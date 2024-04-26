@@ -1,0 +1,158 @@
+[data-theme="dark"] .footer--dark {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: transparent;
+  border: none;
+}
+
+[data-theme="light"] .footer--dark {
+  color: #0d0d0d;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: transparent;
+  border: none;
+  .footer__title,
+  .footer__link-item {
+    color: #0d0d0d;
+  }
+}
+
+.pagination-nav__link--next {
+  border-radius: 0.4375rem;
+  border: 2px solid rgba(87, 95, 110, 0.35);
+  text-align: left;
+}
+
+.pagination-nav__link--prev {
+  border-radius: 0.4375rem;
+  border: 2px solid rgba(87, 95, 110, 0.35);
+  text-align: left;
+}
+
+.pagination-nav__sublabel {
+  font-family: Inter;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -0.025rem;
+}
+
+.pagination-nav__link--next .pagination-nav__label::after {
+  content: "";
+}
+
+.pagination-nav__link--prev .pagination-nav__label::before {
+  content: "";
+}
+
+.pagination-nav__label {
+  font-family: Inter;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.3375rem; /* 133.75% */
+  letter-spacing: -0.005rem;
+}
+
+
+.github {
+  overflow: hidden;
+  display: inline-block; /* Allows sizing */
+  width: 24px; /* Set the width for your icon */
+  height: 24px; /* Set the height for your icon */
+  background-image: url('/svgs/github.svg'); /* Path to your SVG icon */
+  background-size: cover; /* Ensures the icon covers the element */
+  a {
+    color: transparent !important;
+  }
+  cursor: pointer;
+}
+
+.instagram {
+  overflow: hidden;
+  display: inline-block; /* Allows sizing */
+  width: 24px; /* Set the width for your icon */
+  height: 24px; /* Set the height for your icon */
+  background-image: url('/svgs/instagram.svg'); /* Path to your SVG icon */
+  background-size: cover; /* Ensures the icon covers the element */
+  a {
+    color: transparent !important;
+  }
+  cursor: pointer;
+}
+
+.discord {
+  overflow: hidden;
+  display: inline-block; /* Allows sizing */
+  width: 24px; /* Set the width for your icon */
+  height: 24px; /* Set the height for your icon */
+  background-image: url('/svgs/discord.svg'); /* Path to your SVG icon */
+  background-size: cover; /* Ensures the icon covers the element */
+  a {
+    color: transparent !important;
+  }
+  cursor: pointer;
+}
+
+.linkedin {
+  overflow: hidden;
+  color: transparent !important;
+  display: inline-block; /* Allows sizing */
+  width: 24px; /* Set the width for your icon */
+  height: 24px; /* Set the height for your icon */
+  background-image: url('/svgs/linkedin.svg'); /* Path to your SVG icon */
+  background-size: cover; /* Ensures the icon covers the element */
+  a {
+    color: transparent !important;
+  }
+  cursor: pointer;
+}
+
+[class^="iconExternalLink"] {
+  display: none !important;
+  // styles for classes starting with "iconExternalLink"
+}
+
+.footer {
+  display: flex;
+  justify-content: center; /* Center the items horizontally */
+  align-items: center; /* Center the items vertically */
+}
+
+#__docusaurus > footer > div > div.row.footer__links > div:nth-child(1) ul {
+  display: flex;
+  list-style: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+#__docusaurus > footer > div > div.row.footer__links > div:nth-child(1) > div {
+  display: none;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* This centers the footer content vertically */
+  justify-content: center; /* This centers the footer content horizontally */
+  padding: 20px; /* Adjust the padding to set the desired amount of space around the content */
+}
+
+.container-fluid {
+  display: flex;
+  width: 100%; /* Ensures the container takes the full width */
+  max-width: 1200px; /* Adjust this to set the maximum width you desire */
+  margin: auto; /* This centers the container in the middle of the page */
+}
+
+.row.footer__links {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* This spreads the columns evenly across the available space */
+}
+
+.footer ul .social {
+  margin: 0 10px; /* Add some space between the icons */
+}
+
