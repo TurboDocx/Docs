@@ -3,7 +3,8 @@ slug: "/"
 title: "Welcome"
 ---
 
-# Getting Started with the Dev-Docs Starter Template
+
+# Getting Started with the Dev-Docs Starter Template! 
 
 The Dev-Docs starter template is designed to help you create your own documentation quickly and easily. Whether you're building public-facing documentation for your APIs, SDKs, or applications, or internal documentation for your software engineering organization, this template provides a solid foundation to get started.
 

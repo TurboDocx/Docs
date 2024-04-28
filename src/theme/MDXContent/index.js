@@ -61,7 +61,7 @@ export default function MDXContentWrapper(props) {
                   <img
                     className="author-avatar"
                     style={{ height: "4vh" }}
-                    src={item.imageURL || "/img/ddlogo.png"}
+                    src={item.imageURL || "/img/TurboDocxLogo.png"}
                   ></img>
                 </div>
               ))}

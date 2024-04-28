@@ -151,7 +151,7 @@ function ChatBox({ messages, onSendMessage }) {
         <div className="" style={{ width: "100%", display: "flex", padding: "20px", borderBottom: '1px solid  #616062' }}>
           <SvgBackgroundImage imageUrl={logo} />
        
-          <h3 className="pl-4 chat-header">Dev-Docs AI Bot</h3>
+          <h3 className="pl-4 chat-header">TurboDocx Documentation AI Bot</h3>
         </div>
 
         <div className="chat-box__messages flex" style={{"padding": "20px", "flexDirection": "column"}}>

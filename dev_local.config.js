@@ -98,7 +98,7 @@ const config = {
       navbar: {
         title: 'My Site',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'TurboDocx Logo',
           src: logoJson.logo || "",
         },
         items: [

@@ -1,6 +1,4 @@
-
-  
-  Here is the guide for "How to Create a Template" with the requested formatting:
+ Here is the guide for "How to Create a Template" with the requested formatting:
 
 ## Step 1: Create New Template
 1. Navigate to https://app.turbodocx.com/templates/
@@ -23,5 +21,3 @@
 1. Click on the "Create Template" button to finalize the process.
 
 ![This is the image for BUTTON with the text: Create Template and then clicked](/img/how_to_create_a_template/step_4.png)
-  
-  
