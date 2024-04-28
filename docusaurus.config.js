@@ -33,8 +33,8 @@ const config = {
       href: 'https://cdn.tailwindcss.com/2.2.19/tailwind.min.css'
     }
   ],
-  title: 'Your Dev-Docs',
-  tagline: 'Lets Dev-Doc and Roll',
+  title: 'Your TurboDocx Documentation',
+  tagline: 'Turbocharging your Document Workflows',
   url: 'https://your-docusaurus-test-site.com',
   baseUrl: '/',
   onBrokenLinks: 'ignore',
@@ -122,7 +122,7 @@ const config = {
         },
       ],
       navbar: {
-        title: 'Dev-Docs',
+        title: 'Documentation',
         logo: {
           alt: 'TurboDocx Logo',
           src: logoJson.logo || "",
@@ -137,7 +137,7 @@ const config = {
       footer: {
         style: 'dark',
         links: [...footerItems.links],
-        copyright: `Super Charged by Dev-Docs`,
+        copyright: `Turbocharged by Dev-Docs.io`,
       },
       prism: {
         theme: lightCodeTheme,
