@@ -11,10 +11,13 @@ Let's start with creating our first template:
 2. Anything you would like to be a variable or an item that will change from document to document will be put between these {brackets}. This can be single items such as {Date} or {CustomerName} or it can be whole sections such as {Scope} as seen in the images below.
 3. Once you've finished your document with the variables that you want please save it and move on to the next step.
 
-Tips: 
--If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variable within the {brackets}. Find and replace may be helpful here.
--All variables will need to be one word, so do not put any spaces in the middle of the {brackets}
--Remember your knowledge base, if the Variable has the same name as something in your knowledge base TurboDocx will use the info from the knowledge base to fill in the corresponding Variable.
+:::tip
+
+- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variable within the {brackets}. Find and replace may be helpful here.
+- All variables will need to be one word, so do not put any spaces in the middle of the {brackets}
+- Remember your knowledge base, if the Variable has the same name as something in your knowledge base TurboDocx will use the info from the knowledge base to fill in the corresponding Variable.
+
+:::
 
 ![](../static/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
 ![](../static/img/how_to_create_a_template/CreatingATemplateDoc2Title.PNG)
