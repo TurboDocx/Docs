@@ -8,6 +8,7 @@ On the TurboDocX homepage (https://www.turbodocx.com/), click on the "Login" lin
 
 <!-- ![This is the image for A with the text: Login and then clicked](/img/how_to_create_a_deliverable/step_1.png) -->
 
+
 ## Step 2: Select Your Organization
 
 On the organizations page (https://app.turbodocx.com/organizations/), click on the "TurboDocx Demo" organization.
