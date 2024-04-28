@@ -15,7 +15,7 @@ Let's start with creating our first template:
 
 - If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variable within the {brackets}. Find and replace may be helpful here.
 - All variables will need to be one word, so do not put any spaces in the middle of the {brackets}
-- Remember your knowledge base, if the Variable has the same name as something in your knowledge base TurboDocx will use the info from the knowledge base to fill in the corresponding Variable.
+- Remember your knowledge base, if the Variable has the same name as something in your knowledge base TurboDocx will use the info from the knowledge base to fill in the corresponding Variable. 
 
 :::
 
