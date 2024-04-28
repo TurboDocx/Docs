@@ -1,23 +1,58 @@
- Here is the guide for "How to Create a Template" with the requested formatting:
+
+
+
+Congratulations on starting your first template. In this guide, we will show you how to create your first template and how to upload it to your TurboDocx account
 
 ## Step 1: Create New Template
-1. Navigate to https://app.turbodocx.com/templates/
-2. Click on the "New Template" button.
 
-![This is the image for SPAN with the text: New Template and then clicked](/img/how_to_create_a_template/step_1.png)
+Let's start with creating our first template:
+
+1. Open up whatever application you will be using to create your document (Word, Google Drive, etc). 
+2. Anything you would like to be a variable or an item that will change from document to document will be put between these {brackets}. This can be single items such as {Date} or {CustomerName} or it can be whole sections such as {Scope} as seen in the images below.
+3. Once you've finished your document with the variables that you want please save it and move on to the next step.
+
+:::tip
+
+- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variable within the {brackets}. Find and replace may be helpful here.
+- All variables will need to be one word, so do not put any spaces in the middle of the {brackets}
+- Remember your knowledge base, if the Variable has the same name as something in your knowledge base TurboDocx will use the info from the knowledge base to fill in the corresponding Variable.
+
+:::
+
+![](../static/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
+![](../static/img/how_to_create_a_template/CreatingATemplateDoc2Title.PNG)
+
 
 ## Step 2: Upload Template Document
-1. Navigate to https://app.turbodocx.com/templates/create/
-2. Click on the "Upload Template" area or drag and drop your template document.
 
-![This is the image for DIV with the text: Upload TemplateClick to upload or drag and drop and then clicked](/img/how_to_create_a_template/step_2.png)
+Now that we've created our first template, let's upload it to TurboDocx.
+
+1. Navigate to https://app.turbodocx.com/templates/
+2. On the top right of your window, click on the "New Template" button.
+3. As you can see here there are multiple ways to upload a Document. For this example we will click on the "Upload Template" area then choose the document you just saved in the last step or drag and drop your templated document.
+
+![](/img/how_to_create_a_template/step_1.png)
+
 
 ## Step 3: Preview Template
-1. Preview the uploaded template document.
 
-![This is the image for DIV with the text: ​​{CustomerLogo}{CustomerName}{ProjectName}Scope Definition{Date} | Version {VersionNumber}TurboDocx Professional ServicesPowered by TurboDocx and then clicked](/img/how_to_create_a_template/step_3.png)
+On the next screen you will see a preview of your template.
 
-## Step 4: Create Template
-1. Click on the "Create Template" button to finalize the process.
+1. Check to make sure all the variable are listed under the variables column.
+2. Once you've checked to make sure all your variable are set go ahead and click the create template button on the bottom right corner (you may need to scroll)
 
-![This is the image for BUTTON with the text: Create Template and then clicked](/img/how_to_create_a_template/step_4.png)
+Tips:
+- Tags can be very useful to help find certain templates, and knowledge base entries. Don't forget to utilize them! You can also always come back and add them in the future.
+- If your variables are not showing up, go back to step one and check if you're using the right brackets, and that there are no spaces in your variable name.
+
+
+
+![](/img/how_to_create_a_template/step_3.png)
+![](/img/how_to_create_a_template/step_4.png)
+## Step 4: Finished
+
+Congratulations on uploading your first template. You should be able to see it on the template tab once you go back to the main page. 
+
+
+
+
