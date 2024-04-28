@@ -1,3 +1,15 @@
+@import "./design-preferences.scss";
+
+$color-primary: $color-1; // primary-500
+$color-primary-light: $color-1-8; // primary-light
+$color-primary-lightest: $color-1-1; // primary-100
+$color-primary-dark: $color-1-6; // primary-600
+$color-primary-darker: $color-1-7; // primary-700
+$color-primary-darkest: $color-1-9; // extrapolated color darker than primary-700
+$color-accent: $color-2-5; // red-500
+$color-accent-light: $color-2-1; // red-100
+$color-accent-dark: $color-2-7; // red-700
+
 .user-avatar {
   display: none;
 }
@@ -6,8 +18,8 @@
   border-radius: 20px;
   background: radial-gradient(
     178.18% 201.98% at 100% 0%,
-    rgba(41, 38, 42, 0.8) 0%,
-    rgba(41, 38, 42, 0) 100%
+    rgba($color-primary-darker, 0.8) 0%,
+    rgba($color-primary-darkest, 0) 100%
   );
 
   backdrop-filter: blur(5px);
@@ -41,7 +53,7 @@
   }
 
   .chat-header {
-    color: #7984eb !important;
+    color: $color-primary-light !important;
 
     font-family: Inter;
     font-size: 16px;
@@ -53,8 +65,6 @@
 
 .chat-box {
   border-radius: 20px;
-
-
   backdrop-filter: blur(5px);
   position: fixed;
   bottom: 100px;
@@ -86,7 +96,7 @@
   }
 
   .chat-header {
-    color: #7984eb !important;
+    color: $color-primary-light !important;
 
     font-family: Inter;
     font-size: 16px;
@@ -123,7 +133,7 @@
 
 .user-message {
   border-radius: 20px 20px 0px 20px;
-  background: #7984eb !important;
+  background: $color-primary-light !important;
   max-width: 15rem;
   padding-right: 12px;
   display: inline-flex;
@@ -190,7 +200,7 @@
   margin: 0 auto;
   width: 100px;
   height: 40px;
-  background-color: #7984eb;
+  background-color: $color-primary-light;
   color: white;
   border: none;
   border-radius: 20px;
