@@ -1,21 +1,21 @@
 
 
 
-Congratulations on starting your first template. In this guide, we will show you how to create your first template and how to upload it to your TurboDocx account
+Congratulations on starting your first template. In this guide, we will show you how to create your first template and how to upload it to your TurboDocx account.
 
 ## Step 1: Create New Template
 
-Let's start with creating our first template:
+Let's start with creating our first template.
 
-1. Open up whatever application you will be using to create your document (Word, Google Drive, etc). 
+1. Open up whatever application you will be using to create your document (Word, Google Drive, etc).
 2. Anything you would like to be a variable or an item that will change from document to document will be put between these {brackets}. This can be single items such as {Date} or {CustomerName} or it can be whole sections such as {Scope} as seen in the images below.
 3. Once you've finished your document with the variables that you want please save it and move on to the next step.
 
 :::tip
 
-- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variable within the {brackets}. Find and replace may be helpful here.
+- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variables within the {brackets}. Find and replace may be helpful here.
 - All variables will need to be one word, so do not put any spaces in the middle of the {brackets}
-- Remember your knowledge base, if the Variable has the same name as something in your knowledge base TurboDocx will use the info from the knowledge base to fill in the corresponding Variable. 
+- Remember your Knowledgebases, if the variable has the same name as something in your Knowledgebase TurboDocx will use the info from the Knowledgebases to fill in the corresponding Variable.
 
 :::
 
@@ -29,7 +29,7 @@ Now that we've created our first template, let's upload it to TurboDocx.
 
 1. Navigate to https://app.turbodocx.com/templates/
 2. On the top right of your window, click on the "New Template" button.
-3. As you can see here there are multiple ways to upload a Document. For this example we will click on the "Upload Template" area then choose the document you just saved in the last step or drag and drop your templated document.
+3. As you can see, there are multiple ways to upload a Document. For this example, we will click on the "Upload Template" area then choose the document you just saved in the last step or drag and drop your that document into the area.
 
 ![](/img/how_to_create_a_template/step_1.png)
 
@@ -38,17 +38,19 @@ Now that we've created our first template, let's upload it to TurboDocx.
 
 On the next screen you will see a preview of your template.
 
-1. Check to make sure all the variable are listed under the variables column.
-2. Once you've checked to make sure all your variable are set go ahead and click the create template button on the bottom right corner (you may need to scroll)
+1. Check to make sure all the variable you wanted are listed under the variables column.
+2. Once you've checked to make sure all your variable are set, go ahead and click the create template button on the bottom right corner (you may need to scroll)
 
-Tips:
-- Tags can be very useful to help find certain templates, and knowledge base entries. Don't forget to utilize them! You can also always come back and add them in the future.
+:::tip
+
+- Tags can be very useful to help find certain templates, and Knowledgebases entries. Don't forget to utilize them! You can also always come back and add them in the future.
 - If your variables are not showing up, go back to step one and check if you're using the right brackets, and that there are no spaces in your variable name.
 
+:::
 
 
 ![](/img/how_to_create_a_template/step_3.png)
-![](/img/how_to_create_a_template/step_4.png)
+
 ## Step 4: Finished
 
 Congratulations on uploading your first template. You should be able to see it on the template tab once you go back to the main page. 
