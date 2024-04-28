@@ -124,7 +124,7 @@ const config = {
       navbar: {
         title: 'Dev-Docs',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'TurboDocx Logo',
           src: logoJson.logo || "",
         },
         items: [

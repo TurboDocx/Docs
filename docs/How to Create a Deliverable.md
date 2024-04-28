@@ -6,7 +6,7 @@
 
 On the TurboDocX homepage (https://www.turbodocx.com/), click on the "Login" link to access your account.
 
-![This is the image for A with the text: Login and then clicked](/img/how_to_create_a_deliverable/step_1.png)
+<!-- ![This is the image for A with the text: Login and then clicked](/img/how_to_create_a_deliverable/step_1.png) -->
 
 ## Step 2: Select Your Organization
 
@@ -48,7 +48,7 @@ Click on the "Tags (optional)" label to add tags to your deliverable.
 
 Write the name of the tag you want to add in the search input field.
 
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_8.png)
+<!-- ![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_8.png) -->
 
 ## Step 9: Select a Tag
 
