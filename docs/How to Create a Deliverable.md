@@ -17,7 +17,7 @@ Let's get you to your Templates and select the template for your first Deliverab
 ## Step 2: Creating your Deliverable
 
 After you've clicked "Create Deliverable" you will be brought to a new page where you will be able to enter and edit all your variables.
-There are multiple ways to enter and edit your variables so for Step 2 we will break it down into 3 parts: Simple Text Entries, Non-Simple Text Entries, Enabling and Disabling Variable, and Variable Stacking. 
+There are multiple ways to enter and edit your variables so for Step 2 we will break it down into 3 parts: Simple Text Entries, Non-Simple Text Entries, Disabling Variable, and Variable Stacking. 
 
 ### Simple Text Entries
 
@@ -28,7 +28,9 @@ In this first example we will be using simple text entries. Things such as "Cust
 
 What happens if we need a more robust entry? Maybe we want something from our Knowledgebases entries, an image or just add some formating to the text. We'll go through each option in this section. 
 
-First what we will do is click the more options or the triple dot button located next to the variable boxes
+1. First what we will do is click the more options or the triple dot button located next to the variable boxes. Here you will see all the options we just discussed and more.
+2. Next please select the the option you would like to utilize. 
+  2a. For something from your Knowledgebases click Lookup. A new popup window will have all of your entries in the Knowledgebases
 ![more options](/img/how_to_create_a_deliverable/step_10.png)
 ![lookup](/img/how_to_create_a_deliverable/step_20.png)
 ![rich text](/img/how_to_create_a_deliverable/step_17.png)
