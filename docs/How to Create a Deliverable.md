@@ -1,25 +1,38 @@
 
   
-Now that you have a Template and entries in your Knowledgebases, let's put it all together and create your first document or what we call Deliverable. 
+Now that you have a Template and entries in your Knowledgebases, let's put it all together and create your first document or what we call a Deliverable. 
 
-## Step 1: Login to TurboDocX
+## Step 1: Getting to and Selecting your Deliverable
 
-On the TurboDocX homepage (https://www.turbodocx.com/), click on the "Login" link to access your account.
+Let's get you to your Templates and select the template for your first Deliverable.  
+
+1. On the left hand side click on the Templates tab.
+2. Next select the template you want to use. If you have folders set up or pages of templates that makes it hard to find the template you want don't forget the search feature!
+3. Now that you've opened your template it should look something like the second image below. Here you can check to make sure all your variables are there and also have a preview of the template to make sure you have the right document. If everything looks correct, you can go ahead and click "Create Deliverable
 
 <!-- ![This is the image for A with the text: Login and then clicked](/img/how_to_create_a_deliverable/step_1.png) -->
 
-
-## Step 2: Select Your Organization
-
-On the organizations page (https://app.turbodocx.com/organizations/), click on the "TurboDocx Demo" organization.
-
 ![This is the image for SPAN with the text: TurboDocx Demo and then clicked](/img/how_to_create_a_deliverable/step_2.png)
 
-## Step 3: Open the Folder
+## Step 2: Creating your Deliverable
 
-On the templates page (https://app.turbodocx.com/templates/), click on the "Waystar-Royco Indust..." folder with 2 templates.
+After you've clicked "Create Deliverable" you will be brought to a new page where you will be able to enter and edit all your variables.
+There are multiple ways to enter and edit your variables so for Step 2 we will break it down into 3 parts: Simple Text Entries, Non-Simple Text Entries, Enabling and Disabling Variable, and Variable Stacking. 
 
-![This is the image for DIV with the text: Waystar-Royco Indust...NJun 14, 20232 templates and then clicked](/img/how_to_create_a_deliverable/step_3.png)
+### Simple Text Entries
+
+In this first example we will be using simple text entries. Things such as "CustomerName" or "ProjectName" already have formating in the template so just clicking on the box and typing your entry will be sufficient for us here.
+![This is the image for DIV with the text: Waystar-Royco Indust...NJun 14, 20232 templates and then clicked](/img/how_to_create_a_deliverable/step_6.png)
+
+### Non-Simple Text Entries
+
+What happens if we need a more robust entry? Maybe we want something from our Knowledgebases entries, an image or just add some formating to the text. We'll go through each option in this section. 
+
+First what we will do is click the more options or the triple dot button located next to the variable boxes
+![more options](/img/how_to_create_a_deliverable/step_10.png)
+![lookup](/img/how_to_create_a_deliverable/step_20.png)
+![rich text](/img/how_to_create_a_deliverable/step_17.png)
+
 
 ## Step 4: Select the Template
 
