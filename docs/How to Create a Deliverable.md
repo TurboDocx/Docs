@@ -34,7 +34,7 @@ What happens if we need a more robust entry? Maybe we want something from our Kn
 
   #### Lookup 
   For something from your Knowledgebases click Lookup. A new popup window will have all of your entries in the Knowledgebases. Here you can scroll through your entries or search for them. With the search feature it will look through the name, tags and content using the keyword. The content will be shown on the rightmost column and for larger entries you can click on the eye to see a preview. When you've found your entry, click the blue select button to on the right. 
-  Note: You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. For simple text click on the box with the content and change it. For larger entries click the pencil and paper to edit the content. 
+  Note: You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. For simple text click on the box with the content and change it. For other entries click the pencil and paper to edit the content. 
 ![lookup](/img/how_to_create_a_deliverable/step_20.png)
  
   #### Image 
@@ -42,7 +42,7 @@ What happens if we need a more robust entry? Maybe we want something from our Kn
 ![Image](/img/how_to_create_a_deliverable/step_Image.png)
 
   #### Rich Text
-  For text that you need to format, or if you'd like to add a table you will click on Rich Text. A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things.   
+  For text that you need to format, or if you'd like to add a table you will click on Rich Text. A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things. Just click the "Save" button when you're done   
 ![rich text](/img/how_to_create_a_deliverable/step_24.png)
 
   #### Date
