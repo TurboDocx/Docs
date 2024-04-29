@@ -28,13 +28,31 @@ In this first example we will be using simple text entries. Things such as "Cust
 
 What happens if we need a more robust entry? Maybe we want something from our Knowledgebases entries, an image or just add some formating to the text. We'll go through each option in this section. 
 
-1. First what we will do is click the more options or the triple dot button located next to the variable boxes. Here you will see all the options we just discussed and more.
-2. Next please select the the option you would like to utilize. 
-  2a. For something from your Knowledgebases click Lookup. A new popup window will have all of your entries in the Knowledgebases
+1. First, what we will do is click the more options or the triple dot button located next to the variable boxes. Here you will see all the options we just discussed and more.
 ![more options](/img/how_to_create_a_deliverable/step_10.png)
-![lookup](/img/how_to_create_a_deliverable/step_20.png)
-![rich text](/img/how_to_create_a_deliverable/step_17.png)
+2. Next, please select the the option you would like to utilize. 
 
+  #### Lookup 
+  For something from your Knowledgebases click Lookup. A new popup window will have all of your entries in the Knowledgebases. Here you can scroll through your entries or search for them. With the search feature it will look through the name, tags and content using the keyword. The content will be shown on the rightmost column and for larger entries you can click on the eye to see a preview. When you've found your entry, click the blue select button to on the right. 
+  Note: You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. For simple text click on the box with the content and change it. For larger entries click the pencil and paper to edit the content. 
+![lookup](/img/how_to_create_a_deliverable/step_20.png)
+ 
+  #### Image 
+  For images, click Image after the more options button. A pop up will come up where you can drag and drop an image or click on to choose from your file browser.
+
+  #### Rich Text
+  For text that you need to format, or if you'd like to add a table you will click on Rich Text. A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things.   
+![rich text](/img/how_to_create_a_deliverable/step_24.png)
+
+  #### Date
+  If you click on Date, a calendar will pop-up under the variable where you can then use to select the date you would like used.
+
+### Variable Stack and Disable Variable
+
+Sometimes you will need more than one entry for a given variable and others you will not need a certain variable at all. These two options will allow you to do that. 
+
+  #### Variable Stack
+  What if you need more than one Knowledgebases entry or multiple images for a certain section of your Deliverable. Variable stack will allow you to do that. Simply click on the more options button and click "Create Variable Stack". 
 
 ## Step 4: Select the Template
 
