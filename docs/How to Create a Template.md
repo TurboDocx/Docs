@@ -1,6 +1,5 @@
 
 
-
 Congratulations on starting your first template. In this guide, we will show you how to create your first template and how to upload it to your TurboDocx account.
 
 ## Step 1: Create New Template

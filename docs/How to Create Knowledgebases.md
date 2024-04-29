@@ -1,81 +1,49 @@
 
-  
-  ## Step 1: Navigate to Knowledgebases
 
-On the page https://app.turbodocx.com/templates/, find the span with the text "Knowledgebases" and click on it.
+Congratulations on starting your first entry in the Knowledgebases. In this guide, we will show you how to create your first entry.
 
-![This is the image for SPAN with the text: Knowledgebases and then clicked](/img/how_to_create_knowledgebases/step_1.png)
 
-## Step 2: Create a New Knowledgebase
+## Step 1: Navigate to and Create a Knowledgebase Entry
 
-On the page https://app.turbodocx.com/catalogs/knowledgebases/, click the "New" button.
 
-![This is the image for BUTTON with the text: New and then clicked](/img/how_to_create_knowledgebases/step_2.png)
+1. On left side of the screen click on the tab "Knowledgebases".
+2. Next click the blue "New" button on the top left of the page.
 
-## Step 3: Enter a Name
 
-Write your desired name for the new knowledgebase in the input field.
+![](/img/how_to_create_knowledgebases/step_1.png)
+![](/img/how_to_create_knowledgebases/step_2a.png)
 
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_knowledgebases/step_3.png)
 
-## Step 4: Enter a Description (Optional)
+## Step 2: Enter the Information
 
-Write a description for the new knowledgebase in the input field. This step is optional.
 
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_knowledgebases/step_4.png)
+After clicking "New", a new window should pop-up on the right side of your screen. Here is where you will input all of the relevant information.
+1. First, name your entry. We would suggest something that will help to indicate to other users what the Knowledgebases entry will include.
+2. Next, create a placeholder. Don't worry the brackets are automatically used for you.
+3. In the "Default Value" box input the information you would like to use when selecting this Knowledgebases entry. Here you have a few options, if it is simple text feel free to use the box under "Default Value" to type in the info. If you would like to format the text or add images or dates use the more options button (or the triple dot button) to choose from those selections.
+4. Lastly, press the "Submit" button on the bottom right of the page.
 
-## Step 5: Enter a Placeholder Text
 
-Write a placeholder text for the new knowledgebase in the input field.
+:::tip
 
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_knowledgebases/step_5.png)
 
-## Step 6: Enter a Variable
+- Although "Tags" and "Add Description" are optional, this can help others find and understand the purpose of the entry quickly and easily.
+- If the "Placeholder" is the same as a variable used in the Template TurboDocx will automatically place the Knowledgebases entry in that variable slot. Of course, you will still be able to change it.
 
-Write a variable for the new knowledgebase in the input field.
 
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_knowledgebases/step_6.png)
+:::
 
-## Step 7: Click on the Icon Button
 
-Click on the icon button.
+![](/img/how_to_create_knowledgebases/step_8.png)
 
-![This is the image for path with the text:  and then clicked](/img/how_to_create_knowledgebases/step_7.png)
 
-## Step 8: Click on the Lookup Icon Button
+## Step 3: Search
 
-Click on the "Lookup" icon button.
 
-![This is the image for DIV with the text: Lookup and then clicked](/img/how_to_create_knowledgebases/step_8.png)
+Once you've clicked the "Submit" button you should go back to the main Knowledgebases screen.
 
-## Step 9: Click on the Icon Button
 
-Click on the icon button.
+From here you can add new entries, delete outdated or uneeded entries, manage your tags, or search for a specific entry. Note: When searching TurboDocx will look for the keyword in the name, tags and content!
 
-![This is the image for path with the text:  and then clicked](/img/how_to_create_knowledgebases/step_9.png)
 
-## Step 10: Click on the Ellipsis Icon Button
-
-Click on the ellipsis icon button.
-
-![This is the image for BUTTON with the text:  and then clicked](/img/how_to_create_knowledgebases/step_10.png)
-
-## Step 11: Click on the Rich Text Icon Button
-
-Click on the "Rich Text" icon button.
-
-![This is the image for DIV with the text: Rich Text and then clicked](/img/how_to_create_knowledgebases/step_11.png)
-
-## Step 12: Click on the Save Button
-
-Click on the "Save" button to save the new knowledgebase.
-
-![This is the image for SPAN with the text: Save and then clicked](/img/how_to_create_knowledgebases/step_12.png)
-
-## Step 13: Submit the Knowledgebase
-
-Click on the "Submit" button to finalize the creation of the new knowledgebase.
-
-![This is the image for BUTTON with the text: Submit and then clicked](/img/how_to_create_knowledgebases/step_13.png)
-  
-  
+![](/img/how_to_create_knowledgebases/step_2b.png)

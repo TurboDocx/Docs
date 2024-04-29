@@ -1,6 +1,6 @@
 
   
-  Here is the guide for "How to Create a Deliverable" in a simple, easy-to-follow markdown format:
+Now that you have a Template and entries in your Knowledgebases, let's put it all together and create your first document or what we call Deliverable. 
 
 ## Step 1: Login to TurboDocX
 
