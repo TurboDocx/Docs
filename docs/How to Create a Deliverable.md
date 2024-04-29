@@ -34,7 +34,12 @@ What happens if we need a more robust entry? Maybe we want something from our Kn
 
   #### Lookup 
   For something from your Knowledgebases click Lookup. A new popup window will have all of your entries in the Knowledgebases. Here you can scroll through your entries or search for them. With the search feature it will look through the name, tags and content using the keyword. The content will be shown on the rightmost column and for larger entries you can click on the eye to see a preview. When you've found your entry, click the blue select button to on the right. 
-  Note: You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. For simple text click on the box with the content and change it. For other entries click the pencil and paper to edit the content. 
+  :::tip  
+  
+  - This is where tags and descriptions when creating the Knowledgebases entry may come in handy!
+  - You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. For simple text click on the box with the content and change it. For other entries click the pencil and paper to edit the content. 
+  
+  :::
 ![lookup](/img/how_to_create_a_deliverable/step_20.png)
  
   #### Image 
