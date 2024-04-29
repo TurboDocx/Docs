@@ -17,7 +17,7 @@ Let's get you to your Templates and select the template for your first Deliverab
 ## Step 2: Creating your Deliverable
 
 After you've clicked "Create Deliverable" you will be brought to a new page where you will be able to enter and edit all your variables.
-There are multiple ways to enter and edit your variables so for Step 2 we will break it down into 3 parts: Simple Text Entries, Non-Simple Text Entries, Disabling Variable, and Variable Stacking. 
+There are multiple ways to enter and edit your variables so for Step 2 we will break it down into 3 parts: Simple Text Entries, Non-Simple Text Entries, Variable Stack and Disable Variable. 
 
 ### Simple Text Entries
 
@@ -39,6 +39,7 @@ What happens if we need a more robust entry? Maybe we want something from our Kn
  
   #### Image 
   For images, click Image after the more options button. A pop up will come up where you can drag and drop an image or click on to choose from your file browser.
+![Image](/img/how_to_create_a_deliverable/step_Image.png)
 
   #### Rich Text
   For text that you need to format, or if you'd like to add a table you will click on Rich Text. A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things.   
@@ -52,126 +53,27 @@ What happens if we need a more robust entry? Maybe we want something from our Kn
 Sometimes you will need more than one entry for a given variable and others you will not need a certain variable at all. These two options will allow you to do that. 
 
   #### Variable Stack
-  What if you need more than one Knowledgebases entry or multiple images for a certain section of your Deliverable. Variable stack will allow you to do that. Simply click on the more options button and click "Create Variable Stack". 
+  What if you need more than one Knowledgebases entry or multiple images for a certain section of your Deliverable. Variable stack will allow you to do that. Simply click on the more options button and click "Create Variable Stack". This will taake you back to the original page with a "+" button under the variable. By clicking the "+" you can add additional stacks to that variable, clicking the "-" will remove them.
 
-## Step 4: Select the Template
+  ![rich text](/img/how_to_create_a_deliverable/step_VS.png)
 
-Click on the template thumbnail to open the template details.
+#### Disable Variable
 
-![This is the image for IMG with the text:  and then clicked](/img/how_to_create_a_deliverable/step_4.png)
+Sometimes a variable is helpful to have in a template but may not be needed in every Deliverable. For instances where the variable is not needed you can click on more options and then Disable Variable. This will remove the need to have content in that variable. To undo this just click the button that now replaced the more options button. 
 
-## Step 5: Create a Deliverable
+![rich text](/img/how_to_create_a_deliverable/step_10.png)
 
-On the template details page, click the "Create Deliverable" button.
+## Step 3: Generate Deliverable
 
-![This is the image for BUTTON with the text: Create Deliverable and then clicked](/img/how_to_create_a_deliverable/step_5.png)
+Once you've completed filling out the variables in your Deliverable, click the "Generate Deliverable" button on the bottom right of the page and then "Confirm" on the pop up. 
 
-## Step 6: Name the Deliverable
+![This is the image for BUTTON with the text: Generate Deliverable and then clicked](/img/how_to_create_a_deliverable/step_29.png)
 
-Write the name of your deliverable in the input field.
+## Step 4: Export Deliverable
 
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_6.png)
-
-## Step 7: Add Tags (Optional)
-
-Click on the "Tags (optional)" label to add tags to your deliverable.
-
-![This is the image for LABEL with the text: Tags (optional)  and then clicked](/img/how_to_create_a_deliverable/step_7.png)
-
-## Step 8: Search for Tags
-
-Write the name of the tag you want to add in the search input field.
-
-<!-- ![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_8.png) -->
-
-## Step 9: Select a Tag
-
-Click on the desired tag from the list to add it to your deliverable.
-
-![This is the image for LI with the text: Startups and then clicked](/img/how_to_create_a_deliverable/step_9.png)
-
-## Step 10: Edit Variable Content
-
-Write the desired content for the "CustomerName" variable.
-
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_10.png)
-
-## Step 11: Clear Variable Content
-
-Clear the content of the "CustomerName" variable by deleting the text.
-
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_11.png)
-
-## Step 12: Edit Variable Content
-
-Write the desired content for the "ProjectName" variable.
-
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_12.png)
-
-## Step 13: Edit Variable Content
-
-Click the "Click to edit content" button to edit the variable content.
-
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_13.png)
-
-## Step 14: Edit Variable Content
-
-Click the edit icon button to edit the variable content.
-
-![This is the image for BUTTON with the text:  and then clicked](/img/how_to_create_a_deliverable/step_14.png)
-
-## Step 15: Edit Variable Content
-
-Write the desired content for the "Scope" variable.
-
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_15.png)
-
-## Step 16: Open Variable Options
-
-Click on the ellipsis icon button to open the variable options menu.
-
-![This is the image for svg with the text:  and then clicked](/img/how_to_create_a_deliverable/step_16.png)
-
-## Step 17: Open Variable Options Menu
-
-Click on the backdrop to open the variable options menu.
-
-![This is the image for DIV with the text:  and then clicked](/img/how_to_create_a_deliverable/step_17.png)
-
-## Step 18: Edit Variable Content
-
-Write the desired content for the "VersionNumber" variable.
-
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_18.png)
-
-## Step 19: Save Variable Changes
-
-Click the "Save" button to save the changes made to the variables.
-
-![This is the image for SPAN with the text: Save and then clicked](/img/how_to_create_a_deliverable/step_19.png)
-
-## Step 20: Edit Variable Content
-
-Write the desired content for the "BillRate" variable.
-
-![This is the image for DIV with the text: BillRate {BillRate} ​*Variable must have content and then clicked](/img/how_to_create_a_deliverable/step_20.png)
-
-## Step 21: Edit Variable Content
-
-Write the desired content for the "BillRate" variable.
-
-![This is the image for INPUT with the text:  and then clicked](/img/how_to_create_a_deliverable/step_21.png)
-
-## Step 22: Generate Deliverable
-
-Click the "Generate Deliverable" button to generate your deliverable.
-
-![This is the image for BUTTON with the text: Generate Deliverable and then clicked](/img/how_to_create_a_deliverable/step_22.png)
-
-## Step 23: Confirm Deliverable Generation
-
-Click the "Confirm" button to confirm the generation of your deliverable.
-
-![This is the image for BUTTON with the text: Confirm and then clicked](/img/how_to_create_a_deliverable/step_23.png)
+Once you've clicked "Confirm" the next screen will be a preview of your deliverable. After you've taken a look you can press the "Export" button on the top right. Select how you would like to export it and you're done!
+![This is the image for BUTTON with the text: Confirm and then clicked](/img/how_to_create_a_deliverable/step_35.png)
   
-  
+## Step 5: Finish
+
+Congratulations on creating your first Deliverable. I hope these turtorials were helpful and we look forward to working with you to create quick and easy documentation automation!
