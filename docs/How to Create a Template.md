@@ -50,7 +50,7 @@ On the next screen you will see a preview of your template.
 
 ![](/img/how_to_create_a_template/step_3.png)
 
-## Step 4: Finished
+## Finished
 
 Congratulations on uploading your first template. You should be able to see it on the template tab once you go back to the main page. 
 

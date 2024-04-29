@@ -47,3 +47,7 @@ From here you can add new entries, delete outdated or uneeded entries, manage yo
 
 
 ![](/img/how_to_create_knowledgebases/step_2b.png)
+
+## Finished
+
+Congratulations on creating your first Knowledgebases entry. 

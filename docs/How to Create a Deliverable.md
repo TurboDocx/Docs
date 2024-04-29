@@ -74,6 +74,6 @@ Once you've completed filling out the variables in your Deliverable, click the "
 Once you've clicked "Confirm" the next screen will be a preview of your deliverable. After you've taken a look you can press the "Export" button on the top right. Select how you would like to export it and you're done!
 ![This is the image for BUTTON with the text: Confirm and then clicked](/img/how_to_create_a_deliverable/step_35.png)
   
-## Step 5: Finish
+## Finished
 
 Congratulations on creating your first Deliverable. I hope these turtorials were helpful and we look forward to working with you to create quick and easy documentation automation!
