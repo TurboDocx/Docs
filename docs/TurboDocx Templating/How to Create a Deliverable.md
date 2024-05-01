@@ -42,7 +42,8 @@ What happens if we need a more robust entry? Maybe we want something from our Kn
 <br/>
 
   #### Lookup 
-To select something from your Knowledgebase, click Lookup. A popup window will display all your entries. Scroll or search through them. The search feature will look for the keyword in the name, tags, or content. Larger entries have a preview option. Once found, click the blue "Select" button.
+To select something from your Knowledgebase, click Lookup.<br/>
+ A popup window will display all your entries. Scroll or search through them. The search feature will look for the keyword in the name, tags, or content. Larger entries have a preview option. Once found, click the blue "Select" button.
   
   ![lookup](/img/how_to_create_a_deliverable/step_20.png)
 
@@ -55,22 +56,26 @@ To select something from your Knowledgebase, click Lookup. A popup window will d
 
 <br/><br/>
  
-  #### Image
+#### Image
 
-  For images, click Image after the more options button. A pop up will come up where you can click on it to open your file browser and choose an image.
+  For images, click Image. <br/>
+  A pop up will come up where you can click on it to open your file browser and choose an image.
 
 ![Image](/img/how_to_create_a_deliverable/step_img.PNG)
 
 <br/><br/>
 
   #### Rich Text
-  For text that you need to format, or if you'd like to add a table you will click on Rich Text. A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things. Just click the "Save" button when you're done   
+  For text that you need to format, or if you'd like to add a table you will click on Rich Text.<br/>
+   A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things. Just click the "Save" button when you're done   
+
 ![rich text](/img/how_to_create_a_deliverable/step_24.png)
 
 <br/><br/>
 
   #### Date
-  If you click on Date, a calendar will pop-up under the variable where you can then use to select the date you would like used.
+  For a date, click on Date. <br/>
+  A calendar will pop-up above the variable which you can then use to select the date.
 
 ![date](/img/how_to_create_a_deliverable/date.png)
 
@@ -78,18 +83,24 @@ To select something from your Knowledgebase, click Lookup. A popup window will d
 
 ### Variable Stack and Disable Variable
 
-Sometimes you will need more than one entry for a given variable and others you will not need a certain variable at all. These two options will allow you to do that. 
+Sometimes you will need more than one entry for a given variable and others you will not need a certain variable at all. These two options will allow you to do that. <br/><br/>
 
   #### Variable Stack
-  What if you need more than one Knowledgebases entry or multiple images for a certain section of your Deliverable. Variable stack will allow you to do that. Simply click on the more options button and click "Create Variable Stack". This will taake you back to the original page with a "+" button under the variable. By clicking the "+" you can add additional stacks to that variable, clicking the "-" will remove them.
+  If you need multiple variable entries or images for a section of your Deliverable, click Create Variable Stack under more options. <br/>
+  You'll return to the original page with a "+" button under the variable. Add stacks by clicking "+", to remove them click "-".
 
   ![rich text](/img/how_to_create_a_deliverable/step_vs.PNG)
 
+<br/><br/>
+
 #### Disable Variable
 
-Sometimes a variable is helpful to have in a template but may not be needed in every Deliverable. For instances where the variable is not needed you can click on more options and then Disable Variable. This will remove the need to have content in that variable. To undo this just click the button that now replaced the more options button. 
+Sometimes a variable is helpful to have in a template but may not be needed in every Deliverable. For instances where the variable is not needed you can click on more options and then Disable Variable. <br/>
+This will remove the requirement to have content in that variable. To undo this just click the button that now replaced the more options button. 
 
 ![rich text](/img/how_to_create_a_deliverable/step_10.png)
+
+<br/><br/><br/>
 
 ## Step 3: Generate Deliverable
 
@@ -97,11 +108,16 @@ Once you've completed filling out the variables in your Deliverable, click the "
 
 ![This is the image for BUTTON with the text: Generate Deliverable and then clicked](/img/how_to_create_a_deliverable/step_29.png)
 
+<br/><br/>
+
 ## Step 4: Export Deliverable
 
 Once you've clicked "Confirm" the next screen will be a preview of your deliverable. After you've taken a look you can press the "Export" button on the top right. Select how you would like to export it and you're done!
+
 ![This is the image for BUTTON with the text: Confirm and then clicked](/img/how_to_create_a_deliverable/step_35.png)
   
+<br/><br/>
+
 ## Finished
 
-Congratulations on creating your first Deliverable. I hope these turtorials were helpful and we look forward to working with you to create quick and easy documentation automation!
+Congratulations on creating your first Deliverable. I hope these tutorials were helpful and we look forward to working with you to create quick and easy documentation automation!
