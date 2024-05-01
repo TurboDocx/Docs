@@ -50,7 +50,7 @@ Now that we've created our first template, let's upload it to TurboDocx.<br/><br
 
 ## Step 3: Preview Template
 
-On the next screen, you will see a preview of your template.
+On the next screen, you will see a preview of your template.<br/><br/><br/>
 
 1. Check to make sure all the variables you wanted are listed under the variables column.
 - (Optional) - On this page, you can also create default entries for your template that you can change later when you are creating the deliverable.

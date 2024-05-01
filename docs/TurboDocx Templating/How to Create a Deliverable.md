@@ -2,60 +2,79 @@
 title: How to Create a Deliverable
 ---
   
-Now that you have a Template and entries in your Knowledgebases, let's put it all together and create your first document or what we call a Deliverable. 
+Now that you have a Template and entries in your Knowledgebase, let's put it all together and create your first document or what we call a Deliverable. 
 
 ## Step 1: Getting to and Selecting your Deliverable
 
-Let's get you to your Templates and select the template for your first Deliverable.  
+Let's get you to your Templates and select the template for your first Deliverable.  <br/><br/><br/>
 
-1. On the left hand side click on the Templates tab.
+1. On the left hand side click on the Templates tab.<br/><br/>
 2. Next select the template you want to use. If you have folders set up or pages of templates that makes it hard to find the template you want don't forget the search feature!
-3. Now that you've opened your template it should look something like the second image below. Here you can check to make sure all your variables are there and also have a preview of the template to make sure you have the right document. If everything looks correct, you can go ahead and click "Create Deliverable
+![This is the image for A with the text: Login and then clicked](/img/how_to_create_a_deliverable/step_1.png)
 
-<!-- ![This is the image for A with the text: Login and then clicked](/img/how_to_create_a_deliverable/step_1.png) -->
+3. With your template open it should look like the image below. Here you can check to make sure all your variables are present and also have a preview of the template to make sure you have the right document. If everything looks correct, you can go ahead and click "Create Deliverable
 
 ![This is the image for SPAN with the text: TurboDocx Demo and then clicked](/img/how_to_create_a_deliverable/step_2.png)
+
+<br/><br/><br/>
 
 ## Step 2: Creating your Deliverable
 
 After you've clicked "Create Deliverable" you will be brought to a new page where you will be able to enter and edit all your variables.
-There are multiple ways to enter and edit your variables so for Step 2 we will break it down into 3 parts: Simple Text Entries, Non-Simple Text Entries, Variable Stack and Disable Variable. 
+There are multiple ways to enter and edit your variables so for Step 2 we will break it down into 3 parts: Simple Text Entries, Advanced Entries, Variable Stack and Disable Variable. <br/><br/>
+For future reference this information can also be found under the "Additional Information" tab under "Variable Entry".
+<br/>
 
 ### Simple Text Entries
 
 In this first example we will be using simple text entries. Things such as "CustomerName" or "ProjectName" already have formating in the template so just clicking on the box and typing your entry will be sufficient for us here.
-![This is the image for DIV with the text: Waystar-Royco Indust...NJun 14, 20232 templates and then clicked](/img/how_to_create_a_deliverable/step_6.png)
 
-### Non-Simple Text Entries
+![](/img/how_to_create_a_deliverable/step_6.png)
+<br/>
 
-What happens if we need a more robust entry? Maybe we want something from our Knowledgebases entries, an image or just add some formating to the text. We'll go through each option in this section. 
+### Advanced Entries
+
+What happens if we need a more robust entry? Maybe we want something from our Knowledgebase entries, an image or just add some formatting to the text. We'll go through each option in this section. <br/><br/>
 
 1. First, what we will do is click the more options or the triple dot button located next to the variable boxes. Here you will see all the options we just discussed and more.
 ![more options](/img/how_to_create_a_deliverable/step_10.png)
-2. Next, please select the the option you would like to utilize. 
+2. Next, please select the option you would like to utilize. 
+<br/>
 
   #### Lookup 
-  For something from your Knowledgebases click Lookup. A new popup window will have all of your entries in the Knowledgebases. Here you can scroll through your entries or search for them. With the search feature it will look through the name, tags and content using the keyword. The content will be shown on the rightmost column and for larger entries you can click on the eye to see a preview. When you've found your entry, click the blue select button to on the right. 
+To select something from your Knowledgebase, click Lookup. A popup window will display all your entries. Scroll or search through them. The search feature will look for the keyword in the name, tags, or content. Larger entries have a preview option. Once found, click the blue "Select" button.
   
+  ![lookup](/img/how_to_create_a_deliverable/step_20.png)
+
 :::tip
 
-- This is where tags and descriptions when creating the Knowledgebases entry may come in handy.
-- You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. After you've selected the entry, you will be able to click on the bost with content to change simple text. For other entries click the pencil and paper to edit the content. 
+- This is where tags and descriptions when creating the Knowledgebase entry may come in handy.
+- Even after selection, you can edit variables for any necessary changes from the Knowledgebase entry. Simply click the content box for simple text changes. For other variable types, use the pencil and paper icon to edit.
   
 :::
 
-![lookup](/img/how_to_create_a_deliverable/step_20.png)
+<br/><br/>
  
-  #### Image 
-  For images, click Image after the more options button. A pop up will come up where you can click on it open your file browser to choose an image.
+  #### Image
+
+  For images, click Image after the more options button. A pop up will come up where you can click on it to open your file browser and choose an image.
+
 ![Image](/img/how_to_create_a_deliverable/step_img.PNG)
+
+<br/><br/>
 
   #### Rich Text
   For text that you need to format, or if you'd like to add a table you will click on Rich Text. A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things. Just click the "Save" button when you're done   
 ![rich text](/img/how_to_create_a_deliverable/step_24.png)
 
+<br/><br/>
+
   #### Date
   If you click on Date, a calendar will pop-up under the variable where you can then use to select the date you would like used.
+
+![date](/img/how_to_create_a_deliverable/date.png)
+
+<br/><br/>
 
 ### Variable Stack and Disable Variable
 
