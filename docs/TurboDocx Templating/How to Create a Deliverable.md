@@ -1,4 +1,6 @@
-
+---
+title: How to Create a Deliverable
+---
   
 Now that you have a Template and entries in your Knowledgebases, let's put it all together and create your first document or what we call a Deliverable. 
 

@@ -21,7 +21,6 @@ const sidebars = {
       dirName: '.', // '.' means the current docs folder
     }
   ]
-
 };
 
 

@@ -1,3 +1,6 @@
+---
+title: How to Create a Template
+---
 
 
 Congratulations on starting your first template. In this guide, we will show you how to create your first template and how to upload it to your TurboDocx account.
@@ -18,8 +21,8 @@ Let's start with creating our first template.
 
 :::
 
-![](../static/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
-![](../static/img/how_to_create_a_template/CreatingATemplateDoc2Title.PNG)
+![](/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
+![](/img/how_to_create_a_template/CreatingATemplateDoc2Title.PNG)
 
 
 ## Step 2: Upload Template Document

@@ -1,4 +1,6 @@
-
+---
+title: How to Create a Knowledgebase Entry
+---
 
 Congratulations on starting your first entry in the Knowledgebases. In this guide, we will show you how to create your first entry.
 
