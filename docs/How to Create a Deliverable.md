@@ -34,17 +34,19 @@ What happens if we need a more robust entry? Maybe we want something from our Kn
 
   #### Lookup 
   For something from your Knowledgebases click Lookup. A new popup window will have all of your entries in the Knowledgebases. Here you can scroll through your entries or search for them. With the search feature it will look through the name, tags and content using the keyword. The content will be shown on the rightmost column and for larger entries you can click on the eye to see a preview. When you've found your entry, click the blue select button to on the right. 
-  :::tip  
   
-  - This is where tags and descriptions when creating the Knowledgebases entry may come in handy!
-  - You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. For simple text click on the box with the content and change it. For other entries click the pencil and paper to edit the content. 
+:::tip
+
+- This is where tags and descriptions when creating the Knowledgebases entry may come in handy.
+- You will still be able to edit the variable if you need to change some details from the Knowledgebases entry. After you've selected the entry, you will be able to click on the bost with content to change simple text. For other entries click the pencil and paper to edit the content. 
   
-  :::
+:::
+
 ![lookup](/img/how_to_create_a_deliverable/step_20.png)
  
   #### Image 
-  For images, click Image after the more options button. A pop up will come up where you can drag and drop an image or click on to choose from your file browser.
-![Image](/img/how_to_create_a_deliverable/step_Image.png)
+  For images, click Image after the more options button. A pop up will come up where you can click on it open your file browser to choose an image.
+![Image](/img/how_to_create_a_deliverable/step_img.PNG)
 
   #### Rich Text
   For text that you need to format, or if you'd like to add a table you will click on Rich Text. A new window will pop-up as shown in the image below. Here you will see familiar options such as text formats, colors as well as the ability to add tables among other things. Just click the "Save" button when you're done   
@@ -60,7 +62,7 @@ Sometimes you will need more than one entry for a given variable and others you 
   #### Variable Stack
   What if you need more than one Knowledgebases entry or multiple images for a certain section of your Deliverable. Variable stack will allow you to do that. Simply click on the more options button and click "Create Variable Stack". This will taake you back to the original page with a "+" button under the variable. By clicking the "+" you can add additional stacks to that variable, clicking the "-" will remove them.
 
-  ![rich text](/img/how_to_create_a_deliverable/step_VS.png)
+  ![rich text](/img/how_to_create_a_deliverable/step_vs.PNG)
 
 #### Disable Variable
 
