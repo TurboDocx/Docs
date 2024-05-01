@@ -188,6 +188,21 @@ html, body {
   // border: 1px solid rgba(209, 213, 219, 0.3);
 }
 
+[class^="admonition"] {
+  ul {
+    margin-left: 1em;
+    li {
+      margin-bottom: 10px;
+    }
+  }
+  ol {
+    margin-left: 1em;
+    li {
+      margin-bottom: 10px;
+    }
+  }
+}
+
 [data-theme="light"] [class^="docPage"]::before {
   content: "";
   position: absolute;
@@ -237,6 +252,7 @@ html, body {
   }
   /* Styles for elements with a class that starts with "word" */
 }
+
 
 // [class^="docPage"]::before {
 //   content: "";
