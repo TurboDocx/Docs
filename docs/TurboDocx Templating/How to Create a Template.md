@@ -21,11 +21,11 @@ Let's start with creating our first template. <br /><br /><br/>
 
 :::tip
 
-- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variables within the {brackets}. Find and replace may be helpful here. <br /><br />
+- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variables within the {brackets}. Find and replace may be helpful here.
 
-- All variables will need to be one word, so do not put any spaces in the middle of the {brackets} <br /><br />
+- All variables will need to be one word, so do not put any spaces in the middle of the {brackets} 
 
-- Remember your Knowledgebases, if the variable has the same name as something in your Knowledgebase TurboDocx will use the info from the Knowledgebases to fill in the corresponding Variable.<br /><br />
+- Remember your Knowledgebases, if the variable has the same name as something in your Knowledgebase TurboDocx will use the info from the Knowledgebases to fill in the corresponding Variable.
 
 :::
 
@@ -35,7 +35,7 @@ Let's start with creating our first template. <br /><br /><br/>
 
 Now that we've created our first template, let's upload it to TurboDocx.<br/><br/><br/>
 
-1. Login to your TurboDocx account you should land on the Templates tab if not click on the Template tab on the left side. Then, On the top right of your window, click on the "New Template" button.
+1. Login to your TurboDocx account you should land on the Templates tab if not it can be found on the left side. Then, On the top right of your window, click on the "New Template" button.
 
 ![](/img/how_to_create_a_template/newtemp.png)
 
@@ -49,6 +49,10 @@ Now that we've created our first template, let's upload it to TurboDocx.<br/><br
 On the next screen you will see a preview of your template.
 
 1. Check to make sure all the variable you wanted are listed under the variables column.
+- (Optional) - On this page, you can also create default entries for your template that you can change later when you are creating the deliverable.
+
+![](/img/how_to_create_a_template/step_3.png)
+
 2. Once you've checked to make sure all your variable are set, go ahead and click the create template button on the bottom right corner (you may need to scroll)
 
 :::tip
@@ -59,7 +63,7 @@ On the next screen you will see a preview of your template.
 :::
 
 
-![](/img/how_to_create_a_template/step_3.png)
+
 
 ## Finished
 
