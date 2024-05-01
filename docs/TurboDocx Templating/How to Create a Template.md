@@ -7,31 +7,39 @@ Congratulations on starting your first template. In this guide, we will show you
 
 ## Step 1: Create New Template
 
-Let's start with creating our first template.
+Let's start with creating our first template. <br /><br /><br/>
 
 1. Open up whatever application you will be using to create your document (Word, Google Drive, etc).
+<br/><br />
 2. Anything you would like to be a variable or an item that will change from document to document will be put between these {brackets}. This can be single items such as {Date} or {CustomerName} or it can be whole sections such as {Scope} as seen in the images below.
-3. Once you've finished your document with the variables that you want please save it and move on to the next step.
-
-:::tip
-
-- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variables within the {brackets}. Find and replace may be helpful here.
-- All variables will need to be one word, so do not put any spaces in the middle of the {brackets}
-- Remember your Knowledgebases, if the variable has the same name as something in your Knowledgebase TurboDocx will use the info from the Knowledgebases to fill in the corresponding Variable.
-
-:::
 
 ![](/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
 ![](/img/how_to_create_a_template/CreatingATemplateDoc2Title.PNG)
 
+3. Once you've finished your document with the variables that you want please save it and move on to the next step.
+<br /><br />
+
+:::tip
+
+- If you've previously created a document you want to use as a template, go ahead and use that. Just remember to replace all the variables within the {brackets}. Find and replace may be helpful here. <br /><br />
+
+- All variables will need to be one word, so do not put any spaces in the middle of the {brackets} <br /><br />
+
+- Remember your Knowledgebases, if the variable has the same name as something in your Knowledgebase TurboDocx will use the info from the Knowledgebases to fill in the corresponding Variable.<br /><br />
+
+:::
+
+
 
 ## Step 2: Upload Template Document
 
-Now that we've created our first template, let's upload it to TurboDocx.
+Now that we've created our first template, let's upload it to TurboDocx.<br/><br/><br/>
 
-1. Navigate to https://app.turbodocx.com/templates/
-2. On the top right of your window, click on the "New Template" button.
-3. As you can see, there are multiple ways to upload a Document. For this example, we will click on the "Upload Template" area then choose the document you just saved in the last step or drag and drop your that document into the area.
+1. Login to your TurboDocx account you should land on the Templates tab if not click on the Template tab on the left side. Then, On the top right of your window, click on the "New Template" button.
+
+![](/img/how_to_create_a_template/newtemp.png)
+
+2. As you can see, there are multiple ways to upload a Document. For this example, we will click on the "Upload Template" area then choose the document you just saved in the last step or drag and drop your that document into the area.
 
 ![](/img/how_to_create_a_template/step_1.png)
 
