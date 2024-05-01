@@ -1,5 +1,6 @@
 ---
 title: How to Create a Template
+sidebar_position: 1
 ---
 
 
