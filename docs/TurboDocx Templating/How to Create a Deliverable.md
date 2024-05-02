@@ -54,9 +54,11 @@ To select something from your Knowledgebase, click Lookup.<br/>
   
 :::
 
-<br/><br/>
- 
-#### Image
+ <br/><br/>
+
+
+
+  #### Image
 
   For images, click Image. <br/>
   A pop up will come up where you can click on it to open your file browser and choose an image.

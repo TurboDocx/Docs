@@ -97,7 +97,7 @@ In your Knowledgebase you may have entries that you will want to have variables 
 ### Adding Subvariables
 
 1. We will start by creating a new Knowledgebase entry (see How to Create a Knowledgebase Entry if you need a refresher), and we will be selecting "Rich Text" from our more options menu. <br/><br/>
-2. Much like adding a variable in a Template you will fill out your entry utilizing {brackets} around the subvariable that you would like to create, in this example we will be using {CustomerName} in part of our chart. <br/><br/>
+2. Much like adding a variable in a Template you will fill out your entry utilizing \{brackets\} around the subvariable that you would like to create, in this example we will be using \{CustomerName\} in part of our chart. <br/><br/>
 3. As you can see once the subvariable is created a seperate input box will appear on the left side under {CustomerName}. Whatever you input into this box will be placed in the subvariable!
 
 ![img](/img/additional_information/subvariables.png)
