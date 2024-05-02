@@ -6,7 +6,7 @@ Now that you have a Template and entries in your Knowledgebase, let's put it all
 
 ## Step 1: Getting to and Selecting your Deliverable
 
-Let's get you to your Templates and select the template for your first Deliverable.  <br/><br/><br/>
+Let's get you to your Templates and select the template for your first Deliverable.  <br/><br/>
 
 1. On the left hand side click on the Templates tab.<br/><br/>
 2. Next select the template you want to use. If you have folders set up or pages of templates that makes it hard to find the template you want don't forget the search feature!

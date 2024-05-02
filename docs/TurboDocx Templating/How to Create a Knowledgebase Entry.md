@@ -27,6 +27,7 @@ After clicking "New", a new window should pop-up on the right side of your scree
 <br/><br/>
 3. In the "Default Value" box, enter the info you want to use for this Knowledgebase entry. For plain text, type directly into the box. If you need formatting, images, or dates, click the "More Options" button for those choices. 
 - For additional info on how to use these tools, see the "Additional Information" tab under "Variable Entry".
+- You can also add subvariables in your entries. For more information on how, see the "Additional Information" tab under "Subvariables"
 
 ![](/img/how_to_create_knowledgebases/step_8.png)
 
