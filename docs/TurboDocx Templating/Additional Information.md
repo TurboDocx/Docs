@@ -151,7 +151,7 @@ Once we have added our content hit the "Generate" button.
 
 <br/><br/><br/>
 
-## Variables not Showing up in Template or Deliverable
+## Variable Troubleshooting
 
 Here are some best practices when troubleshooting why your variable is not showing up in the Template. 
 
