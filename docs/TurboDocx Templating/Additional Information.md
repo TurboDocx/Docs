@@ -154,8 +154,15 @@ Once we have added our content hit the "Generate" button.
 ## Variables not Showing up in Template or Deliverable
 
 Here are some best practices when troubleshooting why your variable is not showing up in the Template. 
-<br/> <br/>
-1. All variables will need to be one word, so do not put any spaces in the middle of the {brackets}. <br/> <br/>
+
+<br/>
+<br/>
+
+1. All variables will need to be one word, so do not put any spaces in the middle of the {brackets}. 
+
+<br/>
+<br/>
+ 
 2. If the variable will be an image or rich text, make sure the variable is on it's own line. Use the show paragraph tool if you need help. The location for that tool in Word and Google Docs are in the image below. 
 
 ![](/img/how_to_create_a_template/paragraphtool.png)
