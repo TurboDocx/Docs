@@ -10,7 +10,7 @@
             "label": "Blogs",
             "position": "left",
             "prependBaseUrlToHref": true,
-            "href": "/blog"
+            "href": "https://www.turbodocx.com/blog"
         }
     ]
 }

@@ -3,25 +3,13 @@
         {
             "items": [
                 {
-                    "label": "Instagram",
-                    "href": "https://www.instagram.com",
-                    "position": "left",
-                    "prependBaseUrlToHref": false
-                },
-                {
-                    "label": "X",
-                    "href": "https://x.com",
-                    "position": "left",
-                    "prependBaseUrlToHref": false
-                },
-                {
                     "label": "GitHub",
-                    "href": "https://github.com",
+                    "href": "https://github.com/turbodocx",
                     "prependBaseUrlToHref": false
                 },
                 {
                     "label": "Discord",
-                    "href": "https://discord.com",
+                    "href": "https://discord.gg/NYKwz4BcpX",
                     "prependBaseUrlToHref": false
                 }
             ],
@@ -31,13 +19,13 @@
             "items": [
                 {
                     "label": "Tutorial",
-                    "to": "/docs/intro",
+                    "to": "/docs",
                     "prependBaseUrlToHref": true
                 },
                 {
                     "label": "About",
-                    "href": "/about",
-                    "prependBaseUrlToHref": true,
+                    "href": "https://www.turbodocx.com/about-us",
+                    "prependBaseUrlToHref": false,
                     "position": "left"
                 }
             ],
@@ -46,32 +34,32 @@
         {
             "items": [
                 {
-                    "label": "Stack Overflow",
-                    "href": "https://stackoverflow.com/questions/tagged/docusaurus",
+                    "label": "News and Updates",
+                    "href": "https://www.turbodocx.com/newsroom",
                     "prependBaseUrlToHref": false
                 },
                 {
                     "label": "Discord",
-                    "href": "https://discordapp.com/invite/docusaurus",
-                    "prependBaseUrlToHref": false
-                },
-                {
-                    "label": "Twitter",
-                    "href": "https://twitter.com/docusaurus",
+                    "href": "https://discord.gg/NYKwz4BcpX",
                     "prependBaseUrlToHref": false
                 }
             ],
-            "title": "Community"
+            "title": "Company"
         },
         {
             "items": [
                 {
-                    "label": "Blog",
-                    "to": "/blog",
-                    "prependBaseUrlToHref": true
+                    "label": "Terms of Service",
+                    "to": "https://www.turbodocx.com/termsofservice",
+                    "prependBaseUrlToHref": false
+                },
+                {
+                    "label": "Privacy Policy",
+                    "to": "https://www.turbodocx.com/termsofservice",
+                    "prependBaseUrlToHref": false
                 }
             ],
-            "title": "More"
+            "title": "Legal"
         }
     ]
 }
