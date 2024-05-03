@@ -1,0 +1,13 @@
+{
+    "position": 3,
+    "label": "Advanced Configuration",
+    "collapsible": true,
+    "collapsed": true,
+    "link": {
+      "type": "generated-index",
+      "title": "Advanced Configuration Overview"
+    },
+    "customProps": {
+      "description": "Learn how to configure advanced features like Single-Sign-On, OneDrive, SharePoint, SalesForce, and more."
+    }
+  }

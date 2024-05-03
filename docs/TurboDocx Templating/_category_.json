@@ -1,0 +1,13 @@
+{
+    "position": 2,
+    "label": "TurboDocx Templating",
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+      "type": "generated-index",
+      "title": "TurboDocx Templating Overview"
+    },
+    "customProps": {
+      "description": "An overview of the TurboDocx Templating Product"
+    }
+  }

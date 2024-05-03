@@ -41,6 +41,7 @@ To select something from your Knowledgebase, click Lookup.<br/>
 
 <br/><br/>
  
+
 #### Image
 
   For images, click Image. <br/>
