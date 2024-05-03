@@ -30,7 +30,7 @@ const config = {
     },
     'src/css/custom.css',
     {
-      href: 'https://cdn.tailwindcss.com/2.2.19/tailwind.min.css'
+      href: 'https://cdn.tailwindcss.com/3.4.3'
     }
   ],
   title: 'TurboDocx Documentation',
