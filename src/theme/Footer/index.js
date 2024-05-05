@@ -69,13 +69,8 @@ export default function FooterWrapper(props) {
   }, [location.pathname]);
   return (
     <>
-      <ChatBox messages={[]} />
       <GlobalDarkModeHandler />
-      
-
-
         <Footer {...props} />
-
     </>
   );
 }
