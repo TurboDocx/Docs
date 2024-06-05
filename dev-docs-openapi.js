@@ -138,7 +138,7 @@ function findMatchingItem(items, metadata) {
 
 function generatePostmanItem(item, metadata) {
    try {
-      const yamlData = fs.readFileSync(`examples/${item}.yaml`, "utf8");
+      const yamlData = fs.readFileSync(`${item}`, "utf8");
 
       let conversionResult;
       let errorOccurred = false;
@@ -313,16 +313,16 @@ ${metadata.description}
 const apiConfig = {
   petstore: {
     // the <id> referenced when running CLI commands
-    specPath: "examples/pestore.yaml", // path to OpenAPI spec, URLs supported
-    outputDir: "docs/api/petstore", // output directory for generated files
+    specPath: "tdocxcollection.yml", // path to OpenAPI spec, URLs supported
+    outputDir: "docs/api/turbodocx", // output directory for generated files
     sidebarOptions: {
       // optional, instructs plugin to generate sidebar.js
       groupPathsBy: "tag", // group sidebar items by operation "tag"
     },
     markdownGenerators: {
       createApiPageMD: (metadata) => {
-         return generatePostmanItem("pestore", metadata)
-         // console.log("metadata", metadata);
+         return generatePostmanItem("./tdocxcollection.yml", metadata)
+         console.log("metadata", metadata);
          
       },
     },

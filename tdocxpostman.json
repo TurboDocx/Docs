@@ -1,0 +1,2283 @@
+{
+	"info": {
+		"_postman_id": "a47336b8-67e2-476c-92c9-2b800cdb9b6e",
+		"name": "TurboDocx API Documentation",
+		"description": "Welcome to the TurboDocx API Documentation. This comprehensive guide is designed to provide developers with all the information required to interact with the TurboDocx platform programmatically.\n\nWhether you're looking to automate document creation, manage your templates, or integrate TurboDocx features into your application, you'll find the necessary endpoints, parameters, and examples here.\n\n## **Getting started guide**\n\nBefore diving into the specifics of the API, ensure that you have obtained the necessary Access Token and have the correct permissions to access the desired resources.\n\nKeep your Access Token secure and do not expose them in publicly accessible areas such as GitHub, client-side code, etc. **The Authentication and Organization ID is a variable set at the root of the collection.**\n\n## Base URL\n\nAll API requests should be made to the base URL provided upon your API key registration. Typically, it looks like this:\n\n``` typescript\nhttps://api.turbodocx.com\n\n ```\n\n## Authentication\n\nTurboDocx is working on it's API Key flows, and for the time being, we recommend grabbing the access token used from your user's accounts to leverage our APIs. You can find an example on how to get your access token in the `Blueprint` folder.\n\nTo use the Access Token, use the following under the `Authorization Header`\n\n``` typescript\nAuthorization: Bearer YOUR_ACCESS_TOKEN\n\n ```\n\n### Authentication error response\n\nIf an Access Token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.\n\n### **Need some help?**\n\nIn case you have questions, go through our tutorials ((link to your video or help documentation here)). Or visit our FAQ page ((link to the relevant page)).\n\nOr you can check out our community forum, there’s a good chance our community has an answer for you. Visit our developer forum ((link to developer forum)) to review topics, ask questions, and learn from others.\n\n`You can also document or add links to libraries, code examples, and other resources needed to make a request.`",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "624260",
+		"_collection_link": "https://turbodocx.postman.co/workspace/TurboDocx~c0d17cdc-cf02-4abc-8173-f196a3ecee53/collection/624260-a47336b8-67e2-476c-92c9-2b800cdb9b6e?action=share&source=collection_link&creator=624260"
+	},
+	"item": [
+		{
+			"name": "Blueprint",
+			"item": [
+				{
+					"name": "Step 2 (Optional) - Create Knowledgebase Entries",
+					"item": [
+						{
+							"name": "Create Text Variable (Knowledgebase)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{TurboDocx Access Token}}"
+									},
+									{
+										"key": "x-rapiddocx-org-id",
+										"value": "{{TurboDocx Organization ID}}"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "en-US,en;q=0.9"
+									},
+									{
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"key": "dnt",
+										"value": "1"
+									},
+									{
+										"key": "origin",
+										"value": "https://app.turbodocx.com"
+									},
+									{
+										"key": "referer",
+										"value": "https://app.turbodocx.com/"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Company Name\",\r\n    \"description\": \"This is name of our ficticious company.\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{CompanyName}\",\r\n    \"text\": \"VelocityWare, Inc.\",\r\n    \"mimeType\": \"text\",\r\n    \"isGlobal\": true,\r\n    \"allowRichTextInjection\": true\r\n}"
+								},
+								"url": {
+									"raw": "https://api.turbodocx.com/Variable",
+									"protocol": "https",
+									"host": [
+										"api",
+										"turbodocx",
+										"com"
+									],
+									"path": [
+										"Variable"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Image Variable (Knowledgebase)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{TurboDocx Access Token}}"
+									},
+									{
+										"key": "x-rapiddocx-org-id",
+										"value": "{{TurboDocx Organization ID}}"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "en-US,en;q=0.9"
+									},
+									{
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"key": "dnt",
+										"value": "1"
+									},
+									{
+										"key": "origin",
+										"value": "https://app.turbodocx.com"
+									},
+									{
+										"key": "referer",
+										"value": "https://app.turbodocx.com/"
+									},
+									{
+										"key": "sec-ch-ua-mobile",
+										"value": "?0"
+									},
+									{
+										"key": "sec-ch-ua-platform",
+										"value": "\"Windows\""
+									},
+									{
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"VelocityWare Logo\",\r\n    \"description\": \"\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{CompanyLogo}\",\r\n    \"mimeType\": \"image\",\r\n    \"isGlobal\": true,\r\n    \"allowRichTextInjection\": true,\r\n    \"text\": \"data:image/png;base64,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\"\r\n}"
+								},
+								"url": {
+									"raw": "https://api.turbodocx.com/Variable",
+									"protocol": "https",
+									"host": [
+										"api",
+										"turbodocx",
+										"com"
+									],
+									"path": [
+										"Variable"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create HTML Variable (Knowledgebase)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{TurboDocx Access Token}}"
+									},
+									{
+										"key": "x-rapiddocx-org-id",
+										"value": "{{TurboDocx Organization ID}}"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "en-US,en;q=0.9"
+									},
+									{
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"key": "dnt",
+										"value": "1"
+									},
+									{
+										"key": "origin",
+										"value": "https://app.turbodocx.com"
+									},
+									{
+										"key": "referer",
+										"value": "https://app.turbodocx.com/"
+									},
+									{
+										"key": "sec-ch-ua-mobile",
+										"value": "?0"
+									},
+									{
+										"key": "sec-ch-ua-platform",
+										"value": "\"Windows\""
+									},
+									{
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Scope\",\r\n    \"description\": \"This is the Scope of Work for the Engagement\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{Scope}\",\r\n    \"text\": \"<body xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><table cellspacing=\\\"0\\\" style=\\\"border-collapse:collapse\\\">\\n\\t<tbody>\\n\\t\\t<tr>\\n\\t\\t\\t<td style=\\\"background-color:#2f5496; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:1px solid black; vertical-align:top; width:155px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\"><span style=\\\"color:white\\\">Project Phase</span></span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"background-color:#2f5496; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:1px solid black; vertical-align:top; width:396px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\"><span style=\\\"color:white\\\">Activities in Scope</span></span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"background-color:#2f5496; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:1px solid black; vertical-align:top; width:120px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\"><span style=\\\"color:white\\\">Estimated Hours</span></span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t</tr>\\n\\t\\t<tr>\\n\\t\\t\\t<td colspan=\\\"3\\\" style=\\\"background-color:#e7e6e6; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; vertical-align:top; width:671px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\"><span style=\\\"color:black\\\">{technology} Cloud Build</span></span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t</tr>\\n\\t\\t<tr>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; vertical-align:top; width:155px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\">Deploy (4) Nodes within {technology} per Region</span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; vertical-align:top; width:396px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\">Our Services will assist with onboarding of the remote offices. We believe having three nodes per {technology} Region will provide optimal High Availability (HA)</span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; vertical-align:top; width:120px\\\">\\n\\t\\t\\t<p><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:16px\\\">16</span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t</tr>\\n\\t\\t<tr>\\n\\t\\t\\t<td colspan=\\\"2\\\" style=\\\"background-color:#e7e6e6; border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; vertical-align:top; width:552px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\"><span style=\\\"color:black\\\">Feedback and Environment Remediation</span></span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"background-color:#e7e6e6; border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; vertical-align:top; width:120px\\\">\\n\\t\\t\\t<p> </p>\\n\\t\\t\\t</td>\\n\\t\\t</tr>\\n\\t\\t<tr>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; vertical-align:top; width:155px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\">Solicit Initial feedback</span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; vertical-align:top; width:396px\\\">\\n\\t\\t\\t<p><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:16px\\\">Work with initial pilot user groups to solicit feedback around the performance of the platform. </span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; vertical-align:top; width:120px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\">5</span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t</tr>\\n\\t\\t<tr>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-top:none; vertical-align:top; width:155px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\">Environment Remediation</span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; vertical-align:top; width:396px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\">Our Services will allocate up to <strong>15 project-hours</strong> for initial remediation as part of this engagement. Should more hours be needed, we will discuss it with the client project lead and provide an addendum to this scope definition upon mutual agreement.</span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t\\t<td style=\\\"border-bottom:1px solid black; border-left:none; border-right:1px solid black; border-top:none; vertical-align:top; width:120px\\\">\\n\\t\\t\\t<p><span style=\\\"font-size:11pt\\\"><span style=\\\"font-family:Calibri,sans-serif\\\"><span style=\\\"font-size:12.0pt\\\">20</span></span></span></p>\\n\\t\\t\\t</td>\\n\\t\\t</tr>\\n\\t</tbody>\\n</table>\\n</body>\",\r\n    \"mimeType\": \"html\",\r\n    \"isGlobal\": true,\r\n    \"allowRichTextInjection\": true\r\n}"
+								},
+								"url": {
+									"raw": "https://api.turbodocx.com/Variable",
+									"protocol": "https",
+									"host": [
+										"api",
+										"turbodocx",
+										"com"
+									],
+									"path": [
+										"Variable"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "<img src=\"https://content.pstmn.io/74c09457-388d-49cf-bab5-19b04d22b2c3/aW1hZ2UucG5n\" alt=\"The%20UI%20equivalent%20of%20creating%20a%20Variable\" width=\"1295\" height=\"873\">\n\n1. Using the three provided POST parameters, you will create a CompanyName, Company Logo, and then a fictional \"scope\" table to be used as a default inheritied value when creating a Deliverable.  \n    \n2. Note - in the scope we provide \"Subvariables\" that can be swapped out. We use {Technology} which can be platforms like AWS, Azure, GCP, etc.."
+				},
+				{
+					"name": "Step 3 - Create a Template",
+					"item": [
+						{
+							"name": "Extract Template Placeholders and Generate Preview",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-filename",
+										"value": "SOW Template.docx"
+									},
+									{
+										"key": "x-rapiddocx-org-id",
+										"value": "{{TurboDocx Organization ID}}"
+									},
+									{
+										"key": "authorization",
+										"value": "Bearer {{TurboDocx Access Token}}"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "en-US,en;q=0.9"
+									},
+									{
+										"key": "dnt",
+										"value": "1"
+									},
+									{
+										"key": "origin",
+										"value": "https://app.turbodocx.com"
+									},
+									{
+										"key": "referer",
+										"value": "https://app.turbodocx.com/"
+									},
+									{
+										"key": "sec-ch-ua",
+										"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+									},
+									{
+										"key": "sec-ch-ua-mobile",
+										"value": "?0"
+									},
+									{
+										"key": "sec-ch-ua-platform",
+										"value": "\"Windows\""
+									},
+									{
+										"key": "sec-fetch-dest",
+										"value": "empty"
+									},
+									{
+										"key": "sec-fetch-mode",
+										"value": "cors"
+									},
+									{
+										"key": "sec-fetch-site",
+										"value": "same-site"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"description": "This is an example Template",
+											"type": "file",
+											"src": "hO5LyKhRX/SOW Template.docx"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.turbodocx.com/template/file",
+									"protocol": "https",
+									"host": [
+										"api",
+										"turbodocx",
+										"com"
+									],
+									"path": [
+										"template",
+										"file"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload Template with Optional Default Values",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{TurboDocx Access Token}}"
+									},
+									{
+										"key": "x-rapiddocx-org-id",
+										"value": "{{TurboDocx Organization ID}}"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "en-US,en;q=0.9"
+									},
+									{
+										"key": "dnt",
+										"value": "1"
+									},
+									{
+										"key": "origin",
+										"value": "https://app.turbodocx.com"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "templateFile",
+											"type": "file",
+											"src": "SOW Template.docx"
+										},
+										{
+											"key": "name",
+											"value": "SOW Template",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "variables",
+											"value": "[{\"placeholder\":\"{CustomerName}\",\"name\":\"CustomerName\",\"allowRichTextInjection\":false,\"order\":0,\"count\":25},{\"placeholder\":\"{ProjectName}\",\"name\":\"ProjectName\",\"allowRichTextInjection\":false,\"order\":1,\"count\":2},{\"placeholder\":\"{Date}\",\"name\":\"Date\",\"allowRichTextInjection\":false,\"order\":2,\"count\":2},{\"placeholder\":\"{CustomerLogo}\",\"name\":\"CustomerLogo\",\"allowRichTextInjection\":true,\"order\":3,\"count\":1},{\"placeholder\":\"{VersionNumber}\",\"name\":\"VersionNumber\",\"allowRichTextInjection\":false,\"order\":4,\"count\":1},{\"placeholder\":\"{Scope}\",\"name\":\"Scope\",\"allowRichTextInjection\":true,\"order\":5,\"count\":1},{\"placeholder\":\"{BillRate}\",\"name\":\"BillRate\",\"allowRichTextInjection\":false,\"order\":6,\"count\":1}]",
+											"type": "text"
+										},
+										{
+											"key": "tags",
+											"value": "[]",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.turbodocx.com/template",
+									"protocol": "https",
+									"host": [
+										"api",
+										"turbodocx",
+										"com"
+									],
+									"path": [
+										"template"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "<img src=\"https://content.pstmn.io/0e5bc131-3951-40fa-90bf-981c4ccfa8a8/aW1hZ2UucG5n\" alt=\"The%20UI%20Equivalent%20of%20Creating%20a%20Template\" width=\"1285\" height=\"857\">\n\n1. The first step is to extract the Template Placeholders to determine whch fields support Rich Text Injection\n2. The second step is to upload the Template with the Optional Default Values (mirroring the items extracted from step 1). Note - the variables are Stringified using a function such as `JSON.stringify()` prior to uploading it to the endpoint."
+				},
+				{
+					"name": "Step 4 - Create a Deliverable",
+					"item": [
+						{
+							"name": "Get Template by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{TurboDocx Access Token}}"
+									},
+									{
+										"key": "x-rapiddocx-org-id",
+										"value": "{{TurboDocx Organization ID}}"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "en-US,en;q=0.9"
+									},
+									{
+										"key": "dnt",
+										"value": "1"
+									},
+									{
+										"key": "if-none-match",
+										"value": "W/\"2534-f/UbhD2HIM3HP3jOlbqIO79TVrQ\""
+									},
+									{
+										"key": "origin",
+										"value": "https://app.turbodocx.com"
+									},
+									{
+										"key": "referer",
+										"value": "https://app.turbodocx.com/"
+									}
+								],
+								"url": {
+									"raw": "https://api.turbodocx.com/template/{{TemplateID}}?showTags=true",
+									"protocol": "https",
+									"host": [
+										"api",
+										"turbodocx",
+										"com"
+									],
+									"path": [
+										"template",
+										"{{TemplateID}}"
+									],
+									"query": [
+										{
+											"key": "showTags",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Deliverable",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "Bearer {{TurboDocx Access Token}}"
+									},
+									{
+										"key": "x-rapiddocx-org-id",
+										"value": "{{TurboDocx Organization ID}}"
+									},
+									{
+										"key": "accept",
+										"value": "application/json, text/plain, */*"
+									},
+									{
+										"key": "accept-language",
+										"value": "en-US,en;q=0.9"
+									},
+									{
+										"key": "content-type",
+										"value": "application/json"
+									},
+									{
+										"key": "dnt",
+										"value": "1"
+									},
+									{
+										"key": "origin",
+										"value": "https://app.turbodocx.com"
+									},
+									{
+										"key": "referer",
+										"value": "https://app.turbodocx.com/"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"templateId\": {{TemplateID}},\r\n    \"name\": \"SOW for Waystar Royco\",\r\n    \"description\": \"\",\r\n    \"variables\": [\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"VersionNumber\",\r\n            \"placeholder\": \"{VersionNumber}\",\r\n            \"text\": \"1.0\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": true,\r\n            \"count\": 1,\r\n            \"order\": 4,\r\n            \"subvariables\": []\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"BillRate\",\r\n            \"placeholder\": \"{BillRate}\",\r\n            \"text\": \"250\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": false,\r\n            \"count\": 1,\r\n            \"order\": 6,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"html\",\r\n            \"name\": \"Scope\",\r\n            \"placeholder\": \"{Scope}\",\r\n            \"text\": \"<body xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><table style=\\\"border-collapse: collapse;\\\" cellspacing=\\\"0\\\">\\n<tbody>\\n<tr>\\n<td style=\\\"background-color: #2f5496; vertical-align: top; width: 155px; border: 1px solid black;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: white;\\\">Project Phase</span></span></span></span></p>\\n</td>\\n<td style=\\\"background-color: #2f5496; border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: 1px solid black; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: white;\\\">Activities in Scope</span></span></span></span></p>\\n</td>\\n<td style=\\\"background-color: #2f5496; border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: 1px solid black; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: white;\\\">Estimated Hours</span></span></span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"background-color: #e7e6e6; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 671px;\\\" colspan=\\\"3\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: black;\\\">{technology} Cloud Build</span></span></span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 155px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Deploy (4) Nodes within {technology} per Region</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Our Services will assist with onboarding of the remote offices. We believe having three nodes per {technology} Region will provide optimal High Availability (HA)</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 16px;\\\">16</span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"background-color: #e7e6e6; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 552px;\\\" colspan=\\\"2\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: black;\\\">Feedback and Environment Remediation</span></span></span></span></p>\\n</td>\\n<td style=\\\"background-color: #e7e6e6; border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p> </p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 155px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Solicit Initial feedback</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 16px;\\\">Work with initial pilot user groups to solicit feedback around the performance of the platform. </span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">5</span></span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 155px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Environment Remediation</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Our Services will allocate up to <strong>15 project-hours</strong> for initial remediation as part of this engagement. Should more hours be needed, we will discuss it with the client project lead and provide an addendum to this scope definition upon mutual agreement.</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">20</span></span></span></p>\\n</td>\\n</tr>\\n</tbody>\\n</table></body>\",\r\n            \"allowRichTextInjection\": 1,\r\n            \"autogenerated\": false,\r\n            \"count\": 1,\r\n            \"order\": 5,\r\n            \"subvariables\": [\r\n                {\r\n                    \"placeholder\": \"{technology}\",\r\n                    \"text\": \"AWS\",\r\n                    \"mimeType\": \"text\",\r\n                    \"isDisabled\": false,\r\n                    \"order\": 0\r\n                }\r\n            ],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"Date\",\r\n            \"placeholder\": \"{Date}\",\r\n            \"text\": \"April 21st, 2024\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": true,\r\n            \"count\": 2,\r\n            \"order\": 2,\r\n            \"subvariables\": []\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"CustomerName\",\r\n            \"placeholder\": \"{CustomerName}\",\r\n            \"text\": \"Waystar Royco\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": false,\r\n            \"count\": 25,\r\n            \"order\": 0,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"ProjectName\",\r\n            \"placeholder\": \"{ProjectName}\",\r\n            \"text\": \"Cloud Assessment and Deployment\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": false,\r\n            \"count\": 2,\r\n            \"order\": 1,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"image\",\r\n            \"name\": \"CustomerLogo\",\r\n            \"placeholder\": \"{CustomerLogo}\",\r\n            \"text\": \"data:image/png;base64,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\",\r\n            \"allowRichTextInjection\": 1,\r\n            \"autogenerated\": true,\r\n            \"count\": 1,\r\n            \"order\": 3,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        }\r\n    ],\r\n    \"tags\": []\r\n}"
+								},
+								"url": {
+									"raw": "https://api.turbodocx.com/deliverable",
+									"protocol": "https",
+									"host": [
+										"api",
+										"turbodocx",
+										"com"
+									],
+									"path": [
+										"deliverable"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "<img src=\"https://content.pstmn.io/3dcb2b67-960d-4077-87d3-659e1799d313/aW1hZ2UucG5n\" alt=\"Creating%20a%20Deliverable%20in%20the%20UI%20with%20pre-merging%20shown.\" width=\"1292\" height=\"958\">\n\nWhen creating a Deliverable, TurboDocx's UI will automatically inherit in the following order:\n\n1. Template Defaults\n2. Folder Variables\n3. Knowledgebase Variables\n    \n\nUsing the APIs, we can perform the same flow. We will get the Template by ID, see the \"pre-merged values\" and then pass those values into the Create Deliverable API."
+				}
+			],
+			"description": "# 🚀 Get started here\n\nThis guide walks you through the operational flows of TurboDocx.TurboDocx is a Document and Slide Deck Generation Platform with an emphasis on reusable content and flexible integrations to fit any use case. Below is our API Documentation that will align with our corresponding UI.\n\n## 🔖 **How to use this Flow**\n\n### **Step 1: Get Access Token and Organization ID**\n\n1. Log into TurboDocx via the UI (a proper API Key is in the works)\n    \n\n<img src=\"https://lh7-us.googleusercontent.com/TXirIt7wFftqr41PsMPeIQs3Mp0ewHjUy2vjelOYNz1SOc_vWn5NXkbT1JXCD4NtPa6QCzZ2HdsTxY7erPr0TK11Pm-34ne5jgEpX3r9ZzBKmEHTtgK_wq3Vr9UUTDGIOhiZLx8F7sDx7JEn2449JQk\">\n\n2\\. After logging in, open your browser developer tools.\n\n<img src=\"https://lh7-us.googleusercontent.com/EPoXUqoOjMAekM69H4SDCvhydTVsCftiO1tnPCEr5A91qxEEc1FxPhRrI5kCngoBy0iSvKXSKobnOhtaKgqLQRU3rqLXAfOfdWzlQ-fanhEVjzM0lpv-RmktClU45trDhLVo-rcX5iX6H1J275lYBPQ\">\n\n3\\. Navigate to the network tab\n\n<img src=\"https://lh7-us.googleusercontent.com/KiyvSzik4vjpnwV5Ehbe44h_R94xkYWZbAS0cRiKvNmJpyYKCPn9EF98OTnf6u0Sv_nFUocfkU15BIPC0Oe0MukYBmxncQvrUpq_5czpbjv0Vji-KO9vcLr6M5Q__zwvtg_SSxPYBsRozfRpoit5jXE\">\n\n4\\. Click on anything and observe the network trace and get the token from the Authorization Header. This is a JWT and is the string after `Bearer`(In the screenshot, we blurred out part of the token for security purposes.)\n\n<img src=\"https://lh7-us.googleusercontent.com/eToIOYqhLY9AD1Ky9qHmtA7nI-iWjeJYI5gF5YTdjbok9g7PZz7DsqL3Q0MVtspoAXMQuVqPqCRxkUb-6LwYwgXfRUwQDHCDrPCqeNZTXeQ4mtcIx_7wjJAQy2XQPbPnQpxUHryNxRBh9CMkGSzMxjs\">\n\n5\\. Capture your Organization ID noted under `x-Rapiddocx-Org-id`\n\n<img src=\"https://lh7-us.googleusercontent.com/Ux4wo1L4QPttxKN6Dqu0mYhxNA4PRarniADy1TaLHB_mBkehOFW5koncfvbkCpsgL1-FXf442v0VMo2BXbcNZvt34omHGskGkyPpl309uqtkJQXCP9RHrOCtdHVwJ761cfSGlvfqJSpKgHWCt165aGk\">\n\n6\\. Set these variables in your Postman Collection\n\n<img src=\"https://content.pstmn.io/834125c9-927e-4cae-af77-f752fd0a2f84/aW1hZ2UucG5n\" width=\"1477\" height=\"303\">\n\n### **Step 2: (Optional) Create Knowledgebase Entires**\n\n<img src=\"https://content.pstmn.io/83538b8c-35cb-426c-953a-2e92794b9d80/aW1hZ2UucG5n\" width=\"616\" height=\"339\">\n\nThe Knowledgebase is the central repository for reusable content within TurboDocx. Knowledgebase content can be text, images, or HTML types.\n\nThe TurboDocx Engine automatically converts the formats in the final document deliverable. TurboDocx also supports \"Folder Variables\" which are knowledgebases specific to folders.\n\nThese will be merged into Deliverables in a later step.\n\n### **Step 3: Create a New Template**\n\nWe typically recommend doing this in the UI, however, you can programatically upload templates into TurboDocx. For this example, [please use our SOW Template provided](https://docs.google.com/document/d/1eGVfPnr0tGR9ofVKria21Ep5Rw4dKHe-/edit?usp=sharing&ouid=101706568972642413390&rtpof=true&sd=true).\n\n1\\. Preflight - Upload your Template and extract the Placeholders and (optionally) use the preview. The most important item is knowing which placeholders support \"Rich Text Injection.\" (i.e. HTML and Image content). Without knowing this, you will see the final result render with issues.\n\n2\\. Create your template, and (optionally) set Template Default Values. Notate the TemplateID from the response.\n\n<img src=\"https://content.pstmn.io/8918dfec-df63-472b-890f-0ad7427d9109/VGVtcGxhdGVDcmVhdGlvbi5wbmc=\" alt=\"Notate%20the%20Template%20ID%20in%20the%20response%20to%20be%20used%20in%20Step%204\" width=\"1179\" height=\"469\">\n\n### **Step 4: Create the Deliverable**\n\nDeliverables are the outputs from TurboDocx from merging the Variables and other content.\n\n1. (Optional) Using the TemplateID from the previous step, Get the Template by ID. TurboDocx will _automatically merge_ centralized items from the Knowledgebase and Folders with the template\n    \n2. Using the Variables from the template, fill in the remaining blanks and merge them into the Deliverable\n    \n3. Capture the DeliverableID to be used in the next step\n    \n\n### **Step 5: Download the Deliverable**\n\nOnce the Deliverable is generated, you can download the document or PDF to be used elsewhere."
+		},
+		{
+			"name": "Variable Routes",
+			"item": [
+				{
+					"name": "Create Text Variable (Knowledgebase)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Company Name\",\r\n    \"description\": \"This is name of our ficticious company.\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{CompanyName}\",\r\n    \"text\": \"VelocityWare, Inc.\",\r\n    \"mimeType\": \"text\",\r\n    \"isGlobal\": true,\r\n    \"allowRichTextInjection\": true\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Text Variable (Knowledgebase) with Tags",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Company Name\",\r\n    \"description\": \"This is name of our ficticious company.\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{CompanyName}\",\r\n    \"text\": \"VelocityWare, Inc.\",\r\n    \"mimeType\": \"text\",\r\n    \"isGlobal\": true,\r\n    \"allowRichTextInjection\": true\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Image Variable (Knowledgebase)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"VelocityWare Logo\",\r\n    \"description\": \"\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{CompanyLogo}\",\r\n    \"mimeType\": \"image\",\r\n    \"isGlobal\": true,\r\n    \"allowRichTextInjection\": true,\r\n    \"text\": \"data:image/png;base64,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\"\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create HTML Variable (Knowledgebase)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Data Table\",\r\n    \"description\": \"\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{DataTable}\",\r\n    \"text\": \"<body xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><table style=\\\"border-collapse: collapse; width: 100%; border: 1px solid rgb(0, 0, 0);\\\" border=\\\"1\\\"><colgroup><col style=\\\"width: 25.8493%;\\\" /><col style=\\\"width: 29.0152%;\\\" /><col style=\\\"width: 45.1356%;\\\" /></colgroup>\\n<tbody>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0); background-color: rgb(53, 152, 219);\\\"><strong><span style=\\\"color: rgb(236, 240, 241);\\\">Name</span></strong></td>\\n<td style=\\\"border-color: rgb(0, 0, 0); background-color: rgb(53, 152, 219);\\\"><strong><span style=\\\"color: rgb(236, 240, 241);\\\">Result</span></strong></td>\\n<td style=\\\"border-color: rgb(0, 0, 0); background-color: rgb(53, 152, 219);\\\"><strong><span style=\\\"color: rgb(236, 240, 241);\\\">Notes</span></strong></td>\\n</tr>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">John Doe</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">90%</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">John did extremely well.</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Jane Doe</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">100%</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Jane exhibited excellent performance.</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Darius Maxwell</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">95%</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Darius shows promising signs of performance. </td>\\n</tr>\\n</tbody>\\n</table></body>\",\r\n    \"mimeType\": \"html\",\r\n    \"isGlobal\": true,\r\n    \"allowRichTextInjection\": true\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Text Variable (Folder)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Client Name\",\r\n    \"description\": \"This is name of our ficticious company.\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{ClientName}\",\r\n    \"text\": \"CyberDyne Systems Inc\",\r\n    \"mimeType\": \"text\",\r\n    \"templateFolderId\": \"3f0da327-a1e1-4dbc-b41e-c70eb6d7ba07\",\r\n    \"allowRichTextInjection\": true\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create HTML Variable (Folder)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cyberdyne Robot Performance\",\r\n    \"description\": \"\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{SupplyRobotPerformance}\",\r\n    \"text\": \"<body xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><table style=\\\"border-collapse: collapse; width: 100%; border: 1px solid rgb(0, 0, 0);\\\" border=\\\"1\\\"><colgroup><col style=\\\"width: 25.8493%;\\\" /><col style=\\\"width: 29.0152%;\\\" /><col style=\\\"width: 45.1356%;\\\" /></colgroup>\\n<tbody>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0); background-color: rgb(53, 152, 219);\\\"><strong><span style=\\\"color: rgb(236, 240, 241);\\\">Name</span></strong></td>\\n<td style=\\\"border-color: rgb(0, 0, 0); background-color: rgb(53, 152, 219);\\\"><strong><span style=\\\"color: rgb(236, 240, 241);\\\">Result</span></strong></td>\\n<td style=\\\"border-color: rgb(0, 0, 0); background-color: rgb(53, 152, 219);\\\"><strong><span style=\\\"color: rgb(236, 240, 241);\\\">Notes</span></strong></td>\\n</tr>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">T-100</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Pass</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Deploying to the field soon.</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">T-300</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Fail</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Did not perform well in interdimensional travel test.</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">T-450</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Pass</td>\\n<td style=\\\"border-color: rgb(0, 0, 0);\\\">Likely to be the next generation of Robots.</td>\\n</tr>\\n</tbody>\\n</table></body>\",\r\n    \"mimeType\": \"html\",\r\n    \"allowRichTextInjection\": true,\r\n    \"templateFolderId\": \"3f0da327-a1e1-4dbc-b41e-c70eb6d7ba07\"\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Image Variable (Folder)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cyberdyne Logo\",\r\n    \"description\": \"\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{ClientLogo}\",\r\n    \"mimeType\": \"image\",\r\n    \"allowRichTextInjection\": true,\r\n    \"text\": \"data:image/png;base64,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\"\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Variables (Knowledgebase)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"44c3-unzppoXln1hKA8phCj0wMh6F2bs\""
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable?limit=5&showTags=true&isGlobal=true",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "showTags",
+									"value": "true"
+								},
+								{
+									"key": "isGlobal",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Variables (Folder)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"44c3-unzppoXln1hKA8phCj0wMh6F2bs\""
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable?limit=5&showTags=true&templateFolderId={{templateFolderId}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "showTags",
+									"value": "true"
+								},
+								{
+									"key": "templateFolderId",
+									"value": "{{templateFolderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Variable (by ID)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Company Name\",\r\n    \"description\": \"This is name of our ficticious company.\",\r\n    \"tags\": [],\r\n    \"placeholder\": \"{CompanyName}\",\r\n    \"text\": \"VelocityWare Products, Inc.\",\r\n    \"mimeType\": \"text\",\r\n    \"id\": {{VariableId}},\r\n    \"allowRichTextInjection\": true,\r\n    \"isGlobal\": 1\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable/{{VariableId}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable",
+								"{{VariableId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Variables (by IDs)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\": [\r\n        \"1de5ad8e-2549-42b6-8662-9f345e7704c3\"\r\n    ]\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Variable/bulk/action",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Variable",
+								"bulk",
+								"action"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "The `Variable` Route in the TurboDocx API allows users to dynamically insert content into their document templates, slide decks, and knowledge bases. The content of these variables can be plain text, HTML, or image files, enabling a versatile approach to document customization and automation.\n\n<img src=\"https://content.pstmn.io/1e4f2893-8f78-4632-b1eb-892e73f7f9a0/aW1hZ2UucG5n\" width=\"1916\" height=\"887\">\n\n## Usage\n\n### Populating the Knowledgebase (or Folder)\n\nThe Knowledgebase is a central repository for content that can be reused across multiple templates and documents. By utilizing the `Variable` Route, users can:\n\n- **Create Variables**: Add new variables to the knowledgebase that can be used as placeholders within templates. These variables are associated with specific tags, enabling organized and efficient retrieval.\n- **Update Variables**: Modify the content of existing variables to reflect changes in information or strategy, ensuring that documents remain up to date without the need to edit individual templates.\n- **Delete Variables**: Remove variables that are no longer relevant from the knowledgebase, maintaining a clean and focused content library.\n    \n\n### Managing Folders\n\nFolders in TurboDocx help organize variables and templates by project, department, or any other categorization that suits the business workflow. The `Variable` Route allows users to:\n\n- **Sort Variables into Folders**: Assign variables to folders for improved document management. This helps users navigate large volumes of content and templates with ease.\n- **Retrieve Folder Contents**: Access all variables within a particular folder, making it simple to find the content needed for a specific document or template.\n    \n\n### Supported Types\n\nThe `Variable` Route supports three types of content, providing flexibility in how information is presented in documents:\n\n- **Text**: For inserting plain text content, such as names, dates, or addresses.\n- **HTML**: For rich text formatting options, like bold, italics, or custom fonts, and for embedding other HTML-supported content within documents.\n- **Image**: For adding graphical elements, such as company logos, user avatars, or product images.\n    \n\n## API Endpoints\n\nThe following endpoints are associated with the `Variable` Route:\n\n- `POST /variable`: Create a new variable.\n- `GET /variable`: Retrieve a list of all variables.\n- `GET /variable/{id}`: Retrieve details about a specific variable.\n- `PUT /variable/{id}`: Update an existing variable.\n- `DELETE /variable/{id}`: Delete a specific variable.\n    \n\nBy using these endpoints, users can automate the integration of dynamic content into their documents, enhancing productivity and ensuring consistency across all generated materials.\n\n## Attributes\n\n- `id` (string, optional): A unique identifier for the variable, automatically generated if not provided.\n- `name` (string, required): The display name of the variable for identification within the user interface.\n- `description` (string, optional): A brief description of the variable's purpose or content.\n- `tags` (array, optional): An array of tags associated with the variable for organizational purposes.\n- `placeholder` (string, required): A unique placeholder text that is used to insert the variable content into documents.\n- `text` (string, required): The content of the variable, which can be text, HTML, or a base64 encoded string for images.\n- `mimeType` (string, required): The type of content that the variable holds, which can be `text`, `html`, or `image`.\n- `allowRichTextInjection` (boolean, optional): Used in other parts of the API, this specifies if this variable can be used in Rich Text Injection. For knowledgebase/folders, it is best practice to leave this set to true.\n- `templateFolderId` (string, conditionally required): The identifier of the template folder to which this variable belongs. This field is required if isGlobal is set to false or omitted. It should not be provided if isGlobal is true.\n- `isGlobal` (boolean, conditionally required): A flag indicating whether the variable is global (i.e., part of the Knowledgebase). If true, the variable is available across all templates and templateFolderId should not be provided. This field is required if templateFolderId is not provided."
+		},
+		{
+			"name": "Tag Routes",
+			"item": [
+				{
+					"name": "Create Tag",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"label\": \"Data Tables\"\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Tag",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Tag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Tag",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{TagId}},\r\n    \"label\": \"Proposal\"\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Tag/{{TagId}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Tag",
+								"{{TagId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Tag",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"url": {
+							"raw": "https://api.turbodocx.com/Tag?limit=6",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Tag"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tags (by IDs)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"ids\":[\"6385160a-f193-42f5-b8d8-9ed0fa2866ee\"]}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/Tag/bulk/action",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"Tag",
+								"bulk",
+								"action"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "<img src=\"https://content.pstmn.io/a9f12bd9-6699-4fa4-bdfa-d5819fcd58e1/aW1hZ2UucG5n\" alt=\"\" height=\"682\" width=\"1907\">\n\nThe Tag API endpoints facilitate efficient organization within the TurboDocx platform by allowing users to manage the tagging system. Tags serve as flexible identifiers that can be attached to Variables, Templates, and Deliverables. Through the API, tags can be created, retrieved, updated, and deleted, enabling automated categorization and enhanced searchability.\n\n## Usage\n\n### Organization and Retrieval\n\nTags are instrumental in categorizing and retrieving various entities within TurboDocx. They enable users to:\n\n- **Create Tag**: Define new tags that can be applied to Variables, Templates, and Deliverables for quick identification and grouping.\n- **Retrieve Tags**: Fetch a list of all existing tags for review or to identify which tag needs to be applied or edited.\n- **Update Tag**: Modify existing tags to better reflect the grouped items or to correct previous tag names.\n- **Delete Tags**: Remove outdated or unnecessary tags from the system to maintain a clean tagging structure.\n    \n\n### Searching with Tags\n\nWith tags applied, users can perform filtered searches across the platform, significantly reducing the time required to locate specific documents or content.\n\n## API Endpoints\n\nThe following endpoints are used for managing tags within the TurboDocx API:\n\n### Create a Tag\n\n- **POST** `/tag`\n    - **Description**: Add a new tag to the system.\n\n### Retrieve Tags\n\n- **GET** `/tag`\n    - **Description**: List all tags available in the system.\n\n### Update a Tag\n\n- **PUT** `/tag/{{tagId}}`\n    \n    - **Description**: Modify an existing tag's label.\n    - **URL Parameters**:\n        \n        - `tagId`: The ID of the tag to be updated.\n            \n\n### Delete a Tag\n\n- **DELETE** `/tag/bulk/action/`\n    \n    - **Description**: Remove a tags from the system"
+		},
+		{
+			"name": "Template Routes",
+			"item": [
+				{
+					"name": "Extract Template Placeholders and Generate Preview",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-filename",
+								"value": "SOW Template.docx"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "This is an example Template",
+									"type": "file",
+									"src": "postman-cloud:///1ef00051-a537-4bd0-8054-9866d7df8ace"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/template/file",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"template",
+								"file"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Template with Optional Default Values",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "templateFile",
+									"type": "file",
+									"src": "vGvlD03TC/SOW Template.docx"
+								},
+								{
+									"key": "name",
+									"value": "SOW Template",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "variables",
+									"value": "[{\"placeholder\":\"{CustomerName}\",\"name\":\"CustomerName\",\"allowRichTextInjection\":false,\"order\":0,\"count\":25},{\"placeholder\":\"{ProjectName}\",\"name\":\"ProjectName\",\"allowRichTextInjection\":false,\"order\":1,\"count\":2},{\"placeholder\":\"{Date}\",\"name\":\"Date\",\"allowRichTextInjection\":false,\"order\":2,\"count\":2},{\"placeholder\":\"{CustomerLogo}\",\"name\":\"CustomerLogo\",\"allowRichTextInjection\":true,\"order\":3,\"count\":1},{\"placeholder\":\"{VersionNumber}\",\"name\":\"VersionNumber\",\"allowRichTextInjection\":false,\"order\":4,\"count\":1},{\"placeholder\":\"{Scope}\",\"name\":\"Scope\",\"allowRichTextInjection\":true,\"order\":5,\"count\":1},{\"placeholder\":\"{BillRate}\",\"name\":\"BillRate\",\"allowRichTextInjection\":false,\"order\":6,\"count\":1}]",
+									"type": "text"
+								},
+								{
+									"key": "tags",
+									"value": "[]",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/template",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"template"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Template Metadata",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"SOW Template\",\r\n    \"tags\": []\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/template/{{TemplateId}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"template",
+								"{{TemplateId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Template",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNfbC02UjRuX1h4bWFTeDdqV3FQSCJ9.eyJodHRwczovL2F1dGgudHVyYm9kb2N4LmNvbS9lbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6Ly9hdXRoLnR1cmJvZG9jeC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDE3MDY1Njg5NzI2NDI0MTMzOTAiLCJhdWQiOlsiaHR0cHM6Ly9hcGkudHVyYm9kb2N4LmNvbSIsImh0dHBzOi8vdGQtcHJvZHVjdGlvbi51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzEzNzIzNDc3LCJleHAiOjE3MTM4MDk4NzcsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhenAiOiJmenVvdmYycUJSanhudDZDVkpTR2tOZUJGZDlwUkw5SiJ9.RYLBqCC16qQCxJm9LTP_SBHyytBNoMtNwIxKr7Ov48iw84JtwifYvjE6giDAvoTpgS9rsRlQ2ms2izqTMEmb5djyejdrJkK9Ninfb8gMqa_MDiwXIWKPab-QzHzgrzBpoB4fXtELCOjfO4qXsxGnzzCdwVSINy45QZJIqq6K5C6aOTUlsXeunIm7jg-Jv0KArWU-T6wXe8BVqz8BTMlbFhM3f7ogHqt4ekBiI5SQAWbw7cPinEfcZIrq6yezdHzEi4oZ1xZDgVZsUVcl-ZPg0Dg-VxR-Ia6-33sSu5uGNI1eyB34DkYLtleEz5Lszh6crxQkBjXf-2iH9lWw2HL_yA"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "579540da-da88-4be9-8e64-dcd8fabd4101"
+							}
+						],
+						"url": {
+							"raw": "https://api.turbodocx.com/template/{{TemplateId}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"template",
+								"{{TemplateId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Template by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"2534-f/UbhD2HIM3HP3jOlbqIO79TVrQ\""
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							}
+						],
+						"url": {
+							"raw": "https://api.turbodocx.com/template/{{TemplateID}}?showTags=true",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"template",
+								"{{TemplateID}}"
+							],
+							"query": [
+								{
+									"key": "showTags",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Template-Item Routes",
+			"item": [
+				{
+					"name": "Get Templates and Folders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"ba3-XeQtPNVWwFAk7rgw2tW+ACfywRQ\""
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							}
+						],
+						"url": {
+							"raw": "https://api.turbodocx.com/template-item?limit=9&showTags=true",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"template-item"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "9"
+								},
+								{
+									"key": "showTags",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "<img src=\"https://content.pstmn.io/6061d955-106b-43b4-ac87-09b5cc6f5211/aW1hZ2UucG5n\" alt=\"This%20route%20gets%20all%20the%20root-level%20templates%20and%20folders.%20\" width=\"1292\" height=\"962\">\n\nTemplates have type set to template\n\nFolders have type set to folder"
+		},
+		{
+			"name": "Deliverable Routes",
+			"item": [
+				{
+					"name": "Create Deliverable",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{TurboDocx Access Token}}"
+							},
+							{
+								"key": "x-rapiddocx-org-id",
+								"value": "{{TurboDocx Organization ID}}"
+							},
+							{
+								"key": "accept",
+								"value": "application/json, text/plain, */*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.turbodocx.com"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.turbodocx.com/"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"templateId\": {{TemplateID}},\r\n    \"name\": \"SOW for Waystar Royco\",\r\n    \"description\": \"\",\r\n    \"variables\": [\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"VersionNumber\",\r\n            \"placeholder\": \"{VersionNumber}\",\r\n            \"text\": \"1.0\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": true,\r\n            \"count\": 1,\r\n            \"order\": 4,\r\n            \"subvariables\": []\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"BillRate\",\r\n            \"placeholder\": \"{BillRate}\",\r\n            \"text\": \"250\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": false,\r\n            \"count\": 1,\r\n            \"order\": 6,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"html\",\r\n            \"name\": \"Scope\",\r\n            \"placeholder\": \"{Scope}\",\r\n            \"text\": \"<body xmlns=\\\"http://www.w3.org/1999/xhtml\\\"><table style=\\\"border-collapse: collapse;\\\" cellspacing=\\\"0\\\">\\n<tbody>\\n<tr>\\n<td style=\\\"background-color: #2f5496; vertical-align: top; width: 155px; border: 1px solid black;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: white;\\\">Project Phase</span></span></span></span></p>\\n</td>\\n<td style=\\\"background-color: #2f5496; border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: 1px solid black; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: white;\\\">Activities in Scope</span></span></span></span></p>\\n</td>\\n<td style=\\\"background-color: #2f5496; border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: 1px solid black; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: white;\\\">Estimated Hours</span></span></span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"background-color: #e7e6e6; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 671px;\\\" colspan=\\\"3\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: black;\\\">{technology} Cloud Build</span></span></span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 155px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Deploy (4) Nodes within {technology} per Region</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Our Services will assist with onboarding of the remote offices. We believe having three nodes per {technology} Region will provide optimal High Availability (HA)</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 16px;\\\">16</span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"background-color: #e7e6e6; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 552px;\\\" colspan=\\\"2\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\"><span style=\\\"color: black;\\\">Feedback and Environment Remediation</span></span></span></span></p>\\n</td>\\n<td style=\\\"background-color: #e7e6e6; border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p> </p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 155px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Solicit Initial feedback</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 16px;\\\">Work with initial pilot user groups to solicit feedback around the performance of the platform. </span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">5</span></span></span></p>\\n</td>\\n</tr>\\n<tr>\\n<td style=\\\"border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: none; vertical-align: top; width: 155px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Environment Remediation</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 396px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">Our Services will allocate up to <strong>15 project-hours</strong> for initial remediation as part of this engagement. Should more hours be needed, we will discuss it with the client project lead and provide an addendum to this scope definition upon mutual agreement.</span></span></span></p>\\n</td>\\n<td style=\\\"border-bottom: 1px solid black; border-left: none; border-right: 1px solid black; border-top: none; vertical-align: top; width: 120px;\\\">\\n<p><span style=\\\"font-size: 11pt;\\\"><span style=\\\"font-family: Calibri,sans-serif;\\\"><span style=\\\"font-size: 12.0pt;\\\">20</span></span></span></p>\\n</td>\\n</tr>\\n</tbody>\\n</table></body>\",\r\n            \"allowRichTextInjection\": 1,\r\n            \"autogenerated\": false,\r\n            \"count\": 1,\r\n            \"order\": 5,\r\n            \"subvariables\": [\r\n                {\r\n                    \"placeholder\": \"{technology}\",\r\n                    \"text\": \"AWS\",\r\n                    \"mimeType\": \"text\",\r\n                    \"isDisabled\": false,\r\n                    \"order\": 0\r\n                }\r\n            ],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"Date\",\r\n            \"placeholder\": \"{Date}\",\r\n            \"text\": \"April 21st, 2024\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": true,\r\n            \"count\": 2,\r\n            \"order\": 2,\r\n            \"subvariables\": []\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"CustomerName\",\r\n            \"placeholder\": \"{CustomerName}\",\r\n            \"text\": \"Waystar Royco\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": false,\r\n            \"count\": 25,\r\n            \"order\": 0,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"text\",\r\n            \"name\": \"ProjectName\",\r\n            \"placeholder\": \"{ProjectName}\",\r\n            \"text\": \"Cloud Assessment and Deployment\",\r\n            \"allowRichTextInjection\": 0,\r\n            \"autogenerated\": false,\r\n            \"count\": 2,\r\n            \"order\": 1,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        },\r\n        {\r\n            \"mimeType\": \"image\",\r\n            \"name\": \"CustomerLogo\",\r\n            \"placeholder\": \"{CustomerLogo}\",\r\n            \"text\": \"data:image/png;base64,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\",\r\n            \"allowRichTextInjection\": 1,\r\n            \"autogenerated\": true,\r\n            \"count\": 1,\r\n            \"order\": 3,\r\n            \"subvariables\": [],\r\n            \"isDisabled\": false\r\n        }\r\n    ],\r\n    \"tags\": []\r\n}"
+						},
+						"url": {
+							"raw": "https://api.turbodocx.com/deliverable",
+							"protocol": "https",
+							"host": [
+								"api",
+								"turbodocx",
+								"com"
+							],
+							"path": [
+								"deliverable"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TurboDocx Organization ID",
+			"value": "ReplaceMeWithYourOrgID",
+			"type": "string"
+		},
+		{
+			"key": "TurboDocx Access Token",
+			"value": "ReplaceMeWithYourAccessToken",
+			"type": "string"
+		}
+	]
+}
