@@ -1,5 +1,7 @@
 var Converter = require("openapi-to-postmanv2");
 const fs = require("fs");
+const importer = require("./extractTwo")
+
 function parseOpenApiInfo(openapiData) {
    const operation = openapiData.api;
    const headers = {};
@@ -101,12 +103,14 @@ function findMatchingItem(items, metadata) {
     }
 
     for (const item of items) {
+      console.log("this is the item", item)
         // Check if the item has a request and matches the metadata
         if (item?.request?.url?.path && metadata?.api?.path) {
             const pathMatches = `/${item.request.url.path.join("/")}` === metadata.api.path.replace(/{(\w+)}/g, ":$1");
             const methodMatches = item.request.method.toLowerCase() === metadata.api.method.toLowerCase();
 
             if (pathMatches && methodMatches) {
+              console.log("this is the main item", item)
                 return item;
             }
         }
@@ -116,6 +120,7 @@ function findMatchingItem(items, metadata) {
             // console.log("item.item", item.item)
             const foundItem = findMatchingItem(item.item, metadata);
             if (foundItem) {
+              console.log("this is the main item", foundItem)
                 return foundItem;
             }
         }
@@ -160,9 +165,11 @@ function generatePostmanItem(item, metadata) {
         return ""; // Return an empty string in case of error
       }
       let apiItems = conversionResult.output[0].data.item
+      // console.log("this is the api items", apiItems)
+      // return
       let flatItems = []
       for(let apiItem of apiItems) {
-        console.log("this is the api item", apiItem)
+        // console.log("this is the api item", apiItem)
         if(apiItem?.item?.length) flatItems = [...flatItems, ...apiItem.item]    
       }
 
@@ -171,7 +178,7 @@ function generatePostmanItem(item, metadata) {
         // console.log("finalItem", finalItem)
         metadata.postmanItem = finalItem
         const template = generateTemplate(metadata.postmanItem, metadata);
-        // console.log("this is the metadata", metadata)
+        console.log("this is the template", template)
         return template
      //  if(metadata.postmanItem) fs.writeFileSync("output.json", JSON.stringify(metadata, null, 2))
      //  return JSON.stringify(metadata, null, 2);
@@ -243,72 +250,74 @@ function handleMetadataBody(bodyJson, decodedJSON) {
 
 }
 
+
+
 function generateTemplate(data, metadata) {
-try {
-  // console.log("this is the data", data)
-  if(!data) return ""
-  // console.log(data)
-  let bodyJsonPlacehoder;
-  if(data?.request?.body?.raw) {
-    bodyJsonPlacehoder = flattenJson(data?.request?.body?.raw)
-  } else {
-    bodyJsonPlacehoder = {}
-  }
-  let bodyJson = bodyJsonPlacehoder  || {}
-  if(Object.keys(bodyJson).length > 0) bodyJson = handleMetadataBody(bodyJson, metadata?.api?.requestBody?.content)
-
-  var bodyData = JSON.stringify(bodyJson);
-  let query = handleQuery(data?.request?.url)
-  let headersData = handleHeaders(data?.request?.header)
-  let url = JSON.stringify(query|| {})
-  let headers = JSON.stringify(headersData|| {})
-  let fullMetadataBody = JSON.stringify(metadata?.api?.requestBody || {})
-
-  var encodedBodyData = Buffer.from(bodyData).toString('base64');
+  try {
+    console.log("this is the data", metadata)
+    if(!data) return ""
+    // console.log(data)
+    let bodyJsonPlacehoder;
+    if(data?.request?.body?.raw) {
+      bodyJsonPlacehoder = flattenJson(data?.request?.body?.raw)
+    } else {
+      bodyJsonPlacehoder = {}
+    }
+    let bodyJson = bodyJsonPlacehoder  || {}
+    if(Object.keys(bodyJson).length > 0) bodyJson = handleMetadataBody(bodyJson, metadata?.api?.requestBody?.content)
   
-  var encodedUrlData = Buffer.from(url).toString('base64');
-  console.log("what is the encoded string query", encodedUrlData)
-  var encodedHeadersData = Buffer.from(headers).toString('base64');
-  var encodedMetadata = Buffer.from(fullMetadataBody).toString('base64')
-
-   return `
-
-import ApiTabs from "@theme/ApiTabs";
-import DiscriminatorTabs from "@theme/DiscriminatorTabs";
-import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
-import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
-import MimeTabs from "@theme/MimeTabs";
-import ParamsItem from "@theme/ParamsItem";
-import ResponseSamples from "@theme/ResponseSamples";
-import SchemaItem from "@theme/SchemaItem";
-import SchemaTabs from "@theme/SchemaTabs";
-
-import JsonToTable from '@site/src/components/JsonToTable';
-import BodyTable from '@site/src/components/BodyTable';
-import QueryTable from '@site/src/components/QueryTable';
-import HeadersTable from '@site/src/components/HeadersTable';
-import DisplayJson from '@site/src/components/DisplayJson';
-import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
-
-# ${metadata.title}
-
-${metadata.description}
-
-<DisplayEndpoint method="${metadata.api.method}" endpoint="${metadata.api.path}"/>
-<QueryTable title="query" data="${encodedUrlData}" />
-<HeadersTable title="headers" data="${encodedHeadersData}" />
-<BodyTable title="body" data="${encodedBodyData}" />
-<DisplayJson title="Whole Request" data="${encodedMetadata}" />             
-
-
-   `;
-
-} catch(e) {
-  console.log(e)
-}
-
-   
-}
+    var bodyData = JSON.stringify(bodyJson);
+    let query = handleQuery(data?.request?.url)
+    let headersData = handleHeaders(data?.request?.header)
+    let url = JSON.stringify(query|| {})
+    let headers = JSON.stringify(headersData|| {})
+    let fullMetadataBody = JSON.stringify(metadata?.api?.requestBody || {})
+  
+    var encodedBodyData = Buffer.from(bodyData).toString('base64');
+    
+    var encodedUrlData = Buffer.from(url).toString('base64');
+    console.log("what is the encoded string query", encodedUrlData)
+    var encodedHeadersData = Buffer.from(headers).toString('base64');
+    var encodedMetadata = Buffer.from(fullMetadataBody).toString('base64')
+  
+     return `
+  
+  import ApiTabs from "@theme/ApiTabs";
+  import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+  import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+  import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+  import MimeTabs from "@theme/MimeTabs";
+  import ParamsItem from "@theme/ParamsItem";
+  import ResponseSamples from "@theme/ResponseSamples";
+  import SchemaItem from "@theme/SchemaItem";
+  import SchemaTabs from "@theme/SchemaTabs";
+  
+  import JsonToTable from '@site/src/components/JsonToTable';
+  import BodyTable from '@site/src/components/BodyTable';
+  import QueryTable from '@site/src/components/QueryTable';
+  import HeadersTable from '@site/src/components/HeadersTable';
+  import DisplayJson from '@site/src/components/DisplayJson';
+  import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
+  
+  # ${metadata.title}
+  
+  ${metadata.description}
+  
+  <DisplayEndpoint method="${metadata.api.method}" endpoint="${metadata.api.path}"/>
+  <QueryTable title="query" data="${encodedUrlData}" />
+  <HeadersTable title="headers" data="${encodedHeadersData}" />
+  <BodyTable title="body" data="${encodedBodyData}" />
+  <DisplayJson title="Whole Request" data="${encodedMetadata}" />             
+  
+  
+     `;
+  
+  } catch(e) {
+    console.log(e)
+  }
+  
+     
+  }
 
 
 const apiConfig = {
@@ -322,10 +331,10 @@ const apiConfig = {
     },
     markdownGenerators: {
       createApiPageMD: (metadata) => {
-        console.log("metadata", metadata);
-         return generatePostmanItem("./tdocxcollection.yml", metadata)
- 
-         
+        // console.log("metadata", metadata);
+        let item = importer.generateTempates("./tdocxcollection.yml", metadata, {postmanCollectionPath: "./tdocxpostman.json"})
+        // console.log("this is the final final final item", item)
+        return item
       },
     },
   },

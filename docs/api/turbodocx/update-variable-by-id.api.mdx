@@ -12,34 +12,27 @@ custom_edit_url: null
 ---
 
 
+  
+  import ApiTabs from "@theme/ApiTabs";
+  import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+  import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+  import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+  import MimeTabs from "@theme/MimeTabs";
+  import ParamsItem from "@theme/ParamsItem";
+  import ResponseSamples from "@theme/ResponseSamples";
+  import SchemaItem from "@theme/SchemaItem";
+  import SchemaTabs from "@theme/SchemaTabs";
+  
+  import JsonToTable from '@site/src/components/JsonToTable';
+  import BodyTable from '@site/src/components/BodyTable';
+  import QueryTable from '@site/src/components/QueryTable';
+  import HeadersTable from '@site/src/components/HeadersTable';
+  import DisplayJson from '@site/src/components/DisplayJson';
+  import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
+  
 
-import ApiTabs from "@theme/ApiTabs";
-import DiscriminatorTabs from "@theme/DiscriminatorTabs";
-import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
-import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
-import MimeTabs from "@theme/MimeTabs";
-import ParamsItem from "@theme/ParamsItem";
-import ResponseSamples from "@theme/ResponseSamples";
-import SchemaItem from "@theme/SchemaItem";
-import SchemaTabs from "@theme/SchemaTabs";
+  <BodyTable title="body" data="IntcclxuICAgIFwibmFtZVwiOiBcIkNvbXBhbnkgTmFtZVwiLFxyXG4gICAgXCJkZXNjcmlwdGlvblwiOiBcIlRoaXMgaXMgbmFtZSBvZiBvdXIgZmljdGljaW91cyBjb21wYW55LlwiLFxyXG4gICAgXCJ0YWdzXCI6IFtdLFxyXG4gICAgXCJwbGFjZWhvbGRlclwiOiBcIntDb21wYW55TmFtZX1cIixcclxuICAgIFwidGV4dFwiOiBcIlZlbG9jaXR5V2FyZSBQcm9kdWN0cywgSW5jLlwiLFxyXG4gICAgXCJtaW1lVHlwZVwiOiBcInRleHRcIixcclxuICAgIFwiaWRcIjoge3tWYXJpYWJsZUlkfX0sXHJcbiAgICBcImFsbG93UmljaFRleHRJbmplY3Rpb25cIjogdHJ1ZSxcclxuICAgIFwiaXNHbG9iYWxcIjogMVxyXG59Ig==" />
 
-import JsonToTable from '@site/src/components/JsonToTable';
-import BodyTable from '@site/src/components/BodyTable';
-import QueryTable from '@site/src/components/QueryTable';
-import HeadersTable from '@site/src/components/HeadersTable';
-import DisplayJson from '@site/src/components/DisplayJson';
-import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
-
-# Update Variable (by ID)
-
-Update Variable (by ID)
-
-<DisplayEndpoint method="put" endpoint="/Variable/{VariableId}"/>
-<QueryTable title="query" data="e30=" />
-<HeadersTable title="headers" data="eyJ4LXJhcGlkZG9jeC1vcmctaWQiOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJ4LXJhcGlkZG9jeC1vcmctaWQiLCJ2YWx1ZSI6IjxzdHJpbmc+IiwiZGVzY3JpcHRpb24iOiIifSwiYWNjZXB0LWxhbmd1YWdlIjp7ImRpc2FibGVkIjpmYWxzZSwia2V5IjoiYWNjZXB0LWxhbmd1YWdlIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiIn0sImRudCI6eyJkaXNhYmxlZCI6ZmFsc2UsImtleSI6ImRudCIsInZhbHVlIjoiPGludGVnZXI+IiwiZGVzY3JpcHRpb24iOiIifSwib3JpZ2luIjp7ImRpc2FibGVkIjpmYWxzZSwia2V5Ijoib3JpZ2luIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiIn0sInJlZmVyZXIiOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJyZWZlcmVyIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiIn0sInNlYy1jaC11YSI6eyJkaXNhYmxlZCI6ZmFsc2UsImtleSI6InNlYy1jaC11YSIsInZhbHVlIjoiPHN0cmluZz4iLCJkZXNjcmlwdGlvbiI6IiJ9LCJzZWMtY2gtdWEtbW9iaWxlIjp7ImRpc2FibGVkIjpmYWxzZSwia2V5Ijoic2VjLWNoLXVhLW1vYmlsZSIsInZhbHVlIjoiPHN0cmluZz4iLCJkZXNjcmlwdGlvbiI6IiJ9LCJzZWMtY2gtdWEtcGxhdGZvcm0iOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJzZWMtY2gtdWEtcGxhdGZvcm0iLCJ2YWx1ZSI6IjxzdHJpbmc+IiwiZGVzY3JpcHRpb24iOiIifSwic2VjLWZldGNoLWRlc3QiOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJzZWMtZmV0Y2gtZGVzdCIsInZhbHVlIjoiPHN0cmluZz4iLCJkZXNjcmlwdGlvbiI6IiJ9LCJzZWMtZmV0Y2gtbW9kZSI6eyJkaXNhYmxlZCI6ZmFsc2UsImtleSI6InNlYy1mZXRjaC1tb2RlIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiIn0sInNlYy1mZXRjaC1zaXRlIjp7ImRpc2FibGVkIjpmYWxzZSwia2V5Ijoic2VjLWZldGNoLXNpdGUiLCJ2YWx1ZSI6IjxzdHJpbmc+IiwiZGVzY3JpcHRpb24iOiIifSwiQ29udGVudC1UeXBlIjp7ImtleSI6IkNvbnRlbnQtVHlwZSIsInZhbHVlIjoiKi8qIn0sIkFjY2VwdCI6eyJrZXkiOiJBY2NlcHQiLCJ2YWx1ZSI6ImFwcGxpY2F0aW9uL2pzb24ifX0=" />
-<BodyTable title="body" data="e30=" />
-<DisplayJson title="Whole Request" data="eyJjb250ZW50Ijp7IiovKiI6eyJzY2hlbWEiOnsidHlwZSI6InN0cmluZyIsImV4YW1wbGUiOiJcIntcXHJcXG4gICAgXFxcIm5hbWVcXFwiOiBcXFwiQ29tcGFueSBOYW1lXFxcIixcXHJcXG4gICAgXFxcImRlc2NyaXB0aW9uXFxcIjogXFxcIlRoaXMgaXMgbmFtZSBvZiBvdXIgZmljdGljaW91cyBjb21wYW55LlxcXCIsXFxyXFxuICAgIFxcXCJ0YWdzXFxcIjogW10sXFxyXFxuICAgIFxcXCJwbGFjZWhvbGRlclxcXCI6IFxcXCJ7Q29tcGFueU5hbWV9XFxcIixcXHJcXG4gICAgXFxcInRleHRcXFwiOiBcXFwiVmVsb2NpdHlXYXJlIFByb2R1Y3RzLCBJbmMuXFxcIixcXHJcXG4gICAgXFxcIm1pbWVUeXBlXFxcIjogXFxcInRleHRcXFwiLFxcclxcbiAgICBcXFwiaWRcXFwiOiB7e1ZhcmlhYmxlSWR9fSxcXHJcXG4gICAgXFxcImFsbG93UmljaFRleHRJbmplY3Rpb25cXFwiOiB0cnVlLFxcclxcbiAgICBcXFwiaXNHbG9iYWxcXFwiOiAxXFxyXFxufVwiIn19fX0=" />             
-
-
-   
+  
+     
       

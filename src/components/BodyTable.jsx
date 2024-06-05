@@ -52,27 +52,52 @@ const JsonToTable = ({ data, title, columns }) => {
   useEffect(() => {
     if (data) {
       try {
+        console.log("Raw data:", data);
+  
+        // Decode the Base64 string
         const decoded64JSON = atob(data);
-        const decodedJSON = JSON.parse(decoded64JSON);
+        console.log("Decoded Base64 JSON string:", decoded64JSON);
+  
+        // Replace placeholders {value} or {{value}} with value
+        let sanitizedJSONStr = decoded64JSON.replace(/{{(.*?)}}/g, '$1').replace(/{(.*?)}/g, '$1');
+  
+        // Remove { and } characters from string values
+        sanitizedJSONStr = sanitizedJSONStr.replace(/"([^"]*?)"/g, (match, p1) => {
+          return `"${p1.replace(/[{}]/g, '')}"`;
+        });
+        console.log("Sanitized JSON string:", sanitizedJSONStr);
+  
+        // Parse the sanitized JSON string
+        const decodedJSON = JSON.parse(sanitizedJSONStr);
+        console.log("Parsed JSON object:", decodedJSON);
+  
+        console.log("Setting decoded data");
         setDecodedData(decodedJSON);
+        console.log("Decoded data set successfully");
+  
       } catch (error) {
-        console.error("Error parsing JSON:", error);
+        console.error("Error occurred:", error.message);
+        console.error("Stack trace:", error.stack);
       }
     }
   }, [data]);
+  
 
   const renderTable = (json, tableName = "Root") => {
+    console.log("WHAT IS DA JSON BOI", typeof json)
     if (!json) return null;
 
     const nestedTables = [];
 
     const iteratedTableRows = Object.entries(json).map(([key, value], index) => {
+      // console.log("######", key)
+      // console.log("######", value)
       if (value.type || value.description) {
         return (
           <TableRow key={key} className={index % 2 === 0 ? 'table-row-even': 'table-row-odd'}>
             <TableCell><span className="font-bold text-md">{key}</span></TableCell>
-            <TableCell className="w-[300px]">{value.description}</TableCell>
-            <TableCell>{value.type}</TableCell>
+            <TableCell className="w-[300px]">{value}</TableCell>
+            <TableCell>{value}</TableCell>
             <TableCell>Yes</TableCell>
           </TableRow>
         );
@@ -108,21 +133,16 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <AccordionItem value="body-table">
-          <AccordionTrigger>{title}</AccordionTrigger>
-          <AccordionContent>
             <Card>
               <CardHeader></CardHeader>
               <CardContent>
-                {decodedData && Object.keys(decodedData).length > 0 ? (
+                {typeof decodedData == "object" && Object.keys(decodedData).length > 0 ? (
                   renderTable(decodedData)
                 ) : (
                   <p></p>
                 )}
               </CardContent>
             </Card>
-          </AccordionContent>
-        </AccordionItem>
       )}
     </>
   );

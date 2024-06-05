@@ -75,16 +75,11 @@ const JsonToTable = ({ data, title, columns }) => {
     let tableRows = [...iteratedTableRows];
 
     return (
-      <AccordionItem value="display-json">
-        <AccordionTrigger>{title}</AccordionTrigger>
-        <AccordionContent>
           <div key={tableName}>
             <pre>
               <code>{JSON.stringify(decodedData, null, 2)}</code>
             </pre>
           </div>
-        </AccordionContent>
-      </AccordionItem>
     );
   };
 

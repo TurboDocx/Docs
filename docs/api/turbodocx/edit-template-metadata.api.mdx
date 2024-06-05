@@ -12,34 +12,34 @@ custom_edit_url: null
 ---
 
 
-
-import ApiTabs from "@theme/ApiTabs";
-import DiscriminatorTabs from "@theme/DiscriminatorTabs";
-import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
-import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
-import MimeTabs from "@theme/MimeTabs";
-import ParamsItem from "@theme/ParamsItem";
-import ResponseSamples from "@theme/ResponseSamples";
-import SchemaItem from "@theme/SchemaItem";
-import SchemaTabs from "@theme/SchemaTabs";
-
-import JsonToTable from '@site/src/components/JsonToTable';
-import BodyTable from '@site/src/components/BodyTable';
-import QueryTable from '@site/src/components/QueryTable';
-import HeadersTable from '@site/src/components/HeadersTable';
-import DisplayJson from '@site/src/components/DisplayJson';
-import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
-
-# Edit Template Metadata
-
-Edit Template Metadata
-
-<DisplayEndpoint method="patch" endpoint="/template/{TemplateId}"/>
-<QueryTable title="query" data="e30=" />
-<HeadersTable title="headers" data="eyJ4LXJhcGlkZG9jeC1vcmctaWQiOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJ4LXJhcGlkZG9jeC1vcmctaWQiLCJ2YWx1ZSI6IjxzdHJpbmc+IiwiZGVzY3JpcHRpb24iOiIifSwiYWNjZXB0LWxhbmd1YWdlIjp7ImRpc2FibGVkIjpmYWxzZSwia2V5IjoiYWNjZXB0LWxhbmd1YWdlIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiIn0sImRudCI6eyJkaXNhYmxlZCI6ZmFsc2UsImtleSI6ImRudCIsInZhbHVlIjoiPGludGVnZXI+IiwiZGVzY3JpcHRpb24iOiIifSwib3JpZ2luIjp7ImRpc2FibGVkIjpmYWxzZSwia2V5Ijoib3JpZ2luIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiIn0sInJlZmVyZXIiOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJyZWZlcmVyIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiIn0sIkNvbnRlbnQtVHlwZSI6eyJrZXkiOiJDb250ZW50LVR5cGUiLCJ2YWx1ZSI6IiovKiJ9LCJBY2NlcHQiOnsia2V5IjoiQWNjZXB0IiwidmFsdWUiOiJhcHBsaWNhdGlvbi9qc29uIn19" />
-<BodyTable title="body" data="e30=" />
-<DisplayJson title="Whole Request" data="eyJjb250ZW50Ijp7IiovKiI6eyJzY2hlbWEiOnsidHlwZSI6InN0cmluZyIsImV4YW1wbGUiOiJcIntcXHJcXG4gICAgXFxcIm5hbWVcXFwiOiBcXFwiU09XIFRlbXBsYXRlXFxcIixcXHJcXG4gICAgXFxcInRhZ3NcXFwiOiBbXVxcclxcbn1cIiJ9fX19" />             
-
-
-   
+  
+  import ApiTabs from "@theme/ApiTabs";
+  import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+  import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+  import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+  import MimeTabs from "@theme/MimeTabs";
+  import ParamsItem from "@theme/ParamsItem";
+  import ResponseSamples from "@theme/ResponseSamples";
+  import SchemaItem from "@theme/SchemaItem";
+  import SchemaTabs from "@theme/SchemaTabs";
+  
+  import JsonToTable from '@site/src/components/JsonToTable';
+  import BodyTable from '@site/src/components/BodyTable';
+  import QueryTable from '@site/src/components/QueryTable';
+  import HeadersTable from '@site/src/components/HeadersTable';
+  import DisplayJson from '@site/src/components/DisplayJson';
+  import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
+  
+  # Edit Template Metadata
+  
+  PATCH /template/{TemplateId}
+  
+  <DisplayEndpoint method="PATCH" endpoint="/template/{TemplateId}"/>
+  <QueryTable title="query" data="W10=" />
+  <HeadersTable title="headers" data="W3sia2V5IjoieC1yYXBpZGRvY3gtb3JnLWlkIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn1d" />
+  <BodyTable title="body" data="IntcclxuICAgIFwibmFtZVwiOiBcIlNPVyBUZW1wbGF0ZVwiLFxyXG4gICAgXCJ0YWdzXCI6IFtdXHJcbn0i" />
+  <DisplayJson title="Whole Request" data="eyJ0aXRsZSI6IkVkaXQgVGVtcGxhdGUgTWV0YWRhdGEiLCJkZXNjcmlwdGlvbiI6IlBBVENIIC90ZW1wbGF0ZS97VGVtcGxhdGVJZH0iLCJhcGkiOnsibWV0aG9kIjoiUEFUQ0giLCJwYXRoIjoiL3RlbXBsYXRlL3tUZW1wbGF0ZUlkfSJ9fQ==" />             
+  
+  
+     
       

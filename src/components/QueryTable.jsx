@@ -54,6 +54,7 @@ const JsonToTable = ({ data, title, columns }) => {
       try {
         const decoded64JSON = atob(data);
         const decodedJSON = JSON.parse(decoded64JSON);
+        console.log("this is the query", decodedJSON)
         setDecodedData(decodedJSON);
       } catch (error) {
         console.error("Error parsing JSON:", error);
@@ -67,13 +68,14 @@ const JsonToTable = ({ data, title, columns }) => {
     const nestedTables = [];
 
     const iteratedTableRows = Object.entries(json).map(([key, value], index) => {
-      if (value.type || value.description) {
+
+      if (value.type || value.description || value.key) {
         return (
           <TableRow key={key} className={index % 2 === 0 ? 'table-row-even': 'table-row-odd'}>
             <TableCell><span className="font-bold text-md">{key}</span></TableCell>
-            <TableCell className="w-[300px]">{value.description}</TableCell>
-            <TableCell>string</TableCell>
-            <TableCell>Yes</TableCell>
+            <TableCell className="w-[300px]">{value.key}</TableCell>
+            <TableCell>{value.value}</TableCell>
+            <TableCell>{value.value}</TableCell>
           </TableRow>
         );
       }
@@ -108,9 +110,6 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <AccordionItem value="query-table">
-          <AccordionTrigger>{title}</AccordionTrigger>
-          <AccordionContent>
             <Card>
               <CardHeader>
                 <CardDescription></CardDescription>
@@ -123,8 +122,6 @@ const JsonToTable = ({ data, title, columns }) => {
                 )}
               </CardContent>
             </Card>
-          </AccordionContent>
-        </AccordionItem>
       )}
     </>
   );

@@ -3,10 +3,38 @@ display: flex;
 flex-direction: column;
 }
 
-.openapi-right-panel__container {
-    // display: flex;
-    // flex-direction: column;
-    // flex-wrap: wrap;
-    // overflow: hidden;
-    // background: red;
+.openapi-left-panel__container {
+    max-width: unset;
+    border: none !important;
+    margin-bottom: 2em;
 }
+
+
+.openapi-right-panel__container::before {
+    content: ("Try it Out");
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.5px;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.openapi-right-panel__container {
+    max-width: unset;
+}
+
+.tabs-container {
+    margin-top: 2em;
+}
+
+[class*="ApiItem"] {
+    .tracing-beam {
+        display: none;
+    }
+    .col--7 {
+        max-width: unset;
+    }
+  }
+  
