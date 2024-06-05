@@ -33,20 +33,20 @@ const JsonToTable = ({ data, title, columns }) => {
   const [tableHeaderdata, setTableHeaderData] = useState([
     {
       id: 1,
-      name: 'Parameter',
+      name: "Parameter",
     },
     {
       id: 2,
-      name: 'Value',
+      name: "Value",
     },
     {
       id: 3,
-      name: 'Data type',
+      name: "Data type",
     },
     {
       id: 4,
-      name: 'Required?',
-    }
+      name: "Required?",
+    },
   ]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const JsonToTable = ({ data, title, columns }) => {
       try {
         const decoded64JSON = atob(data);
         const decodedJSON = JSON.parse(decoded64JSON);
-        console.log("what is the headers decoded", decodedJSON)
+        console.log("what is the headers decoded", decodedJSON);
         setDecodedData(decodedJSON);
       } catch (error) {
         console.error("Error parsing JSON:", error);
@@ -67,39 +67,42 @@ const JsonToTable = ({ data, title, columns }) => {
 
     const nestedTables = [];
 
-    const iteratedTableRows = Object.entries(json).map(([key, value], index) => {
-      console.log("what is the header value", value)
-      if (value.value) {
-        return (
-          <TableRow key={key} className={index % 2 === 0 ? 'table-row-even': 'table-row-odd'}>
-            <TableCell><span className="font-bold text-md font-medium">{key}</span></TableCell>
-            <TableCell className="w-[300px]">{value.value}</TableCell>
-            <TableCell>string</TableCell>
-            <TableCell>Yes</TableCell>
-          </TableRow>
-        );
+    const iteratedTableRows = Object.entries(json).map(
+      ([key, value], index) => {
+        console.log("what is the header value", value);
+        if (value.value) {
+          return (
+            <TableRow
+              key={key}
+              className={index % 2 === 0 ? "table-row-even" : "table-row-odd"}
+            >
+              <TableCell>
+                <span className="font-bold text-md font-medium">{key}</span>
+              </TableCell>
+              <TableCell className="w-[300px]">{value.value}</TableCell>
+              <TableCell>string</TableCell>
+              <TableCell>Yes</TableCell>
+            </TableRow>
+          );
+        }
+        return null;
       }
-      return null;
-    });
+    );
 
     let tableRows = [...iteratedTableRows];
 
     return (
       <>
         <Table>
-          {
-            tableHeaderdata.length > 0 && <TableHeader>
+          {tableHeaderdata.length > 0 && (
+            <TableHeader>
               <TableRow>
-                {
-                  tableHeaderdata.map((item) => {
-                    return (
-                      <TableHead>{item.name}</TableHead>
-                    )
-                  })
-                }
+                {tableHeaderdata.map((item) => {
+                  return <TableHead>{item.name}</TableHead>;
+                })}
               </TableRow>
             </TableHeader>
-          }
+          )}
           <TableBody>{tableRows}</TableBody>
         </Table>
         {nestedTables}
@@ -109,24 +112,20 @@ const JsonToTable = ({ data, title, columns }) => {
 
   return (
     <>
+      <h3>Headers</h3>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <AccordionItem value="headers-table">
-          <AccordionTrigger>{title}</AccordionTrigger>
-          <AccordionContent>
-            <Card>
-              <CardHeader>
-                <CardDescription></CardDescription>
-              </CardHeader>
-              <CardContent>
-                {decodedData && Object.keys(decodedData).length > 0 ? (
-                  renderTable(decodedData)
-                ) : (
-                  <p></p>
-                )}
-              </CardContent>
-            </Card>
-          </AccordionContent>
-        </AccordionItem>
+        <Card>
+          <CardHeader>
+            <CardDescription></CardDescription>
+          </CardHeader>
+          <CardContent>
+            {decodedData && Object.keys(decodedData).length > 0 ? (
+              renderTable(decodedData)
+            ) : (
+              <p></p>
+            )}
+          </CardContent>
+        </Card>
       )}
     </>
   );

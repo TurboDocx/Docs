@@ -162,7 +162,8 @@ function generatePostmanItem(item, metadata) {
       let apiItems = conversionResult.output[0].data.item
       let flatItems = []
       for(let apiItem of apiItems) {
-        flatItems = [...flatItems, ...apiItem.item]
+        console.log("this is the api item", apiItem)
+        if(apiItem?.item?.length) flatItems = [...flatItems, ...apiItem.item]    
       }
 
         let finalItem = findMatchingItem(flatItems, metadata);
@@ -321,8 +322,9 @@ const apiConfig = {
     },
     markdownGenerators: {
       createApiPageMD: (metadata) => {
+        console.log("metadata", metadata);
          return generatePostmanItem("./tdocxcollection.yml", metadata)
-         console.log("metadata", metadata);
+ 
          
       },
     },
