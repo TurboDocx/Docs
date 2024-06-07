@@ -11,35 +11,36 @@ info_path: docs/api/turbodocx/turbodocx-api-documentation
 custom_edit_url: null
 ---
 
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
 
-  
-  import ApiTabs from "@theme/ApiTabs";
-  import DiscriminatorTabs from "@theme/DiscriminatorTabs";
-  import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
-  import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
-  import MimeTabs from "@theme/MimeTabs";
-  import ParamsItem from "@theme/ParamsItem";
-  import ResponseSamples from "@theme/ResponseSamples";
-  import SchemaItem from "@theme/SchemaItem";
-  import SchemaTabs from "@theme/SchemaTabs";
-  
-  import JsonToTable from '@site/src/components/JsonToTable';
-  import BodyTable from '@site/src/components/BodyTable';
-  import QueryTable from '@site/src/components/QueryTable';
-  import HeadersTable from '@site/src/components/HeadersTable';
-  import DisplayJson from '@site/src/components/DisplayJson';
-  import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
-  
-  # Edit Template Metadata
-  
-  PATCH /template/{TemplateId}
-  
-  <DisplayEndpoint method="PATCH" endpoint="/template/{TemplateId}"/>
-  <QueryTable title="query" data="W10=" />
-  <HeadersTable title="headers" data="W3sia2V5IjoieC1yYXBpZGRvY3gtb3JnLWlkIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn1d" />
-  <BodyTable title="body" data="IntcclxuICAgIFwibmFtZVwiOiBcIlNPVyBUZW1wbGF0ZVwiLFxyXG4gICAgXCJ0YWdzXCI6IFtdXHJcbn0i" />
-  <DisplayJson title="Whole Request" data="eyJ0aXRsZSI6IkVkaXQgVGVtcGxhdGUgTWV0YWRhdGEiLCJkZXNjcmlwdGlvbiI6IlBBVENIIC90ZW1wbGF0ZS97VGVtcGxhdGVJZH0iLCJhcGkiOnsibWV0aG9kIjoiUEFUQ0giLCJwYXRoIjoiL3RlbXBsYXRlL3tUZW1wbGF0ZUlkfSJ9fQ==" />             
-  
-  
-     
+<h1 className={"openapi__heading"}>Edit Template Metadata</h1>
+
+<MethodEndpoint method={"patch"} path={"/template/{TemplateId}"}></MethodEndpoint>
+
+
+
+Edit Template Metadata
+
+## Request
+
+<details style={{"marginBottom":"1rem"}} className={"openapi-markdown__details"} data-collapsed={false} open={true}><summary style={{}}><h3 className={"openapi-markdown__details-summary-header-params"}>Path Parameters</h3></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"TemplateId","in":"path","schema":{"type":"string"},"required":true}}></ParamsItem></ul></div></details><details style={{"marginBottom":"1rem"}} className={"openapi-markdown__details"} data-collapsed={false} open={true}><summary style={{}}><h3 className={"openapi-markdown__details-summary-header-params"}>Header Parameters</h3></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"x-rapiddocx-org-id","in":"header","schema":{"type":"string"},"example":"{{TurboDocx Organization ID}}"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"authorization","in":"header","schema":{"type":"string"},"example":"Bearer {{TurboDocx Access Token}}"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"accept","in":"header","schema":{"type":"string"},"example":"application/json, text/plain, */*"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"accept-language","in":"header","schema":{"type":"string"},"example":"en-US,en;q=0.9"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"content-type","in":"header","schema":{"type":"string"},"example":"application/json"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"dnt","in":"header","schema":{"type":"integer"},"example":"1"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"origin","in":"header","schema":{"type":"string"},"example":"https://app.turbodocx.com"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"referer","in":"header","schema":{"type":"string"},"example":"https://app.turbodocx.com/"}}></ParamsItem></ul></div></details><MimeTabs className={"openapi-tabs__mime"}><TabItem label={"*/*"} value={"*/*-schema"}><details style={{}} className={"openapi-markdown__details mime"} data-collapsed={false} open={true}><summary style={{}} className={"openapi-markdown__details-summary-mime"}><h3 className={"openapi-markdown__details-summary-header-body"}>Body</h3></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}><div style={{"marginTop":".5rem","marginBottom":".5rem"}}>
+
+string
+
+</div></ul></details></TabItem></MimeTabs><div><div><ApiTabs label={undefined} id={undefined}><TabItem label={"200"} value={"200"}><div>
+
+Successful response
+
+</div><div><MimeTabs className={"openapi-tabs__mime"} schemaType={"response"}><TabItem label={"application/json"} value={"application/json"}><SchemaTabs className={"openapi-tabs__schema"}><TabItem label={"Schema"} value={"Schema"}><details style={{}} className={"openapi-markdown__details response"} data-collapsed={false} open={true}><summary style={{}} className={"openapi-markdown__details-summary-response"}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}>any</ul></details></TabItem></SchemaTabs></TabItem></MimeTabs></div></TabItem></ApiTabs></div></div>
       
