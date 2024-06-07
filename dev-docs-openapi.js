@@ -299,13 +299,7 @@ function generateTemplate(data, metadata) {
   import DisplayJson from '@site/src/components/DisplayJson';
   import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
   
-  # ${metadata.title}
-  
-  ${metadata.description}
-  
-  <DisplayEndpoint method="${metadata.api.method}" endpoint="${metadata.api.path}"/>
-  <QueryTable title="query" data="${encodedUrlData}" />
-  <HeadersTable title="headers" data="${encodedHeadersData}" />
+
   <BodyTable title="body" data="${encodedBodyData}" />
   <DisplayJson title="Whole Request" data="${encodedMetadata}" />             
   
@@ -328,7 +322,14 @@ const apiConfig = {
     sidebarOptions: {
       // optional, instructs plugin to generate sidebar.js
       groupPathsBy: "tag", // group sidebar items by operation "tag"
-    }
+    },
+    markdownGenerators: {
+      createApiPageMD: (metadata) => {
+         return importer.generateTempates("./tdocxcollection.yml", metadata, {postmanCollectionPath: "./tdocxpostman.json"})
+         // console.log("metadata", metadata);
+         
+      },
+    },
   },
 };
 

@@ -185,6 +185,25 @@ function mergeData(openAPIData, postmanData) {
   return mergedData;
 }
 
+function removeQuotes(jsonString) {
+  try {
+    const firstChar = jsonString.charAt(0);
+    const lastChar = jsonString.charAt(jsonString.length - 1);
+  
+    if (
+      (firstChar === "'" && lastChar === "'") ||
+      (firstChar === '"' && lastChar === '"')
+    ) {
+      return jsonString.slice(1, -1);
+    }
+    return jsonString;
+
+  } catch(e) {
+    return jsonString
+  }
+
+}
+
 function generateMdxTemplate(item) {
     try {
         console.log("what is the item", item)
@@ -194,7 +213,9 @@ function generateMdxTemplate(item) {
         let bodyContent = body?.content
         if(bodyContent) {
             console.log("what is body", bodyContent['*/*'])
-            let json = JSON.parse(bodyContent['*/*'].schema.example)
+            let cleanExample = bodyContent['*/*'].schema.example
+            let json = JSON.parse(cleanExample)
+            console.log("this is the json", typeof json)
             jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
             console.log("what is json body", jsonBody)
         }
@@ -215,10 +236,10 @@ function generateMdxTemplate(item) {
         
         encodedHeadersData = Buffer.from(JSON.stringify(headers)).toString('base64');
         if(jsonBody) encodedBodyData = jsonBody
-        console.log("WHAT IS THE ENCOded", encodedBodyData)
-        encodedMetadata = Buffer.from(JSON.stringify(metadata)).toString('base64');
+       
+       
       
-    return `
+    let template = `
   
   import ApiTabs from "@theme/ApiTabs";
   import DiscriminatorTabs from "@theme/DiscriminatorTabs";
@@ -237,20 +258,20 @@ function generateMdxTemplate(item) {
   import DisplayJson from '@site/src/components/DisplayJson';
   import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
   
-  # ${metadata.title}
-  
-  ${metadata.description}
-  
-  <DisplayEndpoint method="${metadata.api.method}" endpoint="${metadata.api.path}"/>
-  <QueryTable title="query" data="${encodedUrlData}" />
-  <HeadersTable title="headers" data="${encodedHeadersData}" />
+
   <BodyTable title="body" data="${encodedBodyData}" />
-  <DisplayJson title="Whole Request" data="${encodedMetadata}" />             
+           
   
   
      `;
+      console.log("this is the item", item.summary)
+      console.log("this is the template", template)
+     return template
+
+    
 
     } catch(e) {
+      console.log("error for this path", item.summary)
         console.log(e)
     }
    
@@ -301,7 +322,7 @@ function generateTempates(yamlFilePath, metadata, options = {}) {
         const openAPIYAMLPath = yamlFilePath
         const postmanCollectionPath = options?.postmanCollectionPath
         const openAPIData = extractFromOpenAPIYAML(openAPIYAMLPath);
-        const postmanData = extractFromPostmanCollection(postmanCollectionPath)
+        const postmanData = []
         const mergedData = mergeData(openAPIData, postmanData)
         let foundItem = findMatchingItem(mergedData, metadata)
         // console.log("what is the metadata", metadata)

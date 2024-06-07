@@ -59,16 +59,13 @@ const JsonToTable = ({ data, title, columns }) => {
         console.log("Decoded Base64 JSON string:", decoded64JSON);
   
         // Replace placeholders {value} or {{value}} with value
-        let sanitizedJSONStr = decoded64JSON.replace(/{{(.*?)}}/g, '$1').replace(/{(.*?)}/g, '$1');
+
   
         // Remove { and } characters from string values
-        sanitizedJSONStr = sanitizedJSONStr.replace(/"([^"]*?)"/g, (match, p1) => {
-          return `"${p1.replace(/[{}]/g, '')}"`;
-        });
-        console.log("Sanitized JSON string:", sanitizedJSONStr);
+      
   
         // Parse the sanitized JSON string
-        const decodedJSON = JSON.parse(sanitizedJSONStr);
+        const decodedJSON = JSON.parse(decoded64JSON);
         console.log("Parsed JSON object:", decodedJSON);
   
         console.log("Setting decoded data");
@@ -136,11 +133,11 @@ const JsonToTable = ({ data, title, columns }) => {
             <Card>
               <CardHeader></CardHeader>
               <CardContent>
-                {typeof decodedData == "object" && Object.keys(decodedData).length > 0 ? (
-                  renderTable(decodedData)
-                ) : (
-                  <p></p>
-                )}
+                <pre>
+                  <code>
+                    {JSON.stringify(decodedData)}
+                  </code>
+                </pre>
               </CardContent>
             </Card>
       )}
