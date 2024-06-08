@@ -211,13 +211,25 @@ function generateMdxTemplate(item) {
         const { headers, query, body, urlParams } = parameters;
         let jsonBody
         let bodyContent = body?.content
-        if(bodyContent) {
+        // if(item.summary == "Extract Template Placeholders and Generate Preview") {
+        //   console.log("this is the extract")
+        //   console.log(bodyContent)
+        //   console.log(bodyContent['multipart/form-data'].schema.properties)
+        //   console.log("this is the extract")
+        // }
+        if(bodyContent['*/*']) {
             console.log("what is body", bodyContent['*/*'])
-            let cleanExample = bodyContent['*/*'].schema.example
+            let cleanExample = bodyContent['*/*']?.schema?.example || bodyContent['multipart/form-data'].schema.properties
             let json = JSON.parse(cleanExample)
             console.log("this is the json", typeof json)
             jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
             console.log("what is json body", jsonBody)
+        }
+        if(bodyContent['multipart/form-data']) {
+          
+          let json = bodyContent['multipart/form-data'].schema.properties
+          jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
+          console.log("what is json body", jsonBody)
         }
         const metadata = {
           title: summary,
