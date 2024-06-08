@@ -11,5 +11,32 @@ info_path: docs/api/turbodocx/turbodocx-api-documentation
 custom_edit_url: null
 ---
 
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
 
+<h1 className={"openapi__heading"}>Delete Template</h1>
+
+<MethodEndpoint method={"delete"} path={"/template/{TemplateId}"}></MethodEndpoint>
+
+
+
+Delete Template
+
+## Request
+
+<details style={{"marginBottom":"1rem"}} className={"openapi-markdown__details"} data-collapsed={false} open={true}><summary style={{}}><h3 className={"openapi-markdown__details-summary-header-params"}>Path Parameters</h3></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"TemplateId","in":"path","schema":{"type":"string"},"required":true}}></ParamsItem></ul></div></details><details style={{"marginBottom":"1rem"}} className={"openapi-markdown__details"} data-collapsed={false} open={true}><summary style={{}}><h3 className={"openapi-markdown__details-summary-header-params"}>Header Parameters</h3></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"accept","in":"header","schema":{"type":"string"},"example":"application/json, text/plain, */*"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"accept-language","in":"header","schema":{"type":"string"},"example":"en-US,en;q=0.9"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"authorization","in":"header","schema":{"type":"string"},"example":"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNfbC02UjRuX1h4bWFTeDdqV3FQSCJ9.eyJodHRwczovL2F1dGgudHVyYm9kb2N4LmNvbS9lbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6Ly9hdXRoLnR1cmJvZG9jeC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDE3MDY1Njg5NzI2NDI0MTMzOTAiLCJhdWQiOlsiaHR0cHM6Ly9hcGkudHVyYm9kb2N4LmNvbSIsImh0dHBzOi8vdGQtcHJvZHVjdGlvbi51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzEzNzIzNDc3LCJleHAiOjE3MTM4MDk4NzcsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhenAiOiJmenVvdmYycUJSanhudDZDVkpTR2tOZUJGZDlwUkw5SiJ9.RYLBqCC16qQCxJm9LTP_SBHyytBNoMtNwIxKr7Ov48iw84JtwifYvjE6giDAvoTpgS9rsRlQ2ms2izqTMEmb5djyejdrJkK9Ninfb8gMqa_MDiwXIWKPab-QzHzgrzBpoB4fXtELCOjfO4qXsxGnzzCdwVSINy45QZJIqq6K5C6aOTUlsXeunIm7jg-Jv0KArWU-T6wXe8BVqz8BTMlbFhM3f7ogHqt4ekBiI5SQAWbw7cPinEfcZIrq6yezdHzEi4oZ1xZDgVZsUVcl-ZPg0Dg-VxR-Ia6-33sSu5uGNI1eyB34DkYLtleEz5Lszh6crxQkBjXf-2iH9lWw2HL_yA"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"dnt","in":"header","schema":{"type":"integer"},"example":"1"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"origin","in":"header","schema":{"type":"string"},"example":"https://app.turbodocx.com"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"referer","in":"header","schema":{"type":"string"},"example":"https://app.turbodocx.com/"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-ch-ua","in":"header","schema":{"type":"string"},"example":"\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-ch-ua-mobile","in":"header","schema":{"type":"string"},"example":"?0"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-ch-ua-platform","in":"header","schema":{"type":"string"},"example":"\"Windows\""}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-fetch-dest","in":"header","schema":{"type":"string"},"example":"empty"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-fetch-mode","in":"header","schema":{"type":"string"},"example":"cors"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-fetch-site","in":"header","schema":{"type":"string"},"example":"same-site"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"user-agent","in":"header","schema":{"type":"string"},"example":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"x-rapiddocx-org-id","in":"header","schema":{"type":"string"},"example":"579540da-da88-4be9-8e64-dcd8fabd4101"}}></ParamsItem></ul></div></details><div><div><ApiTabs label={undefined} id={undefined}><TabItem label={"200"} value={"200"}><div>
+
+Successful response
+
+</div><div><MimeTabs className={"openapi-tabs__mime"} schemaType={"response"}><TabItem label={"application/json"} value={"application/json"}><SchemaTabs className={"openapi-tabs__schema"}><TabItem label={"Schema"} value={"Schema"}><details style={{}} className={"openapi-markdown__details response"} data-collapsed={false} open={true}><summary style={{}} className={"openapi-markdown__details-summary-response"}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}>any</ul></details></TabItem></SchemaTabs></TabItem></MimeTabs></div></TabItem></ApiTabs></div></div>
       

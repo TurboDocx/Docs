@@ -896,7 +896,7 @@ paths:
         content:
           '*/*':
             schema:
-              type: string
+              type: object
               example: >-
                 {"templateId": "TemplateID","name": "SOW for Waystar
                 Royco","description": "hello","variables": [{"mimeType":
@@ -963,15 +963,21 @@ paths:
       summary: Update Variable (by ID)
       requestBody:
         content:
-          '*/*':
+          'application/json':
             schema:
-              type: string
-              example: >-
-                {  "name": "Company Name",  "description": "This is name
-                of our ficticious company.",  "tags": [],  "placeholder":
-                "CompanyName",  "text": "VelocityWare Products, Inc.", 
-                "mimeType": "text",  "id": "VariableId", 
-                "allowRichTextInjection": true,  "isGlobal": 1}
+              type: object
+              properties: 
+                name:
+                  type: string
+                  description: The name of the variable
+                description:
+                  type: string
+                  description: The description of the variable
+                tags:
+                  type: array
+                items:
+                  type: string
+                  description: List of tags associated with the variable
       parameters:
         - name: authorization
           in: header

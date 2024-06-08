@@ -11,5 +11,32 @@ info_path: docs/api/turbodocx/turbodocx-api-documentation
 custom_edit_url: null
 ---
 
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+import Markdown from "@theme/Markdown";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
 
+<h1 className={"openapi__heading"}>Delete Tags (by IDs)</h1>
+
+<MethodEndpoint method={"delete"} path={"/Tag/bulk/action"}></MethodEndpoint>
+
+
+
+Delete Tags (by IDs)
+
+## Request
+
+<details style={{"marginBottom":"1rem"}} className={"openapi-markdown__details"} data-collapsed={false} open={true}><summary style={{}}><h3 className={"openapi-markdown__details-summary-header-params"}>Header Parameters</h3></summary><div><ul><ParamsItem className={"paramsItem"} param={{"name":"x-rapiddocx-org-id","in":"header","schema":{"type":"string"},"example":"{{TurboDocx Organization ID}}"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"authorization","in":"header","schema":{"type":"string"},"example":"Bearer {{TurboDocx Access Token}}"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"accept","in":"header","schema":{"type":"string"},"example":"application/json, text/plain, */*"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"accept-language","in":"header","schema":{"type":"string"},"example":"en-US,en;q=0.9"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"content-type","in":"header","schema":{"type":"string"},"example":"application/json"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"dnt","in":"header","schema":{"type":"integer"},"example":"1"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"origin","in":"header","schema":{"type":"string"},"example":"https://app.turbodocx.com"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"referer","in":"header","schema":{"type":"string"},"example":"https://app.turbodocx.com/"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-ch-ua","in":"header","schema":{"type":"string"},"example":"\"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\""}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-ch-ua-mobile","in":"header","schema":{"type":"string"},"example":"?0"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-ch-ua-platform","in":"header","schema":{"type":"string"},"example":"\"Windows\""}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-fetch-dest","in":"header","schema":{"type":"string"},"example":"empty"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-fetch-mode","in":"header","schema":{"type":"string"},"example":"cors"}}></ParamsItem><ParamsItem className={"paramsItem"} param={{"name":"sec-fetch-site","in":"header","schema":{"type":"string"},"example":"same-site"}}></ParamsItem></ul></div></details><div><div><ApiTabs label={undefined} id={undefined}><TabItem label={"200"} value={"200"}><div>
+
+Successful response
+
+</div><div><MimeTabs className={"openapi-tabs__mime"} schemaType={"response"}><TabItem label={"application/json"} value={"application/json"}><SchemaTabs className={"openapi-tabs__schema"}><TabItem label={"Schema"} value={"Schema"}><details style={{}} className={"openapi-markdown__details response"} data-collapsed={false} open={true}><summary style={{}} className={"openapi-markdown__details-summary-response"}><strong>Schema</strong></summary><div style={{"textAlign":"left","marginLeft":"1rem"}}></div><ul style={{"marginLeft":"1rem"}}>any</ul></details></TabItem></SchemaTabs></TabItem></MimeTabs></div></TabItem></ApiTabs></div></div>
       
