@@ -1,3 +1,8 @@
 {
-    "external": true
+    "external": true,
+    "ai": {
+        "openapi": {
+            "file": "tdocxcollection.yml"
+        }
+    }
 }
