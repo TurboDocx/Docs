@@ -33,20 +33,12 @@ const JsonToTable = ({ data, title, columns }) => {
   const [tableHeaderdata, setTableHeaderData] = useState([
     {
       id: 1,
-      name: "Parameter",
+      name: "Header",
     },
     {
       id: 2,
       name: "Value",
-    },
-    {
-      id: 3,
-      name: "Data type",
-    },
-    {
-      id: 4,
-      name: "Required?",
-    },
+    }
   ]);
 
   useEffect(() => {
@@ -70,6 +62,7 @@ const JsonToTable = ({ data, title, columns }) => {
     const iteratedTableRows = Object.entries(json).map(
       ([key, value], index) => {
         console.log("what is the header value", value);
+        console.log("what is the key", key)
         if (value.key) {
           return (
             <TableRow
@@ -79,9 +72,7 @@ const JsonToTable = ({ data, title, columns }) => {
               <TableCell>
                 <span className="font-bold text-md font-medium">{value.key}</span>
               </TableCell>
-              <TableCell className="w-[300px]">{value.example}</TableCell>
-              <TableCell>string</TableCell>
-              <TableCell>Yes</TableCell>
+              <TableCell className="w-[300px]">{typeof value.example}</TableCell>
             </TableRow>
           );
         }
