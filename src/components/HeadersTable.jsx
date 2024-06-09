@@ -70,16 +70,16 @@ const JsonToTable = ({ data, title, columns }) => {
     const iteratedTableRows = Object.entries(json).map(
       ([key, value], index) => {
         console.log("what is the header value", value);
-        if (value.value) {
+        if (value.key) {
           return (
             <TableRow
               key={key}
               className={index % 2 === 0 ? "table-row-even" : "table-row-odd"}
             >
               <TableCell>
-                <span className="font-bold text-md font-medium">{key}</span>
+                <span className="font-bold text-md font-medium">{value.key}</span>
               </TableCell>
-              <TableCell className="w-[300px]">{value.value}</TableCell>
+              <TableCell className="w-[300px]">{value.example}</TableCell>
               <TableCell>string</TableCell>
               <TableCell>Yes</TableCell>
             </TableRow>
@@ -111,10 +111,10 @@ const JsonToTable = ({ data, title, columns }) => {
   };
 
   return (
-    <>
+    <div style={{"paddingBottom": "2em"}}>
       <h3>Headers</h3>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <Card>
+        <Card className="headers-card">
           <CardHeader>
             <CardDescription></CardDescription>
           </CardHeader>
@@ -127,7 +127,7 @@ const JsonToTable = ({ data, title, columns }) => {
           </CardContent>
         </Card>
       )}
-    </>
+    </div>
   );
 };
 

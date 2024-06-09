@@ -210,13 +210,7 @@ function generateMdxTemplate(item) {
         const { path, method, summary, parameters } = item;
         const { headers, query, body, urlParams } = parameters;
         let jsonBody
-        let bodyContent = body?.content
-        // if(item.summary == "Extract Template Placeholders and Generate Preview") {
-        //   console.log("this is the extract")
-        //   console.log(bodyContent)
-        //   console.log(bodyContent['multipart/form-data'].schema.properties)
-        //   console.log("this is the extract")
-        // }
+        let bodyContent = body?.content || {}
         console.log("WHAT IS THE BODY CONTENT BOI", bodyContent)
         if(bodyContent['*/*']) {
             console.log("what is body", bodyContent['*/*'])
@@ -275,8 +269,14 @@ function generateMdxTemplate(item) {
   import HeadersTable from '@site/src/components/HeadersTable';
   import DisplayJson from '@site/src/components/DisplayJson';
   import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
-  
 
+  # Testing
+
+  Description
+
+  <DisplayEndpoint method="${metadata.api.method}" endpoint="${metadata.api.path}"/>
+  <QueryTable title="query" data="${encodedUrlData}" />
+  <HeadersTable title="headers" data="${encodedHeadersData}" />
   <BodyTable title="body" data="${encodedBodyData}" />
            
   

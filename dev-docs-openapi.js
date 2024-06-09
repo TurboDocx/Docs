@@ -329,7 +329,7 @@ const apiConfig = {
          // console.log("metadata", metadata);
          
       }
-    },
+    }
   },
 };
 

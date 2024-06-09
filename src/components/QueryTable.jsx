@@ -37,15 +37,7 @@ const JsonToTable = ({ data, title, columns }) => {
     },
     {
       id: 2,
-      name: 'Description',
-    },
-    {
-      id: 3,
-      name: 'Data type',
-    },
-    {
-      id: 4,
-      name: 'Required?',
+      name: 'Type',
     }
   ]);
 
@@ -68,14 +60,13 @@ const JsonToTable = ({ data, title, columns }) => {
     const nestedTables = [];
 
     const iteratedTableRows = Object.entries(json).map(([key, value], index) => {
-
+      console.log("what is the key", key)
+      console.log("what is the value", value)
       if (value.type || value.description || value.key) {
         return (
           <TableRow key={key} className={index % 2 === 0 ? 'table-row-even': 'table-row-odd'}>
-            <TableCell><span className="font-bold text-md">{key}</span></TableCell>
-            <TableCell className="w-[300px]">{value.key}</TableCell>
-            <TableCell>{value.value}</TableCell>
-            <TableCell>{value.value}</TableCell>
+            <TableCell><span className="font-bold text-md">{value.key}</span></TableCell>
+            <TableCell className="w-[300px]">{typeof value.example}</TableCell>
           </TableRow>
         );
       }
@@ -110,9 +101,10 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-            <Card>
+            <>
+            <h3>Query Table</h3>
+            <Card className="query-table">
               <CardHeader>
-                <CardDescription></CardDescription>
               </CardHeader>
               <CardContent>
                 {decodedData && Object.keys(decodedData).length > 0 ? (
@@ -122,6 +114,7 @@ const JsonToTable = ({ data, title, columns }) => {
                 )}
               </CardContent>
             </Card>
+            </>
       )}
     </>
   );
