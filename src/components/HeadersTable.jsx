@@ -112,20 +112,26 @@ const JsonToTable = ({ data, title, columns }) => {
 
   return (
     <div style={{"paddingBottom": "2em"}}>
-      <h3>Headers</h3>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <Card className="headers-card">
+        <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="item-header-1">
+          <AccordionTrigger>Headers</AccordionTrigger>
+          <AccordionContent>
+        {/* <Card className="headers-card">
           <CardHeader>
             <CardDescription></CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent> */}
             {decodedData && Object.keys(decodedData).length > 0 ? (
               renderTable(decodedData)
             ) : (
               <p></p>
             )}
-          </CardContent>
-        </Card>
+          {/* </CardContent>
+        </Card> */}
+        </AccordionContent>
+        </AccordionItem>
+        </Accordion>
       )}
     </div>
   );

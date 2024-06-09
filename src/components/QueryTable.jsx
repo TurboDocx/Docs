@@ -33,12 +33,12 @@ const JsonToTable = ({ data, title, columns }) => {
   const [tableHeaderdata, setTableHeaderData] = useState([
     {
       id: 1,
-      name: 'Parameter',
+      name: "Parameter",
     },
     {
       id: 2,
-      name: 'Type',
-    }
+      name: "Type",
+    },
   ]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const JsonToTable = ({ data, title, columns }) => {
       try {
         const decoded64JSON = atob(data);
         const decodedJSON = JSON.parse(decoded64JSON);
-        console.log("this is the query", decodedJSON)
+        console.log("this is the query", decodedJSON);
         setDecodedData(decodedJSON);
       } catch (error) {
         console.error("Error parsing JSON:", error);
@@ -59,38 +59,43 @@ const JsonToTable = ({ data, title, columns }) => {
 
     const nestedTables = [];
 
-    const iteratedTableRows = Object.entries(json).map(([key, value], index) => {
-      console.log("what is the key", key)
-      console.log("what is the value", value)
-      if (value.type || value.description || value.key) {
-        return (
-          <TableRow key={key} className={index % 2 === 0 ? 'table-row-even': 'table-row-odd'}>
-            <TableCell><span className="font-bold text-md">{value.key}</span></TableCell>
-            <TableCell className="w-[300px]">{typeof value.example}</TableCell>
-          </TableRow>
-        );
+    const iteratedTableRows = Object.entries(json).map(
+      ([key, value], index) => {
+        console.log("what is the key", key);
+        console.log("what is the value", value);
+        if (value.type || value.description || value.key) {
+          return (
+            <TableRow
+              key={key}
+              className={index % 2 === 0 ? "table-row-even" : "table-row-odd"}
+            >
+              <TableCell>
+                <span className="font-bold text-md">{value.key}</span>
+              </TableCell>
+              <TableCell className="w-[300px]">
+                {typeof value.example}
+              </TableCell>
+            </TableRow>
+          );
+        }
+        return null;
       }
-      return null;
-    });
+    );
 
     let tableRows = [...iteratedTableRows];
 
     return (
       <>
         <Table>
-          {
-            tableHeaderdata.length > 0 && <TableHeader>
+          {tableHeaderdata.length > 0 && (
+            <TableHeader>
               <TableRow>
-                {
-                  tableHeaderdata.map((item) => {
-                    return (
-                      <TableHead>{item.name}</TableHead>
-                    )
-                  })
-                }
+                {tableHeaderdata.map((item) => {
+                  return <TableHead>{item.name}</TableHead>;
+                })}
               </TableRow>
             </TableHeader>
-          }
+          )}
           <TableBody>{tableRows}</TableBody>
         </Table>
         {nestedTables}
@@ -101,20 +106,25 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-            <>
-            <h3>Query Table</h3>
-            <Card className="query-table">
-              <CardHeader>
-              </CardHeader>
-              <CardContent>
-                {decodedData && Object.keys(decodedData).length > 0 ? (
-                  renderTable(decodedData)
-                ) : (
-                  <p></p>
-                )}
-              </CardContent>
-            </Card>
-            </>
+        <>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-query-1">
+              <AccordionTrigger>Query Parameters</AccordionTrigger>
+              <AccordionContent>
+                {/* <Card className="query-table">
+                  <CardHeader></CardHeader>
+                  <CardContent> */}
+                    {decodedData && Object.keys(decodedData).length > 0 ? (
+                      renderTable(decodedData)
+                    ) : (
+                      <p></p>
+                    )}
+                  {/* </CardContent>
+                </Card> */}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </>
       )}
     </>
   );

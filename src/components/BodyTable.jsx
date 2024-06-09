@@ -121,35 +121,22 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <div className="body-cards" style={{ display: "flex", gap: "1rem" }}>
-          <div>
-            <Card className="card-item">
+        <div>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-boady-table-1">
+              <AccordionTrigger>Body Parameters</AccordionTrigger>
+              <AccordionContent>
+                {/* <Card className="card-item">
               <CardHeader>
-              <h3>Body Values</h3>
-              </CardHeader>
-              <CardContent>
+              <h3>Body Values</h3> */}
+                {/* </CardHeader>
+              <CardContent> */}
                 {renderTable(decodedData)}
-              </CardContent>
-            </Card>
-          </div>
-          <div>
-            <Card className="card-item">
-              <CardHeader>
-                <h3>Example JSON</h3>
-              </CardHeader>
-              <CardContent>
-                <pre
-                  style={{
-                    maxHeight: "30vh",
-                    overflowY: "auto",
-                    maxWidth: "500px",
-                  }}
-                >
-                  <code>{JSON.stringify(decodedData, null, 2)}</code>
-                </pre>
-              </CardContent>
-            </Card>
-          </div>
+                {/* </CardContent>
+            </Card> */}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       )}
     </>
