@@ -270,10 +270,10 @@ function generateMdxTemplate(item) {
   import DisplayJson from '@site/src/components/DisplayJson';
   import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
-  # Testing
-
-  Description
-
+  # ${metadata.title.replace(/[{}]/g, '')}
+  
+  ${item.summary}
+  
   <DisplayEndpoint method="${metadata.api.method}" endpoint="${metadata.api.path}"/>
   <QueryTable title="query" data="${encodedUrlData}" />
   <HeadersTable title="headers" data="${encodedHeadersData}" />
