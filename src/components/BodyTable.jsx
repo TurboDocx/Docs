@@ -38,7 +38,7 @@ const JsonToTable = ({ data, title, columns }) => {
     {
       id: 2,
       name: "Example Value",
-    }
+    },
   ]);
 
   useEffect(() => {
@@ -70,10 +70,7 @@ const JsonToTable = ({ data, title, columns }) => {
 
   const renderTable = (json, tableName = "Root") => {
     try {
-
-    } catch(e) {
-
-    }
+    } catch (e) {}
     console.log("WHAT IS DA JSON BOI", json);
     if (!json) return null;
 
@@ -81,8 +78,8 @@ const JsonToTable = ({ data, title, columns }) => {
 
     const iteratedTableRows = Object.entries(json).map(
       ([key, value], index) => {
-        console.log("######", key)
-        console.log("######", value)
+        console.log("######", key);
+        console.log("######", value);
         if (key || value) {
           return (
             <TableRow
@@ -92,7 +89,7 @@ const JsonToTable = ({ data, title, columns }) => {
               <TableCell>
                 <span className="font-bold text-md">{key}</span>
               </TableCell>
-              <TableCell className="w-[300px]">{typeof value}</TableCell>
+              <TableCell className="w-[300px]">{value.type}</TableCell>
             </TableRow>
           );
         }
@@ -124,23 +121,35 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <div>
-          <Card>
-            <CardHeader></CardHeader>
-            <CardContent>
-              <pre>
-                <code>{JSON.stringify(decodedData)}</code>
-              </pre>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader></CardHeader>
-            <CardContent>
-              <pre>
+        <div className="body-cards" style={{ display: "flex", gap: "1rem" }}>
+          <div>
+            <Card className="card-item">
+              <CardHeader>
+              <h3>Body Values</h3>
+              </CardHeader>
+              <CardContent>
                 {renderTable(decodedData)}
-              </pre>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
+          <div>
+            <Card className="card-item">
+              <CardHeader>
+                <h3>Example JSON</h3>
+              </CardHeader>
+              <CardContent>
+                <pre
+                  style={{
+                    maxHeight: "30vh",
+                    overflowY: "auto",
+                    maxWidth: "500px",
+                  }}
+                >
+                  <code>{JSON.stringify(decodedData, null, 2)}</code>
+                </pre>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       )}
     </>

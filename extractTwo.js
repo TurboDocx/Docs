@@ -217,6 +217,7 @@ function generateMdxTemplate(item) {
         //   console.log(bodyContent['multipart/form-data'].schema.properties)
         //   console.log("this is the extract")
         // }
+        console.log("WHAT IS THE BODY CONTENT BOI", bodyContent)
         if(bodyContent['*/*']) {
             console.log("what is body", bodyContent['*/*'])
             let cleanExample = bodyContent['*/*']?.schema?.example || bodyContent['multipart/form-data'].schema.properties
@@ -228,6 +229,11 @@ function generateMdxTemplate(item) {
         if(bodyContent['multipart/form-data']) {
           
           let json = bodyContent['multipart/form-data'].schema.properties
+          jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
+          console.log("what is json body", jsonBody)
+        }
+        if(bodyContent["application/json"]) {
+          let json = bodyContent["application/json"].schema.properties
           jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
           console.log("what is json body", jsonBody)
         }

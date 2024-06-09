@@ -323,14 +323,13 @@ const apiConfig = {
       // optional, instructs plugin to generate sidebar.js
       groupPathsBy: "tag", // group sidebar items by operation "tag"
     },
-    // markdownGenerators: {
-    //   createApiPageMD: (metadata) => {
-    //      return importer.generateTempates("./tdocxcollection.yml", metadata, {postmanCollectionPath: "./tdocxpostman.json"})
-    //      // console.log("metadata", metadata);
+    markdownGenerators: {
+      createApiPageMD: (metadata) => {
+         return importer.generateTempates("./tdocxcollection.yml", metadata, {postmanCollectionPath: "./tdocxpostman.json"})
+         // console.log("metadata", metadata);
          
-    //   },
-    
-    // },
+      }
+    },
   },
 };
 

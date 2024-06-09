@@ -37,4 +37,12 @@ flex-direction: column;
         max-width: unset;
     }
   }
+
+.body-cards {
+    .bg-card {
+        min-height: 50vh !important;
+        max-height: 50vh !important;
+        overflow-x: scroll;
+    }
+}
   
