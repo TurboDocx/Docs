@@ -32,7 +32,6 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
-    "@scalar/docusaurus": "^0.0.6",
     "@tabler/icons-react": "^2.46.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tanstack/react-table": "^8.10.7",
