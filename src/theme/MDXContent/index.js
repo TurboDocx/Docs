@@ -26,7 +26,7 @@ export default function MDXContentWrapper(props) {
             imagePositionY={
               props?.children?.type?.frontMatter?.image_position_y
             }
-            bgImageSize={ props?.children?.type?.frontMatter?.image_size}
+            bgImageSize={props?.children?.type?.frontMatter?.image_size}
             imagePositionX={
               props?.children?.type?.frontMatter?.image_position_x
             }
@@ -75,6 +75,11 @@ export default function MDXContentWrapper(props) {
           </BackgroundGradientAnimation>
           <MDXContent style={{ backgroundImage: image }} {...props} />
         </>
+      ) : props?.children?.props?.children?.props?.className?.includes("theme-api-markdown") ? (
+        // Render something for the new condition
+        <div style={{ paddingTop: "2em" }}>
+          <MDXContent style={{ backgroundImage: image }} {...props} />
+        </div>
       ) : (
         <TracingBeam>
           <div style={{ paddingTop: "2em" }}>

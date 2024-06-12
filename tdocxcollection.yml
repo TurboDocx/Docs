@@ -1,0 +1,1950 @@
+openapi: 3.0.0
+info:
+  title: TurboDocx API Documentation
+  description: >-
+    Welcome to the TurboDocx API Documentation. This comprehensive guide is
+    designed to provide developers with all the information required to interact
+    with the TurboDocx platform programmatically.
+
+
+    Whether you're looking to automate document creation, manage your templates,
+    or integrate TurboDocx features into your application, you'll find the
+    necessary endpoints, parameters, and examples here.
+
+
+    ## **Getting started guide**
+
+
+    Before diving into the specifics of the API, ensure that you have obtained
+    the necessary Access Token and have the correct permissions to access the
+    desired resources.
+
+
+    Keep your Access Token secure and do not expose them in publicly accessible
+    areas such as GitHub, client-side code, etc. **The Authentication and
+    Organization ID is a variable set at the root of the collection.**
+
+
+    ## Base URL
+
+
+    All API requests should be made to the base URL provided upon your API key
+    registration. Typically, it looks like this:
+
+
+    ``` typescript
+
+    https://api.turbodocx.com
+
+     ```
+
+    ## Authentication
+
+
+    TurboDocx is working on it's API Key flows, and for the time being, we
+    recommend grabbing the access token used from your user's accounts to
+    leverage our APIs. You can find an example on how to get your access token
+    in the `Blueprint` folder.
+
+
+    To use the Access Token, use the following under the `Authorization Header`
+
+
+    ``` typescript
+
+    Authorization: Bearer YOUR_ACCESS_TOKEN
+
+     ```
+
+    ### Authentication error response
+
+
+    If an Access Token is missing, malformed, or invalid, you will receive an
+    HTTP 401 Unauthorized response code.
+
+
+    ### **Need some help?**
+
+
+    In case you have questions, go through our tutorials ((link to your video or
+    help documentation here)). Or visit our FAQ page ((link to the relevant
+    page)).
+
+
+    Or you can check out our community forum, there’s a good chance our
+    community has an answer for you. Visit our developer forum ((link to
+    developer forum)) to review topics, ask questions, and learn from others.
+
+
+    `You can also document or add links to libraries, code examples, and other
+    resources needed to make a request.`
+  version: 1.0.0
+servers:
+  - url: https://api.turbodocx.com
+  - url: https://app.turbodocx.com
+tags:
+  - name: Blueprint
+    description: >-
+      # 🚀 Get started here
+
+
+      This guide walks you through the operational flows of TurboDocx.TurboDocx
+      is a Document and Slide Deck Generation Platform with an emphasis on
+      reusable content and flexible integrations to fit any use case. Below is
+      our API Documentation that will align with our corresponding UI.
+
+
+      ## 🔖 **How to use this Flow**
+
+
+      ### **Step 1: Get Access Token and Organization ID**
+
+
+      1. Log into TurboDocx via the UI (a proper API Key is in the works)
+          
+
+      <img
+      src="https://lh7-us.googleusercontent.com/TXirIt7wFftqr41PsMPeIQs3Mp0ewHjUy2vjelOYNz1SOc_vWn5NXkbT1JXCD4NtPa6QCzZ2HdsTxY7erPr0TK11Pm-34ne5jgEpX3r9ZzBKmEHTtgK_wq3Vr9UUTDGIOhiZLx8F7sDx7JEn2449JQk">
+
+
+      2\. After logging in, open your browser developer tools.
+
+
+      <img
+      src="https://lh7-us.googleusercontent.com/EPoXUqoOjMAekM69H4SDCvhydTVsCftiO1tnPCEr5A91qxEEc1FxPhRrI5kCngoBy0iSvKXSKobnOhtaKgqLQRU3rqLXAfOfdWzlQ-fanhEVjzM0lpv-RmktClU45trDhLVo-rcX5iX6H1J275lYBPQ">
+
+
+      3\. Navigate to the network tab
+
+
+      <img
+      src="https://lh7-us.googleusercontent.com/KiyvSzik4vjpnwV5Ehbe44h_R94xkYWZbAS0cRiKvNmJpyYKCPn9EF98OTnf6u0Sv_nFUocfkU15BIPC0Oe0MukYBmxncQvrUpq_5czpbjv0Vji-KO9vcLr6M5Q__zwvtg_SSxPYBsRozfRpoit5jXE">
+
+
+      4\. Click on anything and observe the network trace and get the token from
+      the Authorization Header. This is a JWT and is the string after
+      `Bearer`(In the screenshot, we blurred out part of the token for security
+      purposes.)
+
+
+      <img
+      src="https://lh7-us.googleusercontent.com/eToIOYqhLY9AD1Ky9qHmtA7nI-iWjeJYI5gF5YTdjbok9g7PZz7DsqL3Q0MVtspoAXMQuVqPqCRxkUb-6LwYwgXfRUwQDHCDrPCqeNZTXeQ4mtcIx_7wjJAQy2XQPbPnQpxUHryNxRBh9CMkGSzMxjs">
+
+
+      5\. Capture your Organization ID noted under `x-Rapiddocx-Org-id`
+
+
+      <img
+      src="https://lh7-us.googleusercontent.com/Ux4wo1L4QPttxKN6Dqu0mYhxNA4PRarniADy1TaLHB_mBkehOFW5koncfvbkCpsgL1-FXf442v0VMo2BXbcNZvt34omHGskGkyPpl309uqtkJQXCP9RHrOCtdHVwJ761cfSGlvfqJSpKgHWCt165aGk">
+
+
+      6\. Set these variables in your Postman Collection
+
+
+      <img
+      src="https://content.pstmn.io/834125c9-927e-4cae-af77-f752fd0a2f84/aW1hZ2UucG5n"
+      width="1477" height="303">
+
+
+      ### **Step 2: (Optional) Create Knowledgebase Entires**
+
+
+      <img
+      src="https://content.pstmn.io/83538b8c-35cb-426c-953a-2e92794b9d80/aW1hZ2UucG5n"
+      width="616" height="339">
+
+
+      The Knowledgebase is the central repository for reusable content within
+      TurboDocx. Knowledgebase content can be text, images, or HTML types.
+
+
+      The TurboDocx Engine automatically converts the formats in the final
+      document deliverable. TurboDocx also supports "Folder Variables" which are
+      knowledgebases specific to folders.
+
+
+      These will be merged into Deliverables in a later step.
+
+
+      ### **Step 3: Create a New Template**
+
+
+      We typically recommend doing this in the UI, however, you can
+      programatically upload templates into TurboDocx. For this example, [please
+      use our SOW Template
+      provided](https://docs.google.com/document/d/1eGVfPnr0tGR9ofVKria21Ep5Rw4dKHe-/edit?usp=sharing&ouid=101706568972642413390&rtpof=true&sd=true).
+
+
+      1\. Preflight - Upload your Template and extract the Placeholders and
+      (optionally) use the preview. The most important item is knowing which
+      placeholders support "Rich Text Injection." (i.e. HTML and Image content).
+      Without knowing this, you will see the final result render with issues.
+
+
+      2\. Create your template, and (optionally) set Template Default Values.
+      Notate the TemplateID from the response.
+
+
+      <img
+      src="https://content.pstmn.io/8918dfec-df63-472b-890f-0ad7427d9109/VGVtcGxhdGVDcmVhdGlvbi5wbmc="
+      alt="Notate%20the%20Template%20ID%20in%20the%20response%20to%20be%20used%20in%20Step%204"
+      width="1179" height="469">
+
+
+      ### **Step 4: Create the Deliverable**
+
+
+      Deliverables are the outputs from TurboDocx from merging the Variables and
+      other content.
+
+
+      1. (Optional) Using the TemplateID from the previous step, Get the
+      Template by ID. TurboDocx will _automatically merge_ centralized items
+      from the Knowledgebase and Folders with the template
+          
+      2. Using the Variables from the template, fill in the remaining blanks and
+      merge them into the Deliverable
+          
+      3. Capture the DeliverableID to be used in the next step
+          
+
+      ### **Step 5: Download the Deliverable**
+
+
+      Once the Deliverable is generated, you can download the document or PDF to
+      be used elsewhere.
+  - name: Blueprint > Step 2 (Optional) - Create Knowledgebase Entries
+    description: >-
+      <img
+      src="https://content.pstmn.io/74c09457-388d-49cf-bab5-19b04d22b2c3/aW1hZ2UucG5n"
+      alt="The%20UI%20equivalent%20of%20creating%20a%20Variable" width="1295"
+      height="873">
+
+
+      1. Using the three provided POST parameters, you will create a
+      CompanyName, Company Logo, and then a fictional "scope" table to be used
+      as a default inheritied value when creating a Deliverable.  
+          
+      2. Note - in the scope we provide "Subvariables" that can be swapped out.
+      We use {Technology} which can be platforms like AWS, Azure, GCP, etc..
+  - name: Blueprint > Step 3 - Create a Template
+    description: >-
+      <img
+      src="https://content.pstmn.io/0e5bc131-3951-40fa-90bf-981c4ccfa8a8/aW1hZ2UucG5n"
+      alt="The%20UI%20Equivalent%20of%20Creating%20a%20Template" width="1285"
+      height="857">
+
+
+      1. The first step is to extract the Template Placeholders to determine
+      whch fields support Rich Text Injection
+
+      2. The second step is to upload the Template with the Optional Default
+      Values (mirroring the items extracted from step 1). Note - the variables
+      are Stringified using a function such as `JSON.stringify()` prior to
+      uploading it to the endpoint.
+  - name: Blueprint > Step 4 - Create a Deliverable
+    description: >-
+      <img
+      src="https://content.pstmn.io/3dcb2b67-960d-4077-87d3-659e1799d313/aW1hZ2UucG5n"
+      alt="Creating%20a%20Deliverable%20in%20the%20UI%20with%20pre-merging%20shown."
+      width="1292" height="958">
+
+
+      When creating a Deliverable, TurboDocx's UI will automatically inherit in
+      the following order:
+
+
+      1. Template Defaults
+
+      2. Folder Variables
+
+      3. Knowledgebase Variables
+          
+
+      Using the APIs, we can perform the same flow. We will get the Template by
+      ID, see the "pre-merged values" and then pass those values into the Create
+      Deliverable API.
+  - name: Variable Routes
+    description: >-
+      The `Variable` Route in the TurboDocx API allows users to dynamically
+      insert content into their document templates, slide decks, and knowledge
+      bases. The content of these variables can be plain text, HTML, or image
+      files, enabling a versatile approach to document customization and
+      automation.
+
+
+      <img
+      src="https://content.pstmn.io/1e4f2893-8f78-4632-b1eb-892e73f7f9a0/aW1hZ2UucG5n"
+      width="1916" height="887">
+
+
+      ## Usage
+
+
+      ### Populating the Knowledgebase (or Folder)
+
+
+      The Knowledgebase is a central repository for content that can be reused
+      across multiple templates and documents. By utilizing the `Variable`
+      Route, users can:
+
+
+      - **Create Variables**: Add new variables to the knowledgebase that can be
+      used as placeholders within templates. These variables are associated with
+      specific tags, enabling organized and efficient retrieval.
+
+      - **Update Variables**: Modify the content of existing variables to
+      reflect changes in information or strategy, ensuring that documents remain
+      up to date without the need to edit individual templates.
+
+      - **Delete Variables**: Remove variables that are no longer relevant from
+      the knowledgebase, maintaining a clean and focused content library.
+          
+
+      ### Managing Folders
+
+
+      Folders in TurboDocx help organize variables and templates by project,
+      department, or any other categorization that suits the business workflow.
+      The `Variable` Route allows users to:
+
+
+      - **Sort Variables into Folders**: Assign variables to folders for
+      improved document management. This helps users navigate large volumes of
+      content and templates with ease.
+
+      - **Retrieve Folder Contents**: Access all variables within a particular
+      folder, making it simple to find the content needed for a specific
+      document or template.
+          
+
+      ### Supported Types
+
+
+      The `Variable` Route supports three types of content, providing
+      flexibility in how information is presented in documents:
+
+
+      - **Text**: For inserting plain text content, such as names, dates, or
+      addresses.
+
+      - **HTML**: For rich text formatting options, like bold, italics, or
+      custom fonts, and for embedding other HTML-supported content within
+      documents.
+
+      - **Image**: For adding graphical elements, such as company logos, user
+      avatars, or product images.
+          
+
+      ## API Endpoints
+
+
+      The following endpoints are associated with the `Variable` Route:
+
+
+      - `POST /variable`: Create a new variable.
+
+      - `GET /variable`: Retrieve a list of all variables.
+
+      - `GET /variable/{id}`: Retrieve details about a specific variable.
+
+      - `PUT /variable/{id}`: Update an existing variable.
+
+      - `DELETE /variable/{id}`: Delete a specific variable.
+          
+
+      By using these endpoints, users can automate the integration of dynamic
+      content into their documents, enhancing productivity and ensuring
+      consistency across all generated materials.
+
+
+      ## Attributes
+
+
+      - `id` (string, optional): A unique identifier for the variable,
+      automatically generated if not provided.
+
+      - `name` (string, required): The display name of the variable for
+      identification within the user interface.
+
+      - `description` (string, optional): A brief description of the variable's
+      purpose or content.
+
+      - `tags` (array, optional): An array of tags associated with the variable
+      for organizational purposes.
+
+      - `placeholder` (string, required): A unique placeholder text that is used
+      to insert the variable content into documents.
+
+      - `text` (string, required): The content of the variable, which can be
+      text, HTML, or a base64 encoded string for images.
+
+      - `mimeType` (string, required): The type of content that the variable
+      holds, which can be `text`, `html`, or `image`.
+
+      - `allowRichTextInjection` (boolean, optional): Used in other parts of the
+      API, this specifies if this variable can be used in Rich Text Injection.
+      For knowledgebase/folders, it is best practice to leave this set to true.
+
+      - `templateFolderId` (string, conditionally required): The identifier of
+      the template folder to which this variable belongs. This field is required
+      if isGlobal is set to false or omitted. It should not be provided if
+      isGlobal is true.
+
+      - `isGlobal` (boolean, conditionally required): A flag indicating whether
+      the variable is global (i.e., part of the Knowledgebase). If true, the
+      variable is available across all templates and templateFolderId should not
+      be provided. This field is required if templateFolderId is not provided.
+  - name: Tag Routes
+    description: >-
+      <img
+      src="https://content.pstmn.io/a9f12bd9-6699-4fa4-bdfa-d5819fcd58e1/aW1hZ2UucG5n"
+      alt="" height="682" width="1907">
+
+
+      The Tag API endpoints facilitate efficient organization within the
+      TurboDocx platform by allowing users to manage the tagging system. Tags
+      serve as flexible identifiers that can be attached to Variables,
+      Templates, and Deliverables. Through the API, tags can be created,
+      retrieved, updated, and deleted, enabling automated categorization and
+      enhanced searchability.
+
+
+      ## Usage
+
+
+      ### Organization and Retrieval
+
+
+      Tags are instrumental in categorizing and retrieving various entities
+      within TurboDocx. They enable users to:
+
+
+      - **Create Tag**: Define new tags that can be applied to Variables,
+      Templates, and Deliverables for quick identification and grouping.
+
+      - **Retrieve Tags**: Fetch a list of all existing tags for review or to
+      identify which tag needs to be applied or edited.
+
+      - **Update Tag**: Modify existing tags to better reflect the grouped items
+      or to correct previous tag names.
+
+      - **Delete Tags**: Remove outdated or unnecessary tags from the system to
+      maintain a clean tagging structure.
+          
+
+      ### Searching with Tags
+
+
+      With tags applied, users can perform filtered searches across the
+      platform, significantly reducing the time required to locate specific
+      documents or content.
+
+
+      ## API Endpoints
+
+
+      The following endpoints are used for managing tags within the TurboDocx
+      API:
+
+
+      ### Create a Tag
+
+
+      - **POST** `/tag`
+          - **Description**: Add a new tag to the system.
+
+      ### Retrieve Tags
+
+
+      - **GET** `/tag`
+          - **Description**: List all tags available in the system.
+
+      ### Update a Tag
+
+
+      - **PUT** `/tag/{{tagId}}`
+          
+          - **Description**: Modify an existing tag's label.
+          - **URL Parameters**:
+              
+              - `tagId`: The ID of the tag to be updated.
+                  
+
+      ### Delete a Tag
+
+
+      - **DELETE** `/tag/bulk/action/`
+          
+          - **Description**: Remove a tags from the system
+  - name: Template Routes
+  - name: Template-Item Routes
+    description: >-
+      <img
+      src="https://content.pstmn.io/6061d955-106b-43b4-ac87-09b5cc6f5211/aW1hZ2UucG5n"
+      alt="This%20route%20gets%20all%20the%20root-level%20templates%20and%20folders.%20"
+      width="1292" height="962">
+
+
+      Templates have type set to template
+
+
+      Folders have type set to folder
+  - name: Deliverable Routes
+paths:
+  /Variable:
+    post:
+      tags:
+        - Variable Routes
+      summary: Create Image Variable (Folder)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the variable
+                description:
+                  type: string
+                  description: The description of the variable
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: List of tags associated with the variable
+                placeholder:
+                  type: string
+                  description: >-
+                    A unique placeholder text that is used to insert the
+                    variable content into documents
+                text:
+                  type: string
+                  description: >-
+                    The content of the variable, which can be text, HTML, or a
+                    base64 encoded string for images
+                mimeType:
+                  type: string
+                  description: >-
+                    The type of content that the variable holds, which can be
+                    `text`, `html`, or `image`
+                allowRichTextInjection:
+                  type: boolean
+                  description: >-
+                    Used in other parts of the API, this specifies if this
+                    variable can be used in Rich Text Injection. For
+                    knowledgebase/folders, it is best practice to leave this set
+                    to true
+              required:
+                - name
+                - placeholder
+                - text
+                - mimeType
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Variable Routes
+      summary: Read Variables (Folder)
+      parameters:
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: if-none-match
+          in: header
+          schema:
+            type: string
+          example: W/"44c3-unzppoXln1hKA8phCj0wMh6F2bs"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: "5"
+        - name: showTags
+          in: query
+          schema:
+            type: boolean
+          example: "true"
+        - name: templateFolderId
+          in: query
+          schema:
+            type: string
+          example: "{{templateFolderId}}"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /template/file:
+    post:
+      tags:
+        - Template Routes
+      summary: Extract Template Placeholders and Generate Preview
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: This is an example Template
+                  format: binary
+      parameters:
+        - name: x-filename
+          in: header
+          schema:
+            type: string
+          example: SOW Template.docx
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /template:
+    post:
+      tags:
+        - Template Routes
+      summary: Upload Template with Optional Default Values
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                templateFile:
+                  type: string
+                  format: binary
+                name:
+                  type: string
+                  example: SOW Template
+                description:
+                  type: string
+                variables:
+                  type: string
+                  example: >-
+                    [{"placeholder":"CustomerName","name":"CustomerName","allowRichTextInjection":false,"order":0,"count":25},{"placeholder":"ProjectName","name":"ProjectName","allowRichTextInjection":false,"order":1,"count":2},{"placeholder":"Date","name":"Date","allowRichTextInjection":false,"order":2,"count":2},{"placeholder":"CustomerLogo","name":"CustomerLogo","allowRichTextInjection":true,"order":3,"count":1},{"placeholder":"VersionNumber","name":"VersionNumber","allowRichTextInjection":false,"order":4,"count":1},{"placeholder":"Scope","name":"Scope","allowRichTextInjection":true,"order":5,"count":1},{"placeholder":"BillRate","name":"BillRate","allowRichTextInjection":false,"order":6,"count":1}]
+                tags:
+                  type: string
+                  example: "[]"
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /template/{TemplateID}:
+    get:
+      tags:
+        - Template Routes
+      summary: Get Template by ID
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: if-none-match
+          in: header
+          schema:
+            type: string
+          example: W/"2534-f/UbhD2HIM3HP3jOlbqIO79TVrQ"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: showTags
+          in: query
+          schema:
+            type: boolean
+          example: "true"
+        - name: TemplateID
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /deliverable:
+    post:
+      tags:
+        - Blueprint > Step 4 - Create a Deliverable
+      summary: Create Deliverable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                templateId:
+                  type: string
+                  example: TemplateID
+                name:
+                  type: string
+                  example: SOW for Waystar Royco
+                description:
+                  type: string
+                  example: hello
+                variables:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      mimeType:
+                        type: string
+                        example: text
+                      name:
+                        type: string
+                        example: VersionNumber
+                      placeholder:
+                        type: string
+                        example: VersionNumber
+                      text:
+                        type: string
+                        example: "1.0"
+                      allowRichTextInjection:
+                        type: integer
+                        example: 0
+                      autogenerated:
+                        type: boolean
+                        example: true
+                      count:
+                        type: integer
+                        example: 1
+                      order:
+                        type: integer
+                        example: 4
+                      subvariables:
+                        type: array
+                        example: []
+                tags:
+                  type: array
+                  example: []
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /Variable/{VariableId}:
+    put:
+      tags:
+        - Variable Routes
+      summary: Update Variable (by ID)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the variable
+                description:
+                  type: string
+                  description: The description of the variable
+                tags:
+                  type: array
+                items:
+                  type: string
+                  description: List of tags associated with the variable
+                placeholder:
+                  type: string
+                  description: >-
+                    A unique placeholder text that is used to insert the
+                    variable content into documents
+                text:
+                  type: string
+                  description: >-
+                    The content of the variable, which can be text, HTML, or a
+                    base64 encoded string for images
+                mimeType:
+                  type: string
+                  description: >-
+                    The type of content that the variable holds, which can be
+                    `text`, `html`, or `image`
+                allowRichTextInjection:
+                  type: boolean
+                  description: >-
+                    Used in other parts of the API, this specifies if this
+                    variable can be used in Rich Text Injection. For
+                    knowledgebase/folders, it is best practice to leave this set
+                    to true
+                isGlobal:
+                  type: boolean
+                  description: >-
+                    A flag indicating whether the variable is global (i.e., part
+                    of the Knowledgebase). If true, the variable is available
+                    across all templates and templateFolderId should not be
+                    provided. This field is required if templateFolderId is not
+                    provided
+        parameters:
+          - name: authorization
+            in: header
+            schema:
+              type: string
+            example: Bearer {{TurboDocx Access Token}}
+          - name: x-rapiddocx-org-id
+            in: header
+            schema:
+              type: string
+            example: "{{TurboDocx Organization ID}}"
+          - name: accept
+            in: header
+            schema:
+              type: string
+            example: application/json, text/plain, */*
+          - name: accept-language
+            in: header
+            schema:
+              type: string
+            example: en-US,en;q=0.9
+          - name: content-type
+            in: header
+            schema:
+              type: string
+            example: application/json
+          - name: dnt
+            in: header
+            schema:
+              type: integer
+            example: "1"
+          - name: origin
+            in: header
+            schema:
+              type: string
+            example: https://app.turbodocx.com
+          - name: referer
+            in: header
+            schema:
+              type: string
+            example: https://app.turbodocx.com/
+          - name: sec-ch-ua
+            in: header
+            schema:
+              type: string
+            example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+          - name: sec-ch-ua-mobile
+            in: header
+            schema:
+              type: string
+            example: "?0"
+          - name: sec-ch-ua-platform
+            in: header
+            schema:
+              type: string
+            example: '"Windows"'
+          - name: sec-fetch-dest
+            in: header
+            schema:
+              type: string
+            example: empty
+          - name: sec-fetch-mode
+            in: header
+            schema:
+              type: string
+            example: cors
+          - name: sec-fetch-site
+            in: header
+            schema:
+              type: string
+            example: same-site
+          - name: VariableId
+            in: path
+            schema:
+              type: string
+            required: true
+        responses:
+          "200":
+            description: Successful response
+            content:
+              application/json: {}
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+        - name: VariableId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /Variable/bulk/action:
+    delete:
+      tags:
+        - Variable Routes
+      summary: Delete Variables (by IDs)
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /Tag:
+    post:
+      tags:
+        - Tag Routes
+      summary: Create Tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                  description: The updated label of the tag
+              required:
+                - label
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Tag Routes
+      summary: Read Tag
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: "6"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /Tag/{TagId}:
+    put:
+      tags:
+        - Tag Routes
+      summary: Update Tag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                label:
+                  type: string
+                  description: The updated label of the tag
+              required:
+                - label
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+        - name: TagId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /Tag/bulk/action:
+    delete:
+      tags:
+        - Tag Routes
+      summary: Delete Tags (by IDs)
+      parameters:
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /template/{TemplateId}:
+    patch:
+      tags:
+        - Template Routes
+      summary: Edit Template Metadata
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the variable
+                tag:
+                  type: array
+                  description: array of tag items
+              example: {"name": "SOW Template", "tags": []}
+      parameters:
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: TemplateId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Template Routes
+      summary: Delete Template
+      parameters:
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer Access Token Value
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+          example: >-
+            Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+            like Gecko) Chrome/123.0.0.0 Safari/537.36
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: 579540da-da88-4be9-8e64-dcd8fabd4101
+        - name: TemplateId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /template-item:
+    get:
+      tags:
+        - Template-Item Routes
+      summary: Get Templates and Folders
+      parameters:
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: if-none-match
+          in: header
+          schema:
+            type: string
+          example: W/"ba3-XeQtPNVWwFAk7rgw2tW+ACfywRQ"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: "9"
+        - name: showTags
+          in: query
+          schema:
+            type: boolean
+          example: "true"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /api/deliverable:
+    post:
+      tags:
+        - Deliverable Routes
+      summary: Create Deliverable
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+              example: >-
+                {"templateId":"TemplateID","name":"SOW for Waystar
+                Royco","description":"hey","variables":[{"mimeType":"text","name":"VersionNumber","placeholder":"VersionNumber","text":"1.0","allowRichTextInjection":0,"autogenerated":true,"count":1,"order":4,"subvariables":[]},{"mimeType":"text","name":"BillRate","placeholder":"BillRate","text":"250","allowRichTextInjection":0,"autogenerated":false,"count":1,"order":6,"subvariables":[],"isDisabled":false},{"mimeType":"html","name":"Scope","placeholder":"Scope","text":"htm_text"}]}
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer TurboDocx Access Token
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: TurboDocx Organization ID
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}

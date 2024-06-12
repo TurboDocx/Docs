@@ -33,71 +33,84 @@ const JsonToTable = ({ data, title, columns }) => {
   const [tableHeaderdata, setTableHeaderData] = useState([
     {
       id: 1,
-      name: 'Parameter',
+      name: "Parameter",
     },
     {
       id: 2,
-      name: 'Description',
+      name: "Example Value",
     },
-    {
-      id: 3,
-      name: 'Data type',
-    },
-    {
-      id: 4,
-      name: 'Required?',
-    }
   ]);
 
   useEffect(() => {
     if (data) {
       try {
+        console.log("Raw data:", data);
+
+        // Decode the Base64 string
         const decoded64JSON = atob(data);
+        console.log("Decoded Base64 JSON string:", decoded64JSON);
+
+        // Replace placeholders {value} or {{value}} with value
+
+        // Remove { and } characters from string values
+
+        // Parse the sanitized JSON string
         const decodedJSON = JSON.parse(decoded64JSON);
+        console.log("Parsed JSON object:", decodedJSON);
+
+        console.log("Setting decoded data");
         setDecodedData(decodedJSON);
+        console.log("Decoded data set successfully");
       } catch (error) {
-        console.error("Error parsing JSON:", error);
+        console.error("Error occurred:", error.message);
+        console.error("Stack trace:", error.stack);
       }
     }
   }, [data]);
 
   const renderTable = (json, tableName = "Root") => {
+    try {
+    } catch (e) {}
+    console.log("WHAT IS DA JSON BOI", json);
     if (!json) return null;
 
     const nestedTables = [];
 
-    const iteratedTableRows = Object.entries(json).map(([key, value], index) => {
-      if (value.type || value.description) {
-        return (
-          <TableRow key={key} className={index % 2 === 0 ? 'table-row-even': 'table-row-odd'}>
-            <TableCell><span className="font-bold text-md">{key}</span></TableCell>
-            <TableCell className="w-[300px]">{value.description}</TableCell>
-            <TableCell>{value.type}</TableCell>
-            <TableCell>Yes</TableCell>
-          </TableRow>
-        );
+    const iteratedTableRows = Object.entries(json).map(
+      ([key, value], index) => {
+        console.log("######", key);
+        console.log("######", value);
+        if (key || value) {
+          return (
+            <TableRow
+              key={key}
+              className={index % 2 === 0 ? "table-row-even" : "table-row-odd"}
+            >
+              <TableCell>
+                <span className="font-bold text-md">{key}</span>
+              </TableCell>
+              <TableCell className="w-[300px]">{value.type}</TableCell>
+            </TableRow>
+          );
+        }
+        return null;
       }
-      return null;
-    });
+    );
 
     let tableRows = [...iteratedTableRows];
 
     return (
       <>
         <Table>
-          {
-            tableHeaderdata.length > 0 && <TableHeader>
+          {tableHeaderdata.length > 0 && (
+            <TableHeader>
               <TableRow>
-                {
-                  tableHeaderdata.map((item) => {
-                    return (
-                      <TableHead>{item.name}</TableHead>
-                    )
-                  })
-                }
+                {tableHeaderdata.map((item) => {
+                  return <TableHead>{item.name}</TableHead>;
+                })}
               </TableRow>
             </TableHeader>
-          }
+          )}
           <TableBody>{tableRows}</TableBody>
         </Table>
         {nestedTables}
@@ -108,21 +121,23 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-        <AccordionItem value="body-table">
-          <AccordionTrigger>{title}</AccordionTrigger>
-          <AccordionContent>
-            <Card>
-              <CardHeader></CardHeader>
-              <CardContent>
-                {decodedData && Object.keys(decodedData).length > 0 ? (
-                  renderTable(decodedData)
-                ) : (
-                  <p></p>
-                )}
-              </CardContent>
-            </Card>
-          </AccordionContent>
-        </AccordionItem>
+        <div>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-boady-table-1">
+              <AccordionTrigger>Body Parameters</AccordionTrigger>
+              <AccordionContent>
+                {/* <Card className="card-item">
+              <CardHeader>
+              <h3>Body Values</h3> */}
+                {/* </CardHeader>
+              <CardContent> */}
+                {renderTable(decodedData)}
+                {/* </CardContent>
+            </Card> */}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       )}
     </>
   );

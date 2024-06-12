@@ -1,0 +1,61 @@
+---
+id: turbodocx-api-documentation
+title: "TurboDocx API Documentation"
+description: "Welcome to the TurboDocx API Documentation. This comprehensive guide is designed to provide developers with all the information required to interact with the TurboDocx platform programmatically."
+sidebar_label: Introduction
+sidebar_position: 0
+hide_title: true
+custom_edit_url: null
+---
+
+import ApiLogo from "@theme/ApiLogo";
+import SchemaTabs from "@theme/SchemaTabs";
+import TabItem from "@theme/TabItem";
+import Export from "@theme/ApiExplorer/Export";
+
+<span className={"theme-doc-version-badge badge badge--secondary"}>Version: 1.0.0</span>
+
+<h1 className={"openapi__heading"}>TurboDocx API Documentation</h1>
+
+
+
+Welcome to the TurboDocx API Documentation. This comprehensive guide is designed to provide developers with all the information required to interact with the TurboDocx platform programmatically.
+
+Whether you're looking to automate document creation, manage your templates, or integrate TurboDocx features into your application, you'll find the necessary endpoints, parameters, and examples here.
+
+## **Getting started guide**
+
+Before diving into the specifics of the API, ensure that you have obtained the necessary Access Token and have the correct permissions to access the desired resources.
+
+Keep your Access Token secure and do not expose them in publicly accessible areas such as GitHub, client-side code, etc. **The Authentication and Organization ID is a variable set at the root of the collection.**
+
+## Base URL
+
+All API requests should be made to the base URL provided upon your API key registration. Typically, it looks like this:
+
+``` typescript
+https://api.turbodocx.com
+
+ ```
+
+## Authentication
+
+TurboDocx is working on it's API Key flows, and for the time being, we recommend grabbing the access token used from your user's accounts to leverage our APIs. You can find an example on how to get your access token in the `Blueprint` folder.
+
+To use the Access Token, use the following under the `Authorization Header`
+
+``` typescript
+Authorization: Bearer YOUR_ACCESS_TOKEN
+
+ ```
+
+### Authentication error response
+
+If an Access Token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.
+
+### **Need some help?**
+
+In case you have questions, go through our tutorials, click through out UI and network trace it, or visit our [Discord](https://discord.gg/NYKwz4BcpX) to review topics, ask questions, and learn from others.
+
+
+      

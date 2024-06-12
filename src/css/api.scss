@@ -1,0 +1,81 @@
+.theme-api-markdown {
+display: flex;
+flex-direction: column;
+
+
+}
+
+#__docusaurus_skipToContent_fallback > div > main > div > div > div > div > div {
+    max-width: none !important;
+}
+
+.openapi-left-panel__container {
+    max-width: unset;
+    border: none !important;
+    margin-bottom: 2em;
+}
+
+
+.openapi-right-panel__container::before {
+    content: ("Try it Out");
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.5px;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.openapi-right-panel__container {
+    max-width: unset;
+}
+
+.tabs-container {
+    margin-top: 2em;
+}
+
+[class^="docs\-doc\-id-api"] {
+    .tracing-beam {
+        display: none;
+    }
+    .col--7 {
+        max-width: unset;
+    }
+  }
+
+.body-cards {
+    .bg-card {
+        min-height: 50vh !important;
+        max-height: 50vh !important;
+        overflow-x: scroll;
+    }
+}
+  
+.headers-card {
+    justify-content: center;
+    display: flex;
+    padding-top: 2em !important;
+}
+
+.openapi-tabs__code-container:not(.openapi-tabs__code-container-inner) {
+    background-color: hsl(var(--card))!important;
+}
+
+.openapi-explorer__request-form {
+    background-color: hsl(var(--card))!important;
+}
+
+.openapi-explorer__response-container {
+    background-color: hsl(var(--card))!important;
+}
+
+.query-table {
+    display: flex;
+    justify-content: center;
+    padding-top: 2em !important;
+}
+
+.col--7 {
+
+}
