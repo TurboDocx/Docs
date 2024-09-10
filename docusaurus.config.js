@@ -122,10 +122,10 @@ const config = {
         },
       ],
       navbar: {
-        title: 'Documentation',
         logo: {
           alt: 'TurboDocx Logo',
           src: logoJson.logo || "",
+          href: "https://www.turbodocx.com/?utm_source=docs-site",
         },
         items: [
           ...itemsJson.items, {
