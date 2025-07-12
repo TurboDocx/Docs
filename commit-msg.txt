@@ -1,1 +1,3 @@
-added
+Merge pull request #26 from team-dev-docs/bugfix/logoAndItemFixes
+
+chore: fixed the logo and removed console log
