@@ -159,22 +159,64 @@ p {
 // Unordered Lists
 ul {
   @include vertical-margin($base-margin);
+  padding-left: 1.5em; // Better indentation for bullets
+  line-height: 1.6; // Improved line height for readability
+  
   // Reset margin for nested lists
   ul {
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-left: 1.25em; // Slightly less padding for nested lists
+  }
+}
+
+// Ordered Lists
+ol {
+  @include vertical-margin($base-margin);
+  padding-left: 1.5em; // Better indentation for numbers
+  line-height: 1.6; // Improved line height for readability
+  
+  // Reset margin for nested lists
+  ol {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-left: 1.25em; // Slightly less padding for nested lists
   }
 }
 
 // List Items
 li {
-  margin-bottom: $base-margin * 0.25; // Smaller bottom margin for list items
+  margin-bottom: $base-margin * 0.75; // Increased bottom margin for better spacing
+  line-height: 1.5; // Better line height for readability
+  
+  // Reduce spacing for nested list items
+  li {
+    margin-bottom: $base-margin * 0.5;
+  }
 }
 
 .theme-doc-markdown {
-  ul {
-    margin-top: 1em;
-    margin-bottom: 1em;
+  ul, ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    
+    li {
+      margin-bottom: 0.75em; // Consistent spacing in markdown content
+      
+      // Better spacing for list items with multiple paragraphs
+      p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        
+        &:first-child {
+          margin-top: 0;
+        }
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 }
 
