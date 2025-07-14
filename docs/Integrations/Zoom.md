@@ -168,6 +168,8 @@ cloud_recording:read:list_user_recordings
 
 <br/>
 
+![App Credentials Configuration Complete](/img/zoom_integration/app_credentials.png)
+
 <br/>
 
 
@@ -215,47 +217,23 @@ Congratulations! Your Zoom integration is now ready to use. Here's how to access
 
 ### Accessing Meeting Transcripts
 
-1. Navigate to the document creation area in TurboDocx
+1. Click the source dropdown and click **"Change Source"**
+
+<img src="/img/zoom_integration/ChangeResource.png" alt="Change Resource" style={{width: '50%', display: 'block', margin: '0 auto'}} />
 
 <br/>
 
+2. Go to the **App Library** tab
+3. Click **"Transcript Providers"** 
 
-2. Select **"Transcript Providers"** 
-
-<br/>
-
-
-3. Choose **"Zoom"** from the available providers
+![Meeting Providers](/img/zoom_integration/MeetingProviders.png)
 
 <br/>
 
+4. Click **"Zoom"** and then you should be able to click the transcript
+5. You'll see a list of your recent cloud recordings with transcripts
 
-4. You'll see a list of your recent cloud recordings with transcripts
-
-![Zoom Meeting Recordings List](/img/zoom_integration/zoom_meeting_recordings.png)
-
-<br/>
-
-### Selecting Meeting Content
-
-1. Browse through your available recordings
-
-<br/>
-
-
-2. Click on a meeting to view its transcript
-
-<br/>
-
-
-3. Select the transcript content you want to use
-
-<br/>
-
-
-4. Use the selected content to populate your document templates
-
-![Meeting Transcript Viewer](/img/zoom_integration/transcript_viewer.png)
+![Transcripts Shown](/img/zoom_integration/TranscriptsShown.png)
 
 <br/>
 
