@@ -206,30 +206,23 @@ function removeQuotes(jsonString) {
 
 function generateMdxTemplate(item) {
     try {
-        console.log("what is the item", item)
         const { path, method, summary, parameters } = item;
         const { headers, query, body, urlParams } = parameters;
         let jsonBody
         let bodyContent = body?.content || {}
-        console.log("WHAT IS THE BODY CONTENT BOI", bodyContent)
         if(bodyContent['*/*']) {
-            console.log("what is body", bodyContent['*/*'])
             let cleanExample = bodyContent['*/*']?.schema?.example || bodyContent['multipart/form-data'].schema.properties
             let json = JSON.parse(cleanExample)
-            console.log("this is the json", typeof json)
             jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
-            console.log("what is json body", jsonBody)
         }
         if(bodyContent['multipart/form-data']) {
           
           let json = bodyContent['multipart/form-data'].schema.properties
           jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
-          console.log("what is json body", jsonBody)
         }
         if(bodyContent["application/json"]) {
           let json = bodyContent["application/json"].schema.properties
           jsonBody = Buffer.from(JSON.stringify(json)).toString('base64');
-          console.log("what is json body", jsonBody)
         }
         const metadata = {
           title: summary,
@@ -282,15 +275,13 @@ function generateMdxTemplate(item) {
   
   
      `;
-      console.log("this is the item", item.summary)
-      console.log("this is the template", template)
      return template
 
     
 
     } catch(e) {
-      console.log("error for this path", item.summary)
-        console.log(e)
+      console.error("Error generating template for path:", item.summary)
+        console.error(e)
     }
    
   }
@@ -350,7 +341,7 @@ function generateTempates(yamlFilePath, metadata, options = {}) {
         let template = generateMdxTemplate(foundItem)
         return template
     } catch(e) {
-        console.log(e)
+        console.error(e)
     }
 
     // console.log(mergedData)

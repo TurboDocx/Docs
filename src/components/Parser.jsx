@@ -78,7 +78,6 @@ function Parser({ children }) {
       const headers = extractMarkdownHeaders(markdownElement?.innerText)
       markdownElement.innerText = null
       if (window.location.pathname.includes("/docs")) {
-        console.log("what is the headers", headers)
         const targetElement = document.querySelector("#__docusaurus_skipToContent_fallback > div > main > div > .row");
         appendStructureToTarget(targetElement, headers);
       }

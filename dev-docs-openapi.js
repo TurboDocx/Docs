@@ -103,14 +103,12 @@ function findMatchingItem(items, metadata) {
     }
 
     for (const item of items) {
-      console.log("this is the item", item)
         // Check if the item has a request and matches the metadata
         if (item?.request?.url?.path && metadata?.api?.path) {
             const pathMatches = `/${item.request.url.path.join("/")}` === metadata.api.path.replace(/{(\w+)}/g, ":$1");
             const methodMatches = item.request.method.toLowerCase() === metadata.api.method.toLowerCase();
 
             if (pathMatches && methodMatches) {
-              console.log("this is the main item", item)
                 return item;
             }
         }
@@ -120,7 +118,6 @@ function findMatchingItem(items, metadata) {
             // console.log("item.item", item.item)
             const foundItem = findMatchingItem(item.item, metadata);
             if (foundItem) {
-              console.log("this is the main item", foundItem)
                 return foundItem;
             }
         }
@@ -178,7 +175,6 @@ function generatePostmanItem(item, metadata) {
         // console.log("finalItem", finalItem)
         metadata.postmanItem = finalItem
         const template = generateTemplate(metadata.postmanItem, metadata);
-        console.log("this is the template", template)
         return template
      //  if(metadata.postmanItem) fs.writeFileSync("output.json", JSON.stringify(metadata, null, 2))
      //  return JSON.stringify(metadata, null, 2);
@@ -210,14 +206,12 @@ function handleHeaders(headers) {
 }
 
 function handleMetadataBody(bodyJson, decodedJSON) {
-  console.log("this is the decodedJSON", decodedJSON)
 
   try {
     if(!decodedJSON) return bodyJson
     if (!decodedJSON["application/json"]?.schema) return bodyJson
     let schema = decodedJSON["application/json"].schema;
     let propertiesSchemaKeys = Object.keys(schema);
-  console.log(schema)
     let propertiesItem;
     if(schema.properties) {
       propertiesItem = schema
@@ -237,13 +231,12 @@ function handleMetadataBody(bodyJson, decodedJSON) {
     let { properties } = propertiesItem;
     // let descriptions = [];
     for (let [key, value] of Object.entries(properties)) {
-      console.log("this is the bodyJson", bodyJson[key])
       bodyJson[key] = {...value, type: bodyJson[key] }
     }
     return bodyJson
 
   } catch(e) {
-    console.log(e)
+    console.error(e)
     return bodyJson
   }
 
@@ -254,7 +247,6 @@ function handleMetadataBody(bodyJson, decodedJSON) {
 
 function generateTemplate(data, metadata) {
   try {
-    console.log("this is the data", metadata)
     if(!data) return ""
     // console.log(data)
     let bodyJsonPlacehoder;
@@ -276,7 +268,6 @@ function generateTemplate(data, metadata) {
     var encodedBodyData = Buffer.from(bodyData).toString('base64');
     
     var encodedUrlData = Buffer.from(url).toString('base64');
-    console.log("what is the encoded string query", encodedUrlData)
     var encodedHeadersData = Buffer.from(headers).toString('base64');
     var encodedMetadata = Buffer.from(fullMetadataBody).toString('base64')
   
@@ -307,7 +298,7 @@ function generateTemplate(data, metadata) {
      `;
   
   } catch(e) {
-    console.log(e)
+    console.error(e)
   }
   
      

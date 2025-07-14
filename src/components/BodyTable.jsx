@@ -44,11 +44,8 @@ const JsonToTable = ({ data, title, columns }) => {
   useEffect(() => {
     if (data) {
       try {
-        console.log("Raw data:", data);
-
         // Decode the Base64 string
         const decoded64JSON = atob(data);
-        console.log("Decoded Base64 JSON string:", decoded64JSON);
 
         // Replace placeholders {value} or {{value}} with value
 
@@ -56,11 +53,7 @@ const JsonToTable = ({ data, title, columns }) => {
 
         // Parse the sanitized JSON string
         const decodedJSON = JSON.parse(decoded64JSON);
-        console.log("Parsed JSON object:", decodedJSON);
-
-        console.log("Setting decoded data");
         setDecodedData(decodedJSON);
-        console.log("Decoded data set successfully");
       } catch (error) {
         console.error("Error occurred:", error.message);
         console.error("Stack trace:", error.stack);
@@ -71,15 +64,12 @@ const JsonToTable = ({ data, title, columns }) => {
   const renderTable = (json, tableName = "Root") => {
     try {
     } catch (e) {}
-    console.log("WHAT IS DA JSON BOI", json);
     if (!json) return null;
 
     const nestedTables = [];
 
     const iteratedTableRows = Object.entries(json).map(
       ([key, value], index) => {
-        console.log("######", key);
-        console.log("######", value);
         if (key || value) {
           return (
             <TableRow

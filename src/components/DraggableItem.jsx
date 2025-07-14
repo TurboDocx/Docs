@@ -74,7 +74,6 @@ const NodeView = (props) => {
 
           // Get a NodeList of the items
           // const grid = closestNodeDraggableItem.querySelector(".draggable-grid")
-          // console.log("this is the grid", grid)
 
           // Initialize a variable to keep track of the maximum height
         });
@@ -101,7 +100,7 @@ const NodeView = (props) => {
           });
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     };
 

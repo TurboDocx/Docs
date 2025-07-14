@@ -5,7 +5,6 @@ export default (props) => {
     const background = props?.node?.attrs?.background || "white"
     const otherStyles = props?.node?.attrs?.customStyle || {}
     function handleSubmit(e) {
-        console.log(props)
         e.preventDefault();
         var url = props?.node.attrs?.url
         var win = window.open(url, '_blank');

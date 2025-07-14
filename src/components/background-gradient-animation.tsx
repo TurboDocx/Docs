@@ -95,7 +95,6 @@ export const BackgroundGradientAnimation = ({
       setTgY(event.clientY - rect.top);
     }
   };
-  console.log("this is the image", image)
   let imageHeaderClass;
   if(image) imageHeaderClass = "image-blog-header-card"
   if(image && lightImage) imageHeaderClass = "image-blog-header-card-light"

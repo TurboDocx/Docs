@@ -11,7 +11,6 @@ export default function MDXHeading(props) {
 
   // Check if it's the top-level H1 heading
   const isTopLevelH1 = props.as === "h1";
-  console.log(props);
 
   return (
    

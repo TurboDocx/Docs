@@ -61,4 +61,3 @@ function extractFromOpenAPI(filepath) {
 // Example usage
 const openApiFilePath = 'path/to/your/openapi.yaml';
 const extractedData = extractFromOpenAPI(openApiFilePath);
-console.log(JSON.stringify(extractedData, null, 2));

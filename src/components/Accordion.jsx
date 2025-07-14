@@ -26,7 +26,6 @@ function Details({ node }) {
         },
       };
       useEffect(() => {
-        console.log("this is the node", node)
         const type = node?.attrs?.type || "note"
         const color = styles[type]?.color;
         if (!color) return;

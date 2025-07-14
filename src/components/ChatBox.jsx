@@ -9,7 +9,6 @@ import chatJson from '../../chat.json'
 
 const {logo} = logoJson
 const {chatUrl} = chatJson
-console.log(logo)
 
 const processor = unified()
   .use(markdown)
@@ -22,7 +21,6 @@ function ChatBox({ messages, onSendMessage }) {
 
   const handleSendMessage = async (event) => {
     event.preventDefault();
-    console.log(message);
     messages.push({ text: message });
 
     try {
@@ -39,7 +37,6 @@ function ChatBox({ messages, onSendMessage }) {
       }
 
       const data = await response.json();
-      console.log(data);
       const { source_nodes} = data?.response
       const answer = data?.response?.response
       messages.push({ text: `${answer} \n Here is the orignal article:` });
