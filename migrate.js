@@ -17,10 +17,8 @@ async function checkFolderFirst(path) {
 
 async function extractContent(options = {}) {
   try {
-    console.log(options)
     var folder = options.directory || directoryPath
     const files = await fs.readdir(folder)
-    console.log("files", files)
     for (const file of files) {
         const filePath = path.join(folder, file);
         const stats = await fs.stat(filePath)

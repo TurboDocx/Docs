@@ -46,7 +46,6 @@ const JsonToTable = ({ data, title, columns }) => {
       try {
         const decoded64JSON = atob(data);
         const decodedJSON = JSON.parse(decoded64JSON);
-        console.log("this is the query", decodedJSON);
         setDecodedData(decodedJSON);
       } catch (error) {
         console.error("Error parsing JSON:", error);
@@ -61,8 +60,6 @@ const JsonToTable = ({ data, title, columns }) => {
 
     const iteratedTableRows = Object.entries(json).map(
       ([key, value], index) => {
-        console.log("what is the key", key);
-        console.log("what is the value", value);
         if (value.type || value.description || value.key) {
           return (
             <TableRow

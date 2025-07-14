@@ -52,12 +52,9 @@ export default props => {
         })
     }
     const otherStyles = props?.node?.attrs?.customStyle || convertStyleString(props?.node?.attrs?.style)
-    console.log("this is the custom styles", otherStyles)
-    console.log("this is the class", props?.node?.attrs?.class)
     const customClass = props?.node?.attrs?.class
     const otherClass = `${props?.node?.attrs?.class} react-component` || "react-component"
     useEffect(() => {
-        console.log(props.node.attrs)
     });
 
     return (

@@ -5,7 +5,6 @@ import { useLocation } from 'react-router-dom';
 const GlobalDarkModeHandler = () => {
   let location = useLocation();
   const handlePageLoad = () => {
-    console.log("i am being called")
     // Your code here for when the page is loaded
     const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
     if (isDarkMode) {

@@ -41,7 +41,5 @@ function extractUrls(inputString) {
 
 
 const file = fs.readFileSync("./docs/reference/rest.md", { encoding: 'utf8', flag: 'r' })
-console.log(file)
 const openapiJson = extractUrls(file);
-console.log(openapiJson);
 fs.writeFileSync("./openapi.json", JSON.stringify(openapiJson))

@@ -130,7 +130,6 @@ function ChatBox({ messages, onSendMessage }) {
         let existingMessage = messages.find(function (message) {
           return message.text.includes(markdownPath);
         });
-        console.log(existingMessage);
         if (!existingMessage) {
           messages.push({
             text: `[Oringal Source]${markdownPath} \n ${camelSourceName}`,
