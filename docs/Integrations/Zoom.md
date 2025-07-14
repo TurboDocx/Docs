@@ -1,19 +1,43 @@
 ---
 title: Zoom Integration
 sidebar_position: 4
+description: Automatically convert Zoom meeting transcripts into professional documents, presentations, and reports. Perfect for post-meeting summaries, action items, and client deliverables.
+keywords: 
+  - zoom meeting documents
+  - zoom call transcripts
+  - zoom to powerpoint
+  - zoom to google slides
+  - zoom meeting notes
+  - zoom presentation maker
+  - zoom meeting summary
+  - zoom transcript to document
+  - meeting follow-up documents
+  - zoom recording to presentation
+  - automated meeting documentation
+  - zoom integration document generation
+  - zoom ai presentation generation
+  - zoom ai powerpoint generation
+  - zoom to proposal
+  - zoom to contract
+  - zoom to quote
+  - zoom meeting proposals
+  - zoom call documentation
+  - zoom transcript automation
+  - meeting to document automation
 ---
 
-The Zoom integration in TurboDocx allows you to automatically import meeting transcripts from your Zoom cloud recordings and use them to generate personalized documents. This powerful integration streamlines your workflow by eliminating the need to manually copy and paste meeting content, enabling you to create professional documents, summaries, and reports directly from your Zoom meetings.
+# Turn Your Zoom Meetings into Professional Documents & Presentations
 
+Transform your meeting recordings into professional documents automatically. TurboDocx's integration eliminates manual note-taking by converting meeting transcripts into polished deliverables, streamlining your post-meeting workflow.
 
-## Overview
+## What You Can Create
 
-With the Zoom integration, you can:
-
-- **Import Meeting Transcripts**: Automatically access transcripts from your Zoom cloud recordings
-- **Generate Documents**: Use meeting content to populate templates and create deliverables  
-- **Streamline Workflows**: Reduce manual work by directly connecting meeting data to document generation
-- **Maintain Security**: All integrations use secure authentication and respect your Zoom privacy settings
+- **📄 Meeting Summaries**: Convert discussions into formatted meeting minutes and action items
+- **📊 Client Presentations**: Turn discovery calls into compelling presentation decks
+- **📋 Project Proposals**: Use requirement gathering sessions to create detailed proposals
+- **📝 Follow-up Reports**: Generate comprehensive meeting reports with key takeaways
+- **💼 Sales Materials**: Transform prospect calls into customized sales presentations
+- **🔄 Automated Workflows**: Connect meeting transcripts directly to your document templates
 
 <br/>
 
