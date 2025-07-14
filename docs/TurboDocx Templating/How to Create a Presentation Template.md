@@ -1,7 +1,34 @@
 ---
-title: How to Create a Presentation Template
+title: How to Create Presentation Templates
 sidebar_position: 2
+description: Learn how to create PowerPoint presentation templates that automatically populate with content from meetings, CRM data, project management systems, and business integrations.
+keywords:
+  - powerpoint template creation
+  - automated powerpoint generation
+  - presentation template design
+  - dynamic powerpoint templates
+  - presentation automation
+  - zoom to powerpoint
+  - meeting presentation template
+  - meeting content to slides
+  - salesforce to powerpoint
+  - crm presentation automation
+  - data-driven presentations
+  - business integration presentations
+  - automated slide generation
 ---
+
+# Create Presentation Templates for Data-Driven Presentations
+
+Turn your business data into professional presentations automatically. This guide shows you how to create presentation templates that can be populated with data from meetings, CRM systems, project management tools, and other integrations.
+
+**Ideal for:**
+- 📞 **Post-meeting summaries** from calls and conferences
+- 🎯 **Client presentations** based on opportunity data and discovery sessions  
+- 📋 **Project status decks** from planning meetings and project systems
+- 📊 **Sales presentations** customized with prospect and opportunity information
+- 🔄 **Recurring reporting formats** with dynamic content from your integrations
+- 📈 **Executive dashboards** with real-time metrics and KPIs
 
 Congratulations on starting your first presentation template. In this guide, we will show you how to create your first presentation template and how to upload it to your TurboDocx account.
 

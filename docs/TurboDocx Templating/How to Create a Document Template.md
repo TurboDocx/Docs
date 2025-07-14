@@ -1,7 +1,51 @@
 ---
-title: How to Create a Document Template
+title: How to Create Document Templates
 sidebar_position: 1
+description: Learn how to create document templates for proposals, statements of work, quotes, and contracts that automatically populate with data from meetings, CRM systems, and business integrations.
+keywords:
+  - document template creation
+  - automated proposal generation
+  - proposal automation
+  - automated sow creation
+  - contract template creation
+  - zoom to proposal
+  - zoom to statement of work
+  - zoom to contract
+  - meeting to document
+  - zoom call documentation
+  - meeting follow-up documents
+  - zoom transcript to proposal
+  - client meeting documentation
+  - zoom meeting summaries
+  - salesforce to document
+  - salesforce proposal generation
+  - salesforce quote automation
+  - salesforce contract creation
+  - crm to document
+  - salesforce integration documents
+  - automated salesforce proposals
+  - salesforce data to contract
+  - crm quote generation
+  - business integration documents
+  - automated document generation
+  - data-driven documents
 ---
+
+# Create Document Templates for Automated Proposals, Contracts & Reports
+
+Transform data from meetings, CRM systems, and integrations into professional documents automatically. This guide shows you how to create document templates for proposals, statements of work, quotes, and contracts that can be populated with content from your connected data sources.
+
+**Perfect for creating:**
+- 📄 **Proposals** from discovery calls, opportunities, and project data
+- 📋 **Statements of Work (SOW)** based on requirement discussions and business data
+- 💰 **Quotes & Estimates** using meeting notes, specifications, and pricing information
+- 📝 **Project Contracts** incorporating terms from calls and account details
+- 🤝 **Service Agreements** with details from consultations and contact systems
+- 📊 **Reports & Summaries** with action items, metrics, and data from your integrations
+
+Transform conversations and CRM data into professional documents automatically - streamlining your workflow with intelligent document generation.
+
+<br/>
 
 Congratulations on starting your first document template. In this guide, we will show you how to create your first document template and how to upload it to your TurboDocx account.
 
@@ -21,10 +65,10 @@ Congratulations on starting your first document template. In this guide, we will
 
 ## Step 1: Create New Document Template
 
-Let's start with creating our first document template. <br /><br /><br/>
+Let's start with creating our first document template. <br />
 
 1. Open up whatever application you will be using to create your document (Word, Google Drive, etc).
-<br/><br />
+<br/><br/>
 2. Anything you would like to be a variable or an item that will change from document to document will be put between these {brackets}. This can be single items such as {Date} or {CustomerName} or it can be whole sections such as {Scope} as seen in the images below.
 
 ![](/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
