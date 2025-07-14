@@ -1,72 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchBar from '@theme-original/SearchBar';
-import { useColorMode } from '@docusaurus/theme-common';
 
 export default function SearchBarWrapper(props) {
-  // Console log the props
-  console.log("this is search", props);
-
-  // Use useEffect to change the colorMode
-  const { colorMode, setColorMode } = useColorMode();
+  const [isApple, setIsApple] = useState(false);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.metaKey && event.key === 'k') {
-        console.log('Command + K was pressed');
-        console.log("this is the colorMode brooo", colorMode);
+    // Detect platform for keyboard shortcut display
+    const isAppleDevice = () => {
+      return typeof navigator !== 'undefined' && 
+             /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+    };
+    
+    setIsApple(isAppleDevice());
+  }, []);
 
-        // You can use the updated colorMode value here
-
-        // Example: Toggle a class on the body based on colorMode
-        if (colorMode === 'dark') {
-          document.body.classList.add("dark");
-          setColorMode('dark')
-        } else {
-          document.body.classList.remove("dark");
-          setColorMode('light')
+  useEffect(() => {
+    // Override DocSearch button key display
+    const updateKeyDisplay = () => {
+      const kbdElements = document.querySelectorAll('.aa-DetachedSearchButton kbd');
+      if (kbdElements.length >= 2) {
+        // Handle the case with separate Cmd/Ctrl and K keys
+        const firstKey = kbdElements[0];
+        if (firstKey && !isApple && firstKey.textContent === '⌘') {
+          firstKey.textContent = 'Ctrl';
+        } else if (firstKey && isApple && firstKey.textContent === 'Ctrl') {
+          firstKey.textContent = '⌘';
         }
-      }
-    };
-
-    const handleClick = () => {
-      console.log('centerSearchBar div was clicked');
-      console.log('Command + K was pressed');
-      console.log("this is the colorMode brooo", colorMode);
-
-      // You can use the updated colorMode value here
-
-      // Example: Toggle a class on the body based on colorMode
-      if (colorMode === 'dark') {
-        document.body.classList.add("dark");
-        setColorMode('dark')
       } else {
-        document.body.classList.remove("dark");
-        setColorMode('light')
+        // Handle single key element
+        kbdElements.forEach(key => {
+          if (key && !isApple && (key.textContent === '⌘' || key.textContent.includes('⌘'))) {
+            key.textContent = 'Ctrl';
+          } else if (key && isApple && (key.textContent === 'Ctrl' || key.textContent.includes('Ctrl'))) {
+            key.textContent = '⌘';
+          }
+        });
       }
-      // Add your logic here for the onClick event
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    document.querySelector('.centerSearchBar').addEventListener('click', handleClick);
+    // Run immediately and set up observer for dynamic updates
+    updateKeyDisplay();
+    
+    const observer = new MutationObserver(() => {
+      // Small delay to ensure DOM is updated
+      setTimeout(updateKeyDisplay, 100);
+    });
+    
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true
+    });
 
-    // Cleanup function to remove the event listeners when the component unmounts
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.querySelector('.centerSearchBar').removeEventListener('click', handleClick);
-    };
-  }, [colorMode]);
-
-  // If you want to manipulate or alter the props, you can do so. 
-  // For example, if there's a prop called 'placeholder', and you want to change its value:
-  const modifiedProps = {
-    ...props,
-    placeholder: 'New Placeholder Text'
-  };
+    return () => observer.disconnect();
+  }, [isApple]);
 
   return (
     <div className="centerSearchBar">
       <div className="searchBarInner">
-        <SearchBar {...modifiedProps} />
+        <SearchBar {...props} />
       </div>
     </div>
   );

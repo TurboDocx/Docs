@@ -107,6 +107,19 @@
   display: none !important;
 }
 
+// Fix kbd styling for Ctrl vs ⌘
+.aa-DetachedSearchButton kbd {
+  min-width: auto !important;
+  padding: 0 2px !important;
+  font-size: 10px !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+.aa-DetachedSearchButton kbd:first-of-type {
+  margin-right: 2px !important;
+}
+
 #__docusaurus > nav > div.navbar__inner > div:nth-child(1) > button > svg > path {
   color: white;
 }
