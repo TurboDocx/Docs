@@ -1,10 +1,9 @@
 ---
-title: How to Create a Template
-sidebar_position: 10
+title: How to Create a Document Template
+sidebar_position: 1
 ---
 
-
-Congratulations on starting your first template. In this guide, we will show you how to create your first template and how to upload it to your TurboDocx account.
+Congratulations on starting your first document template. In this guide, we will show you how to create your first document template and how to upload it to your TurboDocx account.
 
 ## Video Tutorial
 
@@ -20,9 +19,9 @@ Congratulations on starting your first template. In this guide, we will show you
   ></iframe>
 </div>
 
-## Step 1: Create New Template
+## Step 1: Create New Document Template
 
-Let's start with creating our first template. <br /><br /><br/>
+Let's start with creating our first document template. <br /><br /><br/>
 
 1. Open up whatever application you will be using to create your document (Word, Google Drive, etc).
 <br/><br />
@@ -84,57 +83,6 @@ On the next screen, you will see a preview of your template.<br/><br/><br/>
 
 <br/><br/><br/>
 
-<!--
-## PowerPoint/Slide Deck Templates
-
-### Setting Up Variables in Slides
-
-For slide deck templates, follow these specific steps to ensure variables work correctly:
-
-1. **Delete existing content** from the slide where you want dynamic content
-
-2. **Insert a shape:**
-   - Go to **Insert → Shape** in the ribbon
-   - Choose a rectangle
-   - Draw the shape where you want the dynamic content to go
-
-3. **Add your variable:**
-   - Click inside the shape
-   - Type your variable name (e.g., `{WhatWeHeard}`)
-   - Remember: all one word, no spaces
-
-4. **Align text to top:**
-   - With the shape selected, go to **Shape Format → Align Text → Top**
-   - This keeps everything uniform across slides
-
-5. **Make the shape invisible:**
-   - Set **Shape Fill** to "No Fill"
-   - Set **Shape Outline** to "No Fill"
-   - This removes the colored box, making it invisible
-
-6. **Format the text:**
-   - Change the font color to black (or your preferred color)
-   - This makes it easy and clear to see in your final deck
-
-<br />
-
-### Example Slide Setup
-
-For a slide with sections like:
-- What we heard
-- How we can help  
-- Follow-up questions
-
-Create separate invisible shapes for each section with variables like:
-- `{WhatWeHeard}`
-- `{HowWeCanHelp}`
-- `{FollowUpQuestions}`
-
-Each variable should be in its own invisible rectangle shape, not mixed with other text.
-
-<br />
--->
-
 ## Finished
 
-Congratulations on uploading your first template. You should be able to see it on the template tab once you go back to the main page.
+Congratulations on uploading your first document template. You should be able to see it on the template tab once you go back to the main page.

@@ -1,6 +1,6 @@
 ---
 title: How to Create a Deliverable
-sidebar_position: 3
+sidebar_position: 5
 ---
   
 Now that you have a Template and entries in your Knowledgebase, let's put it all together and create your first document or what we call a Deliverable. 

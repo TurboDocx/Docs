@@ -1,5 +1,6 @@
 ---
 title: Additional Information 
+sidebar_position: 20
 ---
 # Guides, Tips and Tricks
 Here you will find additional standalone guides to features, uses and tips.
@@ -154,7 +155,21 @@ Once we have added our content hit the "Generate" button.
 
 ## Variable Troubleshooting
 
-Here are some best practices when troubleshooting why your variable is not showing up in the Template. 
+Here are some best practices when troubleshooting why your variable is not showing up in the Template.
+
+### Video Tutorial
+
+<div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', maxWidth: '100%'}}>
+  <iframe 
+    src="https://www.youtube.com/embed/oTN2c3Y9X-Y?si=GdDa2PSFfFMvEQPu" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin" 
+    allowfullscreen
+    style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
+  ></iframe>
+</div> 
 
 <br/>
 <br/>
