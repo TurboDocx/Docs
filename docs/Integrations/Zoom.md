@@ -38,19 +38,18 @@ The first step is to create a Zoom app that will allow TurboDocx to access your 
 ### Navigate to the Zoom Marketplace
 
 1. Open your web browser and go to [https://marketplace.zoom.us](https://marketplace.zoom.us)
-<br/><br/>
+
+<br/>
+
 2. Click **"Sign In"** in the top right corner
 
-![Zoom Marketplace Sign In](/img/zoom_integration/marketplace_signin.png)
+![Zoom Marketplace Sign In](/img/zoom_integration/step1.png)
 
-<br/><br/>
+<br/>
+
 3. Sign in with your Zoom account credentials
-<br/><br/>
-4. After signing in, click **"Manage"** in the top right corner
+<br/>
 
-![Zoom User Dashboard Manage Button](/img/zoom_integration/user_dashboard_manage.png)
-
-<br/><br/>
 5. You'll be taken to [https://marketplace.zoom.us/user/build](https://marketplace.zoom.us/user/build)
 
 <br/>
@@ -59,22 +58,24 @@ The first step is to create a Zoom app that will allow TurboDocx to access your 
 
 1. In the top right corner, click the dropdown that says **"Develop"**
 
-![Step 1: Develop dropdown](/img/zoom_integration/step_1_develop_dropdown.png)
-
-<br/><br/>
 2. Select **"Build App"** from the dropdown
 
-![Step 2: Build App selection](/img/zoom_integration/step_2_build_app.png)
+![Step 2: Build App selection](/img/zoom_integration/step2.png)
 
-<br/><br/>
+<br/>
+
 3. In the dialog that appears, select **"General App"**
 
-![Step 3: General App selection](/img/zoom_integration/step_3_general_app.png)
+![Step 3: General App selection](/img/zoom_integration/step3.png)
 
-<br/><br/>
+<br/>
+
 4. Click **"Create"**
+5. **Rename your app to "TurboDocx"**
 
-![Step 4: Create button](/img/zoom_integration/step_4_create_button.png)
+![Step 4: Rename app to TurboDocx](/img/zoom_integration/Step4RenameTurboDocx.png)
+
+<br/>
 
 :::info Why General App?
 We use a "General App" because it provides the specific permissions needed to access your cloud recordings safely and securely.
@@ -84,22 +85,23 @@ We use a "General App" because it provides the specific permissions needed to ac
 
 ### Configure Basic Information
 
-After creating your app, you'll be taken to the app configuration page. Let's set up the basic information first. <br/>
+After creating your app, you'll be taken to the app configuration page. Let's set up the basic information first.
+
+<br/>
 
 #### Basic Information Tab
 
 1. Make sure you're on the **"Basic Information"** tab
-<br/><br/>
 2. **Leave app as User Managed** - Ensure the app type remains set as "User Managed"
 
-![Basic Information User Managed](/img/zoom_integration/basic_info_user_managed.png)
+![Basic Information User Managed](/img/zoom_integration/Step5UserManaged.png)
 
-<br/><br/>
+<br/>
+
 3. Scroll down to **"App Credentials"** section
-<br/><br/>
 4. **Note down the Client ID and Client Secret** - You'll need these values when configuring TurboDocx
 
-![App Credentials Section](/img/zoom_integration/app_credentials.png)
+![App Credentials Section](/img/zoom_integration/Step6ClientIdAndSecret.png)
 
 :::tip Keep Your Credentials Safe
 Your Client Secret is like a password - never share it publicly or include it in emails. TurboDocx will store it securely once you enter it.
@@ -110,39 +112,39 @@ Your Client Secret is like a password - never share it publicly or include it in
 #### OAuth Information
 
 1. Still on the Basic Information tab, scroll down to **"OAuth Information"**
-<br/><br/>
 2. For **"Redirect URL for OAuth"**, enter:
 ```
-https://api.turbodx.com/oauth/zoom/callback
+https://api.turbodocx.com/oauth/zoom/callback
 ```
-<br/><br/>
 3. Under **"OAuth Allow List"**, add the following URLs (click "Add" for each one):
 
 ```
-https://app.turbodx.com
+https://app.turbodocx.com
 ```
 
-```
-https://app.turbodx.com/templates-beta/transcripts-provider
-```
-
-![OAuth Information Configuration](/img/zoom_integration/oauth_information.png)
+![OAuth Allow List Configuration](/img/zoom_integration/oauth_allowlist.png)
 
 <br/>
 
 ### Configure Scopes
 
-Now we need to set up the permissions (scopes) that allow TurboDocx to access your cloud recordings. <br/>
+Now we need to set up the permissions (scopes) that allow TurboDocx to access your cloud recordings.
+
+<br/>
 
 #### Scopes Tab
 
-1. Click on the **"Scopes"** tab at the top of the page
+1. In the left bar, click on the **"Scopes"** button and navigate to the add scopes page
 
-![Scopes Tab](/img/zoom_integration/scopes_tab.png)
+![Navigate to Scopes Section](/img/zoom_integration/NavigateToScopesSection.png)
+<br/>
 
-<br/><br/>
 2. Click **"Add Scopes"** button
-<br/><br/>
+
+![Click Add Scopes Button](/img/zoom_integration/clickaddscopesbutton.png)
+
+<br/>
+
 3. In the search dialog that appears, search for:
 ```
 List all cloud recordings for a user
@@ -152,106 +154,82 @@ Or look for the scope with this value:
 cloud_recording:read:list_user_recordings
 ```
 
-![Scope Search Dialog](/img/zoom_integration/scope_search_dialog.png)
+![Type List Cloud Recordings For User](/img/zoom_integration/TypeListCloudRecordingsForUser.png)
 
-<br/><br/>
+<br/>
+
 4. **Add the scope** labeled "View your recordings" (with value `cloud_recording:read:list_user_recordings`)
 
-![Selected Scope](/img/zoom_integration/selected_scope.png)
-
-<br/><br/>
-5. Click **"Continue"** to save the configuration
-<br/><br/>
+![Select Scope and Press Done](/img/zoom_integration/SelectScopeandPressDone.png)
 
 <br/>
 
-### Activate Your App
-
-Once you've completed the basic information and scopes configuration, you need to activate your app. <br/>
-
-1. Navigate to the **"Activation"** section or tab
-<br/><br/>
-2. Click **"Activate your app"**
-<br/><br/>
-3. Your app is now ready to use!
-
-![App Activation Confirmation](/img/zoom_integration/app_activation.png)
+5. Click **"Done"** to save the configuration
 
 <br/>
+
+<br/>
+
 
 ## Step 2: Configuring TurboDocx
 
-Now that your Zoom app is created, let's connect it to TurboDocx. You can do this either through your settings or when you first try to use the integration. <br/>
+### 🔧 How to Configure Zoom in Organization Settings
 
-### Option A: Configure in Settings (Recommended)
+1. Go to **Settings**
 
-1. In TurboDocx, navigate to **Settings** → **Integrations**
-<br/><br/>
-2. Find the **Zoom** integration card
-<br/><br/>
-3. Click **"Configure Zoom"**
-
-![TurboDocx Integrations Page](/img/zoom_integration/turbodocx_integrations.png)
+![Go to Settings](/img/zoom_integration/GoToSettings.png)
 
 <br/>
 
-### Option B: Configure During First Use
+2. Click on **Organization Settings**
 
-1. When accessing transcript providers for the first time
-<br/><br/>
-2. Click **"Configure Settings"** on the Zoom integration card
-<br/><br/>
-3. The same configuration dialog will appear
-
-![Transcript Providers Unconfigured](/img/zoom_integration/transcript_providers_unconfigured.png)
+![Go to Organization Settings](/img/zoom_integration/GoToOrganizationSettings.png)
 
 <br/>
 
-### Enter Your Zoom App Credentials
+3. Scroll down to the **Zoom** section
+4. Click **Configure Zoom**
 
-1. **Client ID**: Copy and paste your Client ID from the Zoom Developer Portal
-<br/><br/>
-2. **Client Secret**: Copy and paste your Client Secret from the Zoom Developer Portal
-<br/><br/>
-3. **Verification Token** (Optional): Leave blank unless you need additional webhook security
-<br/><br/>
-4. Click **"Save Configuration"**
-
-![TurboDocx Zoom Configuration](/img/zoom_integration/turbodocx_zoom_config.png)
+![Click Configure Zoom](/img/zoom_integration/ClickConfigureZoom.png)
 
 <br/>
 
-### Authenticate with Zoom
+5. A Zoom Configuration pop-up will appear
+6. Take the **Client ID** and **Client Secret** you obtained earlier, paste them into the appropriate fields, and click **Save Configuration** in the bottom right-hand corner
 
-1. After saving your configuration, click **"Authenticate with Zoom"**
-<br/><br/>
-2. A popup window will open asking you to sign in to Zoom
-<br/><br/>
-3. Sign in with your Zoom account
-<br/><br/>
-4. Click **"Allow"** to grant TurboDocx permission to access your cloud recordings
+![Enter Client ID Secret and Press Save Configuration](/img/zoom_integration/enterclientidsecretandpresssaveconfiguration.png)
 
-![Zoom OAuth Permission Screen](/img/zoom_integration/zoom_oauth_permission.png)
+<br/>
 
-<br/><br/>
-5. The popup will close automatically, and you'll see a success message
+### Alternative: Inline Configuration
 
-![TurboDocx Success Message](/img/zoom_integration/turbodocx_success_message.png)
+Alternatively, you can configure Zoom integration directly when you first access transcript providers. When you navigate to the transcript providers section and select Zoom, you'll be prompted to enter your credentials if the integration hasn't been configured yet. Simply enter your Client ID and Client Secret in the configuration dialog that appears and save your settings.
 
 <br/>
 
 ## Step 3: Using Your Zoom Integration
 
-Congratulations! Your Zoom integration is now ready to use. Here's how to access your meeting transcripts and use them in your documents. <br/>
+Congratulations! Your Zoom integration is now ready to use. Here's how to access your meeting transcripts and use them in your documents.
+
+<br/>
 
 ### Accessing Meeting Transcripts
 
 1. Navigate to the document creation area in TurboDocx
-<br/><br/>
+
+<br/>
+
+
 2. Select **"Transcript Providers"** 
-<br/><br/>
+
+<br/>
+
+
 3. Choose **"Zoom"** from the available providers
-<br/><br/>
+
+<br/>
+
+
 4. You'll see a list of your recent cloud recordings with transcripts
 
 ![Zoom Meeting Recordings List](/img/zoom_integration/zoom_meeting_recordings.png)
@@ -261,11 +239,20 @@ Congratulations! Your Zoom integration is now ready to use. Here's how to access
 ### Selecting Meeting Content
 
 1. Browse through your available recordings
-<br/><br/>
+
+<br/>
+
+
 2. Click on a meeting to view its transcript
-<br/><br/>
+
+<br/>
+
+
 3. Select the transcript content you want to use
-<br/><br/>
+
+<br/>
+
+
 4. Use the selected content to populate your document templates
 
 ![Meeting Transcript Viewer](/img/zoom_integration/transcript_viewer.png)
@@ -274,7 +261,9 @@ Congratulations! Your Zoom integration is now ready to use. Here's how to access
 
 ## Troubleshooting
 
-If you're having trouble with your Zoom integration, here are some common issues and their solutions. <br/>
+If you're having trouble with your Zoom integration, here are some common issues and their solutions.
+
+<br/>
 
 ### "No Meetings Found"
 - **Cause**: No cloud recordings with transcripts available
@@ -286,9 +275,6 @@ If you're having trouble with your Zoom integration, here are some common issues
   - Double-check your Client ID and Client Secret
   - Try re-authenticating by clicking "Authenticate with Zoom" again
 
-### "App Not Activated"
-- **Cause**: Zoom app was not properly activated
-- **Solution**: Return to the Zoom Developer Portal and ensure your app is activated
 
 ### "Permission Denied"
 - **Cause**: Required scope not properly configured
@@ -306,7 +292,9 @@ If you continue to experience issues:
 
 ## Security and Privacy
 
-Your data security and privacy are important to us. Here's how your information is protected when using the Zoom integration. <br/>
+Your data security and privacy are important to us. Here's how your information is protected when using the Zoom integration.
+
+<br/>
 
 ### How Your Data is Protected
 
@@ -316,33 +304,6 @@ Your data security and privacy are important to us. Here's how your information 
 
 <br/>
 
-## Managing Your Integration
-
-### Updating Configuration
-
-To update your Zoom integration settings:
-1. Go to **Settings** → **Integrations** → **Zoom**
-<br/><br/>
-2. Click **"Configure Zoom"**
-<br/><br/>
-3. Update your credentials as needed
-<br/><br/>
-4. Save your changes
-
-### Removing the Integration
-
-To disconnect Zoom from TurboDocx:
-1. Go to **Settings** → **Integrations** → **Zoom**
-<br/><br/>
-2. Click the **"Delete"** or **"Remove"** option
-<br/><br/>
-3. Confirm the removal
-
-:::tip
-Removing the integration will disconnect TurboDocx from your Zoom account and require you to set up the integration again if you want to use it in the future.
-:::
-
-<br/>
 
 ## Best Practices
 
