@@ -1,3 +1,18 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+/* Platform-specific search bar key display */
+.DocSearch-Button-Key {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Ensure consistent styling for both Ctrl and ⌘ symbols */
+.DocSearch-Button-Key:first-of-type {
+  font-size: 0.75rem;
+  line-height: 1;
+}
