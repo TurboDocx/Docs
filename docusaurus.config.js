@@ -45,7 +45,15 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'TurboDocx', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
-  plugins: ['docusaurus-plugin-sass', "@orama/plugin-docusaurus",
+  plugins: ['docusaurus-plugin-sass', "@orama/plugin-docusaurus", 
+    [
+      'docusaurus-plugin-llms',
+      {
+        generateLLMsTxt: true,
+        docsDir: 'docs',
+        includeBlog: false
+      }
+    ],
     [
       'docusaurus-plugin-openapi-docs',
       {
