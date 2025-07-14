@@ -8,7 +8,7 @@ function transformImgClassName(className) {
 }
 
 export default function MDXImg(props) {
-  console.log("what are the props", props)
+ 
   return (
     <ImageFrame
     {...props}
