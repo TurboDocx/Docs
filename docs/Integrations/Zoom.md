@@ -192,11 +192,6 @@ cloud_recording:read:list_user_recordings
 
 <br/>
 
-![App Credentials Configuration Complete](/img/zoom_integration/app_credentials.png)
-
-<br/>
-
-
 ## Step 2: Configuring TurboDocx
 
 ### 🔧 How to Configure Zoom in Organization Settings
