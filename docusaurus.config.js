@@ -147,7 +147,7 @@ const config = {
       footer: {
         style: 'dark',
         links: [...footerItems.links],
-        copyright: `Powered by Dev-Docs.io`,
+        copyright: `Powered by TurboDocx`,
       },
       prism: {
         theme: lightCodeTheme,
