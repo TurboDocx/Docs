@@ -1,17 +1,173 @@
+---
+title: OneDrive and SharePoint Integration
+sidebar_position: 3
+description: Import templates and export documents seamlessly with OneDrive and SharePoint. Configure Azure AD integration for secure document management and cloud storage automation.
+keywords:
+  - sharepoint integration
+  - onedrive integration
+  - sharepoint document automation
+  - onedrive document management
+  - azure ad integration
+  - sharepoint template import
+  - onedrive template storage
+  - sharepoint document export
+  - onedrive document sync
+  - microsoft graph api
+  - sharepoint configuration
+  - onedrive setup
+  - sharepoint oauth
+  - onedrive permissions
+  - sharepoint document generation
+  - onedrive business integration
+  - sharepoint api integration
+  - microsoft 365 integration
+  - sharepoint document workflow
+  - onedrive automation
+  - sharepoint template management
+  - office 365 document automation
+  - sharepoint ai document generation
+  - onedrive ai automation
+  - sharepoint intelligent document processing
+  - onedrive smart template management
+  - sharepoint ai powered workflows
+  - onedrive intelligent content extraction
+  - sharepoint machine learning documents
+  - onedrive ai optimization
+  - sharepoint ai integration
+  - onedrive artificial intelligence
+  - sharepoint smart documents
+  - onedrive ai enhanced workflows
+---
+
 # OneDrive and SharePoint Integration
 
 The OneDrive and SharePoint integration in TurboDocx offers a streamlined and effective way to manage your document generation process. With this integration, you can import templates from OneDrive or SharePoint and export deliverables back to these platforms, enhancing your workflow and collaboration efficiency.
 
+## Configuration
+
+### Configuring SharePoint and OneDrive for Business with TurboDocx
+
+This guide will provide you step-by-step instructions on creating a SharePoint integration that can connect to your SharePoint sites as well as OneDrive. We will be using the Microsoft Graph API to access the SharePoint and OneDrive resources.
+
+Pre-requisites:
+
+- An Office365 Tenant with SharePoint and OneDrive for Business Enabled
+- Access to the Admin/Azure portal and the ability to register an application.
+
+### Step 1: Register your application in Entra ID (Azure Active Directory):
+
+1. Sign in to the SharePoint Dashboard (or Azure Admin Portal) and click on "Entra ID (Azure Active Directory)" in the respective menu. Click on the "App Registrations and then click on "New registration"
+
+![](/img/sharepoint_and_onedrive/app-reg.png)
+
+2. Enter a name for the application such as "TurboDocx Sharepoint integration", select the appropriate account type, and select Single Page Application with the redirect uri: "https://app.turbodocx.com"
+
+![](/img/sharepoint_and_onedrive/Register_Application.png)
+
+3. Click on the "Register Button" to create the application.
+
+4. Note down the Application (Client) ID and the Directory (tenant) ID, as you will need them later.
+
+![Alt text](/img/sharepoint_and_onedrive/Get_Site_ID_and_Client_ID.png)
+
+### Step 2: Configure API Permissions:
+
+1. In the "App registrations" menu, click on "API" permissions" in the left-hand menu.
+
+2. Click on "Add a permission"
+
+3. Click "Microsoft Graph" and then "Delegated permissions"
+
+![Alt text](/img/sharepoint_and_onedrive/Click_Delegated_Permissions.png)
+
+4. Search for the following permissions and add them:
+
+**Sites.Read.All** - This permission allows TurboDocx to read all site collections, sites, lists, and list items in SharePoint on behalf of the signed-in user. 
+
+:::note 
+TurboDocx does not make API calls to your SharePoint site without user interaction. This will mirror whatever permissions the user has in the SharePoint site.
+:::
+
+**Files.ReadWrite.All** - This permission allows TurboDocx to read and write (create, edit, and delete) all files in OneDrive for Business, SharePoint document libraries, and Microsoft Teams files on behalf of the signed-in user. With this permission, TurboDocx can access and manage files stored in OneDrive and SharePoint, including creating new files, updating existing files, moving or deleting files, and even sharing files with others. 
+
+:::note 
+TurboDocx does not make API calls to your SharePoint site without user interaction. Keep in mind that these are delegated permissions, which means TurboDocx can access these resources on behalf of the signed-in user. 
+
+The level of access TurboDocx will have depends on the user's actual permissions in SharePoint and OneDrive.
+:::
+
+![Alt text](/img/sharepoint_and_onedrive/Graph_Permissions.png)
+
+5. After clicking save, navigate back to "Add Permission" and click SharePoint. Click "SharePoint" and then "Delegated Permissions"
+
+![Alt text](/img/sharepoint_and_onedrive/SharePoint_Delegated_Permissions.png)
+
+6. Search for the following permissions and add them:
+
+**AllSites.Read** - This permission allows TurboDocx to read all site collections, sites, lists, and list items in SharePoint on behalf of the signed-in user. With this permission, TurboDocx can access and retrieve information about the SharePoint site content, such as document libraries, lists, and list items.
+
+**AllSites.Write** - This permission allows TurboDocx to write to all site collections, sites, lists, and list items in SharePoint on behalf of the signed-in user. With this permission, TurboDocx can create, edit, and delete SharePoint site content. This allows TurboDocx to save Deliverables to your SharePoint site. 
+
+**MyFiles.Read** - This permission allows TurboDocx to read the signed-in user's files in OneDrive for Business. With this permission, TurboDocx can access and retrieve information about the user's files, such as file names, file types, and file metadata.
+
+**MyFiles.Write** - This permission allows TurboDocx to write to the signed-in user's files in OneDrive for Business. With this permission, TurboDocx can create, edit, and delete the user's files
+
+:::note
+TurboDocx does not make API calls to your SharePoint site without user interaction. This user's access will mirror whatever permissions the user has in the SharePoint site.
+
+Keep in mind that these are delegated permissions, which means TurboDocx can access these resources on behalf of the signed-in user. The level of access TurboDocx will have depends on the user's actual permissions in SharePoint and OneDrive.
+:::
+
+![Alt text](/img/sharepoint_and_onedrive/SharePoint_Permissions_Select.png)
+
+7. The finished permission sets should look like the below:
+
+![Alt text](/img/sharepoint_and_onedrive/Finished_Permission_Set.png)
+
+### Step 3: Determine the default site that TurboDocx will open and get the path
+
+1. The easiest way to do this is to navigate to your Site and find the path you want users to see first. 
+
+2. Take note of the URL path and notate it for future use. In this case it is "DocumentationTeam"
+
+![Alt text](/img/sharepoint_and_onedrive/GetSiteName.png)
+
+### Step 4: Login to your TurboDocx Tenant and go to Tenant Settings
+
+1. As an admin within your TurboDocx tenant, navigate to the settings tab on the left-hand side-nav and click "Tenant Settings" in the top right corner. 
+
+2. If Hide SharePoint in the UI is selected, unselect this to get the SharePoint configuration button.
+
+3. Click "Configure SharePoint"
+
+![Alt text](/img/sharepoint_and_onedrive/Configure_Sharepoint_button.png)
+
+4. Fill out the following fields with the information you have noted from previous steps and click "Save": 
+
+**Tenant Name** - This is the name of the SharePoint tenant are connecting to. This can be found by looking in the browser bar and it should resemble "TenantName.SharePoint.com"
+
+**Site Name** - This is the name of the default site your users will land on when first opening the SharePoint file picker. This is noted from the previous step. 
+
+**Client ID** - This is the Application (client) ID noted from the previous step in the EntraID (AzureAD) console.
+
+**Tenant ID** - This is the Directory (tenant) ID noted from the previous step in the EntraID (AzureAD) console.
+
+![Alt text](/img/sharepoint_and_onedrive/SharePoint_Configuration_in_TurboDocx.png)
+
+5. Test importing and Exporting templates using the steps noted in the following sections. 
+
 ## Importing Templates
 
-A significant advantage of integrating with OneDrive and SharePoint is the ability to directly import templates from your storage on these platforms. This feature removes the need to manually upload templates to TurboDocx, saving both time and effort. By linking your OneDrive or SharePoint account with TurboDocx, you gain the ability to easily access and import your templates.
+One of the primary benefits of the SharePoint integration in TurboDocx is the ability to directly import templates from your SharePoint document libraries. This feature removes the need to manually upload templates to TurboDocx, streamlining the process and saving you both time and effort. By simply connecting your SharePoint tenant to TurboDocx, you can effortlessly access and import your templates.
 
-The integration ensures a smooth browsing experience, enabling you to sift through your OneDrive or SharePoint folders to locate and select the templates you wish to import. Whether these are existing templates or newly created ones in other applications like Microsoft Word, the process is simplified with OneDrive and SharePoint integration.
+The integration offers a seamless browsing experience, enabling you to navigate through your SharePoint document libraries and folders to choose the desired templates for import. Whether you have pre-existing templates or wish to import templates created using other applications such as Microsoft Word or Office 365, the SharePoint integration simplifies the process.
 
-Once you choose your templates, TurboDocx securely imports them into your account, preparing them for customization and document generation. This integration ensures that your templates are readily accessible within TurboDocx, eliminating repetitive file transfers or the need for duplicate storage.
+Upon selecting the templates, TurboDocx securely imports them into your TurboDocx account, ready for customization and document generation. This ensures that your templates are readily available within TurboDocx, eliminating the need for manual file transfers or duplicate storage.
+
+![Alt text](/img/sharepoint_and_onedrive/Import_with_SharePoint.png)
 
 ## Exporting Deliverables
 
-Moreover, the OneDrive and SharePoint integration facilitates the exporting of deliverables created in TurboDocx back to these platforms. After personalizing and generating documents from your templates, you can effortlessly export them back to OneDrive or SharePoint for convenient access and distribution.
+The SharePoint integration also enables you to export deliverables generated by TurboDocx back to your SharePoint and One Drive for business accounts. Once you have personalized and generated documents based on your templates, you can seamlessly export them to your SharePoint storage for easy access and sharing.
 
-Exporting your documents to OneDrive or SharePoint guarantees that they are safely stored in the cloud, offering a dependable backup and accessibility from any device connected to the internet. Utilizing the familiar interfaces of OneDrive and SharePoint, you can efficiently organize your deliverables, share them with team members, and manage access permissions as required.
+Exporting deliverables to SharePoint and One Drive for Business ensures that your documents are stored securely in the cloud, providing a reliable backup and making them accessible from any device with an internet connection. By leveraging the familiar SharePoint interface, you can organize your deliverables into folders, share them with collaborators, and control access permissions as needed.
