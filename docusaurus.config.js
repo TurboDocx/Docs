@@ -51,7 +51,9 @@ const config = {
       {
         generateLLMsTxt: true,
         docsDir: 'docs',
-        includeBlog: false
+        includeBlog: false,
+        excludeImports: true,
+        removeDuplicateHeadings: true
       }
     ],
     [
