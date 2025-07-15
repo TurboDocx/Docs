@@ -1,7 +1,7 @@
 ---
 title: Zoom Integration
 sidebar_position: 4
-description: Automatically convert Zoom meeting transcripts into professional documents, presentations, and reports. Perfect for post-meeting summaries, action items, and client deliverables.
+description: Automatically turn Zoom transcripts into documents, proposals, and slide decks with TurboDocx. Speed up follow-ups, sales cycles, and client onboarding — powered by AI.
 keywords: 
   - zoom meeting documents
   - zoom call transcripts
