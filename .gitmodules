@@ -1,0 +1,3 @@
+[submodule "vendor/docusaurus-plugin-llms"]
+	path = vendor/docusaurus-plugin-llms
+	url = https://github.com/nicolasiscoding/docusaurus-plugin-llms
