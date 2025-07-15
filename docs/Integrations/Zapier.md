@@ -74,7 +74,7 @@ The Zapier integration is available as part of TurboDocx's premium features. To 
 ### Contact Sales
 To enable the Zapier integration and discuss your specific automation needs:
 
-- **Email**: [sales@turbodocx.com](mailto:sales@turbodocx.com)
+- **Email**: [team@turbodocx.com](mailto:team@turbodocx.com)
 - **Schedule a Demo**: Book a personalized demonstration to see how Zapier integration can streamline your workflows
 - **Custom Setup**: Our team can help design custom automation workflows tailored to your business processes
 
