@@ -61,12 +61,12 @@ This process involves creating something called a "private app" in HubSpot. Thin
 
 ## Step 1: Creating Your HubSpot Private App
 
-The first step is creating a HubSpot private app. Think of this as getting a library card — it gives TurboDocx permission to check out (but not steal!) your HubSpot data.
+The first step is creating a HubSpot private app. Think of this as getting a library card — it gives TurboDocx permission to temporarily read your HubSpot data.
 
 ### Navigate to HubSpot Developer Settings
 
 1. **Open your web browser** and go to [hubspot.com](https://hubspot.com)
-   - Use Chrome, Firefox, Safari, or Edge (Internet Explorer users: it's time to upgrade! 😉)
+   - Use Chrome, Firefox, Safari, or Edge
 
 <br/>
 
@@ -87,8 +87,7 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
 <br/>
 
 4. **Click on the Settings gear**
-   - A menu will appear (like magic, but less impressive)
-
+   - A menu will appear
 <br/>
 
 ### Navigate to Integrations
@@ -118,16 +117,16 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
 
 1. **Click "Create a private app"**
    - Usually a big, friendly blue button
-   - If there's no button, you might need admin permissions (time to sweet-talk your IT department!)
+   - If there's no button, you might need admin permissions (time to find your BFF at your IT department!)
 
 ![Navigate to Integrations](/img/hubspot-integration/create-private-app-steps.png)
 
 <br/>
 
 2. **Fill in the basic information**:
-   - **App name**: Type something memorable like "TurboDocx Integration" or "My Document Generator"
-   - **Description**: Add a simple description like "This connects my HubSpot data to TurboDocx for document generation"
-   - **Logo**: Skip this — we're not entering a beauty contest!
+   - **App name**: Type something memorable like "TurboDocx Integration" or "TurboDocx Document Generator"
+   - **Description**: Add a simple description like "This connects my HubSpot data to TurboDocx for document and presentation generation"
+   - **Logo**: Optional - it's up to you!
 
 ![App Basic Info](/img/hubspot-integration/app-logo-description.png)
 
@@ -141,20 +140,19 @@ Choose an app name you'll remember six months from now. "App123" might seem clev
 
 3. **Click on the "Scopes" tab**
    - This is where you tell HubSpot what data TurboDocx can access
-   - Think of it as setting up a babysitter's permissions for your house
+   - It’s like setting clear boundaries — you choose exactly what TurboDocx can read from your CRM.
 
 ![Scopes Tab](/img/hubspot-integration/add-scope-step.png)
 
 <br/>
 
 4. **Add the required scopes** (permissions)
-   - We need to add A LOT of scopes — don't worry, this is normal!
    - Each scope is like giving TurboDocx permission to read a specific type of data
 
 ![Scopes Tab](/img/hubspot-integration/scope-adding-step.png)
 
 :::warning Attention to Detail Required
-This next part requires some patience. You'll be adding about 50 different permissions. It's like checking off a very long grocery list — tedious, but necessary for the feast ahead! 🛒
+You'll be adding about 50 different permissions. It's like checking off a very long grocery list — but necessary for the feast ahead! 🛒
 :::
 
 **Here's the complete list of scopes to add** (copy each one EXACTLY):
@@ -238,9 +236,11 @@ This next part requires some patience. You'll be adding about 50 different permi
 
 <br/>
 
-:::tip Patience, Grasshopper
-Yes, this is tedious. Yes, you need to do all of them. Think of it as meditation — or count it as your daily exercise! Each click is one step closer to document automation nirvana. 🧘‍♂️
+:::tip Almost Done
+Yes, it’s a few extra clicks — but it’s easy. Just check the boxes and you’ll be on your way to automatic documents in no time. Think of it like flipping switches to power things up. ⚡
 :::
+
+
 
 ### Create Your App
 
@@ -253,7 +253,7 @@ Yes, this is tedious. Yes, you need to do all of them. Think of it as meditation
 <br/>
 
 6. **You'll see the Access Token and Client Secret (needed for later)**
-   - This is super important! You'll see a long string of letters and numbers
+   - This is super important!
    - leave this page open to use these two keys later
 
 ![Access Token](/img/hubspot-integration/click-on-auth.png)
