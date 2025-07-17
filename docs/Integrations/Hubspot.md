@@ -326,7 +326,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 7. **Click "Save Configuration"**
    - Cross your fingers (optional, but recommended!)
 
-<!-- ![Save Configuration](/img/hubspot-integration/TranscriptsShown.png) -->
+![Save Configuration](/img/hubspot-integration/save-config.png)
 
 <br/>
 
@@ -336,29 +336,21 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - This button appears after you save your configuration
    - It tests if your access token works
 
-<!-- ![Connect to HubSpot](/img/hubspot-integration/oauth_allowlist.png) -->
-
-<br/>
-
-9. **Wait for the connection test**
-   - This might take 15-30 seconds
-   - Perfect time for a sip of coffee! ☕
-
-<!-- ![Connection Testing](/img/hubspot-integration/step1.png) -->
+![Connect to HubSpot](/img/hubspot-integration/connect-hubspot.png)
 
 <br/>
 
 ### Sync Your HubSpot Data
 
-10. **Click "Refresh Fields"**
+9. **Click "Refresh Fields"**
     - This button appears after the connection test succeeds
     - It downloads all your custom HubSpot fields and data
 
-<!-- ![Refresh Fields Button](/img/hubspot-integration/step2.png) -->
+![Refresh Fields Button](/img/hubspot-integration/refresh-fields.png)
 
 <br/>
 
-11. **Wait for the field sync**
+10. **Wait for the field sync**
     - This can take 1-3 minutes
     - Time to check your email or practice your victory dance! 💃
 
