@@ -7,7 +7,7 @@ keywords:
   - crm documents
   - hubspot to document
   - hubspot proposal generator
-  - hubspot report maker
+  - hubspot report maker 
   - crm document automation
   - hubspot data export
   - customer data documents
@@ -43,7 +43,7 @@ Say goodbye to copy-pasting customer information! TurboDocx's HubSpot integratio
 ## Before You Begin
 
 :::tip For Our Technology-Shy Friends
-Don't worry! We've made this guide so detailed that even your least tech-savvy team member can follow it. Think of it as IKEA instructions, but for software — and way less frustrating! 😄
+Don't worry! We've made this guide so detailed that any team member can follow it. Think of it as cooking instructions, but for software — and just as tasty! 😄
 :::
 
 To use the HubSpot integration, you'll need:
