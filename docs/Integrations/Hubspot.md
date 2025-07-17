@@ -151,7 +151,7 @@ Choose an app name you'll remember six months from now. "App123" might seem clev
 
 ![Scopes Tab](/img/hubspot-integration/scope-adding-step.png)
 
-:::warning Attention to Detail Required
+:::tip Attention to Detail Required
 You'll be adding about 50 different permissions. It's like checking off a very long grocery list — but necessary for the feast ahead! 🛒
 :::
 
@@ -261,8 +261,10 @@ Yes, it’s a few extra clicks — but it’s easy. Just check the boxes and you
 
 <br/>
 
-:::danger Critical Warning
-This access token is like the keys to your car — don't lose it, and don't give it to strangers!. you can always find it in this page here again, there is also the option to get fresh access tokens in case the current Access Token or Client Secret gets compromised.
+:::warning Handle With Care
+This token is kind of like a temporary library card — it lets TurboDocx read only the data you’ve approved. But just like a password, you don’t want it ending up in the wrong hands.
+
+Keep it private, and if it ever gets shared by accident, no worries — you can always generate a fresh one right here.
 :::
 
 <br/>
@@ -452,10 +454,10 @@ Time to put your new integration to work! This is where the magic happens — tu
 <br/>
 
 **Example prompts:**
-- "Create a professional proposal for the selected deal using the contact's information"
-- "Generate a follow-up email summarizing our recent meeting with this contact"
+- "Create a professional proposal section for the selected deal using the contact's information"
+- "Generate a follow-up slide summarizing our recent meeting with this contact"
 - "Create a company overview report using the selected company data"
-- "Draft a project kickoff document for the selected deal and contacts"
+- "Draft a project kickoff overview for the selected deal and contacts"
 
 13. **Review your document**
     - Check that all the information looks correct
@@ -465,7 +467,7 @@ Time to put your new integration to work! This is where the magic happens — tu
 <br/>
 
 :::tip Pro Document Tips
-- Be specific in your instructions — "Create a proposal" vs. "Create a detailed Q3 marketing proposal for ABC Corp with pricing and timeline"
+- Be specific in your instructions — "Create a proposal" vs. "Create a detailed Q3 marketing proposal section for ABC Corp with pricing and timeline"
 - Select the right records — more relevant data = better documents
 - Don't be afraid to regenerate if the first attempt isn't perfect
 - Save successful prompts for future use!
@@ -524,14 +526,12 @@ Your data security is important to us (and should be to you too!):
 - **Secure Authentication**: We use OAuth 2.0 (fancy industry-standard security)
 - **Limited Permissions**: TurboDocx only gets permission to read your data, not change it
 - **Encrypted Transmission**: All data transfers are encrypted (like sending a letter in a locked box)
-- **No Data Storage**: We don't store your HubSpot data on our servers
 
 ### Best Practices
 
 - **Keep Your Token Secret**: Don't share your access token with anyone
 - **Regular Reviews**: Periodically check which integrations have access to your data
-- **Deactivate Unused Apps**: If you stop using TurboDocx, deactivate the HubSpot private app
-- **Monitor Activity**: Keep an eye on your HubSpot activity logs
+- **Rotate Tokens**: Periodically rotate your tokens for maximal security posture. 
 
 <br/>
 
@@ -582,18 +582,16 @@ Congratulations! You've successfully:
 
 ### Now You Can:
 - Create personalized proposals in minutes instead of hours
-- Generate follow-up emails with accurate customer data
 - Build comprehensive reports using your CRM information
 - Automate document creation for your entire team
 
 ### Next Steps:
-1. **Train your team** on this process (share this guide!)
-2. **Create document templates** for common use cases
+1. **Train your team** on being a prompting pro
+2. **Create document and presentation templates** for common use cases
 3. **Experiment with different AI prompts** to find what works best
-4. **Set up regular data cleanup** in HubSpot for better results
 
 :::tip Final Words of Wisdom
-Remember, you're not just creating documents — you're creating more time for yourself by automating repetitive tasks. Every minute saved on copy-pasting customer data is a minute you can spend on more important things (like actually talking to customers!). 🎉
+Remember, you're not just creating documents or presentations— you're creating more time for yourself by automating repetitive tasks. Every minute saved on copy-pasting customer data is a minute you can spend on more important things (like actually talking to customers!). 🎉
 :::
 
 <br/>
@@ -606,7 +604,7 @@ Remember, you're not just creating documents — you're creating more time for y
 3. **Note the exact step** where you got stuck
 4. **Contact your TurboDocx support team** with the details
 
-**Remember**: There's no such thing as a stupid question. We've all been there, and we're here to help you succeed! 💪
+**Remember**: There's no such thing as a bad question. We've all been there, and we're here to help you succeed! 💪
 
 ---
 
