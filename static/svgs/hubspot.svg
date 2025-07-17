@@ -1,0 +1,21 @@
+<svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* HubSpot logo - simplified version */}
+      <circle cx="12" cy="12" r="11" fill="#FF7A59" />
+      <path
+        d="M8.5 12c0-1.933 1.567-3.5 3.5-3.5s3.5 1.567 3.5 3.5-1.567 3.5-3.5 3.5-3.5-1.567-3.5-3.5z"
+        fill="white"
+      />
+      <circle cx="12" cy="12" r="1.5" fill="#FF7A59" />
+      <path
+        d="M6 8l2 2m8-2l-2 2m-8 8l2-2m8 2l-2-2"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>

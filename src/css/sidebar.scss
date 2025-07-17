@@ -170,6 +170,18 @@
   vertical-align: middle;
 }
 
+.integration-hubspot .menu__link::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  background-image: url('/svgs/hubspot.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+}
+
 .integration-teams .menu__link::before {
   content: "";
   display: inline-block;
