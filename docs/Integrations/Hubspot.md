@@ -48,13 +48,13 @@ Don't worry! We've made this guide so detailed that any team member can follow i
 
 To use the HubSpot integration, you'll need:
 
-- A HubSpot account (free or paid — we don't judge!)
-- Administrative access to create a HubSpot app (or a very patient IT person)
-- About 30 minutes and a cup of coffee ☕
+- A HubSpot account with Private App Access (free or paid — we don't judge!)
+- Administrative access to create a HubSpot app 
+- About 10 minutes and a cup of coffee ☕
 - This guide (which you're already reading — you're ahead of the game!)
 
 :::warning Important Disclaimer
-This process involves creating something called a "private app" in HubSpot. Don't panic! It's not as scary as it sounds. Think of it as giving TurboDocx a special key to your HubSpot data — but only the data you want to share.
+This process involves creating something called a "private app" in HubSpot. Think of it as giving TurboDocx secure access to your HubSpot data — and only the data you want to share.
 :::
 
 <br/>
