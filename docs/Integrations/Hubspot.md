@@ -74,7 +74,7 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
    - Use your normal email and password
    - If you forgot your password, there's a "Forgot Password?" link (we've all been there!)
 
-![HubSpot Login](/img/zoom_integration/step1.png)
+![HubSpot Login](/img/hubspot-integration/hubspot-dashboard.png)
 
 <br/>
 
@@ -82,7 +82,7 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
    - It looks like a little wheel with teeth ⚙️
    - If you can't find it, it's probably hiding next to your profile picture
 
-![HubSpot Settings Gear](/img/zoom_integration/step2.png)
+![HubSpot Settings Gear](/img/hubspot-integration/hubspot-settings.png)
 
 <br/>
 
@@ -97,7 +97,7 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
    - It's usually about halfway down the list
    - If you don't see it, try scrolling down slowly (no need to rush!)
 
-![Navigate to Integrations](/img/zoom_integration/step3.png)
+![Navigate to Integrations](/img/hubspot-integration/create-private-app-steps.png)
 
 <br/>
 
@@ -110,7 +110,7 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
    - It might be hiding under the Integrations section
    - Think of it as a secret menu item at your favorite restaurant
 
-![Private Apps Menu](/img/zoom_integration/Step4RenameTurboDocx.png)
+![Navigate to Integrations](/img/hubspot-integration/create-private-app-steps.png)
 
 <br/>
 
@@ -120,7 +120,7 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
    - Usually a big, friendly blue button
    - If there's no button, you might need admin permissions (time to sweet-talk your IT department!)
 
-![Create Private App Button](/img/zoom_integration/Step5UserManaged.png)
+![Navigate to Integrations](/img/hubspot-integration/create-private-app-steps.png)
 
 <br/>
 
@@ -129,7 +129,7 @@ The first step is creating a HubSpot private app. Think of this as getting a lib
    - **Description**: Add a simple description like "This connects my HubSpot data to TurboDocx for document generation"
    - **Logo**: Skip this — we're not entering a beauty contest!
 
-![App Basic Info](/img/zoom_integration/Step6ClientIdAndSecret.png)
+![App Basic Info](/img/hubspot-integration/app-logo-description.png)
 
 <br/>
 
@@ -143,13 +143,15 @@ Choose an app name you'll remember six months from now. "App123" might seem clev
    - This is where you tell HubSpot what data TurboDocx can access
    - Think of it as setting up a babysitter's permissions for your house
 
-![Scopes Tab](/img/zoom_integration/NavigateToScopesSection.png)
+![Scopes Tab](/img/hubspot-integration/add-scope-step.png)
 
 <br/>
 
 4. **Add the required scopes** (permissions)
    - We need to add A LOT of scopes — don't worry, this is normal!
    - Each scope is like giving TurboDocx permission to read a specific type of data
+
+![Scopes Tab](/img/hubspot-integration/scope-adding-step.png)
 
 :::warning Attention to Detail Required
 This next part requires some patience. You'll be adding about 50 different permissions. It's like checking off a very long grocery list — tedious, but necessary for the feast ahead! 🛒
@@ -232,7 +234,7 @@ This next part requires some patience. You'll be adding about 50 different permi
 5. **Click on the matching result**
 6. **Repeat for the next scope**
 
-![Adding Scopes Process](/img/zoom_integration/clickaddscopesbutton.png)
+![Adding Scopes Process](/img/hubspot-integration/checked-scopes.png)
 
 <br/>
 
@@ -245,21 +247,22 @@ Yes, this is tedious. Yes, you need to do all of them. Think of it as meditation
 5. **Click "Create app"** when you're done adding scopes
    - Take a moment to admire your handiwork first!
 
-![Create App Final](/img/zoom_integration/TypeListCloudRecordingsForUser.png)
+![Create App Final](/img/hubspot-integration/scope-added.png)
+![Create App Final](/img/hubspot-integration/app-created.png)
 
 <br/>
 
-6. **IMMEDIATELY copy your Access Token**
+6. **You'll see the Access Token and Client Secret (needed for later)**
    - This is super important! You'll see a long string of letters and numbers
-   - Copy it RIGHT NOW and save it somewhere safe
-   - You'll NEVER see this token again after you leave this page
+   - leave this page open to use these two keys later
 
-![Access Token](/img/zoom_integration/SelectScopeandPressDone.png)
+![Access Token](/img/hubspot-integration/click-on-auth.png)
+![Access Token](/img/hubspot-integration/access-token-copiying.png)
 
 <br/>
 
 :::danger Critical Warning
-This access token is like the keys to your car — don't lose it, and don't give it to strangers! Save it in a secure place immediately. If you lose it, you'll have to start all over again (and nobody wants that). 🔐
+This access token is like the keys to your car — don't lose it, and don't give it to strangers!. you can always find it in this page here again, there is also the option to get fresh access tokens in case the current Access Token or Client Secret gets compromised.
 :::
 
 <br/>
@@ -273,7 +276,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 1. **Go to your TurboDocx dashboard**
    - Log in if you haven't already
 
-![TurboDocx Dashboard](/img/zoom_integration/GoToSettings.png)
+![TurboDocx Dashboard](/img/hubspot-integration/settings-link.png)
 
 <br/>
 
@@ -281,7 +284,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - Look for the gear icon or "Settings" text
    - Usually in the top menu or sidebar
 
-![TurboDocx Settings](/img/zoom_integration/GoToOrganizationSettings.png)
+![TurboDocx Dashboard](/img/hubspot-integration/settings-link.png)
 
 <br/>
 
@@ -289,7 +292,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - This might be in a dropdown or separate tab
    - If you can't find it, try looking for "Integrations" or "Connected Apps"
 
-![Organization Settings](/img/zoom_integration/ClickConfigureZoom.png)
+![Organization Settings](/img/hubspot-integration/org-settings.png)
 
 <br/>
 
@@ -299,7 +302,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - Look for the HubSpot logo or "HubSpot Integration"
    - It might be in a list with other integrations
 
-![HubSpot Section](/img/zoom_integration/enterclientidsecretandpresssaveconfiguration.png)
+![HubSpot Section](/img/hubspot-integration/select-configure-hubspot.png)
 
 <br/>
 
@@ -307,22 +310,23 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - A popup or form will appear
    - This is where the magic happens! ✨
 
-![Configure HubSpot Button](/img/zoom_integration/ChangeResource.png)
+![Configure HubSpot Button](/img/hubspot-integration/hubspot-config-modal.png)
 
 <br/>
 
 6. **Enter your Access Token**
-   - Paste that long string you saved earlier
-   - Make sure there are no extra spaces at the beginning or end
+   - Copy the Access Token from your HubSpot private app page and paste it here
+   - Copy the Client Secret from your HubSpot private app page and paste it in the Client Secret field
 
-![Enter Access Token](/img/zoom_integration/MeetingProviders.png)
+![Access Token](/img/hubspot-integration/access-token-copiying.png)
+![Enter Access Token](/img/hubspot-integration/copied-access-token.png)
 
 <br/>
 
 7. **Click "Save Configuration"**
    - Cross your fingers (optional, but recommended!)
 
-![Save Configuration](/img/zoom_integration/TranscriptsShown.png)
+<!-- ![Save Configuration](/img/hubspot-integration/TranscriptsShown.png) -->
 
 <br/>
 
@@ -332,7 +336,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - This button appears after you save your configuration
    - It tests if your access token works
 
-![Connect to HubSpot](/img/zoom_integration/oauth_allowlist.png)
+<!-- ![Connect to HubSpot](/img/hubspot-integration/oauth_allowlist.png) -->
 
 <br/>
 
@@ -340,7 +344,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - This might take 15-30 seconds
    - Perfect time for a sip of coffee! ☕
 
-![Connection Testing](/img/zoom_integration/step1.png)
+<!-- ![Connection Testing](/img/hubspot-integration/step1.png) -->
 
 <br/>
 
@@ -350,7 +354,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
     - This button appears after the connection test succeeds
     - It downloads all your custom HubSpot fields and data
 
-![Refresh Fields Button](/img/zoom_integration/step2.png)
+<!-- ![Refresh Fields Button](/img/hubspot-integration/step2.png) -->
 
 <br/>
 
@@ -358,7 +362,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
     - This can take 1-3 minutes
     - Time to check your email or practice your victory dance! 💃
 
-![Field Sync Progress](/img/zoom_integration/step3.png)
+<!-- ![Field Sync Progress](/img/hubspot-integration/step3.png) -->
 
 <br/>
 
@@ -378,7 +382,7 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Look for "Create Document", "New Document", or similar
    - This is usually on your main dashboard
 
-![Document Generation](/img/zoom_integration/Step4RenameTurboDocx.png)
+<!-- ![Document Generation](/img/hubspot-integration/Step4RenameTurboDocx.png) -->
 
 <br/>
 
@@ -386,7 +390,7 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Click on the "Change Source" dropdown
    - Select "Change Source" from the menu
 
-![Change Source](/img/zoom_integration/Step5UserManaged.png)
+<!-- ![Change Source](/img/hubspot-integration/Step5UserManaged.png) -->
 
 <br/>
 
@@ -394,7 +398,7 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Click on the "App Library" tab
    - This shows all your connected integrations
 
-![App Library](/img/zoom_integration/Step6ClientIdAndSecret.png)
+<!-- ![App Library](/img/hubspot-integration/Step6ClientIdAndSecret.png) -->
 
 <br/>
 
@@ -402,7 +406,7 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Look for "CRM" and click on it
    - This filters to show only CRM integrations
 
-![Select CRM](/img/zoom_integration/NavigateToScopesSection.png)
+<!-- ![Select CRM](/img/hubspot-integration/NavigateToScopesSection.png) -->
 
 <br/>
 
@@ -410,14 +414,14 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Click on "HubSpot" (you should see the orange logo)
    - It should show as "Connected"
 
-![Choose HubSpot](/img/zoom_integration/clickaddscopesbutton.png)
+<!-- ![Choose HubSpot](/img/hubspot-integration/clickaddscopesbutton.png) -->
 
 <br/>
 
 6. **Click "Continue"**
    - This takes you to the HubSpot agent interface
 
-![Continue Button](/img/zoom_integration/TypeListCloudRecordingsForUser.png)
+<!-- ![Continue Button](/img/hubspot-integration/TypeListCloudRecordingsForUser.png) -->
 
 <br/>
 
@@ -427,7 +431,7 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Click "Select Records" to choose specific contacts, deals, or companies
    - This helps the AI focus on the right data
 
-![Select Records](/img/zoom_integration/SelectScopeandPressDone.png)
+<!-- ![Select Records](/img/hubspot-integration/SelectScopeandPressDone.png) -->
 
 <br/>
 
@@ -435,14 +439,14 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Click on contacts, deals, or companies relevant to your document
    - Selected items will be highlighted
 
-![Choose Records](/img/zoom_integration/GoToSettings.png)
+<!-- ![Choose Records](/img/hubspot-integration/GoToSettings.png) -->
 
 <br/>
 
 9. **Save your selection**
    - Click "Save" to confirm your record selection
 
-![Save Selection](/img/zoom_integration/GoToOrganizationSettings.png)
+<!-- ![Save Selection](/img/hubspot-integration/GoToOrganizationSettings.png) -->
 
 <br/>
 
@@ -450,7 +454,7 @@ Time to put your new integration to work! This is where the magic happens — tu
     - Type what kind of document you want in plain English
     - Be specific about what you want to create
 
-![AI Instructions](/img/zoom_integration/ClickConfigureZoom.png)
+<!-- ![AI Instructions](/img/hubspot-integration/ClickConfigureZoom.png) -->
 
 <br/>
 
@@ -464,7 +468,7 @@ Time to put your new integration to work! This is where the magic happens — tu
     - Sit back and watch the magic happen!
     - Generation typically takes 30 seconds to 2 minutes
 
-![Generate Document](/img/zoom_integration/enterclientidsecretandpresssaveconfiguration.png)
+<!-- ![Generate Document](/img/hubspot-integration/enterclientidsecretandpresssaveconfiguration.png) -->
 
 <br/>
 
@@ -473,7 +477,7 @@ Time to put your new integration to work! This is where the magic happens — tu
     - Make any necessary edits
     - Marvel at your personalized, professional document!
 
-![Review Document](/img/zoom_integration/ChangeResource.png)
+<!-- ![Review Document](/img/hubspot-integration/ChangeResource.png) -->
 
 <br/>
 
