@@ -53,7 +53,7 @@ To use the HubSpot integration, you'll need:
 - About 10 minutes and a cup of coffee ☕
 - This guide (which you're already reading — you're ahead of the game!)
 
-:::warning Important Disclaimer
+:::tip Quick note
 This process involves creating something called a "private app" in HubSpot. Think of it as giving TurboDocx secure access to your HubSpot data — and only the data you want to share.
 :::
 
