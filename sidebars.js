@@ -65,6 +65,12 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'Integrations/Hubspot',
+          label: 'Hubspot',
+          className: 'integration-hubspot',
+        },
+        {
+          type: 'doc',
           id: 'Integrations/Teams',
           label: 'Microsoft Teams',
           className: 'integration-teams',
