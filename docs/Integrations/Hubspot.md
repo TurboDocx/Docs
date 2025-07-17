@@ -334,7 +334,6 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 
 8. **Click "Connect to HubSpot"**
    - This button appears after you save your configuration
-   - It tests if your access token works
 
 ![Connect to HubSpot](/img/hubspot-integration/connect-hubspot.png)
 
@@ -345,6 +344,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 9. **Click "Refresh Fields"**
     - This button appears after the connection test succeeds
     - It downloads all your custom HubSpot fields and data
+    - It also tests if your access token works
 
 ![Refresh Fields Button](/img/hubspot-integration/refresh-fields.png)
 
@@ -353,8 +353,6 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 10. **Wait for the field sync**
     - This can take 1-3 minutes
     - Time to check your email or practice your victory dance! 💃
-
-<!-- ![Field Sync Progress](/img/hubspot-integration/step3.png) -->
 
 <br/>
 
@@ -374,79 +372,82 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Look for "Create Document", "New Document", or similar
    - This is usually on your main dashboard
 
-<!-- ![Document Generation](/img/hubspot-integration/Step4RenameTurboDocx.png) -->
+![Document Generation](/img/hubspot-integration/home-page.png)
 
 <br/>
 
-2. **Change your data source**
+2. **Select Template**
+   - Click on any available template
+
+![Change Source](/img/hubspot-integration/template-page.png)
+
+<br/>
+
+3. **Change your data source**
    - Click on the "Change Source" dropdown
    - Select "Change Source" from the menu
 
-<!-- ![Change Source](/img/hubspot-integration/Step5UserManaged.png) -->
+![Change Source](/img/hubspot-integration/change-resource.png)
 
 <br/>
 
-3. **Go to the App Library**
+4. **Go to the App Library**
    - Click on the "App Library" tab
    - This shows all your connected integrations
 
-<!-- ![App Library](/img/hubspot-integration/Step6ClientIdAndSecret.png) -->
+![App Library](/img/hubspot-integration/app-library.png)
 
 <br/>
 
-4. **Select CRM category**
+5. **Select CRM category**
    - Look for "CRM" and click on it
    - This filters to show only CRM integrations
 
-<!-- ![Select CRM](/img/hubspot-integration/NavigateToScopesSection.png) -->
+![Select CRM](/img/hubspot-integration/crm-select.png)
 
 <br/>
 
-5. **Choose HubSpot**
+6. **Choose HubSpot**
    - Click on "HubSpot" (you should see the orange logo)
    - It should show as "Connected"
 
-<!-- ![Choose HubSpot](/img/hubspot-integration/clickaddscopesbutton.png) -->
+![Choose HubSpot](/img/hubspot-integration/select-hubspot.png)
 
 <br/>
 
-6. **Click "Continue"**
+7. **Click "Continue"**
    - This takes you to the HubSpot agent interface
 
-<!-- ![Continue Button](/img/hubspot-integration/TypeListCloudRecordingsForUser.png) -->
+![Continue Button](/img/hubspot-integration/continue-click.png)
 
 <br/>
 
 ### Using the HubSpot Agent
 
-7. **Select your records** (optional but helpful)
+8. **Select your records** (optional but helpful)
    - Click "Select Records" to choose specific contacts, deals, or companies
    - This helps the AI focus on the right data
 
-<!-- ![Select Records](/img/hubspot-integration/SelectScopeandPressDone.png) -->
+![Select Records](/img/hubspot-integration/select-resource-btn.png)
 
 <br/>
 
-8. **Choose relevant records**
+9. **Choose relevant records**
    - Click on contacts, deals, or companies relevant to your document
    - Selected items will be highlighted
-
-<!-- ![Choose Records](/img/hubspot-integration/GoToSettings.png) -->
-
-<br/>
-
-9. **Save your selection**
    - Click "Save" to confirm your record selection
 
-<!-- ![Save Selection](/img/hubspot-integration/GoToOrganizationSettings.png) -->
+![Choose Records](/img/hubspot-integration/select-records.png)
 
 <br/>
 
-10. **Give instructions to the AI**
+11. **Give instructions to the AI**
     - Type what kind of document you want in plain English
     - Be specific about what you want to create
+    - Sit back and watch the magic happen!
+    - Generation typically takes 30 seconds to 2 minutes
 
-<!-- ![AI Instructions](/img/hubspot-integration/ClickConfigureZoom.png) -->
+![AI Instructions](/img/hubspot-integration/prompt-continue.png)
 
 <br/>
 
@@ -456,20 +457,10 @@ Time to put your new integration to work! This is where the magic happens — tu
 - "Create a company overview report using the selected company data"
 - "Draft a project kickoff document for the selected deal and contacts"
 
-11. **Click "Generate"**
-    - Sit back and watch the magic happen!
-    - Generation typically takes 30 seconds to 2 minutes
-
-<!-- ![Generate Document](/img/hubspot-integration/enterclientidsecretandpresssaveconfiguration.png) -->
-
-<br/>
-
-12. **Review your document**
+13. **Review your document**
     - Check that all the information looks correct
     - Make any necessary edits
     - Marvel at your personalized, professional document!
-
-<!-- ![Review Document](/img/hubspot-integration/ChangeResource.png) -->
 
 <br/>
 
