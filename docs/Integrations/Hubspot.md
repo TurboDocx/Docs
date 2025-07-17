@@ -377,7 +377,7 @@ Time to put your new integration to work! This is where the magic happens — tu
 <br/>
 
 2. **Select Template**
-   - Click on any available template
+   - Click on the template you want to work with
 
 ![Change Source](/img/hubspot-integration/template-page.png)
 
@@ -385,7 +385,7 @@ Time to put your new integration to work! This is where the magic happens — tu
 
 3. **Change your data source**
    - Click on the "Change Source" dropdown
-   - Select "Change Source" from the menu
+   - Select "Change Resource" from the menu
 
 ![Change Source](/img/hubspot-integration/change-resource.png)
 
