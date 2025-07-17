@@ -321,14 +321,19 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
    - Copy the Client Secret from your HubSpot private app page and paste it in the Client Secret field
 
 ![Access Token](/img/hubspot-integration/access-token-copiying.png)
-![Enter Access Token](/img/hubspot-integration/copied-access-token.png)
+
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+  Screenshots Coming Soon
+</div>
 
 <br/>
 
 7. **Click "Save Configuration"**
    - Cross your fingers (optional, but recommended!)
 
-![Save Configuration](/img/hubspot-integration/save-config.png)
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+  Screenshots Coming Soon
+</div>
 
 <br/>
 
@@ -337,7 +342,9 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 8. **Click "Connect to HubSpot"**
    - This button appears after you save your configuration
 
-![Connect to HubSpot](/img/hubspot-integration/connect-hubspot.png)
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+  Screenshots Coming Soon
+</div>
 
 <br/>
 
@@ -348,7 +355,9 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
     - It downloads all your custom HubSpot fields and data
     - It also tests if your access token works
 
-![Refresh Fields Button](/img/hubspot-integration/refresh-fields.png)
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+  Screenshots Coming Soon
+</div>
 
 <br/>
 
