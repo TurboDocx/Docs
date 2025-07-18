@@ -1,0 +1,10 @@
+{
+  "label": "TurboSign",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "TurboSign Digital Signatures",
+    "description": "Learn how to use TurboSign to get documents digitally signed quickly and securely.",
+    "keywords": ["turbosign", "digital signatures", "e-signature", "document signing"]
+  }
+}
