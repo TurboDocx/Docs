@@ -30,6 +30,8 @@ jobs:
 
       - name: Build Docusaurus site
         run: npm run build
+        env:
+          GTM_CONTAINER_ID: ${{ secrets.GTM_CONTAINER_ID }}
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1

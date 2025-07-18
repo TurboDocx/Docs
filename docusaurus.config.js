@@ -105,6 +105,11 @@ const config = {
         //   // editUrl:
         //     // 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         // },
+        ...(process.env.GTM_CONTAINER_ID && {
+          googleTagManager: {
+            containerId: process.env.GTM_CONTAINER_ID,
+          },
+        }),
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
