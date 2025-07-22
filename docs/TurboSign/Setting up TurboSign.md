@@ -170,7 +170,6 @@ Time to add the people who need to sign your document. This is where you control
 For each recipient, you'll need:
 - **Full name** (as it should appear on the signature)
 - **Email address** (where they'll receive the signature request)
-- **Role** (if applicable - like "Client", "Contractor", etc.)
 
 </div>
 <div>

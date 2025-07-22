@@ -64,128 +64,15 @@ Once you've sent your document for signature, your work isn't done! This guide c
 
 ## Tracking Signature Progress & Viewing Audit Trails
 
-Stay informed about your document's signature journey with TurboSign's comprehensive tracking and audit capabilities. This combined view gives you both real-time progress updates and detailed historical records.
+### Automatic Email Delivery
 
-### Accessing Your Signature Dashboard
+**Good news!** TurboSign automatically sends a copy of the completed document and the user-facing audit trail to all participants via email when the signature process is complete. This means:
 
-From the main TurboSign interface, you can view all your active and completed signature requests in one centralized location.
+- **All signers** get their own copy of the completed document
+- **Email delivery** happens instantly when the last signature is completed
+- **Audit trail** is included for compliance and record-keeping
 
-**To access your signatures:**
-1. Navigate to the **TurboSign dashboard**
-2. Your document table displays all signature requests automatically
-3. Use the **search bar** to find specific documents by name, description, or recipient
-4. Use the **time filter dropdown** to filter by time period
-5. Click the **three-dot menu (⋮)** on any document to access actions
-
-<!-- Screenshot for TurboSign Dashboard showing document table, search, and filters -->
-
-### Understanding Signature Status
-
-Each document displays a clear status indicator:
-
-**Status Types:**
-- **🔵 Under Review** - Document is active and awaiting signatures
-- **🟢 Completed** - All signatures have been collected
-- **🔴 Voided** - Document has been cancelled or expired
-
-### Real-Time Progress Tracking
-
-**Document Table View:**
-- **Document list** with name, creator, creation date, and status
-- **Recipient avatars** showing all signers for each document
-- **Interactive tooltips** displaying detailed recipient information
-- **Search functionality** across document names, descriptions, and recipients
-- **Time filtering** options (This week, This month, Last 6 months, This year, All time)
-
-**What You Can See:**
-- **Document status** with color-coded indicators
-- **Recipient details** including name, email, status, and signing order
-- **Creator information** with user avatars and identification
-- **Document actions** through context menu (three-dot menu)
-- **Real-time status updates** as recipients complete their signatures
-
-### Detailed Audit Trail
-
-Click on any document to access its complete audit trail - a comprehensive record of all signature-related activities.
-
-![Audit trail overview showing complete timeline](/img/turbosign/AuditTrailOverview.png)
-
-**Audit Trail Action Types:**
-- **Document Sent** - Initial document distribution to recipients
-- **Document Viewed** - When recipients access the document
-- **Document Signed** - When signatures are completed
-- **Document Voided** - When documents are cancelled
-- **Document Resent** - When reminder emails are sent
-- **Document PDF Updated** - When the document is modified or digitally signed
-- **Email Notification Sent** - When system notifications are delivered
-
-**Detailed Information for Each Entry:**
-- **Timeline View** - Events grouped by date in chronological order
-- **User Avatars** - Visual identification of all participants
-- **Device Information** - IP address, browser, operating system
-- **Location Data** - City, region, country, and timezone (based on IP)
-- **Cryptographic Verification** - Previous hash and current hash for security
-- **Participant Details** - Full name and email for each user involved
-
-### Using the Combined View
-
-The integrated tracking and audit view provides several benefits:
-
-**For Active Documents:**
-- **Monitor progress** through the document table view
-- **Access context menu** to void documents or resend emails
-- **View recipient tooltips** for detailed status information
-- **Track signing workflow** through status indicators
-
-**For Completed Documents:**
-- **Download signed PDFs** directly from the context menu
-- **Access full audit trail** through the timeline modal
-- **Review cryptographic verification** with hash chain validation
-- **Export audit data** as JSON for compliance records
-
-![Document context menu showing available actions](/img/turbosign/VoidDocument.png)
-
-<!-- Screenshot for Audit Trail modal showing timeline and cryptographic verification -->
-
-### Notifications and Alerts
-
-Stay updated with automatic notifications:
-
-**You'll receive alerts for:**
-- New signatures completed
-- Document fully executed
-- Reminder emails sent
-- Access or delivery issues
-- Approaching expiration dates
-
-**Notification Options:**
-- Email notifications (default)
-- Dashboard notifications
-- Mobile push notifications (if app is installed)
-
-### Export and Reporting
-
-**Available Export Options:**
-- **JSON Audit Trail** - Complete audit history with cryptographic verification
-- **PDF Document Download** - Fully signed document (completed documents only)
-- **Individual Event Details** - Detailed information for each audit entry
-
-### Best Practices for Tracking
-
-**Regular Monitoring:**
-- Check your dashboard weekly for active documents
-- Follow up on documents pending for more than 48 hours
-- Review audit trails before important deadlines
-
-**Record Keeping:**
-- Download audit trails for important legal documents
-- Maintain copies of completed signature certificates
-- Archive historical data according to your retention policy
-
-**Security Considerations:**
-- Review IP addresses for unusual access patterns
-- Monitor failed access attempts
-- Ensure sensitive documents have appropriate access controls
+So while you can always redownload documents from your dashboard, you likely already have the completed document in your email inbox!
 
 <br/>
 
@@ -249,11 +136,11 @@ Need to cancel a signature request that's already been sent? TurboSign makes it 
 
 ---
 
-## How to Download Completed Documents
+## How to Redownload Completed Documents
 
-Need to download your fully signed document? TurboSign makes it easy to get the completed PDF with all signatures.
+Need to download your fully signed document again? TurboSign makes it easy to redownload the completed PDF with all signatures whenever you need it.
 
-### Step-by-Step: Downloading Your Signed Document
+### Step-by-Step: Redownloading Your Signed Document
 
 **Step 1: Access the Document Actions**
 1. Navigate to your **TurboSign Dashboard**
@@ -313,6 +200,11 @@ These are the two most important user events to monitor for tracking signature p
 - **Document Updated** - When the document is modified or updated via signature
 - **Document Sent** - When the document is initially distributed for signature
 
+
+<br/>
+
+### How to Redownload the Audit Trail
+We already send a pretty user-facing Audit Trail with User events, but if you want to download a detailed copy, click **Download Audit Trail as JSON**, 
 
 <br/>
 
