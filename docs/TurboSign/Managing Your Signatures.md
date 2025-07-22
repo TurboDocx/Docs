@@ -47,97 +47,277 @@ Once you've sent your document for signature, your work isn't done! This guide c
 - 🔍 **View audit trails** for complete signature history
 - 📄 **Download completed documents** when all signatures are collected
 
-:::tip Quick Navigation
-Each section below covers a specific aspect of signature management. Jump to what you need, or read through for the complete picture!
-:::
+## Quick Reference: Common Actions
+
+**Access all document actions through the context menu (three-dot menu ⋮):**
+
+| Action | Purpose |
+|--------|---------|
+| **Void Document** | Cancel signature request |
+| **Resend Email** | Send reminder to recipients |
+| **Download PDF** | Get fully signed document |
+| **Audit Trail** | View complete activity history |
 
 <br/>
 
 ---
 
-## Tracking Signatures
+## Tracking Signature Progress & Viewing Audit Trails
 
-**[PLACEHOLDER - Section to be added]**
+Stay informed about your document's signature journey with TurboSign's comprehensive tracking and audit capabilities. This combined view gives you both real-time progress updates and detailed historical records.
 
-*This section will cover:*
-- How to access your signature dashboard
-- Understanding signature status indicators
-- Viewing who has signed and who hasn't
-- Checking signature progress and timelines
-- Getting notifications about signature updates
+### Accessing Your Signature Dashboard
+
+From the main TurboSign interface, you can view all your active and completed signature requests in one centralized location.
+
+**To access your signatures:**
+1. Navigate to the **TurboSign dashboard**
+2. Your document table displays all signature requests automatically
+3. Use the **search bar** to find specific documents by name, description, or recipient
+4. Use the **time filter dropdown** to filter by time period
+5. Click the **three-dot menu (⋮)** on any document to access actions
+
+<!-- Screenshot for TurboSign Dashboard showing document table, search, and filters -->
+
+### Understanding Signature Status
+
+Each document displays a clear status indicator:
+
+**Status Types:**
+- **🔵 Under Review** - Document is active and awaiting signatures
+- **🟢 Completed** - All signatures have been collected
+- **🔴 Voided** - Document has been cancelled or expired
+
+### Real-Time Progress Tracking
+
+**Document Table View:**
+- **Document list** with name, creator, creation date, and status
+- **Recipient avatars** showing all signers for each document
+- **Interactive tooltips** displaying detailed recipient information
+- **Search functionality** across document names, descriptions, and recipients
+- **Time filtering** options (This week, This month, Last 6 months, This year, All time)
+
+**What You Can See:**
+- **Document status** with color-coded indicators
+- **Recipient details** including name, email, status, and signing order
+- **Creator information** with user avatars and identification
+- **Document actions** through context menu (three-dot menu)
+- **Real-time status updates** as recipients complete their signatures
+
+### Detailed Audit Trail
+
+Click on any document to access its complete audit trail - a comprehensive record of all signature-related activities.
+
+![Audit trail overview showing complete timeline](/img/turbosign/AuditTrailOverview.png)
+
+**Audit Trail Action Types:**
+- **Document Sent** - Initial document distribution to recipients
+- **Document Viewed** - When recipients access the document
+- **Document Signed** - When signatures are completed
+- **Document Voided** - When documents are cancelled
+- **Document Resent** - When reminder emails are sent
+- **Document PDF Updated** - When the document is modified or digitally signed
+- **Email Notification Sent** - When system notifications are delivered
+
+**Detailed Information for Each Entry:**
+- **Timeline View** - Events grouped by date in chronological order
+- **User Avatars** - Visual identification of all participants
+- **Device Information** - IP address, browser, operating system
+- **Location Data** - City, region, country, and timezone (based on IP)
+- **Cryptographic Verification** - Previous hash and current hash for security
+- **Participant Details** - Full name and email for each user involved
+
+### Using the Combined View
+
+The integrated tracking and audit view provides several benefits:
+
+**For Active Documents:**
+- **Monitor progress** through the document table view
+- **Access context menu** to void documents or resend emails
+- **View recipient tooltips** for detailed status information
+- **Track signing workflow** through status indicators
+
+**For Completed Documents:**
+- **Download signed PDFs** directly from the context menu
+- **Access full audit trail** through the timeline modal
+- **Review cryptographic verification** with hash chain validation
+- **Export audit data** as JSON for compliance records
+
+![Document context menu showing available actions](/img/turbosign/VoidDocument.png)
+
+<!-- Screenshot for Audit Trail modal showing timeline and cryptographic verification -->
+
+### Notifications and Alerts
+
+Stay updated with automatic notifications:
+
+**You'll receive alerts for:**
+- New signatures completed
+- Document fully executed
+- Reminder emails sent
+- Access or delivery issues
+- Approaching expiration dates
+
+**Notification Options:**
+- Email notifications (default)
+- Dashboard notifications
+- Mobile push notifications (if app is installed)
+
+### Export and Reporting
+
+**Available Export Options:**
+- **JSON Audit Trail** - Complete audit history with cryptographic verification
+- **PDF Document Download** - Fully signed document (completed documents only)
+- **Individual Event Details** - Detailed information for each audit entry
+
+### Best Practices for Tracking
+
+**Regular Monitoring:**
+- Check your dashboard weekly for active documents
+- Follow up on documents pending for more than 48 hours
+- Review audit trails before important deadlines
+
+**Record Keeping:**
+- Download audit trails for important legal documents
+- Maintain copies of completed signature certificates
+- Archive historical data according to your retention policy
+
+**Security Considerations:**
+- Review IP addresses for unusual access patterns
+- Monitor failed access attempts
+- Ensure sensitive documents have appropriate access controls
 
 <br/>
 
 ---
 
-## Resending Signature Emails
+## How to Resend Signature Emails
 
-**[PLACEHOLDER - Section to be added]**
+Need to send a gentle reminder to recipients who haven't signed yet? TurboSign makes it easy to resend signature requests to the next person in your signing order.
 
-*This section will cover:*
-- When and why to resend signature requests
-- Step-by-step process to resend emails
-- Customizing reminder messages
-- Best practices for follow-up timing
-- Avoiding email spam issues
+### Step-by-Step: Resending Signature Emails
 
-<br/>
+**Step 1: Access the Document Actions**
 
----
+1. Navigate to your **TurboSign Dashboard**
+2. Find the document with pending signatures
+3. Click the **three-dot menu (⋮)** next to the document
 
-## Voiding Documents
+![Document context menu showing resend email option](/img/turbosign/ResendEmail.png)
 
-**[PLACEHOLDER - Section to be added]**
+**Step 2: Send the Reminder**
 
-*This section will cover:*
-- When you might need to void a document
-- How to cancel active signature requests
-- What happens to recipients when you void
-- Handling partially signed documents
-- Starting over with a new version
+4. Click **"Resend Email"** from the context menu
+5. The resend modal will open showing available recipients
+
+![Resend email modal showing recipient selection](/img/turbosign/ResendEmailHighlighted.png)
+
+6. Click **"Send Email"** to dispatch the email
+7. The dialog will close and the recipient will receive a reminder email with their signing link
 
 <br/>
 
 ---
 
-## Viewing Audit Trail
+## How to Void a Document
 
-**[PLACEHOLDER - Section to be added]**
+Need to cancel a signature request that's already been sent? TurboSign makes it easy to void documents and notify all recipients.
 
-*This section will cover:*
-- Accessing the complete signature history
-- Understanding audit log entries
-- Viewing timestamps and IP addresses
-- Downloading audit reports
-- Legal compliance and record keeping
+### Step-by-Step: Voiding a Document
+
+**Step 1: Access the Document Actions**
+1. Navigate to your **TurboSign Dashboard**
+2. Locate the document you want to void
+3. Click the **three-dot menu (⋮)** next to the document
+
+![Document context menu showing void option](/img/turbosign/VoidDocument.png)
+
+**Step 2: Enter Void Reason**
+
+4. Enter a void reason that explains why you are voiding the document.  
+![Void dialog with reason field](/img/turbosign/VoidDialogReasonsForVoiding.png)
+
+**Step 3: Confirm Void**
+
+5. Click the **"Void Document"** button in the bottom right corner to confirm
+
+![Clicking void document confirmation button](/img/turbosign/ClickVoidDocument.png)
+
+6. All recipients receive automatic notifications and the document status changes to "Voided"
 
 <br/>
 
 ---
 
-## Downloading Completed Documents
+## How to Download Completed Documents
 
-**[PLACEHOLDER - Section to be added]**
+Need to download your fully signed document? TurboSign makes it easy to get the completed PDF with all signatures.
 
-*This section will cover:*
-- How to download fully signed documents
-- Different download formats available
-- Organizing your completed signatures
-- Sharing signed documents with stakeholders
-- Archiving for future reference
+### Step-by-Step: Downloading Your Signed Document
+
+**Step 1: Access the Document Actions**
+1. Navigate to your **TurboSign Dashboard**
+2. Look for documents with **green "Completed" status**
+3. Click the **three-dot menu (⋮)** next to your completed document
+
+![Document context menu showing download PDF option](/img/turbosign/DownloadPDF.png)
+
+**Step 2: Download the PDF**
+
+4. Click **"Download PDF"** from the context menu
+5. Your browser will automatically start downloading the file with all signatures
+
+---
+
+## How to View Audit Trails
+
+Need to see the complete history of your document? TurboSign maintains a detailed audit trail of every action taken.
+
+### Step-by-Step: Accessing Audit Trails
+
+**Step 1: Access the Document Actions**
+1. Open your **TurboSign Dashboard**
+2. Find any document (completed or in-progress)
+3. Click the **three-dot menu (⋮)** next to the document
+
+![Document context menu showing audit trail option](/img/turbosign/AuditTrail.png)
+
+**Step 2: View the Timeline**
+
+4. Click **"Audit Trail"** from the context menu
+5. The audit trail modal opens showing a chronological timeline
+![Audit trail overview showing complete timeline](/img/turbosign/AuditTrailOverview.png)
+
+6. Review all events with timestamps, participants, and security details.
+
+**Understanding Event Types:**
+
+The audit trail displays two main categories of events:
+<br/>
+
+**User Events** - Actions taken by document participants:
+- **Document Viewed** - When recipients open and view the document
+- **Document Signed** - When recipients complete their signature
+
+These are the two most important user events to monitor for tracking signature progress:
+
+![Document viewed event details](/img/turbosign/AuditTrailDocumentViewed.png)
+
+![Document signed event details](/img/turbosign/AuditTrailDocumentSigned.png)
+
+<br/>
+
+**System Events** - Automated actions by TurboSign:
+- **Email Notification Sent** - When the system sends emails to recipients
+- **Document Digitally Signed by TurboSign** - When TurboSign applies digital signatures
+- **Document Updated** - When the document is modified or updated via signature
+- **Document Sent** - When the document is initially distributed for signature
+
 
 <br/>
 
 ---
 
-## Coming Soon
-
-Each section above will be filled in with detailed, step-by-step instructions, screenshots, and helpful tips to make managing your signatures as smooth as possible.
-
-:::tip Stay Tuned
-We're adding content to each section progressively. Check back soon for complete coverage of all TurboSign management features!
-:::
-
 ---
 
-*Questions about signature management? Each section will include troubleshooting tips and best practices when complete.*
+*Need help with signature management? Each action includes detailed step-by-step guides, screenshots, and best practices for professional document handling.*

@@ -63,10 +63,10 @@ This entire process takes less than 5 minutes once you get the hang of it. We'll
 
 To use TurboSign effectively, you'll need:
 
-- Access to TurboDocx with TurboSign enabled
+- Access to TurboDocx
 - A document ready for signing (PDF, Word, or existing TurboDocx deliverable)
 - Email addresses for all recipients who need to sign
-- About 5 minutes of your time ⏰
+- About 60 seconds of your time ⏰
 
 :::tip Pro Tip
 Have your document ready and know exactly where signatures are needed before you start. This makes the whole process much smoother!
@@ -80,9 +80,7 @@ Let's start by getting to TurboSign from your main dashboard.
 
 From the **TurboDocx homepage**, look for the **"Get It Signed"** button and click it. This will take you directly to **TurboSign** where all the magic happens.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: TurboDocx homepage with "Get It Signed" button highlighted
-</div>
+![Get It Signed button on TurboDocx homepage](/img/turbosign/GetSigned.png)
 
 <br/>
 
@@ -92,15 +90,16 @@ Now that you're in TurboSign, it's time to create your first signature request.
 
 In the **top right corner** of the TurboSign interface, you'll see a **"New Signature"** button. Click it to begin preparing your document for signatures.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: TurboSign dashboard with "New Signature" button highlighted
-</div>
+![New Signature button on TurboSign dashboard](/img/turbosign/ClickNewSignature.png)
 
 <br/>
 
 ## Step 3: Upload or Select a Document
 
 Time to choose your document! TurboSign gives you two convenient options:
+
+<div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem'}}>
+<div>
 
 ### Option A: Upload a New Document
 **Upload a new document** from your computer by clicking the upload area or dragging and dropping your file.
@@ -110,16 +109,16 @@ Time to choose your document! TurboSign gives you two convenient options:
 - Word documents (.docx)
 - Other common document formats
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Document upload interface
 </div>
+<div>
 
 ### Option B: Select an Existing Deliverable
 **Select an existing deliverable** you've already created within TurboDocx. This is perfect if you've already generated a document and want to get it signed.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Existing deliverable selection interface
 </div>
+</div>
+
+![Document upload and selection interface](/img/turbosign/SelectOrUploadDocument.png)
 
 <br/>
 
@@ -153,15 +152,16 @@ Add a brief description to provide context for your recipients. This appears in 
 - "New employee contract for review and signature"
 - "Service agreement for the upcoming project"
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Document details form with name and description fields
-</div>
+![Document details form with name and description fields](/img/turbosign/DocumentNameAndDescription.png)
 
 <br/>
 
 ## Step 5: Add Recipients
 
 Time to add the people who need to sign your document. This is where you control who signs and in what order.
+
+<div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', marginBottom: '2rem'}}>
+<div>
 
 ### Adding Recipients
 
@@ -172,17 +172,15 @@ For each recipient, you'll need:
 - **Email address** (where they'll receive the signature request)
 - **Role** (if applicable - like "Client", "Contractor", etc.)
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Add recipient interface with form fields
 </div>
+<div>
 
 ### Including Yourself
 
 **Click "Include Me"** if you also need to sign the document. This adds you to the recipient list automatically.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: "Include Me" button and recipient list
 </div>
+<div>
 
 ### Setting Signing Order
 
@@ -197,9 +195,10 @@ For each recipient, you'll need:
 - Simple agreements between equal parties
 - Documents where all parties can sign simultaneously
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Recipient list with drag handles for reordering
 </div>
+</div>
+
+![Add recipients interface showing all options](/img/turbosign/AddRecipients.png)
 
 <br/>
 
@@ -218,9 +217,7 @@ Almost there! Now we'll move to the most important part - telling TurboSign exac
 
 **Click "Continue"** in the bottom right corner to move to the field placement interface. This is where you'll drag and drop signature fields onto your document.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Continue button at bottom right of recipient setup
-</div>
+![Continue button at bottom right of recipient setup](/img/turbosign/AddRecipients.png)
 
 <br/>
 
@@ -243,9 +240,7 @@ The field editor provides several types of fields you can add:
 - **Checkbox** - For confirmations or agreements
 - **Dropdown** - For selecting from options
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Field editor with available field types on the left
-</div>
+![Field editor with available field types on the left](/img/turbosign/FieldEditorDragAndDrop.png)
 
 ### How to Place Fields
 
@@ -261,9 +256,7 @@ The field editor provides several types of fields you can add:
 - Place fields in logical locations on the document
 - Ensure all required fields are present
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Document with signature fields placed and recipient assignments
-</div>
+![Document with signature fields placed and recipient assignments](/img/turbosign/DraggingAndDroppingFields.png)
 
 <br/>
 
@@ -283,9 +276,7 @@ The final step! Once all fields are placed and everything looks perfect, it's ti
 
 **Click "Send Document"** in the **top right corner** to initiate the signing process.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Send Document button in top right corner
-</div>
+![Send Document button in top right corner](/img/turbosign/ClickSendDocument.png)
 
 ### What Happens Next
 
@@ -295,10 +286,6 @@ After clicking "Send Document":
 2. **Recipients receive** a secure link to sign the document
 3. **You get notifications** as each person signs
 4. **Everyone receives** a copy of the fully signed document
-
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshot: Confirmation screen after document is sent
-</div>
 
 <br/>
 
@@ -349,17 +336,14 @@ After clicking "Send Document":
 
 ## Troubleshooting Common Issues
 
-### "I Can't Find the Send Button"
-**Solution:** Make sure you've placed at least one signature field and assigned it to a recipient. The Send button appears only when your document is ready.
+### "The Send Button is Disabled"
+**Solution:** Make sure you've placed at least one signature field for each recipient. The Send button appears only when your document is ready.
 
-### "Recipient Says They Can't Sign"
+### "Recipient Says They Can't Haven't Received the Email"
 **Solution:** Check that you used the correct email address and that the signing link hasn't expired. You can resend the invitation from your dashboard.
 
-### "The Signature Fields Look Wrong"
-**Solution:** You can recall the document (if no one has signed yet) and adjust the field placement. Prevention is better - always preview your document before sending.
-
 ### "I Made a Mistake in the Document"
-**Solution:** If no one has signed yet, you can usually recall and resend. If someone has already signed, you'll need to create a new version.
+**Solution:** It's best practice to void the document and send a new version. 
 
 <br/>
 
