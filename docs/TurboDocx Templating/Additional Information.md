@@ -91,7 +91,7 @@ This will remove the requirement to have content in that variable. To undo this 
 
 ## Subvariables
 
-In your Knowledgebase you may have entries that you will want to have variables in. For example a entry outlining each parties responsibites with {CustomerName} or {OrganizationName} as variables. We call these Subvariables. Here we will go over how you can utilize them. 
+In your Knowledgebase you may have entries that you will want to have variables in. For example a entry outlining each parties responsibites with &#123;CustomerName&#125; or &#123;OrganizationName&#125; as variables. We call these Subvariables. Here we will go over how you can utilize them. 
 <br/><br/><br/>
 
 
@@ -100,7 +100,7 @@ In your Knowledgebase you may have entries that you will want to have variables 
 
 1. We will start by creating a new Knowledgebase entry (see How to Create a Knowledgebase Entry if you need a refresher), and we will be selecting "Rich Text" from our more options menu. <br/><br/>
 2. Much like adding a variable in a Template you will fill out your entry utilizing \{brackets\} around the subvariable that you would like to create, in this example we will be using \{CustomerName\} in part of our chart. <br/><br/>
-3. As you can see once the subvariable is created a seperate input box will appear on the left side under {CustomerName}. Whatever you input into this box will be placed in the subvariable!
+3. As you can see once the subvariable is created a seperate input box will appear on the left side under &#123;CustomerName&#125;. Whatever you input into this box will be placed in the subvariable!
 
 ![img](/img/additional_information/subvariables.png)
 
@@ -174,7 +174,7 @@ Here are some best practices when troubleshooting why your variable is not showi
 <br/>
 <br/>
 
-1. All variables will need to be one word, so do not put any spaces in the middle of the {brackets}. 
+1. All variables will need to be one word, so do not put any spaces in the middle of the &#123;brackets&#125;. 
 
 <br/>
 <br/>
@@ -183,7 +183,7 @@ Here are some best practices when troubleshooting why your variable is not showi
 
 ![](/img/how_to_create_a_template/paragraphtool.png)
 
-When you activate the tool, it will resemble the image below. Since {CustomerName} is plain text, it can be incorporated into a paragraph. However, we will be utilizing a chart in Rich Text for {Scope}, so it needs to be on its own line. Paragraph symbols will indicate this distinction clearly.
+When you activate the tool, it will resemble the image below. Since &#123;CustomerName&#125; is plain text, it can be incorporated into a paragraph. However, we will be utilizing a chart in Rich Text for &#123;Scope&#125;, so it needs to be on its own line. Paragraph symbols will indicate this distinction clearly.
 
 ![](/img/additional_information/ptoolexample.png)
 

@@ -1,8 +1,9 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
+const { themes } = require('prism-react-renderer');
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 // [item, [[], [], []]]
 const apiConfig = require('./dev-docs-openapi.js');
@@ -45,7 +46,19 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'TurboDocx', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
-  plugins: ['docusaurus-plugin-sass', "@orama/plugin-docusaurus", 
+  plugins: ['docusaurus-plugin-sass',
+    [
+      "@orama/plugin-docusaurus-v3",
+      {
+        searchbox: {
+          placeholder: "Search...",
+        },
+        searchButton: {
+          text: "soham..."
+        },
+
+      },
+    ],
     [
       'docusaurus-plugin-llms',
       {
@@ -59,9 +72,9 @@ const config = {
     [
       'docusaurus-plugin-openapi-docs',
       {
-        id: "apiDocs",
-        docsPluginId: "classic",
-        config: openApiCongfig
+        id: "api", // plugin id
+        docsPluginId: "classic", // configured for preset-classic
+        config: openApiCongfig,
       },
     ], async function myPlugin(context, options) {
       return {
@@ -91,12 +104,12 @@ const config = {
       ({
         docs: {
           docItemComponent: "@theme/ApiItem",
-          docLayoutComponent: "@theme/DocPage",
+          // docLayoutComponent: "@theme/DocPage",
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl:
-            // 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         // blog: {
         //   showReadingTime: true,
@@ -143,7 +156,8 @@ const config = {
           href: "https://www.turbodocx.com/?utm_source=docs-site",
         },
         items: [
-          ...itemsJson.items, {
+          ...itemsJson.items,
+          {
             type: 'search',
             position: 'left',
           }

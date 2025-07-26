@@ -1,12 +1,11 @@
-
 // import design-preferences.scss
-
+@use "./design-preferences.scss" as prefs;
 
 
 .menu__link--active:not(.menu__link--sublist) {
   border-radius: 7px;
-  background: $color-1-1;
-  color: $color-1;
+  background: prefs.$color-1-1;
+  color: prefs.$color-1;
 
   /* Navigation Selected */
   font-family: Inter;
@@ -53,13 +52,11 @@
 
 // }
 
-.thin-scrollbar.theme-doc-toc-desktop {
- 
-}
+.thin-scrollbar.theme-doc-toc-desktop {}
 
 
 
-#__docusaurus > nav > div.navbar__inner > div:nth-child(1) > button > svg {
+#__docusaurus>nav>div.navbar__inner>div:nth-child(1)>button>svg {
   color: black !important
 }
 
@@ -70,17 +67,16 @@
 }
 
 .tocCollapsible_node_modules-\@docusaurus-theme-classic-lib-theme-TOCCollapsible-styles-module.theme-doc-toc-mobile.tocMobile_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-TOC-Mobile-styles-module {
- .clean-btn {
-  padding-left: 2rem;
-  display: unset !important;
- }
+  .clean-btn {
+    padding-left: 2rem;
+    display: unset !important;
+  }
 }
 
 .navbar-sidebar__back {
   margin-top: 20px;
   background: transparent;
   color: black !important
-
 }
 
 .navbar-toggle {
@@ -99,13 +95,13 @@
 }
 
 .breadcrumbs {
-   li:nth-child(1) {
+  li:nth-child(1) {
     display: none !important;
-   }
+  }
 }
 
 .breadcrumbs__item--active .breadcrumbs__link {
-  background: $color-1;
+  background: prefs.$color-1;
   color: white;
 }
 

@@ -16,11 +16,9 @@ $color-accent-dark: $color-2-7; // red-700
 
 [data-theme="dark"] .chat-box {
   border-radius: 20px;
-  background: radial-gradient(
-    178.18% 201.98% at 100% 0%,
-    rgba($color-primary-darker, 0.8) 0%,
-    rgba($color-primary-darkest, 0) 100%
-  );
+  background: radial-gradient(178.18% 201.98% at 100% 0%,
+      rgba($color-primary-darker, 0.8) 0%,
+      rgba($color-primary-darkest, 0) 100%);
 
   backdrop-filter: blur(5px);
   position: fixed;
@@ -48,6 +46,7 @@ $color-accent-dark: $color-2-7; // red-700
   h6 {
     color: white !important;
   }
+
   p {
     color: white !important;
   }
@@ -91,6 +90,7 @@ $color-accent-dark: $color-2-7; // red-700
   h6 {
     color: white !important;
   }
+
   p {
     color: white !important;
   }
@@ -110,6 +110,7 @@ $color-accent-dark: $color-2-7; // red-700
   height: 80%;
   overflow-y: scroll;
   padding: 10px;
+
   .chatbot-avatar {
     height: 2.5em;
   }
@@ -258,11 +259,9 @@ $color-accent-dark: $color-2-7; // red-700
   left: -10px;
   right: -10px;
   bottom: -10px;
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.5),
-    rgba(255, 255, 255, 0.1)
-  );
+  background: linear-gradient(to right bottom,
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.1));
   filter: blur(20px);
 }
 
@@ -275,11 +274,13 @@ $color-accent-dark: $color-2-7; // red-700
 [data-theme="light"] .dot {
   background-color: black;
 }
+
 .dot {
   width: 8px;
   height: 8px;
   margin: 0 4px;
-  background-color: white; /* Change color as needed */
+  background-color: white;
+  /* Change color as needed */
   border-radius: 50%;
   animation: dotFlashing 1s infinite linear alternate;
 }
@@ -300,6 +301,7 @@ $color-accent-dark: $color-2-7; // red-700
   0% {
     opacity: 0;
   }
+
   50%,
   100% {
     opacity: 1;
@@ -315,7 +317,8 @@ $color-accent-dark: $color-2-7; // red-700
     right: 10px;
   }
 
-  .chat-box__input, .chat-box__button {
+  .chat-box__input,
+  .chat-box__button {
     padding: 12px; // Increase padding for larger touch targets
   }
 
@@ -334,7 +337,8 @@ $color-accent-dark: $color-2-7; // red-700
     right: 10px;
   }
 
-  .chat-box__input, .chat-box__button {
+  .chat-box__input,
+  .chat-box__button {
     padding: 12px; // Increase padding for larger touch targets
   }
 
@@ -347,7 +351,7 @@ $color-accent-dark: $color-2-7; // red-700
 .theme-edit-this-page {
   /* Hide the text content */
   color: transparent !important;
-  line-height: 0 !important; 
+  line-height: 0 !important;
   font-size: 0 !important;
-  color: transparent !important; 
+  color: transparent !important;
 }

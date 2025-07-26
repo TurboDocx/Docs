@@ -23,30 +23,53 @@
 @import "./blog.scss";
 @import "./api.scss";
 
+
+
+.ShowSummaryCTA-module_summary__cta__wrapper__YLAFs {
+  display: none !important;
+}
+
+.searchbutton-module_searchbutton__gg7JJ {
+  min-width: 250px;
+  /* Minimum width */
+  width: 18.3125rem !important;
+  ;
+  /* Take full available width */
+  /* Maximum width */
+  padding: 42px 16px;
+  box-sizing: border-box;
+}
+
 // Removed global list-style rule to prevent affecting navigation
 
 // Enhanced text styling for better readability - only apply to content areas
-article, .markdown, [class*="theme-doc-markdown"] {
+article,
+.markdown,
+[class*="theme-doc-markdown"] {
+
   // Ensure bold text renders properly
-  strong, b {
+  strong,
+  b {
     font-weight: 700 !important;
   }
-  
+
   // Only apply list styles to content, not navigation
-  ul, ol {
+  ul,
+  ol {
     margin: 1.25em 0;
     padding-left: 1.75em;
     list-style: revert; // Ensure list styles show
-    
+
     li {
       margin-bottom: 0.75em;
       line-height: 1.6;
-      
+
       // Improve spacing for list items with strong/bold text
-      strong, b {
+      strong,
+      b {
         font-weight: 600;
       }
-      
+
       // Better handling of code within list items
       code {
         margin: 0 0.125em;
@@ -54,39 +77,40 @@ article, .markdown, [class*="theme-doc-markdown"] {
         font-size: 0.9em;
       }
     }
-    
+
     // Nested lists
-    ul, ol {
+    ul,
+    ol {
       margin-top: 0.5em;
       margin-bottom: 0.5em;
       padding-left: 1.5em;
-      
+
       li {
         margin-bottom: 0.5em;
       }
     }
   }
-  
+
   // Ensure bullets are visible with proper spacing
   ul {
     list-style-type: disc;
-    
+
     ul {
       list-style-type: circle;
-      
+
       ul {
         list-style-type: square;
       }
     }
   }
-  
+
   // Ensure numbers are visible with proper spacing  
   ol {
     list-style-type: decimal;
-    
+
     ol {
       list-style-type: lower-alpha;
-      
+
       ol {
         list-style-type: lower-roman;
       }
@@ -142,29 +166,3 @@ article, .markdown, [class*="theme-doc-markdown"] {
 //   background-color: white;
 //   border: none;
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

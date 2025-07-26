@@ -86,7 +86,7 @@ const JsonToTable = ({ data, title, columns }) => {
             <TableHeader>
               <TableRow>
                 {tableHeaderdata.map((item) => {
-                  return <TableHead>{item.name}</TableHead>;
+                  return <TableHead key={item.id} >{item.name}</TableHead>;
                 })}
               </TableRow>
             </TableHeader>
@@ -99,26 +99,26 @@ const JsonToTable = ({ data, title, columns }) => {
   };
 
   return (
-    <div style={{"paddingBottom": "2em"}}>
+    <div style={{ "paddingBottom": "2em" }}>
       {decodedData && Object.keys(decodedData).length > 0 && (
         <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-header-1">
-          <AccordionTrigger>Headers</AccordionTrigger>
-          <AccordionContent>
-        {/* <Card className="headers-card">
+          <AccordionItem value="item-header-1">
+            <AccordionTrigger>Headers</AccordionTrigger>
+            <AccordionContent>
+              {/* <Card className="headers-card">
           <CardHeader>
             <CardDescription></CardDescription>
           </CardHeader>
           <CardContent> */}
-            {decodedData && Object.keys(decodedData).length > 0 ? (
-              renderTable(decodedData)
-            ) : (
-              <p></p>
-            )}
-          {/* </CardContent>
+              {decodedData && Object.keys(decodedData).length > 0 ? (
+                renderTable(decodedData)
+              ) : (
+                <p></p>
+              )}
+              {/* </CardContent>
         </Card> */}
-        </AccordionContent>
-        </AccordionItem>
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
       )}
     </div>

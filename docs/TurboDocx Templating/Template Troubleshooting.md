@@ -29,7 +29,7 @@ Before you throw your computer, watch this video! Your variables aren't broken, 
 
 ### 1. Variable Naming Rules
 
-All variables must be **one word only** - no spaces allowed inside the {brackets}.
+All variables must be **one word only** - no spaces allowed inside the &#123;brackets&#125;.
 
 <div style={{display: 'grid', gap: '20px', marginBottom: '32px'}}>
 
@@ -151,7 +151,7 @@ One of the most common mistakes is thinking a variable is on its own line when i
 
 ![](/img/how_to_create_a_template/paragraphtool.png)
 
-When you activate the tool, it will resemble the image below. Since {CustomerName} is plain text, it can be incorporated into a paragraph. However, we will be utilizing a chart in Rich Text for {Scope}, so it needs to be on its own line. Paragraph symbols will indicate this distinction clearly.
+When you activate the tool, it will resemble the image below. Since &#123;CustomerName&#125; is plain text, it can be incorporated into a paragraph. However, we will be utilizing a chart in Rich Text for  &#123;Scope&#125;, so it needs to be on its own line. Paragraph symbols will indicate this distinction clearly.
 
 ![](/img/additional_information/ptoolexample.png)
 
