@@ -31,327 +31,153 @@ keywords:
 
 # Fireflies AI Integration
 
-<div style={{
-  background: 'linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%)',
-  borderRadius: '12px',
-  padding: '2rem',
-  margin: '2rem 0',
-  color: 'white',
-  textAlign: 'center'
-}}>
-  <h2 style={{color: 'white', marginBottom: '1rem'}}>🚀 Coming Soon</h2>
-  <p style={{fontSize: '1.1rem', marginBottom: '0', opacity: '0.9'}}>
-    Transform your Fireflies AI meeting transcripts into professional documents and presentations with advanced AI-powered automation.
-  </p>
-</div>
+Transform your meeting recordings into professional documents automatically. TurboDocx's Fireflies integration eliminates manual note-taking by converting meeting transcripts into polished deliverables, streamlining your post-meeting workflow.
 
-## What's Coming
+## What You Can Create
 
-We're developing a powerful Fireflies AI integration that will seamlessly connect your meeting intelligence with TurboDocx's document generation capabilities. Here's what you can expect:
+- **📄 Meeting Summaries**: Convert discussions into formatted meeting minutes and action items
+- **📊 Client Presentations**: Turn discovery calls into compelling presentation decks
+- **📋 Project Proposals**: Use requirement gathering sessions to create detailed proposals
+- **📝 Follow-up Reports**: Generate comprehensive meeting reports with key takeaways
+- **💼 Sales Materials**: Transform prospect calls into customized sales presentations
+- **🔄 Automated Workflows**: Connect meeting transcripts directly to your document templates
 
-### 🎯 Planned Features
+<br/>
 
-<div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-  gap: '1.5rem',
-  margin: '2rem 0'
-}}>
+## Before You Begin
 
-<div style={{
-  background: 'var(--ifm-color-emphasis-100)',
-  padding: '1.5rem',
-  borderRadius: '8px',
-  border: '1px solid var(--ifm-color-emphasis-300)'
-}}>
-  <h4>📄 Intelligent Meeting Documentation</h4>
-  <ul>
-    <li>Convert Fireflies transcripts into structured documents</li>
-    <li>Generate meeting summaries with key insights</li>
-    <li>Create action item lists with owner assignments</li>
-    <li>Extract decisions and next steps automatically</li>
-  </ul>
-</div>
+To use the Fireflies integration, you'll need:
 
-<div style={{
-  background: 'var(--ifm-color-emphasis-100)',
-  padding: '1.5rem',
-  borderRadius: '8px',
-  border: '1px solid var(--ifm-color-emphasis-300)'
-}}>
-  <h4>📊 Advanced Presentation Creation</h4>
-  <ul>
-    <li>Transform client calls into compelling presentations</li>
-    <li>Generate sales decks from discovery conversations</li>
-    <li>Create training materials from recorded sessions</li>
-    <li>Build project updates from status meetings</li>
-  </ul>
-</div>
+- A Fireflies account with recorded meetings and transcripts
+- Administrative access to your Fireflies account to generate API keys
+- Meeting recordings stored in Fireflies with transcription enabled
 
-<div style={{
-  background: 'var(--ifm-color-emphasis-100)',
-  padding: '1.5rem',
-  borderRadius: '8px',
-  border: '1px solid var(--ifm-color-emphasis-300)'
-}}>
-  <h4>🤖 AI-Enhanced Processing</h4>
-  <ul>
-    <li>Leverage Fireflies' speaker identification</li>
-    <li>Utilize sentiment analysis for context</li>
-    <li>Smart content categorization and tagging</li>
-    <li>Automated follow-up document suggestions</li>
-  </ul>
-</div>
+:::tip
+If you're not sure whether you have transcription enabled, check your Fireflies settings or look for transcript availability in your recorded meetings.
+:::
 
-<div style={{
-  background: 'var(--ifm-color-emphasis-100)',
-  padding: '1.5rem',
-  borderRadius: '8px',
-  border: '1px solid var(--ifm-color-emphasis-300)'
-}}>
-  <h4>🔄 Seamless Workflow Integration</h4>
-  <ul>
-    <li>Direct access to Fireflies conversation library</li>
-    <li>Real-time transcript synchronization</li>
-    <li>Automated document generation triggers</li>
-    <li>Custom template mapping for meeting types</li>
-  </ul>
-</div>
+<br/>
 
-</div>
+## Step 1: Configuring Fireflies.ai
 
-<div style={{textAlign: 'center'}}>
-  <h3>🎨 Document Types You'll Be Able to Create</h3>
-</div>
+### Get Your API Key
 
-<div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-  gap: '1.5rem',
-  margin: '2rem 0',
-  textAlign: 'center'
-}}>
+1. Log in to [app.fireflies.ai](https://app.fireflies.ai)
 
-<div>
-  <strong>📋 Executive & Management Documents</strong>
-  <ul style={{listStyle: 'none', padding: 0, marginTop: '0.5rem'}}>
-    <li>Board meeting minutes and executive summaries</li>
-    <li>Strategic planning documentation</li>
-    <li>Performance review summaries</li>
-    <li>Leadership team meeting notes</li>
-  </ul>
-</div>
+2. Navigate to the **"Integrations"** section in your dashboard
 
-<div>
-  <strong>📈 Sales & Customer Success</strong>
-  <ul style={{listStyle: 'none', padding: 0, marginTop: '0.5rem'}}>
-    <li>Client discovery presentations</li>
-    <li>Sales call summaries and follow-ups</li>
-    <li>Customer success check-in reports</li>
-    <li>Product demo documentation</li>
-  </ul>
-</div>
+3. Click on **"Fireflies API"**
 
-<div>
-  <strong>🎓 Training & Development</strong>
-  <ul style={{listStyle: 'none', padding: 0, marginTop: '0.5rem'}}>
-    <li>Employee training session summaries</li>
-    <li>Workshop documentation and materials</li>
-    <li>Onboarding process documentation</li>
-    <li>Skills assessment reports</li>
-  </ul>
-</div>
+4. **Copy your API key** - You'll need this value when configuring TurboDocx
 
-<div>
-  <strong>💼 Project & Operations</strong>
-  <ul style={{listStyle: 'none', padding: 0, marginTop: '0.5rem'}}>
-    <li>Project kickoff meeting summaries</li>
-    <li>Sprint retrospective documentation</li>
-    <li>Vendor meeting notes</li>
-    <li>Process improvement documentation</li>
-  </ul>
-</div>
+:::tip Keep Your API Key Safe
+Your API key is like a password - never share it publicly or include it in emails. TurboDocx will store it securely once you enter it.
+:::
 
-</div>
+<br/>
 
-## Why Fireflies AI Integration Matters
+## Step 2: Configuring TurboDocx
 
-<div style={{
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  margin: '2rem 0'
-}}>
+### 🔧 How to Configure Fireflies in Organization Settings
 
-<div style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
-  padding: '1rem',
-  background: 'var(--ifm-color-emphasis-100)',
-  borderRadius: '6px'
-}}>
-  <div style={{fontSize: '2rem'}}>🧠</div>
-  <div>
-    <strong>Maximize Meeting Intelligence</strong><br/>
-    <small>Combine Fireflies' AI insights with TurboDocx's document generation for superior meeting outcomes</small>
-  </div>
-</div>
+1. Go to **Settings**
 
-<div style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
-  padding: '1rem',
-  background: 'var(--ifm-color-emphasis-100)',
-  borderRadius: '6px'
-}}>
-  <div style={{fontSize: '2rem'}}>⚡</div>
-  <div>
-    <strong>Accelerate Post-Meeting Actions</strong><br/>
-    <small>Transform meeting insights into actionable documents instantly</small>
-  </div>
-</div>
+2. Click on **Organization Settings**
 
-<div style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
-  padding: '1rem',
-  background: 'var(--ifm-color-emphasis-100)',
-  borderRadius: '6px'
-}}>
-  <div style={{fontSize: '2rem'}}>🎯</div>
-  <div>
-    <strong>Enhanced Meeting ROI</strong><br/>
-    <small>Convert every recorded conversation into professional deliverables</small>
-  </div>
-</div>
+3. Scroll down to the **Fireflies** section
+4. Click **Configure Fireflies**
 
-<div style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
-  padding: '1rem',
-  background: 'var(--ifm-color-emphasis-100)',
-  borderRadius: '6px'
-}}>
-  <div style={{fontSize: '2rem'}}>📊</div>
-  <div>
-    <strong>Leverage Advanced AI Analytics</strong><br/>
-    <small>Utilize Fireflies' conversation intelligence to create more contextual documents</small>
-  </div>
-</div>
+5. A Fireflies Configuration pop-up will appear
+6. Take the **API Key** you obtained earlier, paste it into the appropriate field, and click **Save Configuration**
 
-</div>
+<br/>
 
-## Stay Updated
 
-<div style={{
-  background: 'var(--ifm-color-info-lightest)',
-  border: '1px solid var(--ifm-color-info-light)',
-  borderRadius: '8px',
-  padding: '2rem',
-  textAlign: 'center',
-  margin: '2rem 0'
-}}>
+## Step 3: Using Your Fireflies Integration
 
-### 📬 Get Notified When Fireflies AI Integration Launches
+Congratulations! Your Fireflies integration is now ready to use. Here's how to access your meeting transcripts and use them in your documents.
 
-Want to be among the first to experience the power of Fireflies AI combined with TurboDocx? We'll keep you informed about our progress and notify you as soon as it's available.
+<br/>
 
-**Contact our team to:**
-- Get early access notifications
-- Provide input on feature development
-- Schedule a preview demonstration
-- Discuss your specific Fireflies integration needs
+### Accessing Meeting Transcripts
 
-<div style={{marginTop: '1.5rem'}}>
-  <strong>📧 Email:</strong> <a href="mailto:team@turbodocx.com">team@turbodocx.com</a><br/>
-  <strong>💬 Subject:</strong> "Fireflies AI Integration Updates"
-</div>
+1. Click the source dropdown and click **"Change Source"**
 
-</div>
+<br/>
 
-## Technical Preview
+2. Go to the **App Library** tab
+3. Click **"Transcript Providers"** 
 
-<div style={{
-  background: 'var(--ifm-color-secondary-lightest)',
-  border: '1px solid var(--ifm-color-secondary-light)',
-  borderRadius: '8px',
-  padding: '1.5rem',
-  margin: '2rem 0'
-}}>
+<br/>
 
-### 🔬 Beta Testing Program
+4. Click **"Fireflies"** and then you should be able to click the transcript
+5. You'll see a list of your recent meeting recordings with transcripts
 
-We're seeking organizations to participate in our Fireflies AI integration beta testing program. Beta participants will receive:
+<br/>
 
-- **Early access** to Fireflies AI integration features
-- **Direct influence** on feature development
-- **Priority support** during implementation
-- **Reduced pricing** for early adopters
+## Troubleshooting
 
-**Requirements for beta participation:**
-- Active Fireflies AI subscription with recorded meetings
-- Willingness to provide feedback and testing
+If you're having trouble with your Fireflies integration, here are some common issues and their solutions.
 
-<div style={{textAlign: 'center', marginTop: '1rem'}}>
-  <strong>Interested in beta testing?</strong><br/>
-  <a href="mailto:team@turbodocx.com?subject=Fireflies AI Integration Beta">Apply for Beta Access</a>
-</div>
+<br/>
 
-</div>
+### "No Meetings Found"
+- **Cause**: No recorded meetings with transcripts available
+- **Solution**: Ensure your meetings are recorded in Fireflies and have transcription enabled
 
-## Integration Benefits
+### "Authentication Failed"
+- **Cause**: Incorrect API key or expired authentication
+- **Solution**: 
+  - Double-check your API key
+  - Try re-authenticating by entering your API key again
 
-### Increased Productivity
-- Eliminate manual transcript review and document creation
-- Reduce time spent on meeting follow-ups
-- Ensure consistent documentation across all meetings
+### "Permission Denied"
+- **Cause**: API key doesn't have proper permissions
+- **Solution**: Verify that your API key is correct and has access to meeting transcripts
 
-### Enhanced Collaboration
-- Automatically share meeting insights with stakeholders
-- Create standardized documentation formats
-- Maintain comprehensive meeting archives
+:::tip Getting Help
+If you continue to experience issues:
+- Verify all steps in this guide have been completed
+- Check that your Fireflies account has meeting recordings with transcripts
+- Ensure you have the correct API key from your Fireflies account
+- Contact your TurboDocx support team for assistance
+:::
 
-### Improved Decision Making
-- Transform conversation insights into actionable documents
-- Track meeting outcomes and follow-through
-- Create data-driven meeting summaries
+<br/>
 
-## Technical Requirements
+## Security and Privacy
 
-- Active Fireflies AI subscription
-- TurboDocx Premium or Enterprise plan
-- Access to recorded meeting transcripts
-- Administrative permissions for integration setup
+Your data security and privacy are important to us. Here's how your information is protected when using the Fireflies integration.
 
-## Next Steps
+<br/>
 
-Ready to revolutionize your meeting documentation workflow with Fireflies AI integration? Contact our team today to:
+### How Your Data is Protected
 
-1. **Schedule a consultation** to discuss your specific integration needs
-2. **See a live demo** of TurboDocx and Fireflies AI working together
-3. **Get a custom quote** based on your requirements
-4. **Plan your implementation** with our integration specialists
+- **Secure Authentication**: TurboDocx uses API key authentication for secure access
+- **Read-Only Access**: We only read your data as per your request in the flow - we never modify your Fireflies data
+- **Encrypted Storage**: Your API key is stored encrypted in our secure systems
+- **Encrypted Transmission**: All data transfers are encrypted using industry-standard protocols
 
-Transform your meeting intelligence into powerful business documents with the combined power of Fireflies AI and TurboDocx.
+<br/>
 
----
+## Best Practices
 
-<div style={{
-  textAlign: 'center',
-  padding: '2rem',
-  background: 'var(--ifm-color-emphasis-100)',
-  borderRadius: '8px',
-  marginTop: '3rem'
-}}>
-  <h3>🚀 The Future of Meeting Intelligence Documentation</h3>
-  <p style={{fontSize: '1.1rem', marginBottom: '1rem'}}>
-    Fireflies AI integration will transform how your organization captures, processes, and acts on meeting insights.
-  </p>
-  <p style={{marginBottom: '0'}}>
-    Stay tuned for updates on availability and beta program announcements.
-  </p>
-</div>
+### For Optimal Results
+
+- **Enable Transcription**: Always enable transcription when recording meetings in Fireflies
+- **Use Clear Audio**: Ensure good audio quality for more accurate transcripts
+- **Descriptive Meeting Names**: Use clear, descriptive names for your meetings to easily identify them later
+- **Regular Cleanup**: Periodically review and organize your meeting recordings
+
+### Meeting Recording Tips
+
+- Start recording at the beginning of important meetings
+- Speak clearly and avoid overlapping conversations
+- Use a good quality microphone when possible
+- Consider recording in a quiet environment
+
+<br/>
+
+## Finished
+
+Congratulations on setting up your Fireflies integration! You can now seamlessly import meeting transcripts and use them to create professional documents with TurboDocx.
