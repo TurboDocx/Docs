@@ -66,9 +66,28 @@ If you're not sure whether you have transcription enabled, check your Fireflies 
 
 2. Navigate to the **"Integrations"** section in your dashboard
 
+![Fireflies Integration Section](/img/fireflies_integration/click_on_integration.png)
+
+<br/>
+
 3. Click on **"Fireflies API"**
 
-4. **Copy your API key** - You'll need this value when configuring TurboDocx
+![Fireflies API Integration](/img/fireflies_integration/click_on_fireflies.png)
+
+<br/>
+
+4. Click on **"Get API KEY"**
+
+![Get API Key](/img/fireflies_integration/click_on_get_api_key.png)
+
+<br/>
+
+5. **Copy your API key** - You'll need this value when configuring TurboDocx
+
+![Copy API Key](/img/fireflies_integration/copy_api_key.png)
+
+<br/>
+
 
 :::tip Keep Your API Key Safe
 Your API key is like a password - never share it publicly or include it in emails. TurboDocx will store it securely once you enter it.
@@ -82,13 +101,27 @@ Your API key is like a password - never share it publicly or include it in email
 
 1. Go to **Settings**
 
+![Go to Settings](/img/zoom_integration/GoToSettings.png)
+
+<br/>
+
 2. Click on **Organization Settings**
+
+![Go to Organization Settings](/img/zoom_integration/GoToOrganizationSettings.png)
+
+<br/>
 
 3. Scroll down to the **Fireflies** section
 4. Click **Configure Fireflies**
 
+![Click Configure Fireflies](/img/fireflies_integration/configure_fireflies.png)
+
+<br/>
+
 5. A Fireflies Configuration pop-up will appear
 6. Take the **API Key** you obtained earlier, paste it into the appropriate field, and click **Save Configuration**
+
+![Save API Key](/img/fireflies_integration/save_api_key.png)
 
 <br/>
 
@@ -103,15 +136,21 @@ Congratulations! Your Fireflies integration is now ready to use. Here's how to a
 
 1. Click the source dropdown and click **"Change Source"**
 
+<img src="/img/zoom_integration/ChangeResource.png" alt="Change Resource" style={{width: '50%', display: 'block', margin: '0 auto'}} />
+
 <br/>
 
 2. Go to the **App Library** tab
 3. Click **"Transcript Providers"** 
 
+![Meeting Providers](/img/zoom_integration/MeetingProviders.png)
+
 <br/>
 
 4. Click **"Fireflies"** and then you should be able to click the transcript
 5. You'll see a list of your recent meeting recordings with transcripts
+
+![Transcripts Shown](/img/fireflies_integration/transcripts.png)
 
 <br/>
 
