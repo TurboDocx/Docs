@@ -170,10 +170,6 @@ If you're having trouble with your Fireflies integration, here are some common i
   - Double-check your API key
   - Try re-authenticating by entering your API key again
 
-### "Permission Denied"
-- **Cause**: API key doesn't have proper permissions
-- **Solution**: Verify that your API key is correct and has access to meeting transcripts
-
 :::tip Getting Help
 If you continue to experience issues:
 - Verify all steps in this guide have been completed
