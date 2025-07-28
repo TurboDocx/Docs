@@ -61,7 +61,7 @@ This process involves creating something called a "connected app" in Salesforce.
 
 ## Step 1: Create a Private Salesforce External Client App
 
-This step guides you through creating a new external client app in Salesforce, which will serve as the secure bridge for your TurboDocx application.
+Time to get VIP access to your Salesforce data! 🎭 This step guides you through creating a new external client app in Salesforce, which will serve as the secure bridge for your TurboDocx application. Think of it as getting backstage passes to your very own Salesforce concert! 🎫
 
 ### Log in to Salesforce
 
@@ -147,7 +147,7 @@ Choose an app name you'll remember six months from now. "App123" might seem clev
      - `Access unique user identifiers (openid)`
      - `Manage user data via APIs (api)`
      - `Manage user data via Web browsers (web)`
-     - `Perform requestes at any time (refresh_token, offline access)`
+     - `Perform requests at any time (refresh_token, offline access)`
 
 ![OAuth Scopes Selected](/img/salesforce-integration/OAuth_Scopes_Selected.png)
 
@@ -181,8 +181,8 @@ You'll be adding several different permissions. It's like checking off a grocery
 
 <br/>
 
-:::tip Almost Done with Step 1!
-Great job! You've successfully created your Salesforce External Client App. Now we need to configure its policies and get those important credentials. ⚡
+:::tip Achievement Unlocked: App Creator! 🏆
+Look at you go! You've successfully created your Salesforce External Client App. You're basically a mini developer now! 👩‍💻 Now we need to configure its policies and get those important credentials. ⚡
 :::
 
 <br/>
@@ -247,7 +247,7 @@ After creating the app, you need to adjust its access policies and retrieve the 
 
 <br/>
 
-6. **Complete identity verification**
+7. **Complete identity verification**
    - You will be prompted to verify your identity via an OTP being sent to your registered email
    - Complete this verification step
 
@@ -255,7 +255,7 @@ After creating the app, you need to adjust its access policies and retrieve the 
 
 <br/>
 
-7. **Copy your credentials**
+8. **Copy your credentials**
    - After successful verification, your Consumer Key and Consumer Secret will be displayed
    - Copy both the **Consumer Key** and **Consumer Secret** - these credentials are essential for connecting your TurboDocx application to Salesforce
 
@@ -263,22 +263,22 @@ After creating the app, you need to adjust its access policies and retrieve the 
 
 <br/>
 
-:::warning Handle With Care
-This consumer key and secret are like temporary library cards — they let TurboDocx read only the data you've approved. But just like a password, you don't want them ending up in the wrong hands.
+:::warning Handle With Care 🔐
+These consumer keys are like VIP backstage passes to your Salesforce show — they let TurboDocx read only the data you've approved, but you definitely don't want random people crashing your party! 🎉
 
-Keep them private, and if they ever get shared by accident, no worries — you can always generate fresh ones right here.
+Keep them private, and if they ever get shared by accident, no worries — you can always generate fresh ones right here. It's like getting a new set of keys! 🔑
 :::
 
 <br/>
 
 ## Step 3: Configuring TurboDocx
 
-Now we'll connect your shiny new Salesforce external client app to TurboDocx. This is like introducing two friends who are perfect for each other!
+Now we'll connect your shiny new Salesforce external client app to TurboDocx. This is like introducing two friends who are perfect for each other at a party — and watching the magic happen! 🎉✨
 
 ### Navigate to TurboDocx Settings
 
-1. **Go to your TurboDocx dashboard**
-   - Log in if you haven't already
+1. **Go to your TurboDocx dashboard** 📊
+   - Log in if you haven't already (we'll wait!)
 
 ![TurboDocx Main Dashboard](/img/salesforce-integration/Turbodocx_dashboard.png)
 
@@ -310,11 +310,11 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 
 <br/>
 
-5. **Click "Configure Salesforce"**
+5. **Click "Configure Salesforce"** 🚀
    - A popup or form will appear
-   - This is where the magic happens! ✨
+   - This is where the magic happens! Time to make these two apps best friends! ✨👯‍♀️
 
-![Configuration Butoon](/img/salesforce-integration/configure_salesforce_button.png)
+![Configuration Button](/img/salesforce-integration/configure_salesforce_button.png)
 
 ![Configuration Modal](/img/salesforce-integration/configuration_modal.png)
 
@@ -335,7 +335,7 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 
 <br/>
 
-### Establish the OAuth Flow for salesforce
+### Establish the OAuth Flow for Salesforce
 
 8. **Click "Connect to Salesforce"**
    - This button appears after you save your configuration
@@ -347,7 +347,7 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 
 9. **Authorize TurboDocx in Salesforce**
    - Salesforce will ask you to log in and confirm the connection
-   - Enter you username and password to login
+   - Enter your username and password to login
 
 <br/>
 
@@ -362,21 +362,22 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 
 <br/>
 
-11. **Wait for the field sync**
+11. **Wait for the field sync** ⏳
     - This can take 2-5 minutes depending on your Salesforce org size
-    - Time to check your email or practice your victory dance! 💃
+    - Perfect time to check your email, grab a snack, or practice your victory dance! 💃🍿
+    - Pro tip: The bigger your Salesforce org, the more impressive your setup skills! 💪
 
 <br/>
 
-:::tip Success Celebration
-If you've made it this far, you deserve a pat on the back! You've successfully connected Salesforce to TurboDocx. That's no small feat — you're basically a tech wizard now! 🧙‍♂️
+:::tip Success Celebration 🎊
+If you've made it this far, you deserve a pat on the back! You've successfully connected Salesforce to TurboDocx. That's no small feat — you're basically a tech wizard now! 🧙‍♂️ Time for a victory dance! 💃🕺
 :::
 
 <br/>
 
 ## Step 4: Using Your Salesforce Integration
 
-Time to put your new integration to work! This is where the magic happens — turning your Salesforce data into beautiful documents.
+Time to put your new integration to work! This is where the real magic happens — turning your boring Salesforce data into beautiful, professional documents that'll make your colleagues go "WOW!" 🤩✨
 
 ### Creating Your First Document
 
@@ -445,7 +446,7 @@ Time to put your new integration to work! This is where the magic happens — tu
 <br/>
 
 9. **Choose relevant records**
-   - Click on accounts, opportunities, contacts or other fileds relevant to your document
+   - Click on accounts, opportunities, contacts or other fields relevant to your document
    - Selected items will be highlighted
    - Click "Save" to confirm your record selection
 
@@ -453,11 +454,11 @@ Time to put your new integration to work! This is where the magic happens — tu
 
 <br/>
 
-10. **Give instructions to the AI**
-    - Type what kind of document you want in plain English
+10. **Give instructions to the AI** 🤖
+    - Type what kind of document you want in plain English (no tech jargon needed!)
     - Be specific about what you want to create
-    - Sit back and watch the magic happen!
-    - Generation typically takes 30 seconds to 2 minutes
+    - Sit back, relax, and watch the magic happen! ✨
+    - Generation typically takes 30 seconds to 2 minutes (perfect time for a coffee sip! ☕)
 
 ![Prompt Input Interface](/img/salesforce-integration/prompt_input_interface.png)
 
@@ -470,10 +471,10 @@ Time to put your new integration to work! This is where the magic happens — tu
 - "Create a company overview report using the selected account data"
 - "Draft a project kickoff overview for the selected opportunity and contacts"
 
-11. **Review your document**
+11. **Review your document** 👀
     - Check that all the information looks correct
     - Make any necessary edits
-    - Marvel at your personalized, professional document!
+    - Marvel at your personalized, professional document and do a little happy dance! 💃🕺
 
 <br/>
 
@@ -487,9 +488,9 @@ Time to put your new integration to work! This is where the magic happens — tu
 
 <br/>
 
-## Troubleshooting
+## Troubleshooting 🤔
 
-Even the best-laid plans sometimes go awry. Here are solutions to common issues:
+Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't worry — we've got your back! Here are solutions to common issues:
 
 ### "I Can't Find the Setup Menu in Salesforce"
 
@@ -545,8 +546,8 @@ Even the best-laid plans sometimes go awry. Here are solutions to common issues:
 - Include the type of document you want (email, proposal, report, etc.)
 - Try selecting more specific records
 
-:::tip When All Else Fails
-If you're still stuck, don't panic! Take a screenshot of any error messages, note exactly what step you're on, and contact your support team. We're here to help, not judge your tech skills! 🤝
+:::tip When All Else Fails 🎆
+If you're still stuck, don't panic! Take a deep breath — you've got this! 💪 Take a screenshot of any error messages, note exactly what step you're on, and contact our support team. We're here to help, not judge your tech skills (we've all been there!). Think of us as your friendly tech support sidekicks! 🤝🦾
 :::
 
 <br/>
@@ -613,29 +614,29 @@ Your data security is important to us (and should be to you too!):
 
 <br/>
 
-## What's Next?
+## What's Next? 🎆
 
-Congratulations! You've successfully:
+Congratulations, integration superstar! You've successfully:
 
-- ✅ Created a Salesforce external client app (you're basically a developer now!)
-- ✅ Configured its policies and retrieved credentials (security expert: unlocked!)
-- ✅ Connected it to TurboDocx (networking skills: mastered!)
-- ✅ Generated your first document (content creation: achieved!)
+- ✅ Created a Salesforce external client app (you're basically a developer now! 👩‍💻)
+- ✅ Configured its policies and retrieved credentials (security expert: level unlocked! 🔒)
+- ✅ Connected it to TurboDocx (networking ninja: mastered! 🥷)
+- ✅ Generated your first document (content creation wizard: achieved! 🧙‍♀️)
 
-### Now You Can:
+### Now You Can: 🎉
 
-- Create personalized proposals in minutes instead of hours
-- Build comprehensive reports using your CRM information
-- Automate document creation for your entire team
+- Create personalized proposals in minutes instead of hours (time saver level: EXPERT! ⏱️)
+- Build comprehensive reports using your CRM information (data wizard status: UNLOCKED! 📊)
+- Automate document creation for your entire team (team hero achievement: EARNED! 🦾)
 
-### Next Steps:
+### Next Steps: 🚀
 
-1. **Train your team** on being a prompting pro
-2. **Create document and presentation templates** for common use cases
-3. **Experiment with different AI prompts** to find what works best
+1. **Train your team** on being a prompting pro (share your newfound expertise!)
+2. **Create document and presentation templates** for common use cases (you're basically a template architect now!)
+3. **Experiment with different AI prompts** to find what works best (become the AI whisperer of your office! 🤖🗣️)
 
-:::tip Final Words of Wisdom
-Remember, you're not just creating documents or presentations— you're creating more time for yourself by automating repetitive tasks. Every minute saved on copy-pasting customer data is a minute you can spend on more important things (like actually talking to customers!). 🎉
+:::tip Final Words of Wisdom 🎓
+Remember, you're not just creating documents or presentations — you're creating more time for yourself by automating repetitive tasks. Every minute saved on copy-pasting customer data is a minute you can spend on more important things (like actually talking to customers, or grabbing that extra cup of coffee! ☕). You're officially a productivity ninja now! 🎉🥷
 :::
 
 <br/>
@@ -647,10 +648,10 @@ Remember, you're not just creating documents or presentations— you're creating
 1. **Check this guide first** (you'd be surprised how often the answer is right here!)
 2. **Take screenshots** of any error messages
 3. **Note the exact step** where you got stuck
-4. **Contact your TurboDocx support team** with the details
+4. **Contact our TurboDocx support team** with the details
 
-**Remember**: There's no such thing as a bad question. We've all been there, and we're here to help you succeed! 💪
+**Remember**: There's no such thing as a bad question. We've all been there, and we're here to help you succeed! You're part of the TurboDocx family now! 💪🏠
 
 ---
 
-_Happy document generating! May your proposals be persuasive, your reports be comprehensive, and your follow-ups be timely! 🚀_
+_Happy document generating, integration champion! May your proposals be persuasive, your reports be comprehensive, your follow-ups be timely, and your coffee always be hot! ☕🚀✨_
