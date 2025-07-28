@@ -73,7 +73,7 @@ This step guides you through creating a new external client app in Salesforce, w
    - Use your normal email and password with appropriate administrative privileges
    - If you forgot your password, there's a "Forgot Password?" link (we've all been there!)
 
-_[Image placeholder: Salesforce Login Screen - Screenshot coming soon]_
+![Salesforce Login Screen](/img/salesforce-integration/Login_Window.png)
 
 <br/>
 
@@ -83,7 +83,7 @@ _[Image placeholder: Salesforce Login Screen - Screenshot coming soon]_
    - It looks like a little wheel with teeth ⚙️
    - It's located next to your profile picture icon on the home page
 
-_[Image placeholder: Setup Icon and Menu - Screenshot coming soon]_
+![Setup Icon and Menu](/img/salesforce-integration/Setup_Icon_and_Menu.png)
 
 <br/>
 
@@ -91,7 +91,7 @@ _[Image placeholder: Setup Icon and Menu - Screenshot coming soon]_
    - Select "Setup" from the dropdown menu
    - You will be navigated to the Setup Home page
 
-_[Image placeholder: Salesforce Setup Home Page - Screenshot coming soon]_
+![Salesforce Setup Home Page](/img/salesforce-integration/Setup_Home_Page.png)
 
 <br/>
 
@@ -101,7 +101,7 @@ _[Image placeholder: Salesforce Setup Home Page - Screenshot coming soon]_
    - From the Setup Home page, scroll down in the left sidebar
    - Navigate to: **Platform Tools > Apps > App Manager**
 
-_[Image placeholder: Navigation to App Manager in Sidebar - Screenshot coming soon]_
+![Navigation to App Manager in Sidebar](/img/salesforce-integration/Navigation_to_App_Manager.png)
 
 <br/>
 
@@ -111,7 +111,7 @@ _[Image placeholder: Navigation to App Manager in Sidebar - Screenshot coming so
    - On the App Manager screen, look for the "New External Client App" button
    - Click this button (not "New Lightning App")
 
-_[Image placeholder: App Manager Screen with New External Client App Button - Screenshot coming soon]_
+![App Manager Screen with New External Client App Button](/img/salesforce-integration/New_External_Client_App_Button.png)
 
 <br/>
 
@@ -123,7 +123,7 @@ _[Image placeholder: App Manager Screen with New External Client App Button - Sc
    - **Contact Email**: Enter a relevant contact email address
    - **Distribution State**: Set this to "Local"
 
-_[Image placeholder: Basic Information Section Fields - Screenshot coming soon]_
+![Basic Information Section Fields](/img/salesforce-integration/Basic_Information.png)
 
 <br/>
 
@@ -138,7 +138,7 @@ Choose an app name you'll remember six months from now. "App123" might seem clev
    - **Enable OAuth Settings**: Check this box
    - **Callback URL**: Enter `https://api.turbodocx.com/oauth/salesforce/callback` as the callback URL
 
-_[Image placeholder: API Settings with OAuth Enabled - Screenshot coming soon]_
+![API Settings with OAuth Enabled](/img/salesforce-integration/OAuth_Enabled.png)
 
 <br/>
 
@@ -149,7 +149,7 @@ _[Image placeholder: API Settings with OAuth Enabled - Screenshot coming soon]_
      - `Manage user data via Web browsers (web)`
      - `Perform requestes at any time (refresh_token, offline access)`
 
-_[Image placeholder: OAuth Scopes Selected - Screenshot coming soon]_
+![OAuth Scopes Selected](/img/salesforce-integration/OAuth_Scopes_Selected.png)
 
 <br/>
 
@@ -161,7 +161,7 @@ You'll be adding several different permissions. It's like checking off a grocery
     - In the "Flow Enablement" section under OAuth settings, make sure only the following checkbox is ticked
       - **Enable Authorization Code and Credentials Flow**
 
-_[Image placeholder: Flow and Enablement Settings - Screenshot coming soon]_
+![Flow and Enablement Settings](/img/salesforce-integration/Flow_Enablement_settings.png)
 
 <br/>
 
@@ -169,7 +169,7 @@ _[Image placeholder: Flow and Enablement Settings - Screenshot coming soon]_
     - In the "Security" section under OAuth settings, make sure only the following checkbox is ticked:
       - **Issue JSON Web Token (JWT)-based access tokens for named users**
 
-_[Image placeholder: Security Guard Setting Description - Screenshot coming soon]_
+![Security Settings](/img/salesforce-integration/Security_Section.png)
 
 <br/>
 
@@ -177,7 +177,7 @@ _[Image placeholder: Security Guard Setting Description - Screenshot coming soon
     - Click "Create" to create your external client app
     - Take a moment to admire your handiwork first!
 
-_[Image placeholder: Save External Client App - Screenshot coming soon]_
+![Save External Client App](/img/salesforce-integration/create_app.png)
 
 <br/>
 
@@ -197,7 +197,7 @@ After creating the app, you need to adjust its access policies and retrieve the 
    - You should be automatically redirected to the detail page of the app you just created as soon as you hit the create button
    - If not, navigate to External Client App Manager **(Platform Tools > Apps > External Client App > External Client App Manager)** and click on the name of your newly created app
 
-_[Image placeholder: Connected App Detail Page - Screenshot coming soon]_
+![Connected App Detail Page](/img/salesforce-integration/Connected_app_details_page.png)
 
 <br/>
 
@@ -207,7 +207,7 @@ _[Image placeholder: Connected App Detail Page - Screenshot coming soon]_
    - On the app's detail page, find the "Policies" section
    - Click the "Edit" button located below the policies section
 
-_[Image placeholder: Policies Section with Edit Button - Screenshot coming soon]_
+![Policies Section with Edit Button](/img/salesforce-integration/policies_section.png)
 
 <br/>
 
@@ -218,14 +218,14 @@ _[Image placeholder: Policies Section with Edit Button - Screenshot coming soon]
       - **Refresh Token Policy**: Select **"Refresh token is valid until revoked"**
       - **IP Relaxation**: Select **"Relax IP restrictions"**
 
-_[Image placeholder: OAuth Policies Configuration - Screenshot coming soon]_
+![OAuth Policies Configuration](/img/salesforce-integration/OAuth_policies.png)
 
 <br/>
 
 4. **Save Changes**
    - Click "Save" to apply the policy changes
 
-_[Image placeholder: Save Button - Screenshot coming soon]_
+![Save Button](/img/salesforce-integration/Save_policies.png)
 
 <br/>
 
@@ -233,9 +233,9 @@ _[Image placeholder: Save Button - Screenshot coming soon]_
 
 5. **Find Settings section**
    - On the same app details page, Navigate to the "Settings" section
-   - Click the "Edit" button located below the settings section
+   - Here you don't need to edit anything as we have already configured it while creating the app
 
-_[Image placeholder: Manage Consumer Details Button - Screenshot coming soon]_
+![Settings Section](/img/salesforce-integration/connected_app_settings_section.png)
 
 <br/>
 
@@ -243,7 +243,7 @@ _[Image placeholder: Manage Consumer Details Button - Screenshot coming soon]_
    - You will now see a button of **Consumer Key and Secret**
    - Click on this button
 
-_[Image placeholder: Identity Verification Prompt - Screenshot coming soon]_
+![Consumer Key and Secret Button](/img/salesforce-integration/Consumer_key_and_secret_button.png)
 
 <br/>
 
@@ -251,7 +251,7 @@ _[Image placeholder: Identity Verification Prompt - Screenshot coming soon]_
    - You will be prompted to verify your identity via an OTP being sent to your registered email
    - Complete this verification step
 
-_[Image placeholder: Identity Verification Prompt - Screenshot coming soon]_
+![Identity Verification Prompt](/img/salesforce-integration/Identity_Verification_page.png)
 
 <br/>
 
@@ -259,7 +259,7 @@ _[Image placeholder: Identity Verification Prompt - Screenshot coming soon]_
    - After successful verification, your Consumer Key and Consumer Secret will be displayed
    - Copy both the **Consumer Key** and **Consumer Secret** - these credentials are essential for connecting your TurboDocx application to Salesforce
 
-_[Image placeholder: Consumer Key and Secret Display - Screenshot coming soon]_
+![Consumer Key and Secret Display](/img/salesforce-integration/Consumer_key_and_secret_page.png)
 
 <br/>
 
@@ -280,7 +280,7 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 1. **Go to your TurboDocx dashboard**
    - Log in if you haven't already
 
-_[Image placeholder: TurboDocx main dashboard screenshot - Screenshot coming soon]_
+![TurboDocx Main Dashboard](/img/salesforce-integration/Turbodocx_dashboard.png)
 
 <br/>
 
@@ -288,7 +288,7 @@ _[Image placeholder: TurboDocx main dashboard screenshot - Screenshot coming soo
    - Look for the gear icon or "Settings" text
    - Usually in the top menu or sidebar
 
-_[Image placeholder: Settings menu screenshot - Screenshot coming soon]_
+![Settings Menu](/img/salesforce-integration/turbodocx_settings_page.png)
 
 <br/>
 
@@ -296,7 +296,7 @@ _[Image placeholder: Settings menu screenshot - Screenshot coming soon]_
    - This might be in a dropdown or separate tab
    - If you can't find it, try looking for "Integrations" or "Connected Apps"
 
-_[Image placeholder: Organization settings page screenshot - Screenshot coming soon]_
+![Organization Settings Page](/img/salesforce-integration/Turbodocx_org_page.png)
 
 <br/>
 
@@ -306,7 +306,7 @@ _[Image placeholder: Organization settings page screenshot - Screenshot coming s
    - Look for the Salesforce logo or "Salesforce Integration"
    - It might be in a list with other integrations
 
-_[Image placeholder: Salesforce integration section screenshot - Screenshot coming soon]_
+![Salesforce Integration Section](/img/salesforce-integration/Salesforce_integration_page.png)
 
 <br/>
 
@@ -314,7 +314,9 @@ _[Image placeholder: Salesforce integration section screenshot - Screenshot comi
    - A popup or form will appear
    - This is where the magic happens! ✨
 
-_[Image placeholder: Configuration modal screenshot - Screenshot coming soon]_
+![Configuration Butoon](/img/salesforce-integration/configure_salesforce_button.png)
+
+![Configuration Modal](/img/salesforce-integration/configuration_modal.png)
 
 <br/>
 
@@ -322,14 +324,14 @@ _[Image placeholder: Configuration modal screenshot - Screenshot coming soon]_
    - Copy the Consumer Key from your Salesforce connected app page and paste it here
    - Copy the Consumer Secret from your Salesforce connected app page and paste it in the Consumer Secret field
 
-_[Image placeholder: Key entry form screenshot - Screenshot coming soon]_
+![Key Entry Form](/img/salesforce-integration/key_and_secret_entered.png)
 
 <br/>
 
 7. **Click "Save Configuration"**
    - Cross your fingers (optional, but recommended!)
 
-_[Image placeholder: Save configuration button screenshot - Screenshot coming soon]_
+![Save Configuration Button](/img/salesforce-integration/Save_config_button.png)
 
 <br/>
 
@@ -339,15 +341,13 @@ _[Image placeholder: Save configuration button screenshot - Screenshot coming so
    - This button appears after you save your configuration
    - You'll be redirected to Salesforce to authorize the connection
 
-_[Image placeholder: Connection button screenshot - Screenshot coming soon]_
+![Connection Button](/img/salesforce-integration/connect_to_salesforce_button.png)
 
 <br/>
 
 9. **Authorize TurboDocx in Salesforce**
    - Salesforce will ask you to log in and confirm the connection
    - Enter you username and password to login
-
-_[Image placeholder: Authorization page screenshot - Screenshot coming soon]_
 
 <br/>
 
@@ -358,7 +358,7 @@ _[Image placeholder: Authorization page screenshot - Screenshot coming soon]_
     - It downloads all your custom Salesforce fields and data
     - It also tests if your connection works
 
-_[Image placeholder: Field refresh button screenshot - Screenshot coming soon]_
+![Field Refresh Button](/img/salesforce-integration/refresh_fields.png)
 
 <br/>
 
@@ -384,14 +384,14 @@ Time to put your new integration to work! This is where the magic happens — tu
    - Look for "Create Document", "New Document", or similar
    - This is usually on your main dashboard
 
-_[Image placeholder: Document creation page screenshot - Screenshot coming soon]_
+![Document Creation Page](/img/salesforce-integration/Create_document_button.png)
 
 <br/>
 
 2. **Select Template**
    - Click on the template you want to work with
 
-_[Image placeholder: Template selection screenshot - Screenshot coming soon]_
+![Template Selection](/img/salesforce-integration/template_selection_page.png)
 
 <br/>
 
@@ -399,7 +399,7 @@ _[Image placeholder: Template selection screenshot - Screenshot coming soon]_
    - Click on the "Change Source" dropdown
    - Select "Change Resource" from the menu
 
-_[Image placeholder: Source change dropdown screenshot - Screenshot coming soon]_
+![Source Change Dropdown](/img/salesforce-integration/source_change_dropdown.png)
 
 <br/>
 
@@ -407,7 +407,7 @@ _[Image placeholder: Source change dropdown screenshot - Screenshot coming soon]
    - Click on the "App Library" tab
    - This shows all your connected integrations
 
-_[Image placeholder: App library interface screenshot - Screenshot coming soon]_
+![App Library Interface](/img/salesforce-integration/app_library_interface.png)
 
 <br/>
 
@@ -415,7 +415,7 @@ _[Image placeholder: App library interface screenshot - Screenshot coming soon]_
    - Look for "CRM" and click on it
    - This filters to show only CRM integrations
 
-_[Image placeholder: CRM category selection screenshot - Screenshot coming soon]_
+![CRM Category Selection](/img/salesforce-integration/CRM_category_selection.png)
 
 <br/>
 
@@ -423,14 +423,14 @@ _[Image placeholder: CRM category selection screenshot - Screenshot coming soon]
    - Click on "Salesforce" (you should see the Salesforce logo)
    - It should show as "Connected"
 
-_[Image placeholder: Salesforce selection screenshot - Screenshot coming soon]_
+![Salesforce Selection](/img/salesforce-integration/Salesforce_selection.png)
 
 <br/>
 
 7. **Click "Continue"**
    - This takes you to the Salesforce agent interface
 
-_[Image placeholder: Continue button screenshot - Screenshot coming soon]_
+![Continue Button](/img/salesforce-integration/salesforce_continue_button.png)
 
 <br/>
 
@@ -440,7 +440,7 @@ _[Image placeholder: Continue button screenshot - Screenshot coming soon]_
    - Click "Select Records" to choose specific accounts, opportunities, contacts and many other fields
    - This helps the AI focus on the right data
 
-_[Image placeholder: Record selection interface screenshot - Screenshot coming soon]_
+![Record Selection Interface](/img/salesforce-integration/record_selection_interface.png)
 
 <br/>
 
@@ -449,7 +449,7 @@ _[Image placeholder: Record selection interface screenshot - Screenshot coming s
    - Selected items will be highlighted
    - Click "Save" to confirm your record selection
 
-_[Image placeholder: Record selection process screenshot - Screenshot coming soon]_
+![Record Selection Process](/img/salesforce-integration/record_selection_process.png)
 
 <br/>
 
@@ -459,7 +459,7 @@ _[Image placeholder: Record selection process screenshot - Screenshot coming soo
     - Sit back and watch the magic happen!
     - Generation typically takes 30 seconds to 2 minutes
 
-_[Image placeholder: Prompt input interface screenshot - Screenshot coming soon]_
+![Prompt Input Interface](/img/salesforce-integration/prompt_input_interface.png)
 
 <br/>
 
