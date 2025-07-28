@@ -252,7 +252,7 @@ Yes, it’s a few extra clicks — but it’s easy. Just check the boxes and you
 
 <br/>
 
-6. **You'll see the Access Token and Client Secret (needed for later)**
+6. **You'll see the Access Token (needed for later)**
    - This is super important!
    - leave this page open to use this key later
 
