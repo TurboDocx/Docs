@@ -46,19 +46,7 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'TurboDocx', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
-  plugins: ['docusaurus-plugin-sass',
-    [
-      "@orama/plugin-docusaurus-v3",
-      {
-        searchbox: {
-          placeholder: "Search...",
-        },
-        searchButton: {
-          text: "soham..."
-        },
-
-      },
-    ],
+  plugins: ['docusaurus-plugin-sass', "@orama/plugin-docusaurus-v3",
     [
       'docusaurus-plugin-llms',
       {
@@ -72,8 +60,8 @@ const config = {
     [
       'docusaurus-plugin-openapi-docs',
       {
-        id: "api", // plugin id
-        docsPluginId: "classic", // configured for preset-classic
+        id: "api",
+        docsPluginId: "classic",
         config: openApiCongfig,
       },
     ], async function myPlugin(context, options) {

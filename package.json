@@ -28,7 +28,6 @@
     "@orama/orama": "3.1.6",
     "@orama/plugin-docusaurus-v3": "2.1.0",
     "@orama/searchbox": "^1.0.0-rc53",
-    "@oramacloud/client": "^2.1.4",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-context-menu": "^2.1.5",

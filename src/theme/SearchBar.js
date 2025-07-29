@@ -21,75 +21,43 @@ export default function SearchBarWrapper(props) {
     const isAppleDevice = () => {
       return typeof navigator !== 'undefined' &&
         /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+      return typeof navigator !== 'undefined' &&
+        /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
     };
+
     setIsApple(isAppleDevice());
   }, []);
 
   useEffect(() => {
-    // Override DocSearch button key display
-    // const updateKeyDisplay = () => {
-    //     const kbdElements = document.querySelectorAll('.aa-DetachedSearchButton kbd');
-    //     if (kbdElements.length >= 2) {
-    //         // Handle the case with separate Cmd/Ctrl and K keys
-    //         const firstKey = kbdElements[0];
-    //         if (firstKey && isApple && firstKey.textContent === '⌘') {
-    //             firstKey.textContent = 'Ctrl';
-    //         } else if (firstKey && isApple && firstKey.textContent === 'Ctrl') {
-    //             firstKey.textContent = '⌘';
-    //         }
-    //     } else {
-    //         // Handle single key element
-    //         kbdElements.forEach(key => {
-    //             if (key && !isApple && (key.textContent === '⌘' || key.textContent.includes('⌘'))) {
-    //                 key.textContent = 'Ctrl';
-    //             } else if (key && isApple && (key.textContent === 'Ctrl' || key.textContent.includes('Ctrl'))) {
-    //                 key.textContent = '⌘';
-    //             }
-    //         });
-    //     }
-    // };
-
-    // Run immediately and set up observer for dynamic updates
-    // updateKeyDisplay();
-
-    // const observer = new MutationObserver(() => {
-    //     // Small delay to ensure DOM is updated
-    //     setTimeout(updateKeyDisplay, 100);
-    // });
-
-    // observer.observe(document.body, {
-    //     childList: true,
-    //     subtree: true
-    // });
-
     const updateKeyDisplay = () => {
-      const kbdElements = document.querySelectorAll('.aa-DetachedSearchButton kbd');
-      if (kbdElements.length >= 2) {
-        // Handle the case with separate Cmd/Ctrl and K keys
-        const firstKey = kbdElements[0];
-        if (firstKey && !isApple && firstKey.textContent === '⌘') {
-          firstKey.textContent = 'Ctrl';
-        } else if (firstKey && isApple && firstKey.textContent === 'Ctrl') {
-          firstKey.textContent = '⌘';
+      // 1) Grab the two <kbd> elements under the DocSearch button
+      const kbdElements = document.querySelectorAll('button.DocSearch-Button kbd');
+      if (!kbdElements.length) return;  // nothing to do yet
+
+      kbdElements.forEach(key => {
+        const txt = key.textContent || '';
+        if (isApple) {
+          // Mac: turn “Ctrl” → “⌘”
+          if (txt.includes('Ctrl')) key.textContent = txt.replace(/Ctrl/g, '⌘');
+        } else {
+          // Windows/Linux: turn “⌘” → “Ctrl”
+          if (txt.includes('⌘')) key.textContent = txt.replace(/⌘/g, 'Ctrl');
         }
-      } else {
-        // Handle single key element
-        kbdElements.forEach(key => {
-          if (key && !isApple && (key.textContent === '⌘' || key.textContent.includes('⌘'))) {
-            key.textContent = 'Ctrl';
-          } else if (key && isApple && (key.textContent === 'Ctrl' || key.textContent.includes('Ctrl'))) {
-            key.textContent = '⌘';
-          }
-        });
-      }
+      });
     };
 
     // run on load
     updateKeyDisplay();
 
-    // re‑run whenever DocSearch injects new bits
-    const observer = new MutationObserver(() => setTimeout(updateKeyDisplay, 50));
-    observer.observe(document.body, { childList: true, subtree: true });
+    const observer = new MutationObserver(() => {
+      // Small delay to ensure DOM is updated
+      setTimeout(updateKeyDisplay, 100);
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
 
     return () => observer.disconnect();
   }, [isApple]);
@@ -97,12 +65,6 @@ export default function SearchBarWrapper(props) {
   useEffect(() => {
     async function init() {
       try {
-        // const res = await fetch("../../.docusaurus/orama-search-index-current.json.gz");
-        // if (!res.ok) throw new Error(`Failed to fetch Orama index: ${res.status}`);
-
-        // const buffer = await res.arrayBuffer();
-        // const jsonStr = ungzip(buffer, { to: "string" });
-        // const parsedData = JSON.parse(jsonStr);
         const indexUrl = `${baseUrl}orama-index.json`;
         const response = await fetch(indexUrl);
         console.log(response)
