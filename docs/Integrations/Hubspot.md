@@ -252,9 +252,9 @@ Yes, it’s a few extra clicks — but it’s easy. Just check the boxes and you
 
 <br/>
 
-6. **You'll see the Access Token and Client Secret (needed for later)**
+6. **You'll see the Access Token (needed for later)**
    - This is super important!
-   - leave this page open to use these two keys later
+   - leave this page open to use this key later
 
 ![Access Token](/img/hubspot-integration/click-on-auth.png)
 ![Access Token](/img/hubspot-integration/access-token-copiying.png)
@@ -318,33 +318,16 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 
 6. **Enter your Access Token**
    - Copy the Access Token from your HubSpot private app page and paste it here
-   - Copy the Client Secret from your HubSpot private app page and paste it in the Client Secret field
 
 ![Access Token](/img/hubspot-integration/access-token-copiying.png)
-
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshots Coming Soon
-</div>
+![Access Token](/img/hubspot-integration/hubspot-access-token-copied.png)
 
 <br/>
 
 7. **Click "Save Configuration"**
    - Cross your fingers (optional, but recommended!)
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshots Coming Soon
-</div>
-
-<br/>
-
-### Test Your Connection
-
-8. **Click "Connect to HubSpot"**
-   - This button appears after you save your configuration
-
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshots Coming Soon
-</div>
+![Access Token](/img/hubspot-integration/click-save-configuration.png)
 
 <br/>
 
@@ -355,9 +338,7 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
     - It downloads all your custom HubSpot fields and data
     - It also tests if your access token works
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
-  Screenshots Coming Soon
-</div>
+![Access Token](/img/hubspot-integration/refresh-fields.png)
 
 <br/>
 
