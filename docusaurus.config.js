@@ -4,7 +4,6 @@ const { themes } = require('prism-react-renderer');
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
 
-
 // [item, [[], [], []]]
 const apiConfig = require('./dev-docs-openapi.js');
 const openApiCongfig = apiConfig.config
