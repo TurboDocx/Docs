@@ -6,7 +6,8 @@ p {
   p {
     display: none !important;
   }
-  > div {
+
+  >div {
     p {
       display: none !important;
     }
@@ -20,7 +21,9 @@ p {
   min-height: 20em;
   justify-content: center;
   flex-direction: row !important;
-  gap: 0.2em; /* space between cards */
+  gap: 0.2em;
+
+  /* space between cards */
   p {
     display: none !important;
   }
@@ -62,15 +65,19 @@ p {
     flex-direction: column;
     //border: 1px solid #CAD0D2;
     flex: 0 1 calc(20% - 1em);
-    > div {
+
+    >div {
       height: 100% !important;
     }
-    > .content div:first-child {
+
+    >.content div:first-child {
       height: 100% !important;
     }
+
     pre {
       height: 100% !important;
     }
+
     p {
       display: block !important;
     }
@@ -84,7 +91,9 @@ p {
 
   justify-content: center;
   flex-direction: row !important;
-  gap: 2em; /* space between cards */
+  gap: 2em;
+
+  /* space between cards */
   p {
     display: none !important;
   }
@@ -127,15 +136,19 @@ p {
     flex-direction: column;
     //border: 1px solid #CAD0D2;
     flex: 0 1 calc(20% - 1em);
-    > div {
+
+    >div {
       height: 100% !important;
     }
-    > .content div:first-child {
+
+    >.content div:first-child {
       height: 100% !important;
     }
+
     pre {
       height: 100% !important;
     }
+
     p {
       display: block !important;
     }
@@ -149,7 +162,7 @@ p {
   align-items: center;
   opacity: 0.8;
 
-  > h1,
+  >h1,
   h2,
   h3,
   h4,
@@ -179,15 +192,14 @@ p {
   border: 1px solid rgb(255 255 255 / 5%) !important;
   border-radius: 1.5rem;
   gap: 1rem;
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.2) 1px,
-    transparent 1px
-  ) !important;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px,
+      transparent 1px) !important;
   background-position: 50% 50%;
   background-size: 1.1rem 1.1rem;
   padding: 0rem !important;
 
   border-radius: 1.25rem;
+
   .node-ResizableImage {
     width: fit-content;
     flex: 0 0 20%;
@@ -203,13 +215,15 @@ p {
       }
     }
   }
-  .content {
-  }
-  > div {
+
+  .content {}
+
+  >div {
     flex: 1 1 0px;
     height: 100% !important;
     align-self: stretch;
   }
+
   .content div:first-child {
     height: fit-content;
     justify-content: flex-start !important;
@@ -346,6 +360,7 @@ p {
   0% {
     --gradient-angle: 0deg;
   }
+
   100% {
     --gradient-angle: 360deg;
   }
@@ -371,7 +386,7 @@ p {
 .border-button {
   // Your styles here...
 
-  + br {
+  +br {
     display: none; // or any other styles you want to apply
   }
 }
@@ -407,13 +422,15 @@ p {
     display: flex;
     max-width: 100%;
   }
+
   .background-landing {
     height: 100ch;
     display: block;
     justify-content: center;
     align-items: center;
     opacity: 0.8;
-    > h1,
+
+    >h1,
     h2,
     h3,
     h4,
@@ -423,6 +440,7 @@ p {
       padding-right: 0em;
       letter-spacing: -1.6px;
     }
+
     .content {
       height: 100%;
       display: flex !important;
@@ -433,6 +451,7 @@ p {
       flex: 0 0 calc(100% - 1em) !important; // Adjust width to 100% on small devices
     }
   }
+
   .draggable-grid {
     .draggable-item {
       flex-direction: column;
@@ -484,7 +503,7 @@ p {
 
 
 .ProseMirror {
-  > * + * {
+  >*+* {
     margin-top: 0.75em;
   }
 
@@ -560,6 +579,7 @@ p {
   display: flex;
   align-items: center;
   padding-top: 1em;
+
   div {
     display: flex !important;
     flex-direction: column;
@@ -760,6 +780,7 @@ th {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(-360deg);
   }

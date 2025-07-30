@@ -1,4 +1,5 @@
 [data-theme="dark"] {
+
   p,
   h1,
   h2,
@@ -16,14 +17,13 @@
 }
 
 row {
-  background-image: radial-gradient(
-    circle at 200% 104%,
-    #e03c3c 3%,
-    #ffffff 71%
-  ) !important;
+  background-image: radial-gradient(circle at 200% 104%,
+      #e03c3c 3%,
+      #ffffff 71%) !important;
 }
 
 [data-theme="light"] {
+
   p,
   h1,
   h2,
@@ -33,8 +33,8 @@ row {
   h6 {
     color: black !important;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-    "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+      "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
+      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
     // font-family: Inter;
   }
 }
@@ -60,7 +60,8 @@ p {
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 1.6; /* Improved readability */
+  line-height: 1.6;
+  /* Improved readability */
   letter-spacing: -0.08px;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -161,7 +162,7 @@ ul {
   @include vertical-margin($base-margin);
   padding-left: 1.5em; // Better indentation for bullets
   line-height: 1.6; // Improved line height for readability
-  
+
   // Reset margin for nested lists
   ul {
     margin-top: 0.5em;
@@ -175,7 +176,7 @@ ol {
   @include vertical-margin($base-margin);
   padding-left: 1.5em; // Better indentation for numbers
   line-height: 1.6; // Improved line height for readability
-  
+
   // Reset margin for nested lists
   ol {
     margin-top: 0.5em;
@@ -188,7 +189,7 @@ ol {
 li {
   margin-bottom: $base-margin * 0.75; // Increased bottom margin for better spacing
   line-height: 1.5; // Better line height for readability
-  
+
   // Reduce spacing for nested list items
   li {
     margin-bottom: $base-margin * 0.5;
@@ -196,22 +197,24 @@ li {
 }
 
 .theme-doc-markdown {
-  ul, ol {
+
+  ul,
+  ol {
     margin-top: 1.25em;
     margin-bottom: 1.25em;
-    
+
     li {
       margin-bottom: 0.75em; // Consistent spacing in markdown content
-      
+
       // Better spacing for list items with multiple paragraphs
       p {
         margin-top: 0.5em;
         margin-bottom: 0.5em;
-        
+
         &:first-child {
           margin-top: 0;
         }
-        
+
         &:last-child {
           margin-bottom: 0;
         }
@@ -226,17 +229,21 @@ img {
 }
 
 a {
-  color: $color-1; /* Default link color */
-  text-decoration: none; /* Remove underline by default */
+  color: $color-1;
+  /* Default link color */
+  text-decoration: none;
+  /* Remove underline by default */
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-  "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
-  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+    "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
 
 a:hover {
-  color: $color-1; /* Change color on hover */
-  text-decoration: underline; /* Underline on hover */
+  color: $color-1;
+  /* Change color on hover */
+  text-decoration: underline;
+  /* Underline on hover */
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-  "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
-  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+    "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }

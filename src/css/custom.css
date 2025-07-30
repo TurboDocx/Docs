@@ -1,6 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@use 'tailwindcss/base';
+@use 'tailwindcss/components';
+@use'tailwindcss/utilities';
 
 /* Platform-specific search bar key display */
 .DocSearch-Button-Key {
@@ -15,4 +15,20 @@
 .DocSearch-Button-Key:first-of-type {
   font-size: 0.75rem;
   line-height: 1;
+}
+
+.col.col--7 {
+  --ifm-col-width: 100% !important;
+  flex: 1 1 100% !important;
+  max-width: 100% !important;
+}
+
+/* More specific targeting if the above doesn't work */
+.docItemContainer_jff .col.col--7,
+[class*="api"] .col.col--7,
+.api-method .col.col--7 {
+  --ifm-col-width: 100% !important;
+  flex: 1 1 100% !important;
+  max-width: 100% !important;
+  width: 100% !important;
 }

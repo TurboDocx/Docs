@@ -1,18 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import zlib from 'zlib';
-import { useDoc } from '@docusaurus/theme-common/internal';
+import pako from 'pako';
+// import { useDoc } from '@docusaurus/theme-common/internal';
+import { useAllDocsData } from '@docusaurus/plugin-content-docs/client';
+import { useLocation } from '@docusaurus/router';
 
 const JsonToTable = () => {
   const [decodedData, setDecodedData] = useState({});
 
-  const { frontMatter } = useDoc();
+  const allDocsData = useAllDocsData();
+  const location = useLocation();
+
+  // Assuming only one docs plugin instance (e.g., "default")
+  const docs = allDocsData.default;
+  const currentPath = location.pathname;
+  const currentDoc = Object.values(docs.versions[0].docs).find(
+    (doc) => doc.permalink === currentPath
+  );
+
+  const frontMatter = currentDoc?.frontMatter || {};
+
+  console.log(frontMatter);
 
   useEffect(() => {
     if (frontMatter.api) {
       try {
-        let decodedJSON = JSON.parse(
-          zlib.inflateSync(Buffer.from(frontMatter.api, 'base64')).toString()
-        );
+        // Convert base64 to binary data
+        const binaryString = atob(frontMatter.api);
+        const binaryData = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          binaryData[i] = binaryString.charCodeAt(i);
+        }
+
+        // Decompress using pako
+        const decompressed = pako.inflate(binaryData, { to: 'string' });
+        let decodedJSON = JSON.parse(decompressed);
+
         decodedJSON.requestBodyValues = extractPropertiesAndExamples(decodedJSON);
         setDecodedData(decodedJSON);
       } catch (error) {
@@ -66,7 +88,6 @@ const JsonToTable = () => {
     }
   };
 
-
   return (
     <div>
       <div>
@@ -91,17 +112,14 @@ const JsonToTable = () => {
         {decodedData?.requestBodyValues && Object.keys(decodedData.requestBodyValues).length > 0 && (
           <>
             <h3>Request Body</h3>
-
-              {Object.entries(decodedData.requestBodyValues).map(([key, value]) => (
-                
-                <div style={{ borderTop: '1px solid #eaecef', margin: '24px 0' }} aria-hidden="true" key={key}>
-                  <strong>{key}:</strong> 
-                  <p>{value.description}</p>
-                  <br></br>
-                  Extra Context {JSON.stringify(value)}
-                </div>
-              ))}
-           
+            {Object.entries(decodedData.requestBodyValues).map(([key, value]) => (
+              <div style={{ borderTop: '1px solid #eaecef', margin: '24px 0' }} aria-hidden="true" key={key}>
+                <strong>{key}:</strong>
+                <p>{value.description}</p>
+                <br></br>
+                Extra Context {JSON.stringify(value)}
+              </div>
+            ))}
           </>
         )}
         {decodedData.securitySchemes && Object.keys(decodedData.securitySchemes).length > 0 && (
