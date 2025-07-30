@@ -21,8 +21,6 @@ export default function SearchBarWrapper(props) {
     const isAppleDevice = () => {
       return typeof navigator !== 'undefined' &&
         /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
-      return typeof navigator !== 'undefined' &&
-        /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
     };
 
     setIsApple(isAppleDevice());
