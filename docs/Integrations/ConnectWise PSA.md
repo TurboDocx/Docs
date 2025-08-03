@@ -59,7 +59,8 @@ You'll need:
 
 * Admin access to your ConnectWise PSA account
 * API Member credentials (public + private key)
-* A ConnectWise API URL (e.g., `https://yourcompany.connectwise.com`)
+* Your ConnectWise tenant endpoint URL (e.g., `https://yourcompany.connectwise.com`)
+* Your ConnectWise Client ID
 * 5 minutes of time and a steady Wi-Fi signal 🚀
 
 :::tip Quick PSA Primer
@@ -68,40 +69,70 @@ ConnectWise PSA uses “API Members”. You’ll create a special user with read
 
 <br/>
 
-## Step 1: Create a Security Role and API Member
+## Step 1: Gather ConnectWise Credentials
+
+You'll need the following information from your ConnectWise PSA instance:
+
+* **Tenant Endpoint**: Your ConnectWise server URL (e.g., `https://yourcompany.connectwise.com`)
+* **Company Name**: Your ConnectWise company identifier (Site or Company ID)
+* **Public Key**: API public key
+* **Private Key**: API private key
+* **Client ID**: ConnectWise client application ID
+
+<!-- Screenshot: ConnectWise Credentials Requirements -->
+
+## Step 2: Create a Security Role and API Member
 
 ### A. Create a Read-Only Security Role
 
 1. Log into the ConnectWise PSA dashboard
-2. Navigate to **System → Security Roles**
-3. Click **"Add"**, enter `TurboDocx API` for Role ID, and click **Save**
-4. Expand and configure the following modules with **Inquire Level = All**:
+2. Navigate to **System** in the left navigation
+3. Click on **Security Roles**
+4. Press the **"+" (plus)** button in the top-left corner to create a new role
+5. Set the **Role ID** to `TurboDocxIntegration`
 
-   * Companies → Company Maintenance
-   * Companies → Configurations
-   * Contacts
-   * Opportunities
-   * Service Desk → Service Tickets
-   * Projects
-   * Finance → Agreements
-   * Finance → Invoices
-   * Time & Expense → Time Entry
-   * System → Table Setup *(for schema and metadata)*
+<!-- Screenshot: Creating Security Role -->
+
+6. Configure the following permissions with **Inquire Level** access:
+
+#### Company
+   * **Company Maintenance Contacts** – Inquire
+   * **CRM Sales Activities** – Inquire
+   * **Manage Attachments** – Inquire
+   * **Notes** – Inquire
+   * **Agreements** – Inquire
+   * **Billing View Time** – Inquire
+
+#### Finance
+   * **Agreements** – Add/Inquire All
+   * **Billing View Time** – Inquire All
+
+#### Projects
+   * **Project Headers** – Inquire
+   * **Project Tickets** – Inquire
+
+#### Sales
+   * **All Permissions** – Inquire for everything
+
+#### Service Desk
+   * **Service Tickets** – Inquire
+   * **Resource Scheduling** – Inquire
+   * **Close Service Tickets** - Inquire
+
+#### System
+   * **Member Maintenance** – Inquire
+   * **My Company** – Inquire
+
+#### Time and Expense
+   * **Time Entry** – Inquire
+
+<!-- Screenshot: Security Role Permissions -->
+
+7. Save the new role
 
 :::tip Best Practice
-Create a dedicated security role for TurboDocx with **read-only access** to the following modules:
-
-* Companies
-* Contacts
-* Opportunities
-* Tickets
-* Agreements
-* Projects
-* Configurations
-* Invoices
-* Time Entries
-* System (for schema discovery only)
-  :::
+The TurboDocx integration uses **read-only access** (Inquire level) to retrieve data from ConnectWise without making any modifications to your system.
+:::
 
 ### B. Add API Member
 
@@ -111,41 +142,50 @@ Create a dedicated security role for TurboDocx with **read-only access** to the 
 4. Fill out the form:
 
    * **Member ID**: `TurboDocx`
-   * **Role ID**: `TurboDocx API`
+   * **Role ID**: `TurboDocxIntegration`
    * **Level**: Corporate
    * **Name/Email**: `Your CW Admin`, `CWAdmin@yourcompany.com`
    * **Location & Business Unit**: Required fields
 
+<!-- Screenshot: Adding API Member -->
+
 ### C. Generate API Keys
 
 1. Scroll to **API Keys** at the bottom
-2. Click **“+”**, name it `TurboDocx Key`
+2. Click **"+"**, name it `TurboDocx Key`
 3. Save and securely store the **Public** and **Private** API keys
+
+<!-- Screenshot: Generating API Keys -->
 
 <br/>
 
-## Step 2: Configure TurboDocx
+## Step 3: Configure TurboDocx
 
 1. Log into your TurboDocx dashboard
 2. Go to **Settings → Organization Settings**
 3. Find **ConnectWise PSA Integration** and click **Configure**
 
-### Enter Required Info
+<!-- Screenshot: TurboDocx Settings -->
 
-* **API URL**: e.g. `https://yourcompany.connectwisedev.com`
-* **Company ID**
-* **Public Key**
-* **Private Key**
+### Enter Required Information
 
-Click **Save Configuration**, then **Refresh Fields** to sync schemas and validate access.
+* **Tenant Endpoint**: e.g. `https://yourcompany.connectwise.com` (or select from regional options)
+* **Company Name**: Your ConnectWise Site or Company ID
+* **Public Key**: The public API key generated in Step 2
+* **Private Key**: The private API key generated in Step 2  
+* **Client ID**: Your ConnectWise client application ID
 
-:::tip What “Refresh Fields” Does
-It pulls your ticket types, boards, statuses, configurations, and custom fields for use in documents.
+<!-- Screenshot: ConnectWise Configuration Form -->
+
+Click **Save Settings**, then **Test Connection** to validate access.
+
+:::tip What Testing the Connection Does
+It validates your credentials and pulls your ticket types, boards, statuses, configurations, and custom fields for use in documents.
 :::
 
 <br/>
 
-## Step 3: Generate Documents from ConnectWise
+## Step 4: Generate Documents from ConnectWise
 
 1. Open the **Document Generator** in TurboDocx
 2. Click **New Document**
@@ -164,15 +204,19 @@ It pulls your ticket types, boards, statuses, configurations, and custom fields 
 
 ## Troubleshooting
 
-### “Invalid Credentials” Error
+### "Invalid Credentials" Error
 
-* Check API keys, Company ID, and URL
+* Check API keys, Company Name (Site/Company ID), and Tenant Endpoint
 * Confirm role permissions and member status
+* Verify Client ID is correct
 
-### “No Records Found”
+### "Connection Failed" Error
 
-* Click **Refresh Fields**
+* Click **Test Connection** to verify settings
 * Ensure your PSA instance has data to access
+* Check that your tenant endpoint URL is correct
+
+<!-- Screenshot: Troubleshooting Connection Issues -->
 
 ### “Permission Denied”
 
@@ -203,6 +247,75 @@ You're ready to:
 
 :::tip Last Tip
 Clean ConnectWise data = clean, impressive documents. Keep your CRM tidy!
+:::
+
+---
+
+## Appendix: Permission Requirements Explained
+
+Understanding why TurboDocx requires specific Inquire permissions helps ensure proper setup and security compliance.
+
+### Company Permissions
+
+**Company Maintenance Contacts**
+- **Inquire** - Without this, TurboDocx can't query what companies exist for document generation
+
+**CRM/Sales Activities**
+- **Inquire** - Without this, TurboDocx can't access sales activity data for inclusion in reports and proposals
+
+**Manage Attachments**
+- **Inquire** - Required to access existing attachments for document templating
+
+**Notes**
+- **Inquire** - Allows TurboDocx to review company and contact notes for inclusion in generated documents
+
+### Finance Permissions
+
+**Agreements**
+- **Inquire** - Provides access to agreement data for generating contracts, SOWs, and billing documents
+
+**Billing View Time**
+- **Inquire** - Allows access to time tracking data for creating detailed billing reports and invoices
+
+### Project Management Permissions
+
+**Project Headers**
+- **Inquire** - Enables retrieval of project information for generating project documentation and status reports
+
+**Project Tickets**
+- **Inquire** - Provides access to project-related tickets for comprehensive project reporting
+
+### Sales Permissions
+
+**All Permissions**
+- **Inquire** - Comprehensive access to sales data enables generation of proposals, quotes, and sales reports
+
+### Service Desk Permissions
+
+**Service Tickets**
+- **Inquire** - Essential for accessing ticket data to generate service reports and client summaries
+
+**Resource Scheduling**
+- **Inquire** - Provides access to scheduling data for resource allocation reports
+
+**Close Service Tickets**
+- **Inquire** - Allows access to completed ticket data for historical reporting
+
+### System Permissions
+
+**Member Maintenance**
+- **Inquire** - Required to identify team members for assignment in generated documents
+
+**My Company**
+- **Inquire** - Provides access to company configuration and branding information for document customization
+
+### Time and Expense Permissions
+
+**Time Entry**
+- **Inquire** - Enables access to time tracking data for billing reports and project summaries
+
+:::note Security Note
+All permissions are set at the **Inquire** level to ensure TurboDocx operates with read-only access, maintaining data security while enabling document generation functionality.
 :::
 
 ---
