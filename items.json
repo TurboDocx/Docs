@@ -10,7 +10,13 @@
             "label": "Blogs",
             "position": "left",
             "prependBaseUrlToHref": true,
-            "href": "https://www.turbodocx.com/blog"
+            "href": "https://www.turbodocx.com/blog?utm_source=docs-site"
+        },
+        {
+            "label": "Labs (Beta)",
+            "position": "left",
+            "prependBaseUrlToHref": true,
+            "href": "https://labs.turbodocx.com?utm_source=docs-site"
         }
     ]
 }
