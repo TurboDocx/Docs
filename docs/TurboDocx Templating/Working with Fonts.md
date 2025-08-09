@@ -17,16 +17,16 @@ For documents that require specific fonts not included in TurboDocx's standard c
 
 #### Windows
 1. Open your template in Microsoft Word
-2. Go to **File → Options → Save**
+2. Go to **File → Options 
+![This is the image for clicking file -> options in Microsoft Word.](/img/embedding_fonts/FileOptions.png)
 
-<!-- insert screenshot -->
-
-3. Under "Preserve fidelity when sharing this document," check:
+3. Go to the **Save** tab
+4. Under "Preserve fidelity when sharing this document," check:
    - ✅ **Embed fonts in the file**
    - ✅ **Embed only the characters used in the document** (recommended for smaller file sizes)
    - ✅ **Do not embed common system fonts** (optional but recommended)
 
-<!-- insert screenshot -->
+![This is the image for clicking file -> options in microsoft Word.](/img/embedding_fonts/SaveandEmbedFontsInFile.png)
 
 4. Click **OK**
 5. Save your document
