@@ -111,12 +111,12 @@ const JsonToTable = ({ data, title, columns }) => {
                 {/* <Card className="query-table">
                   <CardHeader></CardHeader>
                   <CardContent> */}
-                    {decodedData && Object.keys(decodedData).length > 0 ? (
-                      renderTable(decodedData)
-                    ) : (
-                      <p></p>
-                    )}
-                  {/* </CardContent>
+                {decodedData && Object.keys(decodedData).length > 0 ? (
+                  renderTable(decodedData)
+                ) : (
+                  <p></p>
+                )}
+                {/* </CardContent>
                 </Card> */}
               </AccordionContent>
             </AccordionItem>

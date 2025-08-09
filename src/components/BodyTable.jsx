@@ -63,7 +63,7 @@ const JsonToTable = ({ data, title, columns }) => {
 
   const renderTable = (json, tableName = "Root") => {
     try {
-    } catch (e) {}
+    } catch (e) { }
     if (!json) return null;
 
     const nestedTables = [];
@@ -96,7 +96,7 @@ const JsonToTable = ({ data, title, columns }) => {
             <TableHeader>
               <TableRow>
                 {tableHeaderdata.map((item) => {
-                  return <TableHead>{item.name}</TableHead>;
+                  return <TableHead key={item.id}>{item.name}</TableHead>;
                 })}
               </TableRow>
             </TableHeader>
