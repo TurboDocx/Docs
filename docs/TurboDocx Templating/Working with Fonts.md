@@ -28,9 +28,9 @@ For documents that require specific fonts not included in TurboDocx's standard c
 
 ![This is the image for clicking file -> options in microsoft Word.](/img/embedding_fonts/SaveandEmbedFontsInFile.png)
 
-4. Click **OK**
-5. Save your document
-6. Upload the updated template to TurboDocx
+5. Click **OK**
+6. Save your document
+7. Upload the updated template to TurboDocx
 
 #### macOS  
 1. Open your template in Microsoft Word
@@ -38,8 +38,6 @@ For documents that require specific fonts not included in TurboDocx's standard c
 3. Under "Preserve fidelity when sharing this document," check:
    - ✅ **Embed fonts in the file**
    - ✅ **Embed only the characters used in the document** (recommended)
-
-<!-- insert screenshot -->
 
 4. Click **OK** 
 5. Save your document
@@ -49,16 +47,19 @@ For documents that require specific fonts not included in TurboDocx's standard c
 
 #### Windows
 1. Open your template in Microsoft PowerPoint
-2. Go to **File → Options → Save**
-3. Under "Preserve fidelity when sharing this presentation," check:
+2. Go to **File → Options**
+![This is the image for clicking file -> options in Microsoft PowerPoint.](/img/embedding_fonts/pptxFileOptions.png)
+
+3. Go to the **Save** Tab
+4. Under "Preserve fidelity when sharing this presentation," check:
    - ✅ **Embed fonts in the file**
    - ✅ **Embed only the characters used in the presentation**
 
-<!-- insert screenshot -->
+![This is the image for clicking file -> options in Microsoft PowerPoint.](/img/embedding_fonts/pptxSaveandEmbed.png)
 
-4. Click **OK**
-5. Save your presentation
-6. Upload the updated template to TurboDocx
+5. Click **OK**
+6. Save your presentation
+7. Upload the updated template to TurboDocx
 
 #### macOS
 1. Open your template in Microsoft PowerPoint  
