@@ -1,6 +1,6 @@
 ---
 title: How to Create a Knowledgebase Entry
-sidebar_position: 3
+sidebar_position: 5
 ---
 
 Congratulations on starting your first entry in the Knowledgebase. In this guide, we will show you how to create your first entry.

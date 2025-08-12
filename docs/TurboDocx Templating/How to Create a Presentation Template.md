@@ -1,6 +1,6 @@
 ---
 title: How to Create Presentation Templates
-sidebar_position: 2
+sidebar_position: 3
 description: Learn how to create PowerPoint presentation templates that automatically populate with content from meetings, CRM data, project management systems, and business integrations.
 keywords:
   - powerpoint template creation

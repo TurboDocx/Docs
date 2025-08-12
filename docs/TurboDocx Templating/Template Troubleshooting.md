@@ -1,6 +1,6 @@
 ---
 title: Template Troubleshooting
-sidebar_position: 4
+sidebar_position: 7
 ---
 
 # Template Troubleshooting
