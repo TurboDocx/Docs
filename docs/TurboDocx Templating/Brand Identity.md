@@ -7,7 +7,62 @@ keywords: [brand identity, colors, typography, fonts, logo, styling, templates, 
 
 # Brand Identity
 
+## Why Brand Identity Matters
+
+Your brand is one of your most valuable business assets. Whether you're a law firm, consulting agency, or enterprise organization, consistent branding across all client-facing documents:
+
+- **Builds trust and professionalism** - clients immediately recognize your materials
+- **Saves time and reduces errors** - eliminates manual formatting and brand guideline violations  
+- **Ensures compliance** - automatically enforces corporate brand standards across all teams
+- **Increases efficiency** - setup once, apply everywhere automatically
+
 TurboDocx's Brand Identity feature allows you to configure organization-wide branding settings that apply consistently across all your document templates. Unlike template-specific font embedding, Brand Identity creates tenant-wide standards for colors, typography, and styling that ensure brand consistency across all generated documents.
+
+## Prerequisites Checklist
+
+Before you begin, ensure you have:
+
+- [ ] **Organization administrator access** to your TurboDocx account
+- [ ] **Your organization logo** (PNG or JPG format, 200x200px or larger recommended)
+- [ ] **Brand color codes** (hex codes if you have them, or we'll extract from your logo)
+- [ ] **A few minutes** for initial setup 
+
+:::tip Ready to Start?
+If you just want to get up and running quickly, jump to the [Quick Start (5 minutes)](#quick-start-5-minutes) section below. You can always come back to customize further.
+:::
+
+## Quick Start
+
+**Goal**: Get your brand colors and basic styling applied across all documents quickly.
+
+### Step 1: Access Brand Settings
+1. Go to **Organization Settings** → **Formatting Settings**  
+2. You'll see the Brand Identity interface with upload, controls, and preview areas
+
+### Step 2: Upload Your Logo
+
+![Logo Upload Interface](/img/brandidentity/LogoUpload.png)
+
+1. Click **Upload Logo** and select your company logo
+2. Click **Save Changes** - TurboDocx will automatically extract your brand colors
+3. You should see extracted colors appear in the Brand Colors section
+
+### Step 3: Apply Quick Typography
+
+![Quick Setup Fonts](/img/brandidentity/QuickSetupFonts.png)
+
+1. In the **Quick Setup** section, choose a preset size:
+   - **Small**: Conservative, formal documents
+   - **Normal**: Balanced for most business use  
+   - **Large**: Bold, presentation-style
+2. Preview panel updates with your new heading sizes
+
+### 🎉 You're Done!
+Your brand identity is now active across all new documents. Existing templates will update to use your brand settings automatically.
+
+**Immediate value**: All new documents will now use your brand colors and consistent typography without any additional setup.
+
+---
 
 ## Overview
 
@@ -22,7 +77,19 @@ Brand Identity configuration includes:
 **Brand Identity** sets organization-wide styling standards, while **[Working with Fonts](./Working%20with%20Fonts.md)** covers embedding specific desktop fonts in individual templates.
 :::
 
-## Getting Started
+## Detailed Configuration (Optional)
+
+*Already completed the Quick Start? Skip to [What's Next](#whats-next) or continue here for advanced customization.*
+
+### Choose Your Configuration Approach
+
+**Option A: Automatic Setup** *(Recommended for most users)*
+- Upload logo → Let TurboDocx extract colors → Use presets
+- **Best for**: Quick deployment, consistent results
+
+**Option B: Manual Customization** *(For brand-specific requirements)*  
+- Custom color selection → Granular typography control → Advanced table styling
+- **Best for**: Strict brand guidelines, unique styling
 
 ### Accessing Brand Identity Settings
 
@@ -33,6 +100,8 @@ Brand Identity configuration includes:
    - Configuration controls (left side)
    - Live preview panel (right side)
 
+You can see the upload area and preview panel side-by-side
+
 ### Logo Upload & Save
 
 ![Logo Upload Interface](/img/brandidentity/LogoUpload.png)
@@ -41,11 +110,13 @@ Brand Identity configuration includes:
    - Click the **Upload Logo** button at the top of the page
    - Select your logo file (recommended formats: PNG, JPG)
    - Optimal size: 200x200px or larger for best results
+   - Logo preview appears in upload area
 
 2. **Save Changes**
    - After uploading, click **Save Changes** to apply the logo
    - TurboDocx will automatically analyze your logo to extract brand colors
    - The extraction process may take a few moments
+   - Brand colors appear automatically in the Brand Colors section below
 
 :::tip Logo Tips
 - Use high-resolution logos for better color extraction
@@ -62,13 +133,14 @@ Brand Identity configuration includes:
 Once you upload your logo, TurboDocx automatically extracts your brand's primary colors:
 
 - **Primary Color**: The dominant color from your logo
-- **Secondary Color**: The most prominent accent color
+- **Secondary Color**: The most prominent accent color  
 - **Additional Colors**: Supporting colors found in your logo
 
 The extracted colors appear in the **Brand Colors** section on the left-hand side of the interface.
 
 ### Manual Color Override
 
+**When to customize**: Your extracted colors don't match your brand guidelines exactly, or you need specific hex codes.
 
 You can customize any extracted color:
 
@@ -81,14 +153,16 @@ You can customize any extracted color:
 2. **Color Guidelines**
    - Ensure sufficient contrast between text and background colors
    - Test colors across different document types in the preview
+   - Text remains clearly readable in preview panel
 
 ### Using the Preview Panel
 
-
 The **Preview Panel** on the right-hand side shows:
 - **Real-time Updates**: Changes appear instantly as you modify colors
-- **Document Samples**: See how colors look in actual document layouts
+- **Document Samples**: See how colors look in actual document layouts  
 - **Different Elements**: Preview headings, body text, tables, and other components
+
+Preview panel shows your colors applied to sample document content
 
 ## Typography & Font Configuration
 
@@ -97,14 +171,16 @@ The **Preview Panel** on the right-hand side shows:
 For rapid configuration, use the **Quick Setup** presets:
 
 1. **Preset Sizes** for Headings 1–3:
-   - **Small**: Conservative sizing for formal documents
-   - **Normal**: Balanced sizing for most use cases
-   - **Large**: Bold sizing for impactful presentations
+   - **Small**: Conservative sizing for formal documents (H1: 16pt, H2: 14pt, H3: 12pt)
+   - **Normal**: Balanced sizing for most use cases (H1: 18pt, H2: 16pt, H3: 14pt)
+   - **Large**: Bold sizing for impactful presentations (H1: 22pt, H2: 18pt, H3: 16pt)
 
 2. **Apply Presets**:
    - Select your preferred preset
-   - Changes apply immediately to H1, H2, and H3 headings
+   - Changes apply immediately to H1, H2, and H3 headings in preview panel
    - You can still make granular adjustments afterward
+
+**Stop here if**: You're satisfied with the preset sizes and want to keep setup simple.
 
 ### Granular Typography Adjustments
 
@@ -192,24 +268,60 @@ Your Brand Identity settings automatically apply to:
 - **Existing Templates**: Update existing templates to use brand settings
 - **Generated Documents**: All output maintains brand consistency
 
+## What's Next?
+
+Now that your Brand Identity is configured, here's how to put it to work:
+
+### Immediate Next Steps
+1. **Test with existing templates** - Generate a document from an existing template to see your branding applied
+2. **Create your first branded template** - Follow our [How to Create a Template](./How%20to%20Create%20a%20Template.md) guide
+3. **Set up team access** - Ensure team members have appropriate permissions to use templates
+
+### Building Your Document Workflow
+- **Templates**: Your brand settings automatically apply to all new and existing templates  
+- **Deliverables**: Every generated document will use your brand identity consistently
+- **Knowledge Base**: Combine with [knowledge base entries](./How%20to%20Create%20a%20Knowledgebase%20Entry.md) for fully automated, branded documents
+
+### Integration Opportunities
+- **Salesforce Integration**: Branded proposals generated directly from CRM data
+- **Teams/Zoom Integration**: Consistent meeting follow-ups and reports
+- **Document Library**: Build a library of branded templates for different use cases
+
+:::tip Pro Tip
+Start with 2-3 core templates (proposal, report, letter) to see immediate value, then expand your template library as needed.
+:::
+
 ## Troubleshooting
 
-### Common Issues
+### Problem: Logo Won't Upload
 
-**Logo Upload Problems:**
-- **File Size**: Ensure logo files are under 5MB
-- **Format Support**: Use PNG or JPG formats. 
-- **Resolution**: Higher resolution images provide better color extraction
+**Is your file under 5MB?**
+- ❌ **No**: Compress your logo file or use a smaller version
+- ✅ **Yes**: Continue to format check
 
-**Color Extraction Issues:**
-- **Low Contrast Logos**: May not extract distinct colors - use manual override
-- **Monochrome Logos**: Will extract limited color palette - add colors manually
-- **Complex Logos**: May extract too many colors - simplify by manual selection
+**Is your file PNG or JPG format?**
+- ❌ **No**: Convert your logo to PNG or JPG format
+- ✅ **Yes**: Check image resolution (should be 200x200px or larger)
 
-**Preview Discrepancies:**
-- **Browser Caching**: Refresh the page if changes don't appear
-- **Color Profile**: Ensure your monitor displays colors accurately
-- **Print vs. Screen**: Colors may appear differently in printed documents
+### Problem: Colors Aren't Extracting Well
+
+**Does your logo have multiple distinct colors?**
+- ❌ **No (monochrome/single color)**: Use manual color override to add your brand colors
+- ✅ **Yes**: Continue to contrast check
+
+**Are colors in your logo high contrast?**
+- ❌ **No (subtle/low contrast)**: Use manual color override for better results
+- ✅ **Yes**: Try a higher resolution logo or manual override specific colors
+
+### Problem: Changes Not Appearing
+
+**Are changes showing in the preview panel?**
+- ❌ **No**: Refresh the page and try again
+- ✅ **Yes**: Changes may take a few minutes to apply to generated documents
+
+**Did you click "Save Changes"?**
+- ❌ **No**: Click Save Changes to apply your brand settings
+- ✅ **Yes**: Generate a test document to verify settings are applied
 
 ### Template Application Issues
 
