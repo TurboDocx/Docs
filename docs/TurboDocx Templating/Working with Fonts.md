@@ -1,6 +1,6 @@
 ---
 title: Working with Fonts
-sidebar_position: 15
+sidebar_position: 16
 description: Learn about TurboDocx font support and how to embed custom fonts in your document templates.
 keywords: [fonts, typography, embedding fonts, docx, pptx, templates]
 ---
