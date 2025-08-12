@@ -1,6 +1,6 @@
 ---
 title: How to Create Document Templates
-sidebar_position: 1
+sidebar_position: 2
 description: Learn how to create document templates for proposals, statements of work, quotes, and contracts that automatically populate with data from meetings, CRM systems, and business integrations.
 keywords:
   - document template creation

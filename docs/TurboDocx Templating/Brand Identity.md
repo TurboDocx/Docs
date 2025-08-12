@@ -1,6 +1,6 @@
 ---
 title: Brand Identity
-sidebar_position: 14
+sidebar_position: 1
 description: Configure your organization's brand identity including colors, typography, and styling for consistent document generation.
 keywords: [brand identity, colors, typography, fonts, logo, styling, templates, organization branding]
 ---
