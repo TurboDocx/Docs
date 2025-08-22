@@ -10,10 +10,10 @@ import landingJson from '../../landing.json'
 import Landing from "./_landing_page.md"
 import styles from './index.module.css';
 import Parser from '../components/Parser';
-import {Redirect} from '@docusaurus/router';
+import { Redirect } from '@docusaurus/router';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
@@ -32,7 +32,7 @@ function HomepageHeader() {
 }
 
 export default function Home(): JSX.Element {
-  const {siteConfig} = useDocusaurusContext()
+  const { siteConfig } = useDocusaurusContext()
   const data = landingJson
   return (
     <Redirect to="/docs" />

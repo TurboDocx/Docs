@@ -1,11 +1,11 @@
 .theme-api-markdown {
-display: flex;
-flex-direction: column;
+    display: flex;
+    flex-direction: column;
 
 
 }
 
-#__docusaurus_skipToContent_fallback > div > main > div > div > div > div > div {
+#__docusaurus_skipToContent_fallback>div>main>div>div>div>div>div {
     max-width: none !important;
 }
 
@@ -39,10 +39,27 @@ flex-direction: column;
     .tracing-beam {
         display: none;
     }
+
     .col--7 {
-        max-width: unset;
+        width: 100% !important;
     }
-  }
+}
+
+.col.col--7 {
+    --ifm-col-width: 100% !important;
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+}
+
+/* More specific targeting if the above doesn't work */
+.docItemContainer_jff .col.col--7,
+[class*="api"] .col.col--7,
+.api-method .col.col--7 {
+    --ifm-col-width: 100% !important;
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
 
 .body-cards {
     .bg-card {
@@ -51,7 +68,7 @@ flex-direction: column;
         overflow-x: scroll;
     }
 }
-  
+
 .headers-card {
     justify-content: center;
     display: flex;
@@ -59,15 +76,15 @@ flex-direction: column;
 }
 
 .openapi-tabs__code-container:not(.openapi-tabs__code-container-inner) {
-    background-color: hsl(var(--card))!important;
+    background-color: hsl(var(--card)) !important;
 }
 
 .openapi-explorer__request-form {
-    background-color: hsl(var(--card))!important;
+    background-color: hsl(var(--card)) !important;
 }
 
 .openapi-explorer__response-container {
-    background-color: hsl(var(--card))!important;
+    background-color: hsl(var(--card)) !important;
 }
 
 .query-table {
@@ -76,6 +93,4 @@ flex-direction: column;
     padding-top: 2em !important;
 }
 
-.col--7 {
-
-}
+.col--7 {}
