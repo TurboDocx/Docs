@@ -1,100 +1,140 @@
-# TurboDocx Webhook Verification PowerShell Script
+# TurboDocx Webhook Verification PowerShell Script - Functional Approach
 
-# WebhookVerifier class for handling webhook verification
-class WebhookVerifier {
-    [string]$Secret
+# Verifies the webhook signature
+function Test-TurboDocxWebhookSignature {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Signature,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Timestamp,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Body,
+        
+        [Parameter(Mandatory=$true)]
+        [string]$Secret
+    )
     
-    WebhookVerifier([string]$secret) {
-        $this.Secret = $secret
+    if ([string]::IsNullOrEmpty($Signature) -or [string]::IsNullOrEmpty($Timestamp)) {
+        return $false
     }
     
-    # Verifies the webhook signature
-    [bool] VerifySignature([string]$signature, [string]$timestamp, [string]$body) {
-        if ([string]::IsNullOrEmpty($signature) -or [string]::IsNullOrEmpty($timestamp)) {
+    # Check timestamp is within 5 minutes
+    try {
+        $currentTime = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+        $webhookTime = [int64]$Timestamp
+        
+        if ([Math]::Abs($currentTime - $webhookTime) -gt 300) {
+            Write-Warning "Webhook timestamp too old or too far in future"
             return $false
         }
-        
-        # Check timestamp is within 5 minutes
-        try {
-            $currentTime = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-            $webhookTime = [int64]$timestamp
-            
-            if ([Math]::Abs($currentTime - $webhookTime) -gt 300) {
-                Write-Warning "Webhook timestamp too old or too far in future"
-                return $false
-            }
-        }
-        catch {
-            Write-Error "Invalid timestamp format: $_"
-            return $false
-        }
-        
-        # Generate expected signature
-        $signedString = "$timestamp.$body"
-        $expectedSignature = "sha256=" + $this.ComputeHMAC($signedString)
-        
-        # Timing-safe comparison (PowerShell doesn't have built-in timing-safe comparison)
-        return $this.SecureCompare($signature, $expectedSignature)
+    }
+    catch {
+        Write-Error "Invalid timestamp format: $_"
+        return $false
     }
     
-    # Computes HMAC-SHA256 for the given data
-    [string] ComputeHMAC([string]$data) {
-        $hmacSha256 = New-Object System.Security.Cryptography.HMACSHA256
-        $hmacSha256.Key = [System.Text.Encoding]::UTF8.GetBytes($this.Secret)
+    # Generate expected signature
+    $signedString = "$Timestamp.$Body"
+    $expectedSignature = "sha256=" + (Get-TurboDocxHMAC -Data $signedString -Secret $Secret)
+    
+    # Timing-safe comparison
+    return Compare-SecureString -StringA $Signature -StringB $expectedSignature
+}
+
+# Computes HMAC-SHA256 for the given data
+function Get-TurboDocxHMAC {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Data,
         
-        $dataBytes = [System.Text.Encoding]::UTF8.GetBytes($data)
-        $hashBytes = $hmacSha256.ComputeHash($dataBytes)
+        [Parameter(Mandatory=$true)]
+        [string]$Secret
+    )
+    
+    $hmacSha256 = New-Object System.Security.Cryptography.HMACSHA256
+    $hmacSha256.Key = [System.Text.Encoding]::UTF8.GetBytes($Secret)
+    
+    $dataBytes = [System.Text.Encoding]::UTF8.GetBytes($Data)
+    $hashBytes = $hmacSha256.ComputeHash($dataBytes)
+    
+    $hmacSha256.Dispose()
+    
+    return [System.BitConverter]::ToString($hashBytes).Replace("-", "").ToLower()
+}
+
+# Timing-safe string comparison (basic implementation)
+function Compare-SecureString {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$StringA,
         
-        $hmacSha256.Dispose()
-        
-        return [System.BitConverter]::ToString($hashBytes).Replace("-", "").ToLower()
+        [Parameter(Mandatory=$true)]
+        [string]$StringB
+    )
+    
+    if ($StringA.Length -ne $StringB.Length) {
+        return $false
     }
     
-    # Timing-safe string comparison (basic implementation)
-    [bool] SecureCompare([string]$a, [string]$b) {
-        if ($a.Length -ne $b.Length) {
-            return $false
+    $result = 0
+    for ($i = 0; $i -lt $StringA.Length; $i++) {
+        $result = $result -bor ($StringA[$i] -bxor $StringB[$i])
+    }
+    
+    return $result -eq 0
+}
+
+# Process webhook event payload
+function Invoke-TurboDocxWebhookEvent {
+    param(
+        [Parameter(Mandatory=$true)]
+        [hashtable]$Payload
+    )
+    
+    $eventType = $Payload.event
+    Write-Host "Received event: $eventType" -ForegroundColor Green
+    
+    switch ($eventType) {
+        "signature.document.completed" {
+            Invoke-DocumentCompleted -Data $Payload.data
         }
-        
-        $result = 0
-        for ($i = 0; $i -lt $a.Length; $i++) {
-            $result = $result -bor ($a[$i] -bxor $b[$i])
+        "signature.document.voided" {
+            Invoke-DocumentVoided -Data $Payload.data
         }
-        
-        return $result -eq 0
-    }
-    
-    # Process webhook event payload
-    [void] ProcessEvent([hashtable]$payload) {
-        $eventType = $payload.event
-        Write-Host "Received event: $eventType" -ForegroundColor Green
-        
-        switch ($eventType) {
-            "signature.document.completed" {
-                $this.HandleDocumentCompleted($payload.data)
-            }
-            "signature.document.voided" {
-                $this.HandleDocumentVoided($payload.data)
-            }
-            default {
-                Write-Warning "Unknown event type: $eventType"
-            }
+        default {
+            Write-Warning "Unknown event type: $eventType"
         }
     }
+}
+
+# Handle document completion event
+function Invoke-DocumentCompleted {
+    param(
+        [Parameter(Mandatory=$true)]
+        [hashtable]$Data
+    )
     
-    [void] HandleDocumentCompleted([hashtable]$data) {
-        $documentId = if ($data.documentId) { $data.documentId } else { "unknown" }
-        Write-Host "Document completed: $documentId" -ForegroundColor Cyan
-        
-        # Add your completion logic here
-    }
+    $documentId = if ($Data.documentId) { $Data.documentId } else { "unknown" }
+    Write-Host "Document completed: $documentId" -ForegroundColor Cyan
     
-    [void] HandleDocumentVoided([hashtable]$data) {
-        $documentId = if ($data.documentId) { $data.documentId } else { "unknown" }
-        Write-Host "Document voided: $documentId" -ForegroundColor Yellow
-        
-        # Add your void logic here
-    }
+    # Add your completion logic here
+    # Example: Send email, update database, trigger workflow
+}
+
+# Handle document voided event
+function Invoke-DocumentVoided {
+    param(
+        [Parameter(Mandatory=$true)]
+        [hashtable]$Data
+    )
+    
+    $documentId = if ($Data.documentId) { $Data.documentId } else { "unknown" }
+    Write-Host "Document voided: $documentId" -ForegroundColor Yellow
+    
+    # Add your void logic here
+    # Example: Update status, send notifications
 }
 
 # Function to handle webhook request (for use with PowerShell Universal or other web frameworks)
@@ -111,15 +151,13 @@ function Invoke-WebhookHandler {
     )
     
     try {
-        # Create verifier
-        $verifier = [WebhookVerifier]::new($WebhookSecret)
         
         # Get signature and timestamp from headers
         $signature = $Headers['X-TurboDocx-Signature']
         $timestamp = $Headers['X-TurboDocx-Timestamp']
         
         # Verify signature
-        if (-not $verifier.VerifySignature($signature, $timestamp, $Body)) {
+        if (-not (Test-TurboDocxWebhookSignature -Signature $signature -Timestamp $timestamp -Body $Body -Secret $WebhookSecret)) {
             Write-Warning "Webhook signature verification failed"
             return @{ StatusCode = 401; Body = "Unauthorized" }
         }
@@ -134,7 +172,7 @@ function Invoke-WebhookHandler {
         }
         
         # Process the event
-        $verifier.ProcessEvent($payload)
+        Invoke-TurboDocxWebhookEvent -Payload $payload
         
         # Return success
         return @{ StatusCode = 200; Body = "OK" }
@@ -177,22 +215,21 @@ function Test-WebhookVerification {
     Write-Host "Testing webhook verification..." -ForegroundColor Magenta
     
     # Create test data
-    $verifier = [WebhookVerifier]::new($WebhookSecret)
     $timestamp = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds().ToString()
     $body = '{"event":"signature.document.completed","data":{"documentId":"doc123"}}'
     
     # Generate signature for testing
     $signedString = "$timestamp.$body"
-    $signature = "sha256=" + $verifier.ComputeHMAC($signedString)
+    $signature = "sha256=" + (Get-TurboDocxHMAC -Data $signedString -Secret $WebhookSecret)
     
     # Test verification
-    $result = $verifier.VerifySignature($signature, $timestamp, $body)
+    $result = Test-TurboDocxWebhookSignature -Signature $signature -Timestamp $timestamp -Body $body -Secret $WebhookSecret
     Write-Host "Verification result: $result" -ForegroundColor $(if ($result) { "Green" } else { "Red" })
     
     if ($result) {
         # Test event processing
         $payload = $body | ConvertFrom-Json -AsHashtable
-        $verifier.ProcessEvent($payload)
+        Invoke-TurboDocxWebhookEvent -Payload $payload
     }
     
     return $result
