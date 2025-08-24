@@ -9,7 +9,7 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
   useEffect(() => {
     const loadScripts = async () => {
       try {
-        const languages = ['nodejs', 'python', 'php', 'csharp', 'java'];
+        const languages = ['nodejs', 'python', 'php', 'csharp', 'java', 'go', 'ruby', 'powershell'];
         const loadedScripts = {};
 
         for (const lang of languages) {
@@ -40,7 +40,10 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
       python: 'py',
       php: 'php',
       csharp: 'cs',
-      java: 'java'
+      java: 'java',
+      go: 'go',
+      ruby: 'rb',
+      powershell: 'ps1'
     };
     return extensions[lang] || 'txt';
   };
@@ -51,7 +54,10 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
       python: 'Python',
       php: 'PHP',
       csharp: 'C#',
-      java: 'Java'
+      java: 'Java',
+      go: 'Go',
+      ruby: 'Ruby',
+      powershell: 'PowerShell'
     };
     return labels[lang] || lang;
   };
@@ -62,7 +68,10 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
       python: 'python',
       php: 'php',
       csharp: 'csharp',
-      java: 'java'
+      java: 'java',
+      go: 'go',
+      ruby: 'ruby',
+      powershell: 'powershell'
     };
     return mappings[lang] || lang;
   };
