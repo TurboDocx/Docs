@@ -11,27 +11,20 @@ using System.Threading.Tasks;
 
 namespace TurboDocx.Webhooks
 {
-    public class WebhookVerificationService
+    // Functional webhook verification methods
+    public static class WebhookVerification
     {
-        private readonly string _webhookSecret;
-        private readonly ILogger<WebhookVerificationService> _logger;
-
-        public WebhookVerificationService(string webhookSecret, ILogger<WebhookVerificationService> logger = null)
-        {
-            _webhookSecret = webhookSecret ?? throw new ArgumentNullException(nameof(webhookSecret));
-            _logger = logger;
-        }
-
         /// <summary>
         /// Verifies a TurboDocx webhook signature
         /// </summary>
         /// <param name="signature">X-TurboDocx-Signature header value</param>
         /// <param name="timestamp">X-TurboDocx-Timestamp header value</param>
         /// <param name="body">Raw request body</param>
+        /// <param name="secret">Webhook secret</param>
         /// <returns>True if signature is valid</returns>
-        public bool VerifySignature(string signature, string timestamp, string body)
+        public static bool VerifySignature(string signature, string timestamp, string body, string secret)
         {
-            if (string.IsNullOrEmpty(signature) || string.IsNullOrEmpty(timestamp) || body == null)
+            if (string.IsNullOrEmpty(signature) || string.IsNullOrEmpty(timestamp) || body == null || string.IsNullOrEmpty(secret))
                 return false;
 
             // Check timestamp is within 5 minutes
@@ -44,7 +37,7 @@ namespace TurboDocx.Webhooks
 
             // Generate expected signature
             var signedString = $"{timestamp}.{body}";
-            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_webhookSecret));
+            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
             var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(signedString));
             var expectedSignature = $"sha256={BitConverter.ToString(hash).Replace("-", "").ToLower()}";
 
@@ -58,56 +51,67 @@ namespace TurboDocx.Webhooks
         /// <summary>
         /// Process webhook event payload
         /// </summary>
-        /// <param name="payload">The webhook payload</param>
-        public async Task ProcessEventAsync(WebhookPayload payload)
+        /// <param name="eventType">The event type</param>
+        /// <param name="data">Event data</param>
+        /// <param name="logger">Optional logger</param>
+        public static async Task ProcessEventAsync(string eventType, JsonElement data, ILogger logger = null)
         {
-            _logger?.LogInformation("Received event: {EventType}", payload.Event);
+            logger?.LogInformation("Received event: {EventType}", eventType);
 
-            switch (payload.Event)
+            switch (eventType)
             {
                 case "signature.document.completed":
-                    await HandleDocumentCompletedAsync(payload.Data);
+                    await HandleDocumentCompletedAsync(data, logger);
                     break;
 
                 case "signature.document.voided":
-                    await HandleDocumentVoidedAsync(payload.Data);
+                    await HandleDocumentVoidedAsync(data, logger);
                     break;
 
                 default:
-                    _logger?.LogWarning("Unknown event type: {EventType}", payload.Event);
+                    logger?.LogWarning("Unknown event type: {EventType}", eventType);
                     break;
             }
         }
 
-        private async Task HandleDocumentCompletedAsync(JsonElement data)
+        private static async Task HandleDocumentCompletedAsync(JsonElement data, ILogger logger)
         {
-            var documentId = data.GetProperty("documentId").GetString();
-            _logger?.LogInformation("Document completed: {DocumentId}", documentId);
+            var documentId = data.TryGetProperty("documentId", out var idProp) ? idProp.GetString() : "unknown";
+            logger?.LogInformation("Document completed: {DocumentId}", documentId);
             
             // Add your completion logic here
             await Task.CompletedTask;
         }
 
-        private async Task HandleDocumentVoidedAsync(JsonElement data)
+        private static async Task HandleDocumentVoidedAsync(JsonElement data, ILogger logger)
         {
-            var documentId = data.GetProperty("documentId").GetString();
-            _logger?.LogInformation("Document voided: {DocumentId}", documentId);
+            var documentId = data.TryGetProperty("documentId", out var idProp) ? idProp.GetString() : "unknown";
+            logger?.LogInformation("Document voided: {DocumentId}", documentId);
             
             // Add your void logic here
             await Task.CompletedTask;
         }
     }
 
+    // Simple webhook payload structure
+    public struct WebhookPayload
+    {
+        public string Event { get; set; }
+        public JsonElement Data { get; set; }
+        public string Timestamp { get; set; }
+    }
+
+    // Functional webhook handler for ASP.NET Core
     [ApiController]
     [Route("api/[controller]")]
     public class WebhookController : ControllerBase
     {
-        private readonly WebhookVerificationService _verificationService;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<WebhookController> _logger;
 
-        public WebhookController(WebhookVerificationService verificationService, ILogger<WebhookController> logger)
+        public WebhookController(IConfiguration configuration, ILogger<WebhookController> logger)
         {
-            _verificationService = verificationService;
+            _configuration = configuration;
             _logger = logger;
         }
 
@@ -116,6 +120,10 @@ namespace TurboDocx.Webhooks
         {
             try
             {
+                var webhookSecret = _configuration["TurboDocx:WebhookSecret"] ?? 
+                                   _configuration["WEBHOOK_SECRET"] ?? 
+                                   throw new InvalidOperationException("Webhook secret not configured");
+
                 // Get headers
                 var signature = Request.Headers["X-TurboDocx-Signature"].FirstOrDefault();
                 var timestamp = Request.Headers["X-TurboDocx-Timestamp"].FirstOrDefault();
@@ -125,7 +133,7 @@ namespace TurboDocx.Webhooks
                 var body = await reader.ReadToEndAsync();
 
                 // Verify signature
-                if (!_verificationService.VerifySignature(signature, timestamp, body))
+                if (!WebhookVerification.VerifySignature(signature, timestamp, body, webhookSecret))
                 {
                     _logger.LogWarning("Webhook signature verification failed");
                     return Unauthorized();
@@ -133,7 +141,7 @@ namespace TurboDocx.Webhooks
 
                 // Parse and process webhook
                 var payload = JsonSerializer.Deserialize<WebhookPayload>(body);
-                await _verificationService.ProcessEventAsync(payload);
+                await WebhookVerification.ProcessEventAsync(payload.Event, payload.Data, _logger);
 
                 return Ok();
             }
@@ -150,25 +158,47 @@ namespace TurboDocx.Webhooks
         }
     }
 
-    public class WebhookPayload
+    // Minimal setup helper functions
+    public static class WebhookSetup
     {
-        public string Event { get; set; }
-        public JsonElement Data { get; set; }
-        public string Timestamp { get; set; }
-    }
-
-    // Extension methods for DI setup
-    public static class ServiceCollectionExtensions
-    {
-        public static IServiceCollection AddTurboDocxWebhooks(this IServiceCollection services, IConfiguration configuration)
+        /// <summary>
+        /// Simple webhook handler function for minimal APIs or Azure Functions
+        /// </summary>
+        public static async Task<IResult> HandleWebhookRequest(HttpRequest request, string webhookSecret, ILogger logger = null)
         {
-            var webhookSecret = configuration["TurboDocx:WebhookSecret"] ?? 
-                              throw new InvalidOperationException("Webhook secret not configured");
+            try
+            {
+                // Get headers
+                var signature = request.Headers["X-TurboDocx-Signature"].FirstOrDefault();
+                var timestamp = request.Headers["X-TurboDocx-Timestamp"].FirstOrDefault();
 
-            services.AddScoped(provider => 
-                new WebhookVerificationService(webhookSecret, provider.GetService<ILogger<WebhookVerificationService>>()));
+                // Read body
+                using var reader = new StreamReader(request.Body);
+                var body = await reader.ReadToEndAsync();
 
-            return services;
+                // Verify signature
+                if (!WebhookVerification.VerifySignature(signature, timestamp, body, webhookSecret))
+                {
+                    logger?.LogWarning("Webhook signature verification failed");
+                    return Results.Unauthorized();
+                }
+
+                // Parse and process
+                var payload = JsonSerializer.Deserialize<WebhookPayload>(body);
+                await WebhookVerification.ProcessEventAsync(payload.Event, payload.Data, logger);
+
+                return Results.Ok("OK");
+            }
+            catch (JsonException ex)
+            {
+                logger?.LogError(ex, "Invalid JSON payload");
+                return Results.BadRequest("Invalid payload");
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "Error processing webhook");
+                return Results.Problem("Internal server error");
+            }
         }
     }
 }
