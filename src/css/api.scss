@@ -76,6 +76,40 @@ flex-direction: column;
     padding-top: 2em !important;
 }
 
+// Make webhook code sections larger and more readable
+.openapi-explorer__code-block-container {
+    min-height: 600px !important;
+    max-height: 800px !important;
+    
+    .openapi-explorer__code-block {
+        min-height: 600px !important;
+        max-height: 800px !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+    
+    .prism-code {
+        min-height: 600px !important;
+        max-height: 800px !important;
+        padding: 1.5rem !important;
+    }
+}
+
+// Make subtabs wider to prevent text wrapping
+.openapi-tabs__code-container-inner {
+    .tabs__item {
+        min-width: 120px !important;
+        padding: 0.75rem 1.5rem !important;
+        text-align: center;
+        white-space: nowrap;
+        
+        span {
+            font-weight: 500;
+            font-size: 13px;
+        }
+    }
+}
+
 .col--7 {
 
 }
