@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import ApiTabs from "@theme/ApiTabs";
 import ResponseSamples from "@theme/ResponseSamples";
 
 const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) => {
   const [scripts, setScripts] = useState({});
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState(null);
 
   useEffect(() => {
     const loadScripts = async () => {
@@ -24,6 +24,11 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
         }
 
         setScripts(loadedScripts);
+        // Set the first available language as the active tab
+        const firstLang = Object.keys(loadedScripts)[0];
+        if (firstLang) {
+          setActiveTab(firstLang);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Failed to load scripts:', error);
@@ -85,17 +90,37 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
     return <div>No code examples available.</div>;
   }
 
+  if (!activeTab) {
+    return <div>Loading code examples...</div>;
+  }
+
   return (
-    <ApiTabs id={id} label={label}>
-      {scriptEntries.map(([lang, code]) => (
-        <div key={lang} value={lang} label={getLanguageLabel(lang)}>
-          <ResponseSamples
-            language={getLanguageForHighlighting(lang)}
-            responseExample={code}
-          />
+    <div className="tabs-container openapi-tabs__code-container">
+      <ul role="tablist" aria-orientation="horizontal" className="tabs openapi-tabs__code-list-container">
+        {scriptEntries.map(([lang, code]) => (
+          <li 
+            key={lang}
+            role="tab" 
+            tabIndex={lang === activeTab ? 0 : -1}
+            aria-selected={lang === activeTab}
+            className={`tabs__item openapi-tabs__code-item openapi-tabs__code-item--${lang} ${lang === activeTab ? 'active' : ''}`}
+            onClick={() => setActiveTab(lang)}
+          >
+            <span>{getLanguageLabel(lang)}</span>
+          </li>
+        ))}
+      </ul>
+      <div role="tabpanel" className="margin-top--md">
+        <div className={`openapi-explorer__code-block-container openapi-explorer__code-block language-${getLanguageForHighlighting(activeTab)} theme-code-block`}>
+          <div className="openapi-explorer__code-block-content">
+            <ResponseSamples
+              language={getLanguageForHighlighting(activeTab)}
+              responseExample={scripts[activeTab]}
+            />
+          </div>
         </div>
-      ))}
-    </ApiTabs>
+      </div>
+    </div>
   );
 };
 
