@@ -31,6 +31,8 @@ keywords:
 
 Webhooks enable your application to receive real-time notifications when important events occur in TurboSign. Instead of polling for changes, webhooks push event data to your specified endpoints immediately when signature documents are completed or voided.
 
+![Get It Signed button on TurboDocx homepage](/img/webhooks/webhook-schema.png)
+
 ## Overview
 
 TurboSign webhooks provide a robust and secure way to integrate document signature events into your existing workflows. When configured, webhooks will automatically send HTTP POST requests to your specified URLs whenever subscribed events occur.
@@ -50,22 +52,21 @@ TurboSign webhooks provide a robust and secure way to integrate document signatu
 
 Webhooks can be configured through the TurboSign interface in your organization settings.
 
-<!-- TODO: Add screenshot of Organization Settings navigation -->
-<!-- Screenshot placeholder: Organization settings menu with webhook option highlighted -->
+1. **Go to the Turbodocx Home Page and click on settings**
+   - click on the settings on the sidemenu
+
+![Get It Signed button on TurboDocx homepage](/img/webhooks/home-page.png)
 
 1. **Navigate to Organization Settings**
-   - Click on your organization name in the top navigation
-   - Select "Organization Settings" from the dropdown
+   - Select "Organization Settings" from the tabs
 
-<!-- TODO: Add screenshot of Webhook Configuration button -->
-<!-- Screenshot placeholder: TurboSign settings page showing "Configure Webhooks" button -->
+![Get It Signed button on TurboDocx homepage](/img/webhooks/organization-setting.png)
 
-2. **Open Webhook Configuration**
-   - In the TurboSign section, click "Configure Webhooks"
-   - The webhook configuration dialog will open
+2. **Scroll Down to Signature Configuration**
 
-<!-- TODO: Add screenshot of Webhook Configuration Dialog -->
-<!-- Screenshot placeholder: Empty webhook configuration dialog showing URL input and event selection -->
+   - click "Configure Webhooks"
+
+![Get It Signed button on TurboDocx homepage](/img/webhooks/core-features-section.png)
 
 3. **Add Webhook URLs**
    - Enter your webhook endpoint URL(s)
@@ -73,24 +74,22 @@ Webhooks can be configured through the TurboSign interface in your organization 
    - Each URL will receive all subscribed events
    - URLs must use HTTPS for production environments
 
-<!-- TODO: Add screenshot of adding multiple webhook URLs -->
-<!-- Screenshot placeholder: Dialog showing multiple webhook URL inputs with add/remove buttons -->
+![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
 
 4. **Select Events to Subscribe**
    - Choose which events should trigger webhooks:
      - **Signature Document Completed**: Triggered when all signers have completed signing
      - **Signature Document Voided**: Triggered when a document is voided/cancelled
 
-<!-- TODO: Add screenshot of event selection checkboxes -->
-<!-- Screenshot placeholder: Event subscription checkboxes with both events selected -->
+![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
 
 5. **Save Configuration**
    - Click "Save Configuration" to activate your webhooks
    - Your webhook secret key will be displayed (only shown once for new configurations)
    - **Important**: Copy and securely store your webhook secret - it won't be shown again
 
-<!-- TODO: Add screenshot of successful configuration with secret key -->
-<!-- Screenshot placeholder: Success message showing webhook secret key with copy button -->
+![Get It Signed button on TurboDocx homepage](/img/webhooks/dill-signature-webhook-config.png)
+![Get It Signed button on TurboDocx homepage](/img/webhooks/copy-webhook-secret.png)
 
 ### Managing Webhook Configuration
 
@@ -98,14 +97,13 @@ Webhooks can be configured through the TurboSign interface in your organization 
 
 The Delivery History tab shows all webhook delivery attempts with detailed information:
 
-<!-- TODO: Add screenshot of Delivery History tab -->
-<!-- Screenshot placeholder: Delivery history table showing successful and failed deliveries -->
-
 - **Event Type**: The type of event that triggered the webhook
 - **HTTP Status**: Response status code from your endpoint
 - **Attempts**: Number of delivery attempts made
 - **Timestamps**: When the webhook was created and last updated
 - **Actions**: View details or replay failed deliveries
+
+![Get It Signed button on TurboDocx homepage](/img/webhooks/delivery-history.png)
 
 #### Webhook Secret Management
 
@@ -114,10 +112,9 @@ Your webhook secret is used to verify that webhooks are genuinely from TurboDocx
 - **Initial Generation**: A secret is automatically generated when you create a webhook configuration
 - **Security**: The secret is only shown in full immediately after generation or regeneration
 - **Regeneration**: You can regenerate the secret at any time if compromised
-- **Display**: After initial viewing, only a masked version (first 3 + *** + last 3 characters) is shown
+- **Display**: After initial viewing, only a masked version (first 3 + \*\*\* + last 3 characters) is shown
 
-<!-- TODO: Add screenshot of secret key management section -->
-<!-- Screenshot placeholder: Webhook secret section showing masked secret with regenerate button -->
+![Get It Signed button on TurboDocx homepage](/img/webhooks/regenerate-secret.png)
 
 ## Webhook Events
 
@@ -128,19 +125,20 @@ Triggered when all required signers have successfully signed a document.
 **Event Name**: `signature.document.completed`
 
 **Payload Example**:
+
 ```json
 {
   "event": "signature.document.completed",
-  "event_id": "evt_a1b2c3d4e5f6",
-  "created_at": "2024-01-15T10:30:00.000Z",
+  "event_id": "evt_01daa4ba531c42938f861c5a9ce9a5f2",
+  "created_at": "2025-08-26T11:44:30.305Z",
   "version": "1.0",
   "data": {
-    "document_id": "doc_abc123def456",
-    "title": "Service Agreement - Acme Corp",
+    "document_id": "2dea093d-c38f-4898-b440-43dd9a14cd9d",
+    "title": "Document Name",
     "status": "completed",
     "status_enum": "SignatureDocumentStatus.COMPLETED",
-    "completed_at": "2024-01-15T10:30:00.000Z",
-    "signature": "b7e3a9c2f1d8e4a5b6c7d8e9f0a1b2c3"
+    "completed_at": "2025-08-26T11:44:30.299Z",
+    "document_hash": "f516c4b9de36a5c9a999ba87abbc93078fdd0c9f6b855590d883d8bfb143308f"
   }
 }
 ```
@@ -152,62 +150,63 @@ Triggered when a document is voided or cancelled.
 **Event Name**: `signature.document.voided`
 
 **Payload Example**:
+
 ```json
 {
   "event": "signature.document.voided",
-  "event_id": "evt_f6e5d4c3b2a1",
-  "created_at": "2024-01-15T11:45:00.000Z",
+  "event_id": "evt_c825f202658b41ea932871ba13cc52a5",
+  "created_at": "2025-08-26T11:42:03.622Z",
   "version": "1.0",
   "data": {
-    "document_id": "doc_xyz789uvw123",
-    "title": "Service Agreement - Beta Inc",
+    "document_id": "9eee553b-28b6-4b43-b52b-4ef9957cc503",
+    "title": "Statement of Work Example Draft",
     "status": "voided",
     "status_enum": "SignatureDocumentStatus.VOIDED",
-    "voided_at": "2024-01-15T11:45:00.000Z",
-    "void_reason": "Contract terms changed - new version required",
-    "signature": "c8f4b0d3e2a7f5b8c9d0e1f2a3b4c5d6"
+    "voided_at": "2025-08-26T11:42:03.582Z",
+    "void_reason": "signature not required",
+    "document_hash": "b19151b93aed4f8cbcf060030a338dd414c249914eb8d2591c72390a0fa1b754"
   }
 }
 ```
 
 ### Payload Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `event` | string | The type of event (e.g., `signature.document.completed`) |
-| `event_id` | string | Unique identifier for this event instance |
-| `created_at` | string | ISO 8601 timestamp when the event occurred |
-| `version` | string | Webhook payload version (currently "1.0") |
-| `data.document_id` | string | Unique identifier of the signature document |
-| `data.title` | string | Document title/name |
-| `data.status` | string | Human-readable status |
-| `data.status_enum` | string | Programmatic status enum value |
-| `data.signature` | string | Document content hash for integrity verification |
-| `data.completed_at` | string | When the document was completed (completed event only) |
-| `data.voided_at` | string | When the document was voided (voided event only) |
-| `data.void_reason` | string | Reason for voiding (voided event only) |
+| Field                | Type   | Description                                              |
+| -------------------- | ------ | -------------------------------------------------------- |
+| `event`              | string | The type of event (e.g., `signature.document.completed`) |
+| `event_id`           | string | Unique identifier for this event instance                |
+| `created_at`         | string | ISO 8601 timestamp when the event occurred               |
+| `version`            | string | Webhook payload version (currently "1.0")                |
+| `data.document_id`   | string | Unique identifier of the signature document              |
+| `data.title`         | string | Document title/name                                      |
+| `data.status`        | string | Human-readable status                                    |
+| `data.status_enum`   | string | Programmatic status enum value                           |
+| `data.document_hash` | string | Document content hash for integrity verification         |
+| `data.completed_at`  | string | When the document was completed (completed event only)   |
+| `data.voided_at`     | string | When the document was voided (voided event only)         |
+| `data.void_reason`   | string | Reason for voiding (voided event only)                   |
 
 ## Signature Verification
 
-Every webhook request includes an `X-TurboDocx-Signature` header that you should verify to ensure the webhook is genuinely from TurboDocx.
+Every webhook request includes an `x-turbodocx-signature` header that you should verify to ensure the webhook is genuinely from TurboDocx.
 
 ### How It Works
 
 1. TurboDocx creates a signature using HMAC-SHA256
 2. The signature is computed from: `timestamp + "." + request_body`
-3. The signature is sent in the `X-TurboDocx-Signature` header
+3. The signature is sent in the `x-turbodocx-signature` header
 4. Your endpoint verifies this signature using your webhook secret
 
 ### Verification Headers
 
 Each webhook request includes these headers:
 
-| Header | Description |
-|--------|-------------|
-| `X-TurboDocx-Signature` | HMAC signature for verification (format: `sha256=<hex>`) |
-| `X-TurboDocx-Timestamp` | Unix timestamp when the webhook was sent |
-| `X-TurboDocx-Event` | The event type that triggered this webhook |
-| `X-TurboDocx-Delivery-Id` | Unique ID for this delivery attempt (for idempotency) |
+| Header                    | Description                                              |
+| ------------------------- | -------------------------------------------------------- |
+| `X-TurboDocx-Signature`   | HMAC signature for verification (format: `sha256=<hex>`) |
+| `X-TurboDocx-Timestamp`   | Unix timestamp when the webhook was sent                 |
+| `X-TurboDocx-Event`       | The event type that triggered this webhook               |
+| `X-TurboDocx-Delivery-Id` | Unique ID for this delivery attempt (for idempotency)    |
 
 ### Try it Now
 
@@ -299,6 +298,7 @@ For local development, consider using:
 **Symptoms**: Events occur but webhooks aren't triggered
 
 **Solutions**:
+
 - Verify webhook configuration is saved and active
 - Check that you've subscribed to the correct events
 - Ensure your endpoint URL is correct and accessible
@@ -309,6 +309,7 @@ For local development, consider using:
 **Symptoms**: 401 Unauthorized responses from your endpoint
 
 **Solutions**:
+
 - Ensure you're using the raw request body (not parsed JSON)
 - Verify the webhook secret matches exactly
 - Check that header names are lowercase in your code
@@ -319,6 +320,7 @@ For local development, consider using:
 **Symptoms**: Webhook deliveries show timeout errors
 
 **Solutions**:
+
 - Return 200 OK immediately, process asynchronously
 - Optimize endpoint performance
 - Check network connectivity and firewall rules
@@ -329,6 +331,7 @@ For local development, consider using:
 **Symptoms**: Same event processed multiple times
 
 **Solutions**:
+
 - Implement idempotency using `X-TurboDocx-Delivery-Id`
 - Store processed event IDs temporarily
 - Use database constraints to prevent duplicates
@@ -355,10 +358,7 @@ If you encounter issues not covered here:
     "https://api.example.com/webhooks/turbosign",
     "https://backup.example.com/webhooks"
   ],
-  "events": [
-    "signature.document.completed",
-    "signature.document.voided"
-  ],
+  "events": ["signature.document.completed", "signature.document.voided"],
   "secretExists": true,
   "maskedSecret": "whs***f6a",
   "isActive": true,
@@ -398,6 +398,7 @@ If you're migrating from polling to webhooks:
 ## Changelog
 
 ### Version 1.0 (Current)
+
 - Initial webhook implementation
 - Support for signature document completed and voided events
 - HMAC-SHA256 signature verification
