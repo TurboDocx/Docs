@@ -57,18 +57,18 @@ Webhooks can be configured through the TurboSign interface in your organization 
 
 ![Get It Signed button on TurboDocx homepage](/img/webhooks/home-page.png)
 
-1. **Navigate to Organization Settings**
+2. **Navigate to Organization Settings**
    - Select "Organization Settings" from the tabs
 
 ![Get It Signed button on TurboDocx homepage](/img/webhooks/organization-setting.png)
 
-2. **Scroll Down to Signature Configuration**
+3. **Scroll Down to Signature Configuration**
 
    - click "Configure Webhooks"
 
 ![Get It Signed button on TurboDocx homepage](/img/webhooks/core-features-section.png)
 
-3. **Add Webhook URLs**
+4. **Add Webhook URLs**
    - Enter your webhook endpoint URL(s)
    - You can add up to 5 different URLs
    - Each URL will receive all subscribed events
@@ -76,14 +76,14 @@ Webhooks can be configured through the TurboSign interface in your organization 
 
 ![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
 
-4. **Select Events to Subscribe**
+5. **Select Events to Subscribe**
    - Choose which events should trigger webhooks:
      - **Signature Document Completed**: Triggered when all signers have completed signing
      - **Signature Document Voided**: Triggered when a document is voided/cancelled
 
 ![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
 
-5. **Save Configuration**
+6. **Save Configuration**
    - Click "Save Configuration" to activate your webhooks
    - Your webhook secret key will be displayed (only shown once for new configurations)
    - **Important**: Copy and securely store your webhook secret - it won't be shown again
