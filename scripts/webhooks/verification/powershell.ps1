@@ -116,7 +116,7 @@ function Invoke-DocumentCompleted {
         [hashtable]$Data
     )
     
-    $documentId = if ($Data.documentId) { $Data.documentId } else { "unknown" }
+    $documentId = if ($Data.document_id) { $Data.document_id } else { "unknown" }
     Write-Host "Document completed: $documentId" -ForegroundColor Cyan
     
     # Add your completion logic here
@@ -130,7 +130,7 @@ function Invoke-DocumentVoided {
         [hashtable]$Data
     )
     
-    $documentId = if ($Data.documentId) { $Data.documentId } else { "unknown" }
+    $documentId = if ($Data.document_id) { $Data.document_id } else { "unknown" }
     Write-Host "Document voided: $documentId" -ForegroundColor Yellow
     
     # Add your void logic here
@@ -216,7 +216,7 @@ function Test-WebhookVerification {
     
     # Create test data
     $timestamp = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds().ToString()
-    $body = '{"event":"signature.document.completed","data":{"documentId":"doc123"}}'
+    $body = '{"event":"signature.document.completed","data":{"document_id":"doc123"}}'
     
     # Generate signature for testing
     $signedString = "$timestamp.$body"
@@ -259,7 +259,7 @@ curl -X POST http://localhost:$Port/webhook \
   -H "Content-Type: application/json" \
   -H "X-TurboDocx-Signature: sha256=<signature>" \
   -H "X-TurboDocx-Timestamp: <timestamp>" \
-  -d '{"event":"signature.document.completed","data":{"documentId":"test123"}}'
+  -d '{"event":"signature.document.completed","data":{"document_id":"test123"}}' 
 
 Or run the test function:
 Test-WebhookVerification -WebhookSecret '$WebhookSecret'

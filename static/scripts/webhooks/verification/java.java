@@ -117,14 +117,14 @@ public class WebhookVerificationService {
     }
     
     private void handleDocumentCompleted(JsonNode data) {
-        String documentId = data.get("documentId").asText();
+        String documentId = data.get("document_id").asText();
         logger.info("Document completed: {}", documentId);
         
         // Add your completion logic here
     }
     
     private void handleDocumentVoided(JsonNode data) {
-        String documentId = data.get("documentId").asText();
+        String documentId = data.get("document_id").asText();
         logger.info("Document voided: {}", documentId);
         
         // Add your void logic here

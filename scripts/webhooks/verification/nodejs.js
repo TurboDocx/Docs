@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 /**
  * Verifies a TurboDocx webhook signature
@@ -9,23 +9,25 @@ const crypto = require('crypto');
  * @returns {boolean} - True if signature is valid
  */
 function verifyWebhookSignature(request, secret) {
-  const signature = request.headers['x-turbodocx-signature'];
-  const timestamp = request.headers['x-turbodocx-timestamp'];
+  const signature = request.headers["x-turbodocx-signature"];
+  const timestamp = request.headers["x-turbodocx-timestamp"];
   const body = request.rawBody;
-  
+
   // Check timestamp is within 5 minutes
   const currentTime = Math.floor(Date.now() / 1000);
   if (Math.abs(currentTime - parseInt(timestamp)) > 300) {
     return false; // Timestamp too old or too far in future
   }
-  
+
   // Generate expected signature
   const signedString = `${timestamp}.${body}`;
-  const expectedSignature = 'sha256=' + 
-    crypto.createHmac('sha256', secret)
-          .update(signedString, 'utf8')
-          .digest('hex');
-  
+  const expectedSignature =
+    "sha256=" +
+    crypto
+      .createHmac("sha256", secret)
+      .update(signedString, "utf8")
+      .digest("hex");
+
   // Use timing-safe comparison
   return crypto.timingSafeEqual(
     Buffer.from(signature),
@@ -41,7 +43,7 @@ function verifyWebhookSignature(request, secret) {
 function createWebhookMiddleware(secret) {
   return (req, res, next) => {
     if (!verifyWebhookSignature(req, secret)) {
-      return res.status(401).send('Unauthorized');
+      return res.status(401).send("Unauthorized");
     }
     next();
   };
@@ -51,34 +53,38 @@ function createWebhookMiddleware(secret) {
  * Complete Express.js webhook handler example
  */
 function setupWebhookHandler(app, secret) {
-  app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
-    if (!verifyWebhookSignature(req, secret)) {
-      return res.status(401).send('Unauthorized');
+  app.post(
+    "/webhook",
+    express.raw({ type: "application/json" }),
+    (req, res) => {
+      if (!verifyWebhookSignature(req, secret)) {
+        return res.status(401).send("Unauthorized");
+      }
+
+      // Process the webhook
+      const payload = JSON.parse(req.body);
+      console.log("Received event:", payload.event);
+
+      // Always return 200 OK quickly
+      res.status(200).send("OK");
+
+      // Process the event asynchronously
+      processWebhookEvent(payload);
     }
-    
-    // Process the webhook
-    const payload = JSON.parse(req.body);
-    console.log('Received event:', payload.event);
-    
-    // Always return 200 OK quickly
-    res.status(200).send('OK');
-    
-    // Process the event asynchronously
-    processWebhookEvent(payload);
-  });
+  );
 }
 
 async function processWebhookEvent(payload) {
   // Add your webhook processing logic here
   switch (payload.event) {
-    case 'signature.document.completed':
-      console.log('Document completed:', payload.data.documentId);
+    case "signature.document.completed":
+      console.log("Document completed:", payload.data.document_id);
       break;
-    case 'signature.document.voided':
-      console.log('Document voided:', payload.data.documentId);
+    case "signature.document.voided":
+      console.log("Document voided:", payload.data.document_id);
       break;
     default:
-      console.log('Unknown event type:', payload.event);
+      console.log("Unknown event type:", payload.event);
   }
 }
 
@@ -86,5 +92,5 @@ module.exports = {
   verifyWebhookSignature,
   createWebhookMiddleware,
   setupWebhookHandler,
-  processWebhookEvent
+  processWebhookEvent,
 };

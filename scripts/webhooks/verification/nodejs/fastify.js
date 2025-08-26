@@ -57,13 +57,13 @@ function processWebhookEvent(payload) {
 }
 
 function handleDocumentCompleted(data) {
-  const documentId = data.documentId || 'unknown';
+  const documentId = data.document_id || 'unknown';
   fastify.log.info('Document completed:', documentId);
   // Add your completion logic here
 }
 
 function handleDocumentVoided(data) {
-  const documentId = data.documentId || 'unknown';
+  const documentId = data.document_id || 'unknown';
   fastify.log.info('Document voided:', documentId);
   // Add your void logic here
 }
