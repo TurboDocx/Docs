@@ -108,11 +108,11 @@ def process_webhook_event(payload: Dict[str, Any]) -> None:
     event_type = payload.get('event')
     
     if event_type == 'signature.document.completed':
-        print(f"Document completed: {payload['data']['documentId']}")
+        print(f"Document completed: {payload['data']['document_id']}")
         # Add your completion logic here
         
     elif event_type == 'signature.document.voided':
-        print(f"Document voided: {payload['data']['documentId']}")
+        print(f"Document voided: {payload['data']['document_id']}")
         # Add your void logic here
         
     else:

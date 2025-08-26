@@ -70,14 +70,14 @@ class WebhookVerifier
   end
 
   def handle_document_completed(data)
-    document_id = data['documentId'] || 'unknown'
+    document_id = data['document_id'] || 'unknown'
     @logger.info "Document completed: #{document_id}"
     
     # Add your completion logic here
   end
 
   def handle_document_voided(data)
-    document_id = data['documentId'] || 'unknown'
+    document_id = data['document_id'] || 'unknown'
     @logger.info "Document voided: #{document_id}"
     
     # Add your void logic here
@@ -167,7 +167,7 @@ module WebhookProcessor
       verifier = WebhookVerifier.new(secret)
       
       timestamp = Time.now.to_i.to_s
-      body = '{"event":"signature.document.completed","data":{"documentId":"doc123"}}'
+      body = '{"event":"signature.document.completed","data":{"document_id":"doc123"}}' 
       
       # Generate signature for testing
       signed_string = "#{timestamp}.#{body}"

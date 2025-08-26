@@ -76,7 +76,7 @@ namespace TurboDocx.Webhooks
 
         private static async Task HandleDocumentCompletedAsync(JsonElement data, ILogger logger)
         {
-            var documentId = data.TryGetProperty("documentId", out var idProp) ? idProp.GetString() : "unknown";
+            var documentId = data.TryGetProperty("document_id", out var idProp) ? idProp.GetString() : "unknown";
             logger?.LogInformation("Document completed: {DocumentId}", documentId);
             
             // Add your completion logic here
@@ -85,7 +85,7 @@ namespace TurboDocx.Webhooks
 
         private static async Task HandleDocumentVoidedAsync(JsonElement data, ILogger logger)
         {
-            var documentId = data.TryGetProperty("documentId", out var idProp) ? idProp.GetString() : "unknown";
+            var documentId = data.TryGetProperty("document_id", out var idProp) ? idProp.GetString() : "unknown";
             logger?.LogInformation("Document voided: {DocumentId}", documentId);
             
             // Add your void logic here

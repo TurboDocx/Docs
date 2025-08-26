@@ -65,7 +65,7 @@ function processTurboDocxWebhookEvent(array $payload): void
  */
 function handleDocumentCompleted(array $data): void 
 {
-    $documentId = $data['documentId'] ?? 'unknown';
+    $documentId = $data['document_id'] ?? 'unknown';
     error_log("Document completed: $documentId");
     
     // Add your completion logic here
@@ -79,7 +79,7 @@ function handleDocumentCompleted(array $data): void
  */
 function handleDocumentVoided(array $data): void 
 {
-    $documentId = $data['documentId'] ?? 'unknown';
+    $documentId = $data['document_id'] ?? 'unknown';
     error_log("Document voided: $documentId");
     
     // Add your void logic here
@@ -158,7 +158,7 @@ function testWebhookVerification(string $secret = 'test-secret'): bool
     $timestamp = (string) time();
     $body = json_encode([
         'event' => 'signature.document.completed',
-        'data' => ['documentId' => 'test123'],
+        'data' => ['document_id' => 'test123'],
         'timestamp' => $timestamp
     ]);
     

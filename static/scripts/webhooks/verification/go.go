@@ -80,7 +80,7 @@ func (wv *WebhookVerifier) ProcessEvent(payload *WebhookPayload) {
 }
 
 func (wv *WebhookVerifier) handleDocumentCompleted(data map[string]interface{}) {
-	documentID, ok := data["documentId"].(string)
+	documentID, ok := data["document_id"].(string)
 	if !ok {
 		documentID = "unknown"
 	}
@@ -90,7 +90,7 @@ func (wv *WebhookVerifier) handleDocumentCompleted(data map[string]interface{}) 
 }
 
 func (wv *WebhookVerifier) handleDocumentVoided(data map[string]interface{}) {
-	documentID, ok := data["documentId"].(string)
+	documentID, ok := data["document_id"].(string)
 	if !ok {
 		documentID = "unknown"
 	}

@@ -57,13 +57,13 @@ function processWebhookEvent(payload) {
 }
 
 function handleDocumentCompleted(data) {
-  const documentId = data.documentId || 'unknown';
+  const documentId = data.document_id || 'unknown';
   console.log('Document completed:', documentId);
   // Add your completion logic here
 }
 
 function handleDocumentVoided(data) {
-  const documentId = data.documentId || 'unknown';
+  const documentId = data.document_id || 'unknown';
   console.log('Document voided:', documentId);
   // Add your void logic here
 }

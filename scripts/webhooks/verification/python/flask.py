@@ -58,13 +58,13 @@ def process_webhook_event(payload: dict) -> None:
 
 def handle_document_completed(data: dict) -> None:
     """Handle document completion event"""
-    document_id = data.get('documentId', 'unknown')
+    document_id = data.get('document_id', 'unknown')
     app.logger.info(f"Document completed: {document_id}")
     # Add your completion logic here
 
 def handle_document_voided(data: dict) -> None:
     """Handle document voided event"""
-    document_id = data.get('documentId', 'unknown')
+    document_id = data.get('document_id', 'unknown')
     app.logger.info(f"Document voided: {document_id}")
     # Add your void logic here
 
@@ -146,7 +146,7 @@ def test_webhook_verification():
     timestamp = str(int(time.time()))
     body = json.dumps({
         'event': 'signature.document.completed',
-        'data': {'documentId': 'test123'}
+        'data': {'document_id': 'test123'}
     }).encode('utf-8')
     
     # Generate test signature

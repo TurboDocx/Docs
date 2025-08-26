@@ -56,13 +56,13 @@ def process_webhook_event(payload: Dict[str, Any]) -> None:
 
 def handle_document_completed(data: Dict[str, Any]) -> None:
     """Handle document completion event"""
-    document_id = data.get('documentId', 'unknown')
+    document_id = data.get('document_id', 'unknown')
     print(f"Document completed: {document_id}")
     # Add your completion logic here
 
 def handle_document_voided(data: Dict[str, Any]) -> None:
     """Handle document voided event"""
-    document_id = data.get('documentId', 'unknown')
+    document_id = data.get('document_id', 'unknown')
     print(f"Document voided: {document_id}")
     # Add your void logic here
 

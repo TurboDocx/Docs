@@ -72,10 +72,10 @@ async function processWebhookEvent(payload) {
   // Add your webhook processing logic here
   switch (payload.event) {
     case 'signature.document.completed':
-      console.log('Document completed:', payload.data.documentId);
+      console.log('Document completed:', payload.data.document_id);
       break;
     case 'signature.document.voided':
-      console.log('Document voided:', payload.data.documentId);
+      console.log('Document voided:', payload.data.document_id);
       break;
     default:
       console.log('Unknown event type:', payload.event);
