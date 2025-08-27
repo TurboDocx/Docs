@@ -385,25 +385,6 @@ If you encounter issues not covered here:
 }
 ```
 
-## Migration Guide
-
-If you're migrating from polling to webhooks:
-
-1. **Set up webhooks** alongside your existing polling
-2. **Run both in parallel** during migration
-3. **Verify webhook reliability** over several days
-4. **Gradually reduce polling frequency**
-5. **Disable polling** once webhooks are proven reliable
-
-## Changelog
-
-### Version 1.0 (Current)
-
-- Initial webhook implementation
-- Support for signature document completed and voided events
-- HMAC-SHA256 signature verification
-- Automatic retry logic with exponential backoff
-- Delivery history and manual replay functionality
 
 ---
 
