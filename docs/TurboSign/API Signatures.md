@@ -31,6 +31,8 @@ keywords:
   - bearer token authentication
 ---
 
+import ScriptLoader from '@site/src/components/ScriptLoader';
+
 # TurboSign API Integration
 
 This comprehensive guide walks you through the TurboSign API integration process. Learn how to programmatically upload documents, add recipients, and prepare documents for electronic signatures using our RESTful API.
@@ -150,97 +152,11 @@ accept: application/json, text/plain, */*
 
 ### Code Examples
 
-#### cURL
-
-```bash
-curl -X POST "https://www.turbodocx.com/turbosign/documents/upload" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
-  -H "origin: https://www.turbodocx.com" \
-  -H "referer: https://www.turbodocx.com" \
-  -H "accept: application/json, text/plain, */*" \
-  -F "name=Contract Agreement" \
-  -F "file=@/path/to/your/document.pdf"
-```
-
-#### JavaScript (Fetch)
-
-```javascript
-const formData = new FormData();
-formData.append("name", "Contract Agreement");
-formData.append("file", pdfFile); // File object
-
-const response = await fetch(
-  "https://www.turbodocx.com/turbosign/documents/upload",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      origin: "https://www.turbodocx.com",
-      referer: "https://www.turbodocx.com",
-      accept: "application/json, text/plain, */*",
-    },
-    body: formData,
-  }
-);
-
-const result = await response.json();
-const documentId = result.data.id; // Save for next step
-```
-
-#### Python (requests)
-
-```python
-import requests
-
-url = "https://www.turbodocx.com/turbosign/documents/upload"
-headers = {
-    "Authorization": "Bearer YOUR_API_TOKEN",
-    "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-    "origin": "https://www.turbodocx.com",
-    "referer": "https://www.turbodocx.com",
-    "accept": "application/json, text/plain, */*"
-}
-
-files = {
-    "name": (None, "Contract Agreement"),
-    "file": ("document.pdf", open("path/to/document.pdf", "rb"), "application/pdf")
-}
-
-response = requests.post(url, headers=headers, files=files)
-result = response.json()
-document_id = result["data"]["id"]  # Save for next step
-```
-
-#### Node.js (axios)
-
-```javascript
-const axios = require("axios");
-const FormData = require("form-data");
-const fs = require("fs");
-
-const form = new FormData();
-form.append("name", "Contract Agreement");
-form.append("file", fs.createReadStream("path/to/document.pdf"));
-
-const response = await axios.post(
-  "https://www.turbodocx.com/turbosign/documents/upload",
-  form,
-  {
-    headers: {
-      ...form.getHeaders(),
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      origin: "https://www.turbodocx.com",
-      referer: "https://www.turbodocx.com",
-      accept: "application/json, text/plain, */*",
-    },
-  }
-);
-
-const documentId = response.data.data.id; // Save for next step
-```
+<ScriptLoader 
+  scriptPath="turbosign/api/step1-upload" 
+  id="step1-upload-examples"
+  label="Step 1: Upload Document Examples"
+/>
 
 ## Step 2: Add Recipients
 
@@ -354,100 +270,11 @@ priority: u=1, i
 
 ### Code Examples
 
-#### cURL
-
-```bash
-curl -X POST "https://www.turbodocx.com/turbosign/documents/4a20eca5-7944-430c-97d5-fcce4be24296/update-with-recipients" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
-  -H "origin: https://www.turbodocx.com" \
-  -H "referer: https://www.turbodocx.com" \
-  -H "accept: application/json, text/plain, */*" \
-  -d '{
-    "document": {
-      "name": "Contract Agreement - Updated",
-      "description": "This document requires electronic signatures from both parties."
-    },
-    "recipients": [
-      {
-        "name": "John Smith",
-        "email": "john.smith@company.com",
-        "signingOrder": 1,
-        "metadata": {
-          "color": "hsl(200, 75%, 50%)",
-          "lightColor": "hsl(200, 75%, 93%)"
-        },
-        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
-      },
-      {
-        "name": "Jane Doe",
-        "email": "jane.doe@partner.com",
-        "signingOrder": 2,
-        "metadata": {
-          "color": "hsl(270, 75%, 50%)",
-          "lightColor": "hsl(270, 75%, 93%)"
-        },
-        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
-      }
-    ]
-  }'
-```
-
-#### JavaScript (Fetch)
-
-```javascript
-const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296"; // From Step 1
-
-const recipientData = {
-  document: {
-    name: "Contract Agreement - Updated",
-    description:
-      "This document requires electronic signatures from both parties.",
-  },
-  recipients: [
-    {
-      name: "John Smith",
-      email: "john.smith@company.com",
-      signingOrder: 1,
-      metadata: {
-        color: "hsl(200, 75%, 50%)",
-        lightColor: "hsl(200, 75%, 93%)",
-      },
-      documentId: documentId,
-    },
-    {
-      name: "Jane Doe",
-      email: "jane.doe@partner.com",
-      signingOrder: 2,
-      metadata: {
-        color: "hsl(270, 75%, 50%)",
-        lightColor: "hsl(270, 75%, 93%)",
-      },
-      documentId: documentId,
-    },
-  ],
-};
-
-const response = await fetch(
-  `https://www.turbodocx.com/turbosign/documents/${documentId}/update-with-recipients`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      origin: "https://www.turbodocx.com",
-      referer: "https://www.turbodocx.com",
-      accept: "application/json, text/plain, */*",
-    },
-    body: JSON.stringify(recipientData),
-  }
-);
-
-const result = await response.json();
-const recipients = result.data.recipients; // Save recipient IDs for Step 3
-```
+<ScriptLoader 
+  scriptPath="turbosign/api/step2-recipients" 
+  id="step2-recipients-examples"
+  label="Step 2: Add Recipients Examples"
+/>
 
 ## Step 3: Prepare for Signing
 
@@ -581,262 +408,21 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
 
 ### Code Examples
 
-#### cURL
-
-```bash
-curl -X POST "https://www.turbodocx.com/turbosign/documents/4a20eca5-7944-430c-97d5-fcce4be24296/prepare-for-signing" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
-  -H "origin: https://www.turbodocx.com" \
-  -H "referer: https://www.turbodocx.com" \
-  -H "accept: application/json, text/plain, */*" \
-  -d '[
-    {
-      "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-      "type": "signature",
-      "template": {
-        "anchor": "{Signature1}",
-        "placement": "replace",
-        "size": { "width": 200, "height": 80 },
-        "offset": { "x": 0, "y": 0 },
-        "caseSensitive": true,
-        "useRegex": false
-      },
-      "required": true
-    },
-    {
-      "recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
-      "type": "signature",
-      "template": {
-        "anchor": "{Signature2}",
-        "placement": "replace",
-        "size": { "width": 200, "height": 80 },
-        "offset": { "x": 0, "y": 0 },
-        "caseSensitive": true,
-        "useRegex": false
-      },
-      "required": true
-    }
-  ]'
-```
-
-#### JavaScript (Fetch)
-
-```javascript
-const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296"; // From Step 1
-const recipientIds = [
-  "5f673f37-9912-4e72-85aa-8f3649760f6b", // From Step 2
-  "a8b9c1d2-3456-7890-abcd-ef1234567890", // From Step 2
-];
-
-const signatureFields = [
-  {
-    recipientId: recipientIds[0],
-    type: "signature",
-    template: {
-      anchor: "{Signature1}",
-      placement: "replace",
-      size: { width: 200, height: 80 },
-      offset: { x: 0, y: 0 },
-      caseSensitive: true,
-      useRegex: false,
-    },
-    required: true,
-  },
-  {
-    recipientId: recipientIds[1],
-    type: "signature",
-    template: {
-      anchor: "{Signature2}",
-      placement: "replace",
-      size: { width: 200, height: 80 },
-      offset: { x: 0, y: 0 },
-      caseSensitive: true,
-      useRegex: false,
-    },
-    required: true,
-  },
-];
-
-const response = await fetch(
-  `https://www.turbodocx.com/turbosign/documents/${documentId}/prepare-for-signing`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      origin: "https://www.turbodocx.com",
-      referer: "https://www.turbodocx.com",
-      accept: "application/json, text/plain, */*",
-    },
-    body: JSON.stringify(signatureFields),
-  }
-);
-
-const result = await response.json();
-console.log("Document sent for signing:", result.success);
-```
+<ScriptLoader 
+  scriptPath="turbosign/api/step3-prepare" 
+  id="step3-prepare-examples"
+  label="Step 3: Prepare for Signing Examples"
+/>
 
 ## Complete Workflow Example
 
 Here's a complete example that demonstrates the entire 3-step process:
 
-### JavaScript Implementation
-
-```javascript
-class TurboSignAPI {
-  constructor(apiToken, orgId) {
-    this.apiToken = apiToken;
-    this.orgId = orgId;
-    this.baseURL = "https://www.turbodocx.com";
-  }
-
-  async uploadDocument(name, fileBlob) {
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("file", fileBlob);
-
-    const response = await fetch(`${this.baseURL}/turbosign/documents/upload`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.apiToken}`,
-        "x-rapiddocx-org-id": this.orgId,
-        origin: this.baseURL,
-        referer: this.baseURL,
-        accept: "application/json, text/plain, */*",
-      },
-      body: formData,
-    });
-
-    const result = await response.json();
-    return result.data.id;
-  }
-
-  async addRecipients(documentId, recipients) {
-    const payload = {
-      document: {
-        name: "Contract Agreement",
-        description: "Please review and sign this document.",
-      },
-      recipients: recipients.map((recipient, index) => ({
-        ...recipient,
-        documentId,
-        signingOrder: index + 1,
-        metadata: {
-          color: `hsl(${(index * 60) % 360}, 75%, 50%)`,
-          lightColor: `hsl(${(index * 60) % 360}, 75%, 93%)`,
-        },
-      })),
-    };
-
-    const response = await fetch(
-      `${this.baseURL}/turbosign/documents/${documentId}/update-with-recipients`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.apiToken}`,
-          "x-rapiddocx-org-id": this.orgId,
-          origin: this.baseURL,
-          referer: this.baseURL,
-          accept: "application/json, text/plain, */*",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    const result = await response.json();
-    return result.data.recipients;
-  }
-
-  async prepareForSigning(documentId, recipientIds, signatureAnchors) {
-    const fields = recipientIds.map((recipientId, index) => ({
-      recipientId,
-      type: "signature",
-      template: {
-        anchor: signatureAnchors[index] || `{Signature${index + 1}}`,
-        placement: "replace",
-        size: { width: 200, height: 80 },
-        offset: { x: 0, y: 0 },
-        caseSensitive: true,
-        useRegex: false,
-      },
-      required: true,
-    }));
-
-    const response = await fetch(
-      `${this.baseURL}/turbosign/documents/${documentId}/prepare-for-signing`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.apiToken}`,
-          "x-rapiddocx-org-id": this.orgId,
-          origin: this.baseURL,
-          referer: this.baseURL,
-          accept: "application/json, text/plain, */*",
-        },
-        body: JSON.stringify(fields),
-      }
-    );
-
-    return await response.json();
-  }
-
-  // Complete workflow method
-  async processDocument(fileName, fileBlob, recipients, signatureAnchors) {
-    try {
-      // Step 1: Upload document
-      const documentId = await this.uploadDocument(fileName, fileBlob);
-      console.log("Document uploaded:", documentId);
-
-      // Step 2: Add recipients
-      const addedRecipients = await this.addRecipients(documentId, recipients);
-      console.log("Recipients added:", addedRecipients.length);
-
-      // Step 3: Prepare for signing
-      const recipientIds = addedRecipients.map((r) => r.id);
-      const result = await this.prepareForSigning(
-        documentId,
-        recipientIds,
-        signatureAnchors
-      );
-
-      if (result.success) {
-        console.log("Document successfully sent for signing!");
-        return { documentId, recipients: addedRecipients };
-      } else {
-        throw new Error("Failed to prepare document for signing");
-      }
-    } catch (error) {
-      console.error("Error processing document:", error);
-      throw error;
-    }
-  }
-}
-
-// Usage example
-const api = new TurboSignAPI("YOUR_API_TOKEN", "YOUR_ORG_ID");
-
-const recipients = [
-  { name: "John Smith", email: "john@company.com" },
-  { name: "Jane Doe", email: "jane@partner.com" },
-];
-
-const signatureAnchors = ["{Signature1}", "{Signature2}"];
-
-// Process the document
-api
-  .processDocument("Contract.pdf", pdfFileBlob, recipients, signatureAnchors)
-  .then((result) => {
-    console.log("Success:", result);
-  })
-  .catch((error) => {
-    console.error("Failed:", error);
-  });
-```
+<ScriptLoader 
+  scriptPath="turbosign/api/complete-workflow" 
+  id="complete-workflow-examples"
+  label="Complete Workflow Implementation"
+/>
 
 ## Best Practices
 
