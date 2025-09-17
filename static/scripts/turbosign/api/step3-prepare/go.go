@@ -1,0 +1,87 @@
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	// Step 3: Prepare for Signing
+	documentID := "4a20eca5-7944-430c-97d5-fcce4be24296"
+	
+	payload := `[
+	  {
+		"recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+		"type": "signature",
+		"template": {
+		  "anchor": "{Signature1}",
+		  "placement": "replace",
+		  "size": { "width": 200, "height": 80 },
+		  "offset": { "x": 0, "y": 0 },
+		  "caseSensitive": true,
+		  "useRegex": false
+		},
+		"defaultValue": "",
+		"required": true
+	  },
+	  {
+		"recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+		"type": "date",
+		"template": {
+		  "anchor": "{Date1}",
+		  "placement": "replace",
+		  "size": { "width": 150, "height": 30 },
+		  "offset": { "x": 0, "y": 0 },
+		  "caseSensitive": true,
+		  "useRegex": false
+		},
+		"defaultValue": "",
+		"required": true
+	  },
+	  {
+		"recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
+		"type": "signature",
+		"template": {
+		  "anchor": "{Signature2}",
+		  "placement": "replace",
+		  "size": { "width": 200, "height": 80 },
+		  "offset": { "x": 0, "y": 0 },
+		  "caseSensitive": true,
+		  "useRegex": false
+		},
+		"defaultValue": "",
+		"required": true
+	  },
+	  {
+		"recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
+		"type": "text",
+		"template": {
+		  "anchor": "{Title2}",
+		  "placement": "replace",
+		  "size": { "width": 200, "height": 30 },
+		  "offset": { "x": 0, "y": 0 },
+		  "caseSensitive": true,
+		  "useRegex": false
+		},
+		"defaultValue": "Business Partner",
+		"required": false
+	  }
+	]`
+	
+	req, _ := http.NewRequest("POST", fmt.Sprintf("https://www.turbodocx.com/turbosign/documents/%s/prepare-for-signing", documentID), bytes.NewBufferString(payload))
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
+	req.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
+	req.Header.Set("origin", "https://www.turbodocx.com")
+	req.Header.Set("referer", "https://www.turbodocx.com")
+	req.Header.Set("accept", "application/json, text/plain, */*")
+	
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+	
+	body := make([]byte, 1024)
+	resp.Body.Read(body)
+	fmt.Println(string(body))
+}
