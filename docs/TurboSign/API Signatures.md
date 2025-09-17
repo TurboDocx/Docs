@@ -1,394 +1,1049 @@
 ---
-title: API Signatures
+title: TurboSign API Integration
 sidebar_position: 3
-description: Configure real-time webhooks to receive instant notifications when TurboSign signature documents are completed or voided. Integrate TurboSign events with your existing systems through secure webhook endpoints.
+description: Complete guide for integrating TurboSign API to upload documents, add recipients, and prepare documents for electronic signatures. Learn the 3-step process with detailed examples and code samples.
 keywords:
-  - webhook configuration
-  - signature webhooks
-  - turbosign webhooks
-  - webhook events
-  - document completion webhook
-  - document voided webhook
-  - webhook security
-  - webhook signature verification
-  - hmac signature
-  - webhook integration
-  - real-time notifications
-  - event notifications
-  - webhook endpoints
-  - webhook payload
-  - webhook authentication
-  - webhook retry logic
-  - webhook delivery history
-  - turbodocx api webhooks
-  - signature document events
-  - webhook best practices
-  - webhook troubleshooting
-  - webhook secret key
+  - turbosign api
+  - document upload api
+  - electronic signature api
+  - recipients api
+  - signature preparation
+  - api integration
+  - document signing workflow
+  - turbodocx api
+  - signature api endpoints
+  - api authentication
+  - document processing api
+  - api tutorial
+  - signature document api
+  - api examples
+  - postman examples
+  - curl examples
+  - javascript api
+  - python api
+  - nodejs api
+  - php api
+  - signature automation
+  - document workflow api
+  - electronic signature integration
+  - api best practices
+  - api troubleshooting
+  - bearer token authentication
 ---
 
-# Webhooks
+# TurboSign API Integration
 
-Webhooks enable your application to receive real-time notifications when important events occur in TurboSign. Instead of polling for changes, webhooks push event data to your specified endpoints immediately when signature documents are completed or voided.
+This comprehensive guide walks you through the TurboSign API integration process. Learn how to programmatically upload documents, add recipients, and prepare documents for electronic signatures using our RESTful API.
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/webhook-schema.png)
+![TurboSign API Integration Overview](/img/turbosign/api/api-illustration.png)
 
 ## Overview
 
-TurboSign webhooks provide a robust and secure way to integrate document signature events into your existing workflows. When configured, webhooks will automatically send HTTP POST requests to your specified URLs whenever subscribed events occur.
+The TurboSign API follows a simple 3-step process to prepare documents for electronic signatures:
+
+1. **Upload Document** - Upload your PDF document to TurboSign
+2. **Add Recipients** - Configure who needs to sign and their signing order
+3. **Prepare for Signing** - Set up signature fields and send for signing
+
+![TurboSign API Integration Overview](/img/turbosign/api/steps.png)
 
 ### Key Features
 
-- **Real-time Notifications**: Receive instant updates when documents are signed or voided
-- **Multiple URLs**: Configure up to 5 webhook URLs per configuration
-- **Secure Authentication**: HMAC-SHA256 signature verification ensures webhook authenticity
-- **Reliable Delivery**: Automatic retry logic with up to 3 attempts per webhook
-- **Delivery History**: Track and replay webhook deliveries with detailed logs
-- **Event Filtering**: Subscribe only to the events you need
+- **RESTful API**: Standard HTTP methods with JSON payloads
+- **Bearer Token Authentication**: Secure API access using JWT tokens
+- **Multiple Recipients**: Support for multiple signers with custom signing order
+- **Flexible Field Placement**: Position signature fields using anchors or coordinates
+- **Real-time Status Updates**: Track document status throughout the signing process
+- **Webhook Integration**: Receive notifications when signing is complete
 
-## Configuration
+## Prerequisites
 
-### Setting Up Webhooks
+Before you begin, ensure you have:
 
-Webhooks can be configured through the TurboSign interface in your organization settings.
+- **API Access Token**: Bearer token for authentication
+- **Organization ID**: Your organization identifier
+- **PDF Document**: Document ready for signature collection
 
-1. **Go to the Turbodocx Home Page and click on settings**
-   - click on the settings on the sidemenu
+### Getting Your Credentials
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/home-page.png)
+1. **Login to TurboDocx**: Visit [https://www.turbodocx.com](https://www.turbodocx.com)
+2. **Navigate to Settings**: Access your organization settings
+3. **API Keys Section**: Generate or retrieve your API access token
+4. **Organization ID**: Copy your organization ID from the settings
 
-2. **Navigate to Organization Settings**
-   - Select "Organization Settings" from the tabs
+![TurboSign API Integration Overview](/img/turbosign/api/api-key.png)
+![TurboSign API Integration Overview](/img/turbosign/api/org-id.png)
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/organization-setting.png)
+## Authentication
 
-3. **Scroll Down to Signature Configuration**
+All TurboSign API requests require authentication using a Bearer token in the Authorization header:
 
-   - click "Configure Webhooks"
+```http
+Authorization: Bearer YOUR_API_TOKEN
+```
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/core-features-section.png)
+Additional required headers for all requests:
 
-4. **Add Webhook URLs**
-   - Enter your webhook endpoint URL(s)
-   - You can add up to 5 different URLs
-   - Each URL will receive all subscribed events
-   - URLs must use HTTPS for production environments
+```http
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+origin: https://www.turbodocx.com
+accept: application/json, text/plain, */*
+```
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
+## Step 1: Upload Document
 
-5. **Select Events to Subscribe**
-   - Choose which events should trigger webhooks:
-     - **Signature Document Completed**: Triggered when all signers have completed signing
-     - **Signature Document Voided**: Triggered when a document is voided/cancelled
+The first step is to upload your PDF document to TurboSign. This creates a new document record and returns a document ID that you'll use in subsequent steps.
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
+### Endpoint
 
-6. **Save Configuration**
-   - Click "Save Configuration" to activate your webhooks
-   - Your webhook secret key will be displayed (only shown once for new configurations)
-   - **Important**: Copy and securely store your webhook secret - it won't be shown again
+```http
+POST https://www.turbodocx.com/turbosign/documents/upload
+```
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/dill-signature-webhook-config.png)
-![Get It Signed button on TurboDocx homepage](/img/webhooks/copy-webhook-secret.png)
+### Headers
 
-### Managing Webhook Configuration
+```http
+Content-Type: multipart/form-data
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+origin: https://www.turbodocx.com
+referer: https://www.turbodocx.com
+accept: application/json, text/plain, */*
+```
 
-#### Viewing Delivery History
+### Request Body (Form Data)
 
-The Delivery History tab shows all webhook delivery attempts with detailed information:
+```javascript
+{
+  "name": "Contract Agreement",
+  "file": [PDF_FILE_BINARY],
+  // Optional: triggerMeta for advanced configurations
+  // "triggerMeta": "{\"url\": \"callback_url\"}"
+}
+```
 
-- **Event Type**: The type of event that triggered the webhook
-- **HTTP Status**: Response status code from your endpoint
-- **Attempts**: Number of delivery attempts made
-- **Timestamps**: When the webhook was created and last updated
-- **Actions**: View details or replay failed deliveries
-
-![Get It Signed button on TurboDocx homepage](/img/webhooks/delivery-history.png)
-
-#### Webhook Secret Management
-
-Your webhook secret is used to verify that webhooks are genuinely from TurboDocx:
-
-- **Initial Generation**: A secret is automatically generated when you create a webhook configuration
-- **Security**: The secret is only shown in full immediately after generation or regeneration
-- **Regeneration**: You can regenerate the secret at any time if compromised
-- **Display**: After initial viewing, only a masked version (first 3 + \*\*\* + last 3 characters) is shown
-
-![Get It Signed button on TurboDocx homepage](/img/webhooks/regenerate-secret.png)
-
-## Webhook Events
-
-### Signature Document Completed
-
-Triggered when all required signers have successfully signed a document.
-
-**Event Name**: `signature.document.completed`
-
-**Payload Example**:
+### Response
 
 ```json
 {
-  "event": "signature.document.completed",
-  "event_id": "evt_01daa4ba531c42938f861c5a9ce9a5f2",
-  "created_at": "2025-08-26T11:44:30.305Z",
-  "version": "1.0",
   "data": {
-    "document_id": "2dea093d-c38f-4898-b440-43dd9a14cd9d",
-    "title": "Document Name",
-    "status": "completed",
-    "status_enum": "SignatureDocumentStatus.COMPLETED",
-    "completed_at": "2025-08-26T11:44:30.299Z",
-    "document_hash": "f516c4b9de36a5c9a999ba87abbc93078fdd0c9f6b855590d883d8bfb143308f"
+    "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
+    "name": "Contract Agreement",
+    "description": "",
+    "status": "draft",
+    "createdOn": "2025-09-17T13:24:57.083Z"
   }
 }
 ```
 
-### Signature Document Voided
+### Response Fields
 
-Triggered when a document is voided or cancelled.
+| Field              | Type   | Description                                           |
+| ------------------ | ------ | ----------------------------------------------------- |
+| `data.id`          | string | Unique document identifier (save this for next steps) |
+| `data.name`        | string | Document name as provided                             |
+| `data.description` | string | Document description (empty by default)               |
+| `data.status`      | string | Document status (`draft` after upload)                |
+| `data.createdOn`   | string | ISO 8601 timestamp of document creation               |
 
-**Event Name**: `signature.document.voided`
+<!-- ![Step 1: Document Upload Postman Example](/img/turbosign/step1-upload-postman.png) -->
 
-**Payload Example**:
+### Code Examples
+
+#### cURL
+
+```bash
+curl -X POST "https://www.turbodocx.com/turbosign/documents/upload" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "origin: https://www.turbodocx.com" \
+  -H "referer: https://www.turbodocx.com" \
+  -H "accept: application/json, text/plain, */*" \
+  -F "name=Contract Agreement" \
+  -F "file=@/path/to/your/document.pdf"
+```
+
+#### JavaScript (Fetch)
+
+```javascript
+const formData = new FormData();
+formData.append("name", "Contract Agreement");
+formData.append("file", pdfFile); // File object
+
+const response = await fetch(
+  "https://www.turbodocx.com/turbosign/documents/upload",
+  {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer YOUR_API_TOKEN",
+      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
+      origin: "https://www.turbodocx.com",
+      referer: "https://www.turbodocx.com",
+      accept: "application/json, text/plain, */*",
+    },
+    body: formData,
+  }
+);
+
+const result = await response.json();
+const documentId = result.data.id; // Save for next step
+```
+
+#### Python (requests)
+
+```python
+import requests
+
+url = "https://www.turbodocx.com/turbosign/documents/upload"
+headers = {
+    "Authorization": "Bearer YOUR_API_TOKEN",
+    "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
+    "origin": "https://www.turbodocx.com",
+    "referer": "https://www.turbodocx.com",
+    "accept": "application/json, text/plain, */*"
+}
+
+files = {
+    "name": (None, "Contract Agreement"),
+    "file": ("document.pdf", open("path/to/document.pdf", "rb"), "application/pdf")
+}
+
+response = requests.post(url, headers=headers, files=files)
+result = response.json()
+document_id = result["data"]["id"]  # Save for next step
+```
+
+#### Node.js (axios)
+
+```javascript
+const axios = require("axios");
+const FormData = require("form-data");
+const fs = require("fs");
+
+const form = new FormData();
+form.append("name", "Contract Agreement");
+form.append("file", fs.createReadStream("path/to/document.pdf"));
+
+const response = await axios.post(
+  "https://www.turbodocx.com/turbosign/documents/upload",
+  form,
+  {
+    headers: {
+      ...form.getHeaders(),
+      Authorization: "Bearer YOUR_API_TOKEN",
+      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
+      origin: "https://www.turbodocx.com",
+      referer: "https://www.turbodocx.com",
+      accept: "application/json, text/plain, */*",
+    },
+  }
+);
+
+const documentId = response.data.data.id; // Save for next step
+```
+
+## Step 2: Add Recipients
+
+After uploading your document, add the recipients who need to sign. You can specify multiple recipients with their signing order and customize their signature appearance.
+
+### Endpoint
+
+```http
+POST https://www.turbodocx.com/turbosign/documents/{documentId}/update-with-recipients
+```
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+origin: https://www.turbodocx.com
+referer: https://www.turbodocx.com
+accept: application/json, text/plain, */*
+dnt: 1
+accept-language: en-US,en;q=0.9
+priority: u=1, i
+```
+
+### Request Body
 
 ```json
 {
-  "event": "signature.document.voided",
-  "event_id": "evt_c825f202658b41ea932871ba13cc52a5",
-  "created_at": "2025-08-26T11:42:03.622Z",
-  "version": "1.0",
+  "document": {
+    "name": "Contract Agreement - Updated",
+    "description": "This document requires electronic signatures from both parties. Please review all content carefully before signing."
+  },
+  "recipients": [
+    {
+      "name": "John Smith",
+      "email": "john.smith@company.com",
+      "signingOrder": 1,
+      "metadata": {
+        "color": "hsl(200, 75%, 50%)",
+        "lightColor": "hsl(200, 75%, 93%)"
+      },
+      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
+    },
+    {
+      "name": "Jane Doe",
+      "email": "jane.doe@partner.com",
+      "signingOrder": 2,
+      "metadata": {
+        "color": "hsl(270, 75%, 50%)",
+        "lightColor": "hsl(270, 75%, 93%)"
+      },
+      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
+    }
+  ]
+}
+```
+
+### Response
+
+```json
+{
   "data": {
-    "document_id": "9eee553b-28b6-4b43-b52b-4ef9957cc503",
-    "title": "Statement of Work Example Draft",
-    "status": "voided",
-    "status_enum": "SignatureDocumentStatus.VOIDED",
-    "voided_at": "2025-08-26T11:42:03.582Z",
-    "void_reason": "signature not required",
-    "document_hash": "b19151b93aed4f8cbcf060030a338dd414c249914eb8d2591c72390a0fa1b754"
+    "document": {
+      "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
+      "name": "Contract Agreement - Updated",
+      "description": "This document requires electronic signatures from both parties. Please review all content carefully before signing.",
+      "status": "setup_complete",
+      "updatedOn": "2025-09-17T13:26:10.000Z"
+    },
+    "recipients": [
+      {
+        "id": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+        "name": "John Smith",
+        "email": "john.smith@company.com",
+        "signingOrder": 1,
+        "metadata": {
+          "color": "hsl(200, 75%, 50%)",
+          "lightColor": "hsl(200, 75%, 93%)"
+        }
+      },
+      {
+        "id": "a8b9c1d2-3456-7890-abcd-ef1234567890",
+        "name": "Jane Doe",
+        "email": "jane.doe@partner.com",
+        "signingOrder": 2,
+        "metadata": {
+          "color": "hsl(270, 75%, 50%)",
+          "lightColor": "hsl(270, 75%, 93%)"
+        }
+      }
+    ]
   }
 }
 ```
 
-### Payload Fields
+### Request Fields
 
-| Field                | Type   | Description                                              |
-| -------------------- | ------ | -------------------------------------------------------- |
-| `event`              | string | The type of event (e.g., `signature.document.completed`) |
-| `event_id`           | string | Unique identifier for this event instance                |
-| `created_at`         | string | ISO 8601 timestamp when the event occurred               |
-| `version`            | string | Webhook payload version (currently "1.0")                |
-| `data.document_id`   | string | Unique identifier of the signature document              |
-| `data.title`         | string | Document title/name                                      |
-| `data.status`        | string | Human-readable status                                    |
-| `data.status_enum`   | string | Programmatic status enum value                           |
-| `data.document_hash` | string | Document content hash for integrity verification         |
-| `data.completed_at`  | string | When the document was completed (completed event only)   |
-| `data.voided_at`     | string | When the document was voided (voided event only)         |
-| `data.void_reason`   | string | Reason for voiding (voided event only)                   |
+| Field                              | Type   | Required | Description                                         |
+| ---------------------------------- | ------ | -------- | --------------------------------------------------- |
+| `document.name`                    | string | Yes      | Updated document name                               |
+| `document.description`             | string | No       | Document description for recipients                 |
+| `recipients[].name`                | string | Yes      | Full name of the signer                             |
+| `recipients[].email`               | string | Yes      | Email address for signing notifications             |
+| `recipients[].signingOrder`        | number | Yes      | Order in which recipients should sign (1, 2, 3...)  |
+| `recipients[].metadata.color`      | string | No       | Primary color for this recipient's signature fields |
+| `recipients[].metadata.lightColor` | string | No       | Light color variant for highlights                  |
+| `recipients[].documentId`          | string | Yes      | Document ID from Step 1                             |
 
-## Signature Verification
+<!-- ![Step 2: Add Recipients Postman Example](/img/turbosign/step2-recipients-postman.png) -->
 
-Every webhook request includes an `x-turbodocx-signature` header that you should verify to ensure the webhook is genuinely from TurboDocx.
+### Code Examples
 
-### How It Works
+#### cURL
 
-1. TurboDocx creates a signature using HMAC-SHA256
-2. The signature is computed from: `timestamp + "." + request_body`
-3. The signature is sent in the `x-turbodocx-signature` header
-4. Your endpoint verifies this signature using your webhook secret
+```bash
+curl -X POST "https://www.turbodocx.com/turbosign/documents/4a20eca5-7944-430c-97d5-fcce4be24296/update-with-recipients" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "origin: https://www.turbodocx.com" \
+  -H "referer: https://www.turbodocx.com" \
+  -H "accept: application/json, text/plain, */*" \
+  -d '{
+    "document": {
+      "name": "Contract Agreement - Updated",
+      "description": "This document requires electronic signatures from both parties."
+    },
+    "recipients": [
+      {
+        "name": "John Smith",
+        "email": "john.smith@company.com",
+        "signingOrder": 1,
+        "metadata": {
+          "color": "hsl(200, 75%, 50%)",
+          "lightColor": "hsl(200, 75%, 93%)"
+        },
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
+      },
+      {
+        "name": "Jane Doe",
+        "email": "jane.doe@partner.com",
+        "signingOrder": 2,
+        "metadata": {
+          "color": "hsl(270, 75%, 50%)",
+          "lightColor": "hsl(270, 75%, 93%)"
+        },
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
+      }
+    ]
+  }'
+```
 
-### Verification Headers
+#### JavaScript (Fetch)
 
-Each webhook request includes these headers:
+```javascript
+const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296"; // From Step 1
 
-| Header                    | Description                                              |
-| ------------------------- | -------------------------------------------------------- |
-| `X-TurboDocx-Signature`   | HMAC signature for verification (format: `sha256=<hex>`) |
-| `X-TurboDocx-Timestamp`   | Unix timestamp when the webhook was sent                 |
-| `X-TurboDocx-Event`       | The event type that triggered this webhook               |
-| `X-TurboDocx-Delivery-Id` | Unique ID for this delivery attempt (for idempotency)    |
+const recipientData = {
+  document: {
+    name: "Contract Agreement - Updated",
+    description:
+      "This document requires electronic signatures from both parties.",
+  },
+  recipients: [
+    {
+      name: "John Smith",
+      email: "john.smith@company.com",
+      signingOrder: 1,
+      metadata: {
+        color: "hsl(200, 75%, 50%)",
+        lightColor: "hsl(200, 75%, 93%)",
+      },
+      documentId: documentId,
+    },
+    {
+      name: "Jane Doe",
+      email: "jane.doe@partner.com",
+      signingOrder: 2,
+      metadata: {
+        color: "hsl(270, 75%, 50%)",
+        lightColor: "hsl(270, 75%, 93%)",
+      },
+      documentId: documentId,
+    },
+  ],
+};
 
-### Try it Now
+const response = await fetch(
+  `https://www.turbodocx.com/turbosign/documents/${documentId}/update-with-recipients`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer YOUR_API_TOKEN",
+      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
+      origin: "https://www.turbodocx.com",
+      referer: "https://www.turbodocx.com",
+      accept: "application/json, text/plain, */*",
+    },
+    body: JSON.stringify(recipientData),
+  }
+);
 
-<ScriptLoader 
-  scriptPath="webhooks/verification" 
-  id="webhook-verification-examples"
-  label="Webhook Verification Examples"
-/>
+const result = await response.json();
+const recipients = result.data.recipients; // Save recipient IDs for Step 3
+```
 
-### Security Best Practices
+## Step 3: Prepare for Signing
 
-1. **Always verify signatures**: Never process webhooks without verifying the signature
-2. **Use HTTPS**: Always use HTTPS endpoints in production
-3. **Store secrets securely**: Keep webhook secrets in environment variables or secure vaults
-4. **Implement timestamp validation**: Reject webhooks with timestamps older than 5 minutes
-5. **Use timing-safe comparison**: Prevent timing attacks when comparing signatures
-6. **Handle retries idempotently**: Use the `X-TurboDocx-Delivery-Id` to prevent duplicate processing
-7. **Respond quickly**: Return 200 OK immediately and process webhooks asynchronously
-8. **Log failures**: Keep logs of signature verification failures for security monitoring
+The final step configures signature fields and sends the document to recipients for signing. You can position fields using text anchors or absolute coordinates.
 
-## Delivery & Retries
+### Endpoint
 
-### Delivery Behavior
+```http
+POST https://www.turbodocx.com/turbosign/documents/{documentId}/prepare-for-signing
+```
 
-- **Timeout**: Each delivery attempt has a 10-second timeout
-- **Success Criteria**: Only HTTP 2xx status codes are considered successful
-- **Retry Logic**: Failed deliveries are automatically retried up to 3 times
-- **Retry Schedule**: Exponential backoff between retry attempts
-- **Delivery Order**: Webhooks are delivered to all configured URLs in parallel
+### Headers
 
-### Handling Failures
+```http
+Content-Type: application/json
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+origin: https://www.turbodocx.com
+referer: https://www.turbodocx.com
+accept: application/json, text/plain, */*
+dnt: 1
+accept-language: en-US,en;q=0.9
+priority: u=1, i
+sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Windows"
+sec-fetch-dest: empty
+sec-fetch-mode: cors
+sec-fetch-site: same-site
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
+```
 
-When a webhook delivery fails:
+### Request Body
 
-1. **Automatic Retries**: The system will automatically retry failed deliveries
-2. **Delivery History**: All attempts are logged in the delivery history
-3. **Manual Replay**: You can manually replay failed deliveries from the UI
-4. **Error Details**: Response status codes and error messages are captured
+```json
+[
+  {
+    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+    "type": "signature",
+    "template": {
+      "anchor": "{Signature1}",
+      "placement": "replace",
+      "size": { "width": 200, "height": 80 },
+      "offset": { "x": 0, "y": 0 },
+      "caseSensitive": true,
+      "useRegex": false
+    },
+    "defaultValue": "",
+    "required": true
+  },
+  {
+    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+    "type": "date",
+    "template": {
+      "anchor": "{Date1}",
+      "placement": "replace",
+      "size": { "width": 150, "height": 30 },
+      "offset": { "x": 0, "y": 0 },
+      "caseSensitive": true,
+      "useRegex": false
+    },
+    "defaultValue": "",
+    "required": true
+  },
+  {
+    "recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
+    "type": "signature",
+    "template": {
+      "anchor": "{Signature2}",
+      "placement": "replace",
+      "size": { "width": 200, "height": 80 },
+      "offset": { "x": 0, "y": 0 },
+      "caseSensitive": true,
+      "useRegex": false
+    },
+    "defaultValue": "",
+    "required": true
+  },
+  {
+    "recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
+    "type": "text",
+    "template": {
+      "anchor": "{Title2}",
+      "placement": "replace",
+      "size": { "width": 200, "height": 30 },
+      "offset": { "x": 0, "y": 0 },
+      "caseSensitive": true,
+      "useRegex": false
+    },
+    "defaultValue": "Business Partner",
+    "required": false
+  }
+]
+```
 
-<!-- TODO: Add screenshot of delivery details dialog -->
-<!-- Screenshot placeholder: Delivery details showing error message and response -->
+### Response
 
-### Best Practices for Your Endpoint
+```json
+{
+  "success": true
+}
+```
 
-1. **Return 200 OK quickly**: Process webhooks asynchronously to avoid timeouts
-2. **Implement idempotency**: Handle duplicate deliveries gracefully
-3. **Queue for processing**: Use a message queue for reliable processing
-4. **Monitor your endpoint**: Set up alerting for webhook processing failures
-5. **Handle all event types**: Be prepared for new event types in the future
+### Field Types
 
-## Testing Webhooks
+| Type        | Description                | Use Case                     |
+| ----------- | -------------------------- | ---------------------------- |
+| `signature` | Electronic signature field | Legal signatures             |
+| `date`      | Date picker field          | Signing date, agreement date |
+| `text`      | Text input field           | Names, titles, custom text   |
+| `checkbox`  | Checkbox field             | Acknowledgments, consents    |
+| `radio`     | Radio button field         | Single-choice selections     |
 
-### Using the Test Feature
+### Template Configuration
 
-You can test your webhook configuration before going live:
+| Field                    | Type    | Required | Description                                            |
+| ------------------------ | ------- | -------- | ------------------------------------------------------ |
+| `recipientId`            | string  | Yes      | Recipient ID from Step 2                               |
+| `type`                   | string  | Yes      | Field type (signature, date, text, etc.)               |
+| `template.anchor`        | string  | Yes      | Text anchor to find in document (e.g., "{Signature1}") |
+| `template.placement`     | string  | Yes      | How to place field ("replace", "before", "after")      |
+| `template.size`          | object  | Yes      | Field dimensions (width, height in pixels)             |
+| `template.offset`        | object  | No       | Position offset from anchor (x, y in pixels)           |
+| `template.caseSensitive` | boolean | No       | Whether anchor search is case-sensitive                |
+| `template.useRegex`      | boolean | No       | Whether to treat anchor as regex pattern               |
+| `defaultValue`           | string  | No       | Pre-filled value for the field                         |
+| `required`               | boolean | No       | Whether field must be completed                        |
 
-1. **Configure your webhook** with your test endpoint URL
-2. **Save the configuration** to activate it
-3. **Create a test signature document** and complete the signing process
-4. **Check the Delivery History** to verify successful delivery
-5. **Verify your endpoint** received and processed the webhook correctly
+<!-- ![Step 3: Prepare for Signing Postman Example](/img/turbosign/step3-prepare-postman.png) -->
 
-### Development Tools
+### Code Examples
 
-For local development, consider using:
+#### cURL
 
-- **ngrok**: Expose your local server to receive webhooks
-- **Webhook.site**: Test webhook payloads without writing code
-- **RequestBin**: Inspect webhook requests in real-time
-- **Postman**: Simulate webhook requests for testing
+```bash
+curl -X POST "https://www.turbodocx.com/turbosign/documents/4a20eca5-7944-430c-97d5-fcce4be24296/prepare-for-signing" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "origin: https://www.turbodocx.com" \
+  -H "referer: https://www.turbodocx.com" \
+  -H "accept: application/json, text/plain, */*" \
+  -d '[
+    {
+      "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+      "type": "signature",
+      "template": {
+        "anchor": "{Signature1}",
+        "placement": "replace",
+        "size": { "width": 200, "height": 80 },
+        "offset": { "x": 0, "y": 0 },
+        "caseSensitive": true,
+        "useRegex": false
+      },
+      "required": true
+    },
+    {
+      "recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
+      "type": "signature",
+      "template": {
+        "anchor": "{Signature2}",
+        "placement": "replace",
+        "size": { "width": 200, "height": 80 },
+        "offset": { "x": 0, "y": 0 },
+        "caseSensitive": true,
+        "useRegex": false
+      },
+      "required": true
+    }
+  ]'
+```
 
-### Testing Checklist
+#### JavaScript (Fetch)
 
-- [ ] Webhook endpoint returns 200 OK status
-- [ ] Signature verification is working correctly
-- [ ] Timestamp validation is implemented
-- [ ] All event types are handled
-- [ ] Error handling is in place
-- [ ] Retry logic is handled idempotently
-- [ ] Logs capture webhook processing details
-- [ ] Performance under load has been tested
+```javascript
+const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296"; // From Step 1
+const recipientIds = [
+  "5f673f37-9912-4e72-85aa-8f3649760f6b", // From Step 2
+  "a8b9c1d2-3456-7890-abcd-ef1234567890", // From Step 2
+];
 
-## Troubleshooting
+const signatureFields = [
+  {
+    recipientId: recipientIds[0],
+    type: "signature",
+    template: {
+      anchor: "{Signature1}",
+      placement: "replace",
+      size: { width: 200, height: 80 },
+      offset: { x: 0, y: 0 },
+      caseSensitive: true,
+      useRegex: false,
+    },
+    required: true,
+  },
+  {
+    recipientId: recipientIds[1],
+    type: "signature",
+    template: {
+      anchor: "{Signature2}",
+      placement: "replace",
+      size: { width: 200, height: 80 },
+      offset: { x: 0, y: 0 },
+      caseSensitive: true,
+      useRegex: false,
+    },
+    required: true,
+  },
+];
+
+const response = await fetch(
+  `https://www.turbodocx.com/turbosign/documents/${documentId}/prepare-for-signing`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer YOUR_API_TOKEN",
+      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
+      origin: "https://www.turbodocx.com",
+      referer: "https://www.turbodocx.com",
+      accept: "application/json, text/plain, */*",
+    },
+    body: JSON.stringify(signatureFields),
+  }
+);
+
+const result = await response.json();
+console.log("Document sent for signing:", result.success);
+```
+
+## Complete Workflow Example
+
+Here's a complete example that demonstrates the entire 3-step process:
+
+### JavaScript Implementation
+
+```javascript
+class TurboSignAPI {
+  constructor(apiToken, orgId) {
+    this.apiToken = apiToken;
+    this.orgId = orgId;
+    this.baseURL = "https://www.turbodocx.com";
+  }
+
+  async uploadDocument(name, fileBlob) {
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("file", fileBlob);
+
+    const response = await fetch(`${this.baseURL}/turbosign/documents/upload`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.apiToken}`,
+        "x-rapiddocx-org-id": this.orgId,
+        origin: this.baseURL,
+        referer: this.baseURL,
+        accept: "application/json, text/plain, */*",
+      },
+      body: formData,
+    });
+
+    const result = await response.json();
+    return result.data.id;
+  }
+
+  async addRecipients(documentId, recipients) {
+    const payload = {
+      document: {
+        name: "Contract Agreement",
+        description: "Please review and sign this document.",
+      },
+      recipients: recipients.map((recipient, index) => ({
+        ...recipient,
+        documentId,
+        signingOrder: index + 1,
+        metadata: {
+          color: `hsl(${(index * 60) % 360}, 75%, 50%)`,
+          lightColor: `hsl(${(index * 60) % 360}, 75%, 93%)`,
+        },
+      })),
+    };
+
+    const response = await fetch(
+      `${this.baseURL}/turbosign/documents/${documentId}/update-with-recipients`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiToken}`,
+          "x-rapiddocx-org-id": this.orgId,
+          origin: this.baseURL,
+          referer: this.baseURL,
+          accept: "application/json, text/plain, */*",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const result = await response.json();
+    return result.data.recipients;
+  }
+
+  async prepareForSigning(documentId, recipientIds, signatureAnchors) {
+    const fields = recipientIds.map((recipientId, index) => ({
+      recipientId,
+      type: "signature",
+      template: {
+        anchor: signatureAnchors[index] || `{Signature${index + 1}}`,
+        placement: "replace",
+        size: { width: 200, height: 80 },
+        offset: { x: 0, y: 0 },
+        caseSensitive: true,
+        useRegex: false,
+      },
+      required: true,
+    }));
+
+    const response = await fetch(
+      `${this.baseURL}/turbosign/documents/${documentId}/prepare-for-signing`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiToken}`,
+          "x-rapiddocx-org-id": this.orgId,
+          origin: this.baseURL,
+          referer: this.baseURL,
+          accept: "application/json, text/plain, */*",
+        },
+        body: JSON.stringify(fields),
+      }
+    );
+
+    return await response.json();
+  }
+
+  // Complete workflow method
+  async processDocument(fileName, fileBlob, recipients, signatureAnchors) {
+    try {
+      // Step 1: Upload document
+      const documentId = await this.uploadDocument(fileName, fileBlob);
+      console.log("Document uploaded:", documentId);
+
+      // Step 2: Add recipients
+      const addedRecipients = await this.addRecipients(documentId, recipients);
+      console.log("Recipients added:", addedRecipients.length);
+
+      // Step 3: Prepare for signing
+      const recipientIds = addedRecipients.map((r) => r.id);
+      const result = await this.prepareForSigning(
+        documentId,
+        recipientIds,
+        signatureAnchors
+      );
+
+      if (result.success) {
+        console.log("Document successfully sent for signing!");
+        return { documentId, recipients: addedRecipients };
+      } else {
+        throw new Error("Failed to prepare document for signing");
+      }
+    } catch (error) {
+      console.error("Error processing document:", error);
+      throw error;
+    }
+  }
+}
+
+// Usage example
+const api = new TurboSignAPI("YOUR_API_TOKEN", "YOUR_ORG_ID");
+
+const recipients = [
+  { name: "John Smith", email: "john@company.com" },
+  { name: "Jane Doe", email: "jane@partner.com" },
+];
+
+const signatureAnchors = ["{Signature1}", "{Signature2}"];
+
+// Process the document
+api
+  .processDocument("Contract.pdf", pdfFileBlob, recipients, signatureAnchors)
+  .then((result) => {
+    console.log("Success:", result);
+  })
+  .catch((error) => {
+    console.error("Failed:", error);
+  });
+```
+
+## Best Practices
+
+### Security
+
+- **Never expose API tokens**: Store tokens securely in environment variables
+- **Use HTTPS only**: All API calls must use HTTPS in production
+- **Validate inputs**: Always validate recipient emails and document names
+- **Implement rate limiting**: Respect API rate limits to avoid throttling
+
+### Error Handling
+
+- **Check HTTP status codes**: Always verify response status before processing
+- **Handle timeouts**: Implement retry logic for network failures
+- **Log API responses**: Keep detailed logs for debugging and monitoring
+- **Validate responses**: Check response structure before accessing data
+
+### Performance
+
+- **Upload optimization**: Compress PDFs when possible to reduce upload time
+- **Batch operations**: Group multiple recipients in single API calls
+- **Async processing**: Use webhooks instead of polling for status updates
+- **Connection pooling**: Reuse HTTP connections for multiple requests
+
+### Document Preparation
+
+- **Use text anchors**: Place anchor text like `{Signature1}` in your PDFs for precise field positioning
+- **Consistent naming**: Use consistent anchor naming conventions across documents
+- **Test coordinates**: Verify field positions with test documents before production
+- **Document validation**: Ensure PDFs are not password-protected or corrupted
+
+## Error Handling & Troubleshooting
+
+### Common HTTP Status Codes
+
+| Status Code | Description           | Solution                                      |
+| ----------- | --------------------- | --------------------------------------------- |
+| `200`       | Success               | Request completed successfully                |
+| `400`       | Bad Request           | Check request body format and required fields |
+| `401`       | Unauthorized          | Verify API token and headers                  |
+| `403`       | Forbidden             | Check organization ID and permissions         |
+| `404`       | Not Found             | Verify document ID and endpoint URLs          |
+| `422`       | Unprocessable Entity  | Validate field values and constraints         |
+| `429`       | Too Many Requests     | Implement rate limiting and retry logic       |
+| `500`       | Internal Server Error | Contact support if persistent                 |
 
 ### Common Issues
 
-#### Webhook Not Receiving Events
+#### Authentication Failures
 
-**Symptoms**: Events occur but webhooks aren't triggered
-
-**Solutions**:
-
-- Verify webhook configuration is saved and active
-- Check that you've subscribed to the correct events
-- Ensure your endpoint URL is correct and accessible
-- Review the Delivery History for error messages
-
-#### Signature Verification Failing
-
-**Symptoms**: 401 Unauthorized responses from your endpoint
+**Symptoms**: 401 Unauthorized responses
 
 **Solutions**:
 
-- Ensure you're using the raw request body (not parsed JSON)
-- Verify the webhook secret matches exactly
-- Check that header names are lowercase in your code
-- Confirm timestamp validation isn't too strict
+- Verify API token is correct and not expired
+- Check that `x-rapiddocx-org-id` header matches your organization
+- Ensure Bearer token format: `Bearer YOUR_TOKEN`
 
-#### Timeouts
+#### Document Upload Failures
 
-**Symptoms**: Webhook deliveries show timeout errors
-
-**Solutions**:
-
-- Return 200 OK immediately, process asynchronously
-- Optimize endpoint performance
-- Check network connectivity and firewall rules
-- Consider increasing server resources
-
-#### Duplicate Deliveries
-
-**Symptoms**: Same event processed multiple times
+**Symptoms**: Upload returns error or times out
 
 **Solutions**:
 
-- Implement idempotency using `X-TurboDocx-Delivery-Id`
-- Store processed event IDs temporarily
-- Use database constraints to prevent duplicates
+- Verify PDF file is not corrupted or password-protected
+- Check file size is under the maximum limit (typically 10MB)
+- Ensure file is actually a PDF (check MIME type)
+- Verify network connection and try again
 
-### Getting Help
+#### Recipient Configuration Issues
 
-If you encounter issues not covered here:
+**Symptoms**: Recipients not receiving signing invitations
 
-1. **Check the Delivery History** for detailed error messages
-2. **Review your endpoint logs** for processing errors
-3. **Test with a simple endpoint** to isolate issues
-4. **Contact Support** with your webhook configuration details and error messages
+**Solutions**:
 
-## API Reference
+- Verify email addresses are valid and correctly formatted
+- Check signing order numbers are sequential (1, 2, 3...)
+- Ensure document ID from Step 1 is used correctly
+- Verify recipient metadata format is correct
 
-### Webhook Object
+#### Field Positioning Problems
 
-```json
-{
-  "id": "webhook_abc123",
-  "orgId": "org_xyz789",
-  "name": "signature",
-  "urls": [
-    "https://api.example.com/webhooks/turbosign",
-    "https://backup.example.com/webhooks"
-  ],
-  "events": ["signature.document.completed", "signature.document.voided"],
-  "secretExists": true,
-  "maskedSecret": "whs***f6a",
-  "isActive": true,
-  "createdOn": "2024-01-15T09:00:00.000Z",
-  "updatedOn": "2024-01-15T09:00:00.000Z"
+**Symptoms**: Signature fields appear in wrong locations
+
+**Solutions**:
+
+- Verify anchor text exists in the PDF document
+- Check anchor text matches exactly (case-sensitive by default)
+- Test with `caseSensitive: false` if having matching issues
+- Use PDF coordinates as fallback if anchors don't work
+
+#### Webhook Integration Issues
+
+**Symptoms**: Not receiving completion notifications
+
+**Solutions**:
+
+- Verify webhook URLs are accessible and return 200 OK
+- Check webhook configuration in organization settings
+- Review webhook delivery history for error details
+- Test webhook endpoints with external tools
+
+### Debugging Tips
+
+1. **Enable request logging**: Log all API requests and responses
+2. **Test step by step**: Isolate issues by testing each step individually
+3. **Use Postman**: Import examples and test manually before coding
+4. **Check network**: Verify connectivity to `turbodocx.com`
+5. **Validate JSON**: Ensure request bodies are valid JSON format
+
+<!-- ![API Debugging Workflow](/img/turbosign/api-debugging-flow.png) -->
+
+## Rate Limits & Quotas
+
+### Current Limits
+
+- **Upload API**: 10 requests per minute per organization
+- **Recipients API**: 20 requests per minute per organization
+- **Signing API**: 30 requests per minute per organization
+- **File size limit**: 10MB per document
+- **Recipients per document**: 50 maximum
+
+### Handling Rate Limits
+
+When you exceed rate limits, the API returns HTTP 429 with a `Retry-After` header:
+
+```javascript
+if (response.status === 429) {
+  const retryAfter = response.headers.get("Retry-After");
+  console.log(`Rate limited. Retry after ${retryAfter} seconds`);
+  // Implement exponential backoff
 }
 ```
 
-### Delivery Object
+### Best Practices
 
-```json
-{
-  "id": "delivery_def456",
-  "webhookId": "webhook_abc123",
-  "eventType": "signature.document.completed",
-  "url": "https://api.example.com/webhooks/turbosign",
-  "httpStatus": 200,
-  "attemptCount": 1,
-  "maxAttempts": 3,
-  "isDelivered": true,
-  "deliveredAt": "2024-01-15T10:30:05.000Z",
-  "createdOn": "2024-01-15T10:30:00.000Z",
-  "updatedOn": "2024-01-15T10:30:05.000Z"
-}
-```
+- **Implement exponential backoff**: Gradually increase retry delays
+- **Monitor usage**: Track API calls to stay within limits
+- **Batch operations**: Group multiple recipients in single calls
+- **Cache responses**: Store document IDs to avoid redundant uploads
 
----
+## Testing & Validation
+
+### Test Environment
+
+Use the same production URLs for testing, but with test data:
+
+- **Test organization**: Use a separate test organization ID
+- **Test documents**: Use sample PDFs with clear anchor text
+- **Test emails**: Use your own email addresses for testing
+- **Monitor logs**: Enable detailed logging during testing
+
+### Validation Checklist
+
+- [ ] API authentication is working correctly
+- [ ] Document upload returns valid document ID
+- [ ] Recipients are added with correct signing order
+- [ ] Signature fields are positioned correctly
+- [ ] Email notifications are sent to recipients
+- [ ] Signing process completes successfully
+- [ ] Webhooks are received (if configured)
+- [ ] Error handling works for invalid inputs
+
+### Load Testing
+
+Before production deployment:
+
+1. **Test with multiple documents**: Upload several PDFs simultaneously
+2. **Test recipient limits**: Try with maximum number of recipients
+3. **Test field complexity**: Use documents with many signature fields
+4. **Monitor response times**: Ensure acceptable performance
+5. **Test error scenarios**: Verify graceful handling of failures
 
 ## Next Steps
 
-- [Learn about TurboSign](/docs/TurboSign/Setting-up-TurboSign)
-- [Explore API Documentation](/docs/API/turbodocx-api-documentation)
-- [View Integration Guides](/docs/Integrations)
+### Advanced Features
+
+- **Custom branding**: Customize signing interface with your brand
+- **Advanced field types**: Use checkboxes, radio buttons, and dropdowns
+- **Conditional logic**: Show/hide fields based on other field values
+- **Document templates**: Create reusable templates with pre-positioned fields
+- **Bulk operations**: Process multiple documents in batch operations
+
+### Integration Patterns
+
+- **Webhook integration**: Receive real-time completion notifications
+- **Database storage**: Store document IDs and recipient information
+- **User management**: Integrate with your existing user authentication
+- **Audit trails**: Maintain detailed logs of all signing activities
+- **Document storage**: Archive completed documents securely
+
+### Related Documentation
+
+- [TurboSign Setup Guide](/docs/TurboSign/Setting-up-TurboSign)
+- [Webhook Configuration](/docs/TurboSign/Webhooks)
+- [API Authentication](/docs/API/turbodocx-api-documentation)
+- [Integration Examples](/docs/Integrations)
+
+## Support
+
+Need help with your integration?
+
+- **Documentation**: [https://docs.turbodocx.com](https://docs.turbodocx.com)
+- **Support Portal**: Contact our technical support team
+- **Community**: Join our developer community for tips and best practices
+- **Status Page**: Monitor API status and planned maintenance
+
+---
+
+Ready to get started? Follow the step-by-step guide above to integrate TurboSign API into your application and start collecting electronic signatures programmatically!
