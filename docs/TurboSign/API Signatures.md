@@ -58,6 +58,18 @@ The TurboSign API follows a simple 3-step process to prepare documents for elect
 - **Real-time Status Updates**: Track document status throughout the signing process
 - **Webhook Integration**: Receive notifications when signing is complete
 
+## TLDR; Complete Working Example 🚀
+
+Don't want to read all the details? Here's the complete 3-step workflow that actually works:
+
+<ScriptLoader
+  scriptPath="turbosign/api/complete-workflow"
+  id="complete-workflow-examples"
+  label="Complete Workflow Implementation"
+/>
+
+Now that you've seen the whole thing, let's dive into the details...
+
 ## Prerequisites
 
 Before you begin, ensure you have:
@@ -381,20 +393,25 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
 
 ### Field Types
 
-| Type        | Description                | Use Case                     |
-| ----------- | -------------------------- | ---------------------------- |
-| `signature` | Electronic signature field | Legal signatures             |
-| `date`      | Date picker field          | Signing date, agreement date |
-| `text`      | Text input field           | Names, titles, custom text   |
-| `checkbox`  | Checkbox field             | Acknowledgments, consents    |
-| `radio`     | Radio button field         | Single-choice selections     |
+| Type        | Description                | Use Case                                          |
+| ----------- | -------------------------- | ------------------------------------------------- |
+| `signature` | Electronic signature field | Legal signatures                                  |
+| `initial`   | Initial field              | Document initials, paragraph acknowledgments     |
+| `date`      | Date picker field          | Signing date, agreement date                     |
+| `full_name` | Full name field            | Automatically fills signer's complete name       |
+| `first_name`| First name field           | Automatically fills signer's first name          |
+| `last_name` | Last name field            | Automatically fills signer's last name           |
+| `title`     | Title/job title field      | Professional title or position                   |
+| `company`   | Company name field         | Organization or company name                     |
+| `email`     | Email address field        | Signer's email address                           |
+| `text`      | Generic text input field   | Custom text, notes, or any other text input      |
 
 ### Template Configuration
 
 | Field                    | Type    | Required | Description                                            |
 | ------------------------ | ------- | -------- | ------------------------------------------------------ |
 | `recipientId`            | string  | Yes      | Recipient ID from Step 2                               |
-| `type`                   | string  | Yes      | Field type (signature, date, text, etc.)               |
+| `type`                   | string  | Yes      | Field type - see Field Types table above for all options |
 | `template.anchor`        | string  | Yes      | Text anchor to find in document (e.g., "{Signature1}") |
 | `template.placement`     | string  | Yes      | How to place field ("replace", "before", "after")      |
 | `template.size`          | object  | Yes      | Field dimensions (width, height in pixels)             |
@@ -412,16 +429,6 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
   scriptPath="turbosign/api/step3-prepare" 
   id="step3-prepare-examples"
   label="Step 3: Prepare for Signing Examples"
-/>
-
-## Complete Workflow Example
-
-Here's a complete example that demonstrates the entire 3-step process:
-
-<ScriptLoader 
-  scriptPath="turbosign/api/complete-workflow" 
-  id="complete-workflow-examples"
-  label="Complete Workflow Implementation"
 />
 
 ## Best Practices
