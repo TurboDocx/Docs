@@ -57,6 +57,14 @@ const config = {
       }
     ],
     [
+      './docusaurus-plugin-indexnow.js',
+      {
+        enabled: true,
+        submitOnBuild: false, // Only submit via CI/CD after deployment
+        maxUrls: 100
+      }
+    ],
+    [
       'docusaurus-plugin-openapi-docs',
       {
         id: "apiDocs",
