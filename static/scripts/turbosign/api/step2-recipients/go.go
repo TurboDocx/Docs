@@ -43,9 +43,7 @@ func main() {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
 	req.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req.Header.Set("origin", "https://www.turbodocx.com")
-	req.Header.Set("referer", "https://www.turbodocx.com")
-	req.Header.Set("accept", "application/json, text/plain, */*")
+	req.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	client := &http.Client{}
 	resp, _ := client.Do(req)

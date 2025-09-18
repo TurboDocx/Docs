@@ -24,9 +24,7 @@ http.use_ssl = true
 request = Net::HTTP::Post.new(uri)
 request['Authorization'] = 'Bearer YOUR_API_TOKEN'
 request['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request['origin'] = 'https://www.turbodocx.com'
-request['referer'] = 'https://www.turbodocx.com'
-request['accept'] = 'application/json, text/plain, */*'
+request['User-Agent'] = 'TurboDocx API Client'
 request['Content-Type'] = "multipart/form-data; boundary=#{boundary}"
 request.body = form_data
 
@@ -70,9 +68,7 @@ request2 = Net::HTTP::Post.new(uri2)
 request2['Content-Type'] = 'application/json'
 request2['Authorization'] = 'Bearer YOUR_API_TOKEN'
 request2['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request2['origin'] = 'https://www.turbodocx.com'
-request2['referer'] = 'https://www.turbodocx.com'
-request2['accept'] = 'application/json, text/plain, */*'
+request2['User-Agent'] = 'TurboDocx API Client'
 request2.body = recipient_payload.to_json
 
 recipient_response = http.request(request2)
@@ -145,9 +141,7 @@ request3 = Net::HTTP::Post.new(uri3)
 request3['Content-Type'] = 'application/json'
 request3['Authorization'] = 'Bearer YOUR_API_TOKEN'
 request3['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request3['origin'] = 'https://www.turbodocx.com'
-request3['referer'] = 'https://www.turbodocx.com'
-request3['accept'] = 'application/json, text/plain, */*'
+request3['User-Agent'] = 'TurboDocx API Client'
 request3.body = signature_fields.to_json
 
 prepare_response = http.request(request3)

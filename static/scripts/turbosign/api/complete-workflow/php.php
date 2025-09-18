@@ -13,9 +13,7 @@ $upload_data = [
 $upload_headers = [
     'Authorization: Bearer YOUR_API_TOKEN',
     'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*'
+    'User-Agent: TurboDocx API Client'
 ];
 
 $ch = curl_init();
@@ -67,9 +65,7 @@ $recipient_headers = [
     'Content-Type: application/json',
     'Authorization: Bearer YOUR_API_TOKEN',
     'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*'
+    'User-Agent: TurboDocx API Client'
 ];
 
 $ch = curl_init();
@@ -151,9 +147,7 @@ $prepare_headers = [
     'Content-Type: application/json',
     'Authorization: Bearer YOUR_API_TOKEN',
     'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*'
+    'User-Agent: TurboDocx API Client'
 ];
 
 $ch = curl_init();

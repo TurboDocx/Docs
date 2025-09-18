@@ -42,9 +42,7 @@ func main() {
 	req, _ := http.NewRequest("POST", "https://www.turbodocx.com/turbosign/documents/upload", &buf)
 	req.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
 	req.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req.Header.Set("origin", "https://www.turbodocx.com")
-	req.Header.Set("referer", "https://www.turbodocx.com")
-	req.Header.Set("accept", "application/json, text/plain, */*")
+	req.Header.Set("User-Agent", "TurboDocx API Client")
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	
 	client := &http.Client{}
@@ -90,9 +88,7 @@ func main() {
 	req2.Header.Set("Content-Type", "application/json")
 	req2.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
 	req2.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req2.Header.Set("origin", "https://www.turbodocx.com")
-	req2.Header.Set("referer", "https://www.turbodocx.com")
-	req2.Header.Set("accept", "application/json, text/plain, */*")
+	req2.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	resp2, _ := client.Do(req2)
 	defer resp2.Body.Close()
@@ -166,9 +162,7 @@ func main() {
 	req3.Header.Set("Content-Type", "application/json")
 	req3.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
 	req3.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req3.Header.Set("origin", "https://www.turbodocx.com")
-	req3.Header.Set("referer", "https://www.turbodocx.com")
-	req3.Header.Set("accept", "application/json, text/plain, */*")
+	req3.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	resp3, _ := client.Do(req3)
 	defer resp3.Body.Close()

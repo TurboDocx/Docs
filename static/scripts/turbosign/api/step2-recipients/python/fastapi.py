@@ -10,12 +10,7 @@ headers = {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_API_TOKEN",
     "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-    "origin": "https://www.turbodocx.com",
-    "referer": "https://www.turbodocx.com",
-    "accept": "application/json, text/plain, */*",
-    "dnt": "1",
-    "accept-language": "en-US,en;q=0.9",
-    "priority": "u=1, i"
+    "User-Agent": "TurboDocx API Client"
 }
 
 payload = {

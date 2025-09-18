@@ -44,9 +44,7 @@ public class TurboSignRecipients {
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer YOUR_API_TOKEN")
             .header("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-            .header("origin", "https://www.turbodocx.com")
-            .header("referer", "https://www.turbodocx.com")
-            .header("accept", "application/json, text/plain, */*")
+            .header("User-Agent", "TurboDocx API Client")
             .POST(HttpRequest.BodyPublishers.ofString(payload))
             .build();
         

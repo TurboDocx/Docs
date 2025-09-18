@@ -43,9 +43,7 @@ request = Net::HTTP::Post.new(uri)
 request['Content-Type'] = 'application/json'
 request['Authorization'] = 'Bearer YOUR_API_TOKEN'
 request['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request['origin'] = 'https://www.turbodocx.com'
-request['referer'] = 'https://www.turbodocx.com'
-request['accept'] = 'application/json, text/plain, */*'
+request['User-Agent'] = 'TurboDocx API Client'
 request.body = payload.to_json
 
 response = http.request(request)

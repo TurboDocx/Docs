@@ -33,9 +33,7 @@ public class TurboSignWorkflow {
             .uri(URI.create("https://www.turbodocx.com/turbosign/documents/upload"))
             .header("Authorization", "Bearer YOUR_API_TOKEN")
             .header("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-            .header("origin", "https://www.turbodocx.com")
-            .header("referer", "https://www.turbodocx.com")
-            .header("accept", "application/json, text/plain, */*")
+            .header("User-Agent", "TurboDocx API Client")
             .header("Content-Type", "multipart/form-data; boundary=" + boundary)
             .POST(HttpRequest.BodyPublishers.ofByteArray(baos.toByteArray()))
             .build();
@@ -81,9 +79,7 @@ public class TurboSignWorkflow {
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer YOUR_API_TOKEN")
             .header("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-            .header("origin", "https://www.turbodocx.com")
-            .header("referer", "https://www.turbodocx.com")
-            .header("accept", "application/json, text/plain, */*")
+            .header("User-Agent", "TurboDocx API Client")
             .POST(HttpRequest.BodyPublishers.ofString(recipientPayload))
             .build();
         
@@ -162,9 +158,7 @@ public class TurboSignWorkflow {
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer YOUR_API_TOKEN")
             .header("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-            .header("origin", "https://www.turbodocx.com")
-            .header("referer", "https://www.turbodocx.com")
-            .header("accept", "application/json, text/plain, */*")
+            .header("User-Agent", "TurboDocx API Client")
             .POST(HttpRequest.BodyPublishers.ofString(signaturePayload))
             .build();
         

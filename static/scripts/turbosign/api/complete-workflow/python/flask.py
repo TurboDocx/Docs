@@ -13,9 +13,7 @@ upload_response = requests.post(
     headers={
         'Authorization': 'Bearer YOUR_API_TOKEN',
         'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-        'origin': 'https://www.turbodocx.com',
-        'referer': 'https://www.turbodocx.com',
-        'accept': 'application/json, text/plain, */*'
+        'User-Agent': 'TurboDocx API Client'
     },
     files=files
 )
@@ -59,9 +57,7 @@ recipient_response = requests.post(
         'Content-Type': 'application/json',
         'Authorization': 'Bearer YOUR_API_TOKEN',
         'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-        'origin': 'https://www.turbodocx.com',
-        'referer': 'https://www.turbodocx.com',
-        'accept': 'application/json, text/plain, */*'
+        'User-Agent': 'TurboDocx API Client'
     },
     json=recipient_payload
 )
@@ -135,9 +131,7 @@ prepare_response = requests.post(
         'Content-Type': 'application/json',
         'Authorization': 'Bearer YOUR_API_TOKEN',
         'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-        'origin': 'https://www.turbodocx.com',
-        'referer': 'https://www.turbodocx.com',
-        'accept': 'application/json, text/plain, */*'
+        'User-Agent': 'TurboDocx API Client'
     },
     json=signature_fields
 )

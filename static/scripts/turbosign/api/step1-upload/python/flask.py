@@ -11,9 +11,7 @@ response = requests.post(
     headers={
         'Authorization': 'Bearer YOUR_API_TOKEN',
         'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-        'origin': 'https://www.turbodocx.com',
-        'referer': 'https://www.turbodocx.com',
-        'accept': 'application/json, text/plain, */*'
+        'User-Agent': 'TurboDocx API Client'
     },
     files=files
 )

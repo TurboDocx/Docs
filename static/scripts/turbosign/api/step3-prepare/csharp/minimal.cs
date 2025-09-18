@@ -14,9 +14,7 @@ class Program
         
         client.DefaultRequestHeaders.Add("Authorization", "Bearer YOUR_API_TOKEN");
         client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID");
-        client.DefaultRequestHeaders.Add("origin", "https://www.turbodocx.com");
-        client.DefaultRequestHeaders.Add("referer", "https://www.turbodocx.com");
-        client.DefaultRequestHeaders.Add("accept", "application/json, text/plain, */*");
+        client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
         
         var payload = @"[
           {

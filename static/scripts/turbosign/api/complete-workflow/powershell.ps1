@@ -27,9 +27,7 @@ $uploadBody = New-Object byte[] ($formDataBytes.Length + $fileBytes.Length + $en
 $uploadHeaders = @{
     'Authorization' = 'Bearer YOUR_API_TOKEN'
     'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
-    'origin' = 'https://www.turbodocx.com'
-    'referer' = 'https://www.turbodocx.com'
-    'accept' = 'application/json, text/plain, */*'
+    'User-Agent' = 'TurboDocx API Client'
     'Content-Type' = "multipart/form-data; boundary=$boundary"
 }
 
@@ -70,9 +68,7 @@ $recipientHeaders = @{
     'Content-Type' = 'application/json'
     'Authorization' = 'Bearer YOUR_API_TOKEN'
     'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
-    'origin' = 'https://www.turbodocx.com'
-    'referer' = 'https://www.turbodocx.com'
-    'accept' = 'application/json, text/plain, */*'
+    'User-Agent' = 'TurboDocx API Client'
 }
 
 $recipientResponse = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/$documentId/update-with-recipients" -Method Post -Body $recipientPayload -Headers $recipientHeaders -ContentType 'application/json'
@@ -142,9 +138,7 @@ $prepareHeaders = @{
     'Content-Type' = 'application/json'
     'Authorization' = 'Bearer YOUR_API_TOKEN'
     'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
-    'origin' = 'https://www.turbodocx.com'
-    'referer' = 'https://www.turbodocx.com'
-    'accept' = 'application/json, text/plain, */*'
+    'User-Agent' = 'TurboDocx API Client'
 }
 
 $finalResponse = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/$documentId/prepare-for-signing" -Method Post -Body $signatureFields -Headers $prepareHeaders -ContentType 'application/json'

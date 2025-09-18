@@ -21,9 +21,7 @@ http.use_ssl = true
 request = Net::HTTP::Post.new(uri)
 request['Authorization'] = 'Bearer YOUR_API_TOKEN'
 request['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request['origin'] = 'https://www.turbodocx.com'
-request['referer'] = 'https://www.turbodocx.com'
-request['accept'] = 'application/json, text/plain, */*'
+request['User-Agent'] = 'TurboDocx API Client'
 request['Content-Type'] = "multipart/form-data; boundary=#{boundary}"
 request.body = form_data
 
