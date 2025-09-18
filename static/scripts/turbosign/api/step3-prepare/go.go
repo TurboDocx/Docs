@@ -11,6 +11,7 @@ const (
 	API_TOKEN = "YOUR_API_TOKEN"
 	ORG_ID = "YOUR_ORGANIZATION_ID"
 	BASE_URL = "https://api.turbodocx.com"
+	DOCUMENT_NAME = "Contract Agreement"
 )
 
 func main() {

@@ -3,6 +3,7 @@
 $API_TOKEN = "YOUR_API_TOKEN";
 $ORG_ID = "YOUR_ORGANIZATION_ID";
 $BASE_URL = "https://api.turbodocx.com";
+$DOCUMENT_NAME = "Contract Agreement";
 
 // Step 3: Prepare for Signing
 $document_id = "4a20eca5-7944-430c-97d5-fcce4be24296";

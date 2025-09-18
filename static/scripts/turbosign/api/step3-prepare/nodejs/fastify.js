@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORG_ID = "YOUR_ORGANIZATION_ID";
 const BASE_URL = "https://api.turbodocx.com";
+const DOCUMENT_NAME = "Contract Agreement";
 
 // Step 3: Prepare for Signing
 const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296";
