@@ -571,55 +571,13 @@ if (response.status === 429) {
 - **Batch operations**: Group multiple recipients in single calls
 - **Cache responses**: Store document IDs to avoid redundant uploads
 
-## Testing & Validation
-
-### Test Environment
-
-Use the same production URLs for testing, but with test data:
-
-- **Test organization**: Use a separate test organization ID
-- **Test documents**: Use sample PDFs with clear anchor text
-- **Test emails**: Use your own email addresses for testing
-- **Monitor logs**: Enable detailed logging during testing
-
-### Validation Checklist
-
-- [ ] API authentication is working correctly
-- [ ] Document upload returns valid document ID
-- [ ] Recipients are added with correct signing order
-- [ ] Signature fields are positioned correctly
-- [ ] Email notifications are sent to recipients
-- [ ] Signing process completes successfully
-- [ ] Webhooks are received (if configured)
-- [ ] Error handling works for invalid inputs
-
-### Load Testing
-
-Before production deployment:
-
-1. **Test with multiple documents**: Upload several PDFs simultaneously
-2. **Test recipient limits**: Try with maximum number of recipients
-3. **Test field complexity**: Use documents with many signature fields
-4. **Monitor response times**: Ensure acceptable performance
-5. **Test error scenarios**: Verify graceful handling of failures
-
 ## Next Steps
 
-### Advanced Features
+### Webhooks - The Next Logical Step
 
-- **Custom branding**: Customize signing interface with your brand
-- **Advanced field types**: Use checkboxes, radio buttons, and dropdowns
-- **Conditional logic**: Show/hide fields based on other field values
-- **Document templates**: Create reusable templates with pre-positioned fields
-- **Bulk operations**: Process multiple documents in batch operations
+Now that you've integrated the basic signing flow, the next step is setting up webhooks to receive real-time notifications when documents are signed. This eliminates the need for polling and provides instant updates about document status changes.
 
-### Integration Patterns
-
-- **Webhook integration**: Receive real-time completion notifications
-- **Database storage**: Store document IDs and recipient information
-- **User management**: Integrate with your existing user authentication
-- **Audit trails**: Maintain detailed logs of all signing activities
-- **Document storage**: Archive completed documents securely
+📖 **[Learn how to configure Webhooks →](/docs/TurboSign/Webhooks)**
 
 ### Related Documentation
 
@@ -632,9 +590,9 @@ Before production deployment:
 
 Need help with your integration?
 
+- **Discord Community**: [Join our Discord server](https://discord.gg/turbodocx) for real-time support and discussions
 - **Documentation**: [https://docs.turbodocx.com](https://docs.turbodocx.com)
 - **Support Portal**: Contact our technical support team
-- **Community**: Join our developer community for tips and best practices
 - **Status Page**: Monitor API status and planned maintenance
 
 ---
