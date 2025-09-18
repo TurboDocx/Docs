@@ -1,11 +1,17 @@
 const fetch = require('node-fetch');
 
+// Configuration - Update these values
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORG_ID = "YOUR_ORGANIZATION_ID";
+const BASE_URL = "https://www.turbodocx.com/turbosign";
+const DOCUMENT_NAME = "Contract Agreement";
+
 // Step 2: Add Recipients
 const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296";
 
 const payload = {
   "document": {
-    "name": "Contract Agreement - Updated",
+    "name": `${DOCUMENT_NAME} - Updated`,
     "description": "This document requires electronic signatures from both parties. Please review all content carefully before signing."
   },
   "recipients": [
@@ -32,12 +38,12 @@ const payload = {
   ]
 };
 
-const response = await fetch(`https://www.turbodocx.com/turbosign/documents/${documentId}/update-with-recipients`, {
+const response = await fetch(`${BASE_URL}/documents/${documentId}/update-with-recipients`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
+    'Authorization': `Bearer ${API_TOKEN}`,
+    'x-rapiddocx-org-id': ORG_ID,
     'User-Agent': 'TurboDocx API Client'
   },
   body: JSON.stringify(payload)

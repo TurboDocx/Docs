@@ -1,5 +1,10 @@
 const fetch = require('node-fetch');
 
+// Configuration - Update these values
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORG_ID = "YOUR_ORGANIZATION_ID";
+const BASE_URL = "https://www.turbodocx.com/turbosign";
+
 // Step 3: Prepare for Signing
 const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296";
 
@@ -62,12 +67,12 @@ const signatureFields = [
   }
 ];
 
-const response = await fetch(`https://www.turbodocx.com/turbosign/documents/${documentId}/prepare-for-signing`, {
+const response = await fetch(`${BASE_URL}/documents/${documentId}/prepare-for-signing`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
+    'Authorization': `Bearer ${API_TOKEN}`,
+    'x-rapiddocx-org-id': ORG_ID,
     'User-Agent': 'TurboDocx API Client'
   },
   body: JSON.stringify(signatureFields)

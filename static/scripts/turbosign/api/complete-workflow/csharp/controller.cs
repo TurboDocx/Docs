@@ -7,6 +7,11 @@ using System.Text.Json;
 
 class Program
 {
+    // Configuration - Update these values
+    private const string API_TOKEN = "YOUR_API_TOKEN";
+    private const string ORG_ID = "YOUR_ORGANIZATION_ID";
+    private const string BASE_URL = "https://www.turbodocx.com/turbosign";
+    private const string DOCUMENT_NAME = "Contract Agreement";
     static async Task Main(string[] args)
     {
         // Complete Workflow: Upload → Recipients → Prepare
@@ -14,17 +19,17 @@ class Program
         
         // Step 1: Upload Document
         using var uploadContent = new MultipartFormDataContent();
-        uploadContent.Add(new StringContent("Contract Agreement"), "name");
+        uploadContent.Add(new StringContent(DOCUMENT_NAME), "name");
         
         var fileContent = new ByteArrayContent(File.ReadAllBytes("./document.pdf"));
         fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/pdf");
         uploadContent.Add(fileContent, "file", "document.pdf");
         
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer YOUR_API_TOKEN");
-        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID");
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + API_TOKEN);
+        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", ORG_ID);
         client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
         
-        var uploadResponse = await client.PostAsync("https://www.turbodocx.com/turbosign/documents/upload", uploadContent);
+        var uploadResponse = await client.PostAsync(BASE_URL + "/documents/upload", uploadContent);
         var uploadResult = await uploadResponse.Content.ReadAsStringAsync();
         
         var uploadDoc = JsonDocument.Parse(uploadResult);
@@ -33,7 +38,7 @@ class Program
         // Step 2: Add Recipients
         var recipientPayload = @"{
           ""document"": {
-            ""name"": ""Contract Agreement - Updated"",
+            ""name"": """ + DOCUMENT_NAME + " - Updated"",
             ""description"": ""This document requires electronic signatures from both parties. Please review all content carefully before signing.""
           },
           ""recipients"": [
@@ -61,7 +66,7 @@ class Program
         }";
         
         var recipientContent = new StringContent(recipientPayload, Encoding.UTF8, "application/json");
-        var recipientResponse = await client.PostAsync($"https://www.turbodocx.com/turbosign/documents/{documentId}/update-with-recipients", recipientContent);
+        var recipientResponse = await client.PostAsync($"{BASE_URL}/documents/{documentId}/update-with-recipients", recipientContent);
         var recipientResult = await recipientResponse.Content.ReadAsStringAsync();
         
         var recipientDoc = JsonDocument.Parse(recipientResult);
@@ -128,7 +133,7 @@ class Program
         ]";
         
         var prepareContent = new StringContent(signaturePayload, Encoding.UTF8, "application/json");
-        var prepareResponse = await client.PostAsync($"https://www.turbodocx.com/turbosign/documents/{documentId}/prepare-for-signing", prepareContent);
+        var prepareResponse = await client.PostAsync($"{BASE_URL}/documents/{documentId}/prepare-for-signing", prepareContent);
         var finalResult = await prepareResponse.Content.ReadAsStringAsync();
         
         Console.WriteLine(finalResult);

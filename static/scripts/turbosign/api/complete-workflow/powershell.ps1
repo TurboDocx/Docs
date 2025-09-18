@@ -1,3 +1,9 @@
+# Configuration - Update these values
+$API_TOKEN = "YOUR_API_TOKEN"
+$ORG_ID = "YOUR_ORGANIZATION_ID"
+$BASE_URL = "https://www.turbodocx.com/turbosign"
+$DOCUMENT_NAME = "Contract Agreement"
+
 # Complete Workflow: Upload → Recipients → Prepare
 
 # Step 1: Upload Document
@@ -9,7 +15,7 @@ $formData = @"
 --$boundary
 Content-Disposition: form-data; name="name"
 
-Contract Agreement
+$DOCUMENT_NAME
 --$boundary
 Content-Disposition: form-data; name="file"; filename="document.pdf"
 Content-Type: application/pdf
@@ -25,19 +31,19 @@ $uploadBody = New-Object byte[] ($formDataBytes.Length + $fileBytes.Length + $en
 [Array]::Copy($endBoundary, 0, $uploadBody, $formDataBytes.Length + $fileBytes.Length, $endBoundary.Length)
 
 $uploadHeaders = @{
-    'Authorization' = 'Bearer YOUR_API_TOKEN'
-    'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
+    'Authorization' = "Bearer $API_TOKEN"
+    'x-rapiddocx-org-id' = $ORG_ID
     'User-Agent' = 'TurboDocx API Client'
     'Content-Type' = "multipart/form-data; boundary=$boundary"
 }
 
-$uploadResponse = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/upload" -Method Post -Body $uploadBody -Headers $uploadHeaders
+$uploadResponse = Invoke-RestMethod -Uri "$BASE_URL/documents/upload" -Method Post -Body $uploadBody -Headers $uploadHeaders
 $documentId = $uploadResponse.data.id
 
 # Step 2: Add Recipients
 $recipientPayload = @{
     document = @{
-        name = "Contract Agreement - Updated"
+        name = "$DOCUMENT_NAME - Updated"
         description = "This document requires electronic signatures from both parties. Please review all content carefully before signing."
     }
     recipients = @(
@@ -66,12 +72,12 @@ $recipientPayload = @{
 
 $recipientHeaders = @{
     'Content-Type' = 'application/json'
-    'Authorization' = 'Bearer YOUR_API_TOKEN'
-    'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
+    'Authorization' = "Bearer $API_TOKEN"
+    'x-rapiddocx-org-id' = $ORG_ID
     'User-Agent' = 'TurboDocx API Client'
 }
 
-$recipientResponse = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/$documentId/update-with-recipients" -Method Post -Body $recipientPayload -Headers $recipientHeaders -ContentType 'application/json'
+$recipientResponse = Invoke-RestMethod -Uri "$BASE_URL/documents/$documentId/update-with-recipients" -Method Post -Body $recipientPayload -Headers $recipientHeaders -ContentType 'application/json'
 $recipients = $recipientResponse.data.recipients
 
 # Step 3: Prepare for Signing
@@ -136,10 +142,10 @@ $signatureFields = @(
 
 $prepareHeaders = @{
     'Content-Type' = 'application/json'
-    'Authorization' = 'Bearer YOUR_API_TOKEN'
-    'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
+    'Authorization' = "Bearer $API_TOKEN"
+    'x-rapiddocx-org-id' = $ORG_ID
     'User-Agent' = 'TurboDocx API Client'
 }
 
-$finalResponse = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/$documentId/prepare-for-signing" -Method Post -Body $signatureFields -Headers $prepareHeaders -ContentType 'application/json'
+$finalResponse = Invoke-RestMethod -Uri "$BASE_URL/documents/$documentId/prepare-for-signing" -Method Post -Body $signatureFields -Headers $prepareHeaders -ContentType 'application/json'
 $finalResponse | ConvertTo-Json

@@ -2,12 +2,18 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+# Configuration - Update these values
+API_TOKEN = "YOUR_API_TOKEN"
+ORG_ID = "YOUR_ORGANIZATION_ID"
+BASE_URL = "https://www.turbodocx.com/turbosign"
+DOCUMENT_NAME = "Contract Agreement"
+
 # Step 2: Add Recipients
 document_id = "4a20eca5-7944-430c-97d5-fcce4be24296"
 
 payload = {
   "document" => {
-    "name" => "Contract Agreement - Updated",
+    "name" => "#{DOCUMENT_NAME} - Updated",
     "description" => "This document requires electronic signatures from both parties. Please review all content carefully before signing."
   },
   "recipients" => [
@@ -34,15 +40,15 @@ payload = {
   ]
 }
 
-uri = URI("https://www.turbodocx.com/turbosign/documents/#{document_id}/update-with-recipients")
+uri = URI("#{BASE_URL}/documents/#{document_id}/update-with-recipients")
 
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
 request = Net::HTTP::Post.new(uri)
 request['Content-Type'] = 'application/json'
-request['Authorization'] = 'Bearer YOUR_API_TOKEN'
-request['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
+request['Authorization'] = "Bearer #{API_TOKEN}"
+request['x-rapiddocx-org-id'] = ORG_ID
 request['User-Agent'] = 'TurboDocx API Client'
 request.body = payload.to_json
 

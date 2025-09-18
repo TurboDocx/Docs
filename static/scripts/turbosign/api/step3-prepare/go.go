@@ -6,6 +6,13 @@ import (
 	"net/http"
 )
 
+// Configuration - Update these values
+const (
+	API_TOKEN = "YOUR_API_TOKEN"
+	ORG_ID = "YOUR_ORGANIZATION_ID"
+	BASE_URL = "https://www.turbodocx.com/turbosign"
+)
+
 func main() {
 	// Step 3: Prepare for Signing
 	documentID := "4a20eca5-7944-430c-97d5-fcce4be24296"
@@ -69,10 +76,10 @@ func main() {
 	  }
 	]`
 	
-	req, _ := http.NewRequest("POST", fmt.Sprintf("https://www.turbodocx.com/turbosign/documents/%s/prepare-for-signing", documentID), bytes.NewBufferString(payload))
+	req, _ := http.NewRequest("POST", fmt.Sprintf(BASE_URL+"/documents/%s/prepare-for-signing", documentID), bytes.NewBufferString(payload))
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
-	req.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
+	req.Header.Set("Authorization", "Bearer "+API_TOKEN)
+	req.Header.Set("x-rapiddocx-org-id", ORG_ID)
 	req.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	client := &http.Client{}

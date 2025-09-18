@@ -1,9 +1,15 @@
+# Configuration - Update these values
+$API_TOKEN = "YOUR_API_TOKEN"
+$ORG_ID = "YOUR_ORGANIZATION_ID"
+$BASE_URL = "https://www.turbodocx.com/turbosign"
+$DOCUMENT_NAME = "Contract Agreement"
+
 # Step 2: Add Recipients
 $documentId = "4a20eca5-7944-430c-97d5-fcce4be24296"
 
 $payload = @{
     document = @{
-        name = "Contract Agreement - Updated"
+        name = "$DOCUMENT_NAME - Updated"
         description = "This document requires electronic signatures from both parties. Please review all content carefully before signing."
     }
     recipients = @(
@@ -32,10 +38,10 @@ $payload = @{
 
 $headers = @{
     'Content-Type' = 'application/json'
-    'Authorization' = 'Bearer YOUR_API_TOKEN'
-    'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
+    'Authorization' = "Bearer $API_TOKEN"
+    'x-rapiddocx-org-id' = $ORG_ID
     'User-Agent' = 'TurboDocx API Client'
 }
 
-$response = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/$documentId/update-with-recipients" -Method Post -Body $payload -Headers $headers -ContentType 'application/json'
+$response = Invoke-RestMethod -Uri "$BASE_URL/documents/$documentId/update-with-recipients" -Method Post -Body $payload -Headers $headers -ContentType 'application/json'
 $response | ConvertTo-Json

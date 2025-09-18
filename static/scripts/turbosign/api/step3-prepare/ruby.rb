@@ -2,6 +2,12 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+# Configuration - Update these values
+API_TOKEN = "YOUR_API_TOKEN"
+ORG_ID = "YOUR_ORGANIZATION_ID"
+BASE_URL = "https://www.turbodocx.com/turbosign"
+DOCUMENT_NAME = "Contract Agreement"
+
 # Step 3: Prepare for Signing
 document_id = "4a20eca5-7944-430c-97d5-fcce4be24296"
 
@@ -64,15 +70,15 @@ signature_fields = [
   }
 ]
 
-uri = URI("https://www.turbodocx.com/turbosign/documents/#{document_id}/prepare-for-signing")
+uri = URI("#{BASE_URL}/documents/#{document_id}/prepare-for-signing")
 
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
 request = Net::HTTP::Post.new(uri)
 request['Content-Type'] = 'application/json'
-request['Authorization'] = 'Bearer YOUR_API_TOKEN'
-request['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
+request['Authorization'] = "Bearer #{API_TOKEN}"
+request['x-rapiddocx-org-id'] = ORG_ID
 request['User-Agent'] = 'TurboDocx API Client'
 request.body = signature_fields.to_json
 

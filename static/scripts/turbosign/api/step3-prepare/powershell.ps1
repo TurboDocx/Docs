@@ -1,3 +1,9 @@
+# Configuration - Update these values
+$API_TOKEN = "YOUR_API_TOKEN"
+$ORG_ID = "YOUR_ORGANIZATION_ID"
+$BASE_URL = "https://www.turbodocx.com/turbosign"
+$DOCUMENT_NAME = "Contract Agreement"
+
 # Step 3: Prepare for Signing
 $documentId = "4a20eca5-7944-430c-97d5-fcce4be24296"
 
@@ -62,10 +68,10 @@ $signatureFields = @(
 
 $headers = @{
     'Content-Type' = 'application/json'
-    'Authorization' = 'Bearer YOUR_API_TOKEN'
-    'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
+    'Authorization' = "Bearer $API_TOKEN"
+    'x-rapiddocx-org-id' = $ORG_ID
     'User-Agent' = 'TurboDocx API Client'
 }
 
-$response = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/$documentId/prepare-for-signing" -Method Post -Body $signatureFields -Headers $headers -ContentType 'application/json'
+$response = Invoke-RestMethod -Uri "$BASE_URL/documents/$documentId/prepare-for-signing" -Method Post -Body $signatureFields -Headers $headers -ContentType 'application/json'
 $response | ConvertTo-Json
