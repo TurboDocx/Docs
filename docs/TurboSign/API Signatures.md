@@ -149,8 +149,7 @@ Additional required headers for all requests:
 
 ```http
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-accept: application/json, text/plain, */*
+User-Agent: TurboDocx API Client
 ```
 
 ## Step 1: Upload Document
@@ -169,9 +168,7 @@ POST https://www.turbodocx.com/turbosign/documents/upload
 Content-Type: multipart/form-data
 Authorization: Bearer YOUR_API_TOKEN
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-referer: https://www.turbodocx.com
-accept: application/json, text/plain, */*
+User-Agent: TurboDocx API Client
 ```
 
 ### Request Body (Form Data)
@@ -235,12 +232,7 @@ POST https://www.turbodocx.com/turbosign/documents/{documentId}/update-with-reci
 Content-Type: application/json
 Authorization: Bearer YOUR_API_TOKEN
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-referer: https://www.turbodocx.com
-accept: application/json, text/plain, */*
-dnt: 1
-accept-language: en-US,en;q=0.9
-priority: u=1, i
+User-Agent: TurboDocx API Client
 ```
 
 ### Request Body
@@ -353,20 +345,7 @@ POST https://www.turbodocx.com/turbosign/documents/{documentId}/prepare-for-sign
 Content-Type: application/json
 Authorization: Bearer YOUR_API_TOKEN
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-referer: https://www.turbodocx.com
-accept: application/json, text/plain, */*
-dnt: 1
-accept-language: en-US,en;q=0.9
-priority: u=1, i
-sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "Windows"
-sec-fetch-dest: empty
-sec-fetch-mode: cors
-sec-fetch-site: same-site
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
+User-Agent: TurboDocx API Client
 ```
 
 ### Request Body

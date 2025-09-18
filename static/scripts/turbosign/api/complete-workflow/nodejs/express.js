@@ -14,9 +14,7 @@ const uploadResponse = await fetch('https://www.turbodocx.com/turbosign/document
   headers: {
     'Authorization': 'Bearer YOUR_API_TOKEN',
     'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-    'origin': 'https://www.turbodocx.com',
-    'referer': 'https://www.turbodocx.com',
-    'accept': 'application/json, text/plain, */*',
+    'User-Agent': 'TurboDocx API Client',
     ...formData.getHeaders()
   },
   body: formData
@@ -61,9 +59,7 @@ const recipientResponse = await fetch(`https://www.turbodocx.com/turbosign/docum
     'Content-Type': 'application/json',
     'Authorization': 'Bearer YOUR_API_TOKEN',
     'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-    'origin': 'https://www.turbodocx.com',
-    'referer': 'https://www.turbodocx.com',
-    'accept': 'application/json, text/plain, */*'
+    'User-Agent': 'TurboDocx API Client'
   },
   body: JSON.stringify(recipientPayload)
 });
@@ -137,9 +133,7 @@ const prepareResponse = await fetch(`https://www.turbodocx.com/turbosign/documen
     'Content-Type': 'application/json',
     'Authorization': 'Bearer YOUR_API_TOKEN',
     'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-    'origin': 'https://www.turbodocx.com',
-    'referer': 'https://www.turbodocx.com',
-    'accept': 'application/json, text/plain, */*'
+    'User-Agent': 'TurboDocx API Client'
   },
   body: JSON.stringify(signatureFields)
 });
