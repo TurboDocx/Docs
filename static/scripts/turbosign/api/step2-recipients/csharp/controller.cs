@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 
 class Program
 {
+    // Configuration - Update these values
+    private const string API_TOKEN = "YOUR_API_TOKEN";
+    private const string ORG_ID = "YOUR_ORGANIZATION_ID";
+    private const string BASE_URL = "https://api.turbodocx.com";
+    private const string DOCUMENT_NAME = "Contract Agreement";
     static async Task Main(string[] args)
     {
         // Step 2: Add Recipients
@@ -12,15 +17,13 @@ class Program
         
         using var client = new HttpClient();
         
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer YOUR_API_TOKEN");
-        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID");
-        client.DefaultRequestHeaders.Add("origin", "https://www.turbodocx.com");
-        client.DefaultRequestHeaders.Add("referer", "https://www.turbodocx.com");
-        client.DefaultRequestHeaders.Add("accept", "application/json, text/plain, */*");
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + API_TOKEN);
+        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", ORG_ID);
+        client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
         
         var payload = @"{
           ""document"": {
-            ""name"": ""Contract Agreement - Updated"",
+            ""name"": """ + DOCUMENT_NAME + " - Updated"",
             ""description"": ""This document requires electronic signatures from both parties. Please review all content carefully before signing.""
           },
           ""recipients"": [
@@ -48,7 +51,7 @@ class Program
         }";
         
         var content = new StringContent(payload, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync($"https://www.turbodocx.com/turbosign/documents/{documentId}/update-with-recipients", content);
+        var response = await client.PostAsync($"{BASE_URL}/documents/{documentId}/update-with-recipients", content);
         var result = await response.Content.ReadAsStringAsync();
         
         Console.WriteLine(result);

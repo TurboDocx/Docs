@@ -1,21 +1,25 @@
 <?php
+// Configuration - Update these values
+$API_TOKEN = "YOUR_API_TOKEN";
+$ORG_ID = "YOUR_ORGANIZATION_ID";
+$BASE_URL = "https://api.turbodocx.com";
+$DOCUMENT_NAME = "Contract Agreement";
+
 // Complete Workflow: Upload → Recipients → Prepare
 
 // Step 1: Upload Document
-$upload_url = 'https://www.turbodocx.com/turbosign/documents/upload';
+$upload_url = $BASE_URL . '/documents/upload';
 
 $file_path = 'document.pdf';
 $upload_data = [
-    'name' => 'Contract Agreement',
+    'name' => $DOCUMENT_NAME,
     'file' => new CURLFile($file_path, 'application/pdf', 'document.pdf')
 ];
 
 $upload_headers = [
-    'Authorization: Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*'
+    'Authorization: Bearer ' . $API_TOKEN,
+    'x-rapiddocx-org-id: ' . $ORG_ID,
+    'User-Agent: TurboDocx API Client'
 ];
 
 $ch = curl_init();
@@ -36,7 +40,7 @@ $document_id = $upload_result['data']['id'];
 // Step 2: Add Recipients
 $recipient_payload = [
     'document' => [
-        'name' => 'Contract Agreement - Updated',
+        'name' => $DOCUMENT_NAME . ' - Updated',
         'description' => 'This document requires electronic signatures from both parties. Please review all content carefully before signing.'
     ],
     'recipients' => [
@@ -65,16 +69,14 @@ $recipient_payload = [
 
 $recipient_headers = [
     'Content-Type: application/json',
-    'Authorization: Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*'
+    'Authorization: Bearer ' . $API_TOKEN,
+    'x-rapiddocx-org-id: ' . $ORG_ID,
+    'User-Agent: TurboDocx API Client'
 ];
 
 $ch = curl_init();
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://www.turbodocx.com/turbosign/documents/$document_id/update-with-recipients",
+    CURLOPT_URL => $BASE_URL . "/documents/$document_id/update-with-recipients",
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode($recipient_payload),
     CURLOPT_HTTPHEADER => $recipient_headers,
@@ -149,16 +151,14 @@ $signature_fields = [
 
 $prepare_headers = [
     'Content-Type: application/json',
-    'Authorization: Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*'
+    'Authorization: Bearer ' . $API_TOKEN,
+    'x-rapiddocx-org-id: ' . $ORG_ID,
+    'User-Agent: TurboDocx API Client'
 ];
 
 $ch = curl_init();
 curl_setopt_array($ch, [
-    CURLOPT_URL => "https://www.turbodocx.com/turbosign/documents/$document_id/prepare-for-signing",
+    CURLOPT_URL => $BASE_URL . "/documents/$document_id/prepare-for-signing",
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode($signature_fields),
     CURLOPT_HTTPHEADER => $prepare_headers,

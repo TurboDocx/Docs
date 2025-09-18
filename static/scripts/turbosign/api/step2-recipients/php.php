@@ -1,24 +1,25 @@
 <?php
+// Configuration - Update these values
+$API_TOKEN = "YOUR_API_TOKEN";
+$ORG_ID = "YOUR_ORGANIZATION_ID";
+$BASE_URL = "https://api.turbodocx.com";
+$DOCUMENT_NAME = "Contract Agreement";
+
 // Step 2: Add Recipients
 $document_id = "4a20eca5-7944-430c-97d5-fcce4be24296";
 
-$url = "https://www.turbodocx.com/turbosign/documents/$document_id/update-with-recipients";
+$url = $BASE_URL . "/documents/$document_id/update-with-recipients";
 
 $headers = [
     'Content-Type: application/json',
-    'Authorization: Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*',
-    'dnt: 1',
-    'accept-language: en-US,en;q=0.9',
-    'priority: u=1, i'
+    'Authorization: Bearer ' . $API_TOKEN,
+    'x-rapiddocx-org-id: ' . $ORG_ID,
+    'User-Agent: TurboDocx API Client'
 ];
 
 $payload = [
     'document' => [
-        'name' => 'Contract Agreement - Updated',
+        'name' => $DOCUMENT_NAME . ' - Updated',
         'description' => 'This document requires electronic signatures from both parties. Please review all content carefully before signing.'
     ],
     'recipients' => [

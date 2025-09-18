@@ -8,12 +8,20 @@ import (
 	"os"
 )
 
+// Configuration - Update these values
+const (
+	API_TOKEN = "YOUR_API_TOKEN"
+	ORG_ID = "YOUR_ORGANIZATION_ID"
+	BASE_URL = "https://api.turbodocx.com"
+	DOCUMENT_NAME = "Contract Agreement"
+)
+
 func main() {
 	// Step 1: Upload Document
 	var buf bytes.Buffer
 	writer := multipart.NewWriter(&buf)
 	
-	writer.WriteField("name", "Contract Agreement")
+	writer.WriteField("name", DOCUMENT_NAME)
 	
 	file, _ := os.Open("./document.pdf")
 	defer file.Close()
@@ -21,12 +29,10 @@ func main() {
 	io.Copy(part, file)
 	writer.Close()
 	
-	req, _ := http.NewRequest("POST", "https://www.turbodocx.com/turbosign/documents/upload", &buf)
-	req.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
-	req.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req.Header.Set("origin", "https://www.turbodocx.com")
-	req.Header.Set("referer", "https://www.turbodocx.com")
-	req.Header.Set("accept", "application/json, text/plain, */*")
+	req, _ := http.NewRequest("POST", BASE_URL+"/documents/upload", &buf)
+	req.Header.Set("Authorization", "Bearer "+API_TOKEN)
+	req.Header.Set("x-rapiddocx-org-id", ORG_ID)
+	req.Header.Set("User-Agent", "TurboDocx API Client")
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	
 	client := &http.Client{}

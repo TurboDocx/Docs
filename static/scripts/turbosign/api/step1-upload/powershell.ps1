@@ -1,3 +1,9 @@
+# Configuration - Update these values
+$API_TOKEN = "YOUR_API_TOKEN"
+$ORG_ID = "YOUR_ORGANIZATION_ID"
+$BASE_URL = "https://api.turbodocx.com"
+$DOCUMENT_NAME = "Contract Agreement"
+
 # Step 1: Upload Document
 $boundary = "----PowerShellBoundary$([System.Guid]::NewGuid())"
 $filePath = "./document.pdf"
@@ -7,7 +13,7 @@ $formData = @"
 --$boundary
 Content-Disposition: form-data; name="name"
 
-Contract Agreement
+$DOCUMENT_NAME
 --$boundary
 Content-Disposition: form-data; name="file"; filename="document.pdf"
 Content-Type: application/pdf
@@ -23,13 +29,11 @@ $body = New-Object byte[] ($formDataBytes.Length + $fileBytes.Length + $endBound
 [Array]::Copy($endBoundary, 0, $body, $formDataBytes.Length + $fileBytes.Length, $endBoundary.Length)
 
 $headers = @{
-    'Authorization' = 'Bearer YOUR_API_TOKEN'
-    'x-rapiddocx-org-id' = 'YOUR_ORGANIZATION_ID'
-    'origin' = 'https://www.turbodocx.com'
-    'referer' = 'https://www.turbodocx.com'
-    'accept' = 'application/json, text/plain, */*'
+    'Authorization' = "Bearer $API_TOKEN"
+    'x-rapiddocx-org-id' = $ORG_ID
+    'User-Agent' = 'TurboDocx API Client'
     'Content-Type' = "multipart/form-data; boundary=$boundary"
 }
 
-$response = Invoke-RestMethod -Uri "https://www.turbodocx.com/turbosign/documents/upload" -Method Post -Body $body -Headers $headers
+$response = Invoke-RestMethod -Uri "$BASE_URL/documents/upload" -Method Post -Body $body -Headers $headers
 $response | ConvertTo-Json

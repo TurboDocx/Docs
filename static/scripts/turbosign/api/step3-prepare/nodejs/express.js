@@ -1,5 +1,11 @@
 const fetch = require('node-fetch');
 
+// Configuration - Update these values
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORG_ID = "YOUR_ORGANIZATION_ID";
+const BASE_URL = "https://api.turbodocx.com";
+const DOCUMENT_NAME = "Contract Agreement";
+
 // Step 3: Prepare for Signing
 const documentId = "4a20eca5-7944-430c-97d5-fcce4be24296";
 
@@ -62,26 +68,13 @@ const signatureFields = [
   }
 ];
 
-const response = await fetch(`https://www.turbodocx.com/turbosign/documents/${documentId}/prepare-for-signing`, {
+const response = await fetch(`${BASE_URL}/documents/${documentId}/prepare-for-signing`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-    'origin': 'https://www.turbodocx.com',
-    'referer': 'https://www.turbodocx.com',
-    'accept': 'application/json, text/plain, */*',
-    'dnt': '1',
-    'accept-language': 'en-US,en;q=0.9',
-    'priority': 'u=1, i',
-    'sec-ch-ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-site',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
-    'x-device-fingerprint': '280624a233f1fd39ce050a9e9d0a4cc9'
+    'Authorization': `Bearer ${API_TOKEN}`,
+    'x-rapiddocx-org-id': ORG_ID,
+    'User-Agent': 'TurboDocx API Client'
   },
   body: JSON.stringify(signatureFields)
 });

@@ -1,17 +1,21 @@
 <?php
+// Configuration - Update these values
+$API_TOKEN = "YOUR_API_TOKEN";
+$ORG_ID = "YOUR_ORGANIZATION_ID";
+$BASE_URL = "https://api.turbodocx.com";
+$DOCUMENT_NAME = "Contract Agreement";
+
 // Step 1: Upload Document
-$url = 'https://www.turbodocx.com/turbosign/documents/upload';
+$url = $BASE_URL . '/documents/upload';
 
 $headers = [
-    'Authorization: Bearer YOUR_API_TOKEN',
-    'x-rapiddocx-org-id: YOUR_ORGANIZATION_ID',
-    'origin: https://www.turbodocx.com',
-    'referer: https://www.turbodocx.com',
-    'accept: application/json, text/plain, */*'
+    'Authorization: Bearer ' . $API_TOKEN,
+    'x-rapiddocx-org-id: ' . $ORG_ID,
+    'User-Agent: TurboDocx API Client'
 ];
 
 $postFields = [
-    'name' => 'Contract Agreement',
+    'name' => $DOCUMENT_NAME,
     'file' => new CURLFile('./document.pdf', 'application/pdf', 'document.pdf')
 ];
 

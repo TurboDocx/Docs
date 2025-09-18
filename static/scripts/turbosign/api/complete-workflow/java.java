@@ -6,6 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class TurboSignWorkflow {
+    // Configuration - Update these values
+    private static final String API_TOKEN = "YOUR_API_TOKEN";
+    private static final String ORG_ID = "YOUR_ORGANIZATION_ID";
+    private static final String BASE_URL = "https://api.turbodocx.com";
+    private static final String DOCUMENT_NAME = "Contract Agreement";
     public static void main(String[] args) throws Exception {
         // Complete Workflow: Upload → Recipients → Prepare
         HttpClient client = HttpClient.newHttpClient();
@@ -19,7 +24,7 @@ public class TurboSignWorkflow {
         StringBuilder formData = new StringBuilder();
         formData.append("--").append(boundary).append("\r\n");
         formData.append("Content-Disposition: form-data; name=\"name\"\r\n\r\n");
-        formData.append("Contract Agreement\r\n");
+        formData.append(DOCUMENT_NAME + "\r\n");
         formData.append("--").append(boundary).append("\r\n");
         formData.append("Content-Disposition: form-data; name=\"file\"; filename=\"document.pdf\"\r\n");
         formData.append("Content-Type: application/pdf\r\n\r\n");
@@ -30,12 +35,10 @@ public class TurboSignWorkflow {
         baos.write(("\r\n--" + boundary + "--\r\n").getBytes());
         
         HttpRequest uploadRequest = HttpRequest.newBuilder()
-            .uri(URI.create("https://www.turbodocx.com/turbosign/documents/upload"))
-            .header("Authorization", "Bearer YOUR_API_TOKEN")
-            .header("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-            .header("origin", "https://www.turbodocx.com")
-            .header("referer", "https://www.turbodocx.com")
-            .header("accept", "application/json, text/plain, */*")
+            .uri(URI.create(BASE_URL + "/documents/upload"))
+            .header("Authorization", "Bearer " + API_TOKEN)
+            .header("x-rapiddocx-org-id", ORG_ID)
+            .header("User-Agent", "TurboDocx API Client")
             .header("Content-Type", "multipart/form-data; boundary=" + boundary)
             .POST(HttpRequest.BodyPublishers.ofByteArray(baos.toByteArray()))
             .build();
@@ -48,7 +51,7 @@ public class TurboSignWorkflow {
         String recipientPayload = String.format("""
         {
           "document": {
-            "name": "Contract Agreement - Updated",
+            "name": "" + DOCUMENT_NAME + " - Updated",
             "description": "This document requires electronic signatures from both parties. Please review all content carefully before signing."
           },
           "recipients": [
@@ -77,13 +80,11 @@ public class TurboSignWorkflow {
         """, documentId, documentId);
         
         HttpRequest recipientRequest = HttpRequest.newBuilder()
-            .uri(URI.create("https://www.turbodocx.com/turbosign/documents/" + documentId + "/update-with-recipients"))
+            .uri(URI.create(BASE_URL + "/documents/" + documentId + "/update-with-recipients"))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer YOUR_API_TOKEN")
-            .header("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-            .header("origin", "https://www.turbodocx.com")
-            .header("referer", "https://www.turbodocx.com")
-            .header("accept", "application/json, text/plain, */*")
+            .header("Authorization", "Bearer " + API_TOKEN)
+            .header("x-rapiddocx-org-id", ORG_ID)
+            .header("User-Agent", "TurboDocx API Client")
             .POST(HttpRequest.BodyPublishers.ofString(recipientPayload))
             .build();
         
@@ -158,13 +159,11 @@ public class TurboSignWorkflow {
         recipients.get(1).get("id").asText());
         
         HttpRequest prepareRequest = HttpRequest.newBuilder()
-            .uri(URI.create("https://www.turbodocx.com/turbosign/documents/" + documentId + "/prepare-for-signing"))
+            .uri(URI.create(BASE_URL + "/documents/" + documentId + "/prepare-for-signing"))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer YOUR_API_TOKEN")
-            .header("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-            .header("origin", "https://www.turbodocx.com")
-            .header("referer", "https://www.turbodocx.com")
-            .header("accept", "application/json, text/plain, */*")
+            .header("Authorization", "Bearer " + API_TOKEN)
+            .header("x-rapiddocx-org-id", ORG_ID)
+            .header("User-Agent", "TurboDocx API Client")
             .POST(HttpRequest.BodyPublishers.ofString(signaturePayload))
             .build();
         

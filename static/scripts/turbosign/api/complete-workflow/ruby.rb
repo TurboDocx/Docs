@@ -2,16 +2,22 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+# Configuration - Update these values
+API_TOKEN = "YOUR_API_TOKEN"
+ORG_ID = "YOUR_ORGANIZATION_ID"
+BASE_URL = "https://api.turbodocx.com"
+DOCUMENT_NAME = "Contract Agreement"
+
 # Complete Workflow: Upload → Recipients → Prepare
 
 # Step 1: Upload Document
-uri = URI('https://www.turbodocx.com/turbosign/documents/upload')
+uri = URI("#{BASE_URL}/documents/upload")
 boundary = "----RubyBoundary#{rand(1000000)}"
 
 form_data = ""
 form_data << "--#{boundary}\r\n"
 form_data << "Content-Disposition: form-data; name=\"name\"\r\n\r\n"
-form_data << "Contract Agreement\r\n"
+form_data << "#{DOCUMENT_NAME}\r\n"
 form_data << "--#{boundary}\r\n"
 form_data << "Content-Disposition: form-data; name=\"file\"; filename=\"document.pdf\"\r\n"
 form_data << "Content-Type: application/pdf\r\n\r\n"
@@ -22,11 +28,9 @@ http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
 request = Net::HTTP::Post.new(uri)
-request['Authorization'] = 'Bearer YOUR_API_TOKEN'
-request['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request['origin'] = 'https://www.turbodocx.com'
-request['referer'] = 'https://www.turbodocx.com'
-request['accept'] = 'application/json, text/plain, */*'
+request['Authorization'] = "Bearer #{API_TOKEN}"
+request['x-rapiddocx-org-id'] = ORG_ID
+request['User-Agent'] = 'TurboDocx API Client'
 request['Content-Type'] = "multipart/form-data; boundary=#{boundary}"
 request.body = form_data
 
@@ -37,7 +41,7 @@ document_id = upload_result['data']['id']
 # Step 2: Add Recipients
 recipient_payload = {
   "document" => {
-    "name" => "Contract Agreement - Updated",
+    "name" => "#{DOCUMENT_NAME} - Updated",
     "description" => "This document requires electronic signatures from both parties. Please review all content carefully before signing."
   },
   "recipients" => [
@@ -64,15 +68,13 @@ recipient_payload = {
   ]
 }
 
-uri2 = URI("https://www.turbodocx.com/turbosign/documents/#{document_id}/update-with-recipients")
+uri2 = URI("#{BASE_URL}/documents/#{document_id}/update-with-recipients")
 
 request2 = Net::HTTP::Post.new(uri2)
 request2['Content-Type'] = 'application/json'
-request2['Authorization'] = 'Bearer YOUR_API_TOKEN'
-request2['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request2['origin'] = 'https://www.turbodocx.com'
-request2['referer'] = 'https://www.turbodocx.com'
-request2['accept'] = 'application/json, text/plain, */*'
+request2['Authorization'] = "Bearer #{API_TOKEN}"
+request2['x-rapiddocx-org-id'] = ORG_ID
+request2['User-Agent'] = 'TurboDocx API Client'
 request2.body = recipient_payload.to_json
 
 recipient_response = http.request(request2)
@@ -139,15 +141,13 @@ signature_fields = [
   }
 ]
 
-uri3 = URI("https://www.turbodocx.com/turbosign/documents/#{document_id}/prepare-for-signing")
+uri3 = URI("#{BASE_URL}/documents/#{document_id}/prepare-for-signing")
 
 request3 = Net::HTTP::Post.new(uri3)
 request3['Content-Type'] = 'application/json'
-request3['Authorization'] = 'Bearer YOUR_API_TOKEN'
-request3['x-rapiddocx-org-id'] = 'YOUR_ORGANIZATION_ID'
-request3['origin'] = 'https://www.turbodocx.com'
-request3['referer'] = 'https://www.turbodocx.com'
-request3['accept'] = 'application/json, text/plain, */*'
+request3['Authorization'] = "Bearer #{API_TOKEN}"
+request3['x-rapiddocx-org-id'] = ORG_ID
+request3['User-Agent'] = 'TurboDocx API Client'
 request3.body = signature_fields.to_json
 
 prepare_response = http.request(request3)

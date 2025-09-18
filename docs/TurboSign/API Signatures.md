@@ -85,6 +85,38 @@ Don't want to read all the details? Here's what you need to know:
   label="Complete Workflow Implementation"
 />
 
+### Quick Coordinate Example
+
+If you prefer using exact coordinates instead of text anchors:
+
+```json
+// Step 3 payload using coordinates instead of templates
+[
+  {
+    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+    "type": "signature",
+    "page": 1,
+    "x": 100,
+    "y": 200,
+    "width": 200,
+    "height": 80,
+    "pageWidth": 612,
+    "pageHeight": 792
+  },
+  {
+    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+    "type": "date",
+    "page": 1,
+    "x": 350,
+    "y": 300,
+    "width": 150,
+    "height": 30,
+    "pageWidth": 612,
+    "pageHeight": 792
+  }
+]
+```
+
 Now that you've seen the whole thing, let's dive into the details...
 
 ## Prerequisites
@@ -117,8 +149,7 @@ Additional required headers for all requests:
 
 ```http
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-accept: application/json, text/plain, */*
+User-Agent: TurboDocx API Client
 ```
 
 ## Step 1: Upload Document
@@ -137,9 +168,7 @@ POST https://www.turbodocx.com/turbosign/documents/upload
 Content-Type: multipart/form-data
 Authorization: Bearer YOUR_API_TOKEN
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-referer: https://www.turbodocx.com
-accept: application/json, text/plain, */*
+User-Agent: TurboDocx API Client
 ```
 
 ### Request Body (Form Data)
@@ -203,12 +232,7 @@ POST https://www.turbodocx.com/turbosign/documents/{documentId}/update-with-reci
 Content-Type: application/json
 Authorization: Bearer YOUR_API_TOKEN
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-referer: https://www.turbodocx.com
-accept: application/json, text/plain, */*
-dnt: 1
-accept-language: en-US,en;q=0.9
-priority: u=1, i
+User-Agent: TurboDocx API Client
 ```
 
 ### Request Body
@@ -321,20 +345,7 @@ POST https://www.turbodocx.com/turbosign/documents/{documentId}/prepare-for-sign
 Content-Type: application/json
 Authorization: Bearer YOUR_API_TOKEN
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-origin: https://www.turbodocx.com
-referer: https://www.turbodocx.com
-accept: application/json, text/plain, */*
-dnt: 1
-accept-language: en-US,en;q=0.9
-priority: u=1, i
-sec-ch-ua: "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
-sec-ch-ua-mobile: ?0
-sec-ch-ua-platform: "Windows"
-sec-fetch-dest: empty
-sec-fetch-mode: cors
-sec-fetch-site: same-site
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
+User-Agent: TurboDocx API Client
 ```
 
 ### Request Body
@@ -408,7 +419,14 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
 }
 ```
 
-### Template Configuration
+### Field Positioning Options
+
+TurboSign supports two field positioning methods:
+
+1. **Template-based positioning** (recommended) - Uses text anchors in your PDF
+2. **Coordinate-based positioning** - Uses exact pixel coordinates
+
+#### Template-based Field Configuration
 
 | Field                    | Type    | Required | Description                                            |
 | ------------------------ | ------- | -------- | ------------------------------------------------------ |
@@ -422,6 +440,61 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
 | `template.useRegex`      | boolean | No       | Whether to treat anchor as regex pattern               |
 | `defaultValue`           | string  | No       | Pre-filled value for the field                         |
 | `required`               | boolean | No       | Whether field must be completed                        |
+
+#### Coordinate-based Field Configuration
+
+For precise positioning when text anchors aren't suitable, use coordinate-based fields:
+
+```json
+[
+  {
+    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+    "type": "signature",
+    "page": 1,
+    "x": 100,
+    "y": 200,
+    "width": 200,
+    "height": 80,
+    "pageWidth": 612,
+    "pageHeight": 792
+  },
+  {
+    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+    "type": "date",
+    "page": 1,
+    "x": 350,
+    "y": 200,
+    "width": 150,
+    "height": 30,
+    "pageWidth": 612,
+    "pageHeight": 792
+  }
+]
+```
+
+| Field        | Type   | Required | Description                                     |
+| ------------ | ------ | -------- | ----------------------------------------------- |
+| `recipientId`| string | Yes      | Recipient ID from Step 2                       |
+| `type`       | string | Yes      | Field type - see Available Field Types section |
+| `page`       | number | Yes      | Page number (starts at 1)                      |
+| `x`          | number | Yes      | Horizontal position from left edge (pixels)    |
+| `y`          | number | Yes      | Vertical position from top edge (pixels)       |
+| `width`      | number | Yes      | Field width in pixels                           |
+| `height`     | number | Yes      | Field height in pixels                          |
+| `pageWidth`  | number | Yes      | Total page width in pixels                      |
+| `pageHeight` | number | Yes      | Total page height in pixels                     |
+
+**Coordinate System Notes:**
+- Origin (0,0) is at the top-left corner of the page
+- Standard US Letter page size is 612 x 792 pixels (8.5" x 11" at 72 DPI)
+- Fields cannot extend beyond page boundaries: `x + width ≤ pageWidth` and `y + height ≤ pageHeight`
+- All coordinate values must be non-negative numbers
+
+**When to use coordinate-based positioning:**
+- Precise pixel-perfect placement needed
+- PDF doesn't contain suitable text anchors
+- Programmatically generated field positions
+- Converting from existing coordinate-based systems
 
 <!-- ![Step 3: Prepare for Signing Postman Example](/img/turbosign/step3-prepare-postman.png) -->
 
@@ -462,6 +535,15 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
 - **Consistent naming**: Use consistent anchor naming conventions across documents
 - **Test coordinates**: Verify field positions with test documents before production
 - **Document validation**: Ensure PDFs are not password-protected or corrupted
+
+### Coordinate-based Positioning Tips
+
+- **Measure accurately**: Use PDF viewers with coordinate display to find exact positions
+- **Account for margins**: Consider document margins when calculating field positions
+- **Test on different devices**: Verify coordinates work across different PDF viewers
+- **Use standard page sizes**: Stick to common page dimensions (612x792 for US Letter)
+- **Validate boundaries**: Ensure fields don't extend beyond page edges
+- **Consider scaling**: Be aware that different DPI settings may affect coordinates
 
 ## Error Handling & Troubleshooting
 
@@ -516,12 +598,18 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
 
 **Symptoms**: Signature fields appear in wrong locations
 
-**Solutions**:
-
+**Template-based Solutions**:
 - Verify anchor text exists in the PDF document
 - Check anchor text matches exactly (case-sensitive by default)
 - Test with `caseSensitive: false` if having matching issues
 - Use PDF coordinates as fallback if anchors don't work
+
+**Coordinate-based Solutions**:
+- Verify page dimensions match your PDF's actual size
+- Check that x,y coordinates are within page boundaries
+- Ensure coordinates account for any PDF margins or headers
+- Test with different page numbers if multi-page document
+- Validate that `x + width ≤ pageWidth` and `y + height ≤ pageHeight`
 
 #### Webhook Integration Issues
 

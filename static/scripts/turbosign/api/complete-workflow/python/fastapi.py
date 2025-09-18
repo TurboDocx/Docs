@@ -1,21 +1,25 @@
 import requests
 
+# Configuration - Update these values
+API_TOKEN = "YOUR_API_TOKEN"
+ORG_ID = "YOUR_ORGANIZATION_ID"
+BASE_URL = "https://api.turbodocx.com"
+DOCUMENT_NAME = "Contract Agreement"
+
 # Complete Workflow: Upload → Recipients → Prepare
 
 # Step 1: Upload Document
 files = {
-    'name': (None, 'Contract Agreement'),
+    'name': (None, DOCUMENT_NAME),
     'file': ('document.pdf', open('document.pdf', 'rb'), 'application/pdf')
 }
 
 upload_response = requests.post(
-    'https://www.turbodocx.com/turbosign/documents/upload',
+    f'{BASE_URL}/documents/upload',
     headers={
-        'Authorization': 'Bearer YOUR_API_TOKEN',
-        'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-        'origin': 'https://www.turbodocx.com',
-        'referer': 'https://www.turbodocx.com',
-        'accept': 'application/json, text/plain, */*'
+        'Authorization': f'Bearer {API_TOKEN}',
+        'x-rapiddocx-org-id': ORG_ID,
+        'User-Agent': 'TurboDocx API Client'
     },
     files=files
 )
@@ -26,7 +30,7 @@ document_id = upload_result['data']['id']
 # Step 2: Add Recipients
 recipient_payload = {
     "document": {
-        "name": "Contract Agreement - Updated",
+        "name": f"{DOCUMENT_NAME} - Updated",
         "description": "This document requires electronic signatures from both parties. Please review all content carefully before signing."
     },
     "recipients": [
@@ -54,14 +58,12 @@ recipient_payload = {
 }
 
 recipient_response = requests.post(
-    f'https://www.turbodocx.com/turbosign/documents/{document_id}/update-with-recipients',
+    f'{BASE_URL}/documents/{document_id}/update-with-recipients',
     headers={
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_TOKEN',
-        'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-        'origin': 'https://www.turbodocx.com',
-        'referer': 'https://www.turbodocx.com',
-        'accept': 'application/json, text/plain, */*'
+        'Authorization': f'Bearer {API_TOKEN}',
+        'x-rapiddocx-org-id': ORG_ID,
+        'User-Agent': 'TurboDocx API Client'
     },
     json=recipient_payload
 )
@@ -130,14 +132,12 @@ signature_fields = [
 ]
 
 prepare_response = requests.post(
-    f'https://www.turbodocx.com/turbosign/documents/{document_id}/prepare-for-signing',
+    f'{BASE_URL}/documents/{document_id}/prepare-for-signing',
     headers={
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_TOKEN',
-        'x-rapiddocx-org-id': 'YOUR_ORGANIZATION_ID',
-        'origin': 'https://www.turbodocx.com',
-        'referer': 'https://www.turbodocx.com',
-        'accept': 'application/json, text/plain, */*'
+        'Authorization': f'Bearer {API_TOKEN}',
+        'x-rapiddocx-org-id': ORG_ID,
+        'User-Agent': 'TurboDocx API Client'
     },
     json=signature_fields
 )

@@ -10,6 +10,14 @@ import (
 	"os"
 )
 
+// Configuration - Update these values
+const (
+	API_TOKEN = "YOUR_API_TOKEN"
+	ORG_ID = "YOUR_ORGANIZATION_ID"
+	BASE_URL = "https://api.turbodocx.com"
+	DOCUMENT_NAME = "Contract Agreement"
+)
+
 type UploadResponse struct {
 	Data struct {
 		ID string `json:"id"`
@@ -31,7 +39,7 @@ func main() {
 	var buf bytes.Buffer
 	writer := multipart.NewWriter(&buf)
 	
-	writer.WriteField("name", "Contract Agreement")
+	writer.WriteField("name", DOCUMENT_NAME)
 	
 	file, _ := os.Open("./document.pdf")
 	defer file.Close()
@@ -39,12 +47,10 @@ func main() {
 	io.Copy(part, file)
 	writer.Close()
 	
-	req, _ := http.NewRequest("POST", "https://www.turbodocx.com/turbosign/documents/upload", &buf)
-	req.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
-	req.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req.Header.Set("origin", "https://www.turbodocx.com")
-	req.Header.Set("referer", "https://www.turbodocx.com")
-	req.Header.Set("accept", "application/json, text/plain, */*")
+	req, _ := http.NewRequest("POST", BASE_URL+"/documents/upload", &buf)
+	req.Header.Set("Authorization", "Bearer "+API_TOKEN)
+	req.Header.Set("x-rapiddocx-org-id", ORG_ID)
+	req.Header.Set("User-Agent", "TurboDocx API Client")
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	
 	client := &http.Client{}
@@ -59,7 +65,7 @@ func main() {
 	// Step 2: Add Recipients
 	recipientPayload := fmt.Sprintf(`{
 	  "document": {
-		"name": "Contract Agreement - Updated",
+		"name": "` + DOCUMENT_NAME + ` - Updated",
 		"description": "This document requires electronic signatures from both parties. Please review all content carefully before signing."
 	  },
 	  "recipients": [
@@ -86,13 +92,11 @@ func main() {
 	  ]
 	}`, documentID, documentID)
 	
-	req2, _ := http.NewRequest("POST", fmt.Sprintf("https://www.turbodocx.com/turbosign/documents/%s/update-with-recipients", documentID), bytes.NewBufferString(recipientPayload))
+	req2, _ := http.NewRequest("POST", fmt.Sprintf(BASE_URL+"/documents/%s/update-with-recipients", documentID), bytes.NewBufferString(recipientPayload))
 	req2.Header.Set("Content-Type", "application/json")
-	req2.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
-	req2.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req2.Header.Set("origin", "https://www.turbodocx.com")
-	req2.Header.Set("referer", "https://www.turbodocx.com")
-	req2.Header.Set("accept", "application/json, text/plain, */*")
+	req2.Header.Set("Authorization", "Bearer "+API_TOKEN)
+	req2.Header.Set("x-rapiddocx-org-id", ORG_ID)
+	req2.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	resp2, _ := client.Do(req2)
 	defer resp2.Body.Close()
@@ -162,13 +166,11 @@ func main() {
 	  }
 	]`, recipients[0].ID, recipients[0].ID, recipients[1].ID, recipients[1].ID)
 	
-	req3, _ := http.NewRequest("POST", fmt.Sprintf("https://www.turbodocx.com/turbosign/documents/%s/prepare-for-signing", documentID), bytes.NewBufferString(signaturePayload))
+	req3, _ := http.NewRequest("POST", fmt.Sprintf(BASE_URL+"/documents/%s/prepare-for-signing", documentID), bytes.NewBufferString(signaturePayload))
 	req3.Header.Set("Content-Type", "application/json")
-	req3.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
-	req3.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
-	req3.Header.Set("origin", "https://www.turbodocx.com")
-	req3.Header.Set("referer", "https://www.turbodocx.com")
-	req3.Header.Set("accept", "application/json, text/plain, */*")
+	req3.Header.Set("Authorization", "Bearer "+API_TOKEN)
+	req3.Header.Set("x-rapiddocx-org-id", ORG_ID)
+	req3.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	resp3, _ := client.Do(req3)
 	defer resp3.Body.Close()
