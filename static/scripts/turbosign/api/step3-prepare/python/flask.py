@@ -4,7 +4,7 @@ import json
 # Configuration - Update these values
 API_TOKEN = "YOUR_API_TOKEN"
 ORG_ID = "YOUR_ORGANIZATION_ID"
-BASE_URL = "https://www.turbodocx.com/turbosign"
+BASE_URL = "https://api.turbodocx.com"
 
 # Step 3: Prepare for Signing
 document_id = "4a20eca5-7944-430c-97d5-fcce4be24296"

@@ -8,7 +8,7 @@ class Program
     // Configuration - Update these values
     private const string API_TOKEN = "YOUR_API_TOKEN";
     private const string ORG_ID = "YOUR_ORGANIZATION_ID";
-    private const string BASE_URL = "https://www.turbodocx.com/turbosign";
+    private const string BASE_URL = "https://api.turbodocx.com";
     private const string DOCUMENT_NAME = "Contract Agreement";
     static async Task Main(string[] args)
     {

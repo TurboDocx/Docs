@@ -1,7 +1,7 @@
 # Configuration - Update these values
 $API_TOKEN = "YOUR_API_TOKEN"
 $ORG_ID = "YOUR_ORGANIZATION_ID"
-$BASE_URL = "https://www.turbodocx.com/turbosign"
+$BASE_URL = "https://api.turbodocx.com"
 $DOCUMENT_NAME = "Contract Agreement"
 
 # Step 3: Prepare for Signing

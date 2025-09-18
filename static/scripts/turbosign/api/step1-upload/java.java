@@ -6,7 +6,7 @@ public class TurboSignUpload {
     // Configuration - Update these values
     private static final String API_TOKEN = "YOUR_API_TOKEN";
     private static final String ORG_ID = "YOUR_ORGANIZATION_ID";
-    private static final String BASE_URL = "https://www.turbodocx.com/turbosign";
+    private static final String BASE_URL = "https://api.turbodocx.com";
     private static final String DOCUMENT_NAME = "Contract Agreement";
     public static void main(String[] args) throws Exception {
         // Step 1: Upload Document

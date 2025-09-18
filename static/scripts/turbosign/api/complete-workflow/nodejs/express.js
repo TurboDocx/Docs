@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 // Configuration - Update these values
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORG_ID = "YOUR_ORGANIZATION_ID";
-const BASE_URL = "https://www.turbodocx.com/turbosign";
+const BASE_URL = "https://api.turbodocx.com";
 const DOCUMENT_NAME = "Contract Agreement";
 
 // Complete Workflow: Upload → Recipients → Prepare
