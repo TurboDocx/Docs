@@ -94,8 +94,8 @@ func main() {
 	
 	req2, _ := http.NewRequest("POST", fmt.Sprintf(BASE_URL+"/documents/%s/update-with-recipients", documentID), bytes.NewBufferString(recipientPayload))
 	req2.Header.Set("Content-Type", "application/json")
-	req2.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
-	req2.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
+	req2.Header.Set("Authorization", "Bearer "+API_TOKEN)
+	req2.Header.Set("x-rapiddocx-org-id", ORG_ID)
 	req2.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	resp2, _ := client.Do(req2)
@@ -168,8 +168,8 @@ func main() {
 	
 	req3, _ := http.NewRequest("POST", fmt.Sprintf(BASE_URL+"/documents/%s/prepare-for-signing", documentID), bytes.NewBufferString(signaturePayload))
 	req3.Header.Set("Content-Type", "application/json")
-	req3.Header.Set("Authorization", "Bearer YOUR_API_TOKEN")
-	req3.Header.Set("x-rapiddocx-org-id", "YOUR_ORGANIZATION_ID")
+	req3.Header.Set("Authorization", "Bearer "+API_TOKEN)
+	req3.Header.Set("x-rapiddocx-org-id", ORG_ID)
 	req3.Header.Set("User-Agent", "TurboDocx API Client")
 	
 	resp3, _ := client.Do(req3)
