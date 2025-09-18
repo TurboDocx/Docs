@@ -542,35 +542,6 @@ x-device-fingerprint: 280624a233f1fd39ce050a9e9d0a4cc9
 
 <!-- ![API Debugging Workflow](/img/turbosign/api-debugging-flow.png) -->
 
-## Rate Limits & Quotas
-
-### Current Limits
-
-- **Upload API**: 10 requests per minute per organization
-- **Recipients API**: 20 requests per minute per organization
-- **Signing API**: 30 requests per minute per organization
-- **File size limit**: 10MB per document
-- **Recipients per document**: 50 maximum
-
-### Handling Rate Limits
-
-When you exceed rate limits, the API returns HTTP 429 with a `Retry-After` header:
-
-```javascript
-if (response.status === 429) {
-  const retryAfter = response.headers.get("Retry-After");
-  console.log(`Rate limited. Retry after ${retryAfter} seconds`);
-  // Implement exponential backoff
-}
-```
-
-### Best Practices
-
-- **Implement exponential backoff**: Gradually increase retry delays
-- **Monitor usage**: Track API calls to stay within limits
-- **Batch operations**: Group multiple recipients in single calls
-- **Cache responses**: Store document IDs to avoid redundant uploads
-
 ## Next Steps
 
 ### Webhooks - The Next Logical Step
@@ -590,10 +561,8 @@ Now that you've integrated the basic signing flow, the next step is setting up w
 
 Need help with your integration?
 
-- **Discord Community**: [Join our Discord server](https://discord.gg/turbodocx) for real-time support and discussions
+- **Discord Community**: [Join our Discord server](https://discord.gg/NYKwz4BcpX) for real-time support and discussions
 - **Documentation**: [https://docs.turbodocx.com](https://docs.turbodocx.com)
-- **Support Portal**: Contact our technical support team
-- **Status Page**: Monitor API status and planned maintenance
 
 ---
 
