@@ -48,7 +48,9 @@ class TemplateWorkflowManager {
       console.log('\n✅ PATH A COMPLETE!');
       console.log(`Template ID: ${template.id}`);
       console.log(`Deliverable ID: ${deliverable.id}`);
-      console.log(`Download: ${deliverable.downloadUrl}`);
+
+      // Download the generated file
+      await this.downloadDeliverable(deliverable.id, `${deliverable.name}.docx`);
 
       return { template, deliverable };
 
@@ -128,7 +130,9 @@ class TemplateWorkflowManager {
       console.log('\n✅ PATH B COMPLETE!');
       console.log(`Template ID: ${templateDetails.id}`);
       console.log(`Deliverable ID: ${deliverable.id}`);
-      console.log(`Download: ${deliverable.downloadUrl}`);
+
+      // Download the generated file
+      await this.downloadDeliverable(deliverable.id, `${deliverable.name}.docx`);
 
       return { template: templateDetails, deliverable, pdfPreview };
 
@@ -244,11 +248,11 @@ class TemplateWorkflowManager {
     }
 
     const result = await response.json();
-    const deliverable = result.data.deliverable;
+    const deliverable = result.data.results.deliverable;
 
     console.log(`✅ Generated: ${deliverable.name}`);
-    console.log(`📄 Status: ${deliverable.status}`);
-    console.log(`📁 Size: ${deliverable.fileSize} bytes`);
+    console.log(`📄 Created by: ${deliverable.createdBy}`);
+    console.log(`📅 Created on: ${deliverable.createdOn}`);
 
     return deliverable;
   }
@@ -320,6 +324,33 @@ class TemplateWorkflowManager {
     return Math.random().toString(36).substr(2, 9) + '-' +
            Math.random().toString(36).substr(2, 9) + '-' +
            Math.random().toString(36).substr(2, 9);
+  }
+
+  async downloadDeliverable(deliverableId, filename) {
+    console.log(`\n📥 Downloading file: ${filename}`);
+
+    const response = await fetch(`${this.baseUrl}/deliverable/file/${deliverableId}`, {
+      method: 'GET',
+      headers: this.headers
+    });
+
+    if (!response.ok) {
+      throw new Error(`Download failed: ${response.status}`);
+    }
+
+    console.log(`✅ File ready for download: ${filename}`);
+    console.log(`📁 Content-Type: ${response.headers.get('content-type')}`);
+    console.log(`📊 Content-Length: ${response.headers.get('content-length')} bytes`);
+
+    // In a real application, you would save the file or return the buffer
+    // const buffer = await response.buffer();
+    // fs.writeFileSync(filename, buffer);
+
+    return {
+      filename,
+      contentType: response.headers.get('content-type'),
+      contentLength: response.headers.get('content-length')
+    };
   }
 
   // ===============================

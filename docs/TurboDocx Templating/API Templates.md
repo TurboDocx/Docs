@@ -247,6 +247,18 @@ User-Agent: TurboDocx API Client
 | `data.template.variables` | array  | Auto-extracted variables from template          |
 | `data.redirectUrl`        | string | Frontend URL to redirect for variable filling   |
 
+### Deliverable Response Fields
+
+| Field                               | Type    | Description                            |
+| ----------------------------------- | ------- | -------------------------------------- |
+| `data.results.deliverable.id`       | string  | Unique deliverable identifier          |
+| `data.results.deliverable.name`     | string  | Deliverable name as provided           |
+| `data.results.deliverable.createdBy`| string  | Email of the user who created it       |
+| `data.results.deliverable.createdOn`| string  | ISO timestamp of creation              |
+| `data.results.deliverable.orgId`    | string  | Organization ID                        |
+| `data.results.deliverable.isActive` | boolean | Whether deliverable is active          |
+| `data.results.deliverable.templateId`| string | Original template ID used              |
+
 ### Code Examples
 
 <ScriptLoader
@@ -411,6 +423,8 @@ GET https://api.turbodocx.com/template/{templateId}/previewpdflink
 
 Both paths converge here - time to fill those variables and create your masterpiece! This is where the magic happens and placeholders become real content.
 
+### Step 1: Generate Deliverable
+
 ### Endpoint
 
 ```http
@@ -517,15 +531,17 @@ User-Agent: TurboDocx API Client
 ```json
 {
   "data": {
-    "deliverable": {
-      "id": "deliverable-xyz789",
-      "name": "Employee Contract - John Smith",
-      "description": "Employment contract for new senior developer",
-      "status": "completed",
-      "downloadUrl": "https://api.turbodocx.com/file/download/contract-john-smith.docx",
-      "createdOn": "2024-01-15T14:15:30.000Z",
-      "fileSize": 287456,
-      "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    "results": {
+      "deliverable": {
+        "id": "39697685-ca00-43b8-92b8-7722544c574f",
+        "name": "Employee Contract - John Smith",
+        "description": "Employment contract for new senior developer",
+        "createdBy": "api-user@company.com",
+        "createdOn": "2024-12-19T21:22:10.000Z",
+        "orgId": "your-organization-id",
+        "isActive": true,
+        "templateId": "0b1099cf-d7b9-41a4-822b-51b68fd4885a"
+      }
     }
   }
 }
@@ -619,6 +635,44 @@ Understanding the variable structure is key to successful document generation:
 | `defaultFont`                        | string  | No       | Default font for the document                  |
 | `replaceFonts`                       | boolean | No       | Whether to replace fonts during generation     |
 | `metadata`                           | object  | No       | Additional metadata (sessions, tracking, etc.) |
+
+### Step 2: Download Generated File
+
+After generating a deliverable, you'll need to download the actual file.
+
+#### Endpoint
+
+```http
+GET https://api.turbodocx.com/deliverable/file/{deliverableId}
+```
+
+#### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+#### Example Request
+
+```bash
+curl -X GET "https://api.turbodocx.com/deliverable/file/39697685-ca00-43b8-92b8-7722544c574f" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "User-Agent: TurboDocx API Client" \
+  --output "employee-contract-john-smith.docx"
+```
+
+#### Response
+
+Returns the binary content of the generated document with appropriate content-type headers:
+
+```http
+Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+Content-Disposition: attachment; filename="employee-contract-john-smith.docx"
+Content-Length: 287456
+```
 
 ### Code Examples
 

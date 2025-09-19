@@ -51,7 +51,9 @@ class TemplateWorkflowManager:
             print("\n✅ PATH A COMPLETE!")
             print(f"Template ID: {template['id']}")
             print(f"Deliverable ID: {deliverable['id']}")
-            print(f"Download: {deliverable['downloadUrl']}")
+
+            # Download the generated file
+            self.download_deliverable(deliverable['id'], f"{deliverable['name']}.docx")
 
             return {'template': template, 'deliverable': deliverable}
 
@@ -141,7 +143,9 @@ class TemplateWorkflowManager:
             print("\n✅ PATH B COMPLETE!")
             print(f"Template ID: {template_details['id']}")
             print(f"Deliverable ID: {deliverable['id']}")
-            print(f"Download: {deliverable['downloadUrl']}")
+
+            # Download the generated file
+            self.download_deliverable(deliverable['id'], f"{deliverable['name']}.docx")
 
             return {
                 'template': template_details,
@@ -242,11 +246,11 @@ class TemplateWorkflowManager:
         response.raise_for_status()
 
         result = response.json()
-        deliverable = result['data']['deliverable']
+        deliverable = result['data']['results']['deliverable']
 
         print(f"✅ Generated: {deliverable['name']}")
-        print(f"📄 Status: {deliverable['status']}")
-        print(f"📁 Size: {deliverable['fileSize']} bytes")
+        print(f"📄 Created by: {deliverable['createdBy']}")
+        print(f"📅 Created on: {deliverable['createdOn']}")
 
         return deliverable
 
@@ -317,6 +321,29 @@ class TemplateWorkflowManager:
     def generate_session_id(self):
         """Generate a unique session ID"""
         return str(uuid.uuid4())
+
+    def download_deliverable(self, deliverable_id, filename):
+        """Download the generated deliverable file"""
+        print(f"\n📥 Downloading file: {filename}")
+
+        url = f"{self.base_url}/deliverable/file/{deliverable_id}"
+
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+
+        print(f"✅ File ready for download: {filename}")
+        print(f"📁 Content-Type: {response.headers.get('content-type')}")
+        print(f"📊 Content-Length: {response.headers.get('content-length')} bytes")
+
+        # In a real application, you would save the file
+        # with open(filename, 'wb') as f:
+        #     f.write(response.content)
+
+        return {
+            'filename': filename,
+            'content_type': response.headers.get('content-type'),
+            'content_length': response.headers.get('content-length')
+        }
 
     # ===============================
     # DEMO FUNCTIONS

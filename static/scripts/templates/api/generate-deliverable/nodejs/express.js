@@ -54,13 +54,13 @@ async function generateDeliverable(templateId, deliverableData) {
     }
 
     const result = await response.json();
-    const deliverable = result.data.deliverable;
+    const deliverable = result.data.results.deliverable;
 
     console.log('✅ Deliverable generated successfully!');
     console.log(`Deliverable ID: ${deliverable.id}`);
-    console.log(`Status: ${deliverable.status}`);
-    console.log(`Download URL: ${deliverable.downloadUrl}`);
-    console.log(`File Size: ${deliverable.fileSize} bytes`);
+    console.log(`Created by: ${deliverable.createdBy}`);
+    console.log(`Created on: ${deliverable.createdOn}`);
+    console.log(`Template ID: ${deliverable.templateId}`);
 
     return deliverable;
 
@@ -221,6 +221,48 @@ function generateSessionId() {
 }
 
 /**
+ * Download the generated deliverable file
+ */
+async function downloadDeliverable(deliverableId, filename) {
+  try {
+    const url = `${BASE_URL}/deliverable/file/${deliverableId}`;
+
+    console.log(`Downloading file: ${filename}`);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${API_TOKEN}`,
+        'x-rapiddocx-org-id': ORG_ID,
+        'User-Agent': 'TurboDocx API Client'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Download failed: ${response.status}`);
+    }
+
+    console.log(`✅ File ready for download: ${filename}`);
+    console.log(`📁 Content-Type: ${response.headers.get('content-type')}`);
+    console.log(`📊 Content-Length: ${response.headers.get('content-length')} bytes`);
+
+    // In a real application, you would save the file
+    // const buffer = await response.buffer();
+    // fs.writeFileSync(filename, buffer);
+
+    return {
+      filename,
+      contentType: response.headers.get('content-type'),
+      contentLength: response.headers.get('content-length')
+    };
+
+  } catch (error) {
+    console.error('Error downloading file:', error);
+    throw error;
+  }
+}
+
+/**
  * Example usage with realistic data
  */
 async function exampleGenerateDeliverable() {
@@ -253,6 +295,10 @@ async function exampleGenerateDeliverable() {
     console.log('=== Final Step: Generate Deliverable ===');
     const deliverable = await generateDeliverable(templateId, deliverableData);
 
+    // Download the generated file
+    console.log('\n=== Download Generated File ===');
+    await downloadDeliverable(deliverable.id, `${deliverable.name}.docx`);
+
     return deliverable;
 
   } catch (error) {
@@ -263,6 +309,7 @@ async function exampleGenerateDeliverable() {
 // Export functions for use in other modules
 module.exports = {
   generateDeliverable,
+  downloadDeliverable,
   createComplexVariables,
   exampleGenerateDeliverable
 };

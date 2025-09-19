@@ -26,6 +26,34 @@ get_timestamp() {
     date -u +"%Y-%m-%dT%H:%M:%S.%3NZ"
 }
 
+# Function to download deliverable file
+download_deliverable() {
+    local deliverable_id="$1"
+    local filename="$2"
+
+    echo "Downloading file: $filename"
+
+    DOWNLOAD_RESPONSE=$(curl -s -X GET "$BASE_URL/deliverable/file/$deliverable_id" \
+      -H "Authorization: Bearer $API_TOKEN" \
+      -H "x-rapiddocx-org-id: $ORG_ID" \
+      -H "User-Agent: TurboDocx API Client" \
+      --output "$filename" \
+      --write-out "HTTP_CODE:%{http_code};CONTENT_TYPE:%{content_type};SIZE:%{size_download}")
+
+    HTTP_CODE=$(echo "$DOWNLOAD_RESPONSE" | grep -o 'HTTP_CODE:[0-9]*' | cut -d: -f2)
+    CONTENT_TYPE=$(echo "$DOWNLOAD_RESPONSE" | grep -o 'CONTENT_TYPE:[^;]*' | cut -d: -f2)
+    FILE_SIZE=$(echo "$DOWNLOAD_RESPONSE" | grep -o 'SIZE:[0-9]*' | cut -d: -f2)
+
+    if [ "$HTTP_CODE" = "200" ]; then
+        echo -e "${GREEN}✅ File downloaded successfully: $filename${NC}"
+        echo -e "${GREEN}📁 Content-Type: $CONTENT_TYPE${NC}"
+        echo -e "${GREEN}📊 File Size: $FILE_SIZE bytes${NC}"
+    else
+        echo -e "${RED}❌ Download failed with HTTP $HTTP_CODE${NC}"
+        return 1
+    fi
+}
+
 # ===============================
 # PATH A: Upload New Template
 # ===============================
@@ -128,13 +156,18 @@ path_a_upload_and_generate() {
     echo "$GENERATE_RESPONSE" | jq '.'
 
     # Extract deliverable details
-    DELIVERABLE_ID=$(echo "$GENERATE_RESPONSE" | jq -r '.data.deliverable.id')
-    DOWNLOAD_URL=$(echo "$GENERATE_RESPONSE" | jq -r '.data.deliverable.downloadUrl')
+    DELIVERABLE_ID=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.id')
+    DELIVERABLE_NAME=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.name')
+    CREATED_BY=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.createdBy')
 
     echo -e "\n${GREEN}✅ PATH A COMPLETE!${NC}"
     echo -e "${GREEN}Template ID: $TEMPLATE_ID${NC}"
     echo -e "${GREEN}Deliverable ID: $DELIVERABLE_ID${NC}"
-    echo -e "${GREEN}Download: $DOWNLOAD_URL${NC}"
+    echo -e "${GREEN}Created by: $CREATED_BY${NC}"
+
+    # Download the generated file
+    echo -e "\n${BLUE}📥 Step 3: Downloading file...${NC}"
+    download_deliverable "$DELIVERABLE_ID" "$DELIVERABLE_NAME.docx"
 }
 
 # ===============================
@@ -259,14 +292,19 @@ path_b_browse_and_generate() {
     echo "$GENERATE_RESPONSE" | jq '.'
 
     # Extract deliverable details
-    DELIVERABLE_ID=$(echo "$GENERATE_RESPONSE" | jq -r '.data.deliverable.id')
-    DOWNLOAD_URL=$(echo "$GENERATE_RESPONSE" | jq -r '.data.deliverable.downloadUrl')
+    DELIVERABLE_ID=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.id')
+    DELIVERABLE_NAME=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.name')
+    CREATED_BY=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.createdBy')
 
     echo -e "\n${GREEN}✅ PATH B COMPLETE!${NC}"
     echo -e "${GREEN}Template ID: $TEMPLATE_ID${NC}"
     echo -e "${GREEN}Deliverable ID: $DELIVERABLE_ID${NC}"
-    echo -e "${GREEN}Download: $DOWNLOAD_URL${NC}"
+    echo -e "${GREEN}Created by: $CREATED_BY${NC}"
     echo -e "${GREEN}PDF Preview: $PDF_URL${NC}"
+
+    # Download the generated file
+    echo -e "\n${BLUE}📥 Step 5: Downloading file...${NC}"
+    download_deliverable "$DELIVERABLE_ID" "$DELIVERABLE_NAME.docx"
 }
 
 # ===============================

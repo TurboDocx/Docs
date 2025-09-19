@@ -54,13 +54,13 @@ class DeliverableGenerator:
             response.raise_for_status()
 
             result = response.json()
-            deliverable = result['data']['deliverable']
+            deliverable = result['data']['results']['deliverable']
 
             print("✅ Deliverable generated successfully!")
             print(f"Deliverable ID: {deliverable['id']}")
-            print(f"Status: {deliverable['status']}")
-            print(f"Download URL: {deliverable['downloadUrl']}")
-            print(f"File Size: {deliverable['fileSize']} bytes")
+            print(f"Created by: {deliverable['createdBy']}")
+            print(f"Created on: {deliverable['createdOn']}")
+            print(f"Template ID: {deliverable['templateId']}")
 
             return deliverable
 
@@ -212,6 +212,33 @@ class DeliverableGenerator:
         """Generate a session ID for metadata tracking"""
         return str(uuid.uuid4())
 
+    def download_deliverable(self, deliverable_id, filename):
+        """Download the generated deliverable file"""
+        try:
+            url = f"{self.base_url}/deliverable/file/{deliverable_id}"
+
+            print(f"Downloading file: {filename}")
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+
+            print(f"✅ File ready for download: {filename}")
+            print(f"📁 Content-Type: {response.headers.get('content-type')}")
+            print(f"📊 Content-Length: {response.headers.get('content-length')} bytes")
+
+            # In a real application, you would save the file
+            # with open(filename, 'wb') as f:
+            #     f.write(response.content)
+
+            return {
+                'filename': filename,
+                'content_type': response.headers.get('content-type'),
+                'content_length': response.headers.get('content-length')
+            }
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error downloading file: {e}")
+            raise
+
 def example_generate_deliverable():
     """Example usage with realistic data"""
     try:
@@ -244,6 +271,10 @@ def example_generate_deliverable():
 
         print("=== Final Step: Generate Deliverable ===")
         deliverable = generator.generate_deliverable(template_id, deliverable_data)
+
+        # Download the generated file
+        print("\n=== Download Generated File ===")
+        generator.download_deliverable(deliverable['id'], f"{deliverable['name']}.docx")
 
         return deliverable
 

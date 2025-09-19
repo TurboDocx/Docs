@@ -180,6 +180,24 @@ curl -X POST "$BASE_URL/deliverable" \
 
 echo -e "\n=== Deliverable Generation Complete ==="
 
+# Extract deliverable ID for download
+DELIVERABLE_ID=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.id')
+DELIVERABLE_NAME=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.name')
+
+if [ "$DELIVERABLE_ID" != "null" ] && [ -n "$DELIVERABLE_ID" ]; then
+    echo "\n=== Download Generated File ==="
+    echo "Downloading deliverable: $DELIVERABLE_NAME"
+
+    curl -X GET "$BASE_URL/deliverable/file/$DELIVERABLE_ID" \
+      -H "Authorization: Bearer $API_TOKEN" \
+      -H "x-rapiddocx-org-id: $ORG_ID" \
+      -H "User-Agent: TurboDocx API Client" \
+      --output "$DELIVERABLE_NAME.docx" \
+      --write-out "Downloaded: %{filename_effective} (%{size_download} bytes)\n"
+else
+    echo "❌ Could not extract deliverable ID from response"
+fi
+
 # Example: Simple variable structure (minimal example)
 echo -e "\n--- Alternative: Simple Variable Structure ---"
 echo "For a simpler example with basic variables:"
