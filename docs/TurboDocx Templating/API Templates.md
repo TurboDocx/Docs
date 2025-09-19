@@ -245,35 +245,35 @@ User-Agent: TurboDocx API Client
 
 ### Response Fields
 
-| Field                                    | Type    | Description                                     |
-| ---------------------------------------- | ------- | ----------------------------------------------- |
-| `data.results.template.id`               | string  | Unique template identifier (use for generation) |
-| `data.results.template.name`             | string  | Template name as provided                       |
-| `data.results.template.description`      | string  | Template description                            |
-| `data.results.template.fonts`            | array   | Array of font objects with name and usage      |
-| `data.results.template.defaultFont`      | string  | Default font name for the template              |
-| `data.results.template.orgId`            | string  | Organization ID                                 |
-| `data.results.template.createdBy`        | string  | User ID who created the template                |
-| `data.results.template.createdOn`        | string  | ISO timestamp of template creation              |
-| `data.results.template.updatedOn`        | string  | ISO timestamp of last template update          |
-| `data.results.template.isActive`         | number  | Active status (1 = active, 0 = inactive)       |
-| `data.results.template.variables`        | array\|null | Auto-extracted variables (null if none found)  |
-| `data.results.template.projectspaceId`   | string\|null | Project space ID (null if not assigned)        |
-| `data.results.template.templateFolderId` | string\|null | Folder ID (null if not in folder)              |
-| `data.results.template.metadata`         | object\|null | Additional metadata (null if not set)          |
-| `data.results.redirectUrl`               | string  | Frontend URL to redirect for variable filling   |
+| Field                                    | Type         | Description                                     |
+| ---------------------------------------- | ------------ | ----------------------------------------------- |
+| `data.results.template.id`               | string       | Unique template identifier (use for generation) |
+| `data.results.template.name`             | string       | Template name as provided                       |
+| `data.results.template.description`      | string       | Template description                            |
+| `data.results.template.fonts`            | array        | Array of font objects with name and usage       |
+| `data.results.template.defaultFont`      | string       | Default font name for the template              |
+| `data.results.template.orgId`            | string       | Organization ID                                 |
+| `data.results.template.createdBy`        | string       | User ID who created the template                |
+| `data.results.template.createdOn`        | string       | ISO timestamp of template creation              |
+| `data.results.template.updatedOn`        | string       | ISO timestamp of last template update           |
+| `data.results.template.isActive`         | number       | Active status (1 = active, 0 = inactive)        |
+| `data.results.template.variables`        | array\|null  | Auto-extracted variables (null if none found)   |
+| `data.results.template.projectspaceId`   | string\|null | Project space ID (null if not assigned)         |
+| `data.results.template.templateFolderId` | string\|null | Folder ID (null if not in folder)               |
+| `data.results.template.metadata`         | object\|null | Additional metadata (null if not set)           |
+| `data.results.redirectUrl`               | string       | Frontend URL to redirect for variable filling   |
 
 ### Deliverable Response Fields
 
-| Field                               | Type    | Description                            |
-| ----------------------------------- | ------- | -------------------------------------- |
-| `data.results.deliverable.id`       | string  | Unique deliverable identifier          |
-| `data.results.deliverable.name`     | string  | Deliverable name as provided           |
-| `data.results.deliverable.createdBy`| string  | Email of the user who created it       |
-| `data.results.deliverable.createdOn`| string  | ISO timestamp of creation              |
-| `data.results.deliverable.orgId`    | string  | Organization ID                        |
-| `data.results.deliverable.isActive` | boolean | Whether deliverable is active          |
-| `data.results.deliverable.templateId`| string | Original template ID used              |
+| Field                                 | Type    | Description                      |
+| ------------------------------------- | ------- | -------------------------------- |
+| `data.results.deliverable.id`         | string  | Unique deliverable identifier    |
+| `data.results.deliverable.name`       | string  | Deliverable name as provided     |
+| `data.results.deliverable.createdBy`  | string  | Email of the user who created it |
+| `data.results.deliverable.createdOn`  | string  | ISO timestamp of creation        |
+| `data.results.deliverable.orgId`      | string  | Organization ID                  |
+| `data.results.deliverable.isActive`   | boolean | Whether deliverable is active    |
+| `data.results.deliverable.templateId` | string  | Original template ID used        |
 
 ### Code Examples
 
@@ -367,25 +367,25 @@ User-Agent: TurboDocx API Client
 
 #### Browse Response Fields
 
-| Field                           | Type         | Description                                      |
-| ------------------------------- | ------------ | ------------------------------------------------ |
-| `data.results[]`                | array        | Array of templates and folders                   |
-| `data.results[].id`             | string       | Unique identifier for template or folder         |
-| `data.results[].name`           | string       | Name of the template or folder                   |
-| `data.results[].description`    | string\|null | Description (null for some items)               |
-| `data.results[].createdOn`      | string       | ISO timestamp of creation                        |
-| `data.results[].updatedOn`      | string       | ISO timestamp of last update                     |
-| `data.results[].isActive`       | number       | Active status (1 = active, 0 = inactive)        |
-| `data.results[].type`           | string       | Item type ("template" or "folder")               |
-| `data.results[].createdBy`      | string       | User ID who created the item                     |
-| `data.results[].email`          | string       | Email of the creator                             |
-| `data.results[].templateFolderId`| string\|null | Parent folder ID (null if at root level)        |
-| `data.results[].deliverableCount`| number      | Number of deliverables generated from template   |
-| `data.results[].fileSize`       | number\|null | File size in bytes (null for folders)           |
-| `data.results[].fileType`       | string\|null | MIME type of template file (null for folders)   |
-| `data.results[].templateCount`  | number       | Number of templates in folder (0 for templates) |
-| `data.results[].tags`           | array        | Array of tag objects                             |
-| `data.totalRecords`             | number       | Total number of items available                  |
+| Field                             | Type         | Description                                     |
+| --------------------------------- | ------------ | ----------------------------------------------- |
+| `data.results[]`                  | array        | Array of templates and folders                  |
+| `data.results[].id`               | string       | Unique identifier for template or folder        |
+| `data.results[].name`             | string       | Name of the template or folder                  |
+| `data.results[].description`      | string\|null | Description (null for some items)               |
+| `data.results[].createdOn`        | string       | ISO timestamp of creation                       |
+| `data.results[].updatedOn`        | string       | ISO timestamp of last update                    |
+| `data.results[].isActive`         | number       | Active status (1 = active, 0 = inactive)        |
+| `data.results[].type`             | string       | Item type ("template" or "folder")              |
+| `data.results[].createdBy`        | string       | User ID who created the item                    |
+| `data.results[].email`            | string       | Email of the creator                            |
+| `data.results[].templateFolderId` | string\|null | Parent folder ID (null if at root level)        |
+| `data.results[].deliverableCount` | number       | Number of deliverables generated from template  |
+| `data.results[].fileSize`         | number\|null | File size in bytes (null for folders)           |
+| `data.results[].fileType`         | string\|null | MIME type of template file (null for folders)   |
+| `data.results[].templateCount`    | number       | Number of templates in folder (0 for templates) |
+| `data.results[].tags`             | array        | Array of tag objects                            |
+| `data.totalRecords`               | number       | Total number of items available                 |
 
 ### Step 2: Get Template Details
 
@@ -860,7 +860,7 @@ Content-Length: 287456
 
 Now that you've mastered the basics, consider exploring these advanced capabilities:
 
-📖 **[AI-Powered Content Generation →](/docs/AI/ai-content-generation)**
+📖 **[AI-Powered Content Generation →](/docs/TurboDocx%20Templating/ai-variable-generation)**
 📖 **[Webhook Integration for Status Updates →](/docs/Webhooks/webhook-configuration)**
 📖 **[Bulk Document Generation →](/docs/Templates/bulk-generation)**
 📖 **[Template Version Management →](/docs/Templates/version-control)**
