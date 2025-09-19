@@ -20,7 +20,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuration
-const INDEXNOW_API_KEY = '800eabc35ea5450111e9509e56e568af49305a629982d640818b63cc837c0da1';
+const INDEXNOW_API_KEY = '83ba63194d6e4b31a960c844585c2a8b';
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow';
 const SITE_URL = process.env.SITE_URL || 'https://docs.turbodocx.com';
 const MAX_URLS = parseInt(process.env.MAX_URLS || '100');
