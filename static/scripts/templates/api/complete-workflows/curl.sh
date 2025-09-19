@@ -94,9 +94,11 @@ path_a_upload_and_generate() {
     echo "$UPLOAD_RESPONSE" | jq '.'
 
     # Extract template ID and details
-    TEMPLATE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.template.id')
-    TEMPLATE_NAME=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.template.name')
-    VARIABLE_COUNT=$(echo "$UPLOAD_RESPONSE" | jq '.data.template.variables | length')
+    TEMPLATE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.id')
+    TEMPLATE_NAME=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.name')
+    VARIABLE_COUNT=$(echo "$UPLOAD_RESPONSE" | jq '.data.results.template.variables | length // 0')
+    DEFAULT_FONT=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.defaultFont')
+    FONT_COUNT=$(echo "$UPLOAD_RESPONSE" | jq '.data.results.template.fonts | length // 0')
 
     if [ "$TEMPLATE_ID" = "null" ] || [ -z "$TEMPLATE_ID" ]; then
         echo -e "${RED}❌ Failed to extract template ID from upload response${NC}"
@@ -105,6 +107,8 @@ path_a_upload_and_generate() {
 
     echo -e "${GREEN}✅ Template uploaded: $TEMPLATE_NAME ($TEMPLATE_ID)${NC}"
     echo -e "${GREEN}📊 Variables extracted: $VARIABLE_COUNT${NC}"
+    echo -e "${GREEN}🔤 Default font: $DEFAULT_FONT${NC}"
+    echo -e "${GREEN}📝 Fonts used: $FONT_COUNT${NC}"
 
     # Step 2: Generate deliverable using uploaded template
     echo -e "\n${BLUE}📝 Step 2: Generating deliverable...${NC}"

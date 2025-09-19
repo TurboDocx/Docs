@@ -88,10 +88,12 @@ class TemplateWorkflowManager:
             response.raise_for_status()
 
             result = response.json()
-            template = result['data']['template']
+            template = result['data']['results']['template']
 
             print(f"✅ Template uploaded: {template['name']} ({template['id']})")
-            print(f"📊 Variables extracted: {len(template['variables'])}")
+            print(f"📊 Variables extracted: {len(template['variables']) if template['variables'] else 0}")
+            print(f"🔤 Default font: {template['defaultFont']}")
+            print(f"📝 Fonts used: {len(template['fonts']) if template['fonts'] else 0}")
 
             return template
 

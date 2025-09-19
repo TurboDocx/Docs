@@ -211,41 +211,57 @@ User-Agent: TurboDocx API Client
 ```json
 {
   "data": {
-    "template": {
-      "id": "0b1099cf-d7b9-41a4-822b-51b68fd4885a",
-      "name": "Employee Contract Template",
-      "description": "Standard employee contract with variable placeholders",
-      "createdOn": "2024-01-15T10:30:00.000Z",
-      "variables": [
-        {
-          "id": "var-123",
-          "name": "Employee Name",
-          "placeholder": "{EmployeeName}",
-          "mimeType": "text",
-          "allowRichTextInjection": false
-        },
-        {
-          "id": "var-456",
-          "name": "Company Name",
-          "placeholder": "{CompanyName}",
-          "mimeType": "text",
-          "allowRichTextInjection": true
-        }
-      ]
-    },
-    "redirectUrl": "/templates-beta/0b1099cf-d7b9-41a4-822b-51b68fd4885a/generate"
+    "results": {
+      "template": {
+        "name": "Employee Contract Template",
+        "description": "Standard employee contract with variable placeholders",
+        "fonts": [
+          {
+            "name": "Arial",
+            "usage": 269
+          },
+          {
+            "name": "Calibri",
+            "usage": 45
+          }
+        ],
+        "defaultFont": "Arial",
+        "orgId": "2d66ecf0-a749-475d-9403-9956d0f67884",
+        "createdBy": "9d829e80-1135-4a97-93ea-cc2a1eecc9da",
+        "createdOn": "2025-09-19T15:45:47.000Z",
+        "updatedOn": "2025-09-19T15:45:47.000Z",
+        "isActive": 1,
+        "id": "31cc4cce-4ed7-4f3b-aa80-0b9a4f995412",
+        "variables": null,
+        "projectspaceId": null,
+        "templateFolderId": null,
+        "metadata": null
+      },
+      "redirectUrl": "/templates/31cc4cce-4ed7-4f3b-aa80-0b9a4f995412/generate"
+    }
   }
 }
 ```
 
 ### Response Fields
 
-| Field                     | Type   | Description                                     |
-| ------------------------- | ------ | ----------------------------------------------- |
-| `data.template.id`        | string | Unique template identifier (use for generation) |
-| `data.template.name`      | string | Template name as provided                       |
-| `data.template.variables` | array  | Auto-extracted variables from template          |
-| `data.redirectUrl`        | string | Frontend URL to redirect for variable filling   |
+| Field                                    | Type    | Description                                     |
+| ---------------------------------------- | ------- | ----------------------------------------------- |
+| `data.results.template.id`               | string  | Unique template identifier (use for generation) |
+| `data.results.template.name`             | string  | Template name as provided                       |
+| `data.results.template.description`      | string  | Template description                            |
+| `data.results.template.fonts`            | array   | Array of font objects with name and usage      |
+| `data.results.template.defaultFont`      | string  | Default font name for the template              |
+| `data.results.template.orgId`            | string  | Organization ID                                 |
+| `data.results.template.createdBy`        | string  | User ID who created the template                |
+| `data.results.template.createdOn`        | string  | ISO timestamp of template creation              |
+| `data.results.template.updatedOn`        | string  | ISO timestamp of last template update          |
+| `data.results.template.isActive`         | number  | Active status (1 = active, 0 = inactive)       |
+| `data.results.template.variables`        | array\|null | Auto-extracted variables (null if none found)  |
+| `data.results.template.projectspaceId`   | string\|null | Project space ID (null if not assigned)        |
+| `data.results.template.templateFolderId` | string\|null | Folder ID (null if not in folder)              |
+| `data.results.template.metadata`         | object\|null | Additional metadata (null if not set)          |
+| `data.results.redirectUrl`               | string  | Frontend URL to redirect for variable filling   |
 
 ### Deliverable Response Fields
 

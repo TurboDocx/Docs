@@ -82,10 +82,12 @@ class TemplateWorkflowManager {
     }
 
     const result = await response.json();
-    const template = result.data.template;
+    const template = result.data.results.template;
 
     console.log(`✅ Template uploaded: ${template.name} (${template.id})`);
-    console.log(`📊 Variables extracted: ${template.variables.length}`);
+    console.log(`📊 Variables extracted: ${template.variables ? template.variables.length : 0}`);
+    console.log(`🔤 Default font: ${template.defaultFont}`);
+    console.log(`📝 Fonts used: ${template.fonts ? template.fonts.length : 0}`);
 
     return template;
   }

@@ -34,11 +34,16 @@ async function uploadTemplate() {
     }
 
     const result = await response.json();
-    console.log('Template uploaded successfully:', result.data.template.id);
-    console.log('Variables extracted:', result.data.template.variables.length);
-    console.log('Redirect to:', result.data.redirectUrl);
+    const template = result.data.results.template;
 
-    return result.data.template;
+    console.log('Template uploaded successfully:', template.id);
+    console.log('Template name:', template.name);
+    console.log('Variables extracted:', template.variables ? template.variables.length : 0);
+    console.log('Default font:', template.defaultFont);
+    console.log('Fonts used:', template.fonts ? template.fonts.length : 0);
+    console.log('Redirect to:', result.data.results.redirectUrl);
+
+    return template;
   } catch (error) {
     console.error('Error uploading template:', error);
     throw error;

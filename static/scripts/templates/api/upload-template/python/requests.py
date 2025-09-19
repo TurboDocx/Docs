@@ -38,11 +38,14 @@ def upload_template():
         response.raise_for_status()
 
         result = response.json()
-        template = result['data']['template']
+        template = result['data']['results']['template']
 
         print(f"Template uploaded successfully: {template['id']}")
-        print(f"Variables extracted: {len(template['variables'])}")
-        print(f"Redirect to: {result['data']['redirectUrl']}")
+        print(f"Template name: {template['name']}")
+        print(f"Variables extracted: {len(template['variables']) if template['variables'] else 0}")
+        print(f"Default font: {template['defaultFont']}")
+        print(f"Fonts used: {len(template['fonts']) if template['fonts'] else 0}")
+        print(f"Redirect to: {result['data']['results']['redirectUrl']}")
 
         # Clean up file handle
         files['templateFile'][1].close()
