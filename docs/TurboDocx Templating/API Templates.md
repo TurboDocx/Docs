@@ -326,28 +326,66 @@ User-Agent: TurboDocx API Client
   "data": {
     "results": [
       {
-        "id": "template-abc123",
-        "name": "Employee Contract Template",
-        "description": "Standard employment agreement template",
+        "id": "0b1099cf-d7b9-41a4-822b-51b68fd4885a",
+        "name": "Employee / Contractor IP Agreement Example",
+        "description": "A Statement of Work template provided by TurboDocx",
+        "createdOn": "2025-05-29T19:07:16.000Z",
+        "updatedOn": "2025-09-08T11:44:11.000Z",
+        "isActive": 1,
         "type": "template",
-        "createdOn": "2024-01-15T10:30:00.000Z",
-        "deliverableCount": 45,
-        "fileSize": 156789,
+        "createdBy": "9d829e80-1135-4a97-93ea-cc2a1eecc9da",
+        "email": "kahlerasse@gmail.com",
+        "templateFolderId": null,
+        "deliverableCount": 4,
+        "fileSize": 24942,
         "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "email": "creator@company.com"
+        "templateCount": 0,
+        "tags": []
       },
       {
-        "id": "folder-def456",
-        "name": "HR Templates",
-        "description": "Human resources document templates",
+        "id": "604d1e63-6cdc-4849-9e71-548409bfec69",
+        "name": "Legal",
+        "description": null,
+        "createdOn": "2025-05-29T19:07:16.000Z",
+        "updatedOn": "2025-05-29T19:07:16.000Z",
+        "isActive": 1,
         "type": "folder",
-        "templateCount": 12
+        "createdBy": "9d829e80-1135-4a97-93ea-cc2a1eecc9da",
+        "email": "kahlerasse@gmail.com",
+        "templateFolderId": null,
+        "deliverableCount": 0,
+        "fileSize": null,
+        "fileType": null,
+        "templateCount": 0,
+        "tags": []
       }
     ],
-    "totalRecords": 156
+    "totalRecords": 26
   }
 }
 ```
+
+#### Browse Response Fields
+
+| Field                           | Type         | Description                                      |
+| ------------------------------- | ------------ | ------------------------------------------------ |
+| `data.results[]`                | array        | Array of templates and folders                   |
+| `data.results[].id`             | string       | Unique identifier for template or folder         |
+| `data.results[].name`           | string       | Name of the template or folder                   |
+| `data.results[].description`    | string\|null | Description (null for some items)               |
+| `data.results[].createdOn`      | string       | ISO timestamp of creation                        |
+| `data.results[].updatedOn`      | string       | ISO timestamp of last update                     |
+| `data.results[].isActive`       | number       | Active status (1 = active, 0 = inactive)        |
+| `data.results[].type`           | string       | Item type ("template" or "folder")               |
+| `data.results[].createdBy`      | string       | User ID who created the item                     |
+| `data.results[].email`          | string       | Email of the creator                             |
+| `data.results[].templateFolderId`| string\|null | Parent folder ID (null if at root level)        |
+| `data.results[].deliverableCount`| number      | Number of deliverables generated from template   |
+| `data.results[].fileSize`       | number\|null | File size in bytes (null for folders)           |
+| `data.results[].fileType`       | string\|null | MIME type of template file (null for folders)   |
+| `data.results[].templateCount`  | number       | Number of templates in folder (0 for templates) |
+| `data.results[].tags`           | array        | Array of tag objects                             |
+| `data.totalRecords`             | number       | Total number of items available                  |
 
 ### Step 2: Get Template Details
 
