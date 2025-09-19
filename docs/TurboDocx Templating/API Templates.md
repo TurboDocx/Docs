@@ -36,7 +36,7 @@ import ScriptLoader from '@site/src/components/ScriptLoader';
 
 This comprehensive guide walks you through the Template Generation API integration process. Learn how to programmatically upload new templates or select existing ones, then generate beautiful documents with variable substitution using our RESTful API.
 
-<!-- ![Template Generation API Integration Overview](/img/templates/api/api-illustration.png) -->
+![Template Generation API Integration Overview](/img/template-generation-api/banner.gif)
 
 ## Overview
 
@@ -53,7 +53,7 @@ The Template Generation API offers **two flexible paths** to document creation, 
 2. **Template Details** - Load template variables and preview PDF
 3. **Generate Document** - Fill variables and create your deliverable
 
-<!-- ![Template Generation API Workflow](/img/templates/api/workflow.png) -->
+![Template Generation API Workflow](/img/template-generation-api/options.png)
 
 ### Key Features
 
@@ -157,8 +157,8 @@ Before you begin your journey into template automation nirvana, ensure you have:
 3. **API Keys Section**: Generate or retrieve your API access token
 4. **Organization ID**: Copy your organization ID from the settings
 
-<!-- ![Template API Credentials](/img/templates/api/api-key.png)
-![Organization ID Location](/img/templates/api/org-id.png) -->
+![Template API Credentials](/img/turbosign/api/api-key.png)
+![Organization ID Location](/img/turbosign/api/org-id.png)
 
 ## Authentication
 
