@@ -71,11 +71,14 @@ function uploadTemplate($apiToken, $orgId, $baseUrl, $templateName, $templateFil
 // Example usage
 try {
     $result = uploadTemplate($apiToken, $orgId, $baseUrl, $templateName, $templateFile);
-    $template = $result['data']['template'];
+    $template = $result['data']['results']['template'];
 
     echo "Template uploaded successfully: " . $template['id'] . "\n";
-    echo "Variables extracted: " . count($template['variables']) . "\n";
-    echo "Redirect to: " . $result['data']['redirectUrl'] . "\n";
+    echo "Template name: " . $template['name'] . "\n";
+    echo "Variables extracted: " . (isset($template['variables']) && $template['variables'] ? count($template['variables']) : 0) . "\n";
+    echo "Default font: " . ($template['defaultFont'] ?? 'N/A') . "\n";
+    echo "Fonts used: " . (isset($template['fonts']) && $template['fonts'] ? count($template['fonts']) : 0) . "\n";
+    echo "Redirect to: " . $result['data']['results']['redirectUrl'] . "\n";
 
     echo "Ready to generate documents with template: " . $template['id'] . "\n";
 
