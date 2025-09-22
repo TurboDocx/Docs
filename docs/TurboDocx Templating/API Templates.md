@@ -201,8 +201,6 @@ User-Agent: TurboDocx API Client
   "templateFile": [DOCX_OR_PPTX_FILE_BINARY],
   "name": "Employee Contract Template",
   "description": "Standard employee contract with variable placeholders",
-  "variables": "[]", // Optional: Pre-defined variables (usually extracted automatically)
-  "tags": "[]" // Optional: Categorization tags
 }
 ```
 
