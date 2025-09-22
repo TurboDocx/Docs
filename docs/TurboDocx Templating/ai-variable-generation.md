@@ -31,7 +31,7 @@ import ScriptLoader from '@site/src/components/ScriptLoader';
 
 Transform your document workflows with intelligent, context-aware variable generation. This API leverages advanced AI to automatically create rich, relevant content for your template variables by analyzing uploaded files, understanding context, and generating human-quality text based on your specific prompts.
 
-<!-- ![AI Variable Generation Overview](/img/ai-variable-generation/banner.gif) -->
+![Template Generation API Integration Overview](/img/ai/ai.webp)
 
 ## Overview
 
@@ -45,12 +45,12 @@ The AI Variable Generation API represents the cutting edge of document automatio
 
 ### Key Capabilities
 
-🧠 **AI-Powered Content Creation**: Advanced language models generate human-quality content
-📎 **File Attachment Processing**: Upload and analyze documents for context-driven generation
-📊 **Spreadsheet Intelligence**: Select specific sheets and extract relevant data automatically
-🎯 **Context Integration**: Use existing templates to inform and guide content generation
-✨ **Rich Text Generation**: Create formatted content with styling and structure
-🔧 **Customizable Prompts**: Fine-tune AI behavior with specific instructions and hints
+- 🧠 **AI-Powered Content Creation**: Advanced language models generate human-quality content
+- 📎 **File Attachment Processing**: Upload and analyze documents for context-driven generation
+- 📊 **Spreadsheet Intelligence**: Select specific sheets and extract relevant data automatically
+- 🎯 **Context Integration**: Use existing templates to inform and guide content generation
+- ✨ **Rich Text Generation**: Create formatted content with styling and structure
+- 🔧 **Customizable Prompts**: Fine-tune AI behavior with specific instructions and hints
 
 ## How It Works
 
