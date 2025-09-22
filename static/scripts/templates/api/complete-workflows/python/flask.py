@@ -43,16 +43,19 @@ def upload_template(template_file_path):
 def generate_deliverable(template_id):
     variables = [
         {
+            "mimeType": "text",
             "name": "Company Name",
             "placeholder": "{CompanyName}",
             "text": "Acme Corporation"
         },
         {
+            "mimeType": "text",
             "name": "Employee Name",
             "placeholder": "{EmployeeName}",
             "text": "John Smith"
         },
         {
+            "mimeType": "text",
             "name": "Date",
             "placeholder": "{Date}",
             "text": "January 15, 2024"

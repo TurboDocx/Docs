@@ -84,18 +84,21 @@ public class TemplateWorkflowManager {
         ArrayNode variables = mapper.createArrayNode();
 
         ObjectNode companyVar = mapper.createObjectNode();
+        companyVar.put("mimeType", "text");
         companyVar.put("name", "Company Name");
         companyVar.put("placeholder", "{CompanyName}");
         companyVar.put("text", "Acme Corporation");
         variables.add(companyVar);
 
         ObjectNode employeeVar = mapper.createObjectNode();
+        employeeVar.put("mimeType", "text");
         employeeVar.put("name", "Employee Name");
         employeeVar.put("placeholder", "{EmployeeName}");
         employeeVar.put("text", "John Smith");
         variables.add(employeeVar);
 
         ObjectNode dateVar = mapper.createObjectNode();
+        dateVar.put("mimeType", "text");
         dateVar.put("name", "Date");
         dateVar.put("placeholder", "{Date}");
         dateVar.put("text", "January 15, 2024");

@@ -21,6 +21,7 @@ const (
 // Simple 3-step process for document generation
 
 type Variable struct {
+	MimeType    string `json:"mimeType"`
 	Name        string `json:"name"`
 	Placeholder string `json:"placeholder"`
 	Text        string `json:"text"`
@@ -113,16 +114,19 @@ func uploadTemplate(templateFilePath string) (*Template, error) {
 func generateDeliverable(templateID string) (*Deliverable, error) {
 	variables := []Variable{
 		{
+			MimeType:    "text",
 			Name:        "Company Name",
 			Placeholder: "{CompanyName}",
 			Text:        "Acme Corporation",
 		},
 		{
+			MimeType:    "text",
 			Name:        "Employee Name",
 			Placeholder: "{EmployeeName}",
 			Text:        "John Smith",
 		},
 		{
+			MimeType:    "text",
 			Name:        "Date",
 			Placeholder: "{Date}",
 			Text:        "January 15, 2024",

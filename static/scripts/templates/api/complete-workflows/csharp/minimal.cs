@@ -89,16 +89,19 @@ class TemplateWorkflowManager
           "description": "Simple document example",
           "variables": [
             {
+              "mimeType": "text",
               "name": "Company Name",
               "placeholder": "{CompanyName}",
               "text": "Acme Corporation"
             },
             {
+              "mimeType": "text",
               "name": "Employee Name",
               "placeholder": "{EmployeeName}",
               "text": "John Smith"
             },
             {
+              "mimeType": "text",
               "name": "Date",
               "placeholder": "{Date}",
               "text": "January 15, 2024"
