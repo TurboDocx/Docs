@@ -5,393 +5,115 @@ API_TOKEN="YOUR_API_TOKEN"
 ORG_ID="YOUR_ORGANIZATION_ID"
 BASE_URL="https://api.turbodocx.com"
 
-# Colors for output formatting
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+# Complete Workflow: Upload → Generate → Download
+# Simple 3-step process for document generation
 
-echo -e "${BLUE}🚀 COMPLETE TEMPLATE GENERATION WORKFLOWS${NC}"
-echo -e "${BLUE}===========================================${NC}"
+echo "🚀 Starting complete workflow..."
+
+# Step 1: Upload template file
 echo
+echo "📤 Step 1: Uploading template..."
 
-# Function to generate session ID
-generate_session_id() {
-    echo "session-$(date +%s)-$(shuf -i 1000-9999 -n 1)"
-}
+TEMPLATE_FILE="./template.docx"
 
-# Function to get current timestamp
-get_timestamp() {
-    date -u +"%Y-%m-%dT%H:%M:%S.%3NZ"
-}
+if [ ! -f "$TEMPLATE_FILE" ]; then
+    echo "❌ Template file not found: $TEMPLATE_FILE"
+    echo "Please provide a valid template file path"
+    exit 1
+fi
 
-# Function to download deliverable file
-download_deliverable() {
-    local deliverable_id="$1"
-    local filename="$2"
+# Upload template
+UPLOAD_RESPONSE=$(curl -s -X POST "$BASE_URL/template/upload-and-create" \
+  -H "Authorization: Bearer $API_TOKEN" \
+  -H "x-rapiddocx-org-id: $ORG_ID" \
+  -H "User-Agent: TurboDocx API Client" \
+  -F "templateFile=@$TEMPLATE_FILE" \
+  -F "name=Simple Template" \
+  -F "description=Template uploaded for document generation")
 
-    echo "Downloading file: $filename"
+# Check if upload was successful
+if [ $? -ne 0 ]; then
+    echo "❌ Upload failed"
+    exit 1
+fi
 
-    DOWNLOAD_RESPONSE=$(curl -s -X GET "$BASE_URL/deliverable/file/$deliverable_id" \
-      -H "Authorization: Bearer $API_TOKEN" \
-      -H "x-rapiddocx-org-id: $ORG_ID" \
-      -H "User-Agent: TurboDocx API Client" \
-      --output "$filename" \
-      --write-out "HTTP_CODE:%{http_code};CONTENT_TYPE:%{content_type};SIZE:%{size_download}")
+# Extract template ID
+TEMPLATE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.id')
+TEMPLATE_NAME=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.name')
 
-    HTTP_CODE=$(echo "$DOWNLOAD_RESPONSE" | grep -o 'HTTP_CODE:[0-9]*' | cut -d: -f2)
-    CONTENT_TYPE=$(echo "$DOWNLOAD_RESPONSE" | grep -o 'CONTENT_TYPE:[^;]*' | cut -d: -f2)
-    FILE_SIZE=$(echo "$DOWNLOAD_RESPONSE" | grep -o 'SIZE:[0-9]*' | cut -d: -f2)
+if [ "$TEMPLATE_ID" == "null" ] || [ -z "$TEMPLATE_ID" ]; then
+    echo "❌ Failed to extract template ID from response"
+    exit 1
+fi
 
-    if [ "$HTTP_CODE" = "200" ]; then
-        echo -e "${GREEN}✅ File downloaded successfully: $filename${NC}"
-        echo -e "${GREEN}📁 Content-Type: $CONTENT_TYPE${NC}"
-        echo -e "${GREEN}📊 File Size: $FILE_SIZE bytes${NC}"
-    else
-        echo -e "${RED}❌ Download failed with HTTP $HTTP_CODE${NC}"
-        return 1
-    fi
-}
+echo "✅ Template uploaded: $TEMPLATE_NAME ($TEMPLATE_ID)"
 
-# ===============================
-# PATH A: Upload New Template
-# ===============================
+# Step 2: Generate deliverable with simple variables
+echo
+echo "📝 Step 2: Generating document..."
 
-path_a_upload_and_generate() {
-    local template_file="$1"
-    local deliverable_name="$2"
+DELIVERABLE_RESPONSE=$(curl -s -X POST "$BASE_URL/deliverable" \
+  -H "Authorization: Bearer $API_TOKEN" \
+  -H "x-rapiddocx-org-id: $ORG_ID" \
+  -H "User-Agent: TurboDocx API Client" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "templateId": "'$TEMPLATE_ID'",
+    "name": "Generated Document",
+    "description": "Simple document example",
+    "variables": [
+      {
+        "name": "Company Name",
+        "placeholder": "{CompanyName}",
+        "text": "Acme Corporation"
+      },
+      {
+        "name": "Employee Name",
+        "placeholder": "{EmployeeName}",
+        "text": "John Smith"
+      },
+      {
+        "name": "Date",
+        "placeholder": "{Date}",
+        "text": "January 15, 2024"
+      }
+    ]
+  }')
 
-    echo -e "${YELLOW}🔄 PATH A: Upload New Template → Generate Deliverable${NC}"
-    echo -e "${YELLOW}================================================${NC}"
-    echo
+# Extract deliverable ID
+DELIVERABLE_ID=$(echo "$DELIVERABLE_RESPONSE" | jq -r '.data.results.deliverable.id')
+DELIVERABLE_NAME=$(echo "$DELIVERABLE_RESPONSE" | jq -r '.data.results.deliverable.name')
 
-    if [ ! -f "$template_file" ]; then
-        echo -e "${RED}❌ Error: Template file '$template_file' not found${NC}"
-        echo "Please provide a valid .docx or .pptx file path"
-        return 1
-    fi
+if [ "$DELIVERABLE_ID" == "null" ] || [ -z "$DELIVERABLE_ID" ]; then
+    echo "❌ Failed to generate document"
+    echo "Response: $DELIVERABLE_RESPONSE"
+    exit 1
+fi
 
-    # Step 1: Upload and create template
-    echo -e "${BLUE}📤 Step 1: Uploading template...${NC}"
+echo "✅ Document generated: $DELIVERABLE_NAME ($DELIVERABLE_ID)"
 
-    UPLOAD_RESPONSE=$(curl -s -X POST "$BASE_URL/template/upload-and-create" \
-      -H "Authorization: Bearer $API_TOKEN" \
-      -H "x-rapiddocx-org-id: $ORG_ID" \
-      -H "User-Agent: TurboDocx API Client" \
-      -F "templateFile=@$template_file" \
-      -F "name=API Upload Template" \
-      -F "description=Template uploaded via API for testing" \
-      -F 'variables=[]' \
-      -F 'tags=["api", "test", "upload"]')
+# Step 3: Download generated file
+echo
+echo "📥 Step 3: Downloading file..."
 
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}❌ Template upload failed${NC}"
-        return 1
-    fi
+DOWNLOAD_FILE="${DELIVERABLE_NAME}.docx"
 
-    echo "Upload Response:"
-    echo "$UPLOAD_RESPONSE" | jq '.'
+curl -s -X GET "$BASE_URL/deliverable/file/$DELIVERABLE_ID" \
+  -H "Authorization: Bearer $API_TOKEN" \
+  -H "x-rapiddocx-org-id: $ORG_ID" \
+  -H "User-Agent: TurboDocx API Client" \
+  --output "$DOWNLOAD_FILE" \
+  --write-out "Downloaded: %{filename_effective} (%{size_download} bytes)\n"
 
-    # Extract template ID and details
-    TEMPLATE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.id')
-    TEMPLATE_NAME=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.name')
-    VARIABLE_COUNT=$(echo "$UPLOAD_RESPONSE" | jq '.data.results.template.variables | length // 0')
-    DEFAULT_FONT=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.results.template.defaultFont')
-    FONT_COUNT=$(echo "$UPLOAD_RESPONSE" | jq '.data.results.template.fonts | length // 0')
+if [ $? -eq 0 ]; then
+    echo "✅ File ready for download: $DOWNLOAD_FILE"
+else
+    echo "❌ Download failed"
+    exit 1
+fi
 
-    if [ "$TEMPLATE_ID" = "null" ] || [ -z "$TEMPLATE_ID" ]; then
-        echo -e "${RED}❌ Failed to extract template ID from upload response${NC}"
-        return 1
-    fi
-
-    echo -e "${GREEN}✅ Template uploaded: $TEMPLATE_NAME ($TEMPLATE_ID)${NC}"
-    echo -e "${GREEN}📊 Variables extracted: $VARIABLE_COUNT${NC}"
-    echo -e "${GREEN}🔤 Default font: $DEFAULT_FONT${NC}"
-    echo -e "${GREEN}📝 Fonts used: $FONT_COUNT${NC}"
-
-    # Step 2: Generate deliverable using uploaded template
-    echo -e "\n${BLUE}📝 Step 2: Generating deliverable...${NC}"
-
-    GENERATE_RESPONSE=$(curl -s -X POST "$BASE_URL/deliverable" \
-      -H "Authorization: Bearer $API_TOKEN" \
-      -H "x-rapiddocx-org-id: $ORG_ID" \
-      -H "User-Agent: TurboDocx API Client" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "templateId": "'$TEMPLATE_ID'",
-        "name": "'$deliverable_name'",
-        "description": "Generated from uploaded template: '$TEMPLATE_NAME'",
-        "variables": [
-          {
-            "mimeType": "text",
-            "name": "Sample Variable",
-            "placeholder": "{SampleVariable}",
-            "text": "Sample Content from Path A",
-            "allowRichTextInjection": 0,
-            "autogenerated": false,
-            "count": 1,
-            "order": 1,
-            "subvariables": [],
-            "metadata": {
-              "generatedBy": "Path A Workflow"
-            },
-            "aiPrompt": ""
-          }
-        ],
-        "tags": ["api-generated", "path-a"],
-        "fonts": "[]",
-        "defaultFont": "Arial",
-        "replaceFonts": true,
-        "metadata": {
-          "sessions": [
-            {
-              "id": "'$(generate_session_id)'",
-              "starttime": "'$(get_timestamp)'",
-              "endtime": "'$(get_timestamp)'"
-            }
-          ],
-          "workflow": "Path A - Upload and Generate",
-          "generated": "'$(get_timestamp)'"
-        }
-      }')
-
-    echo "Generation Response:"
-    echo "$GENERATE_RESPONSE" | jq '.'
-
-    # Extract deliverable details
-    DELIVERABLE_ID=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.id')
-    DELIVERABLE_NAME=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.name')
-    CREATED_BY=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.createdBy')
-
-    echo -e "\n${GREEN}✅ PATH A COMPLETE!${NC}"
-    echo -e "${GREEN}Template ID: $TEMPLATE_ID${NC}"
-    echo -e "${GREEN}Deliverable ID: $DELIVERABLE_ID${NC}"
-    echo -e "${GREEN}Created by: $CREATED_BY${NC}"
-
-    # Download the generated file
-    echo -e "\n${BLUE}📥 Step 3: Downloading file...${NC}"
-    download_deliverable "$DELIVERABLE_ID" "$DELIVERABLE_NAME.docx"
-}
-
-# ===============================
-# PATH B: Browse and Select
-# ===============================
-
-path_b_browse_and_generate() {
-    local search_query="$1"
-    local deliverable_name="$2"
-
-    echo -e "${YELLOW}🔍 PATH B: Browse Existing Templates → Generate Deliverable${NC}"
-    echo -e "${YELLOW}======================================================${NC}"
-    echo
-
-    # Step 1: Browse templates
-    echo -e "${BLUE}🔍 Step 1: Browsing templates...${NC}"
-
-    BROWSE_RESPONSE=$(curl -s -X GET "$BASE_URL/template-item?limit=10&offset=0&query=$search_query&showTags=true" \
-      -H "Authorization: Bearer $API_TOKEN" \
-      -H "x-rapiddocx-org-id: $ORG_ID" \
-      -H "User-Agent: TurboDocx API Client")
-
-    echo "Browse Results:"
-    echo "$BROWSE_RESPONSE" | jq '.'
-
-    # Extract first template ID
-    TEMPLATE_ID=$(echo "$BROWSE_RESPONSE" | jq -r '.data.results[] | select(.type == "template") | .id' | head -1)
-
-    if [ "$TEMPLATE_ID" = "null" ] || [ -z "$TEMPLATE_ID" ]; then
-        echo -e "${RED}❌ No templates found in browse results${NC}"
-        return 1
-    fi
-
-    TEMPLATE_NAME=$(echo "$BROWSE_RESPONSE" | jq -r '.data.results[] | select(.id == "'$TEMPLATE_ID'") | .name')
-    echo -e "${GREEN}📋 Selected: $TEMPLATE_NAME ($TEMPLATE_ID)${NC}"
-
-    # Step 2: Get template details
-    echo -e "\n${BLUE}📖 Step 2: Getting template details...${NC}"
-
-    TEMPLATE_DETAILS=$(curl -s -X GET "$BASE_URL/template/$TEMPLATE_ID" \
-      -H "Authorization: Bearer $API_TOKEN" \
-      -H "x-rapiddocx-org-id: $ORG_ID" \
-      -H "User-Agent: TurboDocx API Client")
-
-    echo "Template Details:"
-    echo "$TEMPLATE_DETAILS" | jq '.'
-
-    VARIABLE_COUNT=$(echo "$TEMPLATE_DETAILS" | jq '.data.results.variables | length')
-    DEFAULT_FONT=$(echo "$TEMPLATE_DETAILS" | jq -r '.data.results.defaultFont // "N/A"')
-
-    echo -e "${GREEN}📊 Variables: $VARIABLE_COUNT${NC}"
-    echo -e "${GREEN}🔤 Default font: $DEFAULT_FONT${NC}"
-
-    # Step 3: Get PDF preview (optional)
-    echo -e "\n${BLUE}🖼️  Step 3: Getting PDF preview...${NC}"
-
-    PDF_PREVIEW=$(curl -s -X GET "$BASE_URL/template/$TEMPLATE_ID/previewpdflink" \
-      -H "Authorization: Bearer $API_TOKEN" \
-      -H "x-rapiddocx-org-id: $ORG_ID" \
-      -H "User-Agent: TurboDocx API Client")
-
-    echo "PDF Preview Response:"
-    echo "$PDF_PREVIEW" | jq '.'
-
-    PDF_URL=$(echo "$PDF_PREVIEW" | jq -r '.results')
-    echo -e "${GREEN}🖼️  PDF Preview available: $PDF_URL${NC}"
-
-    # Step 4: Generate deliverable
-    echo -e "\n${BLUE}📝 Step 4: Generating deliverable...${NC}"
-
-    GENERATE_RESPONSE=$(curl -s -X POST "$BASE_URL/deliverable" \
-      -H "Authorization: Bearer $API_TOKEN" \
-      -H "x-rapiddocx-org-id: $ORG_ID" \
-      -H "User-Agent: TurboDocx API Client" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "templateId": "'$TEMPLATE_ID'",
-        "name": "'$deliverable_name'",
-        "description": "Generated from existing template: '$TEMPLATE_NAME'",
-        "variables": [
-          {
-            "mimeType": "text",
-            "name": "Sample Variable",
-            "placeholder": "{SampleVariable}",
-            "text": "Sample Content from Path B",
-            "allowRichTextInjection": 0,
-            "autogenerated": false,
-            "count": 1,
-            "order": 1,
-            "subvariables": [
-              {
-                "placeholder": "{SampleVariable.SubItem}",
-                "text": "Sub-content from browse workflow"
-              }
-            ],
-            "metadata": {
-              "generatedBy": "Path B Workflow",
-              "sourceTemplate": "'$TEMPLATE_NAME'"
-            },
-            "aiPrompt": "Generate content appropriate for this selected template"
-          }
-        ],
-        "tags": ["api-generated", "path-b", "browse-selected"],
-        "fonts": "[]",
-        "defaultFont": "'$DEFAULT_FONT'",
-        "replaceFonts": true,
-        "metadata": {
-          "sessions": [
-            {
-              "id": "'$(generate_session_id)'",
-              "starttime": "'$(get_timestamp)'",
-              "endtime": "'$(get_timestamp)'"
-            }
-          ],
-          "workflow": "Path B - Browse and Generate",
-          "generated": "'$(get_timestamp)'",
-          "pdfPreview": "'$PDF_URL'"
-        }
-      }')
-
-    echo "Generation Response:"
-    echo "$GENERATE_RESPONSE" | jq '.'
-
-    # Extract deliverable details
-    DELIVERABLE_ID=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.id')
-    DELIVERABLE_NAME=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.name')
-    CREATED_BY=$(echo "$GENERATE_RESPONSE" | jq -r '.data.results.deliverable.createdBy')
-
-    echo -e "\n${GREEN}✅ PATH B COMPLETE!${NC}"
-    echo -e "${GREEN}Template ID: $TEMPLATE_ID${NC}"
-    echo -e "${GREEN}Deliverable ID: $DELIVERABLE_ID${NC}"
-    echo -e "${GREEN}Created by: $CREATED_BY${NC}"
-    echo -e "${GREEN}PDF Preview: $PDF_URL${NC}"
-
-    # Download the generated file
-    echo -e "\n${BLUE}📥 Step 5: Downloading file...${NC}"
-    download_deliverable "$DELIVERABLE_ID" "$DELIVERABLE_NAME.docx"
-}
-
-# ===============================
-# DEMO FUNCTIONS
-# ===============================
-
-demo_path_a() {
-    local template_file="$1"
-    echo -e "${BLUE}🚀 DEMO: Path A - Upload New Template Workflow${NC}"
-    echo -e "${BLUE}==============================================${NC}"
-    echo
-
-    if [ -z "$template_file" ]; then
-        echo -e "${YELLOW}📝 Path A requires a template file to upload.${NC}"
-        echo "Usage: demo_path_a './path/to/your/template.docx'"
-        echo "Example: demo_path_a './contract-template.docx'"
-        return 1
-    fi
-
-    path_a_upload_and_generate "$template_file" "Contract Generated via Path A - API Upload"
-}
-
-demo_path_b() {
-    echo -e "${BLUE}🚀 DEMO: Path B - Browse Existing Template Workflow${NC}"
-    echo -e "${BLUE}==================================================${NC}"
-    echo
-
-    path_b_browse_and_generate "contract" "Contract Generated via Path B - Browse & Select"
-}
-
-demo_comparison() {
-    echo -e "${BLUE}🚀 DEMO: Complete Workflow Comparison${NC}"
-    echo -e "${BLUE}====================================${NC}"
-    echo
-
-    echo "Testing both paths with the same template type..."
-    echo
-
-    # Run Path B first (browse existing)
-    demo_path_b
-
-    echo
-    echo -e "${BLUE}${'='*60}${NC}"
-    echo
-
-    # For Path A, we'd need a template file
-    echo -e "${YELLOW}📝 Path A requires a template file to upload.${NC}"
-    echo "   Example: demo_path_a './contract-template.docx'"
-    echo
-    echo "To test Path A, run:"
-    echo "  $0 path-a ./path/to/your/template.docx"
-}
-
-# ===============================
-# MAIN EXECUTION
-# ===============================
-
-case "${1:-demo}" in
-    "path-a")
-        demo_path_a "$2"
-        ;;
-    "path-b")
-        demo_path_b
-        ;;
-    "comparison")
-        demo_comparison
-        ;;
-    "demo"|*)
-        echo -e "${BLUE}Template Generation API - Complete Workflows${NC}"
-        echo -e "${BLUE}===========================================${NC}"
-        echo
-        echo "Available commands:"
-        echo "  $0 path-a <template-file>  - Demo Path A (upload new template)"
-        echo "  $0 path-b                  - Demo Path B (browse existing templates)"
-        echo "  $0 comparison              - Compare both workflows"
-        echo
-        echo "Examples:"
-        echo "  $0 path-a ./contract-template.docx"
-        echo "  $0 path-b"
-        echo "  $0 comparison"
-        echo
-        echo "Running Path B demo by default..."
-        echo
-        demo_path_b
-        ;;
-esac
+echo
+echo "✅ Workflow complete!"
+echo "Template: $TEMPLATE_ID"
+echo "Document: $DELIVERABLE_ID"
+echo "File: $DOWNLOAD_FILE"
