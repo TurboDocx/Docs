@@ -16,13 +16,6 @@ keywords:
   - smart content generation
   - ai-powered templates
   - turbodocx ai api
-  - ai variable extraction
-  - intelligent placeholder filling
-  - ai content api
-  - automated variable creation
-  - ai document analysis
-  - smart variable generation
-  - ai template integration
 ---
 
 import ScriptLoader from '@site/src/components/ScriptLoader';
@@ -66,21 +59,13 @@ The AI Variable Generation process follows a simple but powerful workflow:
 
 ## TLDR; Quick Example 🚀
 
-Ready to jump in? Here's a complete working example:
+Ready to jump in? Here are complete working examples in multiple programming languages:
 
-```bash
-curl 'https://api.turbodocx.com/ai/generate/variable/one' \
-  -H 'Authorization: Bearer YOUR_API_TOKEN' \
-  -H 'x-rapiddocx-org-id: YOUR_ORG_ID' \
-  -H 'Content-Type: multipart/form-data' \
-  -F 'FileResource-123e4567-e89b-12d3-a456-426614174000=@financial-report.xlsx' \
-  -F 'fileResourceMetadata={"123e4567-e89b-12d3-a456-426614174000":{"selectedSheet":"Q4 Results","hasMultipleSheets":true}}' \
-  -F 'name=Company Performance Summary' \
-  -F 'placeholder={Q4Performance}' \
-  -F 'templateId=template-abc123' \
-  -F 'aiHint=Generate a professional executive summary of Q4 financial performance based on the attached spreadsheet data' \
-  -F 'richTextEnabled=true'
-```
+<ScriptLoader
+  scriptPath="ai/variable-generation"
+  id="ai-variable-generation-examples"
+  label="AI Variable Generation Examples"
+/>
 
 **Response:**
 
