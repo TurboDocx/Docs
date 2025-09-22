@@ -96,7 +96,8 @@ Before you begin generating AI-powered variables, ensure you have:
 3. **API Keys Section**: Generate or retrieve your API access token
 4. **Organization ID**: Copy your organization ID from the settings
 
-<!-- ![API Credentials](/img/turbosign/api/api-key.png) -->
+![Template API Credentials](/img/turbosign/api/api-key.png)
+![Organization ID Location](/img/turbosign/api/org-id.png)
 
 ### Supported File Types
 
