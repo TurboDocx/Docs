@@ -88,52 +88,31 @@ Don't want to read the novel? Here's the executive summary:
 
 ### Quick Variable Structure Example
 
-Here's what a complex variable payload looks like:
+Here's what a simple variable payload looks like:
 
 ```json
 {
   "templateId": "abc123-def456-ghi789",
-  "name": "Employee Contract Draft",
-  "description": "Generated contract for new hire",
+  "name": "Generated Document",
+  "description": "Simple document example",
   "variables": [
     {
-      "name": "Employee",
-      "placeholder": "{Employee}",
-      "text": "John Smith",
-      "subvariables": [
-        {
-          "placeholder": "{Employee.Title}",
-          "text": "Senior Developer"
-        },
-        {
-          "placeholder": "{Employee.StartDate}",
-          "text": "2024-01-15"
-        }
-      ]
+      "mimeType": "text",
+      "name": "Company Name",
+      "placeholder": "{CompanyName}",
+      "text": "Acme Corporation"
     },
     {
-      "name": "Projects",
-      "placeholder": "{Projects}",
-      "variableStack": {
-        "0": {
-          "text": "Project Alpha - Backend Development",
-          "subvariables": [
-            {
-              "placeholder": "{Projects.Duration}",
-              "text": "6 months"
-            }
-          ]
-        },
-        "1": {
-          "text": "Project Beta - API Integration",
-          "subvariables": [
-            {
-              "placeholder": "{Projects.Duration}",
-              "text": "3 months"
-            }
-          ]
-        }
-      }
+      "mimeType": "text",
+      "name": "Employee Name",
+      "placeholder": "{EmployeeName}",
+      "text": "John Smith"
+    },
+    {
+      "mimeType": "text",
+      "name": "Date",
+      "placeholder": "{Date}",
+      "text": "January 15, 2024"
     }
   ]
 }
