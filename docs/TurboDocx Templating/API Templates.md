@@ -653,6 +653,35 @@ Content-Length: 287456
   label="Final Step: Generate Deliverable Examples"
 />
 
+## Advanced File Attachment Examples
+
+For advanced workflows that combine template upload with data file processing, explore these comprehensive examples that demonstrate Excel file attachment, sheet selection, and AI variable generation integration.
+
+### File Attachment with Sheet Selection
+
+These examples show how to upload templates alongside Excel data files, with specific sheet selection and data range configuration for AI-powered variable generation:
+
+<ScriptLoader
+  scriptPath="templates/api/file-attachment-examples"
+  id="file-attachment-examples"
+  label="Advanced File Attachment Examples"
+/>
+
+### Key Features Demonstrated
+
+- **📊 Excel File Attachment**: Upload spreadsheet data alongside template files
+- **📋 Sheet Selection**: Choose specific sheets from multi-sheet workbooks
+- **📐 Data Range Configuration**: Define cell ranges for targeted data analysis
+- **🤖 AI Variable Integration**: Pre-configure AI variables that reference attached data
+- **🔗 Multi-Sheet Support**: Handle complex workbooks with multiple data sources
+
+### Use Cases
+
+- **Financial Reports**: Upload templates with Q4 financial data and auto-generate summaries
+- **Business Analysis**: Combine report templates with multi-sheet business data
+- **Data-Driven Documents**: Create documents that pull insights from attached spreadsheets
+- **Dynamic Content**: Generate variables based on real-time data uploads
+
 ## Best Practices
 
 ### Security
