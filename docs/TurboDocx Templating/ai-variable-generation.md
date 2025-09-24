@@ -221,46 +221,53 @@ When attaching files, provide metadata to guide AI processing:
 When working with spreadsheets, the AI can analyze specific sheets and data ranges:
 
 ```javascript
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "template-abc123";
+const FILE_UUID = "fin123";
+const VARIABLE_NAME = "Revenue Analysis";
+const VARIABLE_PLACEHOLDER = "{RevenueAnalysis}";
+const SELECTED_SHEET = "Income Statement";
+const DATA_RANGE = "A1:F50";
+const AI_HINT = "Analyze the quarterly revenue trends and provide insights on growth patterns, highlighting key metrics and year-over-year changes";
+const RICH_TEXT_ENABLED = "true";
+
 // Create FormData for file upload
 const formData = new FormData();
 
 // Attach the Excel/spreadsheet file
-formData.append("FileResource-fin123", quarterlyFinancialsFile); // Your Excel file
+formData.append(`FileResource-${FILE_UUID}`, quarterlyFinancialsFile);
 
 // Specify sheet and data range metadata
 formData.append(
   "fileResourceMetadata",
   JSON.stringify({
-    fin123: {
-      selectedSheet: "Income Statement",
+    [FILE_UUID]: {
+      selectedSheet: SELECTED_SHEET,
       hasMultipleSheets: true,
-      dataRange: "A1:F50",
+      dataRange: DATA_RANGE,
     },
   })
 );
 
 // Add variable parameters
-formData.append("name", "Revenue Analysis");
-formData.append("placeholder", "{RevenueAnalysis}");
-formData.append("templateId", "template-abc123");
-formData.append(
-  "aiHint",
-  "Analyze the quarterly revenue trends and provide insights on growth patterns, highlighting key metrics and year-over-year changes"
-);
-formData.append("richTextEnabled", "true");
+formData.append("name", VARIABLE_NAME);
+formData.append("placeholder", VARIABLE_PLACEHOLDER);
+formData.append("templateId", TEMPLATE_ID);
+formData.append("aiHint", AI_HINT);
+formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      // Note: Don't set Content-Type - let browser set multipart boundary
-    },
-    body: formData,
-  }
-);
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    // Note: Don't set Content-Type - let browser set multipart boundary
+  },
+  body: formData,
+});
 ```
 
 #### Document Content Extraction
@@ -268,44 +275,50 @@ const response = await fetch(
 For text documents, the AI can extract and synthesize key information:
 
 ```javascript
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "template-abc123";
+const FILE_UUID = "doc456";
+const VARIABLE_NAME = "Contract Key Terms";
+const VARIABLE_PLACEHOLDER = "{KeyTerms}";
+const CONTENT_TYPE = "legal-document";
+const AI_HINT = "Extract and summarize the key terms, obligations, and important dates from this contract document";
+const RICH_TEXT_ENABLED = "false";
+
 // Create FormData for document upload
 const formData = new FormData();
 
 // Attach the document file (PDF, DOCX, etc.)
-formData.append("FileResource-doc456", contractDraftFile); // Your document file
+formData.append(`FileResource-${FILE_UUID}`, contractDraftFile);
 
 // Specify document metadata
 formData.append(
   "fileResourceMetadata",
   JSON.stringify({
-    doc456: {
-      contentType: "legal-document",
+    [FILE_UUID]: {
+      contentType: CONTENT_TYPE,
     },
   })
 );
 
 // Add variable parameters
-formData.append("name", "Contract Key Terms");
-formData.append("placeholder", "{KeyTerms}");
-formData.append("templateId", "template-abc123");
-formData.append(
-  "aiHint",
-  "Extract and summarize the key terms, obligations, and important dates from this contract document"
-);
-formData.append("richTextEnabled", "false");
+formData.append("name", VARIABLE_NAME);
+formData.append("placeholder", VARIABLE_PLACEHOLDER);
+formData.append("templateId", TEMPLATE_ID);
+formData.append("aiHint", AI_HINT);
+formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      // Note: Don't set Content-Type - let browser set multipart boundary
-    },
-    body: formData,
-  }
-);
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    // Note: Don't set Content-Type - let browser set multipart boundary
+  },
+  body: formData,
+});
 ```
 
 ### Context-Aware Generation
@@ -313,25 +326,31 @@ const response = await fetch(
 Leverage existing template context for more accurate content generation:
 
 ```javascript
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: "Project Scope Description",
-      placeholder: "{ProjectScope}",
-      templateId: "project-template-789",
-      aiHint:
-        "Generate a detailed project scope description that aligns with the project template structure and includes deliverables, timeline, and success criteria",
-      richTextEnabled: true,
-    }),
-  }
-);
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "project-template-789";
+const VARIABLE_NAME = "Project Scope Description";
+const VARIABLE_PLACEHOLDER = "{ProjectScope}";
+const AI_HINT = "Generate a detailed project scope description that aligns with the project template structure and includes deliverables, timeline, and success criteria";
+const RICH_TEXT_ENABLED = true;
+
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name: VARIABLE_NAME,
+    placeholder: VARIABLE_PLACEHOLDER,
+    templateId: TEMPLATE_ID,
+    aiHint: AI_HINT,
+    richTextEnabled: RICH_TEXT_ENABLED,
+  }),
+});
 ```
 
 ### Rich Text Generation
@@ -339,25 +358,31 @@ const response = await fetch(
 Enable rich text for formatted output with HTML styling:
 
 ```javascript
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: "Executive Summary",
-      placeholder: "{ExecutiveSummary}",
-      templateId: "template-abc123",
-      aiHint:
-        "Create a comprehensive executive summary with bullet points, key metrics, and strategic recommendations formatted for presentation",
-      richTextEnabled: true,
-    }),
-  }
-);
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "template-abc123";
+const VARIABLE_NAME = "Executive Summary";
+const VARIABLE_PLACEHOLDER = "{ExecutiveSummary}";
+const AI_HINT = "Create a comprehensive executive summary with bullet points, key metrics, and strategic recommendations formatted for presentation";
+const RICH_TEXT_ENABLED = true;
+
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name: VARIABLE_NAME,
+    placeholder: VARIABLE_PLACEHOLDER,
+    templateId: TEMPLATE_ID,
+    aiHint: AI_HINT,
+    richTextEnabled: RICH_TEXT_ENABLED,
+  }),
+});
 ```
 
 **Rich Text Response Example:**
@@ -388,45 +413,51 @@ const response = await fetch(
 **Scenario**: Generate executive summaries from quarterly financial spreadsheets
 
 ```javascript
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "template-abc123";
+const FILE_UUID = "12345";
+const VARIABLE_NAME = "Financial Performance Summary";
+const VARIABLE_PLACEHOLDER = "{FinancialSummary}";
+const SELECTED_SHEET = "Summary";
+const AI_HINT = "Create a concise executive summary highlighting revenue growth, profit margins, and key financial metrics from the Q4 data";
+const RICH_TEXT_ENABLED = "true";
+
 // Create FormData for financial spreadsheet upload
 const formData = new FormData();
 
 // Attach the Q4 financial spreadsheet
-formData.append("FileResource-12345", q4FinancialsFile); // Your Q4 Excel file
+formData.append(`FileResource-${FILE_UUID}`, q4FinancialsFile);
 
 // Specify sheet selection metadata
 formData.append(
   "fileResourceMetadata",
   JSON.stringify({
-    12345: {
-      selectedSheet: "Summary",
+    [FILE_UUID]: {
+      selectedSheet: SELECTED_SHEET,
       hasMultipleSheets: true,
     },
   })
 );
 
 // Add variable parameters
-formData.append("name", "Financial Performance Summary");
-formData.append("placeholder", "{FinancialSummary}");
-formData.append("templateId", "template-abc123");
-formData.append(
-  "aiHint",
-  "Create a concise executive summary highlighting revenue growth, profit margins, and key financial metrics from the Q4 data"
-);
-formData.append("richTextEnabled", "true");
+formData.append("name", VARIABLE_NAME);
+formData.append("placeholder", VARIABLE_PLACEHOLDER);
+formData.append("templateId", TEMPLATE_ID);
+formData.append("aiHint", AI_HINT);
+formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      // Note: Don't set Content-Type - let browser set multipart boundary
-    },
-    body: formData,
-  }
-);
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    // Note: Don't set Content-Type - let browser set multipart boundary
+  },
+  body: formData,
+});
 ```
 
 ### 2. Contract Key Terms Extraction
@@ -434,34 +465,39 @@ const response = await fetch(
 **Scenario**: Extract important terms and dates from legal documents
 
 ```javascript
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "template-abc123";
+const FILE_UUID = "67890";
+const VARIABLE_NAME = "Contract Terms";
+const VARIABLE_PLACEHOLDER = "{ContractTerms}";
+const AI_HINT = "Extract contract duration, payment terms, key obligations, and important deadlines in a structured format";
+const RICH_TEXT_ENABLED = "false";
+
 // Create FormData for service agreement upload
 const formData = new FormData();
 
 // Attach the service agreement document
-formData.append("FileResource-67890", serviceAgreementFile); // Your PDF/DOCX file
+formData.append(`FileResource-${FILE_UUID}`, serviceAgreementFile);
 
 // Add variable parameters
-formData.append("name", "Contract Terms");
-formData.append("placeholder", "{ContractTerms}");
-formData.append("templateId", "template-abc123");
-formData.append(
-  "aiHint",
-  "Extract contract duration, payment terms, key obligations, and important deadlines in a structured format"
-);
-formData.append("richTextEnabled", "false");
+formData.append("name", VARIABLE_NAME);
+formData.append("placeholder", VARIABLE_PLACEHOLDER);
+formData.append("templateId", TEMPLATE_ID);
+formData.append("aiHint", AI_HINT);
+formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      // Note: Don't set Content-Type - let browser set multipart boundary
-    },
-    body: formData,
-  }
-);
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    // Note: Don't set Content-Type - let browser set multipart boundary
+  },
+  body: formData,
+});
 ```
 
 ### 3. Project Proposal Generation
@@ -469,34 +505,39 @@ const response = await fetch(
 **Scenario**: Create project descriptions based on scope documents
 
 ```javascript
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "proposal-template-123";
+const FILE_UUID = "abcde";
+const VARIABLE_NAME = "Project Description";
+const VARIABLE_PLACEHOLDER = "{ProjectDescription}";
+const AI_HINT = "Generate a professional project description including objectives, deliverables, timeline, and success criteria based on the requirements document";
+const RICH_TEXT_ENABLED = "true";
+
 // Create FormData for project requirements upload
 const formData = new FormData();
 
 // Attach the project requirements document
-formData.append("FileResource-abcde", projectRequirementsFile); // Your requirements DOCX file
+formData.append(`FileResource-${FILE_UUID}`, projectRequirementsFile);
 
 // Add variable parameters
-formData.append("name", "Project Description");
-formData.append("placeholder", "{ProjectDescription}");
-formData.append("templateId", "proposal-template-123");
-formData.append(
-  "aiHint",
-  "Generate a professional project description including objectives, deliverables, timeline, and success criteria based on the requirements document"
-);
-formData.append("richTextEnabled", "true");
+formData.append("name", VARIABLE_NAME);
+formData.append("placeholder", VARIABLE_PLACEHOLDER);
+formData.append("templateId", TEMPLATE_ID);
+formData.append("aiHint", AI_HINT);
+formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      // Note: Don't set Content-Type - let browser set multipart boundary
-    },
-    body: formData,
-  }
-);
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    // Note: Don't set Content-Type - let browser set multipart boundary
+  },
+  body: formData,
+});
 ```
 
 ### 4. Data-Driven Insights
@@ -504,45 +545,51 @@ const response = await fetch(
 **Scenario**: Generate insights from research data and surveys
 
 ```javascript
+// Configuration variables
+const API_TOKEN = "YOUR_API_TOKEN";
+const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
+const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
+const TEMPLATE_ID = "template-abc123";
+const FILE_UUID = "xyz789";
+const VARIABLE_NAME = "Market Insights";
+const VARIABLE_PLACEHOLDER = "{MarketInsights}";
+const SELECTED_SHEET = "Survey Results";
+const AI_HINT = "Analyze the survey data and generate key market insights, trends, and actionable recommendations for product strategy";
+const RICH_TEXT_ENABLED = "true";
+
 // Create FormData for market research data upload
 const formData = new FormData();
 
 // Attach the market research spreadsheet
-formData.append("FileResource-xyz789", marketResearchFile); // Your Excel research file
+formData.append(`FileResource-${FILE_UUID}`, marketResearchFile);
 
 // Specify survey results sheet metadata
 formData.append(
   "fileResourceMetadata",
   JSON.stringify({
-    xyz789: {
-      selectedSheet: "Survey Results",
+    [FILE_UUID]: {
+      selectedSheet: SELECTED_SHEET,
       hasMultipleSheets: true,
     },
   })
 );
 
 // Add variable parameters
-formData.append("name", "Market Insights");
-formData.append("placeholder", "{MarketInsights}");
-formData.append("templateId", "template-abc123");
-formData.append(
-  "aiHint",
-  "Analyze the survey data and generate key market insights, trends, and actionable recommendations for product strategy"
-);
-formData.append("richTextEnabled", "true");
+formData.append("name", VARIABLE_NAME);
+formData.append("placeholder", VARIABLE_PLACEHOLDER);
+formData.append("templateId", TEMPLATE_ID);
+formData.append("aiHint", AI_HINT);
+formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
-const response = await fetch(
-  "https://api.turbodocx.com/ai/generate/variable/one",
-  {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer YOUR_API_TOKEN",
-      "x-rapiddocx-org-id": "YOUR_ORGANIZATION_ID",
-      // Note: Don't set Content-Type - let browser set multipart boundary
-    },
-    body: formData,
-  }
-);
+const response = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${API_TOKEN}`,
+    "x-rapiddocx-org-id": ORGANIZATION_ID,
+    // Note: Don't set Content-Type - let browser set multipart boundary
+  },
+  body: formData,
+});
 ```
 
 ## AI Prompt Engineering
