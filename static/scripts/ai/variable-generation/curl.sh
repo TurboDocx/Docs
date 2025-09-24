@@ -16,7 +16,6 @@ RESPONSE=$(curl -s -X POST "$BASE_URL/ai/generate/variable/one" \
   -d '{
     "name": "Company Performance Summary",
     "placeholder": "{Q4Performance}",
-    "templateId": "template-abc123",
     "aiHint": "Generate a professional executive summary of Q4 financial performance highlighting revenue growth, profit margins, and key achievements",
     "richTextEnabled": true
   }')

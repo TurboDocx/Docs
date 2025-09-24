@@ -26,7 +26,6 @@ public class AIVariableGenerator {
         Map<String, Object> payload = new HashMap<>();
         payload.put("name", "Company Performance Summary");
         payload.put("placeholder", "{Q4Performance}");
-        payload.put("templateId", "template-abc123");
         payload.put("aiHint", "Generate a professional executive summary of Q4 financial performance highlighting revenue growth, profit margins, and key achievements");
         payload.put("richTextEnabled", true);
 

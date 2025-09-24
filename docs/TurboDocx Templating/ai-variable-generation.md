@@ -225,7 +225,6 @@ When working with spreadsheets, the AI can analyze specific sheets and data rang
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "template-abc123";
 const FILE_UUID = "fin123";
 const VARIABLE_NAME = "Revenue Analysis";
 const VARIABLE_PLACEHOLDER = "{RevenueAnalysis}";
@@ -255,7 +254,6 @@ formData.append(
 // Add variable parameters
 formData.append("name", VARIABLE_NAME);
 formData.append("placeholder", VARIABLE_PLACEHOLDER);
-formData.append("templateId", TEMPLATE_ID);
 formData.append("aiHint", AI_HINT);
 formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
@@ -279,7 +277,6 @@ For text documents, the AI can extract and synthesize key information:
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "template-abc123";
 const FILE_UUID = "doc456";
 const VARIABLE_NAME = "Contract Key Terms";
 const VARIABLE_PLACEHOLDER = "{KeyTerms}";
@@ -306,7 +303,6 @@ formData.append(
 // Add variable parameters
 formData.append("name", VARIABLE_NAME);
 formData.append("placeholder", VARIABLE_PLACEHOLDER);
-formData.append("templateId", TEMPLATE_ID);
 formData.append("aiHint", AI_HINT);
 formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
@@ -330,7 +326,6 @@ Leverage existing template context for more accurate content generation:
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "project-template-789";
 const VARIABLE_NAME = "Project Scope Description";
 const VARIABLE_PLACEHOLDER = "{ProjectScope}";
 const AI_HINT = "Generate a detailed project scope description that aligns with the project template structure and includes deliverables, timeline, and success criteria";
@@ -346,7 +341,6 @@ const response = await fetch(API_URL, {
   body: JSON.stringify({
     name: VARIABLE_NAME,
     placeholder: VARIABLE_PLACEHOLDER,
-    templateId: TEMPLATE_ID,
     aiHint: AI_HINT,
     richTextEnabled: RICH_TEXT_ENABLED,
   }),
@@ -362,7 +356,6 @@ Enable rich text for formatted output with HTML styling:
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "template-abc123";
 const VARIABLE_NAME = "Executive Summary";
 const VARIABLE_PLACEHOLDER = "{ExecutiveSummary}";
 const AI_HINT = "Create a comprehensive executive summary with bullet points, key metrics, and strategic recommendations formatted for presentation";
@@ -378,7 +371,6 @@ const response = await fetch(API_URL, {
   body: JSON.stringify({
     name: VARIABLE_NAME,
     placeholder: VARIABLE_PLACEHOLDER,
-    templateId: TEMPLATE_ID,
     aiHint: AI_HINT,
     richTextEnabled: RICH_TEXT_ENABLED,
   }),
@@ -417,7 +409,6 @@ const response = await fetch(API_URL, {
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "template-abc123";
 const FILE_UUID = "12345";
 const VARIABLE_NAME = "Financial Performance Summary";
 const VARIABLE_PLACEHOLDER = "{FinancialSummary}";
@@ -445,7 +436,6 @@ formData.append(
 // Add variable parameters
 formData.append("name", VARIABLE_NAME);
 formData.append("placeholder", VARIABLE_PLACEHOLDER);
-formData.append("templateId", TEMPLATE_ID);
 formData.append("aiHint", AI_HINT);
 formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
@@ -469,7 +459,6 @@ const response = await fetch(API_URL, {
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "template-abc123";
 const FILE_UUID = "67890";
 const VARIABLE_NAME = "Contract Terms";
 const VARIABLE_PLACEHOLDER = "{ContractTerms}";
@@ -485,7 +474,6 @@ formData.append(`FileResource-${FILE_UUID}`, serviceAgreementFile);
 // Add variable parameters
 formData.append("name", VARIABLE_NAME);
 formData.append("placeholder", VARIABLE_PLACEHOLDER);
-formData.append("templateId", TEMPLATE_ID);
 formData.append("aiHint", AI_HINT);
 formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
@@ -509,7 +497,6 @@ const response = await fetch(API_URL, {
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "proposal-template-123";
 const FILE_UUID = "abcde";
 const VARIABLE_NAME = "Project Description";
 const VARIABLE_PLACEHOLDER = "{ProjectDescription}";
@@ -525,7 +512,6 @@ formData.append(`FileResource-${FILE_UUID}`, projectRequirementsFile);
 // Add variable parameters
 formData.append("name", VARIABLE_NAME);
 formData.append("placeholder", VARIABLE_PLACEHOLDER);
-formData.append("templateId", TEMPLATE_ID);
 formData.append("aiHint", AI_HINT);
 formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 
@@ -549,7 +535,6 @@ const response = await fetch(API_URL, {
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORGANIZATION_ID = "YOUR_ORGANIZATION_ID";
 const API_URL = "https://api.turbodocx.com/ai/generate/variable/one";
-const TEMPLATE_ID = "template-abc123";
 const FILE_UUID = "xyz789";
 const VARIABLE_NAME = "Market Insights";
 const VARIABLE_PLACEHOLDER = "{MarketInsights}";
@@ -577,7 +562,6 @@ formData.append(
 // Add variable parameters
 formData.append("name", VARIABLE_NAME);
 formData.append("placeholder", VARIABLE_PLACEHOLDER);
-formData.append("templateId", TEMPLATE_ID);
 formData.append("aiHint", AI_HINT);
 formData.append("richTextEnabled", RICH_TEXT_ENABLED);
 

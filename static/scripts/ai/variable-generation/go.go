@@ -18,7 +18,6 @@ func generateAIVariable() error {
     payload := map[string]interface{}{
         "name":            "Company Performance Summary",
         "placeholder":     "{Q4Performance}",
-        "templateId":      "template-abc123",
         "aiHint":          "Generate a professional executive summary of Q4 financial performance highlighting revenue growth, profit margins, and key achievements",
         "richTextEnabled": true,
     }

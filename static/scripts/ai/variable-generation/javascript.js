@@ -17,7 +17,6 @@ async function generateAIVariable(options) {
         fileMetadata,
         name,
         placeholder,
-        templateId,
         aiHint,
         richTextEnabled = false
     } = options;
@@ -47,10 +46,6 @@ async function generateAIVariable(options) {
     formData.append('placeholder', placeholder);
     formData.append('aiHint', aiHint);
     formData.append('richTextEnabled', richTextEnabled.toString());
-
-    if (templateId) {
-        formData.append('templateId', templateId);
-    }
 
     try {
         const response = await fetch(`${BASE_URL}/ai/generate/variable/one`, {
@@ -132,7 +127,6 @@ async function example2_ExcelAnalysis(excelFile) {
             },
             name: 'Financial Performance Summary',
             placeholder: '{FinancialSummary}',
-            templateId: 'quarterly-report-template-123',
             aiHint: 'Analyze the Q4 financial data and generate a comprehensive executive summary highlighting revenue growth, profit margins, key performance indicators, and strategic recommendations',
             richTextEnabled: true
         });
@@ -159,7 +153,6 @@ async function example3_DocumentAnalysis(wordFile) {
             },
             name: 'Project Scope',
             placeholder: '{ProjectScope}',
-            templateId: 'project-proposal-template-456',
             aiHint: 'Based on the project requirements document, create a detailed project scope including objectives, key deliverables, timeline milestones, and success criteria',
             richTextEnabled: true
         });
@@ -208,7 +201,6 @@ async function example5_RichTextGeneration() {
         const result = await generateAIVariable({
             name: 'Marketing Campaign Summary',
             placeholder: '{CampaignSummary}',
-            templateId: 'marketing-report-template-789',
             aiHint: 'Create a comprehensive marketing campaign summary with structured sections: Executive Overview, Key Metrics (with specific numbers), Strategic Insights, and Action Items. Format with appropriate headings and bullet points.',
             richTextEnabled: true
         });
