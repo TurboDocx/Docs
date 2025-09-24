@@ -36,7 +36,7 @@ import ScriptLoader from '@site/src/components/ScriptLoader';
 
 This comprehensive guide walks you through the Template Generation API integration process. Learn how to programmatically upload new templates or select existing ones, then generate beautiful documents with variable substitution using our RESTful API.
 
-![Template Generation API Integration Overview](/img/template-generation-api/banner.gif)
+![Template Generation API Integration Overview](/img/template-generation-api/banner.png)
 
 ## Overview
 
