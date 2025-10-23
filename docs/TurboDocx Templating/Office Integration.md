@@ -172,20 +172,6 @@ When you add or modify template variables:
 - **Don't click multiple times** - Wait for Word to open
 - **Check your internet speed** - Slow connections take longer
 
-### Browser-Specific Issues
-
-#### Chrome/Edge (Recommended)
-- Usually works perfectly
-- If issues occur, try clearing cache
-
-#### Firefox
-- May require one-time setup for Office protocols
-- Follow browser prompts to allow Office applications
-
-#### Safari
-- Limited support for Office protocols
-- Consider using Chrome or Edge instead
-
 ## Tips for Best Results
 
 ### Save Frequently
