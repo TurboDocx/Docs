@@ -217,3 +217,15 @@
   background-repeat: no-repeat;
   vertical-align: middle;
 }
+
+.integration-wrike .menu__link::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  background-image: url("/img/wrike-logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: middle;
+}
