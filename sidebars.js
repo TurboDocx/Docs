@@ -98,6 +98,12 @@ const sidebars = {
           label: 'ConnectWise PSA',
           className: 'integration-connectwise',
         },
+        {
+          type: 'doc',
+          id: 'Integrations/Wrike',
+          label: 'Wrike',
+          className: 'integration-wrike',
+        },
       ],
     },
     {

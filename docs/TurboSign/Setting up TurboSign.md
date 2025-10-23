@@ -269,6 +269,102 @@ The field editor provides several types of fields you can add:
 
 <br/>
 
+## Step 7.5: Setting Default Values (Optional)
+
+Want to save your recipients time by pre-filling some information? TurboSign lets you set default values that will automatically appear in fields when recipients open the document. This is especially useful for common information you already know about your signers.
+
+### What Are Default Values?
+
+**Default values** are pre-filled text that appears in fields automatically. Recipients can see this information already filled in and:
+- **Keep it as-is** if it's correct
+- **Edit it** if they need to make changes
+- **Save time** by not typing common information from scratch
+
+:::tip When to Use Default Values
+Perfect for information you already know:
+- Shipping addresses for order forms
+- Client contact details from your records
+- Company information for regular business partners
+- Any information recipients can review and correct if needed
+:::
+
+<br/>
+
+### How to Set Default Values
+
+You can set default values for each recipient to pre-fill common information.
+
+:::note Field Types Without Defaults
+**Signature**, **Initials**, and **Date** fields cannot have default values because they must be completed by the recipient at signing time.
+:::
+
+<br/>
+
+### Setting Default Values Per Recipient
+
+Default values are set per recipient and will pre-fill their fields.
+
+**Step 1: Find the Default Values Accordion**
+
+Scroll down in the right sidebar until you see the **"Default values for [recipient name] (Optional)"** accordion. Click to expand it.
+
+**Step 2: Enter Default Values**
+
+Fill in any of the available fields:
+- **Full name** - Complete name (e.g., "John Smith")
+- **First Name** - Given name only (e.g., "John")
+- **Last Name** - Family name only (e.g., "Smith")
+- **Email Address** - Contact email (e.g., "john.smith@company.com")
+- **Title** - Job title (e.g., "Senior Manager")
+- **Company** - Organization name (e.g., "Acme Corporation")
+
+**Step 3: Switch Between Recipients**
+
+Use the recipient tabs at the top to set different default values for each signer.
+
+:::tip Character Limits
+Each field has a maximum character limit. TurboSign will show you a character counter when you're approaching the limit so you don't lose any information.
+:::
+
+<br/>
+
+
+### Practical Examples
+
+**Example: Service Order**
+
+You're sending a service agreement to a client named Sarah Johnson. You already have her information from a previous order:
+
+**Default values for Sarah:**
+- Full name: "Sarah Johnson"
+- Email Address: "sarah.johnson@example.com"
+- Company: "Acme Corporation"
+- Text field for "Service Address": "123 Main Street, Suite 400, San Francisco, CA 94105"
+
+Now when Sarah receives the document, these fields will be pre-filled with this information. She can review and correct anything if needed before signing.
+
+<br/>
+
+### Best Practices for Default Values
+
+**Do:**
+- ✅ **Use accurate information** - Double-check spelling and formatting
+- ✅ **Keep it concise** - Stay within character limits
+- ✅ **Save time on repeat signers** - Great for clients with existing records
+- ✅ **Pre-fill known facts** - Addresses, contact details, company names
+
+**Don't:**
+- ❌ **Don't force information** - Recipients can edit defaults if needed
+- ❌ **Don't use for signatures/initials** - These fields must be completed during signing
+- ❌ **Don't include sensitive data** - Avoid passwords, SSNs, or confidential information
+- ❌ **Don't overfill** - Only set defaults for information you truly know
+
+:::tip Time-Saving Tip
+If you send the same type of document to the same people regularly, setting default values can cut signing time in half! Recipients can review and submit much faster when common fields are already filled.
+:::
+
+<br/>
+
 ## Step 8: Send the Document
 
 The final step! Once all fields are placed and everything looks perfect, it's time to send your document for signatures.

@@ -85,23 +85,15 @@ See our [How to Create a Template](../TurboDocx%20Templating/How%20to%20Create%2
 Your template can include variables like `{CompanyName}`, `{ProjectTitle}`, `{TaskDescription}`, etc. The AI will automatically populate these from Wrike data.
 :::
 
-### B. Add Default Values (Optional)
+### B. Configure Default Values and AI Smart Prompts (Optional)
+
+![Template Default Values and AI Values](/img/wrike-integration/TurboDocxTemplateDefaultValuesAndAIValues.png)
 
 1. **Open your template** in TurboDocx
-2. **Click on "Default Values"**
-3. **Add default values** for any variables that should have fallback content
-
-<!-- TODO: Add screenshot showing the Default Values section in TurboDocx template editor -->
-![Template Default Values](/img/wrike-integration/default-values.png)
-
-### C. Configure AI Generation (Recommended)
-
-1. **Enable AI variable generation** for your template
-2. **Set up AI prompts** for complex variables that should be generated from Wrike context
-3. **Test the AI generation** to ensure it works as expected
-
-<!-- TODO: Add screenshot showing AI variable generation settings in TurboDocx template -->
-![AI Variable Configuration](/img/wrike-integration/ai-config.png)
+2. **Click on "Edit Template Preferences"**
+3. **Fill in the Default Values** for any variables that should have fallback content
+4. **Configure the Smart Prompt Template** to customize how AI generates content from Wrike data
+5. **Test the AI generation** to ensure it works as expected
 
 :::info Using TurboSign for Digital Signatures?
 
@@ -124,17 +116,20 @@ If you plan to use the [TurboSign signature workflow](#signature-workflow) with 
 
 **Why this is needed:** When TurboDocx generates the document from Wrike, it needs to preserve these anchor fields as literal text (not replace them with data from Wrike). By setting the default value to the same field name, the anchor remains in the generated document for TurboSign to locate and replace with actual signature elements.
 
-See the [TurboSign Documentation](../TurboSign/overview.md) for more details on signature workflows.
+See the [TurboSign Documentation](../TurboSign/Setting%20up%20TurboSign.md) for more details on signature workflows.
 :::
 
-### D. Note Your Template ID
+### C. Note Your Template ID
 
 1. **Open your template** in TurboDocx
 2. **Look at the URL** - it will contain your template ID
-3. **Copy the template ID** (you'll need this for Step 3)
+3. **Copy the template ID** (you'll need this for Step 4)
 
-Example URL: `https://app.turbodocx.com/templates/bad30fa3-cf34-440f-8029-3410d2ff52e6`
-Template ID: `bad30fa3-cf34-440f-8029-3410d2ff52e6`
+**Example:**
+```
+URL: https://app.turbodocx.com/templates/bad30fa3-cf34-440f-8029-3410d2ff52e6
+Template ID: bad30fa3-cf34-440f-8029-3410d2ff52e6
+```
 
 <br/>
 
@@ -364,16 +359,6 @@ Now let's test the entire workflow to see the magic happen!
 
 ![Wrike SOW Generated Comment](/img/wrike-integration/WrikeSOWGeneratedComment.png)
 
-### C. What Happens Behind the Scenes
-
-1. ✅ Wrike detects the status change
-2. ✅ Wrike sends webhook notification to TurboDocx
-3. ✅ TurboDocx validates the webhook signature
-4. ✅ TurboDocx fetches task/folder data from Wrike
-5. ✅ TurboDocx generates the document using your template and AI
-6. ✅ TurboDocx attaches the finished document to the Wrike task
-7. ✅ Wrike updates the task status to a custom "Generated" status
-
 :::tip Success Indicators
 - The document appears as an attachment on the Wrike task
 - The task status may automatically update to show generation completed
@@ -388,13 +373,16 @@ TurboDocx also supports a signature workflow for Wrike tasks.
 
 ### How It Works
 
+![Send for Signature in Wrike](/img/wrike-integration/SendForSignatureWrike.png)
+
 1. **Change a task status to** `Send for Signature`
 2. **TurboDocx fetches the most recent attachment** from the task
 3. **TurboDocx extracts signature recipients** from Wrike custom fields
 4. **TurboDocx sends it through the TurboSign workflow** for digital signatures
-5. **The signed document is returned** to the Wrike task
 
 ### Required Wrike Custom Fields
+
+![Signature Fields in Wrike](/img/wrike-integration/SignatureFieldsInWrike.png)
 
 TurboSign for Wrike is configured by default to look for the following custom fields on your Wrike task or folder:
 
@@ -482,7 +470,6 @@ Your document template must include the following anchor fields for TurboSign to
 
 **Solution:**
 - Wait at least 2 minutes before assuming failure
-- Check TurboDocx logs in your organization settings
 - Simplify your template or reduce the number of AI-generated variables
 
 ### Document Not Attached to Wrike Task
@@ -492,27 +479,14 @@ Your document template must include the following anchor fields for TurboSign to
 **Solution:**
 1. Check that your Wrike API token has permission to add attachments
 2. Verify the Wrike folder/task still exists
-3. Check TurboDocx logs for attachment errors
 
-:::tip Still Stuck?
-Contact TurboDocx support with:
-- Your organization ID
-- Your template ID
-- The Wrike task ID or folder ID
-- A screenshot of any error messages
-We're here to help! 🚀
+:::tip Need Help?
+Join our [Discord community](https://discord.gg/turbodocx) for support! Our team and community members are ready to help you troubleshoot any issues. 🚀
 :::
 
 <br/>
 
 ## Security and Privacy
-
-### How Your Data is Protected
-
-- 🔐 **HMAC Signature Verification**: All webhook requests are cryptographically verified
-- 🔒 **API Key Authentication**: Webhook-specific API keys prevent unauthorized access
-- 📦 **Encrypted Data Transfer**: All communication uses HTTPS/TLS encryption
-- 🔍 **Read-Only Wrike Access**: TurboDocx only reads Wrike data (except to attach generated documents)
 
 ### Best Practices
 
@@ -583,10 +557,6 @@ Congratulations! You've successfully set up the Wrike integration. Now you can:
 3. **Build a template library** for common document types
 4. **Set up custom workflows** in Wrike to streamline your processes
 
-:::tip UI Integration Coming Soon
-We're actively working on adding webhook management to the TurboDocx UI. Soon you'll be able to create and manage Wrike webhooks without using Postman! 🚀
-:::
-
 ---
 
 ## FAQ
@@ -605,7 +575,7 @@ Both! The webhook monitors a specific folder, but the status changes happen on t
 
 ### How do I know if document generation failed?
 
-Check the TurboDocx logs in your organization settings. Failed generations will show error details. You can also monitor your Wrike webhook logs.
+If document generation fails, you won't see the document attached to your Wrike task. Join our [Discord community](https://discord.gg/turbodocx) for help troubleshooting any issues.
 
 ### Can the AI use data from multiple Wrike tasks?
 
