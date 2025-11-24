@@ -19,6 +19,47 @@ const sidebars = {
     'Welcome to TurboDocx',
     {
       type: 'category',
+      label: 'SDKs',
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'SDKs/index',
+      },
+      items: [
+        {
+          type: 'doc',
+          id: 'SDKs/javascript',
+          label: 'JavaScript / TypeScript',
+        },
+        {
+          type: 'doc',
+          id: 'SDKs/python',
+          label: 'Python',
+        },
+        {
+          type: 'doc',
+          id: 'SDKs/go',
+          label: 'Go',
+        },
+        {
+          type: 'doc',
+          id: 'SDKs/dotnet',
+          label: '.NET / C#',
+        },
+        {
+          type: 'doc',
+          id: 'SDKs/java',
+          label: 'Java',
+        },
+        {
+          type: 'doc',
+          id: 'SDKs/ruby',
+          label: 'Ruby',
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'TurboDocx Templating',
       collapsed: false,
       items: [

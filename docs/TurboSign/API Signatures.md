@@ -66,6 +66,21 @@ TurboSign offers two single-step endpoints to fit different workflows:
 - **Real-time Status Updates**: Track document status throughout the signing process
 - **Webhook Integration**: Receive notifications when signing is complete
 
+:::tip Prefer using an SDK?
+We offer official SDKs that handle authentication, error handling, and type safety for you:
+
+| Language | Package | Quick Install |
+|:---------|:--------|:--------------|
+| **JavaScript/TypeScript** | [@turbodocx/sdk](/docs/SDKs/javascript) | `npm install @turbodocx/sdk` |
+| **Python** | [turbodocx-sdk](/docs/SDKs/python) | `pip install turbodocx-sdk` |
+| **Go** | [turbodocx-sdk](/docs/SDKs/go) | `go get github.com/turbodocx/sdk` |
+| **C# / .NET** | [TurboDocx.Sdk](/docs/SDKs/dotnet) | `dotnet add package TurboDocx.Sdk` |
+| **Java** | [com.turbodocx:sdk](/docs/SDKs/java) | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) |
+| **Ruby** | [turbodocx-sdk](/docs/SDKs/ruby) | `gem install turbodocx-sdk` |
+
+[View all SDKs →](/docs/SDKs)
+:::
+
 ## TLDR; Complete Working Example 🚀
 
 Don't want to read all the details? Here's what you need to know:
