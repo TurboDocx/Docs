@@ -199,6 +199,8 @@ For each recipient, you'll need:
 
 ![Add recipients interface showing all options](/img/turbosign/AddRecipients.png)
 
+**CC Emails (Optional):** You can also add CC email addresses for people who should receive a copy of the document. These individuals will get the final signed copy when everyone has completed signing, but they won't need to sign the document themselves.
+
 <br/>
 
 :::tip Recipient Best Practices
