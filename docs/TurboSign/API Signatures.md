@@ -1,12 +1,15 @@
 ---
 title: TurboSign API Integration
 sidebar_position: 3
-description: Complete guide for integrating TurboSign API to upload documents, add recipients, and prepare documents for electronic signatures. Learn the 3-step process with detailed examples and code samples.
+description: Complete guide for integrating TurboSign API using single-step document preparation. Send documents for electronic signatures in one API call with our simplified workflow.
 keywords:
   - turbosign api
+  - single-step signature api
   - document upload api
   - electronic signature api
-  - recipients api
+  - multipart form data
+  - prepare for review
+  - prepare for signing
   - signature preparation
   - api integration
   - document signing workflow
@@ -35,26 +38,31 @@ import ScriptLoader from '@site/src/components/ScriptLoader';
 
 # TurboSign API Integration
 
-This comprehensive guide walks you through the TurboSign API integration process. Learn how to programmatically upload documents, add recipients, and prepare documents for electronic signatures using our RESTful API.
+This comprehensive guide walks you through the TurboSign single-step API integration. Learn how to programmatically upload documents, configure recipients, set up signature fields, and send documents for electronic signatures using a single, streamlined API call.
 
 ![TurboSign API Integration Overview](/img/turbosign/api/api-illustration.png)
 
 ## Overview
 
-The TurboSign API follows a simple 3-step process to prepare documents for electronic signatures:
+The TurboSign API provides a simplified single-step process to prepare documents for electronic signatures. Instead of multiple API calls, you can now accomplish everything in one request.
 
-1. **Upload Document** - Upload your PDF document to TurboSign
-2. **Add Recipients** - Configure who needs to sign and their signing order
-3. **Prepare for Signing** - Set up signature fields and send for signing
+### Two Endpoint Options
 
-![TurboSign API Integration Overview](/img/turbosign/api/steps.png)
+TurboSign offers two single-step endpoints to fit different workflows:
+
+1. **Prepare for Review** - Upload and get preview URL (no emails sent)
+2. **Prepare for Signing** - Upload and send immediately (emails sent)
+
+![TurboSign Single-Step Workflow](/img/turbosign/api/types.svg)
 
 ### Key Features
 
-- **RESTful API**: Standard HTTP methods with JSON payloads
+- **Single API Call**: Upload document, add recipients, and configure fields in one request
+- **RESTful API**: Standard HTTP methods with multipart/form-data
 - **Bearer Token Authentication**: Secure API access using JWT tokens
 - **Multiple Recipients**: Support for multiple signers with custom signing order
 - **Flexible Field Placement**: Position signature fields using anchors or coordinates
+- **Multiple File Sources**: Upload file, or reference deliverableId, templateId, or fileLink
 - **Real-time Status Updates**: Track document status throughout the signing process
 - **Webhook Integration**: Receive notifications when signing is complete
 
@@ -64,58 +72,48 @@ Don't want to read all the details? Here's what you need to know:
 
 ### Available Field Types
 
-| Type        | Description                | Use Case                                          |
-| ----------- | -------------------------- | ------------------------------------------------- |
-| `signature` | Electronic signature field | Legal signatures                                  |
-| `initial`   | Initial field              | Document initials, paragraph acknowledgments     |
-| `date`      | Date picker field          | Signing date, agreement date                     |
-| `full_name` | Full name field            | Automatically fills signer's complete name       |
-| `first_name`| First name field           | Automatically fills signer's first name          |
-| `last_name` | Last name field            | Automatically fills signer's last name           |
-| `title`     | Title/job title field      | Professional title or position                   |
-| `company`   | Company name field         | Organization or company name                     |
-| `email`     | Email address field        | Signer's email address                           |
-| `text`      | Generic text input field   | Custom text, notes, or any other text input      |
+| Type         | Description                | Use Case                                     |
+| ------------ | -------------------------- | -------------------------------------------- |
+| `signature`  | Electronic signature field | Legal signatures                             |
+| `initial`    | Initial field              | Document initials, paragraph acknowledgments |
+| `date`       | Date picker field          | Signing date, agreement date                 |
+| `full_name`  | Full name field            | Automatically fills signer's complete name   |
+| `first_name` | First name field           | Automatically fills signer's first name      |
+| `last_name`  | Last name field            | Automatically fills signer's last name       |
+| `title`      | Title/job title field      | Professional title or position               |
+| `company`    | Company name field         | Organization or company name                 |
+| `email`      | Email address field        | Signer's email address                       |
+| `text`       | Generic text input field   | Custom text, notes, or any other text input  |
+| `checkbox`   | Checkbox field             | Acknowledgments, consent, agreements         |
 
-### Complete 3-Step Workflow
+### Quick Start: Prepare for Signing (Most Common)
+
+Use this endpoint to send documents immediately for signing:
 
 <ScriptLoader
-  scriptPath="turbosign/api/complete-workflow"
-  id="complete-workflow-examples"
-  label="Complete Workflow Implementation"
+  scriptPath="turbosign/api/single-step/prepare-for-signing"
+  id="prepare-for-signing-quick"
+  label="Prepare for Signing - Quick Start"
 />
 
-### Quick Coordinate Example
+### Alternative: Prepare for Review
 
-If you prefer using exact coordinates instead of text anchors:
+Use this endpoint when you need a preview URL to verify field placement:
 
-```json
-// Step 3 payload using coordinates instead of templates
-[
-  {
-    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-    "type": "signature",
-    "page": 1,
-    "x": 100,
-    "y": 200,
-    "width": 200,
-    "height": 80,
-    "pageWidth": 612,
-    "pageHeight": 792
-  },
-  {
-    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-    "type": "date",
-    "page": 1,
-    "x": 350,
-    "y": 300,
-    "width": 150,
-    "height": 30,
-    "pageWidth": 612,
-    "pageHeight": 792
-  }
-]
-```
+<ScriptLoader
+  scriptPath="turbosign/api/single-step/prepare-for-review"
+  id="prepare-for-review-quick"
+  label="Prepare for Review - Quick Start"
+/>
+
+### Quick Comparison
+
+| Feature              | prepare-for-review             | prepare-for-signing       |
+| -------------------- | ------------------------------ | ------------------------- |
+| Sends emails?        | ❌ No                          | ✅ Yes                    |
+| Returns preview URL? | ✅ Yes                         | ❌ No                     |
+| Final status         | REVIEW_READY                   | UNDER_REVIEW              |
+| Use when             | Need to verify field placement | Ready to send immediately |
 
 Now that you've seen the whole thing, let's dive into the details...
 
@@ -134,8 +132,8 @@ Before you begin, ensure you have:
 3. **API Keys Section**: Generate or retrieve your API access token
 4. **Organization ID**: Copy your organization ID from the settings
 
-![TurboSign API Integration Overview](/img/turbosign/api/api-key.png)
-![TurboSign API Integration Overview](/img/turbosign/api/org-id.png)
+![TurboSign API Key](/img/turbosign/api/api-key.png)
+![TurboSign Organization ID](/img/turbosign/api/org-id.png)
 
 ## Authentication
 
@@ -152,14 +150,40 @@ x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
 User-Agent: TurboDocx API Client
 ```
 
-## Step 1: Upload Document
+## Choosing Your Endpoint
 
-The first step is to upload your PDF document to TurboSign. This creates a new document record and returns a document ID that you'll use in subsequent steps.
+TurboSign offers two single-step endpoints to fit different workflows. Choose the one that best matches your use case.
+
+### When to Use prepare-for-review
+
+✅ **Use this endpoint when you want to:**
+
+- Verify field placement before sending to recipients
+- Get a preview URL to review the document in TurboSign's interface
+- Manually trigger email sending after verifying field placement
+- Ensure correct field positioning before recipients receive emails
+
+**Workflow**: Upload → Get preview URL → Review in browser → Manually send when ready
+
+### When to Use prepare-for-signing
+
+✅ **Use this endpoint when you want to:**
+
+- Send documents immediately without preview step
+- Automate the entire signature process end-to-end
+- Use with verified templates or confident field positioning
+- Skip manual review and send directly to recipients
+
+**Workflow**: Upload → Emails sent automatically → Recipients sign
+
+## Endpoint 1: Prepare for Review
+
+Creates a signature request and returns a preview URL. No emails are sent to recipients.
 
 ### Endpoint
 
 ```http
-POST https://www.turbodocx.com/turbosign/documents/upload
+POST https://api.turbodocx.com/turbosign/single/prepare-for-review
 ```
 
 ### Headers
@@ -171,379 +195,628 @@ x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
 User-Agent: TurboDocx API Client
 ```
 
-### Request Body (Form Data)
+### Request Body (multipart/form-data)
+
+⚠️ **Important**: Recipients and fields must be sent as JSON strings in form-data
+
+| Field               | Type           | Required      | Description                                |
+| ------------------- | -------------- | ------------- | ------------------------------------------ |
+| file                | File           | Conditional\* | PDF, DOCX, or PPTX file to upload          |
+| deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
+| templateId          | String (UUID)  | Conditional\* | Reference to existing template             |
+| fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
+| documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
+| documentDescription | String         | No            | Document description (max 1000 chars)      |
+| recipients          | String (JSON)  | **Yes**       | JSON string array of recipient objects     |
+| fields              | String (JSON)  | **Yes**       | JSON string array of field objects         |
+| senderName          | String         | No            | Name of sender (max 255 chars)             |
+| senderEmail         | String (email) | No            | Email of sender                            |
+| ccEmails            | String (JSON)  | No            | JSON string array of CC email addresses    |
+
+\* **File Source**: Must provide exactly ONE of: file, deliverableId, templateId, or fileLink
+
+### Recipients JSON Format
+
+Recipients must be stringified before adding to form-data:
 
 ```javascript
-{
-  "name": "Contract Agreement",
-  "file": [PDF_FILE_BINARY],
-  // Optional: triggerMeta for advanced configurations
-  // "triggerMeta": "{\"url\": \"callback_url\"}"
-}
+const recipients = JSON.stringify([
+  {
+    name: "John Smith",
+    email: "john.smith@company.com",
+    signingOrder: 1,
+    metadata: {
+      color: "hsl(200, 75%, 50%)",
+      lightColor: "hsl(200, 75%, 93%)",
+    },
+  },
+  {
+    name: "Jane Doe",
+    email: "jane.doe@partner.com",
+    signingOrder: 2,
+    metadata: {
+      color: "hsl(270, 75%, 50%)",
+      lightColor: "hsl(270, 75%, 93%)",
+    },
+  },
+]);
+formData.append("recipients", recipients);
+```
+
+### Fields JSON Format
+
+Fields reference recipients by **email** (not recipientId) and must be stringified:
+
+#### Template-based (recommended):
+
+```javascript
+const fields = JSON.stringify([
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "signature",
+    template: {
+      anchor: "{Signature1}",
+      placement: "replace",
+      size: { width: 200, height: 80 },
+      offset: { x: 0, y: 0 },
+    },
+    required: true,
+  },
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "date",
+    template: {
+      anchor: "{Date1}",
+      placement: "replace",
+      size: { width: 150, height: 30 },
+    },
+    required: true,
+  },
+]);
+formData.append("fields", fields);
+```
+
+#### Coordinate-based:
+
+```javascript
+const fields = JSON.stringify([
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "signature",
+    page: 1,
+    x: 100,
+    y: 200,
+    width: 200,
+    height: 80,
+    pageWidth: 612,
+    pageHeight: 792,
+    required: true,
+  },
+]);
+formData.append("fields", fields);
 ```
 
 ### Response
 
 ```json
 {
-  "data": {
-    "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
-    "name": "Contract Agreement",
-    "description": "",
-    "status": "draft",
-    "createdOn": "2025-09-17T13:24:57.083Z"
-  }
-}
-```
-
-### Response Fields
-
-| Field              | Type   | Description                                           |
-| ------------------ | ------ | ----------------------------------------------------- |
-| `data.id`          | string | Unique document identifier (save this for next steps) |
-| `data.name`        | string | Document name as provided                             |
-| `data.description` | string | Document description (empty by default)               |
-| `data.status`      | string | Document status (`draft` after upload)                |
-| `data.createdOn`   | string | ISO 8601 timestamp of document creation               |
-
-<!-- ![Step 1: Document Upload Postman Example](/img/turbosign/step1-upload-postman.png) -->
-
-### Code Examples
-
-<ScriptLoader 
-  scriptPath="turbosign/api/step1-upload" 
-  id="step1-upload-examples"
-  label="Step 1: Upload Document Examples"
-/>
-
-## Step 2: Add Recipients
-
-After uploading your document, add the recipients who need to sign. You can specify multiple recipients with their signing order and customize their signature appearance.
-
-### Endpoint
-
-```http
-POST https://www.turbodocx.com/turbosign/documents/{documentId}/update-with-recipients
-```
-
-### Headers
-
-```http
-Content-Type: application/json
-Authorization: Bearer YOUR_API_TOKEN
-x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
-User-Agent: TurboDocx API Client
-```
-
-### Request Body
-
-```json
-{
-  "document": {
-    "name": "Contract Agreement - Updated",
-    "description": "This document requires electronic signatures from both parties. Please review all content carefully before signing."
-  },
+  "success": true,
+  "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+  "status": "REVIEW_READY",
+  "previewUrl": "https://www.turbodocx.com/sign/preview/abc123...",
   "recipients": [
     {
+      "id": "5f673f37-9912-4e72-85aa-8f3649760f6b",
       "name": "John Smith",
       "email": "john.smith@company.com",
       "signingOrder": 1,
       "metadata": {
         "color": "hsl(200, 75%, 50%)",
         "lightColor": "hsl(200, 75%, 93%)"
-      },
-      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
-    },
-    {
-      "name": "Jane Doe",
-      "email": "jane.doe@partner.com",
-      "signingOrder": 2,
-      "metadata": {
-        "color": "hsl(270, 75%, 50%)",
-        "lightColor": "hsl(270, 75%, 93%)"
-      },
-      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296"
-    }
-  ]
-}
-```
-
-### Response
-
-```json
-{
-  "data": {
-    "document": {
-      "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
-      "name": "Contract Agreement - Updated",
-      "description": "This document requires electronic signatures from both parties. Please review all content carefully before signing.",
-      "status": "setup_complete",
-      "updatedOn": "2025-09-17T13:26:10.000Z"
-    },
-    "recipients": [
-      {
-        "id": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-        "name": "John Smith",
-        "email": "john.smith@company.com",
-        "signingOrder": 1,
-        "metadata": {
-          "color": "hsl(200, 75%, 50%)",
-          "lightColor": "hsl(200, 75%, 93%)"
-        }
-      },
-      {
-        "id": "a8b9c1d2-3456-7890-abcd-ef1234567890",
-        "name": "Jane Doe",
-        "email": "jane.doe@partner.com",
-        "signingOrder": 2,
-        "metadata": {
-          "color": "hsl(270, 75%, 50%)",
-          "lightColor": "hsl(270, 75%, 93%)"
-        }
       }
-    ]
-  }
+    }
+  ],
+  "message": "Document prepared for review. Use the preview URL to review and assign fields."
 }
 ```
 
-### Request Fields
+### Response Fields
 
-| Field                              | Type   | Required | Description                                         |
-| ---------------------------------- | ------ | -------- | --------------------------------------------------- |
-| `document.name`                    | string | Yes      | Updated document name                               |
-| `document.description`             | string | No       | Document description for recipients                 |
-| `recipients[].name`                | string | Yes      | Full name of the signer                             |
-| `recipients[].email`               | string | Yes      | Email address for signing notifications             |
-| `recipients[].signingOrder`        | number | Yes      | Order in which recipients should sign (1, 2, 3...)  |
-| `recipients[].metadata.color`      | string | No       | Primary color for this recipient's signature fields |
-| `recipients[].metadata.lightColor` | string | No       | Light color variant for highlights                  |
-| `recipients[].documentId`          | string | Yes      | Document ID from Step 1                             |
-
-<!-- ![Step 2: Add Recipients Postman Example](/img/turbosign/step2-recipients-postman.png) -->
+| Field      | Type          | Description                                    |
+| ---------- | ------------- | ---------------------------------------------- |
+| success    | Boolean       | Request success status                         |
+| documentId | String (UUID) | Unique document identifier - save for tracking |
+| status     | String        | Document status (REVIEW_READY)                 |
+| previewUrl | String (URL)  | URL to preview and verify document             |
+| recipients | Array         | Array of recipient objects with generated IDs  |
+| message    | String        | Human-readable success message                 |
 
 ### Code Examples
 
-<ScriptLoader 
-  scriptPath="turbosign/api/step2-recipients" 
-  id="step2-recipients-examples"
-  label="Step 2: Add Recipients Examples"
+<ScriptLoader
+  scriptPath="turbosign/api/single-step/prepare-for-review"
+  id="prepare-for-review-detailed"
+  label="Prepare for Review - Code Examples"
 />
 
-## Step 3: Prepare for Signing
+### Next Steps After Review
 
-The final step configures signature fields and sends the document to recipients for signing. You can position fields using text anchors or absolute coordinates.
+Once you've reviewed the document via the preview URL click "Send for Signing" button on the preview page to send emails to recipients
+
+## Endpoint 2: Prepare for Signing
+
+Creates a signature request and immediately sends emails to recipients. Use this for production workflows when you're confident in your field positioning.
 
 ### Endpoint
 
 ```http
-POST https://www.turbodocx.com/turbosign/documents/{documentId}/prepare-for-signing
+POST https://api.turbodocx.com/turbosign/single/prepare-for-signing
 ```
 
 ### Headers
 
 ```http
-Content-Type: application/json
+Content-Type: multipart/form-data
 Authorization: Bearer YOUR_API_TOKEN
 x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
 User-Agent: TurboDocx API Client
 ```
 
-### Request Body
+### Request Body (multipart/form-data)
 
-```json
-[
-  {
-    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-    "type": "signature",
-    "template": {
-      "anchor": "{Signature1}",
-      "placement": "replace",
-      "size": { "width": 200, "height": 80 },
-      "offset": { "x": 0, "y": 0 },
-      "caseSensitive": true,
-      "useRegex": false
-    },
-    "defaultValue": "",
-    "required": true
-  },
-  {
-    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-    "type": "date",
-    "template": {
-      "anchor": "{Date1}",
-      "placement": "replace",
-      "size": { "width": 150, "height": 30 },
-      "offset": { "x": 0, "y": 0 },
-      "caseSensitive": true,
-      "useRegex": false
-    },
-    "defaultValue": "",
-    "required": true
-  },
-  {
-    "recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
-    "type": "signature",
-    "template": {
-      "anchor": "{Signature2}",
-      "placement": "replace",
-      "size": { "width": 200, "height": 80 },
-      "offset": { "x": 0, "y": 0 },
-      "caseSensitive": true,
-      "useRegex": false
-    },
-    "defaultValue": "",
-    "required": true
-  },
-  {
-    "recipientId": "a8b9c1d2-3456-7890-abcd-ef1234567890",
-    "type": "text",
-    "template": {
-      "anchor": "{Title2}",
-      "placement": "replace",
-      "size": { "width": 200, "height": 30 },
-      "offset": { "x": 0, "y": 0 },
-      "caseSensitive": true,
-      "useRegex": false
-    },
-    "defaultValue": "Business Partner",
-    "required": false
-  }
-]
-```
+The request format is **identical** to prepare-for-review. See the "Endpoint 1: Prepare for Review" section above for detailed field documentation.
 
 ### Response
 
 ```json
 {
-  "success": true
+  "success": true,
+  "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+  "message": "Document sent for signing. Emails are being sent to recipients."
 }
 ```
 
-### Field Positioning Options
+### Response Fields
 
-TurboSign supports two field positioning methods:
+| Field      | Type          | Description                                    |
+| ---------- | ------------- | ---------------------------------------------- |
+| success    | Boolean       | Request success status                         |
+| documentId | String (UUID) | Unique document identifier - save for tracking |
+| message    | String        | Human-readable success message                 |
 
-1. **Template-based positioning** (recommended) - Uses text anchors in your PDF
-2. **Coordinate-based positioning** - Uses exact pixel coordinates
+⚠️ **Note**: This endpoint returns immediately after creating the document. Email sending happens asynchronously in the background. Use webhooks to receive notification when the document is fully signed.
 
-#### Template-based Field Configuration
+### Code Examples
 
-| Field                    | Type    | Required | Description                                            |
-| ------------------------ | ------- | -------- | ------------------------------------------------------ |
-| `recipientId`            | string  | Yes      | Recipient ID from Step 2                               |
-| `type`                   | string  | Yes      | Field type - see Available Field Types in TLDR section |
-| `template.anchor`        | string  | Yes      | Text anchor to find in document (e.g., "{Signature1}") |
-| `template.placement`     | string  | Yes      | How to place field ("replace", "before", "after")      |
-| `template.size`          | object  | Yes      | Field dimensions (width, height in pixels)             |
-| `template.offset`        | object  | No       | Position offset from anchor (x, y in pixels)           |
-| `template.caseSensitive` | boolean | No       | Whether anchor search is case-sensitive                |
-| `template.useRegex`      | boolean | No       | Whether to treat anchor as regex pattern               |
-| `defaultValue`           | string  | No       | Pre-filled value for the field                         |
-| `required`               | boolean | No       | Whether field must be completed                        |
+<ScriptLoader
+  scriptPath="turbosign/api/single-step/prepare-for-signing"
+  id="prepare-for-signing-detailed"
+  label="Prepare for Signing - Code Examples"
+/>
 
-#### Coordinate-based Field Configuration
+## Recipients Reference
 
-For precise positioning when text anchors aren't suitable, use coordinate-based fields:
+### Recipient Properties
+
+Each recipient object in the `recipients` array should contain the following properties:
+
+| Property     | Type           | Required | Description                                                |
+| ------------ | -------------- | -------- | ---------------------------------------------------------- |
+| name         | String         | Yes      | Full name of the recipient/signer                          |
+| email        | String (email) | Yes      | Email address of the recipient (must be unique)            |
+| signingOrder | Number         | Yes      | Order in which recipient should sign (starts at 1)         |
+| metadata     | Object         | No       | Optional metadata for UI customization (color, lightColor) |
+
+### Metadata Object (Optional)
+
+The `metadata` object allows you to customize the recipient's UI appearance:
+
+| Property   | Type   | Description                                        | Example                |
+| ---------- | ------ | -------------------------------------------------- | ---------------------- |
+| color      | String | Primary color for recipient in HSL format          | `"hsl(200, 75%, 50%)"` |
+| lightColor | String | Light background color for recipient in HSL format | `"hsl(200, 75%, 93%)"` |
+
+### Example Recipients Array
 
 ```json
 [
   {
-    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-    "type": "signature",
-    "page": 1,
-    "x": 100,
-    "y": 200,
-    "width": 200,
-    "height": 80,
-    "pageWidth": 612,
-    "pageHeight": 792
+    "name": "John Smith",
+    "email": "john.smith@company.com",
+    "signingOrder": 1
   },
   {
-    "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b",
-    "type": "date",
-    "page": 1,
-    "x": 350,
-    "y": 200,
-    "width": 150,
-    "height": 30,
-    "pageWidth": 612,
-    "pageHeight": 792
+    "name": "Jane Doe",
+    "email": "jane.doe@partner.com",
+    "signingOrder": 2
   }
 ]
 ```
 
-| Field        | Type   | Required | Description                                     |
-| ------------ | ------ | -------- | ----------------------------------------------- |
-| `recipientId`| string | Yes      | Recipient ID from Step 2                       |
-| `type`       | string | Yes      | Field type - see Available Field Types section |
-| `page`       | number | Yes      | Page number (starts at 1)                      |
-| `x`          | number | Yes      | Horizontal position from left edge (pixels)    |
-| `y`          | number | Yes      | Vertical position from top edge (pixels)       |
-| `width`      | number | Yes      | Field width in pixels                           |
-| `height`     | number | Yes      | Field height in pixels                          |
-| `pageWidth`  | number | Yes      | Total page width in pixels                      |
-| `pageHeight` | number | Yes      | Total page height in pixels                     |
+### With Optional Metadata
 
-**Coordinate System Notes:**
-- Origin (0,0) is at the top-left corner of the page
-- Standard US Letter page size is 612 x 792 pixels (8.5" x 11" at 72 DPI)
-- Fields cannot extend beyond page boundaries: `x + width ≤ pageWidth` and `y + height ≤ pageHeight`
-- All coordinate values must be non-negative numbers
+```json
+[
+  {
+    "name": "John Smith",
+    "email": "john.smith@company.com",
+    "signingOrder": 1,
+    "metadata": {
+      "color": "hsl(200, 75%, 50%)",
+      "lightColor": "hsl(200, 75%, 93%)"
+    }
+  }
+]
+```
 
-**When to use coordinate-based positioning:**
-- Precise pixel-perfect placement needed
-- PDF doesn't contain suitable text anchors
-- Programmatically generated field positions
-- Converting from existing coordinate-based systems
+## Field Types Reference
 
-<!-- ![Step 3: Prepare for Signing Postman Example](/img/turbosign/step3-prepare-postman.png) -->
+### Complete Field Type List
 
-### Code Examples
+| Type         | Description                | Auto-filled | Use Case                                     |
+| ------------ | -------------------------- | ----------- | -------------------------------------------- |
+| `signature`  | Electronic signature field | No          | Legal signatures, agreements                 |
+| `initial`    | Initial field              | No          | Document initials, paragraph acknowledgments |
+| `date`       | Date picker field          | No          | Signing date, agreement date                 |
+| `full_name`  | Full name field            | Yes         | Automatically fills signer's complete name   |
+| `first_name` | First name field           | Yes         | Automatically fills signer's first name      |
+| `last_name`  | Last name field            | Yes         | Automatically fills signer's last name       |
+| `title`      | Title/job title field      | No          | Professional title or position               |
+| `company`    | Company name field         | No          | Organization or company name                 |
+| `email`      | Email address field        | Yes         | Signer's email address                       |
+| `text`       | Generic text input field   | No          | Custom text, notes, or any other text input  |
+| `checkbox`   | Checkbox field             | No          | Acknowledgments, consent, agreements         |
 
-<ScriptLoader 
-  scriptPath="turbosign/api/step3-prepare" 
-  id="step3-prepare-examples"
-  label="Step 3: Prepare for Signing Examples"
-/>
+### Field Configuration Properties
+
+#### Common Properties (All Field Types)
+
+| Property        | Type    | Required | Description                                                    |
+| --------------- | ------- | -------- | -------------------------------------------------------------- |
+| recipientEmail  | String  | Yes      | Email address of recipient (matches email in recipients array) |
+| type            | String  | Yes      | Field type (see table above)                                   |
+| required        | Boolean | No       | Whether field must be completed (default: true)                |
+| defaultValue    | String  | No       | Pre-filled value for the field                                 |
+| isReadonly      | Boolean | No       | Makes field non-editable (for prefilled values)                |
+| backgroundColor | String  | No       | Custom background color (hex or rgba)                          |
+
+#### Template-based Properties
+
+| Property               | Type    | Required | Description                                                     |
+| ---------------------- | ------- | -------- | --------------------------------------------------------------- |
+| template.anchor        | String  | Yes      | Text anchor to find in document (e.g., "{Signature1}")          |
+| template.placement     | String  | Yes      | How to place field: "replace", "before", "after"                |
+| template.size          | Object  | Yes      | Field dimensions: { width: number, height: number }             |
+| template.offset        | Object  | No       | Position offset: { x: number, y: number } (default: {x:0, y:0}) |
+| template.caseSensitive | Boolean | No       | Whether anchor search is case-sensitive (default: true)         |
+| template.useRegex      | Boolean | No       | Whether to treat anchor as regex pattern (default: false)       |
+
+#### Coordinate-based Properties
+
+| Property   | Type   | Required | Description                                                        |
+| ---------- | ------ | -------- | ------------------------------------------------------------------ |
+| page       | Number | Yes      | Page number (starts at 1)                                          |
+| x          | Number | Yes      | Horizontal position from left edge (pixels)                        |
+| y          | Number | Yes      | Vertical position from top edge (pixels)                           |
+| width      | Number | Yes      | Field width in pixels                                              |
+| height     | Number | Yes      | Field height in pixels                                             |
+| pageWidth  | Number | No       | Total page width in pixels (optional, for responsive positioning)  |
+| pageHeight | Number | No       | Total page height in pixels (optional, for responsive positioning) |
+
+### Field Type Special Behaviors
+
+**signature & initial**
+
+- Draws a signature pad for user input
+- Can be text-based or drawn
+- Cryptographically signed and hashed for legal validity
+
+**date**
+
+- Shows date picker interface
+- Format: MM/DD/YYYY (US) or DD/MM/YYYY (configurable)
+- Can set defaultValue to "today" for auto-population
+
+**full_name, first_name, last_name, email**
+
+- Auto-populated from recipient profile
+- Can be overridden by recipient if needed
+- Useful for legal compliance and form filling
+
+**text**
+
+- Single-line text input by default
+- Supports defaultValue for prefilled content
+- Use for titles, company names, custom fields
+
+**checkbox**
+
+- Boolean true/false value
+- Useful for acknowledgments and consent
+- Can have label text next to checkbox
+
+## Field Positioning Methods
+
+TurboSign supports two methods for positioning signature fields in your documents.
+
+### Method 1: Template-based Positioning (Recommended)
+
+Uses text anchors in your PDF as placeholders. TurboSign searches for these anchors and places fields accordingly.
+
+#### Advantages
+
+✅ Easy to update field positions (just edit the PDF)
+✅ No need to measure exact coordinates
+✅ Works across different page sizes
+✅ More maintainable for non-technical users
+✅ Handles document variations gracefully
+
+#### How it Works
+
+1. **Add anchor text to your PDF**: Place text like `{Signature1}`, `{Date1}`, `{Initial1}` where you want fields
+2. **Configure fields with anchor references**: Tell TurboSign what to search for
+3. **TurboSign finds and replaces**: Anchors are found and replaced with interactive fields
+
+#### Anchor Configuration Example
+
+```json
+{
+  "recipientEmail": "john.smith@company.com",
+  "type": "signature",
+  "template": {
+    "anchor": "{Signature1}",
+    "placement": "replace",
+    "size": { "width": 200, "height": 80 },
+    "offset": { "x": 0, "y": 0 },
+    "caseSensitive": true,
+    "useRegex": false
+  },
+  "required": true
+}
+```
+
+#### Placement Options
+
+- **replace**: Removes the anchor text and places the field in its position
+- **before**: Places field before the anchor text (anchor remains visible)
+- **after**: Places field after the anchor text (anchor remains visible)
+
+#### Offset Usage
+
+Offset allows fine-tuning field position relative to the anchor:
+
+- `x`: Positive moves right, negative moves left (pixels)
+- `y`: Positive moves down, negative moves up (pixels)
+
+```json
+{
+  "anchor": "{Signature1}",
+  "placement": "replace",
+  "size": { "width": 200, "height": 80 },
+  "offset": { "x": 10, "y": -5 } // 10px right, 5px up from anchor
+}
+```
+
+### Method 2: Coordinate-based Positioning
+
+Uses exact pixel coordinates to position fields on specific pages. Best for precise control or when anchors aren't feasible.
+
+#### Advantages
+
+✅ Pixel-perfect precision
+✅ Works with PDFs that can't be edited
+✅ Programmatically generated positions
+✅ Useful for form-filling scenarios
+✅ Consistent placement across documents
+
+#### How it Works
+
+1. **Measure exact x,y coordinates** in your PDF (using PDF editor or viewer)
+2. **Provide page number, coordinates, and dimensions**
+3. **TurboSign places fields at exact positions**
+
+#### Coordinate Configuration Example
+
+```json
+{
+  "recipientEmail": "john.smith@company.com",
+  "type": "signature",
+  "page": 1,
+  "x": 100,
+  "y": 200,
+  "width": 200,
+  "height": 80,
+  "pageWidth": 612,
+  "pageHeight": 792,
+  "required": true
+}
+```
+
+#### Coordinate System Reference
+
+- **Origin (0,0)**: Top-left corner of the page
+- **X-axis**: Increases from left to right
+- **Y-axis**: Increases from top to bottom
+- **Standard US Letter**: 612 x 792 pixels (8.5" x 11" at 72 DPI)
+- **Standard A4**: 595 x 842 pixels (210mm x 297mm at 72 DPI)
+
+#### Coordinate Validation
+
+Fields must stay within page boundaries:
+
+- `x ≥ 0`
+- `y ≥ 0`
+- `x + width ≤ pageWidth`
+- `y + height ≤ pageHeight`
+
+#### Measuring Coordinates
+
+**Adobe Acrobat Pro**:
+
+1. View → Show/Hide → Rulers & Grids → Rulers
+2. Hover over location to see coordinates
+
+**Browser Developer Tools**:
+
+1. Open PDF in browser
+2. Right-click → Inspect
+3. Use element inspector to measure positions
+
+**PDF Editing Software**:
+
+- Use built-in coordinate display
+- Draw rectangles to measure dimensions
+
+#### Quick Coordinate Example
+
+Position a signature field at bottom-right of a US Letter page:
+
+```json
+{
+  "recipientEmail": "john@example.com",
+  "type": "signature",
+  "page": 1,
+  "x": 362, // 612 - 250 = 362 (right aligned with 50px margin)
+  "y": 662, // 792 - 130 = 662 (bottom aligned with 50px margin)
+  "width": 200,
+  "height": 80,
+  "pageWidth": 612,
+  "pageHeight": 792
+}
+```
 
 ## Best Practices
 
+### Workflow Selection
+
+**When You Need Field Verification**:
+
+- ✅ Use `prepare-for-review` to get preview URLs
+- ✅ Verify field placement in browser before sending
+- ✅ Manually trigger sending after review
+- ✅ Useful for new document templates or complex field layouts
+
+**When Field Placement Is Verified**:
+
+- ✅ Use `prepare-for-signing` to send immediately
+- ✅ Implement webhook handlers for completion notifications
+- ✅ Use proper error handling and retry logic
+- ✅ Monitor API rate limits
+- ✅ Log all document IDs for tracking
+
+**General Tips**:
+
+- ✅ Use deliverableId or templateId to avoid repeated uploads
+- ✅ Test with your own email addresses first
+- ✅ Both endpoints are production-ready
+
 ### Security
 
-- **Never expose API tokens**: Store tokens securely in environment variables
-- **Use HTTPS only**: All API calls must use HTTPS in production
-- **Validate inputs**: Always validate recipient emails and document names
+- **Never expose API tokens**: Store tokens securely in environment variables or secrets management
+- **Use HTTPS only**: All API calls must use HTTPS in production (API enforces this)
+- **Validate inputs**: Always validate recipient emails and document names before submission
 - **Implement rate limiting**: Respect API rate limits to avoid throttling
+- **Rotate tokens regularly**: Generate new API tokens periodically
+- **Use webhook signatures**: Verify webhook payloads using HMAC signatures
+- **Sanitize user inputs**: Validate and sanitize all user-provided data
 
 ### Error Handling
 
 - **Check HTTP status codes**: Always verify response status before processing
-- **Handle timeouts**: Implement retry logic for network failures
+- **Handle timeouts**: Implement retry logic with exponential backoff for network failures
 - **Log API responses**: Keep detailed logs for debugging and monitoring
 - **Validate responses**: Check response structure before accessing data
+- **Graceful degradation**: Have fallback behavior for API failures
+- **User-friendly errors**: Display helpful error messages to end users
 
 ### Performance
 
-- **Upload optimization**: Compress PDFs when possible to reduce upload time
-- **Batch operations**: Group multiple recipients in single API calls
-- **Async processing**: Use webhooks instead of polling for status updates
-- **Connection pooling**: Reuse HTTP connections for multiple requests
+**File Upload Optimization**:
+
+- Compress PDFs when possible (aim for <5MB)
+- Use fileLink for files already in cloud storage (S3, GCS, etc.)
+- Use deliverableId/templateId to reference existing documents
+- Avoid uploading the same document multiple times
+
+**API Efficiency**:
+
+- Single-step endpoints reduce API calls from 3 to 1 (3x faster)
+- Batch multiple documents in parallel requests when possible
+- Use connection pooling for multiple requests
+- Implement exponential backoff for retries
+- Cache responses when appropriate
+
+**Network Optimization**:
+
+- Use CDN for document hosting when using fileLink
+- Enable gzip compression for API requests
+- Minimize payload sizes by only including required fields
 
 ### Document Preparation
 
-- **Use text anchors**: Place anchor text like `{Signature1}` in your PDFs for precise field positioning
-- **Consistent naming**: Use consistent anchor naming conventions across documents
-- **Test coordinates**: Verify field positions with test documents before production
-- **Document validation**: Ensure PDFs are not password-protected or corrupted
+**Text Anchors (Template-based)**:
 
-### Coordinate-based Positioning Tips
+- Use consistent anchor naming: `{FieldType}{Number}` (e.g., `{Signature1}`, `{Date1}`)
+- Place anchors exactly where you want fields
+- Use unique anchors (avoid duplicates)
+- Test anchor placement with prepare-for-review first
+- Document your anchor naming convention
 
-- **Measure accurately**: Use PDF viewers with coordinate display to find exact positions
-- **Account for margins**: Consider document margins when calculating field positions
-- **Test on different devices**: Verify coordinates work across different PDF viewers
-- **Use standard page sizes**: Stick to common page dimensions (612x792 for US Letter)
-- **Validate boundaries**: Ensure fields don't extend beyond page edges
-- **Consider scaling**: Be aware that different DPI settings may affect coordinates
+**Coordinate-based**:
+
+- Verify coordinates work across different PDF viewers
+- Account for page margins and headers/footers
+- Use standard page sizes when possible
+- Test on actual page dimensions (don't assume)
+- Validate boundaries before submission
+
+**Document Validation**:
+
+- Ensure PDFs are not password-protected or corrupted
+- Verify all pages are readable
+- Test with actual documents before production
+- Keep backup copies of source documents
+
+### JSON String Formatting
+
+⚠️ **Critical**: Recipients and fields must be valid JSON strings when added to form-data.
+
+**Correct**:
+
+```javascript
+const recipients = JSON.stringify([
+  { name: "John", email: "john@example.com", signingOrder: 1 },
+]);
+formData.append("recipients", recipients);
+```
+
+**Incorrect**:
+
+```javascript
+// Don't send object/array directly!
+formData.append("recipients", recipientsArray); // ❌ Wrong
+formData.append("recipients", "[{...}]"); // ❌ Wrong (string literal, not stringified)
+```
+
+**Python Example**:
+
+```python
+import json
+recipients = json.dumps([
+    {"name": "John", "email": "john@example.com", "signingOrder": 1}
+])
+form_data['recipients'] = recipients
+```
+
+**C# Example**:
+
+```csharp
+using System.Text.Json;
+var recipients = JsonSerializer.Serialize(new[] {
+    new { name = "John", email = "john@example.com", signingOrder = 1 }
+});
+formData.Add(new StringContent(recipients), "recipients");
+```
 
 ## Error Handling & Troubleshooting
 
@@ -555,12 +828,82 @@ For precise positioning when text anchors aren't suitable, use coordinate-based 
 | `400`       | Bad Request           | Check request body format and required fields |
 | `401`       | Unauthorized          | Verify API token and headers                  |
 | `403`       | Forbidden             | Check organization ID and permissions         |
-| `404`       | Not Found             | Verify document ID and endpoint URLs          |
+| `404`       | Not Found             | Verify endpoint URLs are correct              |
 | `422`       | Unprocessable Entity  | Validate field values and constraints         |
 | `429`       | Too Many Requests     | Implement rate limiting and retry logic       |
 | `500`       | Internal Server Error | Contact support if persistent                 |
 
 ### Common Issues
+
+#### JSON String Formatting Errors
+
+**Symptoms**: 400 Bad Request with message "Invalid JSON in recipients/fields"
+
+**Solutions**:
+
+- ✅ Verify JSON.stringify() or equivalent is used for recipients, fields, ccEmails
+- ✅ Check JSON is valid using JSONLint or similar validator
+- ✅ Ensure proper escaping of quotes in JSON strings
+- ✅ Test with minimal example first (1 recipient, 1 field)
+
+**Example Error Response**:
+
+```json
+{
+  "error": "Invalid JSON string in recipients field",
+  "code": "JSONParseError",
+  "details": "Unexpected token at position 45"
+}
+```
+
+**Debug Steps**:
+
+1. Log the JSON string before sending
+2. Validate JSON with online validator
+3. Check for special characters or unescaped quotes
+4. Test with hardcoded valid JSON first
+
+#### File Source Errors
+
+**Symptoms**: 400 Bad Request with message about file source
+
+**Solutions**:
+
+- ✅ Provide exactly ONE of: file, deliverableId, templateId, fileId, fileLink
+- ✅ Verify UUIDs are valid format (8-4-4-4-12 characters)
+- ✅ Check file upload isn't corrupted or empty
+- ✅ Ensure fileLink is accessible (not behind auth)
+
+**Example Error Response**:
+
+```json
+{
+  "error": "Must provide exactly one file source",
+  "code": "InvalidFileSource"
+}
+```
+
+#### Recipients/Fields Mismatch
+
+**Symptoms**: 400 Bad Request about missing recipient or email mismatch
+
+**Solutions**:
+
+- ✅ Verify recipientEmail in fields matches email in recipients array **exactly**
+- ✅ Check for typos in email addresses
+- ✅ Ensure all fields reference valid recipients
+- ✅ Email matching is case-sensitive
+
+**Example**:
+
+```javascript
+// Recipients array
+[{ email: "john.smith@company.com", ... }]
+
+// Fields array - must match exactly
+[{ recipientEmail: "john.smith@company.com", ... }]  // ✅ Correct
+[{ recipientEmail: "John.Smith@company.com", ... }]  // ❌ Wrong (case mismatch)
+```
 
 #### Authentication Failures
 
@@ -568,9 +911,17 @@ For precise positioning when text anchors aren't suitable, use coordinate-based 
 
 **Solutions**:
 
-- Verify API token is correct and not expired
-- Check that `x-rapiddocx-org-id` header matches your organization
-- Ensure Bearer token format: `Bearer YOUR_TOKEN`
+- ✅ Verify API token is correct and not expired
+- ✅ Check that `x-rapiddocx-org-id` header matches your organization
+- ✅ Ensure Bearer token format: `Bearer YOUR_TOKEN` (with space)
+- ✅ Confirm token has necessary permissions
+
+**Example Correct Headers**:
+
+```http
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+x-rapiddocx-org-id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+```
 
 #### Document Upload Failures
 
@@ -578,38 +929,31 @@ For precise positioning when text anchors aren't suitable, use coordinate-based 
 
 **Solutions**:
 
-- Verify PDF file is not corrupted or password-protected
-- Check file size is under the maximum limit (typically 10MB)
-- Ensure file is actually a PDF (check MIME type)
-- Verify network connection and try again
-
-#### Recipient Configuration Issues
-
-**Symptoms**: Recipients not receiving signing invitations
-
-**Solutions**:
-
-- Verify email addresses are valid and correctly formatted
-- Check signing order numbers are sequential (1, 2, 3...)
-- Ensure document ID from Step 1 is used correctly
-- Verify recipient metadata format is correct
+- ✅ Verify PDF file is not corrupted or password-protected
+- ✅ Check file size is under maximum limit (typically 10MB)
+- ✅ Ensure file is actually a PDF (check MIME type)
+- ✅ Verify network connection and try again
+- ✅ For fileLink, ensure URL is accessible
 
 #### Field Positioning Problems
 
-**Symptoms**: Signature fields appear in wrong locations
+**Symptoms**: Signature fields appear in wrong locations or not at all
 
 **Template-based Solutions**:
-- Verify anchor text exists in the PDF document
-- Check anchor text matches exactly (case-sensitive by default)
-- Test with `caseSensitive: false` if having matching issues
-- Use PDF coordinates as fallback if anchors don't work
+
+- ✅ Verify anchor text exists in the PDF document
+- ✅ Check anchor text matches exactly (case-sensitive by default)
+- ✅ Test with `caseSensitive: false` if having matching issues
+- ✅ Try different placement options (replace, before, after)
+- ✅ Use prepare-for-review to visually verify placement
 
 **Coordinate-based Solutions**:
-- Verify page dimensions match your PDF's actual size
-- Check that x,y coordinates are within page boundaries
-- Ensure coordinates account for any PDF margins or headers
-- Test with different page numbers if multi-page document
-- Validate that `x + width ≤ pageWidth` and `y + height ≤ pageHeight`
+
+- ✅ Verify page dimensions match your PDF's actual size
+- ✅ Check that x,y coordinates are within page boundaries
+- ✅ Ensure coordinates account for any PDF margins or headers
+- ✅ Test with different page numbers if multi-page document
+- ✅ Validate that `x + width ≤ pageWidth` and `y + height ≤ pageHeight`
 
 #### Webhook Integration Issues
 
@@ -617,26 +961,44 @@ For precise positioning when text anchors aren't suitable, use coordinate-based 
 
 **Solutions**:
 
-- Verify webhook URLs are accessible and return 200 OK
-- Check webhook configuration in organization settings
-- Review webhook delivery history for error details
-- Test webhook endpoints with external tools
+- ✅ Verify webhook URLs are accessible and return 200 OK
+- ✅ Check webhook configuration in organization settings
+- ✅ Review webhook delivery history for error details
+- ✅ Test webhook endpoints with external tools (webhook.site, ngrok)
+- ✅ Implement HMAC signature verification
 
 ### Debugging Tips
 
-1. **Enable request logging**: Log all API requests and responses
-2. **Test step by step**: Isolate issues by testing each step individually
-3. **Use Postman**: Import examples and test manually before coding
-4. **Check network**: Verify connectivity to `turbodocx.com`
-5. **Validate JSON**: Ensure request bodies are valid JSON format
+1. **Test with prepare-for-review first**: Visual confirmation before sending emails
+2. **Use preview URLs**: Verify field placement and document appearance
+3. **Check response documentId**: Save this for tracking and debugging
+4. **Enable request logging**: Log all requests and responses with timestamps
+5. **Test with minimal payloads**: Start simple (1 recipient, 1 field), add complexity incrementally
+6. **Validate JSON before sending**: Use JSON validators to check format
+7. **Use Postman/Insomnia**: Test manually before writing code
+8. **Check API status page**: Verify TurboDocx services are operational
+9. **Review error messages carefully**: Error responses include specific details
+10. **Monitor rate limits**: Track API usage to avoid throttling
 
-<!-- ![API Debugging Workflow](/img/turbosign/api-debugging-flow.png) -->
+### Example Debug Request
+
+```bash
+# Test with curl to isolate issues
+curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-review \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORG_ID" \
+  -F "file=@document.pdf" \
+  -F "documentName=Test Document" \
+  -F 'recipients=[{"name":"Test User","email":"test@example.com","signingOrder":1}]' \
+  -F 'fields=[{"recipientEmail":"test@example.com","type":"signature","page":1,"x":100,"y":200,"width":200,"height":80,"pageWidth":612,"pageHeight":792}]' \
+  -v
+```
 
 ## Next Steps
 
 ### Webhooks - The Next Logical Step
 
-Now that you've integrated the basic signing flow, the next step is setting up webhooks to receive real-time notifications when documents are signed. This eliminates the need for polling and provides instant updates about document status changes.
+Now that you've integrated the single-step signing flow, the next step is setting up webhooks to receive real-time notifications when documents are signed. This eliminates the need for polling and provides instant updates about document status changes.
 
 📖 **[Learn how to configure Webhooks →](/docs/TurboSign/Webhooks)**
 
@@ -656,4 +1018,4 @@ Need help with your integration?
 
 ---
 
-Ready to get started? Follow the step-by-step guide above to integrate TurboSign API into your application and start collecting electronic signatures programmatically!
+Ready to get started? Follow the guide above to integrate TurboSign single-step API into your application and start collecting electronic signatures programmatically with a single API call!
