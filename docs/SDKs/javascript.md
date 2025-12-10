@@ -119,7 +119,7 @@ TurboSign.configure({
 });
 
 // Send document with coordinate-based fields
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://example.com/contract.pdf",
   documentName: "Service Agreement",
   senderName: "Acme Corp",
@@ -185,7 +185,7 @@ TurboSign.configure({
 });
 
 // Send document with coordinate-based fields
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://example.com/contract.pdf",
   documentName: "Service Agreement",
   senderName: "Acme Corp",
@@ -249,7 +249,7 @@ console.log(JSON.stringify(result, null, 2));
 
 ```javascript
 // Use text anchors instead of coordinates
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://example.com/contract-with-placeholders.pdf",
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
@@ -284,7 +284,7 @@ console.log(JSON.stringify(result, null, 2));
 
 ```typescript
 // Use text anchors instead of coordinates
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://example.com/contract-with-placeholders.pdf",
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
@@ -323,7 +323,7 @@ console.log(JSON.stringify(result, null, 2));
 **Alternative:** Use a TurboDocx template with pre-configured anchors:
 
 ```typescript
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   templateId: "template-uuid-from-turbodocx", // Template already contains anchors
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
@@ -361,7 +361,7 @@ const { TurboSign } = require("@turbodocx/sdk");
 
 const fileBuffer = readFileSync("./contract.pdf");
 
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   file: fileBuffer,
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -389,7 +389,7 @@ import { TurboSign } from "@turbodocx/sdk";
 
 const fileBuffer = readFileSync("./contract.pdf");
 
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   file: fileBuffer,
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -417,7 +417,7 @@ const result = await TurboSign.prepareForSigningSingle({
 <TabItem value="javascript" label="JavaScript" default>
 
 ```javascript
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://storage.example.com/contracts/agreement.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -440,7 +440,7 @@ const result = await TurboSign.prepareForSigningSingle({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://storage.example.com/contracts/agreement.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -473,7 +473,7 @@ Use `fileLink` when your documents are already hosted on cloud storage (S3, Goog
 
 ```javascript
 // Use a previously generated TurboDocx document
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   deliverableId: "deliverable-uuid-from-turbodocx",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -497,7 +497,7 @@ const result = await TurboSign.prepareForSigningSingle({
 
 ```typescript
 // Use a previously generated TurboDocx document
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   deliverableId: "deliverable-uuid-from-turbodocx",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -530,7 +530,7 @@ const result = await TurboSign.prepareForSigningSingle({
 
 ```javascript
 // Use a pre-configured TurboSign template
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   templateId: "template-uuid-from-turbodocx", // Template already contains anchors
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
@@ -554,7 +554,7 @@ const result = await TurboSign.prepareForSigningSingle({
 
 ```typescript
 // Use a pre-configured TurboSign template
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   templateId: "template-uuid-from-turbodocx", // Template already contains anchors
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
@@ -641,7 +641,7 @@ Upload a document for preview without sending signature request emails.
 <TabItem value="javascript" label="JavaScript" default>
 
 ```javascript
-const { documentId, previewUrl } = await TurboSign.prepareForReview({
+const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
   fileLink: "https://example.com/document.pdf",
   documentName: "Contract Draft",
   recipients: [
@@ -665,7 +665,7 @@ const { documentId, previewUrl } = await TurboSign.prepareForReview({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const { documentId, previewUrl } = await TurboSign.prepareForReview({
+const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
   fileLink: "https://example.com/document.pdf",
   documentName: "Contract Draft",
   recipients: [
@@ -696,7 +696,7 @@ Upload a document and immediately send signature requests to all recipients.
 <TabItem value="javascript" label="JavaScript" default>
 
 ```javascript
-const { documentId } = await TurboSign.prepareForSigningSingle({
+const { documentId } = await TurboSign.sendSignature({
   fileLink: "https://example.com/document.pdf",
   documentName: "Service Agreement",
   senderName: "Your Company",
@@ -722,7 +722,7 @@ const { documentId } = await TurboSign.prepareForSigningSingle({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const { documentId } = await TurboSign.prepareForSigningSingle({
+const { documentId } = await TurboSign.sendSignature({
   fileLink: "https://example.com/document.pdf",
   documentName: "Service Agreement",
   senderName: "Your Company",
@@ -912,7 +912,7 @@ const {
 } = require("@turbodocx/sdk");
 
 try {
-  const result = await TurboSign.prepareForSigningSingle({
+  const result = await TurboSign.sendSignature({
     fileLink: "https://example.com/contract.pdf",
     recipients: [
       { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -966,7 +966,7 @@ import {
 } from "@turbodocx/sdk";
 
 try {
-  const result = await TurboSign.prepareForSigningSingle({
+  const result = await TurboSign.sendSignature({
     fileLink: "https://example.com/contract.pdf",
     recipients: [
       { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -1033,8 +1033,8 @@ import type {
   N8nField,
   N8nRecipient,
   // Request types
-  PrepareForReviewRequest,
-  PrepareForSigningSingleRequest,
+  CreateSignatureReviewLinkRequest,
+  SendSignatureRequest,
 } from "@turbodocx/sdk";
 ```
 
@@ -1100,9 +1100,9 @@ Field configuration supporting both coordinate-based and template-based position
 | `caseSensitive` | `boolean` | No | Case sensitive search (default: false) |
 | `useRegex` | `boolean` | No | Use regex for anchor/searchText (default: false) |
 
-### PrepareForReviewRequest / PrepareForSigningSingleRequest
+### CreateSignatureReviewLinkRequest / SendSignatureRequest
 
-Request configuration for `prepareForReview` and `prepareForSigningSingle` methods:
+Request configuration for `createSignatureReviewLink` and `sendSignature` methods:
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|

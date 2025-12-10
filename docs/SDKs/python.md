@@ -102,7 +102,7 @@ TurboSign.configure(
 )
 
 async def send_contract():
-    result = await TurboSign.prepare_for_signing_single(
+    result = await TurboSign.send_signature(
         recipients=[
             {"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1},
             {"name": "Bob Johnson", "email": "bob@example.com", "signingOrder": 2}
@@ -129,7 +129,7 @@ asyncio.run(send_contract())
 ### Using Template-Based Fields
 
 ```python
-result = await TurboSign.prepare_for_signing_single(
+result = await TurboSign.send_signature(
     recipients=[{"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1}],
     fields=[
         {
@@ -173,7 +173,7 @@ TurboSign supports four different ways to provide document files:
 with open("./contract.pdf", "rb") as f:
     pdf_buffer = f.read()
 
-result = await TurboSign.prepare_for_signing_single(
+result = await TurboSign.send_signature(
     file=pdf_buffer,
     recipients=[
         {"name": "John Doe", "email": "john@example.com", "signingOrder": 1},
@@ -195,7 +195,7 @@ result = await TurboSign.prepare_for_signing_single(
 ### 2. File URL (file_link)
 
 ```python
-result = await TurboSign.prepare_for_signing_single(
+result = await TurboSign.send_signature(
     file_link="https://storage.example.com/contracts/agreement.pdf",
     recipients=[
         {"name": "John Doe", "email": "john@example.com", "signingOrder": 1},
@@ -222,7 +222,7 @@ Use `file_link` when your documents are already hosted on cloud storage (S3, Goo
 
 ```python
 # Use a previously generated TurboDocx document
-result = await TurboSign.prepare_for_signing_single(
+result = await TurboSign.send_signature(
     deliverable_id="deliverable-uuid-from-turbodocx",
     recipients=[
         {"name": "John Doe", "email": "john@example.com", "signingOrder": 1},
@@ -249,7 +249,7 @@ result = await TurboSign.prepare_for_signing_single(
 
 ```python
 # Use a pre-configured TurboSign template
-result = await TurboSign.prepare_for_signing_single(
+result = await TurboSign.send_signature(
     template_id="template-uuid-from-turbodocx",  # Template already contains anchors
     recipients=[
         {"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1},
@@ -293,7 +293,7 @@ TurboSign.configure(
 Upload a document for preview without sending signature request emails.
 
 ```python
-result = await TurboSign.prepare_for_review(
+result = await TurboSign.create_signature_review_link(
     recipients=[{"name": "John Doe", "email": "john@example.com", "signingOrder": 1}],
     fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "john@example.com"}],
     file_link="https://example.com/document.pdf",
@@ -309,7 +309,7 @@ print(result["previewUrl"])
 Upload a document and immediately send signature requests to all recipients.
 
 ```python
-result = await TurboSign.prepare_for_signing_single(
+result = await TurboSign.send_signature(
     recipients=[{"name": "Recipient Name", "email": "recipient@example.com", "signingOrder": 1}],
     fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "recipient@example.com"}],
     file_link="https://example.com/document.pdf",
@@ -400,7 +400,7 @@ from turbodocx_sdk import (
 )
 
 try:
-    result = await TurboSign.prepare_for_signing_single(
+    result = await TurboSign.send_signature(
         recipients=[{"name": "John Doe", "email": "john@example.com", "signingOrder": 1}],
         fields=[{
             "type": "signature",
@@ -544,7 +544,7 @@ field: Dict[str, Any] = {
 
 ### Request Parameters
 
-Request configuration for `prepare_for_review` and `prepare_for_signing_single` methods:
+Request configuration for `create_signature_review_link` and `send_signature` methods:
 
 &nbsp;
 
