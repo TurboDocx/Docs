@@ -67,16 +67,7 @@ TurboSign offers two single-step endpoints to fit different workflows:
 - **Webhook Integration**: Receive notifications when signing is complete
 
 :::tip Prefer using an SDK?
-We offer official SDKs that handle authentication, error handling, and type safety for you:
-
-| Language | Package | Quick Install |
-|:---------|:--------|:--------------|
-| **JavaScript/TypeScript** | [@turbodocx/sdk](/docs/SDKs/javascript) | `npm install @turbodocx/sdk` |
-| **Python** | [turbodocx-sdk](/docs/SDKs/python) | `pip install turbodocx-sdk` |
-| **Go** | [turbodocx-sdk](/docs/SDKs/go) | `go get github.com/turbodocx/sdk` |
-| **C# / .NET** | [TurboDocx.Sdk](/docs/SDKs/dotnet) | `dotnet add package TurboDocx.Sdk` |
-| **Java** | [com.turbodocx:sdk](/docs/SDKs/java) | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) |
-| **Ruby** | [turbodocx-sdk](/docs/SDKs/ruby) | `gem install turbodocx-sdk` |
+We offer official SDKs that handle authentication, error handling, and type safety for you.
 
 [View all SDKs →](/docs/SDKs)
 :::
@@ -1019,7 +1010,7 @@ Now that you've integrated the single-step signing flow, the next step is settin
 
 ### Related Documentation
 
-- [TurboSign Setup Guide](/docs/TurboSign/Setting-up-TurboSign)
+- [TurboSign Setup Guide](/docs/TurboSign/Setting%20up%20TurboSign)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
 - [Integration Examples](/docs/Integrations)

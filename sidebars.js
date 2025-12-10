@@ -43,18 +43,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'SDKs/dotnet',
-          label: '.NET / C#',
-        },
-        {
-          type: 'doc',
           id: 'SDKs/java',
           label: 'Java',
-        },
-        {
-          type: 'doc',
-          id: 'SDKs/ruby',
-          label: 'Ruby',
         },
       ],
     },

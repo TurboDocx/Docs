@@ -16,13 +16,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import ScriptLoader from '@site/src/components/ScriptLoader';
 
 # Python SDK
 
-The official TurboDocx SDK for Python applications. Async-first design with synchronous wrappers for flexibility.
-
-[![PyPI version](https://img.shields.io/pypi/v/turbodocx-sdk?logo=python&logoColor=white)](https://pypi.org/project/turbodocx-sdk/)
-[![GitHub](https://img.shields.io/github/stars/turbodocx/sdk?style=social)](https://github.com/TurboDocx/SDK)
+The official TurboDocx SDK for Python applications. Build document generation and digital signature workflows with async/await patterns and comprehensive error handling. Available on PyPI as `turbodocx-sdk`.
 
 ## Installation
 
@@ -61,163 +59,264 @@ pipenv install turbodocx-sdk
 ## Configuration
 
 ```python
-from turbodocx import TurboSign
+from turbodocx_sdk import TurboSign
 import os
 
-# Configure globally
-TurboSign.configure(api_key=os.environ["TURBODOCX_API_KEY"])
-
-# Or create an instance with configuration
-client = TurboSign(api_key=os.environ["TURBODOCX_API_KEY"])
+# Configure globally (recommended)
+TurboSign.configure(
+    api_key=os.environ["TURBODOCX_API_KEY"],  # Required: Your TurboDocx API key
+    org_id=os.environ["TURBODOCX_ORG_ID"],    # Required: Your organization ID
+    # base_url="https://api.turbodocx.com"    # Optional: Override base URL
+)
 ```
+
+:::tip Authentication
+Authenticate using `api_key`. API keys are recommended for server-side applications.
+:::
 
 ### Environment Variables
 
 ```bash
 # .env
 TURBODOCX_API_KEY=your_api_key_here
+TURBODOCX_ORG_ID=your_org_id_here
 ```
+
+:::warning API Credentials Required
+Both `api_key` and `org_id` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+:::
 
 ---
 
 ## Quick Start
 
-### Async Usage (Recommended)
+### Send a Document for Signature
 
 ```python
 import asyncio
-from turbodocx import TurboSign
+from turbodocx_sdk import TurboSign
 import os
 
-TurboSign.configure(api_key=os.environ["TURBODOCX_API_KEY"])
+TurboSign.configure(
+    api_key=os.environ["TURBODOCX_API_KEY"],
+    org_id=os.environ["TURBODOCX_ORG_ID"]
+)
 
 async def send_contract():
     result = await TurboSign.prepare_for_signing_single(
+        recipients=[
+            {"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1},
+            {"name": "Bob Johnson", "email": "bob@example.com", "signingOrder": 2}
+        ],
+        fields=[
+            # Alice's signature
+            {"type": "signature", "page": 1, "x": 100, "y": 650, "width": 200, "height": 50, "recipientEmail": "alice@example.com"},
+            {"type": "date", "page": 1, "x": 320, "y": 650, "width": 100, "height": 30, "recipientEmail": "alice@example.com"},
+            # Bob's signature
+            {"type": "signature", "page": 1, "x": 100, "y": 720, "width": 200, "height": 50, "recipientEmail": "bob@example.com"},
+            {"type": "date", "page": 1, "x": 320, "y": 720, "width": 100, "height": 30, "recipientEmail": "bob@example.com"}
+        ],
         file_link="https://example.com/contract.pdf",
         document_name="Service Agreement",
         sender_name="Acme Corp",
         sender_email="contracts@acme.com",
-        recipients=[
-            {"name": "Alice Smith", "email": "alice@example.com", "order": 1},
-            {"name": "Bob Johnson", "email": "bob@example.com", "order": 2}
-        ],
-        fields=[
-            # Alice's signature
-            {"type": "signature", "page": 1, "x": 100, "y": 650, "width": 200, "height": 50, "recipient_order": 1},
-            {"type": "date", "page": 1, "x": 320, "y": 650, "width": 100, "height": 30, "recipient_order": 1},
-            # Bob's signature
-            {"type": "signature", "page": 1, "x": 100, "y": 720, "width": 200, "height": 50, "recipient_order": 2},
-            {"type": "date", "page": 1, "x": 320, "y": 720, "width": 100, "height": 30, "recipient_order": 2}
-        ]
     )
 
-    print(f"Document ID: {result.document_id}")
-    for recipient in result.recipients:
-        print(f"{recipient.name}: {recipient.sign_url}")
+    print("Result:", json.dumps(result, indent=2))
 
 asyncio.run(send_contract())
-```
-
-### Synchronous Usage
-
-```python
-from turbodocx import TurboSign
-import os
-
-TurboSign.configure(api_key=os.environ["TURBODOCX_API_KEY"])
-
-# Use sync_ prefix for synchronous methods
-result = TurboSign.sync_prepare_for_signing_single(
-    file_link="https://example.com/contract.pdf",
-    recipients=[{"name": "John Doe", "email": "john@example.com", "order": 1}],
-    fields=[
-        {"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipient_order": 1}
-    ]
-)
-
-print(f"Sign URL: {result.recipients[0].sign_url}")
 ```
 
 ### Using Template-Based Fields
 
 ```python
 result = await TurboSign.prepare_for_signing_single(
-    file_link="https://example.com/contract-with-placeholders.pdf",
-    recipients=[{"name": "Alice Smith", "email": "alice@example.com", "order": 1}],
+    recipients=[{"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1}],
     fields=[
-        {"type": "signature", "anchor": "{SIGNATURE_ALICE}", "width": 200, "height": 50, "recipient_order": 1},
-        {"type": "date", "anchor": "{DATE_ALICE}", "width": 100, "height": 30, "recipient_order": 1}
-    ]
+        {"type": "signature", "template": {"anchor": "{SIGNATURE_ALICE}"}, "width": 200, "height": 50, "recipientEmail": "alice@example.com"},
+        {"type": "date", "template": {"anchor": "{DATE_ALICE}"}, "width": 100, "height": 30, "recipientEmail": "alice@example.com"}
+    ],
+    file_link="https://example.com/contract-with-placeholders.pdf",
+)
+
+print("Result:", json.dumps(result, indent=2))
+```
+
+:::info Template Anchors Required
+**Important:** The document file must contain the anchor text (e.g., `{SIGNATURE_ALICE}`, `{DATE_ALICE}`) that you reference in your fields. If the anchors don't exist in the document, the API will return an error.
+:::
+
+---
+
+## File Input Methods
+
+TurboSign supports four different ways to provide document files:
+
+### 1. File Upload (bytes)
+
+```python
+with open("./contract.pdf", "rb") as f:
+    pdf_buffer = f.read()
+
+result = await TurboSign.prepare_for_signing_single(
+    file=pdf_buffer,
+    recipients=[
+        {"name": "John Doe", "email": "john@example.com", "signingOrder": 1},
+    ],
+    fields=[
+        {
+            "type": "signature",
+            "page": 1,
+            "x": 100,
+            "y": 650,
+            "width": 200,
+            "height": 50,
+            "recipientEmail": "john@example.com",
+        },
+    ],
 )
 ```
+
+### 2. File URL (file_link)
+
+```python
+result = await TurboSign.prepare_for_signing_single(
+    file_link="https://storage.example.com/contracts/agreement.pdf",
+    recipients=[
+        {"name": "John Doe", "email": "john@example.com", "signingOrder": 1},
+    ],
+    fields=[
+        {
+            "type": "signature",
+            "page": 1,
+            "x": 100,
+            "y": 650,
+            "width": 200,
+            "height": 50,
+            "recipientEmail": "john@example.com",
+        },
+    ],
+)
+```
+
+:::tip When to use file_link
+Use `file_link` when your documents are already hosted on cloud storage (S3, Google Cloud Storage, etc.). This is more efficient than downloading and re-uploading files.
+:::
+
+### 3. TurboDocx Deliverable ID
+
+```python
+# Use a previously generated TurboDocx document
+result = await TurboSign.prepare_for_signing_single(
+    deliverable_id="deliverable-uuid-from-turbodocx",
+    recipients=[
+        {"name": "John Doe", "email": "john@example.com", "signingOrder": 1},
+    ],
+    fields=[
+        {
+            "type": "signature",
+            "page": 1,
+            "x": 100,
+            "y": 650,
+            "width": 200,
+            "height": 50,
+            "recipientEmail": "john@example.com",
+        },
+    ],
+)
+```
+
+:::info Integration with TurboDocx
+`deliverable_id` references documents generated using TurboDocx's document generation API. This creates a seamless workflow: generate → sign.
+:::
+
+### 4. TurboDocx Template ID
+
+```python
+# Use a pre-configured TurboSign template
+result = await TurboSign.prepare_for_signing_single(
+    template_id="template-uuid-from-turbodocx",  # Template already contains anchors
+    recipients=[
+        {"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1},
+    ],
+    fields=[
+        {
+            "type": "signature",
+            "template": {"anchor": "{SIGNATURE_ALICE}"},
+            "width": 200,
+            "height": 50,
+            "recipientEmail": "alice@example.com",
+        },
+    ],
+)
+```
+
+:::info Integration with TurboDocx
+`template_id` references pre-configured TurboSign templates created in the TurboDocx dashboard. These templates come with built-in anchors and field positioning, making it easy to reuse signature workflows across multiple documents.
+:::
 
 ---
 
 ## API Reference
 
-### TurboSign.configure()
+### Configure
 
-Configure the SDK with your API credentials.
+Configure the SDK with your API credentials and organization settings.
 
 ```python
 TurboSign.configure(
-    api_key: str,           # Required: Your TurboDocx API key
-    base_url: str = None,   # Optional: API base URL
-    timeout: int = 30       # Optional: Request timeout in seconds
+    api_key: str,                                    # Required: Your TurboDocx API key
+    org_id: str,                                     # Required: Your organization ID
+    base_url: str = "https://api.turbodocx.com"     # Optional: API base URL
 )
 ```
 
-### prepare_for_review()
+### Prepare for review
 
 Upload a document for preview without sending signature request emails.
 
 ```python
 result = await TurboSign.prepare_for_review(
+    recipients=[{"name": "John Doe", "email": "john@example.com", "signingOrder": 1}],
+    fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "john@example.com"}],
     file_link="https://example.com/document.pdf",
-    # or upload directly:
-    # file=open("document.pdf", "rb"),
     document_name="Contract Draft",
-    recipients=[{"name": "John Doe", "email": "john@example.com", "order": 1}],
-    fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipient_order": 1}]
 )
 
-print(result.document_id)
-print(result.preview_url)
+print(result["documentId"])
+print(result["previewUrl"])
 ```
 
-### prepare_for_signing_single()
+### Prepare for signing
 
-Upload a document and immediately send signature requests.
+Upload a document and immediately send signature requests to all recipients.
 
 ```python
 result = await TurboSign.prepare_for_signing_single(
+    recipients=[{"name": "Recipient Name", "email": "recipient@example.com", "signingOrder": 1}],
+    fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "recipient@example.com"}],
     file_link="https://example.com/document.pdf",
     document_name="Service Agreement",
     sender_name="Your Company",
     sender_email="sender@company.com",
-    recipients=[{"name": "Recipient Name", "email": "recipient@example.com", "order": 1}],
-    fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipient_order": 1}]
 )
+
+print(result["documentId"])
 ```
 
-### get_status()
+### Get status
 
-Check the status of a document and its recipients.
+Retrieve the current status of a document.
 
 ```python
-status = await TurboSign.get_status("document-uuid")
+result = await TurboSign.get_status("document-uuid")
 
-print(status.status)  # 'pending', 'completed', or 'voided'
-print(status.completed_at)
-
-for recipient in status.recipients:
-    print(f"{recipient.name}: {recipient.status}")
-    print(f"Signed at: {recipient.signed_at}")
+print("Result:", json.dumps(result, indent=2))
 ```
 
-### download()
+### Download document
 
-Download the completed signed document.
+Download the completed signed document as PDF bytes.
 
 ```python
 pdf_bytes = await TurboSign.download("document-uuid")
@@ -225,256 +324,246 @@ pdf_bytes = await TurboSign.download("document-uuid")
 # Save to file
 with open("signed-contract.pdf", "wb") as f:
     f.write(pdf_bytes)
-
-# Or upload to S3
-import boto3
-s3 = boto3.client("s3")
-s3.put_object(Bucket="my-bucket", Key="signed-contract.pdf", Body=pdf_bytes)
 ```
 
-### void()
+### Void
 
 Cancel/void a signature request.
 
 ```python
-await TurboSign.void("document-uuid", reason="Contract terms changed")
+result = await TurboSign.void_document("document-uuid", reason="Contract terms changed")
+
+print("Result:", json.dumps(result, indent=2))
 ```
 
-### resend()
+### Resend
 
-Resend signature request emails.
+Resend signature request emails to specific recipients.
 
 ```python
-# Resend to all pending recipients
-await TurboSign.resend("document-uuid")
+result = await TurboSign.resend_email("document-uuid", recipient_ids=["recipient-uuid-1", "recipient-uuid-2"])
 
-# Resend to specific recipients
-await TurboSign.resend("document-uuid", recipient_ids=["recipient-uuid-1", "recipient-uuid-2"])
+print("Result:", json.dumps(result, indent=2))
 ```
 
----
+### Get audit trail
 
-## Framework Examples
-
-### FastAPI
+Retrieve the complete audit trail for a document, including all events and actions.
 
 ```python
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from turbodocx import TurboSign
-import os
+result = await TurboSign.get_audit_trail("document-uuid")
 
-app = FastAPI()
-TurboSign.configure(api_key=os.environ["TURBODOCX_API_KEY"])
-
-class SendContractRequest(BaseModel):
-    recipient_name: str
-    recipient_email: str
-    contract_url: str
-
-class SendContractResponse(BaseModel):
-    document_id: str
-    sign_url: str
-
-@app.post("/api/send-contract", response_model=SendContractResponse)
-async def send_contract(request: SendContractRequest):
-    try:
-        result = await TurboSign.prepare_for_signing_single(
-            file_link=request.contract_url,
-            recipients=[{"name": request.recipient_name, "email": request.recipient_email, "order": 1}],
-            fields=[{"type": "signature", "page": 1, "x": 100, "y": 650, "width": 200, "height": 50, "recipient_order": 1}]
-        )
-        return SendContractResponse(
-            document_id=result.document_id,
-            sign_url=result.recipients[0].sign_url
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/api/document/{document_id}/status")
-async def get_document_status(document_id: str):
-    try:
-        return await TurboSign.get_status(document_id)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-```
-
-### Django
-
-```python
-# views.py
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
-from turbodocx import TurboSign
-import json
-import os
-
-TurboSign.configure(api_key=os.environ["TURBODOCX_API_KEY"])
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def send_contract(request):
-    data = json.loads(request.body)
-
-    # Use sync version in Django (unless using async views)
-    result = TurboSign.sync_prepare_for_signing_single(
-        file_link=data["contract_url"],
-        recipients=[{"name": data["recipient_name"], "email": data["recipient_email"], "order": 1}],
-        fields=[{"type": "signature", "page": 1, "x": 100, "y": 650, "width": 200, "height": 50, "recipient_order": 1}]
-    )
-
-    return JsonResponse({
-        "document_id": result.document_id,
-        "sign_url": result.recipients[0].sign_url
-    })
-
-@require_http_methods(["GET"])
-def document_status(request, document_id):
-    status = TurboSign.sync_get_status(document_id)
-    return JsonResponse({
-        "status": status.status,
-        "recipients": [
-            {"name": r.name, "status": r.status}
-            for r in status.recipients
-        ]
-    })
-```
-
-### Flask
-
-```python
-from flask import Flask, request, jsonify
-from turbodocx import TurboSign
-import os
-
-app = Flask(__name__)
-TurboSign.configure(api_key=os.environ["TURBODOCX_API_KEY"])
-
-@app.route("/api/send-contract", methods=["POST"])
-def send_contract():
-    data = request.json
-
-    result = TurboSign.sync_prepare_for_signing_single(
-        file_link=data["contract_url"],
-        recipients=[{"name": data["recipient_name"], "email": data["recipient_email"], "order": 1}],
-        fields=[{"type": "signature", "page": 1, "x": 100, "y": 650, "width": 200, "height": 50, "recipient_order": 1}]
-    )
-
-    return jsonify({
-        "document_id": result.document_id,
-        "sign_url": result.recipients[0].sign_url
-    })
-
-@app.route("/api/document/<document_id>/status")
-def document_status(document_id):
-    status = TurboSign.sync_get_status(document_id)
-    return jsonify(status.dict())
-
-if __name__ == "__main__":
-    app.run(debug=True)
+print("Result:", json.dumps(result, indent=2))
 ```
 
 ---
 
 ## Error Handling
 
+The SDK provides typed error classes for different failure scenarios. All errors extend the base `TurboDocxError` class.
+
+### Error Classes
+
+| Error Class           | Status Code | Description                         |
+| --------------------- | ----------- | ----------------------------------- |
+| `TurboDocxError`      | varies      | Base error class for all SDK errors |
+| `AuthenticationError` | 401         | Invalid or missing API credentials  |
+| `ValidationError`     | 400         | Invalid request parameters          |
+| `NotFoundError`       | 404         | Document or resource not found      |
+| `RateLimitError`      | 429         | Too many requests                   |
+| `NetworkError`        | -           | Network connectivity issues         |
+
+### Handling Errors
+
 ```python
-from turbodocx import TurboSign
-from turbodocx.exceptions import (
+from turbodocx_sdk import (
+    TurboSign,
     TurboDocxError,
-    UnauthorizedError,
-    InvalidDocumentError,
-    RateLimitedError,
-    NotFoundError
+    AuthenticationError,
+    ValidationError,
+    NotFoundError,
+    RateLimitError,
+    NetworkError,
 )
 
 try:
-    result = await TurboSign.prepare_for_signing_single(...)
-except UnauthorizedError:
-    print("Invalid API key")
-except InvalidDocumentError as e:
-    print(f"Could not process document: {e.message}")
-except RateLimitedError as e:
-    print(f"Rate limited, retry after: {e.retry_after} seconds")
-except NotFoundError:
-    print("Document not found")
+    result = await TurboSign.prepare_for_signing_single(
+        recipients=[{"name": "John Doe", "email": "john@example.com", "signingOrder": 1}],
+        fields=[{
+            "type": "signature",
+            "page": 1,
+            "x": 100,
+            "y": 650,
+            "width": 200,
+            "height": 50,
+            "recipientEmail": "john@example.com",
+        }],
+        file_link="https://example.com/contract.pdf",
+    )
+except AuthenticationError as e:
+    print(f"Authentication failed: {e}")
+    # Check your API key and org ID
+except ValidationError as e:
+    print(f"Validation error: {e}")
+    # Check request parameters
+except NotFoundError as e:
+    print(f"Resource not found: {e}")
+    # Document or recipient doesn't exist
+except RateLimitError as e:
+    print(f"Rate limited: {e}")
+    # Wait and retry
+except NetworkError as e:
+    print(f"Network error: {e}")
+    # Check connectivity
 except TurboDocxError as e:
-    print(f"Error {e.code}: {e.message}")
+    print(f"SDK error: {e}, status_code={e.status_code}, code={e.code}")
 ```
+
+### Error Properties
+
+All errors include these properties:
+
+| Property      | Type          | Description                                         |
+| ------------- | ------------- | --------------------------------------------------- |
+| `message`     | `str`         | Human-readable error description (via `str(error)`) |
+| `status_code` | `int \| None` | HTTP status code (if applicable)                    |
+| `code`        | `str \| None` | Machine-readable error code                         |
 
 ---
 
-## Type Hints
+## Python Types
 
-The SDK includes full type annotations:
+The SDK uses Python type hints with `Dict[str, Any]` for flexible JSON-like structures.
+
+### Importing Types
 
 ```python
-from turbodocx.types import (
-    SigningRequest,
-    SigningResult,
-    Recipient,
-    Field,
-    DocumentStatus,
-    FieldType
-)
+from typing import Dict, List, Any, Optional
+```
 
-# Type-safe field creation
-field: Field = {
-    "type": FieldType.SIGNATURE,
+### SignatureFieldType
+
+String literal values for field types:
+
+```python
+# Available field type values
+field_types = [
+    "signature",
+    "initial",
+    "date",
+    "text",
+    "full_name",
+    "title",
+    "company",
+    "first_name",
+    "last_name",
+    "email",
+    "checkbox",
+]
+```
+
+### Recipient
+
+Recipient configuration for signature requests:
+
+&nbsp;
+
+| Property       | Type  | Required | Description               |
+| -------------- | ----- | -------- | ------------------------- |
+| `name`         | `str` | Yes      | Recipient's full name     |
+| `email`        | `str` | Yes      | Recipient's email address |
+| `signingOrder` | `int` | Yes      | Signing order (1-indexed) |
+
+```python
+recipient: Dict[str, Any] = {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "signingOrder": 1
+}
+```
+
+### Field
+
+Field configuration supporting both coordinate-based and template-based positioning:
+
+&nbsp;
+
+| Property          | Type   | Required | Description                                         |
+| ----------------- | ------ | -------- | --------------------------------------------------- |
+| `type`            | `str`  | Yes      | Field type (see SignatureFieldType)                 |
+| `recipientEmail`  | `str`  | Yes      | Which recipient fills this field                    |
+| `page`            | `int`  | Yes      | Page number (1-indexed)                             |
+| `x`               | `int`  | Yes      | X coordinate position                               |
+| `y`               | `int`  | Yes      | Y coordinate position                               |
+| `width`           | `int`  | Yes      | Field width in pixels                               |
+| `height`          | `int`  | Yes      | Field height in pixels                              |
+| `defaultValue`    | `str`  | No       | Default value (for checkbox: `"true"` or `"false"`) |
+| `isMultiline`     | `bool` | No       | Enable multiline text                               |
+| `isReadonly`      | `bool` | No       | Make field read-only (pre-filled)                   |
+| `required`        | `bool` | No       | Whether field is required                           |
+| `backgroundColor` | `str`  | No       | Background color (hex, rgb, or named)               |
+| `template`        | `Dict` | No       | Template anchor configuration                       |
+
+**Template Configuration:**
+
+| Property        | Type   | Description                                                      |
+| --------------- | ------ | ---------------------------------------------------------------- |
+| `anchor`        | `str`  | Text anchor pattern like `{TagName}`                             |
+| `searchText`    | `str`  | Alternative: search for any text                                 |
+| `placement`     | `str`  | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size`          | `Dict` | `{ "width": int, "height": int }`                                |
+| `offset`        | `Dict` | `{ "x": int, "y": int }`                                         |
+| `caseSensitive` | `bool` | Case sensitive search (default: False)                           |
+| `useRegex`      | `bool` | Use regex for anchor/searchText (default: False)                 |
+
+```python
+field: Dict[str, Any] = {
+    "type": "signature",
     "page": 1,
     "x": 100,
     "y": 500,
     "width": 200,
     "height": 50,
-    "recipient_order": 1
-}
-
-# Type-safe recipient
-recipient: Recipient = {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "order": 1
+    "recipientEmail": "john@example.com"
 }
 ```
+
+### Request Parameters
+
+Request configuration for `prepare_for_review` and `prepare_for_signing_single` methods:
+
+&nbsp;
+
+| Parameter              | Type         | Required    | Description                    |
+| ---------------------- | ------------ | ----------- | ------------------------------ |
+| `recipients`           | `List[Dict]` | Yes         | Recipients who will sign       |
+| `fields`               | `List[Dict]` | Yes         | Signature fields configuration |
+| `file`                 | `bytes`      | Conditional | PDF file content as bytes      |
+| `file_link`            | `str`        | Conditional | URL to document file           |
+| `deliverable_id`       | `str`        | Conditional | TurboDocx deliverable ID       |
+| `template_id`          | `str`        | Conditional | TurboDocx template ID          |
+| `document_name`        | `str`        | No          | Document name                  |
+| `document_description` | `str`        | No          | Document description           |
+| `sender_name`          | `str`        | No          | Sender name                    |
+| `sender_email`         | `str`        | No          | Sender email                   |
+| `cc_emails`            | `List[str]`  | No          | Array of CC email addresses    |
+
+:::info File Source (Conditional)
+Exactly one file source is required: `file`, `file_link`, `deliverable_id`, or `template_id`.
+:::
 
 ---
 
-## Webhook Signature Verification
+## Additional Documentation
 
-Verify that webhooks are genuinely from TurboDocx:
+For detailed information about advanced configuration and API concepts, see:
 
-```python
-from turbodocx import verify_webhook_signature
-from fastapi import FastAPI, Request, HTTPException
+### Core API References
 
-app = FastAPI()
-
-@app.post("/webhook")
-async def handle_webhook(request: Request):
-    body = await request.body()
-    signature = request.headers.get("x-turbodocx-signature")
-    timestamp = request.headers.get("x-turbodocx-timestamp")
-
-    is_valid = verify_webhook_signature(
-        signature=signature,
-        timestamp=timestamp,
-        body=body,
-        secret=os.environ["TURBODOCX_WEBHOOK_SECRET"]
-    )
-
-    if not is_valid:
-        raise HTTPException(status_code=401, detail="Invalid signature")
-
-    event = json.loads(body)
-
-    if event["event"] == "signature.document.completed":
-        print(f"Document completed: {event['data']['document_id']}")
-    elif event["event"] == "signature.document.voided":
-        print(f"Document voided: {event['data']['document_id']}")
-
-    return {"received": True}
-```
+- **[Request Body Reference](/docs/TurboSign/API%20Signatures#request-body-multipartform-data)** - Complete request body parameters, file sources, and multipart/form-data structure
+- **[Recipients Reference](/docs/TurboSign/API%20Signatures#recipients-reference)** - Recipient properties, signing order, metadata, and configuration options
+- **[Field Types Reference](/docs/TurboSign/API%20Signatures#field-types-reference)** - All available field types (signature, date, text, checkbox, etc.) with properties and behaviors
+- **[Field Positioning Methods](/docs/TurboSign/API%20Signatures#field-positioning-methods)** - Template-based vs coordinate-based positioning, anchor configuration, and best practices
 
 ---
 
@@ -482,5 +571,5 @@ async def handle_webhook(request: Request):
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 - [PyPI Package](https://pypi.org/project/turbodocx-sdk/)
-- [API Reference](/docs/TurboSign/API-Signatures)
+- [API Reference](/docs/TurboSign/API%20Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

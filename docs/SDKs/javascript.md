@@ -19,10 +19,7 @@ import TabItem from '@theme/TabItem';
 
 # JavaScript / TypeScript SDK
 
-The official TurboDocx SDK for JavaScript and TypeScript applications.
-
-[![npm version](https://img.shields.io/npm/v/@turbodocx/sdk?logo=npm&logoColor=white)](https://www.npmjs.com/package/@turbodocx/sdk)
-[![GitHub](https://img.shields.io/github/stars/turbodocx/sdk?style=social)](https://github.com/TurboDocx/SDK)
+The official TurboDocx SDK for JavaScript and TypeScript applications. Build document generation and digital signature workflows with full TypeScript support, async/await patterns, and comprehensive error handling. Available on npm as `@turbodocx/sdk`.
 
 ## Installation
 
@@ -59,22 +56,49 @@ pnpm add @turbodocx/sdk
 
 ## Configuration
 
-```typescript
-import { TurboSign } from '@turbodocx/sdk';
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const { TurboSign } = require("@turbodocx/sdk");
 
 // Configure globally (recommended for server-side)
 TurboSign.configure({
-  apiKey: process.env.TURBODOCX_API_KEY,
+  apiKey: process.env.TURBODOCX_API_KEY, // Required : Your TurboDocx API key
+  orgId: process.env.TURBODOCX_ORG_ID, // Required: Your organization ID
   // Optional: override base URL for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
 ```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+import { TurboSign } from "@turbodocx/sdk";
+
+// Configure globally (recommended for server-side)
+TurboSign.configure({
+  apiKey: process.env.TURBODOCX_API_KEY || "", // Required : Your TurboDocx API key
+  orgId: process.env.TURBODOCX_ORG_ID || "", // Required: Your organization ID
+  // Optional: override base URL for testing
+  // baseUrl: 'https://api.turbodocx.com'
+});
+```
+
+</TabItem>
+</Tabs>
+
+:::tip Authentication
+Authenticate using `apiKey`. API keys are recommended for server-side applications.
+:::
 
 ### Environment Variables
 
 ```bash
 # .env
 TURBODOCX_API_KEY=your_api_key_here
+TURBODOCX_ORG_ID=your_org_id_here
 ```
 
 ---
@@ -83,390 +107,1024 @@ TURBODOCX_API_KEY=your_api_key_here
 
 ### Send a Document for Signature
 
-```typescript
-import { TurboSign } from '@turbodocx/sdk';
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
 
-TurboSign.configure({ apiKey: process.env.TURBODOCX_API_KEY });
+```javascript
+const { TurboSign } = require("@turbodocx/sdk");
+
+TurboSign.configure({
+  apiKey: process.env.TURBODOCX_API_KEY,
+  orgId: process.env.TURBODOCX_ORG_ID,
+});
 
 // Send document with coordinate-based fields
 const result = await TurboSign.prepareForSigningSingle({
-  fileLink: 'https://example.com/contract.pdf',
-  documentName: 'Service Agreement',
-  senderName: 'Acme Corp',
-  senderEmail: 'contracts@acme.com',
+  fileLink: "https://example.com/contract.pdf",
+  documentName: "Service Agreement",
+  senderName: "Acme Corp",
+  senderEmail: "contracts@acme.com",
   recipients: [
-    { name: 'Alice Smith', email: 'alice@example.com', order: 1 },
-    { name: 'Bob Johnson', email: 'bob@example.com', order: 2 }
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+    { name: "Bob Johnson", email: "bob@example.com", signingOrder: 2 },
   ],
   fields: [
     // Alice's signature
-    { type: 'signature', page: 1, x: 100, y: 650, width: 200, height: 50, recipientOrder: 1 },
-    { type: 'date', page: 1, x: 320, y: 650, width: 100, height: 30, recipientOrder: 1 },
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "alice@example.com",
+    },
+    {
+      type: "date",
+      page: 1,
+      x: 320,
+      y: 650,
+      width: 100,
+      height: 30,
+      recipientEmail: "alice@example.com",
+    },
     // Bob's signature
-    { type: 'signature', page: 1, x: 100, y: 720, width: 200, height: 50, recipientOrder: 2 },
-    { type: 'date', page: 1, x: 320, y: 720, width: 100, height: 30, recipientOrder: 2 }
-  ]
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 720,
+      width: 200,
+      height: 50,
+      recipientEmail: "bob@example.com",
+    },
+    {
+      type: "date",
+      page: 1,
+      x: 320,
+      y: 720,
+      width: 100,
+      height: 30,
+      recipientEmail: "bob@example.com",
+    },
+  ],
 });
 
-console.log(`Document ID: ${result.documentId}`);
-for (const recipient of result.recipients) {
-  console.log(`${recipient.name}: ${recipient.signUrl}`);
-}
+console.log(JSON.stringify(result, null, 2));
 ```
 
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+import { TurboSign } from "@turbodocx/sdk";
+
+TurboSign.configure({
+  apiKey: process.env.TURBODOCX_API_KEY || "",
+  orgId: process.env.TURBODOCX_ORG_ID || "",
+});
+
+// Send document with coordinate-based fields
+const result = await TurboSign.prepareForSigningSingle({
+  fileLink: "https://example.com/contract.pdf",
+  documentName: "Service Agreement",
+  senderName: "Acme Corp",
+  senderEmail: "contracts@acme.com",
+  recipients: [
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+    { name: "Bob Johnson", email: "bob@example.com", signingOrder: 2 },
+  ],
+  fields: [
+    // Alice's signature
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "alice@example.com",
+    },
+    {
+      type: "date",
+      page: 1,
+      x: 320,
+      y: 650,
+      width: 100,
+      height: 30,
+      recipientEmail: "alice@example.com",
+    },
+    // Bob's signature
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 720,
+      width: 200,
+      height: 50,
+      recipientEmail: "bob@example.com",
+    },
+    {
+      type: "date",
+      page: 1,
+      x: 320,
+      y: 720,
+      width: 100,
+      height: 30,
+      recipientEmail: "bob@example.com",
+    },
+  ],
+});
+
+console.log(JSON.stringify(result, null, 2));
+```
+
+</TabItem>
+</Tabs>
+
 ### Using Template-Based Fields
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+// Use text anchors instead of coordinates
+const result = await TurboSign.prepareForSigningSingle({
+  fileLink: "https://example.com/contract-with-placeholders.pdf",
+  recipients: [
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      template: { anchor: "{SIGNATURE_ALICE}" },
+      width: 200,
+      height: 50,
+      recipientEmail: "alice@example.com",
+    },
+    {
+      type: "date",
+      template: { anchor: "{DATE_ALICE}" },
+      width: 100,
+      height: 30,
+      recipientEmail: "alice@example.com",
+    },
+  ],
+});
+
+console.log(JSON.stringify(result, null, 2));
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
 
 ```typescript
 // Use text anchors instead of coordinates
 const result = await TurboSign.prepareForSigningSingle({
-  fileLink: 'https://example.com/contract-with-placeholders.pdf',
+  fileLink: "https://example.com/contract-with-placeholders.pdf",
   recipients: [
-    { name: 'Alice Smith', email: 'alice@example.com', order: 1 }
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
   ],
   fields: [
-    { type: 'signature', anchor: '{SIGNATURE_ALICE}', width: 200, height: 50, recipientOrder: 1 },
-    { type: 'date', anchor: '{DATE_ALICE}', width: 100, height: 30, recipientOrder: 1 }
-  ]
+    {
+      type: "signature",
+      template: { anchor: "{SIGNATURE_ALICE}" },
+      width: 200,
+      height: 50,
+      recipientEmail: "alice@example.com",
+    },
+    {
+      type: "date",
+      template: { anchor: "{DATE_ALICE}" },
+      width: 100,
+      height: 30,
+      recipientEmail: "alice@example.com",
+    },
+  ],
+});
+
+console.log(JSON.stringify(result, null, 2));
+```
+
+</TabItem>
+</Tabs>
+
+:::info Template Anchors Required
+**Important:** The document file must contain the anchor text (e.g., `{SIGNATURE_ALICE}`, `{DATE_ALICE}`) that you reference in your fields. If the anchors don't exist in the document, the API will return an error.
+
+**Alternative:** Use a TurboDocx template with pre-configured anchors:
+
+```typescript
+const result = await TurboSign.prepareForSigningSingle({
+  templateId: "template-uuid-from-turbodocx", // Template already contains anchors
+  recipients: [
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      template: { anchor: "{SIGNATURE_ALICE}" },
+      width: 200,
+      height: 50,
+      recipientEmail: "alice@example.com",
+    },
+  ],
 });
 ```
+
+:::
+
+---
+
+## File Input Methods
+
+TurboSign supports four different ways to provide document files:
+
+### 1. File Upload (Buffer/Blob)
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const { readFileSync } = require("fs");
+const { TurboSign } = require("@turbodocx/sdk");
+
+const fileBuffer = readFileSync("./contract.pdf");
+
+const result = await TurboSign.prepareForSigningSingle({
+  file: fileBuffer,
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+import { readFileSync } from "fs";
+import { TurboSign } from "@turbodocx/sdk";
+
+const fileBuffer = readFileSync("./contract.pdf");
+
+const result = await TurboSign.prepareForSigningSingle({
+  file: fileBuffer,
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+</Tabs>
+
+### 2. File URL (fileLink)
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const result = await TurboSign.prepareForSigningSingle({
+  fileLink: "https://storage.example.com/contracts/agreement.pdf",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+const result = await TurboSign.prepareForSigningSingle({
+  fileLink: "https://storage.example.com/contracts/agreement.pdf",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+</Tabs>
+
+:::tip When to use fileLink
+Use `fileLink` when your documents are already hosted on cloud storage (S3, Google Cloud Storage, etc.). This is more efficient than downloading and re-uploading files.
+:::
+
+### 3. TurboDocx Deliverable ID
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+// Use a previously generated TurboDocx document
+const result = await TurboSign.prepareForSigningSingle({
+  deliverableId: "deliverable-uuid-from-turbodocx",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+// Use a previously generated TurboDocx document
+const result = await TurboSign.prepareForSigningSingle({
+  deliverableId: "deliverable-uuid-from-turbodocx",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 650,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+</Tabs>
+
+:::info Integration with TurboDocx
+`deliverableId` references documents generated using TurboDocx's document generation API. This creates a seamless workflow: generate → sign.
+:::
+
+### 4. TurboDocx Template ID
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+// Use a pre-configured TurboSign template
+const result = await TurboSign.prepareForSigningSingle({
+  templateId: "template-uuid-from-turbodocx", // Template already contains anchors
+  recipients: [
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      template: { anchor: "{SIGNATURE_ALICE}" },
+      width: 200,
+      height: 50,
+      recipientEmail: "alice@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+// Use a pre-configured TurboSign template
+const result = await TurboSign.prepareForSigningSingle({
+  templateId: "template-uuid-from-turbodocx", // Template already contains anchors
+  recipients: [
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      template: { anchor: "{SIGNATURE_ALICE}" },
+      width: 200,
+      height: 50,
+      recipientEmail: "alice@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+</Tabs>
+
+:::info Integration with TurboDocx
+`templateId` references pre-configured TurboSign templates created in the TurboDocx dashboard. These templates come with built-in anchors and field positioning, making it easy to reuse signature workflows across multiple documents.
+:::
 
 ---
 
 ## API Reference
 
-### TurboSign.configure(options)
+### Configure
 
-Configure the SDK with your API credentials.
+Configure the SDK with your API credentials and organization settings.
 
 ```typescript
 TurboSign.configure({
-  apiKey: string;        // Required: Your TurboDocx API key
-  baseUrl?: string;      // Optional: API base URL
-  timeout?: number;      // Optional: Request timeout in ms (default: 30000)
+  apiKey: string;        // Required : Your TurboDocx API key
+  orgId: string;         // Required: Your organization ID
+  baseUrl?: string;      // Optional: API base URL (default: 'https://api.turbodocx.com')
 });
 ```
 
-### TurboSign.prepareForReview(options)
+**Example:**
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const { TurboSign } = require("@turbodocx/sdk");
+
+TurboSign.configure({
+  apiKey: process.env.TURBODOCX_API_KEY,
+  orgId: process.env.TURBODOCX_ORG_ID,
+  // Optional: override for testing
+  // baseUrl: 'https://api.turbodocx.com'
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+import { TurboSign } from "@turbodocx/sdk";
+
+TurboSign.configure({
+  apiKey: process.env.TURBODOCX_API_KEY || "",
+  orgId: process.env.TURBODOCX_ORG_ID || "",
+  // Optional: override for testing
+  // baseUrl: 'https://api.turbodocx.com'
+});
+```
+
+</TabItem>
+</Tabs>
+
+:::warning API Credentials Required
+Both `apiKey` and `orgId` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+:::
+
+### Prepare for review
 
 Upload a document for preview without sending signature request emails.
 
-```typescript
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
 const { documentId, previewUrl } = await TurboSign.prepareForReview({
-  fileLink: 'https://example.com/document.pdf',
-  // or upload directly:
-  // file: Buffer | Blob,
-  documentName: 'Contract Draft',
+  fileLink: "https://example.com/document.pdf",
+  documentName: "Contract Draft",
   recipients: [
-    { name: 'John Doe', email: 'john@example.com', order: 1 }
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
   ],
   fields: [
-    { type: 'signature', page: 1, x: 100, y: 500, width: 200, height: 50, recipientOrder: 1 }
-  ]
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 500,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
 });
 ```
 
-### TurboSign.prepareForSigningSingle(options)
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+const { documentId, previewUrl } = await TurboSign.prepareForReview({
+  fileLink: "https://example.com/document.pdf",
+  documentName: "Contract Draft",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 500,
+      width: 200,
+      height: 50,
+      recipientEmail: "john@example.com",
+    },
+  ],
+});
+```
+
+</TabItem>
+</Tabs>
+
+### Prepare for signing
 
 Upload a document and immediately send signature requests to all recipients.
 
-```typescript
-const { documentId, recipients } = await TurboSign.prepareForSigningSingle({
-  fileLink: 'https://example.com/document.pdf',
-  documentName: 'Service Agreement',
-  senderName: 'Your Company',
-  senderEmail: 'sender@company.com',
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const { documentId } = await TurboSign.prepareForSigningSingle({
+  fileLink: "https://example.com/document.pdf",
+  documentName: "Service Agreement",
+  senderName: "Your Company",
+  senderEmail: "sender@company.com",
   recipients: [
-    { name: 'Recipient Name', email: 'recipient@example.com', order: 1 }
+    { name: "Recipient Name", email: "recipient@example.com", signingOrder: 1 },
   ],
   fields: [
-    { type: 'signature', page: 1, x: 100, y: 500, width: 200, height: 50, recipientOrder: 1 }
-  ]
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 500,
+      width: 200,
+      height: 50,
+      recipientEmail: "recipient@example.com",
+    },
+  ],
 });
 ```
 
-### TurboSign.getStatus(documentId)
-
-Check the status of a document and its recipients.
-
-```typescript
-const status = await TurboSign.getStatus('document-uuid');
-
-console.log(status.status);  // 'pending' | 'completed' | 'voided'
-console.log(status.completedAt);  // Date when all signatures completed
-
-for (const recipient of status.recipients) {
-  console.log(`${recipient.name}: ${recipient.status}`);  // 'pending' | 'signed'
-  console.log(`Signed at: ${recipient.signedAt}`);
-}
-```
-
-### TurboSign.download(documentId)
-
-Download the completed signed document.
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const pdfBuffer = await TurboSign.download('document-uuid');
-
-// Save to file (Node.js)
-import { writeFileSync } from 'fs';
-writeFileSync('signed-contract.pdf', pdfBuffer);
-
-// Or upload to cloud storage
-await s3.upload({ Body: pdfBuffer, Key: 'signed-contract.pdf' });
+const { documentId } = await TurboSign.prepareForSigningSingle({
+  fileLink: "https://example.com/document.pdf",
+  documentName: "Service Agreement",
+  senderName: "Your Company",
+  senderEmail: "sender@company.com",
+  recipients: [
+    { name: "Recipient Name", email: "recipient@example.com", signingOrder: 1 },
+  ],
+  fields: [
+    {
+      type: "signature",
+      page: 1,
+      x: 100,
+      y: 500,
+      width: 200,
+      height: 50,
+      recipientEmail: "recipient@example.com",
+    },
+  ],
+});
 ```
 
-### TurboSign.void(documentId, reason?)
+</TabItem>
+</Tabs>
+
+### Get status
+
+Retrieve the current status of a document.
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const result = await TurboSign.getStatus("document-uuid");
+
+console.log(JSON.stringify(result, null, 2));
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+const result = await TurboSign.getStatus("document-uuid");
+
+console.log(JSON.stringify(result, null, 2));
+```
+
+</TabItem>
+</Tabs>
+
+### Download document
+
+Download the completed signed document as a PDF Blob.
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const result = await TurboSign.download("document-uuid");
+
+// Node.js: Save to file
+const { writeFileSync } = require("fs");
+const buffer = Buffer.from(await result.arrayBuffer());
+writeFileSync("signed-contract.pdf", buffer);
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+const result = await TurboSign.download("document-uuid");
+
+// Node.js: Save to file
+import { writeFileSync } from "fs";
+const buffer = Buffer.from(await result.arrayBuffer());
+writeFileSync("signed-contract.pdf", buffer);
+```
+
+</TabItem>
+</Tabs>
+
+### Void
 
 Cancel/void a signature request.
 
-```typescript
-await TurboSign.void('document-uuid', 'Contract terms changed');
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+await TurboSign.void("document-uuid", "Contract terms changed");
 ```
 
-### TurboSign.resend(documentId, recipientIds?)
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+await TurboSign.void("document-uuid", "Contract terms changed");
+```
+
+</TabItem>
+</Tabs>
+
+### Resend
 
 Resend signature request emails to specific recipients.
 
-```typescript
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
 // Resend to all pending recipients
-await TurboSign.resend('document-uuid');
+await TurboSign.resend("document-uuid");
 
 // Resend to specific recipients
-await TurboSign.resend('document-uuid', ['recipient-uuid-1', 'recipient-uuid-2']);
+await TurboSign.resend("document-uuid", [
+  "recipient-uuid-1",
+  "recipient-uuid-2",
+]);
 ```
 
----
-
-## Framework Examples
-
-### Express.js
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
 
 ```typescript
-import express from 'express';
-import { TurboSign } from '@turbodocx/sdk';
+// Resend to all pending recipients
+await TurboSign.resend("document-uuid");
 
-const app = express();
-app.use(express.json());
-
-TurboSign.configure({ apiKey: process.env.TURBODOCX_API_KEY });
-
-app.post('/api/send-contract', async (req, res) => {
-  try {
-    const { recipientName, recipientEmail, contractUrl } = req.body;
-
-    const result = await TurboSign.prepareForSigningSingle({
-      fileLink: contractUrl,
-      recipients: [{ name: recipientName, email: recipientEmail, order: 1 }],
-      fields: [
-        { type: 'signature', page: 1, x: 100, y: 650, width: 200, height: 50, recipientOrder: 1 }
-      ]
-    });
-
-    res.json({ documentId: result.documentId, signUrl: result.recipients[0].signUrl });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get('/api/document/:id/status', async (req, res) => {
-  try {
-    const status = await TurboSign.getStatus(req.params.id);
-    res.json(status);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.listen(3000);
+// Resend to specific recipients
+await TurboSign.resend("document-uuid", [
+  "recipient-uuid-1",
+  "recipient-uuid-2",
+]);
 ```
 
-### Next.js API Routes
+</TabItem>
+</Tabs>
+
+### Get audit trail
+
+Retrieve the complete audit trail for a document, including all events and actions.
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const result = await TurboSign.getAuditTrail("document-uuid");
+
+console.log(JSON.stringify(result, null, 2));
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
 
 ```typescript
-// pages/api/send-for-signature.ts
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { TurboSign } from '@turbodocx/sdk';
+const result = await TurboSign.getAuditTrail("document-uuid");
 
-TurboSign.configure({ apiKey: process.env.TURBODOCX_API_KEY });
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const { recipients, documentUrl, fields } = req.body;
-
-  try {
-    const result = await TurboSign.prepareForSigningSingle({
-      fileLink: documentUrl,
-      recipients,
-      fields
-    });
-
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
+console.log(JSON.stringify(result, null, 2));
 ```
 
-### NestJS Service
-
-```typescript
-import { Injectable } from '@nestjs/common';
-import { TurboSign } from '@turbodocx/sdk';
-
-@Injectable()
-export class SignatureService {
-  constructor() {
-    TurboSign.configure({ apiKey: process.env.TURBODOCX_API_KEY });
-  }
-
-  async sendForSignature(documentUrl: string, recipientEmail: string, recipientName: string) {
-    return TurboSign.prepareForSigningSingle({
-      fileLink: documentUrl,
-      recipients: [{ name: recipientName, email: recipientEmail, order: 1 }],
-      fields: [
-        { type: 'signature', page: 1, x: 100, y: 650, width: 200, height: 50, recipientOrder: 1 }
-      ]
-    });
-  }
-
-  async getDocumentStatus(documentId: string) {
-    return TurboSign.getStatus(documentId);
-  }
-
-  async downloadSignedDocument(documentId: string) {
-    return TurboSign.download(documentId);
-  }
-}
-```
+</TabItem>
+</Tabs>
 
 ---
 
 ## Error Handling
 
-```typescript
-import { TurboSign, TurboDocxError, TurboDocxErrorCode } from '@turbodocx/sdk';
+The SDK provides typed error classes for different failure scenarios. All errors extend the base `TurboDocxError` class.
+
+### Error Classes
+
+| Error Class | Status Code | Code | Description |
+|-------------|-------------|------|-------------|
+| `TurboDocxError` | varies | varies | Base error class for all SDK errors |
+| `AuthenticationError` | 401 | `AUTHENTICATION_ERROR` | Invalid or missing API credentials |
+| `ValidationError` | 400 | `VALIDATION_ERROR` | Invalid request parameters |
+| `NotFoundError` | 404 | `NOT_FOUND` | Document or resource not found |
+| `RateLimitError` | 429 | `RATE_LIMIT_EXCEEDED` | Too many requests |
+| `NetworkError` | - | `NETWORK_ERROR` | Network connectivity issues |
+
+### Handling Errors
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const {
+  TurboSign,
+  TurboDocxError,
+  AuthenticationError,
+  ValidationError,
+  NotFoundError,
+  RateLimitError,
+  NetworkError,
+} = require("@turbodocx/sdk");
 
 try {
-  const result = await TurboSign.prepareForSigningSingle({ /* ... */ });
+  const result = await TurboSign.prepareForSigningSingle({
+    fileLink: "https://example.com/contract.pdf",
+    recipients: [
+      { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+    ],
+    fields: [
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 650,
+        width: 200,
+        height: 50,
+        recipientEmail: "john@example.com",
+      },
+    ],
+  });
 } catch (error) {
-  if (error instanceof TurboDocxError) {
-    switch (error.code) {
-      case TurboDocxErrorCode.UNAUTHORIZED:
-        console.error('Invalid API key');
-        break;
-      case TurboDocxErrorCode.INVALID_DOCUMENT:
-        console.error('Could not process document:', error.message);
-        break;
-      case TurboDocxErrorCode.RATE_LIMITED:
-        console.error('Rate limited, retry after:', error.retryAfter);
-        break;
-      default:
-        console.error(`Error ${error.code}: ${error.message}`);
-    }
-  } else {
-    // Network or unexpected error
-    throw error;
+  if (error instanceof AuthenticationError) {
+    console.error("Authentication failed:", error.message);
+    // Check your API key and org ID
+  } else if (error instanceof ValidationError) {
+    console.error("Validation error:", error.message);
+    // Check request parameters
+  } else if (error instanceof NotFoundError) {
+    console.error("Resource not found:", error.message);
+    // Document or recipient doesn't exist
+  } else if (error instanceof RateLimitError) {
+    console.error("Rate limited:", error.message);
+    // Wait and retry
+  } else if (error instanceof NetworkError) {
+    console.error("Network error:", error.message);
+    // Check connectivity
+  } else if (error instanceof TurboDocxError) {
+    console.error("SDK error:", error.message, error.statusCode, error.code);
   }
 }
 ```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+import {
+  TurboSign,
+  TurboDocxError,
+  AuthenticationError,
+  ValidationError,
+  NotFoundError,
+  RateLimitError,
+  NetworkError,
+} from "@turbodocx/sdk";
+
+try {
+  const result = await TurboSign.prepareForSigningSingle({
+    fileLink: "https://example.com/contract.pdf",
+    recipients: [
+      { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+    ],
+    fields: [
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 650,
+        width: 200,
+        height: 50,
+        recipientEmail: "john@example.com",
+      },
+    ],
+  });
+} catch (error) {
+  if (error instanceof AuthenticationError) {
+    console.error("Authentication failed:", error.message);
+    // Check your API key and org ID
+  } else if (error instanceof ValidationError) {
+    console.error("Validation error:", error.message);
+    // Check request parameters
+  } else if (error instanceof NotFoundError) {
+    console.error("Resource not found:", error.message);
+    // Document or recipient doesn't exist
+  } else if (error instanceof RateLimitError) {
+    console.error("Rate limited:", error.message);
+    // Wait and retry
+  } else if (error instanceof NetworkError) {
+    console.error("Network error:", error.message);
+    // Check connectivity
+  } else if (error instanceof TurboDocxError) {
+    console.error("SDK error:", error.message, error.statusCode, error.code);
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Error Properties
+
+All errors include these properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `message` | `string` | Human-readable error description |
+| `statusCode` | `number \| undefined` | HTTP status code (if applicable) |
+| `code` | `string \| undefined` | Machine-readable error code |
 
 ---
 
 ## TypeScript Types
 
-The SDK exports all types for full TypeScript support:
+The SDK exports TypeScript types for full type safety. Import them directly from the package.
+
+### Importing Types
 
 ```typescript
 import type {
-  SigningRequest,
-  SigningResult,
-  Recipient,
-  Field,
-  DocumentStatus,
-  TurboDocxError
-} from '@turbodocx/sdk';
-
-// Type-safe field creation
-const field: Field = {
-  type: 'signature',
-  page: 1,
-  x: 100,
-  y: 500,
-  width: 200,
-  height: 50,
-  recipientOrder: 1
-};
-
-// Type-safe recipient
-const recipient: Recipient = {
-  name: 'John Doe',
-  email: 'john@example.com',
-  order: 1
-};
+  // Field types
+  SignatureFieldType,
+  N8nField,
+  N8nRecipient,
+  // Request types
+  PrepareForReviewRequest,
+  PrepareForSigningSingleRequest,
+} from "@turbodocx/sdk";
 ```
 
----
+### SignatureFieldType
 
-## Field Types
-
-| Type | Description | Required by Signer |
-|:-----|:------------|:-------------------|
-| `signature` | Electronic signature drawing/typing | Yes |
-| `initials` | Initials field | Yes |
-| `text` | Free-form text input | Configurable |
-| `date` | Date stamp (auto-filled on signing) | Auto |
-| `checkbox` | Checkbox for agreements | Configurable |
-| `full_name` | Signer's full name | Auto |
-| `email` | Signer's email address | Auto |
-| `title` | Job title field | Optional |
-| `company` | Company name field | Optional |
-
----
-
-## Webhook Signature Verification
-
-Verify that webhooks are genuinely from TurboDocx:
+Union type for all available field types:
 
 ```typescript
-import { verifyWebhookSignature } from '@turbodocx/sdk';
-import express from 'express';
-
-const app = express();
-
-// Use raw body for signature verification
-app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  const signature = req.headers['x-turbodocx-signature'] as string;
-  const timestamp = req.headers['x-turbodocx-timestamp'] as string;
-  const body = req.body;
-
-  const isValid = verifyWebhookSignature({
-    signature,
-    timestamp,
-    body,
-    secret: process.env.TURBODOCX_WEBHOOK_SECRET
-  });
-
-  if (!isValid) {
-    return res.status(401).json({ error: 'Invalid signature' });
-  }
-
-  const event = JSON.parse(body.toString());
-
-  switch (event.event) {
-    case 'signature.document.completed':
-      console.log('Document completed:', event.data.document_id);
-      break;
-    case 'signature.document.voided':
-      console.log('Document voided:', event.data.document_id);
-      break;
-  }
-
-  res.status(200).json({ received: true });
-});
+type SignatureFieldType =
+  | "signature"
+  | "initial"
+  | "date"
+  | "text"
+  | "full_name"
+  | "title"
+  | "company"
+  | "first_name"
+  | "last_name"
+  | "email"
+  | "checkbox";
 ```
+
+### N8nRecipient
+
+Recipient configuration for signature requests:
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `name` | `string` | Yes | Recipient's full name |
+| `email` | `string` | Yes | Recipient's email address |
+| `signingOrder` | `number` | Yes | Signing order (1-indexed) |
+
+### N8nField
+
+Field configuration supporting both coordinate-based and template-based positioning:
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `type` | `SignatureFieldType` | Yes | Field type |
+| `recipientEmail` | `string` | Yes | Which recipient fills this field |
+| `page` | `number` | Yes | Page number (1-indexed) |
+| `x` | `number` | Yes | X coordinate position |
+| `y` | `number` | Yes | Y coordinate position |
+| `width` | `number` | Yes | Field width in pixels |
+| `height` | `number` | Yes | Field height in pixels |
+| `defaultValue` | `string` | No | Default value (for checkbox: `"true"` or `"false"`) |
+| `isMultiline` | `boolean` | No | Enable multiline text |
+| `isReadonly` | `boolean` | No | Make field read-only (pre-filled) |
+| `required` | `boolean` | No | Whether field is required |
+| `backgroundColor` | `string` | No | Background color (hex, rgb, or named) |
+| `template` | `object` | No | Template anchor configuration |
+
+**Template Configuration:**
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `anchor` | `string` | Text anchor pattern like `{TagName}` |
+| `searchText` | `string` | Alternative: search for any text |
+| `placement` | `string` | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size` | `object` | `{ width: number; height: number }` |
+| `offset` | `object` | `{ x: number; y: number }` |
+| `caseSensitive` | `boolean` | Case sensitive search (default: false) |
+| `useRegex` | `boolean` | Use regex for anchor/searchText (default: false) |
+
+### PrepareForReviewRequest / PrepareForSigningSingleRequest
+
+Request configuration for `prepareForReview` and `prepareForSigningSingle` methods:
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `file` | `string \| File \| Buffer` | Conditional | PDF file as file path, Buffer, or browser File |
+| `fileLink` | `string` | Conditional | URL to document file |
+| `deliverableId` | `string` | Conditional | TurboDocx deliverable ID |
+| `templateId` | `string` | Conditional | TurboDocx template ID |
+| `recipients` | `N8nRecipient[]` | Yes | Recipients who will sign |
+| `fields` | `N8nField[]` | Yes | Signature fields configuration |
+| `documentName` | `string` | No | Document name |
+| `documentDescription` | `string` | No | Document description |
+| `senderName` | `string` | No | Sender name |
+| `senderEmail` | `string` | No | Sender email |
+| `ccEmails` | `string[]` | No | Array of CC email addresses |
+
+:::info File Source (Conditional)
+Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.
+:::
+
+---
+
+## Additional Documentation
+
+For detailed information about advanced configuration and API concepts, see:
+
+### Core API References
+
+- **[Request Body Reference](/docs/TurboSign/API%20Signatures#request-body-multipartform-data)** - Complete request body parameters, file sources, and multipart/form-data structure
+- **[Recipients Reference](/docs/TurboSign/API%20Signatures#recipients-reference)** - Recipient properties, signing order, metadata, and configuration options
+- **[Field Types Reference](/docs/TurboSign/API%20Signatures#field-types-reference)** - All available field types (signature, date, text, checkbox, etc.) with properties and behaviors
+- **[Field Positioning Methods](/docs/TurboSign/API%20Signatures#field-positioning-methods)** - Template-based vs coordinate-based positioning, anchor configuration, and best practices
 
 ---
 
@@ -474,5 +1132,5 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 - [npm Package](https://www.npmjs.com/package/@turbodocx/sdk)
-- [API Reference](/docs/TurboSign/API-Signatures)
+- [API Reference](/docs/TurboSign/API%20Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

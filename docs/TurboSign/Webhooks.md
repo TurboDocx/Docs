@@ -533,6 +533,6 @@ If you encounter issues not covered here:
 
 ## Next Steps
 
-- [Learn about TurboSign](/docs/TurboSign/Setting-up-TurboSign)
+- [Learn about TurboSign](/docs/TurboSign/Setting%20up%20TurboSign)
 - [Explore API Documentation](/docs/API/turbodocx-api-documentation)
 - [View Integration Guides](/docs/Integrations)

@@ -14,6 +14,7 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import ScriptLoader from '@site/src/components/ScriptLoader';
 
 # Go SDK
 
@@ -47,11 +48,15 @@ import (
 
 func main() {
     // Create a new client
-    client := sdk.NewTurboSign(os.Getenv("TURBODOCX_API_KEY"))
+    client := sdk.NewTurboSign(
+        os.Getenv("TURBODOCX_API_KEY"),
+        os.Getenv("TURBODOCX_ORG_ID"),
+    )
 
     // Or with options
     client := sdk.NewTurboSign(
         os.Getenv("TURBODOCX_API_KEY"),
+        os.Getenv("TURBODOCX_ORG_ID"),
         sdk.WithBaseURL("https://api.turbodocx.com"),
         sdk.WithTimeout(30 * time.Second),
     )
@@ -83,7 +88,10 @@ import (
 )
 
 func main() {
-    client := sdk.NewTurboSign(os.Getenv("TURBODOCX_API_KEY"))
+    client := sdk.NewTurboSign(
+        os.Getenv("TURBODOCX_API_KEY"),
+        os.Getenv("TURBODOCX_ORG_ID"),
+    )
 
     ctx := context.Background()
 
@@ -93,16 +101,16 @@ func main() {
         SenderName:   "Acme Corp",
         SenderEmail:  "contracts@acme.com",
         Recipients: []sdk.Recipient{
-            {Name: "Alice Smith", Email: "alice@example.com", Order: 1},
-            {Name: "Bob Johnson", Email: "bob@example.com", Order: 2},
+            {Name: "Alice Smith", Email: "alice@example.com", SigningOrder: 1},
+            {Name: "Bob Johnson", Email: "bob@example.com", SigningOrder: 2},
         },
         Fields: []sdk.Field{
             // Alice's signature
-            {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 650, Width: 200, Height: 50, RecipientOrder: 1},
-            {Type: sdk.FieldTypeDate, Page: 1, X: 320, Y: 650, Width: 100, Height: 30, RecipientOrder: 1},
+            {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 650, Width: 200, Height: 50, RecipientEmail: "alice@example.com"},
+            {Type: sdk.FieldTypeDate, Page: 1, X: 320, Y: 650, Width: 100, Height: 30, RecipientEmail: "alice@example.com"},
             // Bob's signature
-            {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 720, Width: 200, Height: 50, RecipientOrder: 2},
-            {Type: sdk.FieldTypeDate, Page: 1, X: 320, Y: 720, Width: 100, Height: 30, RecipientOrder: 2},
+            {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 720, Width: 200, Height: 50, RecipientEmail: "bob@example.com"},
+            {Type: sdk.FieldTypeDate, Page: 1, X: 320, Y: 720, Width: 100, Height: 30, RecipientEmail: "bob@example.com"},
         },
     })
     if err != nil {
@@ -122,11 +130,11 @@ func main() {
 result, err := client.PrepareForSigningSingle(ctx, &sdk.SigningRequest{
     FileLink: "https://example.com/contract-with-placeholders.pdf",
     Recipients: []sdk.Recipient{
-        {Name: "Alice Smith", Email: "alice@example.com", Order: 1},
+        {Name: "Alice Smith", Email: "alice@example.com", SigningOrder: 1},
     },
     Fields: []sdk.Field{
-        {Type: sdk.FieldTypeSignature, Anchor: "{SIGNATURE_ALICE}", Width: 200, Height: 50, RecipientOrder: 1},
-        {Type: sdk.FieldTypeDate, Anchor: "{DATE_ALICE}", Width: 100, Height: 30, RecipientOrder: 1},
+        {Type: sdk.FieldTypeSignature, Anchor: "{SIGNATURE_ALICE}", Width: 200, Height: 50, RecipientEmail: "alice@example.com"},
+        {Type: sdk.FieldTypeDate, Anchor: "{DATE_ALICE}", Width: 100, Height: 30, RecipientEmail: "alice@example.com"},
     },
 })
 ```
@@ -157,10 +165,10 @@ result, err := client.PrepareForReview(ctx, &sdk.ReviewRequest{
     FileLink:     "https://example.com/document.pdf",
     DocumentName: "Contract Draft",
     Recipients: []sdk.Recipient{
-        {Name: "John Doe", Email: "john@example.com", Order: 1},
+        {Name: "John Doe", Email: "john@example.com", SigningOrder: 1},
     },
     Fields: []sdk.Field{
-        {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 500, Width: 200, Height: 50, RecipientOrder: 1},
+        {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 500, Width: 200, Height: 50, RecipientEmail: "john@example.com"},
     },
 })
 
@@ -179,10 +187,10 @@ result, err := client.PrepareForSigningSingle(ctx, &sdk.SigningRequest{
     SenderName:   "Your Company",
     SenderEmail:  "sender@company.com",
     Recipients: []sdk.Recipient{
-        {Name: "Recipient Name", Email: "recipient@example.com", Order: 1},
+        {Name: "Recipient Name", Email: "recipient@example.com", SigningOrder: 1},
     },
     Fields: []sdk.Field{
-        {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 500, Width: 200, Height: 50, RecipientOrder: 1},
+        {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 500, Width: 200, Height: 50, RecipientEmail: "recipient@example.com"},
     },
 })
 ```
@@ -266,7 +274,10 @@ import (
     "github.com/turbodocx/sdk"
 )
 
-var client = sdk.NewTurboSign(os.Getenv("TURBODOCX_API_KEY"))
+var client = sdk.NewTurboSign(
+    os.Getenv("TURBODOCX_API_KEY"),
+    os.Getenv("TURBODOCX_ORG_ID"),
+)
 
 type SendContractRequest struct {
     RecipientName  string `json:"recipient_name"`
@@ -294,10 +305,10 @@ func sendContractHandler(w http.ResponseWriter, r *http.Request) {
     result, err := client.PrepareForSigningSingle(r.Context(), &sdk.SigningRequest{
         FileLink: req.ContractURL,
         Recipients: []sdk.Recipient{
-            {Name: req.RecipientName, Email: req.RecipientEmail, Order: 1},
+            {Name: req.RecipientName, Email: req.RecipientEmail, SigningOrder: 1},
         },
         Fields: []sdk.Field{
-            {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 650, Width: 200, Height: 50, RecipientOrder: 1},
+            {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 650, Width: 200, Height: 50, RecipientEmail: req.RecipientEmail},
         },
     })
     if err != nil {
@@ -330,7 +341,10 @@ import (
     "github.com/turbodocx/sdk"
 )
 
-var client = sdk.NewTurboSign(os.Getenv("TURBODOCX_API_KEY"))
+var client = sdk.NewTurboSign(
+    os.Getenv("TURBODOCX_API_KEY"),
+    os.Getenv("TURBODOCX_ORG_ID"),
+)
 
 func main() {
     r := gin.Default()
@@ -350,10 +364,10 @@ func main() {
         result, err := client.PrepareForSigningSingle(c.Request.Context(), &sdk.SigningRequest{
             FileLink: req.ContractURL,
             Recipients: []sdk.Recipient{
-                {Name: req.RecipientName, Email: req.RecipientEmail, Order: 1},
+                {Name: req.RecipientName, Email: req.RecipientEmail, SigningOrder: 1},
             },
             Fields: []sdk.Field{
-                {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 650, Width: 200, Height: 50, RecipientOrder: 1},
+                {Type: sdk.FieldTypeSignature, Page: 1, X: 100, Y: 650, Width: 200, Height: 50, RecipientEmail: req.RecipientEmail},
             },
         })
         if err != nil {
@@ -439,9 +453,9 @@ const (
 
 ```go
 type Recipient struct {
-    Name    string `json:"name"`
-    Email   string `json:"email"`
-    Order   int    `json:"order"`
+    Name         string `json:"name"`
+    Email        string `json:"email"`
+    SigningOrder int    `json:"signingOrder"`
     // Response fields
     ID      string `json:"id,omitempty"`
     Status  string `json:"status,omitempty"`
@@ -455,7 +469,7 @@ type Field struct {
     Y              int       `json:"y,omitempty"`
     Width          int       `json:"width"`
     Height         int       `json:"height"`
-    RecipientOrder int       `json:"recipient_order"`
+    RecipientEmail string    `json:"recipientEmail"`
     Anchor         string    `json:"anchor,omitempty"` // For template-based fields
 }
 

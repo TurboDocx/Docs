@@ -15,6 +15,7 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import ScriptLoader from '@site/src/components/ScriptLoader';
 
 # Java SDK
 
@@ -68,11 +69,15 @@ implementation 'com.turbodocx:sdk:1.0.0'
 import com.turbodocx.sdk.TurboSign;
 
 // Create a client
-TurboSign turboSign = new TurboSign(System.getenv("TURBODOCX_API_KEY"));
+TurboSign turboSign = new TurboSign(
+    System.getenv("TURBODOCX_API_KEY"),
+    System.getenv("TURBODOCX_ORG_ID")
+);
 
 // Or with builder
 TurboSign turboSign = TurboSign.builder()
     .apiKey(System.getenv("TURBODOCX_API_KEY"))
+    .orgId(System.getenv("TURBODOCX_ORG_ID"))
     .baseUrl("https://api.turbodocx.com")
     .timeout(Duration.ofSeconds(30))
     .build();
@@ -90,8 +95,10 @@ turbodocx:
 public class TurboDocxConfig {
 
     @Bean
-    public TurboSign turboSign(@Value("${turbodocx.api-key}") String apiKey) {
-        return new TurboSign(apiKey);
+    public TurboSign turboSign(
+            @Value("${turbodocx.api-key}") String apiKey,
+            @Value("${turbodocx.org-id}") String orgId) {
+        return new TurboSign(apiKey, orgId);
     }
 }
 ```
@@ -108,7 +115,10 @@ import com.turbodocx.sdk.models.*;
 
 public class Main {
     public static void main(String[] args) {
-        TurboSign turboSign = new TurboSign(System.getenv("TURBODOCX_API_KEY"));
+        TurboSign turboSign = new TurboSign(
+            System.getenv("TURBODOCX_API_KEY"),
+            System.getenv("TURBODOCX_ORG_ID")
+        );
 
         SigningResult result = turboSign.prepareForSigningSingle(
             SigningRequest.builder()
@@ -119,34 +129,34 @@ public class Main {
                 .recipient(Recipient.builder()
                     .name("Alice Smith")
                     .email("alice@example.com")
-                    .order(1)
+                    .signingOrder(1)
                     .build())
                 .recipient(Recipient.builder()
                     .name("Bob Johnson")
                     .email("bob@example.com")
-                    .order(2)
+                    .signingOrder(2)
                     .build())
                 // Alice's signature
                 .field(Field.builder()
                     .type(FieldType.SIGNATURE)
                     .page(1).x(100).y(650).width(200).height(50)
-                    .recipientOrder(1)
+                    .recipientEmail("alice@example.com")
                     .build())
                 .field(Field.builder()
                     .type(FieldType.DATE)
                     .page(1).x(320).y(650).width(100).height(30)
-                    .recipientOrder(1)
+                    .recipientEmail("alice@example.com")
                     .build())
                 // Bob's signature
                 .field(Field.builder()
                     .type(FieldType.SIGNATURE)
                     .page(1).x(100).y(720).width(200).height(50)
-                    .recipientOrder(2)
+                    .recipientEmail("bob@example.com")
                     .build())
                 .field(Field.builder()
                     .type(FieldType.DATE)
                     .page(1).x(320).y(720).width(100).height(30)
-                    .recipientOrder(2)
+                    .recipientEmail("bob@example.com")
                     .build())
                 .build()
         );
@@ -327,12 +337,12 @@ public class ContractController {
                 .recipient(Recipient.builder()
                     .name(request.getRecipientName())
                     .email(request.getRecipientEmail())
-                    .order(1)
+                    .signingOrder(1)
                     .build())
                 .field(Field.builder()
                     .type(FieldType.SIGNATURE)
                     .page(1).x(100).y(650).width(200).height(50)
-                    .recipientOrder(1)
+                    .recipientEmail("alice@example.com")
                     .build())
                 .build()
         );
@@ -385,12 +395,12 @@ public class ContractService {
                 .recipient(Recipient.builder()
                     .name(recipientName)
                     .email(recipientEmail)
-                    .order(1)
+                    .signingOrder(1)
                     .build())
                 .field(Field.builder()
                     .type(FieldType.SIGNATURE)
                     .page(1).x(100).y(650).width(200).height(50)
-                    .recipientOrder(1)
+                    .recipientEmail("alice@example.com")
                     .build())
                 .build()
         );
@@ -456,7 +466,7 @@ public enum FieldType {
 public class Recipient {
     private String name;
     private String email;
-    private int order;
+    private int signingOrder;
     // Response fields
     private String id;
     private String status;
@@ -472,7 +482,7 @@ public class Field {
     private Integer y;
     private int width;
     private int height;
-    private int recipientOrder;
+    private String recipientEmail;
     private String anchor; // For template-based fields
 }
 
