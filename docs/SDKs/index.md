@@ -138,7 +138,7 @@ TurboSign.configure({
 });
 
 // Send a document for signature
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://example.com/contract.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -172,7 +172,7 @@ TurboSign.configure({
 });
 
 // Send a document for signature
-const result = await TurboSign.prepareForSigningSingle({
+const result = await TurboSign.sendSignature({
   fileLink: "https://example.com/contract.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -207,7 +207,7 @@ TurboSign.configure(
 )
 
 # Send a document for signature
-result = TurboSign.prepare_for_signing_single(
+result = TurboSign.send_signature(
     file_link="https://example.com/contract.pdf",
     recipients=[
         {"name": "John Doe", "email": "john@example.com", "signingOrder": 1}
@@ -242,7 +242,7 @@ func main() {
     )
 
     // Send a document for signature
-    result, err := client.PrepareForSigningSingle(context.Background(), &sdk.SigningRequest{
+    result, err := client.TurboSign.SendSignature(context.Background(), &sdk.SendSignatureRequest{
         FileLink: "https://example.com/contract.pdf",
         Recipients: []sdk.Recipient{
             {Name: "John Doe", Email: "john@example.com", SigningOrder: 1},
@@ -275,7 +275,7 @@ public class Main {
         );
 
         // Send a document for signature
-        SigningResult result = turboSign.prepareForSigningSingle(
+        SigningResult result = turboSign.sendSignature(
             SigningRequest.builder()
                 .fileLink("https://example.com/contract.pdf")
                 .recipient(Recipient.builder()
@@ -309,10 +309,10 @@ All TurboDocx SDKs provide access to:
 
 Send documents for legally-binding eSignatures with full audit trails.
 
-| Method                      | Description                                             |
-| :-------------------------- | :------------------------------------------------------ |
-| `prepareForReview()`        | Upload document for preview without sending emails      |
-| `prepareForSigningSingle()` | Upload and immediately send signature requests          |
+| Method                        | Description                                             |
+| :---------------------------- | :------------------------------------------------------ |
+| `createSignatureReviewLink()` | Upload document for preview without sending emails      |
+| `sendSignature()`             | Upload and immediately send signature requests          |
 | `getStatus()`               | Check document and recipient signing status             |
 | `download()`                | Download the completed signed document                  |
 | `void()`                    | Cancel/void a signature request                         |
@@ -357,7 +357,7 @@ All SDKs provide structured error handling with detailed error codes:
 const { TurboSign, TurboDocxError } = require("@turbodocx/sdk");
 
 try {
-  const result = await TurboSign.prepareForSigningSingle({
+  const result = await TurboSign.sendSignature({
     /* ... */
   });
 } catch (error) {
@@ -378,7 +378,7 @@ try {
 import { TurboSign, TurboDocxError } from "@turbodocx/sdk";
 
 try {
-  const result = await TurboSign.prepareForSigningSingle({
+  const result = await TurboSign.sendSignature({
     /* ... */
   });
 } catch (error) {
@@ -400,7 +400,7 @@ from turbodocx import TurboSign
 from turbodocx.exceptions import TurboDocxError
 
 try:
-    result = await TurboSign.prepare_for_signing_single(...)
+    result = await TurboSign.send_signature(...)
 except TurboDocxError as e:
     print(f"Error {e.code}: {e.message}")
     if e.code == "VALIDATION_ERROR":
@@ -412,7 +412,7 @@ except TurboDocxError as e:
 <TabItem value="go" label="Go">
 
 ```go
-result, err := client.PrepareForSigningSingle(ctx, request)
+result, err := client.TurboSign.SendSignature(ctx, request)
 if err != nil {
     var turboErr *sdk.TurboDocxError
     if errors.As(err, &turboErr) {
@@ -433,7 +433,7 @@ import com.turbodocx.sdk.TurboDocxException;
 import com.turbodocx.sdk.TurboDocxException.*;
 
 try {
-    SigningResult result = turboSign.prepareForSigningSingle(/* ... */);
+    SigningResult result = turboSign.sendSignature(/* ... */);
 } catch (AuthenticationException e) {
     System.err.println("Invalid API key: " + e.getMessage());
 } catch (ValidationException e) {
