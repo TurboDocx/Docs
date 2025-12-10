@@ -2,27 +2,23 @@
 title: Java SDK
 sidebar_position: 6
 sidebar_label: Java
-description: Official TurboDocx Java SDK. Builder pattern with Spring Boot integration for document generation and digital signatures.
+description: Official TurboDocx Java SDK. Builder pattern API with comprehensive error handling for document generation and digital signatures.
 keywords:
   - turbodocx java
   - turbosign java
   - maven turbodocx
   - gradle turbodocx
-  - spring boot sdk
+  - java sdk
   - document api java
   - esignature java
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import ScriptLoader from '@site/src/components/ScriptLoader';
 
 # Java SDK
 
-The official TurboDocx SDK for Java applications. Builder pattern API with Spring Boot integration.
-
-[![Maven Central](https://img.shields.io/maven-central/v/com.turbodocx/sdk?logo=java&logoColor=white)](https://search.maven.org/artifact/com.turbodocx/sdk)
-[![GitHub](https://img.shields.io/github/stars/turbodocx/sdk?style=social)](https://github.com/TurboDocx/SDK)
+The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
 
 ## Installation
 
@@ -57,51 +53,44 @@ implementation 'com.turbodocx:sdk:1.0.0'
 ## Requirements
 
 - Java 11+
-- Jackson for JSON serialization (included)
+- OkHttp 4.x (included)
+- Gson 2.x (included)
 
 ---
 
 ## Configuration
 
-### Basic Configuration
-
 ```java
-import com.turbodocx.sdk.TurboSign;
+import com.turbodocx.TurboDocxClient;
 
-// Create a client
-TurboSign turboSign = new TurboSign(
-    System.getenv("TURBODOCX_API_KEY"),
-    System.getenv("TURBODOCX_ORG_ID")
-);
+public class Main {
+    public static void main(String[] args) {
+        // Create client with Builder pattern
+        TurboDocxClient client = new TurboDocxClient.Builder()
+            .apiKey(System.getenv("TURBODOCX_API_KEY"))
+            .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .build();
 
-// Or with builder
-TurboSign turboSign = TurboSign.builder()
-    .apiKey(System.getenv("TURBODOCX_API_KEY"))
-    .orgId(System.getenv("TURBODOCX_ORG_ID"))
-    .baseUrl("https://api.turbodocx.com")
-    .timeout(Duration.ofSeconds(30))
-    .build();
-```
-
-### Spring Boot Configuration
-
-```java
-// application.yml
-turbodocx:
-  api-key: ${TURBODOCX_API_KEY}
-
-// TurboDocxConfig.java
-@Configuration
-public class TurboDocxConfig {
-
-    @Bean
-    public TurboSign turboSign(
-            @Value("${turbodocx.api-key}") String apiKey,
-            @Value("${turbodocx.org-id}") String orgId) {
-        return new TurboSign(apiKey, orgId);
+        // Or with custom base URL
+        TurboDocxClient client = new TurboDocxClient.Builder()
+            .apiKey(System.getenv("TURBODOCX_API_KEY"))
+            .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .baseUrl("https://api.turbodocx.com")
+            .build();
     }
 }
 ```
+
+### Environment Variables
+
+```bash
+export TURBODOCX_API_KEY=your_api_key_here
+export TURBODOCX_ORG_ID=your_org_id_here
+```
+
+:::warning API Credentials Required
+Both `apiKey` and `orgId` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+:::
 
 ---
 
@@ -110,61 +99,44 @@ public class TurboDocxConfig {
 ### Send a Document for Signature
 
 ```java
-import com.turbodocx.sdk.TurboSign;
-import com.turbodocx.sdk.models.*;
+import com.turbodocx.TurboDocxClient;
+import com.turbodocx.models.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) {
-        TurboSign turboSign = new TurboSign(
-            System.getenv("TURBODOCX_API_KEY"),
-            System.getenv("TURBODOCX_ORG_ID")
-        );
+    public static void main(String[] args) throws Exception {
+        TurboDocxClient client = new TurboDocxClient.Builder()
+            .apiKey(System.getenv("TURBODOCX_API_KEY"))
+            .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .build();
 
-        SigningResult result = turboSign.prepareForSigningSingle(
-            SigningRequest.builder()
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(
+            new PrepareForSigningRequest.Builder()
                 .fileLink("https://example.com/contract.pdf")
                 .documentName("Service Agreement")
                 .senderName("Acme Corp")
                 .senderEmail("contracts@acme.com")
-                .recipient(Recipient.builder()
-                    .name("Alice Smith")
-                    .email("alice@example.com")
-                    .signingOrder(1)
-                    .build())
-                .recipient(Recipient.builder()
-                    .name("Bob Johnson")
-                    .email("bob@example.com")
-                    .signingOrder(2)
-                    .build())
-                // Alice's signature
-                .field(Field.builder()
-                    .type(FieldType.SIGNATURE)
-                    .page(1).x(100).y(650).width(200).height(50)
-                    .recipientEmail("alice@example.com")
-                    .build())
-                .field(Field.builder()
-                    .type(FieldType.DATE)
-                    .page(1).x(320).y(650).width(100).height(30)
-                    .recipientEmail("alice@example.com")
-                    .build())
-                // Bob's signature
-                .field(Field.builder()
-                    .type(FieldType.SIGNATURE)
-                    .page(1).x(100).y(720).width(200).height(50)
-                    .recipientEmail("bob@example.com")
-                    .build())
-                .field(Field.builder()
-                    .type(FieldType.DATE)
-                    .page(1).x(320).y(720).width(100).height(30)
-                    .recipientEmail("bob@example.com")
-                    .build())
+                .recipients(Arrays.asList(
+                    new Recipient("Alice Smith", "alice@example.com", 1),
+                    new Recipient("Bob Johnson", "bob@example.com", 2)
+                ))
+                .fields(Arrays.asList(
+                    // Alice's signature
+                    new Field("signature", 1, 100, 650, 200, 50, "alice@example.com"),
+                    new Field("date", 1, 320, 650, 100, 30, "alice@example.com"),
+                    // Bob's signature
+                    new Field("signature", 1, 100, 720, 200, 50, "bob@example.com"),
+                    new Field("date", 1, 320, 720, 100, 30, "bob@example.com")
+                ))
                 .build()
         );
 
-        System.out.println("Document ID: " + result.getDocumentId());
-        for (Recipient recipient : result.getRecipients()) {
-            System.out.println(recipient.getName() + ": " + recipient.getSignUrl());
-        }
+        System.out.println("Result: " + gson.toJson(result));
     }
 }
 ```
@@ -172,270 +144,305 @@ public class Main {
 ### Using Template-Based Fields
 
 ```java
-SigningResult result = turboSign.prepareForSigningSingle(
-    SigningRequest.builder()
+// Template-based field using anchor text
+Field.TemplateAnchor templateAnchor = new Field.TemplateAnchor(
+    "{SIGNATURE_ALICE}",      // anchor text to find
+    null,                     // searchText (alternative to anchor)
+    "replace",                // placement: replace/before/after/above/below
+    new Field.Size(200, 50),  // size
+    null,                     // offset
+    false,                    // caseSensitive
+    false                     // useRegex
+);
+
+// Field with template anchor (no page/x/y coordinates needed)
+Field templateField = new Field(
+    "signature",              // type
+    null,                     // page (null for template-based)
+    null,                     // x (null for template-based)
+    null,                     // y (null for template-based)
+    null,                     // width (null, using template size)
+    null,                     // height (null, using template size)
+    "alice@example.com",      // recipientEmail
+    null,                     // defaultValue
+    null,                     // isMultiline
+    null,                     // isReadonly
+    null,                     // required
+    null,                     // backgroundColor
+    templateAnchor            // template anchor config
+);
+
+PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(
+    new PrepareForSigningRequest.Builder()
         .fileLink("https://example.com/contract-with-placeholders.pdf")
-        .recipient(Recipient.builder()
-            .name("Alice Smith")
-            .email("alice@example.com")
-            .order(1)
-            .build())
-        .field(Field.builder()
-            .type(FieldType.SIGNATURE)
-            .anchor("{SIGNATURE_ALICE}")
-            .width(200).height(50)
-            .recipientOrder(1)
-            .build())
-        .field(Field.builder()
-            .type(FieldType.DATE)
-            .anchor("{DATE_ALICE}")
-            .width(100).height(30)
-            .recipientOrder(1)
-            .build())
+        .recipients(Arrays.asList(
+            new Recipient("Alice Smith", "alice@example.com", 1)
+        ))
+        .fields(Arrays.asList(templateField))
         .build()
 );
 ```
+
+:::info Template Anchors Required
+**Important:** The document file must contain the anchor text (e.g., `{SIGNATURE_ALICE}`, `{DATE_ALICE}`) that you reference in your fields. If the anchors don't exist in the document, the API will return an error.
+:::
+
+---
+
+## File Input Methods
+
+The SDK supports multiple ways to provide your document:
+
+### 1. File Upload (byte[])
+
+Upload a document directly from file bytes:
+
+```java
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+byte[] pdfBytes = Files.readAllBytes(Paths.get("/path/to/document.pdf"));
+
+PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(
+    new PrepareForSigningRequest.Builder()
+        .file(pdfBytes)
+        .recipients(Arrays.asList(
+            new Recipient("John Doe", "john@example.com", 1)
+        ))
+        .fields(Arrays.asList(
+            new Field("signature", 1, 100, 500, 200, 50, "john@example.com")
+        ))
+        .build()
+);
+```
+
+### 2. File URL
+
+Provide a publicly accessible URL to your document:
+
+```java
+PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(
+    new PrepareForSigningRequest.Builder()
+        .fileLink("https://example.com/documents/contract.pdf")
+        .recipients(Arrays.asList(
+            new Recipient("John Doe", "john@example.com", 1)
+        ))
+        .fields(Arrays.asList(
+            new Field("signature", 1, 100, 500, 200, 50, "john@example.com")
+        ))
+        .build()
+);
+```
+
+:::tip When to use fileLink
+Use `fileLink` when your documents are already hosted on cloud storage (S3, Google Cloud Storage, etc.). This is more efficient than downloading and re-uploading files.
+:::
+
+### 3. TurboDocx Deliverable ID
+
+Use a document generated by TurboDocx document generation:
+
+```java
+PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(
+    new PrepareForSigningRequest.Builder()
+        .deliverableId("deliverable-uuid-from-turbodocx")
+        .recipients(Arrays.asList(
+            new Recipient("John Doe", "john@example.com", 1)
+        ))
+        .fields(Arrays.asList(
+            new Field("signature", 1, 100, 500, 200, 50, "john@example.com")
+        ))
+        .build()
+);
+```
+
+:::info Integration with TurboDocx
+`deliverableId` references documents generated using TurboDocx's document generation API. This creates a seamless workflow: generate → sign.
+:::
+
+### 4. TurboDocx Template ID
+
+Use a pre-configured TurboDocx template:
+
+```java
+PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(
+    new PrepareForSigningRequest.Builder()
+        .templateId("template-uuid-from-turbodocx")
+        .recipients(Arrays.asList(
+            new Recipient("John Doe", "john@example.com", 1)
+        ))
+        .fields(Arrays.asList(
+            new Field("signature", 1, 100, 500, 200, 50, "john@example.com")
+        ))
+        .build()
+);
+```
+
+:::info Integration with TurboDocx
+`templateId` references pre-configured TurboSign templates created in the TurboDocx dashboard. These templates come with built-in anchors and field positioning, making it easy to reuse signature workflows across multiple documents.
+:::
 
 ---
 
 ## API Reference
 
-### prepareForReview()
+### Configure
+
+Create a new TurboDocx client using the Builder pattern.
+
+```java
+TurboDocxClient client = new TurboDocxClient.Builder()
+    .apiKey("your-api-key")       // Required
+    .orgId("your-org-id")         // Required
+    .baseUrl("https://api.turbodocx.com")  // Optional
+    .build();
+```
+
+### Prepare for review
 
 Upload a document for preview without sending emails.
 
 ```java
-ReviewResult result = turboSign.prepareForReview(
-    ReviewRequest.builder()
+PrepareForReviewResponse result = client.turboSign().prepareForReview(
+    new PrepareForReviewRequest.Builder()
         .fileLink("https://example.com/document.pdf")
-        // Or upload directly:
-        // .file(Files.readAllBytes(Path.of("document.pdf")))
         .documentName("Contract Draft")
-        .recipient(Recipient.builder()
-            .name("John Doe")
-            .email("john@example.com")
-            .order(1)
-            .build())
-        .field(Field.builder()
-            .type(FieldType.SIGNATURE)
-            .page(1).x(100).y(500).width(200).height(50)
-            .recipientOrder(1)
-            .build())
+        .recipients(Arrays.asList(
+            new Recipient("John Doe", "john@example.com", 1)
+        ))
+        .fields(Arrays.asList(
+            new Field("signature", 1, 100, 500, 200, 50, "john@example.com")
+        ))
         .build()
 );
 
-System.out.println(result.getDocumentId());
-System.out.println(result.getPreviewUrl());
+System.out.println("Result: " + gson.toJson(result));
 ```
 
-### prepareForSigningSingle()
+### Prepare for signing
 
 Upload a document and immediately send signature requests.
 
 ```java
-SigningResult result = turboSign.prepareForSigningSingle(
-    SigningRequest.builder()
+PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(
+    new PrepareForSigningRequest.Builder()
         .fileLink("https://example.com/document.pdf")
         .documentName("Service Agreement")
         .senderName("Your Company")
         .senderEmail("sender@company.com")
-        .recipient(Recipient.builder()
-            .name("Recipient Name")
-            .email("recipient@example.com")
-            .order(1)
-            .build())
-        .field(Field.builder()
-            .type(FieldType.SIGNATURE)
-            .page(1).x(100).y(500).width(200).height(50)
-            .recipientOrder(1)
-            .build())
+        .recipients(Arrays.asList(
+            new Recipient("Recipient Name", "recipient@example.com", 1)
+        ))
+        .fields(Arrays.asList(
+            new Field("signature", 1, 100, 500, 200, 50, "recipient@example.com")
+        ))
         .build()
 );
+
+System.out.println("Result: " + gson.toJson(result));
 ```
 
-### getStatus()
+### Get status
 
 Check the status of a document.
 
 ```java
-DocumentStatus status = turboSign.getStatus("document-uuid");
+DocumentStatusResponse status = client.turboSign().getStatus("document-uuid");
 
-System.out.println(status.getStatus()); // "pending", "completed", or "voided"
-System.out.println(status.getCompletedAt());
-
-for (Recipient recipient : status.getRecipients()) {
-    System.out.println(recipient.getName() + ": " + recipient.getStatus());
-    System.out.println("Signed at: " + recipient.getSignedAt());
-}
+System.out.println("Result: " + gson.toJson(status));
 ```
 
-### download()
+### Download document
 
 Download the completed signed document.
 
 ```java
-byte[] pdfBytes = turboSign.download("document-uuid");
+byte[] pdfData = client.turboSign().download("document-uuid");
 
 // Save to file
-Files.write(Path.of("signed-contract.pdf"), pdfBytes);
-
-// Or upload to S3
-s3Client.putObject(PutObjectRequest.builder()
-    .bucket("my-bucket")
-    .key("signed-contract.pdf")
-    .build(),
-    RequestBody.fromBytes(pdfBytes)
-);
+Files.write(Paths.get("signed-contract.pdf"), pdfData);
 ```
 
-### void()
+### Get audit trail
+
+Retrieve the audit trail for a document.
+
+```java
+AuditTrailResponse auditTrail = client.turboSign().getAuditTrail("document-uuid");
+
+System.out.println("Result: " + gson.toJson(auditTrail));
+```
+
+### Void
 
 Cancel/void a signature request.
 
 ```java
-turboSign.voidDocument("document-uuid", "Contract terms changed");
+VoidDocumentResponse result = client.turboSign().voidDocument("document-uuid", "Contract terms changed");
 ```
 
-### resend()
+### Resend
 
 Resend signature request emails.
 
 ```java
-// Resend to all pending recipients
-turboSign.resend("document-uuid");
-
 // Resend to specific recipients
-turboSign.resend("document-uuid", List.of("recipient-uuid-1", "recipient-uuid-2"));
-```
-
----
-
-## Spring Boot Examples
-
-### REST Controller
-
-```java
-import com.turbodocx.sdk.TurboSign;
-import com.turbodocx.sdk.models.*;
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-@RequestMapping("/api/contracts")
-public class ContractController {
-
-    private final TurboSign turboSign;
-
-    public ContractController(TurboSign turboSign) {
-        this.turboSign = turboSign;
-    }
-
-    @PostMapping("/send")
-    public SendContractResponse sendContract(@RequestBody SendContractRequest request) {
-        SigningResult result = turboSign.prepareForSigningSingle(
-            SigningRequest.builder()
-                .fileLink(request.getContractUrl())
-                .recipient(Recipient.builder()
-                    .name(request.getRecipientName())
-                    .email(request.getRecipientEmail())
-                    .signingOrder(1)
-                    .build())
-                .field(Field.builder()
-                    .type(FieldType.SIGNATURE)
-                    .page(1).x(100).y(650).width(200).height(50)
-                    .recipientEmail("alice@example.com")
-                    .build())
-                .build()
-        );
-
-        return new SendContractResponse(
-            result.getDocumentId(),
-            result.getRecipients().get(0).getSignUrl()
-        );
-    }
-
-    @GetMapping("/{id}/status")
-    public DocumentStatus getStatus(@PathVariable String id) {
-        return turboSign.getStatus(id);
-    }
-
-    @GetMapping("/{id}/download")
-    public ResponseEntity<byte[]> download(@PathVariable String id) {
-        byte[] pdfBytes = turboSign.download(id);
-        return ResponseEntity.ok()
-            .contentType(MediaType.APPLICATION_PDF)
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"signed-document.pdf\"")
-            .body(pdfBytes);
-    }
-}
-
-record SendContractRequest(String recipientName, String recipientEmail, String contractUrl) {}
-record SendContractResponse(String documentId, String signUrl) {}
-```
-
-### Service Layer
-
-```java
-import com.turbodocx.sdk.TurboSign;
-import com.turbodocx.sdk.models.*;
-import org.springframework.stereotype.Service;
-
-@Service
-public class ContractService {
-
-    private final TurboSign turboSign;
-
-    public ContractService(TurboSign turboSign) {
-        this.turboSign = turboSign;
-    }
-
-    public SigningResult sendForSignature(String documentUrl, String recipientName, String recipientEmail) {
-        return turboSign.prepareForSigningSingle(
-            SigningRequest.builder()
-                .fileLink(documentUrl)
-                .recipient(Recipient.builder()
-                    .name(recipientName)
-                    .email(recipientEmail)
-                    .signingOrder(1)
-                    .build())
-                .field(Field.builder()
-                    .type(FieldType.SIGNATURE)
-                    .page(1).x(100).y(650).width(200).height(50)
-                    .recipientEmail("alice@example.com")
-                    .build())
-                .build()
-        );
-    }
-
-    public DocumentStatus checkStatus(String documentId) {
-        return turboSign.getStatus(documentId);
-    }
-
-    public byte[] downloadSigned(String documentId) {
-        return turboSign.download(documentId);
-    }
-}
+ResendEmailResponse result = client.turboSign().resendEmail(
+    "document-uuid",
+    Arrays.asList("recipient-uuid-1", "recipient-uuid-2")
+);
 ```
 
 ---
 
 ## Error Handling
 
+The SDK provides typed exceptions for different error scenarios:
+
+### Error Types
+
+| Error Type                                   | Status Code | Description                        |
+| -------------------------------------------- | ----------- | ---------------------------------- |
+| `TurboDocxException`                         | varies      | Base exception for all API errors  |
+| `TurboDocxException.AuthenticationException` | 401         | Invalid or missing API credentials |
+| `TurboDocxException.ValidationException`     | 400         | Invalid request parameters         |
+| `TurboDocxException.NotFoundException`       | 404         | Document or resource not found     |
+| `TurboDocxException.RateLimitException`      | 429         | Too many requests                  |
+| `TurboDocxException.NetworkException`        | -           | Network connectivity issues        |
+
+### Error Properties
+
+| Property          | Type     | Description                  |
+| ----------------- | -------- | ---------------------------- |
+| `getMessage()`    | `String` | Human-readable error message |
+| `getStatusCode()` | `int`    | HTTP status code             |
+| `getCode()`       | `String` | Error code (if available)    |
+
+### Example
+
 ```java
-import com.turbodocx.sdk.TurboSign;
-import com.turbodocx.sdk.exceptions.*;
+import com.turbodocx.TurboDocxException;
 
 try {
-    SigningResult result = turboSign.prepareForSigningSingle(request);
-} catch (UnauthorizedException e) {
-    System.out.println("Invalid API key");
-} catch (InvalidDocumentException e) {
-    System.out.println("Could not process document: " + e.getMessage());
-} catch (RateLimitedException e) {
-    System.out.println("Rate limited, retry after: " + e.getRetryAfter() + " seconds");
-} catch (NotFoundException e) {
-    System.out.println("Document not found");
+    PrepareForSigningResponse result = client.turboSign().prepareForSigningSingle(request);
+} catch (TurboDocxException.AuthenticationException e) {
+    System.err.println("Authentication failed: " + e.getMessage());
+    // Check your API key and org ID
+} catch (TurboDocxException.ValidationException e) {
+    System.err.println("Validation error: " + e.getMessage());
+    // Check request parameters
+} catch (TurboDocxException.NotFoundException e) {
+    System.err.println("Not found: " + e.getMessage());
+    // Document or recipient doesn't exist
+} catch (TurboDocxException.RateLimitException e) {
+    System.err.println("Rate limited: " + e.getMessage());
+    // Wait and retry
+} catch (TurboDocxException.NetworkException e) {
+    System.err.println("Network error: " + e.getMessage());
+    // Check connectivity
 } catch (TurboDocxException e) {
-    System.out.println("Error " + e.getCode() + ": " + e.getMessage());
+    // Base exception for other API errors
+    System.err.println("API error [" + e.getStatusCode() + "]: " + e.getMessage());
 }
 ```
 
@@ -443,117 +450,99 @@ try {
 
 ## Types
 
-### Field Types
+### Signature Field Types
 
-```java
-public enum FieldType {
-    SIGNATURE,
-    INITIALS,
-    TEXT,
-    DATE,
-    CHECKBOX,
-    FULL_NAME,
-    EMAIL,
-    TITLE,
-    COMPANY
-}
-```
+The `type` field accepts the following string values:
 
-### Models
+| Type           | Description      |
+| -------------- | ---------------- |
+| `"signature"`  | Signature field  |
+| `"initials"`   | Initials field   |
+| `"text"`       | Text input field |
+| `"date"`       | Date field       |
+| `"checkbox"`   | Checkbox field   |
+| `"full_name"`  | Full name field  |
+| `"first_name"` | First name field |
+| `"last_name"`  | Last name field  |
+| `"email"`      | Email field      |
+| `"title"`      | Title field      |
+| `"company"`    | Company field    |
 
-```java
-@Builder
-public class Recipient {
-    private String name;
-    private String email;
-    private int signingOrder;
-    // Response fields
-    private String id;
-    private String status;
-    private String signUrl;
-    private Instant signedAt;
-}
+### Recipient
 
-@Builder
-public class Field {
-    private FieldType type;
-    private Integer page;
-    private Integer x;
-    private Integer y;
-    private int width;
-    private int height;
-    private String recipientEmail;
-    private String anchor; // For template-based fields
-}
+| Property       | Type     | Required | Description                                       |
+| -------------- | -------- | -------- | ------------------------------------------------- |
+| `name`         | `String` | Yes      | Recipient's full name                             |
+| `email`        | `String` | Yes      | Recipient's email address                         |
+| `signingOrder` | `int`    | Yes      | Order in which recipient should sign (1, 2, 3...) |
 
-@Builder
-public class SigningRequest {
-    private String fileLink;
-    private byte[] file;
-    private String documentName;
-    private String senderName;
-    private String senderEmail;
-    @Singular private List<Recipient> recipients;
-    @Singular private List<Field> fields;
-}
+### Field
 
-public class SigningResult {
-    private String documentId;
-    private List<Recipient> recipients;
-}
+| Property          | Type             | Required | Description                                 |
+| ----------------- | ---------------- | -------- | ------------------------------------------- |
+| `type`            | `String`         | Yes      | Field type (see table above)                |
+| `recipientEmail`  | `String`         | Yes      | Email of the recipient who fills this field |
+| `page`            | `Integer`        | No\*     | Page number (1-indexed)                     |
+| `x`               | `Integer`        | No\*     | X coordinate in pixels                      |
+| `y`               | `Integer`        | No\*     | Y coordinate in pixels                      |
+| `width`           | `Integer`        | No*      | Field width in pixels                       |
+| `height`          | `Integer`        | No*      | Field height in pixels                      |
+| `defaultValue`    | `String`         | No       | Pre-filled value                            |
+| `isMultiline`     | `Boolean`        | No       | Enable multiline for text fields            |
+| `isReadonly`      | `Boolean`        | No       | Make field read-only                        |
+| `required`        | `Boolean`        | No       | Make field required                         |
+| `backgroundColor` | `String`         | No       | Background color                            |
+| `template`        | `TemplateAnchor` | No       | Template anchor configuration               |
 
-public class DocumentStatus {
-    private String status; // "pending", "completed", "voided"
-    private Instant completedAt;
-    private List<Recipient> recipients;
-}
-```
+\*Required when not using template anchors
+
+#### Template Configuration
+
+When using `template` instead of coordinates:
+
+| Property        | Type      | Required | Description                                                                           |
+| --------------- | --------- | -------- | ------------------------------------------------------------------------------------- |
+| `anchor`        | `String`  | Yes      | Text to find in document (e.g., `"{SIGNATURE}"`)                                      |                                                      |
+| `placement`     | `String`  | Yes      | Position relative to anchor: `"replace"`, `"before"`, `"after"`, `"above"`, `"below"` |
+| `size`          | `Size`    | Yes      | Size with `width` and `height`                                                        |
+| `offset`        | `Offset`  | No       | Offset with `x` and `y`                                                               |
+| `caseSensitive` | `Boolean` | No       | Case-sensitive anchor search                                                          |
+| `useRegex`      | `Boolean` | No       | Use regex for anchor search                                                           |
+
+### Request Parameters
+
+Both `PrepareForReviewRequest` and `PrepareForSigningRequest` accept:
+
+| Property              | Type              | Required    | Description              |
+| --------------------- | ----------------- | ----------- | ------------------------ |
+| `file`                | `byte[]`          | Conditional | File content as bytes      |
+| `fileLink`            | `String`          | Conditional | URL to document          |
+| `deliverableId`       | `String`          | Conditional | TurboDocx deliverable ID |
+| `templateId`          | `String`          | Conditional | TurboDocx template ID    |
+| `recipients`          | `List<Recipient>` | Yes         | List of recipients       |
+| `fields`              | `List<Field>`     | Yes         | List of fields           |
+| `documentName`        | `String`          | No          | Document display name    |
+| `documentDescription` | `String`          | No          | Document description     |
+| `senderName`          | `String`          | No          | Sender's name            |
+| `senderEmail`         | `String`          | No          | Sender's email           |
+| `ccEmails`            | `List<String>`    | No          | CC email addresses       |
+
+:::info File Source (Conditional)
+Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.
+:::
 
 ---
 
-## Webhook Signature Verification
+## Additional Documentation
 
-Verify that webhooks are genuinely from TurboDocx:
+For detailed information about advanced configuration and API concepts, see:
 
-```java
-import com.turbodocx.sdk.WebhookVerifier;
-import org.springframework.web.bind.annotation.*;
+### Core API References
 
-@RestController
-@RequestMapping("/webhook")
-public class WebhookController {
-
-    @Value("${turbodocx.webhook-secret}")
-    private String webhookSecret;
-
-    @PostMapping
-    public ResponseEntity<?> handleWebhook(
-            @RequestBody String body,
-            @RequestHeader("X-TurboDocx-Signature") String signature,
-            @RequestHeader("X-TurboDocx-Timestamp") String timestamp) {
-
-        boolean isValid = WebhookVerifier.verifySignature(signature, timestamp, body, webhookSecret);
-
-        if (!isValid) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid signature");
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        WebhookEvent event = mapper.readValue(body, WebhookEvent.class);
-
-        switch (event.getEvent()) {
-            case "signature.document.completed":
-                System.out.println("Document completed: " + event.getData().getDocumentId());
-                break;
-            case "signature.document.voided":
-                System.out.println("Document voided: " + event.getData().getDocumentId());
-                break;
-        }
-
-        return ResponseEntity.ok(Map.of("received", true));
-    }
-}
-```
+- **[Request Body Reference](/docs/TurboSign/API%20Signatures#request-body-multipartform-data)** - Complete request body parameters, file sources, and multipart/form-data structure
+- **[Recipients Reference](/docs/TurboSign/API%20Signatures#recipients-reference)** - Recipient properties, signing order, metadata, and configuration options
+- **[Field Types Reference](/docs/TurboSign/API%20Signatures#field-types-reference)** - All available field types (signature, date, text, checkbox, etc.) with properties and behaviors
+- **[Field Positioning Methods](/docs/TurboSign/API%20Signatures#field-positioning-methods)** - Template-based vs coordinate-based positioning, anchor configuration, and best practices
 
 ---
 

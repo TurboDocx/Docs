@@ -257,17 +257,21 @@ const result = await TurboSign.prepareForSigningSingle({
   fields: [
     {
       type: "signature",
-      template: { anchor: "{SIGNATURE_ALICE}" },
-      width: 200,
-      height: 50,
       recipientEmail: "alice@example.com",
+      template: {
+        anchor: "{SIGNATURE_ALICE}",
+        placement: "replace",
+        size: { width: 200, height: 50 },
+      },
     },
     {
       type: "date",
-      template: { anchor: "{DATE_ALICE}" },
-      width: 100,
-      height: 30,
       recipientEmail: "alice@example.com",
+      template: {
+        anchor: "{DATE_ALICE}",
+        placement: "replace",
+        size: { width: 100, height: 30 },
+      },
     },
   ],
 });
@@ -288,17 +292,21 @@ const result = await TurboSign.prepareForSigningSingle({
   fields: [
     {
       type: "signature",
-      template: { anchor: "{SIGNATURE_ALICE}" },
-      width: 200,
-      height: 50,
       recipientEmail: "alice@example.com",
+      template: {
+        anchor: "{SIGNATURE_ALICE}",
+        placement: "replace",
+        size: { width: 200, height: 50 },
+      },
     },
     {
       type: "date",
-      template: { anchor: "{DATE_ALICE}" },
-      width: 100,
-      height: 30,
       recipientEmail: "alice@example.com",
+      template: {
+        anchor: "{DATE_ALICE}",
+        placement: "replace",
+        size: { width: 100, height: 30 },
+      },
     },
   ],
 });
@@ -323,10 +331,12 @@ const result = await TurboSign.prepareForSigningSingle({
   fields: [
     {
       type: "signature",
-      template: { anchor: "{SIGNATURE_ALICE}" },
-      width: 200,
-      height: 50,
       recipientEmail: "alice@example.com",
+      template: {
+        anchor: "{SIGNATURE_ALICE}",
+        placement: "replace",
+        size: { width: 200, height: 50 },
+      },
     },
   ],
 });
@@ -528,10 +538,12 @@ const result = await TurboSign.prepareForSigningSingle({
   fields: [
     {
       type: "signature",
-      template: { anchor: "{SIGNATURE_ALICE}" },
-      width: 200,
-      height: 50,
       recipientEmail: "alice@example.com",
+      template: {
+        anchor: "{SIGNATURE_ALICE}",
+        placement: "replace",
+        size: { width: 200, height: 50 },
+      },
     },
   ],
 });
@@ -550,10 +562,12 @@ const result = await TurboSign.prepareForSigningSingle({
   fields: [
     {
       type: "signature",
-      template: { anchor: "{SIGNATURE_ALICE}" },
-      width: 200,
-      height: 50,
       recipientEmail: "alice@example.com",
+      template: {
+        anchor: "{SIGNATURE_ALICE}",
+        placement: "replace",
+        size: { width: 200, height: 50 },
+      },
     },
   ],
 });
@@ -818,9 +832,6 @@ Resend signature request emails to specific recipients.
 <TabItem value="javascript" label="JavaScript" default>
 
 ```javascript
-// Resend to all pending recipients
-await TurboSign.resend("document-uuid");
-
 // Resend to specific recipients
 await TurboSign.resend("document-uuid", [
   "recipient-uuid-1",
@@ -832,9 +843,6 @@ await TurboSign.resend("document-uuid", [
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-// Resend to all pending recipients
-await TurboSign.resend("document-uuid");
-
 // Resend to specific recipients
 await TurboSign.resend("document-uuid", [
   "recipient-uuid-1",
@@ -1067,11 +1075,11 @@ Field configuration supporting both coordinate-based and template-based position
 |----------|------|----------|-------------|
 | `type` | `SignatureFieldType` | Yes | Field type |
 | `recipientEmail` | `string` | Yes | Which recipient fills this field |
-| `page` | `number` | Yes | Page number (1-indexed) |
-| `x` | `number` | Yes | X coordinate position |
-| `y` | `number` | Yes | Y coordinate position |
-| `width` | `number` | Yes | Field width in pixels |
-| `height` | `number` | Yes | Field height in pixels |
+| `page` | `number` | No\* | Page number (1-indexed) |
+| `x` | `number` | No\* | X coordinate in pixels |
+| `y` | `number` | No\* | Y coordinate in pixels |
+| `width` | `number` | No* | Field width in pixels |
+| `height` | `number` | No* | Field height in pixels |
 | `defaultValue` | `string` | No | Default value (for checkbox: `"true"` or `"false"`) |
 | `isMultiline` | `boolean` | No | Enable multiline text |
 | `isReadonly` | `boolean` | No | Make field read-only (pre-filled) |
@@ -1079,12 +1087,13 @@ Field configuration supporting both coordinate-based and template-based position
 | `backgroundColor` | `string` | No | Background color (hex, rgb, or named) |
 | `template` | `object` | No | Template anchor configuration |
 
+\*Required when not using template anchors
+
 **Template Configuration:**
 
 | Property | Type | Description |
 |----------|------|-------------|
 | `anchor` | `string` | Text anchor pattern like `{TagName}` |
-| `searchText` | `string` | Alternative: search for any text |
 | `placement` | `string` | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
 | `size` | `object` | `{ width: number; height: number }` |
 | `offset` | `object` | `{ x: number; y: number }` |
@@ -1097,7 +1106,7 @@ Request configuration for `prepareForReview` and `prepareForSigningSingle` metho
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `file` | `string \| File \| Buffer` | Conditional | PDF file as file path, Buffer, or browser File |
+| `file` | `Buffer` | Conditional | PDF file as Buffer |
 | `fileLink` | `string` | Conditional | URL to document file |
 | `deliverableId` | `string` | Conditional | TurboDocx deliverable ID |
 | `templateId` | `string` | Conditional | TurboDocx template ID |

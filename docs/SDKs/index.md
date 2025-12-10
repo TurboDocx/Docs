@@ -329,46 +329,19 @@ Generate documents from templates with dynamic data.
 
 ## Field Positioning
 
-TurboSign supports two methods for placing signature fields:
+TurboSign supports two methods for placing signature fields on your documents:
 
-### Coordinate-Based (Pixel Positioning)
+| Method               | Best For                                                                 |
+| :------------------- | :----------------------------------------------------------------------- |
+| **Coordinate-Based** | PDFs with fixed layouts where you know exact pixel positions             |
+| **Template-Based**   | Documents where content may shift, using text anchors like `{SIGNATURE}` |
 
-Specify exact positions using page coordinates:
-
-```javascript
-{
-  type: 'signature',
-  page: 1,
-  x: 100,      // pixels from left
-  y: 500,      // pixels from top
-  width: 200,
-  height: 50,
-  recipientEmail: 'user@example.com'
-}
-```
-
-### Template-Based (Text Anchors)
-
-Use text markers in your PDF to position fields automatically:
-
-```javascript
-{
-  type: 'signature',
-  anchor: '{SIGNATURE_1}',  // text to find in PDF
-  width: 200,
-  height: 50,
-  recipientEmail: 'user@example.com'
-}
-```
-
-:::tip When to use each method
-
-- **Coordinate-based**: Best for PDFs with fixed layouts where you know exact positions
-- **Template-based**: Best for templates where content may shift, using anchor text like `{SIGNATURE_1}`
-  :::
+:::info Field Positioning Reference
+For detailed information about both positioning methods, including anchor configuration, placement options, and best practices, see the **[Field Positioning Methods](/docs/TurboSign/API%20Signatures#field-positioning-methods)** guide.
+:::
 
 :::info Complete Field Types Reference
-For a comprehensive list of all available field types (signature, initials, text, date, checkbox, full_name, email, title, company) and their detailed usage, see the [Field Types section in the API Signatures guide](/docs/TurboSign/API%20Signatures#field-types-reference)
+For a comprehensive list of all available field types (signature, initials, text, date, checkbox, full_name, email, title, company) and their detailed usage, see the [Field Types section in the API Signatures guide](/docs/TurboSign/API%20Signatures#field-types-reference).
 :::
 
 ---

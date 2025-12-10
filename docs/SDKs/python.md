@@ -16,7 +16,6 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import ScriptLoader from '@site/src/components/ScriptLoader';
 
 # Python SDK
 
@@ -133,8 +132,24 @@ asyncio.run(send_contract())
 result = await TurboSign.prepare_for_signing_single(
     recipients=[{"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1}],
     fields=[
-        {"type": "signature", "template": {"anchor": "{SIGNATURE_ALICE}"}, "width": 200, "height": 50, "recipientEmail": "alice@example.com"},
-        {"type": "date", "template": {"anchor": "{DATE_ALICE}"}, "width": 100, "height": 30, "recipientEmail": "alice@example.com"}
+        {
+            "type": "signature",
+            "recipientEmail": "alice@example.com",
+            "template": {
+                "anchor": "{SIGNATURE_ALICE}",
+                "placement": "replace",
+                "size": {"width": 200, "height": 50},
+            },
+        },
+        {
+            "type": "date",
+            "recipientEmail": "alice@example.com",
+            "template": {
+                "anchor": "{DATE_ALICE}",
+                "placement": "replace",
+                "size": {"width": 100, "height": 30},
+            },
+        },
     ],
     file_link="https://example.com/contract-with-placeholders.pdf",
 )
@@ -242,10 +257,12 @@ result = await TurboSign.prepare_for_signing_single(
     fields=[
         {
             "type": "signature",
-            "template": {"anchor": "{SIGNATURE_ALICE}"},
-            "width": 200,
-            "height": 50,
             "recipientEmail": "alice@example.com",
+            "template": {
+                "anchor": "{SIGNATURE_ALICE}",
+                "placement": "replace",
+                "size": {"width": 200, "height": 50},
+            },
         },
     ],
 )
@@ -332,8 +349,6 @@ Cancel/void a signature request.
 
 ```python
 result = await TurboSign.void_document("document-uuid", reason="Contract terms changed")
-
-print("Result:", json.dumps(result, indent=2))
 ```
 
 ### Resend
@@ -342,8 +357,6 @@ Resend signature request emails to specific recipients.
 
 ```python
 result = await TurboSign.resend_email("document-uuid", recipient_ids=["recipient-uuid-1", "recipient-uuid-2"])
-
-print("Result:", json.dumps(result, indent=2))
 ```
 
 ### Get audit trail
@@ -492,11 +505,11 @@ Field configuration supporting both coordinate-based and template-based position
 | ----------------- | ------ | -------- | --------------------------------------------------- |
 | `type`            | `str`  | Yes      | Field type (see SignatureFieldType)                 |
 | `recipientEmail`  | `str`  | Yes      | Which recipient fills this field                    |
-| `page`            | `int`  | Yes      | Page number (1-indexed)                             |
-| `x`               | `int`  | Yes      | X coordinate position                               |
-| `y`               | `int`  | Yes      | Y coordinate position                               |
-| `width`           | `int`  | Yes      | Field width in pixels                               |
-| `height`          | `int`  | Yes      | Field height in pixels                              |
+| `page`            | `int`  | No\*     | Page number (1-indexed)                             |
+| `x`               | `int`  | No\*     | X coordinate in pixels                              |
+| `y`               | `int`  | No\*     | Y coordinate in pixels                              |
+| `width`           | `int`  | No*      | Field width in pixels                               |
+| `height`          | `int`  | No*      | Field height in pixels                              |
 | `defaultValue`    | `str`  | No       | Default value (for checkbox: `"true"` or `"false"`) |
 | `isMultiline`     | `bool` | No       | Enable multiline text                               |
 | `isReadonly`      | `bool` | No       | Make field read-only (pre-filled)                   |
@@ -504,12 +517,13 @@ Field configuration supporting both coordinate-based and template-based position
 | `backgroundColor` | `str`  | No       | Background color (hex, rgb, or named)               |
 | `template`        | `Dict` | No       | Template anchor configuration                       |
 
+\*Required when not using template anchors
+
 **Template Configuration:**
 
 | Property        | Type   | Description                                                      |
 | --------------- | ------ | ---------------------------------------------------------------- |
 | `anchor`        | `str`  | Text anchor pattern like `{TagName}`                             |
-| `searchText`    | `str`  | Alternative: search for any text                                 |
 | `placement`     | `str`  | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
 | `size`          | `Dict` | `{ "width": int, "height": int }`                                |
 | `offset`        | `Dict` | `{ "x": int, "y": int }`                                         |
