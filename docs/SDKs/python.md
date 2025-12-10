@@ -521,14 +521,14 @@ Field configuration supporting both coordinate-based and template-based position
 
 **Template Configuration:**
 
-| Property        | Type   | Description                                                      |
-| --------------- | ------ | ---------------------------------------------------------------- |
-| `anchor`        | `str`  | Text anchor pattern like `{TagName}`                             |
-| `placement`     | `str`  | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
-| `size`          | `Dict` | `{ "width": int, "height": int }`                                |
-| `offset`        | `Dict` | `{ "x": int, "y": int }`                                         |
-| `caseSensitive` | `bool` | Case sensitive search (default: False)                           |
-| `useRegex`      | `bool` | Use regex for anchor/searchText (default: False)                 |
+| Property        | Type   | Required | Description                                                      |
+| --------------- | ------ | -------- | ---------------------------------------------------------------- |
+| `anchor`        | `str`  | Yes      | Text anchor pattern like `{TagName}`                             |
+| `placement`     | `str`  | Yes      | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size`          | `Dict` | Yes      | `{ "width": int, "height": int }`                                |
+| `offset`        | `Dict` | No       | `{ "x": int, "y": int }`                                         |
+| `caseSensitive` | `bool` | No       | Case sensitive search (default: False)                           |
+| `useRegex`      | `bool` | No       | Use regex for anchor/searchText (default: False)                 |
 
 ```python
 field: Dict[str, Any] = {

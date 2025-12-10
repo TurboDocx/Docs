@@ -1091,14 +1091,14 @@ Field configuration supporting both coordinate-based and template-based position
 
 **Template Configuration:**
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `anchor` | `string` | Text anchor pattern like `{TagName}` |
-| `placement` | `string` | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
-| `size` | `object` | `{ width: number; height: number }` |
-| `offset` | `object` | `{ x: number; y: number }` |
-| `caseSensitive` | `boolean` | Case sensitive search (default: false) |
-| `useRegex` | `boolean` | Use regex for anchor/searchText (default: false) |
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `anchor` | `string` | Yes | Text anchor pattern like `{TagName}` |
+| `placement` | `string` | Yes | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size` | `object` | Yes | `{ width: number; height: number }` |
+| `offset` | `object` | No | `{ x: number; y: number }` |
+| `caseSensitive` | `boolean` | No | Case sensitive search (default: false) |
+| `useRegex` | `boolean` | No | Use regex for anchor/searchText (default: false) |
 
 ### PrepareForReviewRequest / PrepareForSigningSingleRequest
 
