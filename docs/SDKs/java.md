@@ -1,7 +1,7 @@
 ---
 title: Java SDK
 sidebar_position: 6
-sidebar_label: Java
+sidebar_label: 'TurboSign: Java'
 description: Official TurboDocx Java SDK. Builder pattern API with comprehensive error handling for document generation and digital signatures.
 keywords:
   - turbodocx java

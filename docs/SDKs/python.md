@@ -1,7 +1,7 @@
 ---
 title: Python SDK
 sidebar_position: 3
-sidebar_label: Python
+sidebar_label: 'TurboSign: Python'
 description: Official TurboDocx Python SDK. Async-first design with sync wrappers for document generation and digital signatures.
 keywords:
   - turbodocx python

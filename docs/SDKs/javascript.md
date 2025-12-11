@@ -1,7 +1,7 @@
 ---
 title: JavaScript / TypeScript SDK
 sidebar_position: 2
-sidebar_label: JavaScript / TypeScript
+sidebar_label: 'TurboSign: JavaScript / TypeScript'
 description: Official TurboDocx JavaScript and TypeScript SDK. Full TypeScript support with async/await patterns for document generation and digital signatures.
 keywords:
   - turbodocx javascript

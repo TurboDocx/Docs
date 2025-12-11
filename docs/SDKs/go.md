@@ -1,7 +1,7 @@
 ---
 title: Go SDK
 sidebar_position: 4
-sidebar_label: Go
+sidebar_label: 'TurboSign: Go'
 description: Official TurboDocx Go SDK. Idiomatic Go with context support for document generation and digital signatures.
 keywords:
   - turbodocx go
