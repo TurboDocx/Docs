@@ -66,6 +66,12 @@ TurboSign offers two single-step endpoints to fit different workflows:
 - **Real-time Status Updates**: Track document status throughout the signing process
 - **Webhook Integration**: Receive notifications when signing is complete
 
+:::tip Prefer using an SDK?
+We offer official SDKs that handle authentication, error handling, and type safety for you.
+
+[View all SDKs →](/docs/SDKs)
+:::
+
 ## TLDR; Complete Working Example 🚀
 
 Don't want to read all the details? Here's what you need to know:
@@ -1004,7 +1010,7 @@ Now that you've integrated the single-step signing flow, the next step is settin
 
 ### Related Documentation
 
-- [TurboSign Setup Guide](/docs/TurboSign/Setting-up-TurboSign)
+- [TurboSign Setup Guide](/docs/TurboSign/Setting%20up%20TurboSign)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
 - [Integration Examples](/docs/Integrations)

@@ -210,11 +210,154 @@ Each webhook request includes these headers:
 
 ### Try it Now
 
-<ScriptLoader 
-  scriptPath="webhooks/verification" 
+<ScriptLoader
+  scriptPath="webhooks/verification"
   id="webhook-verification-examples"
   label="Webhook Verification Examples"
 />
+
+### SDK Verification Examples
+
+Our SDKs include built-in webhook verification. Here are examples for each language:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="language">
+<TabItem value="js" label="JavaScript" default>
+
+```typescript
+import { verifyWebhookSignature } from '@turbodocx/sdk';
+import express from 'express';
+
+const app = express();
+
+app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  const isValid = verifyWebhookSignature({
+    signature: req.headers['x-turbodocx-signature'],
+    timestamp: req.headers['x-turbodocx-timestamp'],
+    body: req.body,
+    secret: process.env.TURBODOCX_WEBHOOK_SECRET
+  });
+
+  if (!isValid) {
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  const event = JSON.parse(req.body.toString());
+  // Process event...
+  res.status(200).json({ received: true });
+});
+```
+
+</TabItem>
+<TabItem value="python" label="Python">
+
+```python
+from turbodocx import verify_webhook_signature
+from fastapi import FastAPI, Request, HTTPException
+
+app = FastAPI()
+
+@app.post("/webhook")
+async def handle_webhook(request: Request):
+    body = await request.body()
+
+    is_valid = verify_webhook_signature(
+        signature=request.headers.get("x-turbodocx-signature"),
+        timestamp=request.headers.get("x-turbodocx-timestamp"),
+        body=body,
+        secret=os.environ["TURBODOCX_WEBHOOK_SECRET"]
+    )
+
+    if not is_valid:
+        raise HTTPException(status_code=401, detail="Invalid signature")
+
+    event = json.loads(body)
+    # Process event...
+    return {"received": True}
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```go
+func webhookHandler(w http.ResponseWriter, r *http.Request) {
+    body, _ := io.ReadAll(r.Body)
+
+    isValid := sdk.VerifyWebhookSignature(
+        r.Header.Get("X-TurboDocx-Signature"),
+        r.Header.Get("X-TurboDocx-Timestamp"),
+        body,
+        os.Getenv("TURBODOCX_WEBHOOK_SECRET"),
+    )
+
+    if !isValid {
+        http.Error(w, "Invalid signature", http.StatusUnauthorized)
+        return
+    }
+
+    var event sdk.WebhookEvent
+    json.Unmarshal(body, &event)
+    // Process event...
+    w.WriteHeader(http.StatusOK)
+}
+```
+
+</TabItem>
+<TabItem value="dotnet" label=".NET">
+
+```csharp
+[HttpPost]
+public async Task<IActionResult> HandleWebhook()
+{
+    using var reader = new StreamReader(Request.Body);
+    var body = await reader.ReadToEndAsync();
+
+    var isValid = WebhookVerifier.VerifySignature(
+        Request.Headers["X-TurboDocx-Signature"],
+        Request.Headers["X-TurboDocx-Timestamp"],
+        body,
+        _configuration["TurboDocx:WebhookSecret"]
+    );
+
+    if (!isValid)
+        return Unauthorized("Invalid signature");
+
+    var webhookEvent = JsonSerializer.Deserialize<WebhookEvent>(body);
+    // Process event...
+    return Ok(new { Received = true });
+}
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```ruby
+def turbodocx_webhook
+  body = request.raw_post
+
+  is_valid = TurboDocx::WebhookVerifier.verify(
+    signature: request.headers['X-TurboDocx-Signature'],
+    timestamp: request.headers['X-TurboDocx-Timestamp'],
+    body: body,
+    secret: ENV['TURBODOCX_WEBHOOK_SECRET']
+  )
+
+  unless is_valid
+    return render json: { error: 'Invalid signature' }, status: :unauthorized
+  end
+
+  event = JSON.parse(body)
+  # Process event...
+  render json: { received: true }
+end
+```
+
+</TabItem>
+</Tabs>
+
+[View full SDK documentation →](/docs/SDKs)
 
 ### Security Best Practices
 
@@ -390,6 +533,6 @@ If you encounter issues not covered here:
 
 ## Next Steps
 
-- [Learn about TurboSign](/docs/TurboSign/Setting-up-TurboSign)
+- [Learn about TurboSign](/docs/TurboSign/Setting%20up%20TurboSign)
 - [Explore API Documentation](/docs/API/turbodocx-api-documentation)
 - [View Integration Guides](/docs/Integrations)
