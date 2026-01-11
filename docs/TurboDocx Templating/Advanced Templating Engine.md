@@ -224,6 +224,14 @@ To enable advanced templating features, use **either or both**:
 **You can use both together** - `mimeType: "json"` with `usesAdvancedTemplatingEngine: true`
 :::
 
+:::warning Rich Text Not Supported
+Advanced templating features **do not support rich text data** at this time. If your variable values contain rich text formatting in html string, it will be rendered as html string and no conversion will be done.
+
+**Limitation:** Variables with `usesAdvancedTemplatingEngine: true` or `mimeType: "json"` will render as plain text only.
+
+**Workaround:** For rich text content, use simple variables without advanced templating features.
+:::
+
 #### `usesAdvancedTemplatingEngine`
 Explicitly marks variables using advanced features.
 
@@ -1610,8 +1618,8 @@ deep@example.com
 
 **Template:**
 ```
-Name: {user.name = "Anonymous"}
-Email: {user.email = "noemail@example.com"}
+Name: {user.name}
+Email: {user.email}
 Optional: {user.optional}
 ```
 
@@ -1633,8 +1641,8 @@ Optional: {user.optional}
 
 **Output:**
 ```
-Name: Anonymous
-Email: noemail@example.com
+Name:
+Email:
 Optional:
 ```
 
@@ -1718,9 +1726,7 @@ Boolean is true
 **Template:**
 ```
 Empty string: "{emptyString}"
-Null value: "{nullValue}"
 Undefined: "{undefinedValue}"
-With default: {undefinedValue = "DEFAULT"}
 ```
 
 **Payload:**
@@ -1731,11 +1737,6 @@ With default: {undefinedValue = "DEFAULT"}
       "placeholder": "{emptyString}",
       "mimeType": "text",
       "text": ""
-    },
-    {
-      "placeholder": "{nullValue}",
-      "mimeType": "text",
-      "text": null
     }
   ]
 }
@@ -1743,10 +1744,8 @@ With default: {undefinedValue = "DEFAULT"}
 
 **Output:**
 ```
-Empty string: ""
-Null value: ""
-Undefined: ""
-With default: DEFAULT
+Empty string: 
+Undefined: undefined
 ```
 
 ---
@@ -1756,24 +1755,26 @@ With default: DEFAULT
 ### Common Errors
 
 #### 1. Missing Variable
-**Error:** Variable remains as `{variableName}` in output
+
+**Error:** Variable comes as undefined in output
+
 **Cause:** Variable not provided in payload
+
 **Solution:** Check placeholder spelling and ensure variable is in payload
 
 #### 2. Type Mismatch
+
 **Error:** Unexpected rendering or empty content
-**Cause:** Using `text` for loops or `value` for simple text
-**Solution:** Use `mimeType: "json"` for loops/objects, `mimeType: "text"` for simple values
+
+**Cause:** Not providing `usesAdvancedTemplatingEngine:true` with `mimeType: "text"` or `mimeType: "json" ` is not given.
+
+**Solution:** Use `mimeType: "json"`, or `mimeType: "text"` and `usesAdvancedTemplatingEngine: true`
 
 #### 3. Preview Mode Error
-**Error:** `"{expression} is not supported in the TurboDocx UI"`
-**Cause:** Using advanced features in preview mode
-**Solution:** Remove `isPreview: true` or use simple variables only
 
-#### 4. Invalid Expression
-**Error:** Expression not evaluated or shows error
-**Cause:** Syntax error in expression
-**Solution:** Check operators, parentheses, and variable names
+**Error:** `"{expression} is not supported in the TurboDocx UI"`
+
+**Cause:** Using advanced features in preview mode in TurboDocx UI
 
 ### Debugging Strategies
 
@@ -1816,14 +1817,6 @@ Then: {price * quantity}
 }
 ```
 
-#### 5. Enable Logging
-```javascript
-// Log payload before sending
-console.log('Payload:', JSON.stringify(payload, null, 2));
-```
-
----
-
 ## Best Practices
 
 ### 1. Payload Structure
@@ -1858,39 +1851,12 @@ console.log('Payload:', JSON.stringify(payload, null, 2));
 }
 ```
 
-### 2. Performance Optimization
-
-- **Limit nesting depth** to 4-5 levels maximum
-- **Avoid large loops** (keep under 500 items)
-- **Pre-calculate complex math** when possible
-- **Cache JSON objects** in your application
-- **Use conditionals to skip** unnecessary processing
-
-### 3. Template Design
+### 2. Template Design
 
 - **Use meaningful variable names:** `{customer.email}` not `{ce}`
 - **Group related data:** Keep address fields together in one object
-- **Add comments in templates:** Use Word comments to document complex logic
-- **Test with real data:** Always test with production-like datasets
-- **Handle empty states:** Check array lengths before looping
-
-### 4. Security Considerations
-
-- **Validate input data** before sending to API
-- **Sanitize user content** in HTML variables
-- **Don't expose sensitive data** in default values
-- **Use appropriate MIME types** to prevent injection
-- **Limit expression complexity** to prevent DoS
-
-### 5. Testing Strategy
-
-1. **Unit test** individual expressions
-2. **Test edge cases** (empty, null, undefined)
-3. **Performance test** with large datasets
-4. **Visual review** generated documents
-5. **Regression test** after template changes
-
----
+- **Use appropriate MIME types** to get best results
+- **Check data payload** to ensure desired outputs.
 
 ## Migration Guide
 
@@ -1966,10 +1932,10 @@ console.log('Payload:', JSON.stringify(payload, null, 2));
 
 ### Backward Compatibility
 
-✅ **Simple variables continue to work** - No breaking changes
-✅ **Mix simple and advanced** - Use both approaches in same template
-✅ **Gradual migration** - Update templates one at a time
-✅ **No API changes** - Same endpoints, just enhanced payloads
+- ✅ **Simple variables continue to work** - No breaking changes
+- ✅ **Mix simple and advanced** - Use both approaches in same template
+- ✅ **Gradual migration** - Update templates one at a time
+- ✅ **No API changes** - Same endpoints, just enhanced payloads
 
 ---
 

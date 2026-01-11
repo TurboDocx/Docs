@@ -37,23 +37,23 @@ Choose the right variable approach for your document automation needs. This guid
 
 ### Use Simple Variables When:
 
-✅ Building basic templates with static content
-✅ Using UI-based template preview extensively
-✅ Working with non-technical users
-✅ Templates have < 20 variables
-✅ No calculations or conditional logic needed
-✅ Quick prototyping or proof-of-concept
-✅ Simple mail merge style documents
+- ✅ Building basic templates with static content
+- ✅ Using UI-based template preview extensively
+- ✅ Working with non-technical users
+- ✅ Templates have < 20 variables
+- ✅ No calculations or conditional logic needed
+- ✅ Quick prototyping or proof-of-concept
+- ✅ Simple mail merge style documents
 
 ### Use Advanced Variables When:
 
-✅ Working with complex, structured data
-✅ Need calculations or dynamic content
-✅ Templates have > 20 related variables
-✅ Data comes from APIs or databases
-✅ Need conditional rendering
-✅ Working with lists or repeating sections
-✅ Building invoice, reports, or complex contracts
+- ✅ Working with complex, structured data
+- ✅ Need calculations or dynamic content
+- ✅ Templates have > 20 related variables
+- ✅ Data comes from APIs or databases
+- ✅ Need conditional rendering
+- ✅ Working with lists or repeating sections
+- ✅ Building invoice, reports, or complex contracts
 
 ---
 
@@ -222,7 +222,7 @@ INVOICE
 {lineItems.name}
 Qty: {lineItems.quantity} × ${lineItems.price} = ${lineItems.quantity * lineItems.price}
 ---
-{/lineItems}
+{/}
 
 Subtotal: ${subtotal}
 Tax (10%): ${subtotal * 0.10}
@@ -304,16 +304,16 @@ Status: {status}
 {#status == "approved"}
 ✓ Your application has been APPROVED
 Next steps: Complete onboarding
-{/status == "approved"}
+{/}
 
 {#status == "pending"}
 ⏳ Your application is UNDER REVIEW
 Estimated time: 2-3 business days
-{/status == "pending"}
+{/}
 
 {#status == "rejected"}
 ✗ Your application was NOT APPROVED
-{/status == "rejected"}
+{/}
 ```
 
 **Payload:**
@@ -359,9 +359,8 @@ Total: ${total}
 ```
 
 **Issues:**
-- ⚠️ Must calculate on backend
-- ⚠️ Duplication of logic
-- ⚠️ Risk of calculation mismatch
+- ⚠️ Need to provide value for each data
+- ⚠️ Risk of calculation error and wrong data
 
 ---
 
@@ -382,13 +381,13 @@ Total: ${basePrice + (basePrice * 0.10) + shipping}
     {
       "placeholder": "{basePrice}",
       "mimeType": "text",
-      "text": "100.00",
+      "text": 100.00,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{shipping}",
       "mimeType": "text",
-      "text": "15.00",
+      "text": 15.00,
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -405,12 +404,28 @@ Total: ${basePrice + (basePrice * 0.10) + shipping}
 
 Consider migrating from Simple to Advanced variables when:
 
-✅ Template complexity increasing
-✅ Managing 20+ variables per template
-✅ Need calculations or conditional logic
-✅ Data comes from structured sources (APIs, databases)
-✅ Multiple related fields (addresses, contact info, etc.)
-✅ Need repeating sections
+- ✅ Template complexity increasing
+- ✅ Managing 20+ variables per template
+- ✅ Need calculations or conditional logic
+- ✅ Data comes from structured sources (APIs, databases)
+- ✅ Multiple related fields (addresses, contact info, etc.)
+- ✅ Need repeating sections
+
+### When NOT to Migrate
+
+:::warning Do Not Migrate for Rich Text Content
+**Do NOT migrate to advanced variables** if your nested variables need to render **rich text content** (bold, italic, colors, formatting, etc.).
+
+**Why:** Advanced templating features do not support rich text data - all formatting will be lost and content will render as plain text only.
+
+**Solution:** Keep using separate simple variables for each piece of rich text content instead of grouping them into nested structures.
+
+**Example:**
+```
+❌ Don't use: {user.bio}  // Rich text will lose formatting
+✅ Use instead: {userBio}  // Keeps rich text formatting
+```
+:::
 
 ### Migration Strategy
 
@@ -471,13 +486,6 @@ Convert flat variables to nested structure:
 }
 ```
 
-#### Step 4: Test Thoroughly
-
-- ✅ Test with real data
-- ✅ Verify all nested paths work
-- ✅ Check edge cases (null, empty)
-- ✅ Performance test with large datasets
-
 ### Gradual Migration
 
 You can mix both approaches during migration:
@@ -513,8 +521,8 @@ Total: ${price + tax}
       },
       "usesAdvancedTemplatingEngine": true
     },
-    {"placeholder": "{price}", "mimeType": "text", "text": "100", "usesAdvancedTemplatingEngine": true},
-    {"placeholder": "{tax}", "mimeType": "text", "text": "10", "usesAdvancedTemplatingEngine": true}
+    {"placeholder": "{price}", "mimeType": "text", "text": 100, "usesAdvancedTemplatingEngine": true},
+    {"placeholder": "{tax}", "mimeType": "text", "text": 10, "usesAdvancedTemplatingEngine": true}
   ]
 }
 ```
@@ -537,50 +545,6 @@ Use this matrix to decide which approach to use for your use case:
 | Integration with REST API | **Advanced Variables** | Mirrors JSON response |
 | UI-driven template builder | **Simple Variables** | Preview mode compatibility |
 | Programmatic document generation | **Advanced Variables** | More efficient |
-
----
-
-## Cost-Benefit Analysis
-
-### Simple Variables
-
-**Benefits:**
-- ✅ Quick to implement
-- ✅ Easy to understand
-- ✅ Works in preview mode
-- ✅ No learning curve
-- ✅ Direct CSV/spreadsheet mapping
-
-**Costs:**
-- ❌ More variables to manage
-- ❌ Larger payloads
-- ❌ No logic capabilities
-- ❌ Maintenance overhead grows with complexity
-- ❌ Can't handle dynamic lists
-
-**ROI:** High for simple templates, decreases as complexity grows
-
----
-
-### Advanced Variables
-
-**Benefits:**
-- ✅ Fewer variables (60-80% reduction)
-- ✅ Smaller payloads
-- ✅ Built-in calculations
-- ✅ Conditional rendering
-- ✅ Dynamic lists/loops
-- ✅ Mirrors data structure
-- ✅ Easier maintenance at scale
-
-**Costs:**
-- ❌ Steeper learning curve
-- ❌ More complex setup
-- ❌ Preview mode limitations
-- ❌ Requires JSON knowledge
-- ❌ Testing complexity
-
-**ROI:** Low initially, grows significantly with template complexity
 
 ---
 
@@ -675,35 +639,13 @@ Both work with all TurboDocx APIs. The payload structure is the only difference.
 
 ---
 
-## Best Practices
-
-### For Simple Variables
-
-1. **Use descriptive names:** `{customerEmail}` not `{email1}`
-2. **Maintain consistency:** Same naming convention across templates
-3. **Group related fields:** Add prefixes (`customer_`, `order_`, etc.)
-4. **Document your variables:** Keep a list of all placeholders
-5. **Test in preview mode:** Validate before production use
-
-### For Advanced Variables
-
-1. **Mirror your data model:** Use same structure as your database/API
-2. **Limit nesting depth:** Keep under 4-5 levels
-3. **Use meaningful paths:** `customer.contact.email` is self-documenting
-4. **Validate JSON structure:** Test with JSON validators
-5. **Handle null/undefined:** Use default values for optional fields
-6. **Test with real data:** Don't just test with sample data
-
----
-
 ## Summary
 
 | Aspect | Simple Variables | Advanced Variables |
 |--------|-----------------|-------------------|
 | **Complexity** | Low | Medium |
 | **Flexibility** | Limited | High |
-| **Maintenance** | Harder at scale | Easier at scale |
-| **Learning Curve** | Minimal | Moderate |
+| **Rich Text Support** | Full | None |
 | **Preview Support** | Full | Limited |
 | **Calculations** | None | Built-in |
 | **Conditionals** | None | Built-in |

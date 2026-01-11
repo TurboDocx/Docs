@@ -23,22 +23,20 @@ Encountering issues with Advanced Templating? This comprehensive guide covers co
 
 Before diving into specific issues, run through this checklist:
 
-- [ ] Is `usesAdvancedTemplatingEngine: true` set on the variable?
-- [ ] Is `mimeType` correct (`json` for objects/arrays, `text` for simple values)?
+- [ ] Is `mimeType` correct (`json` or `text` with `usesAdvancedTemplatingEngine: true`)?
 - [ ] Is the JSON structure valid? (Test with [JSONLint](https://jsonlint.com/))
 - [ ] Do nested paths exist in the data? (`user.email` requires `user` object with `email` property)
-- [ ] Are you in Preview Mode? (Advanced features don't work in preview)
 
 ---
 
 ## Common Issues
 
-### 1. Variable Remains as `{placeholder}` in Output
+### 1. Variable Remains as undefined in Output
 
 #### Symptoms
 ```
 Template: Hello {user.firstName}!
-Output:   Hello {user.firstName}!
+Output:   Hello undefined!
 ```
 
 #### Causes & Solutions
@@ -77,22 +75,7 @@ Template: {user.firstName}
 Payload placeholder: "{user}"  // ✅ Matches
 ```
 
-**Cause 3: Case sensitivity issue**
-```json
-// Template uses {User.firstName}
-// Payload uses {user}  // ❌ Different case
-```
-
-**Solution:** Match the case exactly
-```json
-{
-  "placeholder": "{User}",  // ✅ Match template case
-  "mimeType": "json",
-  "text": {"firstName": "John"}
-}
-```
-
-**Cause 4: Nested path doesn't exist**
+**Cause 3: Nested path doesn't exist**
 ```json
 // Template: {user.profile.name}
 {
@@ -130,13 +113,13 @@ Output:   Total: ${price + tax}
 
 #### Causes & Solutions
 
-**Cause 1: Missing `usesAdvancedTemplatingEngine` flag**
+**Cause 1: Missing `usesAdvancedTemplatingEngine` and `mimeType: "text"` flag or `mimeType: json` flag**
 ```json
 // ❌ Flag not set
 {
   "placeholder": "{price}",
   "mimeType": "text",
-  "text": "100"
+  "text": 100
 }
 ```
 
@@ -173,33 +156,13 @@ Output:   Total: ${price + tax}
 }
 ```
 
-**Cause 3: Preview mode enabled**
-```javascript
-// ❌ Preview mode blocks expressions
-const result = await generateDocument({
-  templateId: "...",
-  variables: [...],
-  isPreview: true  // ❌ Remove this
-});
-```
-
-**Solution:**
-```javascript
-// ✅ Remove isPreview for production
-const result = await generateDocument({
-  templateId: "...",
-  variables: [...]
-  // isPreview not set (defaults to false)
-});
-```
-
 ---
 
 ### 3. Loop Not Rendering / Empty Output
 
 #### Symptoms
 ```
-Template: {#items}{name}{/items}
+Template: {#items}{name}{/}
 Output:   (nothing)
 ```
 
@@ -240,12 +203,12 @@ Output:   (nothing)
 ```
 Template:
 {#items.length > 0}
-{#items}{name}{/items}
-{/items.length > 0}
+{#items}{name}{/}
+{/}
 
 {#items.length == 0}
 No items available.
-{/items.length == 0}
+{/}
 ```
 
 **Cause 3: Array is nested incorrectly**
@@ -264,7 +227,7 @@ No items available.
 
 ```
 // Template should be:
-{#data.items}{name}{/data.items}  // Not {#items}
+{#data.items}{name}{/}  // Not {#items}
 ```
 
 ---
@@ -273,7 +236,7 @@ No items available.
 
 #### Symptoms
 ```
-Template: {#isPremium}Premium User{/isPremium}
+Template: {#isPremium}Premium User{/}
 Output:   (nothing)
 ```
 
@@ -302,19 +265,19 @@ Output:   (nothing)
 ```
 
 ```
-Template: {#isPremium == "true"}Premium User{/isPremium == "true"}
+Template: {#isPremium == "true"}Premium User{/}
 ```
 
 **Cause 2: Comparison operator issue**
 ```
 // ❌ Using = instead of ==
-{#status = "active"}Content{/status = "active"}
+{#status = "active"}Content{/}
 ```
 
 **Solution:**
 ```
 // ✅ Use == for comparison
-{#status == "active"}Content{/status == "active"}
+{#status == "active"}Content{/}
 ```
 
 **Cause 3: Variable is undefined**
@@ -351,27 +314,7 @@ Output:   {customer.contact.email}
 
 #### Causes & Solutions
 
-**Cause 1: Using `value` instead of `text` for JSON**
-```json
-// ❌ Wrong field name
-{
-  "placeholder": "{customer}",
-  "mimeType": "json",
-  "value": {"contact": {"email": "..."}}  // Wrong field
-}
-```
-
-**Solution:**
-```json
-// ✅ Use 'text' for json mimeType
-{
-  "placeholder": "{customer}",
-  "mimeType": "json",
-  "text": {"contact": {"email": "john@example.com"}}
-}
-```
-
-**Cause 2: JSON string instead of object**
+**Cause 1: JSON string instead of object**
 ```json
 // ❌ Stringified JSON
 {
@@ -391,7 +334,7 @@ Output:   {customer.contact.email}
 }
 ```
 
-**Cause 3: Path doesn't match structure**
+**Cause 2: Path doesn't match structure**
 ```
 Template: {customer.contact.email}
 
@@ -441,13 +384,12 @@ Output: Total: 10020 (concatenation instead of addition)
 }
 ```
 
-**Solution:** Values are automatically converted, but ensure they're valid numbers
 ```json
 // ✅ Will be converted to numbers
 {
   "placeholder": "{price}",
   "mimeType": "text",
-  "text": "100",  // String of number works
+  "text": 100, 
   "usesAdvancedTemplatingEngine": true
 }
 ```
@@ -463,8 +405,8 @@ Output: Total: 10020 (concatenation instead of addition)
 ```json
 {
   "variables": [
-    {"placeholder": "{price}", "text": "100", "usesAdvancedTemplatingEngine": true},
-    {"placeholder": "{tax}", "text": "20", "usesAdvancedTemplatingEngine": true}
+    {"placeholder": "{price}", "text": 100, "usesAdvancedTemplatingEngine": true},
+    {"placeholder": "{tax}", "text": 20, "usesAdvancedTemplatingEngine": true}
   ]
 }
 ```
@@ -481,11 +423,11 @@ Output: Total: 10020 (concatenation instead of addition)
 ```
 {#price != "N/A"}
 Total: ${price + tax}
-{/price != "N/A"}
+{/}
 
 {#price == "N/A"}
 Price not available
-{/price == "N/A"}
+{/}
 ```
 
 ---
@@ -535,443 +477,6 @@ Output:   Found {items.length} items
   "text": {"count": 2}  // Object has no .length
 }
 ```
-
----
-
-### 8. Preview Mode Errors
-
-#### Symptoms
-```
-Error: "{expression} is not supported in the TurboDocx UI"
-```
-
-#### Cause
-Using advanced features in preview mode
-
-#### Solutions
-
-**Solution 1: Remove preview mode**
-```javascript
-// ❌ Preview mode enabled
-const result = await generateDocument({
-  templateId: "...",
-  variables: [...],
-  isPreview: true
-});
-
-// ✅ Production mode
-const result = await generateDocument({
-  templateId: "...",
-  variables: [...]
-});
-```
-
-**Solution 2: Use simple variables for preview**
-```
-If you need preview functionality, switch to simple variables
-for that template or create a preview-specific version
-```
-
----
-
-## Debugging Strategies
-
-### Strategy 1: Simplify and Test
-
-Start with the simplest possible case and build up:
-
-```json
-// Step 1: Test basic variable
-{
-  "variables": [
-    {"placeholder": "{test}", "mimeType": "text", "text": "Works!"}
-  ]
-}
-
-// Step 2: Add nesting
-{
-  "variables": [
-    {
-      "placeholder": "{data}",
-      "mimeType": "json",
-      "text": {"test": "Works!"}
-    }
-  ]
-}
-
-// Step 3: Add your actual structure
-{
-  "variables": [
-    {
-      "placeholder": "{data}",
-      "mimeType": "json",
-      "text": {
-        "customer": {
-          "name": "John"
-        }
-      }
-    }
-  ]
-}
-```
-
-### Strategy 2: Validate JSON
-
-Use online validators:
-- [JSONLint](https://jsonlint.com/)
-- [JSON Formatter](https://jsonformatter.org/)
-
-```javascript
-// Programmatic validation
-try {
-  const validated = JSON.parse(JSON.stringify(payload));
-  console.log('✅ Valid JSON');
-} catch (error) {
-  console.error('❌ Invalid JSON:', error.message);
-}
-```
-
-### Strategy 3: Log Everything
-
-```javascript
-// Before sending
-console.log('Template ID:', templateId);
-console.log('Variables:', JSON.stringify(variables, null, 2));
-console.log('Variable count:', variables.length);
-
-// Check each variable
-variables.forEach((v, i) => {
-  console.log(`Variable ${i}:`, {
-    placeholder: v.placeholder,
-    mimeType: v.mimeType,
-    hasText: !!v.text,
-    usesAdvanced: v.usesAdvancedTemplatingEngine
-  });
-});
-```
-
-### Strategy 4: Test Expressions Individually
-
-```
-// Start simple
-Template: {price}
-Expected: 100
-
-// Add operation
-Template: {price * 2}
-Expected: 200
-
-// Add second variable
-Template: {price + tax}
-Expected: 120
-
-// Add complexity
-Template: {price + (tax * 0.10)}
-Expected: 110
-```
-
-### Strategy 5: Check Data Types
-
-```javascript
-// Verify data types before sending
-const price = payload.variables.find(v => v.placeholder === '{price}');
-console.log('Price value:', price.text);
-console.log('Price type:', typeof price.text);
-console.log('Is number string:', /^\d+(\.\d+)?$/.test(price.text));
-```
-
-### Strategy 6: Use Conditionals for Debugging
-
-```
-Template:
-Price exists: {#price}YES{/price}{#!price}NO{/!price}
-Tax exists: {#tax}YES{/tax}{#!tax}NO{/!tax}
-Price value: {price}
-Tax value: {tax}
-Calculation: {price + tax}
-```
-
----
-
-## Error Messages Explained
-
-### "Variable not found"
-**Meaning:** Template references a variable not in payload
-**Fix:** Add variable to payload or remove from template
-
-### "Invalid JSON structure"
-**Meaning:** JSON in `text` field is malformed
-**Fix:** Validate JSON with linter
-
-### "Expression evaluation failed"
-**Meaning:** Syntax error in arithmetic expression
-**Fix:** Check operators, parentheses, variable names
-
-### "Circular reference detected"
-**Meaning:** Object references itself
-**Fix:** Remove circular references from data
-
-### "Type mismatch"
-**Meaning:** Wrong mimeType for data (e.g., text for array)
-**Fix:** Use json mimeType for objects/arrays
-
-### "Preview mode not supported"
-**Meaning:** Using advanced features with `isPreview: true`
-**Fix:** Remove isPreview or use simple variables
-
----
-
-## Performance Issues
-
-### Issue: Slow Document Generation
-
-**Symptoms:**
-- Generation takes > 10 seconds
-- Timeout errors
-
-**Causes & Solutions:**
-
-**Cause 1: Very large loops**
-```json
-// ❌ 5000 items in loop
-{
-  "text": [/* 5000 items */]
-}
-```
-
-**Solution:** Limit loop size or paginate
-```json
-// ✅ Reasonable size
-{
-  "text": [/* 100-500 items */]
-}
-```
-
-**Cause 2: Deeply nested loops (3+ levels)**
-```
-{#level1}
-  {#level2}
-    {#level3}
-      {#level4}
-      {/level4}
-    {/level3}
-  {/level2}
-{/level1}
-```
-
-**Solution:** Flatten structure or pre-process data
-
-**Cause 3: Complex arithmetic in loops**
-```
-{#items}
-{(price * quantity * (1 + taxRate)) + ((price * quantity * (1 + taxRate)) * discountRate)}
-{/items}
-```
-
-**Solution:** Pre-calculate complex values
-
----
-
-## Best Practices for Error Prevention
-
-### 1. Validate Before Sending
-
-```javascript
-function validatePayload(payload) {
-  // Check required fields
-  if (!payload.templateId) {
-    throw new Error('templateId is required');
-  }
-
-  if (!Array.isArray(payload.variables)) {
-    throw new Error('variables must be an array');
-  }
-
-  // Validate each variable
-  payload.variables.forEach((v, i) => {
-    if (!v.placeholder) {
-      throw new Error(`Variable ${i} missing placeholder`);
-    }
-
-    if (!v.mimeType) {
-      throw new Error(`Variable ${i} missing mimeType`);
-    }
-
-    if (v.mimeType === 'json' && typeof v.text !== 'object') {
-      throw new Error(`Variable ${i} mimeType is json but text is not an object`);
-    }  });
-
-  return true;
-}
-```
-
-### 2. Type-Safe Payloads (TypeScript)
-
-```typescript
-interface Variable {
-  placeholder: string;
-  mimeType: 'text' | 'html' | 'json' | 'image';
-  text: string | object | any[];
-  value?: any;
-  usesAdvancedTemplatingEngine?: boolean;
-}
-
-interface Payload {
-  templateId: string;
-  variables: Variable[];
-}
-
-const payload: Payload = {
-  templateId: '...',
-  variables: [
-    {
-      placeholder: '{customer}',
-      mimeType: 'json',
-      text: {
-        name: 'John'
-      }
-      usesAdvancedTemplatingEngine: true
-    }
-  ]
-};
-```
-
-### 3. Comprehensive Testing
-
-```javascript
-describe('Advanced Templating', () => {
-  test('nested property access', async () => {
-    const result = await generateDocument({
-      templateId: 'test-template',
-      variables: [
-        {
-          placeholder: '{user}',
-          mimeType: 'json',
-          text: {name: {first: 'John'}},
-          usesAdvancedTemplatingEngine: true
-        }
-      ]
-    });
-
-    expect(result).toContain('John');
-  });
-
-  test('arithmetic expression', async () => {
-    const result = await generateDocument({
-      templateId: 'test-template',
-      variables: [
-        {placeholder: '{price}', text: '100', usesAdvancedTemplatingEngine: true},
-        {placeholder: '{tax}', text: '10', usesAdvancedTemplatingEngine: true}
-      ]
-    });
-
-    expect(result).toContain('110');
-  });
-
-  // More tests...
-});
-```
-
-### 4. Error Handling
-
-```javascript
-async function generateDocumentSafely(payload) {
-  try {
-    // Validate first
-    validatePayload(payload);
-
-    // Generate
-    const result = await generateDocument(payload);
-
-    return {success: true, data: result};
-  } catch (error) {
-    // Log for debugging
-    console.error('Generation failed:', {
-      error: error.message,
-      payload: JSON.stringify(payload, null, 2)
-    });
-
-    // Return user-friendly error
-    return {
-      success: false,
-      error: 'Failed to generate document. Please check your template and data.'
-    };
-  }
-}
-```
-
-### 5. Documentation
-
-Document your templates and expected payload structure:
-
-```javascript
-/**
- * Customer Contract Template
- *
- * Required Variables:
- * - {customer}: JSON object with structure:
- *   {
- *     firstName: string,
- *     lastName: string,
- *     email: string,
- *     address: {
- *       street: string,
- *       city: string,
- *       state: string,
- *       zip: string
- *     }
- *   }
- *
- * - {contractDate}: text, format: "YYYY-MM-DD"
- * - {terms}: JSON array of term objects
- */
-const TEMPLATE_ID = '...';
-```
-
----
-
-## Getting Help
-
-If you've tried everything and still having issues:
-
-### 1. Gather Information
-
-Collect this information before contacting support:
-- Template ID
-- Exact error message
-- Full payload (redact sensitive data)
-- Expected vs actual output
-- Steps you've tried
-
-### 2. Create Minimal Reproduction
-
-Simplify to the smallest example that shows the problem:
-
-```json
-{
-  "templateId": "...",
-  "variables": [
-    {
-      "placeholder": "{test}",
-      "mimeType": "json",
-      "text": {"name": "value"},
-      "usesAdvancedTemplatingEngine": true
-    }
-  ]
-}
-```
-
-### 3. Contact Support
-
-- **Email:** support@turbodocx.com
-- **Chat:** Available in dashboard
-- **Documentation:** https://docs.turbodocx.com
-
-Include:
-- Your reproduction case
-- What you expected
-- What actually happened
-- Any error messages
 
 ---
 
