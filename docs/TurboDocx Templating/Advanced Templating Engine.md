@@ -21,9 +21,6 @@ keywords:
 
 # Advanced Templating Engine
 
-> **Feature Status:** Production Ready | **Version:** 1.0.0 | **Last Updated:** January 2026
-
-Transform your document automation with TurboDocx's Advanced Templating Engine. Go beyond simple variable replacement to create dynamic, intelligent templates with nested data structures, mathematical calculations, conditional rendering, and iterative content generation.
 
 ## What's New?
 
@@ -48,8 +45,8 @@ Perform calculations directly in templates
 ### ⚡ Conditional Logic
 Show/hide content based on conditions
 ```
-{#age >= 18}
-Adult content here
+{#price >= 1000}
+This is expensive stuff
 {/}
 ```
 
