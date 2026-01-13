@@ -67,14 +67,14 @@ Generate repeated content from arrays
 ```json
 {
   "variables": [
-    {"placeholder": "{firstName}", "text": "John"},
-    {"placeholder": "{lastName}", "text": "Doe"},
-    {"placeholder": "{email}", "text": "john@example.com"},
-    {"placeholder": "{phone}", "text": "+1-555-0123"},
-    {"placeholder": "{street}", "text": "123 Main St"},
-    {"placeholder": "{city}", "text": "San Francisco"},
-    {"placeholder": "{state}", "text": "CA"},
-    {"placeholder": "{zip}", "text": "94102"}
+    {"placeholder": "{firstName}", "value": "John"},
+    {"placeholder": "{lastName}", "value": "Doe"},
+    {"placeholder": "{email}", "value": "john@example.com"},
+    {"placeholder": "{phone}", "value": "+1-555-0123"},
+    {"placeholder": "{street}", "value": "123 Main St"},
+    {"placeholder": "{city}", "value": "San Francisco"},
+    {"placeholder": "{state}", "value": "CA"},
+    {"placeholder": "{zip}", "value": "94102"}
   ]
 }
 ```
@@ -87,7 +87,7 @@ Generate repeated content from arrays
     {
       "placeholder": "{customer}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "firstName": "John",
         "lastName": "Doe",
         "contact": {
@@ -135,10 +135,10 @@ Thank you for being a {membershipLevel} member.
 ```json
 {
   "variables": [
-    {"placeholder": "{firstName}", "mimeType": "text", "text": "Jane"},
-    {"placeholder": "{lastName}", "mimeType": "text", "text": "Smith"},
-    {"placeholder": "{balance}", "mimeType": "text", "text": "1500.00"},
-    {"placeholder": "{membershipLevel}", "mimeType": "text", "text": "Premium"}
+    {"placeholder": "{firstName}", "mimeType": "text", "value": "Jane"},
+    {"placeholder": "{lastName}", "mimeType": "text", "value": "Smith"},
+    {"placeholder": "{balance}", "mimeType": "text", "value": "1500.00"},
+    {"placeholder": "{membershipLevel}", "mimeType": "text", "value": "Premium"}
   ]
 }
 ```
@@ -162,7 +162,7 @@ Thank you for being a Premium member! You've saved ${user.account.savings} this 
     {
       "placeholder": "{user}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "firstName": "Jane",
         "lastName": "Smith",
         "account": {
@@ -238,7 +238,7 @@ Explicitly marks variables using advanced features.
   {
     "placeholder": "{price}",
     "mimeType": "text",
-    "text": 100,
+    "value": 100,
     "usesAdvancedTemplatingEngine": true  // Required for arithmetic with text
   }
   ```
@@ -248,7 +248,7 @@ Explicitly marks variables using advanced features.
   {
     "placeholder": "{customer}",
     "mimeType": "json",  // Advanced features enabled automatically
-    "text": {"name": "John"},
+    "value": {"name": "John"},
     "usesAdvancedTemplatingEngine": true  // Optional, but recommended
   }
   ```
@@ -268,7 +268,7 @@ Enables advanced templating features automatically for structured data.
 {
   "placeholder": "{order}",
   "mimeType": "json",  // Enables all advanced features
-  "text": {
+  "value": {
     "subtotal": 100,
     "tax": 10,
     "items": [
@@ -336,7 +336,7 @@ Shipping Address:
     {
       "placeholder": "{customer}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "firstName": "Jane",
         "lastName": "Smith",
         "contact": {
@@ -386,7 +386,7 @@ Contact: {company.divisions.engineering.teams.backend.lead.contact.email}
     {
       "placeholder": "{company}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "name": "Acme Corporation",
         "divisions": {
           "engineering": {
@@ -435,7 +435,7 @@ Average: {(student.grades.physics + student.grades.chemistry + student.grades.ma
     {
       "placeholder": "{student}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "id": "STU-12345",
         "name": {
           "first": "Emma",
@@ -498,7 +498,7 @@ Name Length: {teamName.length} characters
     {
       "placeholder": "{users}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {"name": "Alice Johnson", "email": "alice@example.com"},
         {"name": "Bob Smith", "email": "bob@example.com"},
         {"name": "Carol White", "email": "carol@example.com"}
@@ -508,7 +508,7 @@ Name Length: {teamName.length} characters
     {
       "placeholder": "{teamName}",
       "mimeType": "text",
-      "text": "Engineering",
+      "value": "Engineering",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -579,12 +579,12 @@ FINAL AMOUNT:                          ${subtotal + (subtotal * 0.10) + shipping
     {
       "placeholder": "{invoiceNumber}",
       "mimeType": "text",
-      "text": "2024-001"
+      "value": "2024-001"
     },
     {
       "placeholder": "{lineItems}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {"description": "Widget A", "qty": 5, "price": 25.00},
         {"description": "Widget B", "qty": 3, "price": 40.00},
         {"description": "Widget C", "qty": 2, "price": 15.00}
@@ -594,19 +594,19 @@ FINAL AMOUNT:                          ${subtotal + (subtotal * 0.10) + shipping
     {
       "placeholder": "{subtotal}",
       "mimeType": "text",
-      "text": 275.00,
+      "value": 275.00,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{shipping}",
       "mimeType": "text",
-      "text": 15.00,
+      "value": 15.00,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{discount}",
       "mimeType": "text",
-      "text": 25.00,
+      "value": 25.00,
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -660,37 +660,37 @@ Annual Total: ${(basePrice + (userCount * pricePerUser) + (storageGB * pricePerG
     {
       "placeholder": "{basePrice}",
       "mimeType": "text",
-      "text": 29.99,
+      "value": 29.99,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{userCount}",
       "mimeType": "text",
-      "text": 10,
+      "value": 10,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{pricePerUser}",
       "mimeType": "text",
-      "text": 5.00,
+      "value": 5.00,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{storageGB}",
       "mimeType": "text",
-      "text": 100,
+      "value": 100,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{pricePerGB}",
       "mimeType": "text",
-      "text": 0.10,
+      "value": 0.10,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{annualBilling}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -736,19 +736,19 @@ Total Interest: ${(((loanAmount * (interestRate / 100 / 12)) / (1 - (1 + (intere
     {
       "placeholder": "{loanAmount}",
       "mimeType": "text",
-      "text": 300000,
+      "value": 300000,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{interestRate}",
       "mimeType": "text",
-      "text": 4.5,
+      "value": 4.5,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{years}",
       "mimeType": "text",
-      "text": 30,
+      "value": 30,
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -815,13 +815,13 @@ Upgrade to Premium to unlock exclusive benefits!
     {
       "placeholder": "{isActive}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{isPremium}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -869,7 +869,7 @@ Access to standard features
     {
       "placeholder": "{score}",
       "mimeType": "text",
-      "text": 1250,
+      "value": 1250,
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -912,7 +912,7 @@ Reason: {rejectionReason}
     {
       "placeholder": "{status}",
       "mimeType": "text",
-      "text": "approved",
+      "value": "approved",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -955,25 +955,25 @@ Current eligibility criteria not met
     {
       "placeholder": "{creditScore}",
       "mimeType": "text",
-      "text": 720,
+      "value": 720,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{annualIncome}",
       "mimeType": "text",
-      "text": 75000,
+      "value": 75000,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{employmentYears}",
       "mimeType": "text",
-      "text": 5,
+      "value": 5,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{loanAmount}",
       "mimeType": "text",
-      "text": "250000"
+      "value": "250000"
     }
   ]
 }
@@ -1029,25 +1029,25 @@ Please log in to access your account.
     {
       "placeholder": "{isLoggedIn}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{username}",
       "mimeType": "text",
-      "text": "John Doe",
+      "value": "John Doe",
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{hasActiveSubscription}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{subscriptionType}",
       "mimeType": "text",
-      "text": "enterprise",
+      "value": "enterprise",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -1096,7 +1096,7 @@ Your cart is empty. Start shopping!
     {
       "placeholder": "{items}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {"name": "Product 1"},
         {"name": "Product 2"},
         {"name": "Product 3"},
@@ -1149,7 +1149,7 @@ Cart Total: ${cartTotal}
     {
       "placeholder": "{items}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {"name": "Wireless Mouse", "price": 29.99, "quantity": 2},
         {"name": "USB-C Cable", "price": 12.99, "quantity": 3},
         {"name": "Laptop Stand", "price": 45.00, "quantity": 1}
@@ -1159,7 +1159,7 @@ Cart Total: ${cartTotal}
     {
       "placeholder": "{cartTotal}",
       "mimeType": "text",
-      "text": "143.95"
+      "value": "143.95"
     }
   ]
 }
@@ -1218,7 +1218,7 @@ Team Members:
     {
       "placeholder": "{departments}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {
           "name": "Engineering",
           "manager": "Sarah Johnson",
@@ -1329,7 +1329,7 @@ Shipping: FREE (if total > 100)
     {
       "placeholder": "{orders}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {
           "id": "ORD-001",
           "date": "2024-01-15",
@@ -1425,7 +1425,7 @@ No new notifications. You're all caught up!
     {
       "placeholder": "{notifications}",
       "mimeType": "json",
-      "text": []
+      "value": []
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -1461,9 +1461,8 @@ interface IVariable {
   placeholder: string;              // Variable placeholder, e.g., "{user}"
   mimeType: "text" | "html" | "json" | "image";
 
-  // Content - use either 'text' OR 'value' property (both work identically)
-  text?: string | object | any[];   // For text, html, json types
-  value?: string | object | any[];  // Alternative to 'text' - same functionality
+  // Content
+  value?: string | number | boolean | object | any[];  // For text, html, json types
 
   // Advanced templating flags
   usesAdvancedTemplatingEngine?: boolean;  // Uses advanced features
@@ -1479,20 +1478,6 @@ It is required in preview mode
 //   nestedVariables?: NestedVariableData[];
 //   originalExpression?: string;
 // }; -->
-
-:::info Using `text` vs `value`
-You can use **either** the `text` property **or** the `value` property to pass variable content - they are interchangeable and work identically. Most examples in this documentation use `text`, but `value` works the same way.
-
-**Example with `text`:**
-```json
-{"placeholder": "{name}", "mimeType": "text", "text": "John"}
-```
-
-**Example with `value` (equivalent):**
-```json
-{"placeholder": "{name}", "mimeType": "text", "value": "John"}
-```
-:::
 
 <!-- ### Nested Variable Data Structure
 
@@ -1540,7 +1525,7 @@ interface NestedVariableData {
     {
       "placeholder": "{items}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {
           "nestedloop": [
             {"title": "Item 1.1"},
@@ -1587,7 +1572,7 @@ interface NestedVariableData {
     {
       "placeholder": "{company}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "divisions": {
           "departments": {
             "teams": {
@@ -1627,7 +1612,7 @@ Optional: {user.optional}
     {
       "placeholder": "{user}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "name": null
       },
       "usesAdvancedTemplatingEngine": true
@@ -1659,7 +1644,7 @@ Last item: {items[items.length - 1].name}
     {
       "placeholder": "{items}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {"name": "First"},
         {"name": "Second"},
         {"name": "Third"},
@@ -1698,13 +1683,13 @@ Boolean is true
     {
       "placeholder": "{stringBoolean}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{booleanValue}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -1733,7 +1718,7 @@ Undefined: "{undefinedValue}"
     {
       "placeholder": "{emptyString}",
       "mimeType": "text",
-      "text": ""
+      "value": ""
     }
   ]
 }
@@ -1783,7 +1768,7 @@ Undefined: undefined
     {
       "placeholder": "{test}",
       "mimeType": "text",
-      "text": "Hello World"
+      "value": "Hello World"
     }
   ]
 }
@@ -1825,7 +1810,7 @@ Then: {price * quantity}
     {
       "placeholder": "{customer}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "name": "John",
         "email": "john@example.com"
       }
@@ -1842,7 +1827,7 @@ Then: {price * quantity}
     {
       "placeholder": "{customer}",
       "mimeType": "text",  // Wrong type for nested data
-      "text": "John"  // Should be false for JSON
+      "value": "John"  // Should be false for JSON
     }
   ]
 }
@@ -1893,8 +1878,8 @@ Then: {price * quantity}
 ```json
 {
   "variables": [
-    {"placeholder": "{firstName}", "mimeType": "text", "text": "John"},
-    {"placeholder": "{lastName}", "mimeType": "text", "text": "Doe"},
+    {"placeholder": "{firstName}", "mimeType": "text", "value": "John"},
+    {"placeholder": "{lastName}", "mimeType": "text", "value": "Doe"},
     // ... 6 more variables
   ]
 }
@@ -1907,7 +1892,7 @@ Then: {price * quantity}
     {
       "placeholder": "{customer}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "firstName": "John",
         "lastName": "Doe",
         "contact": {
@@ -2003,7 +1988,7 @@ Employee
     {
       "placeholder": "{contract}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "date": "January 15, 2024"
       },
       "usesAdvancedTemplatingEngine": true
@@ -2011,7 +1996,7 @@ Employee
     {
       "placeholder": "{company}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "name": "Acme Corporation",
         "address": {
           "street": "100 Technology Drive",
@@ -2029,7 +2014,7 @@ Employee
     {
       "placeholder": "{employee}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "name": {
           "first": "Alex",
           "last": "Chen"
@@ -2060,7 +2045,7 @@ Employee
     {
       "placeholder": "{benefits}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {
           "name": "Health Insurance",
           "description": "Comprehensive medical, dental, and vision coverage"
@@ -2228,7 +2213,7 @@ curl -X POST https://api.turbodocx.com/v1/deliverables \
       {
         "placeholder": "{customer}",
         "mimeType": "json",
-        "text": {
+        "value": {
           "firstName": "John",
           "lastName": "Doe",
           "account": {

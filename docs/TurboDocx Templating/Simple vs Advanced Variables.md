@@ -81,42 +81,42 @@ ZIP: {zip}
     {
       "placeholder": "{firstName}",
       "mimeType": "text",
-      "text": "Jane"
+      "value": "Jane"
     },
     {
       "placeholder": "{lastName}",
       "mimeType": "text",
-      "text": "Smith"
+      "value": "Smith"
     },
     {
       "placeholder": "{email}",
       "mimeType": "text",
-      "text": "jane.smith@example.com"
+      "value": "jane.smith@example.com"
     },
     {
       "placeholder": "{phone}",
       "mimeType": "text",
-      "text": "+1-555-0123"
+      "value": "+1-555-0123"
     },
     {
       "placeholder": "{street}",
       "mimeType": "text",
-      "text": "123 Main St"
+      "value": "123 Main St"
     },
     {
       "placeholder": "{city}",
       "mimeType": "text",
-      "text": "San Francisco"
+      "value": "San Francisco"
     },
     {
       "placeholder": "{state}",
       "mimeType": "text",
-      "text": "CA"
+      "value": "CA"
     },
     {
       "placeholder": "{zip}",
       "mimeType": "text",
-      "text": "94102"
+      "value": "94102"
     }
   ]
 }
@@ -154,7 +154,7 @@ ZIP: {contact.address.zip}
     {
       "placeholder": "{contact}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "firstName": "Jane",
         "lastName": "Smith",
         "email": "jane.smith@example.com",
@@ -236,7 +236,7 @@ TOTAL: ${subtotal + (subtotal * 0.10)}
     {
       "placeholder": "{lineItems}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {"name": "Widget A", "quantity": 5, "price": 25.00},
         {"name": "Widget B", "quantity": 3, "price": 40.00},
         {"name": "Widget C", "quantity": 2, "price": 15.00}
@@ -246,7 +246,7 @@ TOTAL: ${subtotal + (subtotal * 0.10)}
     {
       "placeholder": "{subtotal}",
       "mimeType": "text",
-      "text": "275.00",
+      "value": "275.00",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -323,7 +323,7 @@ Estimated time: 2-3 business days
     {
       "placeholder": "{status}",
       "mimeType": "text",
-      "text": "approved",
+      "value": "approved",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -350,10 +350,10 @@ Total: ${total}
 ```json
 {
   "variables": [
-    {"placeholder": "{basePrice}", "mimeType": "text", "text": "100.00"},
-    {"placeholder": "{tax}", "mimeType": "text", "text": "10.00"},
-    {"placeholder": "{shipping}", "mimeType": "text", "text": "15.00"},
-    {"placeholder": "{total}", "mimeType": "text", "text": "125.00"}
+    {"placeholder": "{basePrice}", "mimeType": "text", "value": "100.00"},
+    {"placeholder": "{tax}", "mimeType": "text", "value": "10.00"},
+    {"placeholder": "{shipping}", "mimeType": "text", "value": "15.00"},
+    {"placeholder": "{total}", "mimeType": "text", "value": "125.00"}
   ]
 }
 ```
@@ -381,13 +381,13 @@ Total: ${basePrice + (basePrice * 0.10) + shipping}
     {
       "placeholder": "{basePrice}",
       "mimeType": "text",
-      "text": 100.00,
+      "value": 100.00,
       "usesAdvancedTemplatingEngine": true
     },
     {
       "placeholder": "{shipping}",
       "mimeType": "text",
-      "text": 15.00,
+      "value": 15.00,
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -461,9 +461,9 @@ Convert flat variables to nested structure:
 ```json
 {
   "variables": [
-    {"placeholder": "{firstName}", "text": "John"},
-    {"placeholder": "{lastName}", "text": "Doe"},
-    {"placeholder": "{email}", "text": "john@example.com"}
+    {"placeholder": "{firstName}", "value": "John"},
+    {"placeholder": "{lastName}", "value": "Doe"},
+    {"placeholder": "{email}", "value": "john@example.com"}
   ]
 }
 ```
@@ -475,7 +475,7 @@ Convert flat variables to nested structure:
     {
       "placeholder": "{user}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "firstName": "John",
         "lastName": "Doe",
         "email": "john@example.com"
@@ -507,12 +507,12 @@ Total: ${price + tax}
 ```json
 {
   "variables": [
-    {"placeholder": "{firstName}", "mimeType": "text", "text": "John"},
-    {"placeholder": "{lastName}", "mimeType": "text", "text": "Doe"},
+    {"placeholder": "{firstName}", "mimeType": "text", "value": "John"},
+    {"placeholder": "{lastName}", "mimeType": "text", "value": "Doe"},
     {
       "placeholder": "{customer}",
       "mimeType": "json",
-      "text": {
+      "value": {
         "address": {
           "street": "123 Main St",
           "city": "San Francisco",
@@ -521,8 +521,8 @@ Total: ${price + tax}
       },
       "usesAdvancedTemplatingEngine": true
     },
-    {"placeholder": "{price}", "mimeType": "text", "text": 100, "usesAdvancedTemplatingEngine": true},
-    {"placeholder": "{tax}", "mimeType": "text", "text": 10, "usesAdvancedTemplatingEngine": true}
+    {"placeholder": "{price}", "mimeType": "text", "value": 100, "usesAdvancedTemplatingEngine": true},
+    {"placeholder": "{tax}", "mimeType": "text", "value": 10, "usesAdvancedTemplatingEngine": true}
   ]
 }
 ```
@@ -558,7 +558,7 @@ Use this matrix to decide which approach to use for your use case:
 {
   "placeholder": "{customer}",
   "mimeType": "json",
-  "text": {
+  "value": {
     "name": {"first": "Jane", "last": "Smith"},
     "contact": {"email": "...", "phone": "..."},
     "address": {"street": "...", "city": "...", ...}
@@ -573,9 +573,9 @@ Use this matrix to decide which approach to use for your use case:
 ```json
 {
   "variables": [
-    {"placeholder": "{recipientName}", "text": "John Doe"},
-    {"placeholder": "{courseName}", "text": "Advanced JavaScript"},
-    {"placeholder": "{completionDate}", "text": "January 15, 2024"}
+    {"placeholder": "{recipientName}", "value": "John Doe"},
+    {"placeholder": "{courseName}", "value": "Advanced JavaScript"},
+    {"placeholder": "{completionDate}", "value": "January 15, 2024"}
   ]
 }
 ```
@@ -588,7 +588,7 @@ Use this matrix to decide which approach to use for your use case:
 {
   "placeholder": "{lineItems}",
   "mimeType": "json",
-  "text": [
+  "value": [
     {"name": "Item 1", "qty": 5, "price": 25.00},
     {"name": "Item 2", "qty": 3, "price": 40.00}
   ]
@@ -602,9 +602,9 @@ Use this matrix to decide which approach to use for your use case:
 ```json
 {
   "variables": [
-    {"placeholder": "{date}", "text": "January 15, 2024"},
-    {"placeholder": "{recipientName}", "text": "John Doe"},
-    {"placeholder": "{senderName}", "text": "Jane Smith"}
+    {"placeholder": "{date}", "value": "January 15, 2024"},
+    {"placeholder": "{recipientName}", "value": "John Doe"},
+    {"placeholder": "{senderName}", "value": "Jane Smith"}
   ]
 }
 ```
