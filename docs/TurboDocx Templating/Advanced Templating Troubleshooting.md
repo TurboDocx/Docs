@@ -57,7 +57,7 @@ Output:   Hello undefined!
     {
       "placeholder": "{user}",
       "mimeType": "json",
-      "text": {"firstName": "John"}
+      "value": {"firstName": "John"}
     }
   ]
 }
@@ -79,7 +79,7 @@ Payload placeholder: "{user}"  // ✅ Matches
 ```json
 // Template: {user.profile.name}
 {
-  "text": {
+  "value": {
     "user": {
       // ❌ Missing 'profile' property
       "name": "John"
@@ -91,7 +91,7 @@ Payload placeholder: "{user}"  // ✅ Matches
 **Solution:**
 ```json
 {
-  "text": {
+  "value": {
     "user": {
       "profile": {  // ✅ Add missing path
         "name": "John"
@@ -119,7 +119,7 @@ Output:   Total: ${price + tax}
 {
   "placeholder": "{price}",
   "mimeType": "text",
-  "text": 100
+  "value": 100
 }
 ```
 
@@ -129,7 +129,7 @@ Output:   Total: ${price + tax}
 {
   "placeholder": "{price}",
   "mimeType": "text",
-  "text": "100",
+  "value": "100",
   "usesAdvancedTemplatingEngine": true
 }
 ```
@@ -140,7 +140,7 @@ Output:   Total: ${price + tax}
 // ❌ Only provided {price}
 {
   "variables": [
-    {"placeholder": "{price}", "text": "100", "usesAdvancedTemplatingEngine": true}
+    {"placeholder": "{price}", "value": "100", "usesAdvancedTemplatingEngine": true}
   ]
 }
 ```
@@ -150,8 +150,8 @@ Output:   Total: ${price + tax}
 // ✅ Provide all variables
 {
   "variables": [
-    {"placeholder": "{price}", "text": "100", "usesAdvancedTemplatingEngine": true},
-    {"placeholder": "{tax}", "text": "10", "usesAdvancedTemplatingEngine": true}
+    {"placeholder": "{price}", "value": "100", "usesAdvancedTemplatingEngine": true},
+    {"placeholder": "{tax}", "value": "10", "usesAdvancedTemplatingEngine": true}
   ]
 }
 ```
@@ -174,7 +174,7 @@ Output:   (nothing)
 {
   "placeholder": "{items}",
   "mimeType": "text",
-  "text": "[{\"name\":\"Item 1\"}]"
+  "value": "[{\"name\":\"Item 1\"}]"
 }
 ```
 
@@ -184,7 +184,7 @@ Output:   (nothing)
 {
   "placeholder": "{items}",
   "mimeType": "json",
-  "text": [
+  "value": [
     {"name": "Item 1"}
   ]
 }
@@ -195,7 +195,7 @@ Output:   (nothing)
 {
   "placeholder": "{items}",
   "mimeType": "json",
-  "text": []  // ❌ No items to loop over
+  "value": []  // ❌ No items to loop over
 }
 ```
 
@@ -217,7 +217,7 @@ No items available.
 {
   "placeholder": "{data}",
   "mimeType": "json",
-  "text": {
+  "value": {
     "items": [
       {"name": "Item 1"}
     ]
@@ -248,7 +248,7 @@ Output:   (nothing)
 {
   "placeholder": "{isPremium}",
   "mimeType": "text",
-  "text": "false"
+  "value": "false"
 }
 ```
 
@@ -258,7 +258,7 @@ Output:   (nothing)
 {
   "placeholder": "{isPremium}",
   "mimeType": "json",
-  "text": false
+  "value": false
 }
 
 // Option 2: Compare string explicitly
@@ -295,7 +295,7 @@ Template: {#isPremium == "true"}Premium User{/}
     {
       "placeholder": "{isPremium}",
       "mimeType": "text",
-      "text": "true",
+      "value": "true",
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -320,7 +320,7 @@ Output:   {customer.contact.email}
 {
   "placeholder": "{customer}",
   "mimeType": "json",
-  "text": "{\"contact\":{\"email\":\"...\"}}"  // String, not object
+  "value": "{\"contact\":{\"email\":\"...\"}}"  // String, not object
 }
 ```
 
@@ -330,7 +330,7 @@ Output:   {customer.contact.email}
 {
   "placeholder": "{customer}",
   "mimeType": "json",
-  "text": {"contact": {"email": "john@example.com"}}  // Object
+  "value": {"contact": {"email": "john@example.com"}}  // Object
 }
 ```
 
@@ -340,7 +340,7 @@ Template: {customer.contact.email}
 
 // ❌ Wrong structure
 {
-  "text": {
+  "value": {
     "contact_email": "john@example.com"  // Flat, not nested
   }
 }
@@ -350,7 +350,7 @@ Template: {customer.contact.email}
 ```json
 // ✅ Match template structure
 {
-  "text": {
+  "value": {
     "contact": {
       "email": "john@example.com"
     }
@@ -380,7 +380,7 @@ Output: Total: 10020 (concatenation instead of addition)
 {
   "placeholder": "{price}",
   "mimeType": "text",
-  "text": "100"  // String
+  "value": "100"  // String
 }
 ```
 
@@ -389,7 +389,7 @@ Output: Total: 10020 (concatenation instead of addition)
 {
   "placeholder": "{price}",
   "mimeType": "text",
-  "text": 100, 
+  "value": 100, 
   "usesAdvancedTemplatingEngine": true
 }
 ```
@@ -405,8 +405,8 @@ Output: Total: 10020 (concatenation instead of addition)
 ```json
 {
   "variables": [
-    {"placeholder": "{price}", "text": 100, "usesAdvancedTemplatingEngine": true},
-    {"placeholder": "{tax}", "text": 20, "usesAdvancedTemplatingEngine": true}
+    {"placeholder": "{price}", "value": 100, "usesAdvancedTemplatingEngine": true},
+    {"placeholder": "{tax}", "value": 20, "usesAdvancedTemplatingEngine": true}
   ]
 }
 ```
@@ -415,7 +415,7 @@ Output: Total: 10020 (concatenation instead of addition)
 ```json
 {
   "placeholder": "{price}",
-  "text": "N/A"  // ❌ Can't convert to number
+  "value": "N/A"  // ❌ Can't convert to number
 }
 ```
 
@@ -458,7 +458,7 @@ Output:   Found {items.length} items
     {
       "placeholder": "{items}",
       "mimeType": "json",
-      "text": [
+      "value": [
         {"name": "Item 1"},
         {"name": "Item 2"}
       ],
@@ -474,7 +474,7 @@ Output:   Found {items.length} items
 {
   "placeholder": "{items}",
   "mimeType": "json",
-  "text": {"count": 2}  // Object has no .length
+  "value": {"count": 2}  // Object has no .length
 }
 ```
 
