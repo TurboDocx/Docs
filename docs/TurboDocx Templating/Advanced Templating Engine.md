@@ -1462,7 +1462,7 @@ interface IVariable {
   mimeType: "text" | "html" | "json" | "image";
 
   // Content
-  value?: string | number | boolean | object | any[];  // For text, html, json types
+  value: string | number | boolean | object | any[];  // For text, html, json types
 
   // Advanced templating flags
   usesAdvancedTemplatingEngine?: boolean;  // Uses advanced features
