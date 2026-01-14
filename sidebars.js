@@ -72,6 +72,11 @@ const sidebars = {
               id: 'TurboDocx Templating/Advanced Templating Troubleshooting',
               label: 'Troubleshooting',
             },
+            {
+              type: 'doc',
+              id: 'TurboDocx Templating/Advanced Templating cURL Example',
+              label: 'Advanced Templating CURL Example',
+            },
           ],
         },
         {
