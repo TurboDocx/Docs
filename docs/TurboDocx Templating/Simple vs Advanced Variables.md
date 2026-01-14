@@ -24,6 +24,7 @@ Choose the right variable approach for your document automation needs. This guid
 |---------|-----------------|-------------------|
 | **Setup Complexity** | ⭐ Easy | ⭐⭐ Moderate |
 | **Payload Size** | Large (many variables) | Small (fewer, structured) |
+| **Rich Text Support** | Yes | No |
 | **Data Structure** | Flat | Nested/hierarchical |
 | **Calculations** | ❌ No | ✅ Yes (arithmetic) |
 | **Conditionals** | ❌ No | ✅ Yes (show/hide) |
