@@ -113,20 +113,20 @@ DEPARTMENT: {deptName}
 Employees:
 {#employees}
     - {employeeName} ({title})
-{/}
-{/}
+{/employees}
+{/departments}
 
 4.4 Loop with Conditionals:
 {#orderItems}
   Product: {productName} - ${itemPrice}
   {#isOnSale}*** SALE ITEM ***{/}
   {#qty > 5}[Bulk discount applied]{/}
-{/}
+{/orderItems}
 
 4.5 Loop with Arithmetic:
 {#lineItems}
   {description}: {quantity} x ${unitPrice} = ${quantity * unitPrice}
-{/}
+{/lineItems}
 
 SECTION 5: LOGICAL AND/OR
 -------------------------
@@ -172,7 +172,7 @@ Discount ({invTotals.discountCode}): -${invTotals.discountAmount}
 TAX BREAKDOWN:
 {#taxBreakdown}
   {taxName} ({rate}%): ${taxAmt}
-{/}
+{/taxBreakdown}
 
 -------------------------------------------
 TOTAL DUE: ${invTotals.grandTotal}
@@ -223,7 +223,7 @@ Equity: {compensation.equityShares} shares, vesting over {compensation.vestingYe
 BENEFITS:
 {#benefits}
 - {benefitName}: {benefitDesc}
-{/}
+{/benefits}
 
 {#relocation.offered}
 RELOCATION:
@@ -263,7 +263,7 @@ COMPETENCIES:
 {#compRating >= 4}  -> Strength{/}
 {#compRating < 3}  -> Development Area{/}
 Comments: {compComments}
-{/}
+{/competencies}
 
 GOALS:
 {#goals}
@@ -271,7 +271,7 @@ GOALS:
    Weight: {weight}% | Status: {goalStatus}
    {#goalStatus == "completed"}Achievement: {achievement}%{/}
    {#goalStatus == "in_progress"}Progress: {progress}%{/}
-{/}
+{/goals}
 
 Weighted Score: {goalsScore}%
 
@@ -279,14 +279,14 @@ KEY ACHIEVEMENTS:
 {#achievements}
 - {achievementDesc}
   Impact: {impact}
-{/}
+{/achievements}
 
 DEVELOPMENT AREAS:
 {#developmentAreas}
 - {area}
   Plan: {actionPlan}
   Target: {targetDate}
-{/}
+{/developmentAreas}
 
 COMPENSATION:
 {#compRecommendation.meritIncrease > 0}
@@ -313,7 +313,7 @@ USAGE:
 {#usageCharges}
 {serviceName}: {usage} {unit} @ ${ratePerUnit}/{unit} = ${usage * ratePerUnit}
 {#usage > freeAllowance}  (Exceeded free tier by {usage - freeAllowance} {unit}){/}
-{/}
+{/usageCharges}
 
 {#credits.length > 0}
 CREDITS:
@@ -352,7 +352,7 @@ ITEMS:
    Qty: {poQty} {poUnit} @ ${poUnitCost} = ${poQty * poUnitCost}
    {#isUrgent}[URGENT]{/}
    {#requiresApproval}[REQUIRES APPROVAL]{/}
-{/}
+{/poItems}
 
 ORDER TOTAL: ${orderTotal}
 
@@ -362,7 +362,7 @@ APPROVALS:
    {#approvalStatus == "approved"}APPROVED - {approvalDate}{/}
    {#approvalStatus == "pending"}PENDING{/}
    {#approvalStatus == "rejected"}REJECTED: {reason}{/}
-{/}
+{/approvals}
 
 {#allApproved}*** ORDER APPROVED - Ready for Processing ***{/}
 {#allApproved == false}*** AWAITING APPROVAL ***{/}
