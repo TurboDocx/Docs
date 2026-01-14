@@ -2278,100 +2278,17 @@ PERFORMANCE ALERTS
 
 ---
 
-## API Integration Examples
+## API Integration Example
 
-### Node.js / JavaScript
+For a **complete, working cURL example** that demonstrates all advanced templating features in a single comprehensive test document, see:
 
-```javascript
-const TurboDocx = require('@turbodocx/sdk');
+👉 **[cURL Example](./Advanced%20Templating%20cURL%20Example.md)**
 
-const client = new TurboDocx({
-  apiKey: process.env.TURBODOCX_API_KEY
-});
-
-async function generateAdvancedDocument() {
-  try {
-    const result = await client.deliverables.create({
-      templateId: 'your-template-id',
-      variables: [
-        {
-          placeholder: '{customer}',
-          mimeType: 'json',
-          text: {
-            firstName: 'John',
-            lastName: 'Doe',
-            account: {
-              balance: 1500.00,
-              isPremium: true
-            }
-          },
-          usesAdvancedTemplatingEngine: true
-        }
-      ]
-    });
-
-    console.log('Document generated:', result.downloadUrl);
-  } catch (error) {
-    console.error('Error:', error.message);
-  }
-}
-```
-
-### Python
-
-```python
-from turbodocx import TurboDocx
-
-client = TurboDocx(api_key=os.environ['TURBODOCX_API_KEY'])
-
-def generate_advanced_document():
-    result = client.deliverables.create(
-        template_id='your-template-id',
-        variables=[
-            {
-                'placeholder': '{customer}',
-                'mimeType': 'json',
-                'text': {
-                    'firstName': 'John',
-                    'lastName': 'Doe',
-                    'account': {
-                        'balance': 1500.00,
-                        'isPremium': True
-                    }
-                },
-                'usesAdvancedTemplatingEngine': True
-            }
-        ]
-    )
-
-    print(f'Document generated: {result.download_url}')
-```
-
-### cURL
-
-```bash
-curl -X POST https://api.turbodocx.com/v1/deliverables \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "templateId": "your-template-id",
-    "variables": [
-      {
-        "placeholder": "{customer}",
-        "mimeType": "json",
-        "value": {
-          "firstName": "John",
-          "lastName": "Doe",
-          "account": {
-            "balance": 1500.00,
-            "isPremium": true
-          }
-        }
-        "usesAdvancedTemplatingEngine": true
-      }
-    ]
-  }'
-```
+This example includes:
+- Complete test template covering all features
+- Full cURL request with proper headers
+- Complete payload with all variable types
+- Expected output documentation
 
 ---
 
@@ -2390,7 +2307,7 @@ curl -X POST https://api.turbodocx.com/v1/deliverables \
 
 ### Support
 - 📧 Email: support@turbodocx.com
-- 💬 Chat: Available in your dashboard
+- 💬 Discord Community: https://discord.gg/turbodocx
 - 📚 Knowledge Base: https://docs.turbodocx.com
 
 ---
