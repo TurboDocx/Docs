@@ -537,6 +537,16 @@ You **do not** need to create separate variables like `{userCount}` or `{teamNam
 
 Perform mathematical calculations directly in your templates without preprocessing data.
 
+:::warning String vs Number Values
+When performing arithmetic operations, always use **numeric values** (not strings) in your payload. Using string values instead of numbers may produce unexpected or incorrect results.
+
+**Example:**
+- ✅ `"value": 10` (number) - Works correctly
+- ❌ `"value": "10"` (string) - May produce wrong results
+
+See the [String vs Number Example](#string-vs-number-behavior) below for a detailed comparison.
+:::
+
 #### Supported Operators
 
 - **Addition:** `+`
@@ -771,9 +781,145 @@ Total Payment: $547221.60
 Total Interest: $247221.60
 ```
 
+#### String vs Number Behavior
+
+This example demonstrates why you should always use numeric values instead of strings for arithmetic operations.
+
+**Template:**
+```
+All Operators:
+    - Addition: {a} + {b} = {a + b}
+    - Subtraction: {a} - {b} = {a - b}
+    - Multiplication: {a} * {b} = {a * b}
+    - Division: {a} / {b} = {a / b}
+    - Modulo: {a} % {b} = {a % b}
+```
+
+**Payload with Numbers (Correct):**
+```json
+{
+  "variables": [
+    {
+      "placeholder": "{a}",
+      "mimeType": "text",
+      "value": 10,
+      "usesAdvancedTemplatingEngine": true
+    },
+    {
+      "placeholder": "{b}",
+      "mimeType": "text",
+      "value": 3,
+      "usesAdvancedTemplatingEngine": true
+    }
+  ]
+}
+```
+
+**Output with Numbers:**
+```
+All Operators:
+    - Addition: 10 + 3 = 13
+    - Subtraction: 10 - 3 = 7
+    - Multiplication: 10 * 3 = 30
+    - Division: 10 / 3 = 3.333333333333333
+    - Modulo: 10 % 3 = 1
+```
+
+**Payload with Strings (Incorrect):**
+```json
+{
+  "variables": [
+    {
+      "placeholder": "{a}",
+      "mimeType": "text",
+      "value": "10",
+      "usesAdvancedTemplatingEngine": true
+    },
+    {
+      "placeholder": "{b}",
+      "mimeType": "text",
+      "value": "3",
+      "usesAdvancedTemplatingEngine": true
+    }
+  ]
+}
+```
+
+**Output with Strings (Wrong Results):**
+```
+All Operators:
+    - Addition: 10 + 3 = 103
+    - Subtraction: 10 - 3 = 7
+    - Multiplication: 10 * 3 = 30
+    - Division: 10 / 3 = 3.333333333333333
+    - Modulo: 10 % 3 = 1
+```
+
+:::caution Key Takeaway
+Notice how **addition with strings** produces `"103"` (string concatenation) instead of `13` (mathematical addition). While other operators may still work due to JavaScript's type coercion, this behavior is unreliable and can lead to bugs. Always use numeric values for arithmetic operations.
+:::
+
+#### Division and Modulo by Zero
+
+Special care must be taken when dividing or using modulo operations with zero values.
+
+**Template:**
+```
+Division and Modulo with Zero:
+    - 10 / 0 = {a / 0}
+    - 10 % 0 = {a % 0}
+    - 0 * 5 = {0 * b}
+```
+
+**Payload:**
+```json
+{
+  "variables": [
+    {
+      "placeholder": "{a}",
+      "mimeType": "text",
+      "value": 10,
+      "usesAdvancedTemplatingEngine": true
+    },
+    {
+      "placeholder": "{b}",
+      "mimeType": "text",
+      "value": 5,
+      "usesAdvancedTemplatingEngine": true
+    }
+  ]
+}
+```
+
+**Output:**
+```
+Division and Modulo with Zero:
+    - 10 / 0 = Infinity
+    - 10 % 0 = NaN
+    - 0 * 5 = 0
+```
+
+:::danger Zero Division Warnings
+- **Division by zero** (`x / 0`) returns `Infinity`
+- **Modulo by zero** (`x % 0`) returns `NaN` (Not a Number)
+- **Multiplication by zero** (`x * 0` or `0 * x`) returns `0` (works normally)
+
+**Best Practice:** Use conditional logic to check for zero before performing division or modulo operations:
+```
+{#divisor != 0}
+Result: {dividend / divisor}
+{/}
+{#divisor == 0}
+Error: Cannot divide by zero
+{/}
+```
+:::
+
 :::warning Important Notes
 - Division by zero returns `Infinity` - handle with conditionals if needed
+- Modulo by zero returns `NaN` - validate divisor before using modulo
 - Use parentheses to control order of operations
+- **Always use numeric values** (not strings) for arithmetic operations to avoid incorrect results
 :::
 
 ---
