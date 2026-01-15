@@ -1849,7 +1849,7 @@ String is "true"
 Boolean is true
 ```
 
-### 7. Empty String vs Null vs Undefined
+### 7. Empty String vs Undefined
 
 **Template:**
 ```
