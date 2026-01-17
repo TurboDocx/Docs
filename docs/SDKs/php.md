@@ -183,6 +183,10 @@ The above examples omit error handling for brevity. In production, wrap all Turb
 ```php
 <?php
 
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\SendSignatureRequest;
 use TurboDocx\Types\TemplateConfig;
 use TurboDocx\Types\FieldPlacement;
 
@@ -235,6 +239,11 @@ TurboSign supports four different ways to provide document files:
 ### 1. File Upload (Direct)
 
 ```php
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+
 $pdfContent = file_get_contents('./contract.pdf');
 
 $result = TurboSign::sendSignature(
@@ -262,6 +271,11 @@ $result = TurboSign::sendSignature(
 ### 2. File URL
 
 ```php
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+
 $result = TurboSign::sendSignature(
     new SendSignatureRequest(
         fileLink: 'https://storage.example.com/contracts/agreement.pdf',
@@ -290,6 +304,11 @@ Use `fileLink` when your documents are already hosted on cloud storage (S3, Goog
 ### 3. TurboDocx Deliverable ID
 
 ```php
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+
 // Use a previously generated TurboDocx document
 $result = TurboSign::sendSignature(
     new SendSignatureRequest(
@@ -319,6 +338,13 @@ $result = TurboSign::sendSignature(
 ### 4. TurboDocx Template ID
 
 ```php
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+use TurboDocx\Types\TemplateConfig;
+use TurboDocx\Types\FieldPlacement;
+
 // Use a pre-configured TurboSign template
 $result = TurboSign::sendSignature(
     new SendSignatureRequest(
@@ -374,6 +400,9 @@ TurboSign::configure(HttpClientConfig::fromEnvironment());
 Upload a document for preview without sending signature request emails.
 
 ```php
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
 use TurboDocx\Types\Requests\CreateSignatureReviewLinkRequest;
 
 $result = TurboSign::createSignatureReviewLink(
@@ -406,6 +435,9 @@ echo "Document ID: {$result->documentId}\n";
 Upload a document and immediately send signature requests to all recipients.
 
 ```php
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
 use TurboDocx\Types\Requests\SendSignatureRequest;
 
 $result = TurboSign::sendSignature(
@@ -501,7 +533,7 @@ Retrieve the complete audit trail for a document, including all events and actio
 $audit = TurboSign::getAuditTrail('document-uuid');
 
 echo "Audit Trail:\n";
-foreach ($audit->entries as $entry) {
+foreach ($audit->auditTrail as $entry) {
     echo "  {$entry->timestamp} - {$entry->event} by {$entry->actor}\n";
     if ($entry->ipAddress) {
         echo "    IP: {$entry->ipAddress}\n";
@@ -701,6 +733,10 @@ enum FieldPlacement: string {
 
 // Document status
 enum DocumentStatus: string {
+    case DRAFT = 'draft';
+    case SETUP_COMPLETE = 'setup_complete';
+    case REVIEW_READY = 'review_ready';
+    case UNDER_REVIEW = 'under_review';
     case PENDING = 'pending';
     case COMPLETED = 'completed';
     case VOIDED = 'voided';
@@ -712,7 +748,7 @@ enum DocumentStatus: string {
 The SDK uses readonly classes with typed properties:
 
 ```php
-final readonly class Recipient {
+final class Recipient {
     public function __construct(
         public string $name,
         public string $email,
@@ -720,7 +756,7 @@ final readonly class Recipient {
     ) {}
 }
 
-final readonly class Field {
+final class Field {
     public function __construct(
         public SignatureFieldType $type,
         public string $recipientEmail,
@@ -742,16 +778,19 @@ final readonly class Field {
 ### Request Objects
 
 ```php
-final readonly class SendSignatureRequest {
+final class SendSignatureRequest {
     public function __construct(
         public array $recipients,           // Recipient[]
         public array $fields,               // Field[]
         public ?string $file = null,
+        public ?string $fileName = null,
         public ?string $fileLink = null,
         public ?string $deliverableId = null,
         public ?string $templateId = null,
         public ?string $documentName = null,
         public ?string $documentDescription = null,
+        public ?string $senderName = null,
+        public ?string $senderEmail = null,
         public ?array $ccEmails = null
     ) {}
 }
