@@ -24,12 +24,13 @@ Official client libraries for the TurboDocx API. Build document generation and d
 
 ## Available SDKs
 
-| Language                  | Package                    | Install Command                                                      | Links                                                                                              |
-| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- |
-| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
-| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)     |
-| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
-| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
+| Language                  | Package                    | Install Command                                                      | Links                                                                                                |
+| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)   |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)       |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)         |
+| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)           |
+| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)       |
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
@@ -98,6 +99,13 @@ pnpm add @turbodocx/sdk
 pip install turbodocx-sdk
 # or
 poetry add turbodocx-sdk
+```
+
+</TabItem>
+<TabItem value="php" label="PHP">
+
+```bash
+composer require turbodocx/sdk
 ```
 
 </TabItem>
@@ -218,6 +226,50 @@ result = TurboSign.send_signature(
 )
 
 print(f"Document sent! ID: {result.documentId}")
+```
+
+</TabItem>
+<TabItem value="php" label="PHP">
+
+```php
+<?php
+
+use TurboDocx\TurboSign;
+use TurboDocx\Config\HttpClientConfig;
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+
+// Configure with your API key
+TurboSign::configure(new HttpClientConfig(
+    apiKey: $_ENV['TURBODOCX_API_KEY'],
+    orgId: $_ENV['TURBODOCX_ORG_ID'],
+    senderEmail: $_ENV['TURBODOCX_SENDER_EMAIL']
+));
+
+// Send a document for signature
+$result = TurboSign::sendSignature(
+    new SendSignatureRequest(
+        recipients: [
+            new Recipient('John Doe', 'john@example.com', 1)
+        ],
+        fields: [
+            new Field(
+                type: SignatureFieldType::SIGNATURE,
+                recipientEmail: 'john@example.com',
+                page: 1,
+                x: 100,
+                y: 500,
+                width: 200,
+                height: 50
+            )
+        ],
+        fileLink: 'https://example.com/contract.pdf'
+    )
+);
+
+echo "Document sent! ID: {$result->documentId}\n";
 ```
 
 </TabItem>
@@ -406,6 +458,27 @@ except TurboDocxError as e:
     if e.code == "VALIDATION_ERROR":
         # Handle validation error
         pass
+```
+
+</TabItem>
+<TabItem value="php" label="PHP">
+
+```php
+<?php
+
+use TurboDocx\TurboSign;
+use TurboDocx\Exceptions\TurboDocxException;
+use TurboDocx\Exceptions\ValidationException;
+
+try {
+    $result = TurboSign::sendSignature(/* ... */);
+} catch (ValidationException $e) {
+    echo "Validation error: {$e->getMessage()}\n";
+    // Handle validation error
+} catch (TurboDocxException $e) {
+    echo "Error {$e->getCode()}: {$e->getMessage()}\n";
+    echo "Status code: {$e->statusCode}\n";
+}
 ```
 
 </TabItem>

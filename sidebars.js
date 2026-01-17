@@ -137,6 +137,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'SDKs/php',
+          label: 'TurboSign: PHP',
+        },
+        {
+          type: 'doc',
           id: 'SDKs/go',
           label: 'TurboSign: Go',
         },
