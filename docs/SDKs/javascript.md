@@ -1030,8 +1030,8 @@ The SDK exports TypeScript types for full type safety. Import them directly from
 import type {
   // Field types
   SignatureFieldType,
-  N8nField,
-  N8nRecipient,
+  Field,
+  Recipient,
   // Request types
   CreateSignatureReviewLinkRequest,
   SendSignatureRequest,
@@ -1057,7 +1057,7 @@ type SignatureFieldType =
   | "checkbox";
 ```
 
-### N8nRecipient
+### Recipient
 
 Recipient configuration for signature requests:
 
@@ -1067,7 +1067,7 @@ Recipient configuration for signature requests:
 | `email` | `string` | Yes | Recipient's email address |
 | `signingOrder` | `number` | Yes | Signing order (1-indexed) |
 
-### N8nField
+### Field
 
 Field configuration supporting both coordinate-based and template-based positioning:
 
@@ -1110,8 +1110,8 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | `fileLink` | `string` | Conditional | URL to document file |
 | `deliverableId` | `string` | Conditional | TurboDocx deliverable ID |
 | `templateId` | `string` | Conditional | TurboDocx template ID |
-| `recipients` | `N8nRecipient[]` | Yes | Recipients who will sign |
-| `fields` | `N8nField[]` | Yes | Signature fields configuration |
+| `recipients` | `Recipient[]` | Yes | Recipients who will sign |
+| `fields` | `Field[]` | Yes | Signature fields configuration |
 | `documentName` | `string` | No | Document name |
 | `documentDescription` | `string` | No | Document description |
 | `senderName` | `string` | No | Sender name |
