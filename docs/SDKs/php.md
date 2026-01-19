@@ -471,15 +471,7 @@ Retrieve the current status of a document.
 ```php
 $status = TurboSign::getStatus('document-uuid');
 
-echo "Document Status: {$status->status->value}\n";
-echo "Recipients:\n";
-
-foreach ($status->recipients as $recipient) {
-    echo "  {$recipient->name}: {$recipient->status->value}\n";
-    if ($recipient->signedAt) {
-        echo "    Signed at: {$recipient->signedAt}\n";
-    }
-}
+echo "Document Status: {$status->status}\n";  // 'pending', 'completed', 'voided'
 ```
 
 ### Download document
@@ -534,10 +526,11 @@ $audit = TurboSign::getAuditTrail('document-uuid');
 
 echo "Audit Trail:\n";
 foreach ($audit->auditTrail as $entry) {
-    echo "  {$entry->timestamp} - {$entry->event} by {$entry->actor}\n";
-    if ($entry->ipAddress) {
-        echo "    IP: {$entry->ipAddress}\n";
+    echo "  {$entry->timestamp} - {$entry->actionType}";
+    if ($entry->user) {
+        echo " by {$entry->user->name}";
     }
+    echo "\n";
 }
 ```
 
@@ -821,10 +814,3 @@ For detailed information about advanced configuration and API concepts, see:
 - [Packagist Package](https://packagist.org/packages/turbodocx/sdk)
 - [API Reference](/docs/TurboSign/API%20Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
-
-:::tip Quality Metrics
-- ✅ **31 unit tests** with 82 assertions (100% passing)
-- ✅ **PHPStan level 8** - Zero errors
-- ✅ **PSR-12 compliant** - Enforced via PHP-CS-Fixer
-- ✅ **PHP 8.1+ compatible** - Modern PHP features
-:::
