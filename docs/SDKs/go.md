@@ -1,7 +1,7 @@
 ---
 title: Go SDK
 sidebar_position: 4
-sidebar_label: 'TurboSign: Go'
+sidebar_label: "TurboSign: Go"
 description: Official TurboDocx Go SDK. Idiomatic Go with context support for document generation and digital signatures.
 keywords:
   - turbodocx go
@@ -99,7 +99,7 @@ func main() {
     ctx := context.Background()
 
     result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
-        FileLink:     "https://example.com/contract.pdf",
+        FileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
         DocumentName: "Service Agreement",
         SenderName:   "Acme Corp",
         SenderEmail:  "contracts@acme.com",
@@ -128,7 +128,7 @@ func main() {
 
 ```go
 result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
-    FileLink: "https://example.com/contract-with-placeholders.pdf",
+    FileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
     Recipients: []turbodocx.Recipient{
         {Name: "Alice Smith", Email: "alice@example.com", SigningOrder: 1},
     },
@@ -192,7 +192,7 @@ Provide a publicly accessible URL to your document:
 
 ```go
 result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
-    FileLink: "https://example.com/documents/contract.pdf",
+    FileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
     Recipients: []turbodocx.Recipient{
         {Name: "John Doe", Email: "john@example.com", SigningOrder: 1},
     },
@@ -276,7 +276,7 @@ Upload a document for preview without sending emails.
 
 ```go
 result, err := client.TurboSign.CreateSignatureReviewLink(ctx, &turbodocx.CreateSignatureReviewLinkRequest{
-    FileLink:     "https://example.com/document.pdf",
+    FileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
     DocumentName: "Contract Draft",
     Recipients: []turbodocx.Recipient{
         {Name: "John Doe", Email: "john@example.com", SigningOrder: 1},
@@ -295,7 +295,7 @@ Upload a document and immediately send signature requests.
 
 ```go
 result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
-    FileLink:     "https://example.com/document.pdf",
+    FileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
     DocumentName: "Service Agreement",
     SenderName:   "Your Company",
     SenderEmail:  "sender@company.com",
@@ -473,8 +473,8 @@ The `Type` field accepts the following string values:
 | `Page`            | `int`             | No\*     | Page number (1-indexed)                     |
 | `X`               | `int`             | No\*     | X coordinate in pixels                      |
 | `Y`               | `int`             | No\*     | Y coordinate in pixels                      |
-| `Width`           | `int`             | No*      | Field width in pixels                       |
-| `Height`          | `int`             | No*      | Field height in pixels                      |
+| `Width`           | `int`             | No\*     | Field width in pixels                       |
+| `Height`          | `int`             | No\*     | Field height in pixels                      |
 | `DefaultValue`    | `string`          | No       | Pre-filled value                            |
 | `IsMultiline`     | `bool`            | No       | Enable multiline for text fields            |
 | `IsReadonly`      | `bool`            | No       | Make field read-only                        |
@@ -503,7 +503,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 
 | Property              | Type          | Required    | Description              |
 | --------------------- | ------------- | ----------- | ------------------------ |
-| `File`                | `[]byte`      | Conditional | File content as bytes      |
+| `File`                | `[]byte`      | Conditional | File content as bytes    |
 | `FileLink`            | `string`      | Conditional | URL to document          |
 | `DeliverableID`       | `string`      | Conditional | TurboDocx deliverable ID |
 | `TemplateID`          | `string`      | Conditional | TurboDocx template ID    |
