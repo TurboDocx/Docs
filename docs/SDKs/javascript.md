@@ -1,25 +1,27 @@
 ---
-title: JavaScript / TypeScript SDK
+title: Sign Documents with JavaScript | TurboDocx
 sidebar_position: 2
 sidebar_label: 'TurboSign: JavaScript / TypeScript'
-description: Official TurboDocx JavaScript and TypeScript SDK. Full TypeScript support with async/await patterns for document generation and digital signatures.
+description: Learn how to sign documents with JavaScript using TurboDocx SDK. Send documents for signature via API and automate signing in your Node.js or TypeScript app.
 keywords:
-  - turbodocx javascript
-  - turbodocx typescript
+  - sign documents javascript
+  - sign pdf javascript
+  - esignature api javascript
+  - turbodocx javascript sdk
   - turbosign javascript
-  - node.js sdk
-  - typescript sdk
-  - npm turbodocx
-  - document api javascript
-  - esignature javascript
+  - node.js document signing
+  - typescript esignature
+  - npm turbodocx sdk
+  - javascript digital signature api
+  - send documents for signature javascript
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# JavaScript / TypeScript SDK
+# Sign Documents with JavaScript
 
-The official TurboDocx SDK for JavaScript and TypeScript applications. Build document generation and digital signature workflows with full TypeScript support, async/await patterns, and comprehensive error handling. Available on npm as `@turbodocx/sdk`.
+Learn how to sign documents with JavaScript using the TurboDocx SDK. This guide covers installation, configuration, sending documents for signature, and processing results in your Node.js or TypeScript application.
 
 ## Installation
 

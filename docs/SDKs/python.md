@@ -1,25 +1,27 @@
 ---
-title: Python SDK
+title: Sign Documents with Python | TurboDocx
 sidebar_position: 3
 sidebar_label: 'TurboSign: Python'
-description: Official TurboDocx Python SDK. Async-first design with sync wrappers for document generation and digital signatures.
+description: Learn how to sign documents with Python using TurboDocx SDK. Send documents for signature via API and automate signing in your Django or FastAPI app.
 keywords:
-  - turbodocx python
+  - sign documents python
+  - sign pdf python
+  - esignature api python
+  - turbodocx python sdk
   - turbosign python
-  - python sdk
-  - pip turbodocx
-  - asyncio sdk
-  - fastapi turbodocx
-  - django turbodocx
-  - document api python
+  - pip turbodocx sdk
+  - python digital signature api
+  - django document signing
+  - fastapi esignature
+  - send documents for signature python
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Python SDK
+# Sign Documents with Python
 
-The official TurboDocx SDK for Python applications. Build document generation and digital signature workflows with async/await patterns and comprehensive error handling. Available on PyPI as `turbodocx-sdk`.
+Learn how to sign documents with Python using the TurboDocx SDK. This guide covers installation, configuration, sending documents for signature, and processing results in your Django, FastAPI, or Flask application.
 
 ## Installation
 

@@ -1,18 +1,19 @@
 ---
-title: SDKs Overview
+title: Sign Documents with Code | TurboDocx SDKs
 sidebar_position: 1
 sidebar_label: Overview
-description: Official TurboDocx SDKs for JavaScript, Python, Go, and Java. Get started with document generation and digital signatures in minutes.
+description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Send documents for signature via API and automate document signing workflows.
 keywords:
-  - turbodocx sdk
-  - turbosign sdk
-  - javascript sdk
-  - python sdk
-  - go sdk
-  - java sdk
-  - document api
+  - sign documents api
   - esignature sdk
-  - api client library
+  - document signing api
+  - turbodocx sdk
+  - turbosign api
+  - javascript document signing
+  - python esignature
+  - php document api
+  - go signing sdk
+  - java esignature api
 ---
 
 import Tabs from '@theme/Tabs';

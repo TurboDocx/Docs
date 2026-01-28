@@ -1,26 +1,27 @@
 ---
-title: PHP SDK
+title: Sign Documents with PHP | TurboDocx
 sidebar_position: 5
 sidebar_label: 'TurboSign: PHP'
-description: Official TurboDocx PHP SDK. Modern PHP 8.1+ with strong typing, enums, and PSR standards for document generation and digital signatures.
+description: Learn how to sign documents with PHP using TurboDocx SDK. Send documents for signature via API and automate signing in your Laravel or Symfony app.
 keywords:
-  - turbodocx php
+  - sign documents php
+  - sign pdf php
+  - esignature api php
+  - turbodocx php sdk
   - turbosign php
-  - php sdk
-  - composer turbodocx
-  - php 8.1 sdk
-  - laravel turbodocx
-  - symfony turbodocx
-  - document api php
-  - esignature php
+  - composer turbodocx sdk
+  - php digital signature api
+  - laravel document signing
+  - symfony esignature
+  - send documents for signature php
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# PHP SDK
+# Sign Documents with PHP
 
-The official TurboDocx SDK for PHP applications. Build document generation and digital signature workflows with modern PHP 8.1+ features, strong typing, and comprehensive error handling. Available on Packagist as `turbodocx/sdk`.
+Learn how to sign documents with PHP using the TurboDocx SDK. This guide covers installation, configuration, sending documents for signature, and processing results in your Laravel or Symfony application.
 
 ## Installation
 

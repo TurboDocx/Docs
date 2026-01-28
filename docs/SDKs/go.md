@@ -1,23 +1,26 @@
 ---
-title: Go SDK
+title: Sign Documents with Go | TurboDocx
 sidebar_position: 4
 sidebar_label: 'TurboSign: Go'
-description: Official TurboDocx Go SDK. Idiomatic Go with context support for document generation and digital signatures.
+description: Learn how to sign documents with Go using TurboDocx SDK. Send documents for signature via API and automate signing directly in your Golang application.
 keywords:
-  - turbodocx go
-  - turbosign go
-  - golang sdk
-  - go module
-  - document api go
-  - esignature golang
+  - sign documents go
+  - sign pdf golang
+  - esignature api go
+  - turbodocx go sdk
+  - turbosign golang
+  - go module turbodocx
+  - golang digital signature api
+  - go document signing
+  - send documents for signature go
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Go SDK
+# Sign Documents with Go
 
-The official TurboDocx SDK for Go applications. Build document generation and digital signature workflows with idiomatic Go patterns, context support, and comprehensive error handling. Available as `github.com/TurboDocx/SDK/packages/go-sdk`.
+Learn how to sign documents with Go using the TurboDocx SDK. This guide covers installation, configuration, sending documents for signature, and processing results directly in your Golang application.
 
 ## Installation
 

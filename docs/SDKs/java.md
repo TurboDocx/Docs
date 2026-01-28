@@ -1,24 +1,27 @@
 ---
-title: Java SDK
+title: Sign Documents with Java | TurboDocx
 sidebar_position: 6
 sidebar_label: 'TurboSign: Java'
-description: Official TurboDocx Java SDK. Builder pattern API with comprehensive error handling for document generation and digital signatures.
+description: Learn how to sign documents with Java using TurboDocx SDK. Send documents for signature via API and automate signing in your Spring or Maven project.
 keywords:
-  - turbodocx java
+  - sign documents java
+  - sign pdf java
+  - esignature api java
+  - turbodocx java sdk
   - turbosign java
-  - maven turbodocx
-  - gradle turbodocx
-  - java sdk
-  - document api java
-  - esignature java
+  - maven turbodocx sdk
+  - java digital signature api
+  - spring document signing
+  - gradle esignature
+  - send documents for signature java
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Java SDK
+# Sign Documents with Java
 
-The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
+Learn how to sign documents with Java using the TurboDocx SDK. This guide covers installation, configuration, sending documents for signature, and processing results in your Spring Boot or Maven project.
 
 ## Installation
 
