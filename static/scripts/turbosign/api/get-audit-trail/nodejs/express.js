@@ -21,12 +21,14 @@ const response = await fetch(`${BASE_URL}/turbosign/documents/${documentId}/audi
 const result = await response.json();
 
 if (response.ok) {
-  console.log('Document:', result.document.name);
-  console.log('Document ID:', result.document.id);
+  const { document, auditTrail } = result.data;
+
+  console.log('Document:', document.name);
+  console.log('Document ID:', document.id);
   console.log('\nAudit Trail:');
   console.log('============');
 
-  result.auditTrail.forEach((entry, index) => {
+  auditTrail.forEach((entry, index) => {
     console.log(`\n${index + 1}. ${entry.actionType}`);
     console.log(`   Timestamp: ${entry.timestamp}`);
 

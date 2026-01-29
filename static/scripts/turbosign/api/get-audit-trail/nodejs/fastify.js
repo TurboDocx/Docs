@@ -31,11 +31,13 @@ fastify.get('/audit-trail/:documentId', async (request, reply) => {
     }
 
     // Return the audit trail with document info
+    const { document, auditTrail } = result.data;
+
     return reply.send({
       success: true,
-      document: result.document,
-      auditTrail: result.auditTrail,
-      entryCount: result.auditTrail.length
+      document: document,
+      auditTrail: auditTrail,
+      entryCount: auditTrail.length
     });
 
   } catch (error) {

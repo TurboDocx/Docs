@@ -32,11 +32,12 @@ def get_audit_trail(document_id):
             }), response.status_code
 
         # Return the audit trail with document info
+        data = result['data']
         return jsonify({
             'success': True,
-            'document': result['document'],
-            'auditTrail': result['auditTrail'],
-            'entryCount': len(result['auditTrail'])
+            'document': data['document'],
+            'auditTrail': data['auditTrail'],
+            'entryCount': len(data['auditTrail'])
         }), 200
 
     except Exception as error:

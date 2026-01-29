@@ -486,82 +486,84 @@ User-Agent: TurboDocx API Client
 
 ```json
 {
-  "document": {
-    "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
-    "name": "Service Agreement 2024"
-  },
-  "auditTrail": [
-    {
-      "id": "entry-uuid-1",
-      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-      "actionType": "DOCUMENT_CREATED",
-      "timestamp": "2024-01-15T10:30:00.000Z",
-      "previousHash": null,
-      "currentHash": "a1b2c3d4e5f6...",
-      "createdOn": "2024-01-15T10:30:00.000Z",
-      "details": {
-        "ipAddress": "192.168.1.100",
-        "userAgent": "Mozilla/5.0..."
-      },
-      "user": {
-        "name": "Admin User",
-        "email": "admin@company.com"
-      },
-      "userId": "user-uuid-1"
+  "data": {
+    "document": {
+      "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
+      "name": "Service Agreement 2024"
     },
-    {
-      "id": "entry-uuid-2",
-      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-      "actionType": "DOCUMENT_SENT",
-      "timestamp": "2024-01-15T10:31:00.000Z",
-      "previousHash": "a1b2c3d4e5f6...",
-      "currentHash": "b2c3d4e5f6g7...",
-      "createdOn": "2024-01-15T10:31:00.000Z",
-      "details": {
-        "recipientCount": 2
+    "auditTrail": [
+      {
+        "id": "entry-uuid-1",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "DOCUMENT_CREATED",
+        "timestamp": "2024-01-15T10:30:00.000Z",
+        "previousHash": null,
+        "currentHash": "a1b2c3d4e5f6...",
+        "createdOn": "2024-01-15T10:30:00.000Z",
+        "details": {
+          "ipAddress": "192.168.1.100",
+          "userAgent": "Mozilla/5.0..."
+        },
+        "user": {
+          "name": "Admin User",
+          "email": "admin@company.com"
+        },
+        "userId": "user-uuid-1"
       },
-      "user": {
-        "name": "Admin User",
-        "email": "admin@company.com"
+      {
+        "id": "entry-uuid-2",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "DOCUMENT_SENT",
+        "timestamp": "2024-01-15T10:31:00.000Z",
+        "previousHash": "a1b2c3d4e5f6...",
+        "currentHash": "b2c3d4e5f6g7...",
+        "createdOn": "2024-01-15T10:31:00.000Z",
+        "details": {
+          "recipientCount": 2
+        },
+        "user": {
+          "name": "Admin User",
+          "email": "admin@company.com"
+        },
+        "userId": "user-uuid-1"
       },
-      "userId": "user-uuid-1"
-    },
-    {
-      "id": "entry-uuid-3",
-      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-      "actionType": "DOCUMENT_VIEWED",
-      "timestamp": "2024-01-15T11:00:00.000Z",
-      "previousHash": "b2c3d4e5f6g7...",
-      "currentHash": "c3d4e5f6g7h8...",
-      "createdOn": "2024-01-15T11:00:00.000Z",
-      "details": {
-        "ipAddress": "10.0.0.50"
+      {
+        "id": "entry-uuid-3",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "DOCUMENT_VIEWED",
+        "timestamp": "2024-01-15T11:00:00.000Z",
+        "previousHash": "b2c3d4e5f6g7...",
+        "currentHash": "c3d4e5f6g7h8...",
+        "createdOn": "2024-01-15T11:00:00.000Z",
+        "details": {
+          "ipAddress": "10.0.0.50"
+        },
+        "recipient": {
+          "name": "John Smith",
+          "email": "john.smith@company.com"
+        },
+        "recipientId": "recipient-uuid-1"
       },
-      "recipient": {
-        "name": "John Smith",
-        "email": "john.smith@company.com"
-      },
-      "recipientId": "recipient-uuid-1"
-    },
-    {
-      "id": "entry-uuid-4",
-      "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-      "actionType": "DOCUMENT_SIGNED",
-      "timestamp": "2024-01-15T11:05:00.000Z",
-      "previousHash": "c3d4e5f6g7h8...",
-      "currentHash": "d4e5f6g7h8i9...",
-      "createdOn": "2024-01-15T11:05:00.000Z",
-      "details": {
-        "signatureType": "electronic",
-        "ipAddress": "10.0.0.50"
-      },
-      "recipient": {
-        "name": "John Smith",
-        "email": "john.smith@company.com"
-      },
-      "recipientId": "recipient-uuid-1"
-    }
-  ]
+      {
+        "id": "entry-uuid-4",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "DOCUMENT_SIGNED",
+        "timestamp": "2024-01-15T11:05:00.000Z",
+        "previousHash": "c3d4e5f6g7h8...",
+        "currentHash": "d4e5f6g7h8i9...",
+        "createdOn": "2024-01-15T11:05:00.000Z",
+        "details": {
+          "signatureType": "electronic",
+          "ipAddress": "10.0.0.50"
+        },
+        "recipient": {
+          "name": "John Smith",
+          "email": "john.smith@company.com"
+        },
+        "recipientId": "recipient-uuid-1"
+      }
+    ]
+  }
 }
 ```
 

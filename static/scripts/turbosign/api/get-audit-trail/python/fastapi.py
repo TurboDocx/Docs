@@ -34,11 +34,12 @@ async def get_audit_trail(document_id: str):
             )
 
         # Return the audit trail with document info
+        data = result['data']
         return {
             'success': True,
-            'document': result['document'],
-            'auditTrail': result['auditTrail'],
-            'entryCount': len(result['auditTrail'])
+            'document': data['document'],
+            'auditTrail': data['auditTrail'],
+            'entryCount': len(data['auditTrail'])
         }
 
     except HTTPException:
