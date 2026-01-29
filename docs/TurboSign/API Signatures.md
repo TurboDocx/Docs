@@ -444,14 +444,6 @@ User-Agent: TurboDocx API Client
 This endpoint only returns a download URL when the document status is `COMPLETED`. If the document is still pending signatures, you will receive an error response.
 :::
 
-### Code Examples
-
-<ScriptLoader
-  scriptPath="turbosign/api/download-signed-document"
-  id="download-signed-document"
-  label="Download Signed Document - Code Examples"
-/>
-
 ### Usage Notes
 
 - The presigned URL expires after **1 hour**. Request a new URL if the previous one has expired.
@@ -616,14 +608,6 @@ The audit trail uses a cryptographic hash chain for tamper-evidence:
 - Any modification to historical entries would break the chain
 
 This provides strong evidence that the audit trail has not been tampered with after creation.
-
-### Code Examples
-
-<ScriptLoader
-  scriptPath="turbosign/api/get-audit-trail"
-  id="get-audit-trail"
-  label="Get Audit Trail - Code Examples"
-/>
 
 ### Usage Notes
 
