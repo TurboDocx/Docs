@@ -495,7 +495,7 @@ User-Agent: TurboDocx API Client
       {
         "id": "entry-uuid-1",
         "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-        "actionType": "DOCUMENT_CREATED",
+        "actionType": "prepared_for_review",
         "timestamp": "2024-01-15T10:30:00.000Z",
         "previousHash": null,
         "currentHash": "a1b2c3d4e5f6...",
@@ -513,7 +513,7 @@ User-Agent: TurboDocx API Client
       {
         "id": "entry-uuid-2",
         "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-        "actionType": "DOCUMENT_SENT",
+        "actionType": "document_sent",
         "timestamp": "2024-01-15T10:31:00.000Z",
         "previousHash": "a1b2c3d4e5f6...",
         "currentHash": "b2c3d4e5f6g7...",
@@ -530,7 +530,7 @@ User-Agent: TurboDocx API Client
       {
         "id": "entry-uuid-3",
         "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-        "actionType": "DOCUMENT_VIEWED",
+        "actionType": "document_viewed",
         "timestamp": "2024-01-15T11:00:00.000Z",
         "previousHash": "b2c3d4e5f6g7...",
         "currentHash": "c3d4e5f6g7h8...",
@@ -547,7 +547,7 @@ User-Agent: TurboDocx API Client
       {
         "id": "entry-uuid-4",
         "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-        "actionType": "DOCUMENT_SIGNED",
+        "actionType": "document_signed",
         "timestamp": "2024-01-15T11:05:00.000Z",
         "previousHash": "c3d4e5f6g7h8...",
         "currentHash": "d4e5f6g7h8i9...",
@@ -595,18 +595,16 @@ User-Agent: TurboDocx API Client
 
 #### Action Types
 
-| Action Type         | Description                                    |
-| ------------------- | ---------------------------------------------- |
-| DOCUMENT_CREATED    | Document was uploaded and created              |
-| DOCUMENT_SENT       | Document was sent to recipients for signing    |
-| DOCUMENT_VIEWED     | Recipient opened/viewed the document           |
-| DOCUMENT_SIGNED     | Recipient signed the document                  |
-| DOCUMENT_COMPLETED  | All recipients have signed                     |
-| DOCUMENT_VOIDED     | Document was voided/cancelled                  |
-| DOCUMENT_DECLINED   | Recipient declined to sign                     |
-| EMAIL_SENT          | Signing invitation email was sent              |
-| EMAIL_BOUNCED       | Email delivery failed                          |
-| REMINDER_SENT       | Reminder email was sent to recipient           |
+| Action Type                   | Description                                         |
+| ----------------------------- | --------------------------------------------------- |
+| `prepared_for_review`         | Document was uploaded and prepared for review       |
+| `document_sent`               | Document was sent to recipients for signing         |
+| `document_viewed`             | Recipient opened/viewed the document                |
+| `document_signed`             | Recipient signed the document                       |
+| `document_voided`             | Document was voided/cancelled                       |
+| `document_resent`             | Reminder/resend email was sent to recipient         |
+| `email_notification_sent`     | Signing invitation email was sent                   |
+| `cc_email_notification_sent`  | CC notification email was sent                      |
 
 ### Hash Chain Verification
 
