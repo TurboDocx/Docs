@@ -1,7 +1,7 @@
 ---
 title: Java SDK
 sidebar_position: 6
-sidebar_label: 'TurboSign: Java'
+sidebar_label: "TurboSign: Java"
 description: Official TurboDocx Java SDK. Builder pattern API with comprehensive error handling for document generation and digital signatures.
 keywords:
   - turbodocx java
@@ -117,7 +117,7 @@ public class Main {
 
         SendSignatureResponse result = client.turboSign().sendSignature(
             new SendSignatureRequest.Builder()
-                .fileLink("https://example.com/contract.pdf")
+                .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
                 .documentName("Service Agreement")
                 .senderName("Acme Corp")
                 .senderEmail("contracts@acme.com")
@@ -174,7 +174,7 @@ Field templateField = new Field(
 
 SendSignatureResponse result = client.turboSign().sendSignature(
     new SendSignatureRequest.Builder()
-        .fileLink("https://example.com/contract-with-placeholders.pdf")
+        .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
         .recipients(Arrays.asList(
             new Recipient("Alice Smith", "alice@example.com", 1)
         ))
@@ -223,7 +223,7 @@ Provide a publicly accessible URL to your document:
 ```java
 SendSignatureResponse result = client.turboSign().sendSignature(
     new SendSignatureRequest.Builder()
-        .fileLink("https://example.com/documents/contract.pdf")
+        .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
         .recipients(Arrays.asList(
             new Recipient("John Doe", "john@example.com", 1)
         ))
@@ -305,7 +305,7 @@ Upload a document for preview without sending emails.
 ```java
 CreateSignatureReviewLinkResponse result = client.turboSign().createSignatureReviewLink(
     new CreateSignatureReviewLinkRequest.Builder()
-        .fileLink("https://example.com/document.pdf")
+        .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
         .documentName("Contract Draft")
         .recipients(Arrays.asList(
             new Recipient("John Doe", "john@example.com", 1)
@@ -326,7 +326,7 @@ Upload a document and immediately send signature requests.
 ```java
 SendSignatureResponse result = client.turboSign().sendSignature(
     new SendSignatureRequest.Builder()
-        .fileLink("https://example.com/document.pdf")
+        .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
         .documentName("Service Agreement")
         .senderName("Your Company")
         .senderEmail("sender@company.com")
@@ -485,8 +485,8 @@ The `type` field accepts the following string values:
 | `page`            | `Integer`        | No\*     | Page number (1-indexed)                     |
 | `x`               | `Integer`        | No\*     | X coordinate in pixels                      |
 | `y`               | `Integer`        | No\*     | Y coordinate in pixels                      |
-| `width`           | `Integer`        | No*      | Field width in pixels                       |
-| `height`          | `Integer`        | No*      | Field height in pixels                      |
+| `width`           | `Integer`        | No\*     | Field width in pixels                       |
+| `height`          | `Integer`        | No\*     | Field height in pixels                      |
 | `defaultValue`    | `String`         | No       | Pre-filled value                            |
 | `isMultiline`     | `Boolean`        | No       | Enable multiline for text fields            |
 | `isReadonly`      | `Boolean`        | No       | Make field read-only                        |
@@ -501,8 +501,8 @@ The `type` field accepts the following string values:
 When using `template` instead of coordinates:
 
 | Property        | Type      | Required | Description                                                                           |
-| --------------- | --------- | -------- | ------------------------------------------------------------------------------------- |
-| `anchor`        | `String`  | Yes      | Text to find in document (e.g., `"{SIGNATURE}"`)                                      |                                                      |
+| --------------- | --------- | -------- | ------------------------------------------------------------------------------------- | --- |
+| `anchor`        | `String`  | Yes      | Text to find in document (e.g., `"{SIGNATURE}"`)                                      |     |
 | `placement`     | `String`  | Yes      | Position relative to anchor: `"replace"`, `"before"`, `"after"`, `"above"`, `"below"` |
 | `size`          | `Size`    | Yes      | Size with `width` and `height`                                                        |
 | `offset`        | `Offset`  | No       | Offset with `x` and `y`                                                               |
@@ -515,7 +515,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 
 | Property              | Type              | Required    | Description              |
 | --------------------- | ----------------- | ----------- | ------------------------ |
-| `file`                | `byte[]`          | Conditional | File content as bytes      |
+| `file`                | `byte[]`          | Conditional | File content as bytes    |
 | `fileLink`            | `String`          | Conditional | URL to document          |
 | `deliverableId`       | `String`          | Conditional | TurboDocx deliverable ID |
 | `templateId`          | `String`          | Conditional | TurboDocx template ID    |

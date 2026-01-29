@@ -1,7 +1,7 @@
 ---
 title: PHP SDK
 sidebar_position: 5
-sidebar_label: 'TurboSign: PHP'
+sidebar_label: "TurboSign: PHP"
 description: Official TurboDocx PHP SDK. Modern PHP 8.1+ with strong typing, enums, and PSR standards for document generation and digital signatures.
 keywords:
   - turbodocx php
@@ -164,7 +164,7 @@ $result = TurboSign::sendSignature(
                 height: 30
             )
         ],
-        fileLink: 'https://example.com/contract.pdf',
+        fileLink: 'https://www.turbodocx.com/examples/turbodocx.pdf',
         documentName: 'Service Agreement',
         senderName: 'Acme Corp',
         senderEmail: 'contracts@acme.com'
@@ -215,7 +215,7 @@ $result = TurboSign::sendSignature(
                 )
             )
         ],
-        fileLink: 'https://example.com/contract-with-placeholders.pdf',
+        fileLink: 'https://www.turbodocx.com/examples/turbodocx.pdf',
         senderName: 'Your Company',
         senderEmail: 'sender@company.com'
     )
@@ -278,7 +278,7 @@ use TurboDocx\Types\Requests\SendSignatureRequest;
 
 $result = TurboSign::sendSignature(
     new SendSignatureRequest(
-        fileLink: 'https://storage.example.com/contracts/agreement.pdf',
+        fileLink: 'https://www.turbodocx.com/examples/turbodocx.pdf',
         recipients: [
             new Recipient('John Doe', 'john@example.com', 1)
         ],
@@ -421,7 +421,7 @@ $result = TurboSign::createSignatureReviewLink(
                 height: 50
             )
         ],
-        fileLink: 'https://example.com/document.pdf',
+        fileLink: 'https://www.turbodocx.com/examples/turbodocx.pdf',
         documentName: 'Contract Draft'
     )
 );
@@ -456,7 +456,7 @@ $result = TurboSign::sendSignature(
                 height: 50
             )
         ],
-        fileLink: 'https://example.com/document.pdf',
+        fileLink: 'https://www.turbodocx.com/examples/turbodocx.pdf',
         documentName: 'Service Agreement'
     )
 );
@@ -592,6 +592,7 @@ new Field(
 ```
 
 **Placement Options:**
+
 - `FieldPlacement::REPLACE` - Replace the anchor text
 - `FieldPlacement::BEFORE` - Place before the anchor
 - `FieldPlacement::AFTER` - Place after the anchor
@@ -687,6 +688,7 @@ try {
 | `NetworkException`        | -           | Network connectivity issues        |
 
 All exceptions extend `TurboDocxException` and include:
+
 - `getMessage()` - Human-readable error message
 - `statusCode` - HTTP status code (if applicable)
 - `errorCode` - Error code string (e.g., 'AUTHENTICATION_ERROR')

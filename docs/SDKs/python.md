@@ -1,7 +1,7 @@
 ---
 title: Python SDK
 sidebar_position: 3
-sidebar_label: 'TurboSign: Python'
+sidebar_label: "TurboSign: Python"
 description: Official TurboDocx Python SDK. Async-first design with sync wrappers for document generation and digital signatures.
 keywords:
   - turbodocx python
@@ -115,7 +115,7 @@ async def send_contract():
             {"type": "signature", "page": 1, "x": 100, "y": 720, "width": 200, "height": 50, "recipientEmail": "bob@example.com"},
             {"type": "date", "page": 1, "x": 320, "y": 720, "width": 100, "height": 30, "recipientEmail": "bob@example.com"}
         ],
-        file_link="https://example.com/contract.pdf",
+        file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
         document_name="Service Agreement",
         sender_name="Acme Corp",
         sender_email="contracts@acme.com",
@@ -151,7 +151,7 @@ result = await TurboSign.send_signature(
             },
         },
     ],
-    file_link="https://example.com/contract-with-placeholders.pdf",
+    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
 )
 
 print("Result:", json.dumps(result, indent=2))
@@ -196,7 +196,7 @@ result = await TurboSign.send_signature(
 
 ```python
 result = await TurboSign.send_signature(
-    file_link="https://storage.example.com/contracts/agreement.pdf",
+    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
     recipients=[
         {"name": "John Doe", "email": "john@example.com", "signingOrder": 1},
     ],
@@ -296,7 +296,7 @@ Upload a document for preview without sending signature request emails.
 result = await TurboSign.create_signature_review_link(
     recipients=[{"name": "John Doe", "email": "john@example.com", "signingOrder": 1}],
     fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "john@example.com"}],
-    file_link="https://example.com/document.pdf",
+    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
     document_name="Contract Draft",
 )
 
@@ -312,7 +312,7 @@ Upload a document and immediately send signature requests to all recipients.
 result = await TurboSign.send_signature(
     recipients=[{"name": "Recipient Name", "email": "recipient@example.com", "signingOrder": 1}],
     fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "recipient@example.com"}],
-    file_link="https://example.com/document.pdf",
+    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
     document_name="Service Agreement",
     sender_name="Your Company",
     sender_email="sender@company.com",
@@ -411,7 +411,7 @@ try:
             "height": 50,
             "recipientEmail": "john@example.com",
         }],
-        file_link="https://example.com/contract.pdf",
+        file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
     )
 except AuthenticationError as e:
     print(f"Authentication failed: {e}")
@@ -508,8 +508,8 @@ Field configuration supporting both coordinate-based and template-based position
 | `page`            | `int`  | No\*     | Page number (1-indexed)                             |
 | `x`               | `int`  | No\*     | X coordinate in pixels                              |
 | `y`               | `int`  | No\*     | Y coordinate in pixels                              |
-| `width`           | `int`  | No*      | Field width in pixels                               |
-| `height`          | `int`  | No*      | Field height in pixels                              |
+| `width`           | `int`  | No\*     | Field width in pixels                               |
+| `height`          | `int`  | No\*     | Field height in pixels                              |
 | `defaultValue`    | `str`  | No       | Default value (for checkbox: `"true"` or `"false"`) |
 | `isMultiline`     | `bool` | No       | Enable multiline text                               |
 | `isReadonly`      | `bool` | No       | Make field read-only (pre-filled)                   |

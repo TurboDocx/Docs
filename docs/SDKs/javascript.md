@@ -1,7 +1,7 @@
 ---
 title: JavaScript / TypeScript SDK
 sidebar_position: 2
-sidebar_label: 'TurboSign: JavaScript / TypeScript'
+sidebar_label: "TurboSign: JavaScript / TypeScript"
 description: Official TurboDocx JavaScript and TypeScript SDK. Full TypeScript support with async/await patterns for document generation and digital signatures.
 keywords:
   - turbodocx javascript
@@ -120,7 +120,7 @@ TurboSign.configure({
 
 // Send document with coordinate-based fields
 const result = await TurboSign.sendSignature({
-  fileLink: "https://example.com/contract.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Service Agreement",
   senderName: "Acme Corp",
   senderEmail: "contracts@acme.com",
@@ -186,7 +186,7 @@ TurboSign.configure({
 
 // Send document with coordinate-based fields
 const result = await TurboSign.sendSignature({
-  fileLink: "https://example.com/contract.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Service Agreement",
   senderName: "Acme Corp",
   senderEmail: "contracts@acme.com",
@@ -250,7 +250,7 @@ console.log(JSON.stringify(result, null, 2));
 ```javascript
 // Use text anchors instead of coordinates
 const result = await TurboSign.sendSignature({
-  fileLink: "https://example.com/contract-with-placeholders.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
   ],
@@ -285,7 +285,7 @@ console.log(JSON.stringify(result, null, 2));
 ```typescript
 // Use text anchors instead of coordinates
 const result = await TurboSign.sendSignature({
-  fileLink: "https://example.com/contract-with-placeholders.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
   ],
@@ -418,7 +418,7 @@ const result = await TurboSign.sendSignature({
 
 ```javascript
 const result = await TurboSign.sendSignature({
-  fileLink: "https://storage.example.com/contracts/agreement.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
   ],
@@ -441,7 +441,7 @@ const result = await TurboSign.sendSignature({
 
 ```typescript
 const result = await TurboSign.sendSignature({
-  fileLink: "https://storage.example.com/contracts/agreement.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
   ],
@@ -642,7 +642,7 @@ Upload a document for preview without sending signature request emails.
 
 ```javascript
 const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
-  fileLink: "https://example.com/document.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Contract Draft",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -666,7 +666,7 @@ const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
 
 ```typescript
 const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
-  fileLink: "https://example.com/document.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Contract Draft",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -697,7 +697,7 @@ Upload a document and immediately send signature requests to all recipients.
 
 ```javascript
 const { documentId } = await TurboSign.sendSignature({
-  fileLink: "https://example.com/document.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Service Agreement",
   senderName: "Your Company",
   senderEmail: "sender@company.com",
@@ -723,7 +723,7 @@ const { documentId } = await TurboSign.sendSignature({
 
 ```typescript
 const { documentId } = await TurboSign.sendSignature({
-  fileLink: "https://example.com/document.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Service Agreement",
   senderName: "Your Company",
   senderEmail: "sender@company.com",
@@ -886,14 +886,14 @@ The SDK provides typed error classes for different failure scenarios. All errors
 
 ### Error Classes
 
-| Error Class | Status Code | Code | Description |
-|-------------|-------------|------|-------------|
-| `TurboDocxError` | varies | varies | Base error class for all SDK errors |
-| `AuthenticationError` | 401 | `AUTHENTICATION_ERROR` | Invalid or missing API credentials |
-| `ValidationError` | 400 | `VALIDATION_ERROR` | Invalid request parameters |
-| `NotFoundError` | 404 | `NOT_FOUND` | Document or resource not found |
-| `RateLimitError` | 429 | `RATE_LIMIT_EXCEEDED` | Too many requests |
-| `NetworkError` | - | `NETWORK_ERROR` | Network connectivity issues |
+| Error Class           | Status Code | Code                   | Description                         |
+| --------------------- | ----------- | ---------------------- | ----------------------------------- |
+| `TurboDocxError`      | varies      | varies                 | Base error class for all SDK errors |
+| `AuthenticationError` | 401         | `AUTHENTICATION_ERROR` | Invalid or missing API credentials  |
+| `ValidationError`     | 400         | `VALIDATION_ERROR`     | Invalid request parameters          |
+| `NotFoundError`       | 404         | `NOT_FOUND`            | Document or resource not found      |
+| `RateLimitError`      | 429         | `RATE_LIMIT_EXCEEDED`  | Too many requests                   |
+| `NetworkError`        | -           | `NETWORK_ERROR`        | Network connectivity issues         |
 
 ### Handling Errors
 
@@ -913,7 +913,7 @@ const {
 
 try {
   const result = await TurboSign.sendSignature({
-    fileLink: "https://example.com/contract.pdf",
+    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
     recipients: [
       { name: "John Doe", email: "john@example.com", signingOrder: 1 },
     ],
@@ -967,7 +967,7 @@ import {
 
 try {
   const result = await TurboSign.sendSignature({
-    fileLink: "https://example.com/contract.pdf",
+    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
     recipients: [
       { name: "John Doe", email: "john@example.com", signingOrder: 1 },
     ],
@@ -1012,11 +1012,11 @@ try {
 
 All errors include these properties:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `message` | `string` | Human-readable error description |
+| Property     | Type                  | Description                      |
+| ------------ | --------------------- | -------------------------------- |
+| `message`    | `string`              | Human-readable error description |
 | `statusCode` | `number \| undefined` | HTTP status code (if applicable) |
-| `code` | `string \| undefined` | Machine-readable error code |
+| `code`       | `string \| undefined` | Machine-readable error code      |
 
 ---
 
@@ -1061,62 +1061,62 @@ type SignatureFieldType =
 
 Recipient configuration for signature requests:
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `name` | `string` | Yes | Recipient's full name |
-| `email` | `string` | Yes | Recipient's email address |
-| `signingOrder` | `number` | Yes | Signing order (1-indexed) |
+| Property       | Type     | Required | Description               |
+| -------------- | -------- | -------- | ------------------------- |
+| `name`         | `string` | Yes      | Recipient's full name     |
+| `email`        | `string` | Yes      | Recipient's email address |
+| `signingOrder` | `number` | Yes      | Signing order (1-indexed) |
 
 ### Field
 
 Field configuration supporting both coordinate-based and template-based positioning:
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `type` | `SignatureFieldType` | Yes | Field type |
-| `recipientEmail` | `string` | Yes | Which recipient fills this field |
-| `page` | `number` | No\* | Page number (1-indexed) |
-| `x` | `number` | No\* | X coordinate in pixels |
-| `y` | `number` | No\* | Y coordinate in pixels |
-| `width` | `number` | No* | Field width in pixels |
-| `height` | `number` | No* | Field height in pixels |
-| `defaultValue` | `string` | No | Default value (for checkbox: `"true"` or `"false"`) |
-| `isMultiline` | `boolean` | No | Enable multiline text |
-| `isReadonly` | `boolean` | No | Make field read-only (pre-filled) |
-| `required` | `boolean` | No | Whether field is required |
-| `backgroundColor` | `string` | No | Background color (hex, rgb, or named) |
-| `template` | `object` | No | Template anchor configuration |
+| Property          | Type                 | Required | Description                                         |
+| ----------------- | -------------------- | -------- | --------------------------------------------------- |
+| `type`            | `SignatureFieldType` | Yes      | Field type                                          |
+| `recipientEmail`  | `string`             | Yes      | Which recipient fills this field                    |
+| `page`            | `number`             | No\*     | Page number (1-indexed)                             |
+| `x`               | `number`             | No\*     | X coordinate in pixels                              |
+| `y`               | `number`             | No\*     | Y coordinate in pixels                              |
+| `width`           | `number`             | No\*     | Field width in pixels                               |
+| `height`          | `number`             | No\*     | Field height in pixels                              |
+| `defaultValue`    | `string`             | No       | Default value (for checkbox: `"true"` or `"false"`) |
+| `isMultiline`     | `boolean`            | No       | Enable multiline text                               |
+| `isReadonly`      | `boolean`            | No       | Make field read-only (pre-filled)                   |
+| `required`        | `boolean`            | No       | Whether field is required                           |
+| `backgroundColor` | `string`             | No       | Background color (hex, rgb, or named)               |
+| `template`        | `object`             | No       | Template anchor configuration                       |
 
 \*Required when not using template anchors
 
 **Template Configuration:**
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `anchor` | `string` | Yes | Text anchor pattern like `{TagName}` |
-| `placement` | `string` | Yes | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
-| `size` | `object` | Yes | `{ width: number; height: number }` |
-| `offset` | `object` | No | `{ x: number; y: number }` |
-| `caseSensitive` | `boolean` | No | Case sensitive search (default: false) |
-| `useRegex` | `boolean` | No | Use regex for anchor/searchText (default: false) |
+| Property        | Type      | Required | Description                                                      |
+| --------------- | --------- | -------- | ---------------------------------------------------------------- |
+| `anchor`        | `string`  | Yes      | Text anchor pattern like `{TagName}`                             |
+| `placement`     | `string`  | Yes      | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size`          | `object`  | Yes      | `{ width: number; height: number }`                              |
+| `offset`        | `object`  | No       | `{ x: number; y: number }`                                       |
+| `caseSensitive` | `boolean` | No       | Case sensitive search (default: false)                           |
+| `useRegex`      | `boolean` | No       | Use regex for anchor/searchText (default: false)                 |
 
 ### CreateSignatureReviewLinkRequest / SendSignatureRequest
 
 Request configuration for `createSignatureReviewLink` and `sendSignature` methods:
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `file` | `Buffer` | Conditional | PDF file as Buffer |
-| `fileLink` | `string` | Conditional | URL to document file |
-| `deliverableId` | `string` | Conditional | TurboDocx deliverable ID |
-| `templateId` | `string` | Conditional | TurboDocx template ID |
-| `recipients` | `Recipient[]` | Yes | Recipients who will sign |
-| `fields` | `Field[]` | Yes | Signature fields configuration |
-| `documentName` | `string` | No | Document name |
-| `documentDescription` | `string` | No | Document description |
-| `senderName` | `string` | No | Sender name |
-| `senderEmail` | `string` | No | Sender email |
-| `ccEmails` | `string[]` | No | Array of CC email addresses |
+| Property              | Type          | Required    | Description                    |
+| --------------------- | ------------- | ----------- | ------------------------------ |
+| `file`                | `Buffer`      | Conditional | PDF file as Buffer             |
+| `fileLink`            | `string`      | Conditional | URL to document file           |
+| `deliverableId`       | `string`      | Conditional | TurboDocx deliverable ID       |
+| `templateId`          | `string`      | Conditional | TurboDocx template ID          |
+| `recipients`          | `Recipient[]` | Yes         | Recipients who will sign       |
+| `fields`              | `Field[]`     | Yes         | Signature fields configuration |
+| `documentName`        | `string`      | No          | Document name                  |
+| `documentDescription` | `string`      | No          | Document description           |
+| `senderName`          | `string`      | No          | Sender name                    |
+| `senderEmail`         | `string`      | No          | Sender email                   |
+| `ccEmails`            | `string[]`    | No          | Array of CC email addresses    |
 
 :::info File Source (Conditional)
 Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.

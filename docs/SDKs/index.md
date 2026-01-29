@@ -24,13 +24,13 @@ Official client libraries for the TurboDocx API. Build document generation and d
 
 ## Available SDKs
 
-| Language                  | Package                    | Install Command                                                      | Links                                                                                                |
-| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------- |
-| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)   |
-| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)       |
-| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)         |
-| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)           |
-| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)       |
+| Language                  | Package                    | Install Command                                                      | Links                                                                                              |
+| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)     |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)       |
+| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
+| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
@@ -64,7 +64,7 @@ Before you begin, you'll need two things from your TurboDocx account:
 - Store your API key and Organization ID as environment variables
 - Never commit credentials to version control
 - Rotate your API keys regularly for security
-:::
+  :::
 
 ### 2. Install the SDK
 
@@ -147,7 +147,7 @@ TurboSign.configure({
 
 // Send a document for signature
 const result = await TurboSign.sendSignature({
-  fileLink: "https://example.com/contract.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
   ],
@@ -181,7 +181,7 @@ TurboSign.configure({
 
 // Send a document for signature
 const result = await TurboSign.sendSignature({
-  fileLink: "https://example.com/contract.pdf",
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
   ],
@@ -216,7 +216,7 @@ TurboSign.configure(
 
 # Send a document for signature
 result = TurboSign.send_signature(
-    file_link="https://example.com/contract.pdf",
+    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
     recipients=[
         {"name": "John Doe", "email": "john@example.com", "signingOrder": 1}
     ],
@@ -265,7 +265,7 @@ $result = TurboSign::sendSignature(
                 height: 50
             )
         ],
-        fileLink: 'https://example.com/contract.pdf'
+        fileLink: 'https://www.turbodocx.com/examples/turbodocx.pdf'
     )
 );
 
@@ -295,7 +295,7 @@ func main() {
 
     // Send a document for signature
     result, err := client.TurboSign.SendSignature(context.Background(), &sdk.SendSignatureRequest{
-        FileLink: "https://example.com/contract.pdf",
+        FileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
         Recipients: []sdk.Recipient{
             {Name: "John Doe", Email: "john@example.com", SigningOrder: 1},
         },
@@ -329,7 +329,7 @@ public class Main {
         // Send a document for signature
         SigningResult result = turboSign.sendSignature(
             SigningRequest.builder()
-                .fileLink("https://example.com/contract.pdf")
+                .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
                 .recipient(Recipient.builder()
                     .name("John Doe")
                     .email("john@example.com")
@@ -365,11 +365,11 @@ Send documents for legally-binding eSignatures with full audit trails.
 | :---------------------------- | :------------------------------------------------------ |
 | `createSignatureReviewLink()` | Upload document for preview without sending emails      |
 | `sendSignature()`             | Upload and immediately send signature requests          |
-| `getStatus()`               | Check document and recipient signing status             |
-| `download()`                | Download the completed signed document                  |
-| `void()`                    | Cancel/void a signature request                         |
-| `resend()`                  | Resend signature request emails                         |
-| `getAuditTrail()`           | Get complete audit trail with all events and timestamps |
+| `getStatus()`                 | Check document and recipient signing status             |
+| `download()`                  | Download the completed signed document                  |
+| `void()`                      | Cancel/void a signature request                         |
+| `resend()`                    | Resend signature request emails                         |
+| `getAuditTrail()`             | Get complete audit trail with all events and timestamps |
 
 [Learn more about TurboSign →](/docs/TurboSign/Setting%20up%20TurboSign)
 
