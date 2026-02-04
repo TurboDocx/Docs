@@ -400,6 +400,222 @@ The request format is **identical** to prepare-for-review. See the "Endpoint 1: 
   label="Prepare for Signing - Code Examples"
 />
 
+## Endpoint 3: Download Signed Document
+
+After a document has been signed by all recipients (status: `COMPLETED`), you can download the final signed PDF document.
+
+### Endpoint
+
+```http
+GET https://api.turbodocx.com/turbosign/documents/{documentId}/download
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                      |
+| ---------- | ------------- | -------- | -------------------------------- |
+| documentId | String (UUID) | Yes      | The unique identifier of the document |
+
+### Response
+
+```json
+{
+  "downloadUrl": "https://s3.amazonaws.com/bucket/path/to/document.pdf?X-Amz-...",
+  "fileName": "Signed_Contract_2024.pdf"
+}
+```
+
+### Response Fields
+
+| Field       | Type   | Description                                                |
+| ----------- | ------ | ---------------------------------------------------------- |
+| downloadUrl | String | Presigned S3 URL to download the signed PDF (expires in 1 hour) |
+| fileName    | String | Original filename of the signed document                   |
+
+:::warning Document Status Requirement
+This endpoint only returns a download URL when the document status is `COMPLETED`. If the document is still pending signatures, you will receive an error response.
+:::
+
+### Usage Notes
+
+- The presigned URL expires after **1 hour**. Request a new URL if the previous one has expired.
+- The downloaded PDF includes all signatures embedded and is legally binding.
+- For large documents, consider streaming the download rather than loading the entire file into memory.
+
+## Endpoint 4: Get Audit Trail
+
+Retrieve the complete audit trail for a document, including all events and timestamps. The audit trail provides a tamper-evident record of all actions taken on the document using a cryptographic hash chain.
+
+### Endpoint
+
+```http
+GET https://api.turbodocx.com/turbosign/documents/{documentId}/audit-trail
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                      |
+| ---------- | ------------- | -------- | -------------------------------- |
+| documentId | String (UUID) | Yes      | The unique identifier of the document |
+
+### Response
+
+```json
+{
+  "data": {
+    "document": {
+      "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
+      "name": "Service Agreement 2024"
+    },
+    "auditTrail": [
+      {
+        "id": "entry-uuid-1",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "prepared_for_review",
+        "timestamp": "2024-01-15T10:30:00.000Z",
+        "previousHash": null,
+        "currentHash": "a1b2c3d4e5f6...",
+        "createdOn": "2024-01-15T10:30:00.000Z",
+        "details": {
+          "ipAddress": "192.168.1.100",
+          "userAgent": "Mozilla/5.0..."
+        },
+        "user": {
+          "name": "Admin User",
+          "email": "admin@company.com"
+        },
+        "userId": "user-uuid-1"
+      },
+      {
+        "id": "entry-uuid-2",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "document_sent",
+        "timestamp": "2024-01-15T10:31:00.000Z",
+        "previousHash": "a1b2c3d4e5f6...",
+        "currentHash": "b2c3d4e5f6g7...",
+        "createdOn": "2024-01-15T10:31:00.000Z",
+        "details": {
+          "recipientCount": 2
+        },
+        "user": {
+          "name": "Admin User",
+          "email": "admin@company.com"
+        },
+        "userId": "user-uuid-1"
+      },
+      {
+        "id": "entry-uuid-3",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "document_viewed",
+        "timestamp": "2024-01-15T11:00:00.000Z",
+        "previousHash": "b2c3d4e5f6g7...",
+        "currentHash": "c3d4e5f6g7h8...",
+        "createdOn": "2024-01-15T11:00:00.000Z",
+        "details": {
+          "ipAddress": "10.0.0.50"
+        },
+        "recipient": {
+          "name": "John Smith",
+          "email": "john.smith@company.com"
+        },
+        "recipientId": "recipient-uuid-1"
+      },
+      {
+        "id": "entry-uuid-4",
+        "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+        "actionType": "document_signed",
+        "timestamp": "2024-01-15T11:05:00.000Z",
+        "previousHash": "c3d4e5f6g7h8...",
+        "currentHash": "d4e5f6g7h8i9...",
+        "createdOn": "2024-01-15T11:05:00.000Z",
+        "details": {
+          "signatureType": "electronic",
+          "ipAddress": "10.0.0.50"
+        },
+        "recipient": {
+          "name": "John Smith",
+          "email": "john.smith@company.com"
+        },
+        "recipientId": "recipient-uuid-1"
+      }
+    ]
+  }
+}
+```
+
+### Response Fields
+
+#### Document Object
+
+| Field | Type          | Description                 |
+| ----- | ------------- | --------------------------- |
+| id    | String (UUID) | Document identifier         |
+| name  | String        | Document name               |
+
+#### Audit Trail Entry Object
+
+| Field        | Type          | Description                                           |
+| ------------ | ------------- | ----------------------------------------------------- |
+| id           | String (UUID) | Unique identifier for the audit entry                 |
+| documentId   | String (UUID) | Document this entry belongs to                        |
+| actionType   | String        | Type of action (see Action Types below)               |
+| timestamp    | String (ISO)  | When the action occurred                              |
+| previousHash | String        | Hash of the previous entry (null for first entry)     |
+| currentHash  | String        | Hash of this entry (forms hash chain)                 |
+| createdOn    | String (ISO)  | When the entry was created                            |
+| details      | Object        | Additional action-specific details                    |
+| user         | Object        | User who performed action (for sender actions)        |
+| userId       | String (UUID) | User ID (when applicable)                             |
+| recipient    | Object        | Recipient who performed action (for signer actions)   |
+| recipientId  | String (UUID) | Recipient ID (when applicable)                        |
+
+#### Action Types
+
+| Action Type                   | Description                                         |
+| ----------------------------- | --------------------------------------------------- |
+| `prepared_for_review`         | Document was uploaded and prepared for review       |
+| `document_sent`               | Document was sent to recipients for signing         |
+| `document_viewed`             | Recipient opened/viewed the document                |
+| `document_signed`             | Recipient signed the document                       |
+| `document_voided`             | Document was voided/cancelled                       |
+| `document_resent`             | Reminder/resend email was sent to recipient         |
+| `email_notification_sent`     | Signing invitation email was sent                   |
+| `cc_email_notification_sent`  | CC notification email was sent                      |
+
+### Hash Chain Verification
+
+The audit trail uses a cryptographic hash chain for tamper-evidence:
+
+- Each entry's `currentHash` is computed from the entry data plus the `previousHash`
+- The first entry has `previousHash: null`
+- To verify integrity, recompute each hash and compare
+- Any modification to historical entries would break the chain
+
+This provides strong evidence that the audit trail has not been tampered with after creation.
+
+### Usage Notes
+
+- The audit trail is available at any document status (not just completed documents)
+- All timestamps are in ISO 8601 format (UTC timezone)
+- The `details` object varies by action type and may contain IP addresses, user agents, and other contextual information
+- Audit trail entries are immutable and cannot be modified or deleted
+
 ## Recipients Reference
 
 ### Recipient Properties
