@@ -107,7 +107,7 @@ def download_deliverable(deliverable_id, filename):
         print(error_msg)
         raise
 
-def create_complex_variables():
+def create_simple_variables():
     """Create complex variable structures for testing"""
     return [
         {
@@ -251,9 +251,9 @@ def create_deliverable_data(template_id):
 
     return {
         'templateId': template_id,
-        'name': 'Employee Contract - John Smith',
+        'name': 'Contract - John Smith',
         'description': 'Employment contract for new senior software engineer',
-        'variables': create_complex_variables(),
+        'variables': create_simple_variables(),
         'tags': ['hr', 'contract', 'employee', 'engineering'],
         'fonts': '[{"name":"Arial","usage":269}]',
         'defaultFont': 'Arial',
