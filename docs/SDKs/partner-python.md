@@ -236,6 +236,7 @@ result = await TurboPartner.update_organization_entitlements(
         "hasFileDownload": True,
         "hasBetaFeatures": False,
     },
+    tracking={"numUsers": 5},  # Optional: set tracking counters
 )
 
 print("Entitlements updated!")
@@ -288,6 +289,7 @@ result = await TurboPartner.list_organization_users(
     "org-uuid-here",
     limit=50,
     offset=0,
+    search="admin",  # Optional search by email or name
 )
 
 print(f"Total Users: {result['data']['totalRecords']}")
@@ -360,6 +362,8 @@ List all API keys for an organization.
 result = await TurboPartner.list_organization_api_keys(
     "org-uuid-here",
     limit=50,
+    offset=0,       # Optional pagination offset
+    search="prod",  # Optional search by name
 )
 
 for key in result["data"]["results"]:
@@ -428,7 +432,11 @@ print(f"Full Key: {result['data']['key']}")  # Only shown once!
 List all partner API keys.
 
 ```python
-result = await TurboPartner.list_partner_api_keys(limit=50)
+result = await TurboPartner.list_partner_api_keys(
+    limit=50,
+    offset=0,       # Optional pagination offset
+    search="integ",  # Optional search by name
+)
 
 for key in result["data"]["results"]:
     print(f"- {key['name']}")
@@ -487,7 +495,11 @@ print(f"Partner User ID: {result['data']['id']}")
 List all partner portal users.
 
 ```python
-result = await TurboPartner.list_partner_portal_users(limit=50)
+result = await TurboPartner.list_partner_portal_users(
+    limit=50,
+    offset=0,        # Optional pagination offset
+    search="admin",  # Optional search by email or name
+)
 
 for user in result["data"]["results"]:
     print(f"- {user['email']} (Role: {user['role']})")
