@@ -444,6 +444,7 @@ result = await TurboPartner.update_partner_api_key(
     "partner-key-uuid-here",
     name="Updated Integration Key",
     description="Updated description",
+    scopes=[SCOPE_ORG_READ, SCOPE_AUDIT_READ],  # Optional: update scopes
 )
 ```
 
@@ -700,7 +701,11 @@ permissions = {
 The SDK provides typed exceptions for different error scenarios:
 
 ```python
-from turbodocx_sdk import TurboPartner, TurboDocxError, AuthenticationError, ValidationError
+from turbodocx_sdk import (
+    TurboPartner, TurboDocxError,
+    AuthenticationError, ValidationError,
+    NotFoundError, RateLimitError, NetworkError,
+)
 
 try:
     result = await TurboPartner.create_organization("Acme Corp")
@@ -712,6 +717,15 @@ except ValidationError as e:
     # 400 - Invalid request data
     print(f"Validation error: {e}")
     print(f"  HTTP Status: {e.status_code}")
+except NotFoundError as e:
+    # 404 - Resource not found
+    print(f"Not found: {e}")
+except RateLimitError as e:
+    # 429 - Too many requests
+    print(f"Rate limited: {e}")
+except NetworkError as e:
+    # Network connectivity issues
+    print(f"Network error: {e}")
 except TurboDocxError as e:
     # Any other API error
     print(f"API error: {e}")
@@ -728,6 +742,9 @@ except TurboDocxError as e:
 | `TurboDocxError` | varies | Base error for all SDK errors |
 | `AuthenticationError` | 401 | Invalid or missing API credentials |
 | `ValidationError` | 400 | Invalid request parameters |
+| `NotFoundError` | 404 | Resource not found |
+| `RateLimitError` | 429 | Too many requests |
+| `NetworkError` | - | Network connectivity issues |
 
 ---
 
@@ -788,4 +805,4 @@ asyncio.run(main())
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 - [PyPI Package](https://pypi.org/project/turbodocx-sdk/)
 - [TurboSign Python SDK](/docs/SDKs/python) — For digital signature operations
-- [API Reference](/docs/API/partner-api) — REST API documentation
+- [SDKs Overview](/docs/SDKs/) — All TurboDocx SDKs
