@@ -83,7 +83,7 @@ poetry add turbodocx-sdk
 
 ## Requirements
 
-- Python 3.8 or higher
+- Python 3.9 or higher
 - `httpx` (installed automatically)
 
 ---
@@ -166,7 +166,8 @@ Create a new organization under your partner account.
 ```python
 result = await TurboPartner.create_organization(
     "Acme Corporation",
-    features={"maxUsers": 50},  # Optional entitlements override
+    features={"maxUsers": 50},      # Optional entitlements override
+    metadata={"plan": "enterprise"}, # Optional metadata key-value pairs
 )
 
 print(f"Organization ID: {result['data']['id']}")
@@ -543,8 +544,10 @@ Get audit logs for all partner activities with filtering.
 result = await TurboPartner.get_partner_audit_logs(
     limit=50,
     offset=0,
+    search="acme",                 # Optional search query
     action="ORG_CREATED",          # Optional filter by action
     resource_type="organization",  # Optional filter by resource type
+    resource_id="org-uuid-here",   # Optional filter by resource ID
     success=True,                  # Optional filter by success/failure
     start_date="2024-01-01",       # Optional date range start
     end_date="2024-12-31",         # Optional date range end
