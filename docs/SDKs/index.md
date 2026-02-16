@@ -45,11 +45,12 @@ Programmatically manage organizations, users, API keys, and entitlements for mul
 | Language                  | Package         | Install Command               | Links                                                                                                  |
 | :------------------------ | :-------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------- |
 | **JavaScript/TypeScript** | `@turbodocx/sdk` | `npm install @turbodocx/sdk` | [Docs](/docs/SDKs/partner-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
+| **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/partner-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
 | **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/partner-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
 | **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk` | [Docs](/docs/SDKs/partner-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
 
 :::info More Languages Coming Soon
-TurboPartner SDKs for Python and Java are coming soon.
+TurboPartner SDK for Java is coming soon.
 :::
 
 :::tip Low-code or No-code?

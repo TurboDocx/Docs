@@ -169,6 +169,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'SDKs/partner-python',
+              label: 'Python',
+            },
+            {
+              type: 'doc',
               id: 'SDKs/partner-php',
               label: 'PHP',
             },
