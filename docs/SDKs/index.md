@@ -2,16 +2,20 @@
 title: SDKs Overview
 sidebar_position: 1
 sidebar_label: Overview
-description: Official TurboDocx SDKs for JavaScript, Python, Go, and Java. Get started with document generation and digital signatures in minutes.
+description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, digital signatures, and partner management.
 keywords:
   - turbodocx sdk
   - turbosign sdk
+  - turbopartner sdk
   - javascript sdk
   - python sdk
+  - php sdk
   - go sdk
   - java sdk
   - document api
   - esignature sdk
+  - partner api
+  - multi-tenant sdk
   - api client library
 ---
 
@@ -20,9 +24,11 @@ import TabItem from '@theme/TabItem';
 
 # TurboDocx SDKs
 
-Official client libraries for the TurboDocx API. Build document generation and digital signature workflows in your language of choice.
+Official client libraries for the TurboDocx API. Build document generation, digital signature, and partner management workflows in your language of choice.
 
-## Available SDKs
+## TurboSign SDKs
+
+Send documents for legally-binding eSignatures with full audit trails.
 
 | Language                  | Package                    | Install Command                                                      | Links                                                                                              |
 | :------------------------ | :------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- |
@@ -31,6 +37,19 @@ Official client libraries for the TurboDocx API. Build document generation and d
 | **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)       |
 | **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
 | **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
+
+## TurboPartner SDKs
+
+Programmatically manage organizations, users, API keys, and entitlements for multi-tenant applications.
+
+| Language                  | Package         | Install Command               | Links                                                                                                  |
+| :------------------------ | :-------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------- |
+| **JavaScript/TypeScript** | `@turbodocx/sdk` | `npm install @turbodocx/sdk` | [Docs](/docs/SDKs/partner-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
+| **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/partner-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
+
+:::info More Languages Coming Soon
+TurboPartner SDKs for Python, Go, and Java are coming soon.
+:::
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
@@ -64,7 +83,7 @@ Before you begin, you'll need two things from your TurboDocx account:
 - Store your API key and Organization ID as environment variables
 - Never commit credentials to version control
 - Rotate your API keys regularly for security
-  :::
+:::
 
 ### 2. Install the SDK
 
@@ -372,6 +391,23 @@ Send documents for legally-binding eSignatures with full audit trails.
 | `getAuditTrail()`             | Get complete audit trail with all events and timestamps |
 
 [Learn more about TurboSign →](/docs/TurboSign/Setting%20up%20TurboSign)
+
+### TurboPartner — Partner Management
+
+Programmatically manage multi-tenant applications with organization provisioning, user management, and entitlement control.
+
+| Method                            | Description                                           |
+| :-------------------------------- | :---------------------------------------------------- |
+| `createOrganization()`            | Create a new organization under your partner account  |
+| `listOrganizations()`             | List all organizations with pagination and search     |
+| `getOrganizationDetails()`        | Get organization details including features/tracking  |
+| `updateOrganizationEntitlements()` | Update feature limits and capabilities               |
+| `addUserToOrganization()`         | Add users to organizations with specific roles        |
+| `createOrganizationApiKey()`      | Create API keys for organizations                     |
+| `createPartnerApiKey()`           | Create partner-level API keys with scoped access      |
+| `getPartnerAuditLogs()`           | Retrieve audit logs with filtering                    |
+
+[Learn more about TurboPartner →](/docs/SDKs/partner-php)
 
 ### TurboDocx — Document Generation _(Coming Soon)_
 

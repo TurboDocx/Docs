@@ -126,29 +126,53 @@ const sidebars = {
       },
       items: [
         {
-          type: 'doc',
-          id: 'SDKs/javascript',
-          label: 'TurboSign: JavaScript / TypeScript',
+          type: 'category',
+          label: 'TurboSign SDKs',
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'SDKs/javascript',
+              label: 'JavaScript / TypeScript',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/python',
+              label: 'Python',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/php',
+              label: 'PHP',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/go',
+              label: 'Go',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/java',
+              label: 'Java',
+            },
+          ],
         },
         {
-          type: 'doc',
-          id: 'SDKs/python',
-          label: 'TurboSign: Python',
-        },
-        {
-          type: 'doc',
-          id: 'SDKs/php',
-          label: 'TurboSign: PHP',
-        },
-        {
-          type: 'doc',
-          id: 'SDKs/go',
-          label: 'TurboSign: Go',
-        },
-        {
-          type: 'doc',
-          id: 'SDKs/java',
-          label: 'TurboSign: Java',
+          type: 'category',
+          label: 'TurboPartner SDKs',
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'SDKs/partner-javascript',
+              label: 'JavaScript / TypeScript',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/partner-php',
+              label: 'PHP',
+            },
+          ],
         },
       ],
     },
