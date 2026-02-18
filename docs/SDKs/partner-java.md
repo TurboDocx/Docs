@@ -595,7 +595,7 @@ JsonObject result = client.turboPartner().getPartnerAuditLogs(
         50,               // limit
         0,                // offset
         null,             // search
-        "ORG_CREATED",    // action (optional filter)
+        "org.created",    // action (optional filter)
         "organization",   // resourceType (optional filter)
         null,             // resourceId
         true,             // success (optional filter)

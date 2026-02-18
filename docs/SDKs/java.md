@@ -153,32 +153,15 @@ public class Main {
 
 ```java
 // Template-based field using anchor text
-Field.TemplateAnchor templateAnchor = new Field.TemplateAnchor(
-    "{SIGNATURE_ALICE}",      // anchor text to find
-    null,                     // searchText (alternative to anchor)
-    "replace",                // placement: replace/before/after/above/below
-    new Field.Size(200, 50),  // size
-    null,                     // offset
-    false,                    // caseSensitive
-    false                     // useRegex
-);
-
-// Field with template anchor (no page/x/y coordinates needed)
-Field templateField = new Field(
-    "signature",              // type
-    null,                     // page (null for template-based)
-    null,                     // x (null for template-based)
-    null,                     // y (null for template-based)
-    null,                     // width (null, using template size)
-    null,                     // height (null, using template size)
-    "alice@example.com",      // recipientEmail
-    null,                     // defaultValue
-    null,                     // isMultiline
-    null,                     // isReadonly
-    null,                     // required
-    null,                     // backgroundColor
-    templateAnchor            // template anchor config
-);
+Field templateField = new Field.Builder()
+    .type("signature")
+    .recipientEmail("alice@example.com")
+    .template(new Field.TemplateAnchor.Builder()
+        .anchor("{SIGNATURE_ALICE}")  // anchor text to find in the document
+        .placement("replace")         // replace/before/after/above/below
+        .size(new Field.Size(200, 50))
+        .build())
+    .build();
 
 SendSignatureResponse result = client.turboSign().sendSignature(
     new SendSignatureRequest.Builder()
@@ -214,6 +197,7 @@ byte[] pdfBytes = Files.readAllBytes(Paths.get("/path/to/document.pdf"));
 SendSignatureResponse result = client.turboSign().sendSignature(
     new SendSignatureRequest.Builder()
         .file(pdfBytes)
+        .fileName("document.pdf")
         .recipients(Arrays.asList(
             new Recipient("John Doe", "john@example.com", 1)
         ))
