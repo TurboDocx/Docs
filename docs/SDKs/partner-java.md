@@ -595,7 +595,7 @@ JsonObject result = client.turboPartner().getPartnerAuditLogs(
         50,               // limit
         0,                // offset
         null,             // search
-        "org.created",    // action (optional filter)
+        "org.create",     // action (optional filter)
         "organization",   // resourceType (optional filter)
         null,             // resourceId
         true,             // success (optional filter)
@@ -758,6 +758,7 @@ The SDK provides typed exceptions for different error scenarios:
 
 ```java
 import com.turbodocx.TurboDocxException;
+import java.io.IOException;
 
 try {
     JsonObject result = client.turboPartner().createOrganization("Acme Corp");
@@ -773,12 +774,12 @@ try {
 } catch (TurboDocxException.RateLimitException e) {
     // 429 - Rate limit exceeded
     System.err.println("Rate limit: " + e.getMessage());
-} catch (TurboDocxException.NetworkException e) {
-    // Network/connection error
-    System.err.println("Network error: " + e.getMessage());
 } catch (TurboDocxException e) {
     // Base exception for other API errors
     System.err.println("API error [" + e.getStatusCode() + "]: " + e.getMessage());
+} catch (IOException e) {
+    // Network/connection error
+    System.err.println("Network error: " + e.getMessage());
 }
 ```
 
@@ -791,7 +792,7 @@ try {
 | `TurboDocxException.ValidationException` | 400 | Invalid request parameters |
 | `TurboDocxException.NotFoundException` | 404 | Resource not found |
 | `TurboDocxException.RateLimitException` | 429 | Too many requests |
-| `TurboDocxException.NetworkException` | - | Network connectivity issues |
+| `IOException` | - | Network connectivity issues |
 
 ### Error Properties
 

@@ -18,7 +18,7 @@ import TabItem from '@theme/TabItem';
 
 # Java SDK
 
-The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
+The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:turbodocx-sdk`.
 
 ## Installation
 
@@ -63,26 +63,22 @@ implementation 'com.turbodocx:turbodocx-sdk:0.2.0'
 ```java
 import com.turbodocx.TurboDocxClient;
 
-public class Main {
-    public static void main(String[] args) {
-        // Create client with Builder pattern
-        TurboDocxClient client = new TurboDocxClient.Builder()
-            .apiKey(System.getenv("TURBODOCX_API_KEY"))
-            .orgId(System.getenv("TURBODOCX_ORG_ID"))
-            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))  // REQUIRED
-            .senderName(System.getenv("TURBODOCX_SENDER_NAME"))    // Optional but recommended
-            .build();
+// Basic configuration
+TurboDocxClient client = new TurboDocxClient.Builder()
+    .apiKey(System.getenv("TURBODOCX_API_KEY"))       // Required
+    .orgId(System.getenv("TURBODOCX_ORG_ID"))         // Required
+    .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))  // Required
+    .senderName(System.getenv("TURBODOCX_SENDER_NAME"))    // Optional but recommended
+    .build();
 
-        // Or with custom base URL
-        TurboDocxClient client = new TurboDocxClient.Builder()
-            .apiKey(System.getenv("TURBODOCX_API_KEY"))
-            .orgId(System.getenv("TURBODOCX_ORG_ID"))
-            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
-            .senderName(System.getenv("TURBODOCX_SENDER_NAME"))
-            .baseUrl("https://api.turbodocx.com")
-            .build();
-    }
-}
+// With custom base URL
+TurboDocxClient client = new TurboDocxClient.Builder()
+    .apiKey(System.getenv("TURBODOCX_API_KEY"))
+    .orgId(System.getenv("TURBODOCX_ORG_ID"))
+    .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
+    .senderName(System.getenv("TURBODOCX_SENDER_NAME"))
+    .baseUrl("https://api.turbodocx.com")              // Optional
+    .build();
 ```
 
 ### Environment Variables
@@ -402,7 +398,7 @@ The SDK provides typed exceptions for different error scenarios:
 | `TurboDocxException.ValidationException`     | 400         | Invalid request parameters         |
 | `TurboDocxException.NotFoundException`       | 404         | Document or resource not found     |
 | `TurboDocxException.RateLimitException`      | 429         | Too many requests                  |
-| `TurboDocxException.NetworkException`        | -           | Network connectivity issues        |
+| `IOException`                                | -           | Network connectivity issues        |
 
 ### Error Properties
 
@@ -416,6 +412,7 @@ The SDK provides typed exceptions for different error scenarios:
 
 ```java
 import com.turbodocx.TurboDocxException;
+import java.io.IOException;
 
 try {
     SendSignatureResponse result = client.turboSign().sendSignature(request);
@@ -431,12 +428,12 @@ try {
 } catch (TurboDocxException.RateLimitException e) {
     System.err.println("Rate limited: " + e.getMessage());
     // Wait and retry
-} catch (TurboDocxException.NetworkException e) {
-    System.err.println("Network error: " + e.getMessage());
-    // Check connectivity
 } catch (TurboDocxException e) {
     // Base exception for other API errors
     System.err.println("API error [" + e.getStatusCode() + "]: " + e.getMessage());
+} catch (IOException e) {
+    System.err.println("Network error: " + e.getMessage());
+    // Check connectivity
 }
 ```
 
