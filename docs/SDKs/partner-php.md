@@ -623,7 +623,7 @@ $result = TurboPartner::getPartnerAuditLogs(
     new ListAuditLogsRequest(
         limit: 50,
         offset: 0,
-        action: 'ORG_CREATED',           // Optional filter by action
+        action: 'org.create',             // Optional filter by action
         resourceType: 'organization',    // Optional filter by resource type
         success: true,                   // Optional filter by success/failure
         startDate: '2024-01-01',        // Optional date range start

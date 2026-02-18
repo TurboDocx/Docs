@@ -583,7 +583,7 @@ result, err := partner.GetPartnerAuditLogs(ctx,
     &turbodocx.ListAuditLogsRequest{
         Limit:        turbodocx.IntPtr(50),
         Offset:       turbodocx.IntPtr(0),
-        Action:       "ORG_CREATED",        // Optional filter by action
+        Action:       "org.create",          // Optional filter by action
         ResourceType: "organization",       // Optional filter by resource type
         Success:      turbodocx.BoolPtr(true), // Optional filter by success/failure
         StartDate:    "2024-01-01",         // Optional date range start
