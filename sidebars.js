@@ -182,6 +182,11 @@ const sidebars = {
               id: 'SDKs/partner-go',
               label: 'Go',
             },
+            {
+              type: 'doc',
+              id: 'SDKs/partner-java',
+              label: 'Java',
+            },
           ],
         },
       ],

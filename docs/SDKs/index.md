@@ -48,10 +48,7 @@ Programmatically manage organizations, users, API keys, and entitlements for mul
 | **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/partner-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
 | **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/partner-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
 | **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk` | [Docs](/docs/SDKs/partner-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
-
-:::info More Languages Coming Soon
-TurboPartner SDK for Java is coming soon.
-:::
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/partner-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk) |
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
