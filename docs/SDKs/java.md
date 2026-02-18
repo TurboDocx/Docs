@@ -28,8 +28,8 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 ```xml
 <dependency>
     <groupId>com.turbodocx</groupId>
-    <artifactId>sdk</artifactId>
-    <version>1.0.0</version>
+    <artifactId>turbodocx-sdk</artifactId>
+    <version>0.1.6</version>
 </dependency>
 ```
 
@@ -37,14 +37,14 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:sdk:1.0.0")
+implementation("com.turbodocx:turbodocx-sdk:0.1.6")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:sdk:1.0.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.1.6'
 ```
 
 </TabItem>
@@ -69,12 +69,16 @@ public class Main {
         TurboDocxClient client = new TurboDocxClient.Builder()
             .apiKey(System.getenv("TURBODOCX_API_KEY"))
             .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))  // REQUIRED
+            .senderName(System.getenv("TURBODOCX_SENDER_NAME"))    // Optional but recommended
             .build();
 
         // Or with custom base URL
         TurboDocxClient client = new TurboDocxClient.Builder()
             .apiKey(System.getenv("TURBODOCX_API_KEY"))
             .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
+            .senderName(System.getenv("TURBODOCX_SENDER_NAME"))
             .baseUrl("https://api.turbodocx.com")
             .build();
     }
@@ -86,10 +90,12 @@ public class Main {
 ```bash
 export TURBODOCX_API_KEY=your_api_key_here
 export TURBODOCX_ORG_ID=your_org_id_here
+export TURBODOCX_SENDER_EMAIL=you@company.com
+export TURBODOCX_SENDER_NAME="Your Company Name"
 ```
 
 :::warning API Credentials Required
-Both `apiKey` and `orgId` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+`apiKey`, `orgId`, and `senderEmail` are **required** for all API requests. `senderEmail` is used as the reply-to address for signature request emails. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ---
@@ -111,6 +117,8 @@ public class Main {
         TurboDocxClient client = new TurboDocxClient.Builder()
             .apiKey(System.getenv("TURBODOCX_API_KEY"))
             .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
+            .senderName(System.getenv("TURBODOCX_SENDER_NAME"))
             .build();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -292,9 +300,11 @@ Create a new TurboDocx client using the Builder pattern.
 
 ```java
 TurboDocxClient client = new TurboDocxClient.Builder()
-    .apiKey("your-api-key")       // Required
-    .orgId("your-org-id")         // Required
-    .baseUrl("https://api.turbodocx.com")  // Optional
+    .apiKey("your-api-key")                    // Required
+    .orgId("your-org-id")                      // Required
+    .senderEmail("you@company.com")            // Required
+    .senderName("Your Company")                // Optional but recommended
+    .baseUrl("https://api.turbodocx.com")      // Optional
     .build();
 ```
 
@@ -549,6 +559,6 @@ For detailed information about advanced configuration and API concepts, see:
 ## Resources
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
-- [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk)
+- [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
 - [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

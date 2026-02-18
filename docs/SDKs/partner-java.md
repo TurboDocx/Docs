@@ -243,8 +243,9 @@ Get full details including features and tracking for an organization.
 JsonObject result = client.turboPartner().getOrganizationDetails("org-uuid-here");
 
 JsonObject data = result.getAsJsonObject("data");
-System.out.println("Name: " + data.get("name").getAsString());
-System.out.println("Active: " + data.get("isActive").getAsBoolean());
+JsonObject org = data.getAsJsonObject("organization");
+System.out.println("Name: " + org.get("name").getAsString());
+System.out.println("Active: " + org.get("isActive").getAsBoolean());
 
 if (data.has("features") && !data.get("features").isJsonNull()) {
     JsonObject features = data.getAsJsonObject("features");
