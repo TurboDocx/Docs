@@ -166,7 +166,7 @@ ZIP: {contact.address.zip}
           "state": "CA",
           "zip": "94102"
         }
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -480,7 +480,7 @@ Convert flat variables to nested structure:
         "firstName": "John",
         "lastName": "Doe",
         "email": "john@example.com"
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]

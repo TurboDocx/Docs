@@ -384,7 +384,7 @@ END OF TEST DOCUMENT
 Replace the placeholder values (`YOUR_API_KEY`, `YOUR_ORG_ID`) with your actual credentials:
 
 ```bash
-curl -X POST https://api.turbodocx.com/v1/deliverables \
+curl -X POST https://api.turbodocx.com/deliverable \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "x-rapiddocx-org-id: YOUR_ORG_ID" \
   -H "Content-Type: application/json" \

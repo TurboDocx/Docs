@@ -170,7 +170,7 @@ Thank you for being a Premium member! You've saved ${user.account.savings} this 
           "isPremium": true,
           "savings": 250.00
         }
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -349,7 +349,7 @@ Shipping Address:
           "state": "CA",
           "zip": "94102"
         }
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -404,7 +404,7 @@ Contact: {company.divisions.engineering.teams.backend.lead.contact.email}
             }
           }
         }
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -446,7 +446,7 @@ Average: {(student.grades.physics + student.grades.chemistry + student.grades.ma
           "chemistry": 88,
           "mathematics": 95
         }
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -1959,7 +1959,7 @@ Then: {price * quantity}
       "value": {
         "name": "John",
         "email": "john@example.com"
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]
@@ -2051,7 +2051,7 @@ Then: {price * quantity}
           "state": "CA",
           "zip": "94102"
         }
-      }
+      },
       "usesAdvancedTemplatingEngine": true
     }
   ]
