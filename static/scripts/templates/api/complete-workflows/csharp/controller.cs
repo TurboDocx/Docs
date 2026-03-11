@@ -342,9 +342,8 @@ class TemplateWorkflowManager
             }
           ],
           "tags": ["api-generated"],
-          "fonts": "[]",
-          "defaultFont": "Arial",
           "replaceFonts": true,
+          "fonts": "[]",
           "metadata": {
             "sessions": [
               {

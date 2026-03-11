@@ -306,9 +306,8 @@ public class TemplateWorkflowManager {
         payload.put("description", deliverableData.get("description").asText());
         payload.set("variables", deliverableData.get("variables"));
         payload.set("tags", deliverableData.get("tags"));
-        payload.put("fonts", "[]");
-        payload.put("defaultFont", "Arial");
         payload.put("replaceFonts", true);
+        payload.put("fonts", "[]");
         payload.set("metadata", createMetadata());
 
         String jsonBody = mapper.writeValueAsString(payload);

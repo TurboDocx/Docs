@@ -53,9 +53,8 @@ class DeliverableData(BaseModel):
     description: str
     variables: List[Variable]
     tags: List[str]
+    replaceFonts: Optional[bool] = True
     fonts: str
-    defaultFont: str
-    replaceFonts: bool
     metadata: Metadata
 
 class GenerateRequest(BaseModel):
@@ -91,7 +90,7 @@ def generate_deliverable(template_id: str, deliverable_data: dict) -> dict:
     Final Step: Generate Deliverable (Both Paths Converge Here)
     Generate a deliverable document from template with variable substitution
     """
-    url = f"{BASE_URL}/deliverable"
+    url = f"{BASE_URL}/v1/deliverable"
 
     print('Generating deliverable...')
     print(f'Template ID: {template_id}')
@@ -136,7 +135,7 @@ def download_deliverable(deliverable_id: str, filename: str) -> dict:
     """Download the generated deliverable file"""
     print(f'Downloading file: {filename}')
 
-    url = f"{BASE_URL}/deliverable/file/{deliverable_id}"
+    url = f"{BASE_URL}/v1/deliverable/file/{deliverable_id}"
 
     headers = {
         'Authorization': f'Bearer {API_TOKEN}',
@@ -323,9 +322,8 @@ def create_deliverable_data(template_id: str) -> dict:
         'description': 'Employment contract for new senior software engineer',
         'variables': create_complex_variables(),
         'tags': ['hr', 'contract', 'employee', 'engineering'],
-        'fonts': '[{"name":"Arial","usage":269}]',
-        'defaultFont': 'Arial',
         'replaceFonts': True,
+        'fonts': '[{"name":"Arial","usage":269}]',
         'metadata': {
             'sessions': [
                 {
@@ -410,7 +408,7 @@ async def complete_workflow_endpoint(request: WorkflowRequest):
 
         # Get download info (but don't actually download in this example)
         print('\n=== Getting Download Info ===')
-        download_url = f"{BASE_URL}/deliverable/file/{deliverable['id']}"
+        download_url = f"{BASE_URL}/v1/deliverable/file/{deliverable['id']}"
 
         return WorkflowResponse(
             success=True,
@@ -473,14 +471,14 @@ def demonstrate_generation():
 
         # Get download info (but don't actually download in demo)
         print('\n=== Download Info ===')
-        print(f'Download URL: {BASE_URL}/deliverable/file/{deliverable["id"]}')
+        print(f'Download URL: {BASE_URL}/v1/deliverable/file/{deliverable["id"]}')
 
         print('\n=== Generation Complete ===')
         print('Deliverable generated successfully')
 
         return {
             'deliverable': deliverable,
-            'downloadUrl': f'{BASE_URL}/deliverable/file/{deliverable["id"]}'
+            'downloadUrl': f'{BASE_URL}/v1/deliverable/file/{deliverable["id"]}'
         }
 
     except Exception as e:

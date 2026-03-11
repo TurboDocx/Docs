@@ -468,10 +468,9 @@ func (tm *TemplateWorkflowManager) generateDeliverable(templateID, name, descrip
 				"aiPrompt": "",
 			},
 		},
-		"tags":         []string{"api-generated"},
-		"fonts":        "[]",
-		"defaultFont":  "Arial",
-		"replaceFonts": true,
+		"tags":            []string{"api-generated"},
+		"replaceFonts":   true,
+		"fonts":           "[]",
 		"metadata": map[string]interface{}{
 			"sessions": []map[string]interface{}{
 				{

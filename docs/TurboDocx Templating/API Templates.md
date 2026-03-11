@@ -482,7 +482,7 @@ Both paths converge here - time to fill those variables and create your masterpi
 ### Endpoint
 
 ```http
-POST https://api.turbodocx.com/deliverable
+POST https://api.turbodocx.com/v1/deliverable
 ```
 
 ### Headers
@@ -565,9 +565,8 @@ User-Agent: TurboDocx API Client
     }
   ],
   "tags": ["hr-template", "contract", "full-time"],
-  "fonts": "[{\"name\":\"Arial\",\"usage\":269}]",
-  "defaultFont": "Arial",
   "replaceFonts": true,
+  "fonts": "[{\"name\":\"Arial\",\"usage\":269}]",
   "metadata": {
     "sessions": [
       {
@@ -685,9 +684,8 @@ Understanding the variable structure is key to successful document generation:
 | `variables[].aiPrompt`               | string  | No       | AI prompt for content generation               |
 | `variables[].metadata`               | object  | No       | Custom metadata for the variable               |
 | `tags`                               | array   | No       | Tags for categorization                        |
+| `replaceFonts`                       | boolean | No       | Whether to replace fonts during generation (default: `false`) |
 | `fonts`                              | string  | No       | JSON string of font usage statistics           |
-| `defaultFont`                        | string  | No       | Default font for the document                  |
-| `replaceFonts`                       | boolean | No       | Whether to replace fonts during generation     |
 | `metadata`                           | object  | No       | Additional metadata (sessions, tracking, etc.) |
 
 ### Step 2: Download Generated File
@@ -697,7 +695,7 @@ After generating a deliverable, you'll need to download the actual file.
 #### Endpoint
 
 ```http
-GET https://api.turbodocx.com/deliverable/file/{deliverableId}
+GET https://api.turbodocx.com/v1/deliverable/file/{deliverableId}
 ```
 
 #### Headers
@@ -711,7 +709,7 @@ User-Agent: TurboDocx API Client
 #### Example Request
 
 ```bash
-curl -X GET "https://api.turbodocx.com/deliverable/file/39697685-ca00-43b8-92b8-7722544c574f" \
+curl -X GET "https://api.turbodocx.com/v1/deliverable/file/39697685-ca00-43b8-92b8-7722544c574f" \
   -H "Authorization: Bearer YOUR_API_TOKEN" \
   -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
   -H "User-Agent: TurboDocx API Client" \
@@ -841,8 +839,6 @@ Content-Length: 287456
 
 **Solutions**:
 
-- Use `replaceFonts: true` to normalize font usage
-- Specify `defaultFont` for consistent appearance
 - Check that rich text injection is enabled only when needed
 - Validate HTML content in rich text variables
 

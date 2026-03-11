@@ -1,320 +1,142 @@
-const fetch = require('node-fetch');
+const Fastify = require('fastify');
+const axios = require('axios');
 
 // Configuration - Update these values
 const API_TOKEN = "YOUR_API_TOKEN";
 const ORG_ID = "YOUR_ORGANIZATION_ID";
 const BASE_URL = "https://api.turbodocx.com";
 
-// Final Step: Generate Deliverable (Both Paths Converge Here)
+// Shared headers for TurboDocx API requests
+const apiHeaders = {
+  'Authorization': `Bearer ${API_TOKEN}`,
+  'x-rapiddocx-org-id': ORG_ID,
+  'User-Agent': 'TurboDocx API Client',
+  'Content-Type': 'application/json'
+};
+
+// Initialize Fastify
+const fastify = Fastify({ logger: true });
 
 /**
- * Generate a deliverable document from template with variable substitution
+ * POST /generate
+ * Generate a deliverable document from a template with variable substitution
  */
-async function generateDeliverable(templateId, deliverableData) {
+fastify.post('/generate', async (request, reply) => {
   try {
-    const url = `${BASE_URL}/deliverable`;
+    const { templateId } = request.body;
+
+    if (!templateId) {
+      return reply.status(400).send({ error: 'templateId is required' });
+    }
 
     const payload = {
       templateId: templateId,
-      name: deliverableData.name,
-      description: deliverableData.description || '',
-      variables: deliverableData.variables,
-      tags: deliverableData.tags || [],
-      fonts: deliverableData.fonts || '[]',
-      defaultFont: deliverableData.defaultFont || 'Arial',
-      replaceFonts: deliverableData.replaceFonts !== undefined ? deliverableData.replaceFonts : true,
-      metadata: deliverableData.metadata || {
-        sessions: [{
-          id: generateSessionId(),
-          starttime: new Date().toISOString(),
-          endtime: new Date().toISOString()
-        }]
-      }
+      name: "Employee Contract - John Smith",
+      description: "Employment contract for new senior developer",
+      variables: [
+        { placeholder: "{EmployeeName}", text: "John Smith", mimeType: "text" },
+        { placeholder: "{CompanyName}", text: "TechCorp Solutions Inc.", mimeType: "text" },
+        { placeholder: "{JobTitle}", text: "Senior Software Engineer", mimeType: "text" },
+        {
+          mimeType: "html",
+          placeholder: "{ContactBlock}",
+          text: "<div><p>Contact: {contactName}</p><p>Phone: {contactPhone}</p></div>",
+          subvariables: [
+            { placeholder: "{contactName}", text: "Jane Doe", mimeType: "text" },
+            { placeholder: "{contactPhone}", text: "(555) 123-4567", mimeType: "text" }
+          ]
+        }
+      ],
+      tags: ["hr", "contract", "employee"],
+      replaceFonts: true,
     };
 
-    console.log('Generating deliverable...');
-    console.log(`Template ID: ${templateId}`);
-    console.log(`Deliverable Name: ${payload.name}`);
-    console.log(`Variables: ${payload.variables.length}`);
+    fastify.log.info(`Generating deliverable for template: ${templateId}`);
+    fastify.log.info(`Deliverable Name: ${payload.name}`);
+    fastify.log.info(`Variables: ${payload.variables.length}`);
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${API_TOKEN}`,
-        'x-rapiddocx-org-id': ORG_ID,
-        'User-Agent': 'TurboDocx API Client',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
+    const response = await axios.post(`${BASE_URL}/v1/deliverable`, payload, {
+      headers: apiHeaders
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
-    }
+    const deliverable = response.data.data.results.deliverable;
 
-    const result = await response.json();
-    const deliverable = result.data.results.deliverable;
+    fastify.log.info(`Deliverable generated successfully - ID: ${deliverable.id}`);
 
-    console.log('✅ Deliverable generated successfully!');
-    console.log(`Deliverable ID: ${deliverable.id}`);
-    console.log(`Created by: ${deliverable.createdBy}`);
-    console.log(`Created on: ${deliverable.createdOn}`);
-    console.log(`Template ID: ${deliverable.templateId}`);
-
-    return deliverable;
+    return reply.send({
+      success: true,
+      deliverable: {
+        id: deliverable.id,
+        createdBy: deliverable.createdBy,
+        createdOn: deliverable.createdOn,
+        templateId: deliverable.templateId
+      }
+    });
 
   } catch (error) {
-    console.error('Error generating deliverable:', error);
-    throw error;
+    fastify.log.error(error, 'Error generating deliverable');
+    const status = error.response?.status || 500;
+    const message = error.response?.data || error.message;
+    return reply.status(status).send({ error: message });
   }
-}
+});
 
 /**
- * Example: Complex variable structure with all features
+ * GET /download/:id
+ * Download a generated deliverable file by its ID
  */
-function createComplexVariables() {
-  return [
-    {
-      mimeType: "text",
-      name: "Employee Name",
-      placeholder: "{EmployeeName}",
-      text: "John Smith",
-      allowRichTextInjection: 0,
-      autogenerated: false,
-      count: 1,
-      order: 1,
-      subvariables: [
-        {
-          placeholder: "{EmployeeName.Title}",
-          text: "Senior Software Engineer"
-        },
-        {
-          placeholder: "{EmployeeName.StartDate}",
-          text: "January 15, 2024"
-        }
-      ],
-      metadata: {
-        department: "Engineering",
-        level: "Senior"
-      },
-      aiPrompt: "Generate a professional job description for a senior software engineer role"
-    },
-    {
-      mimeType: "text",
-      name: "Company Information",
-      placeholder: "{CompanyInfo}",
-      text: "TechCorp Solutions Inc.",
-      allowRichTextInjection: 1,
-      autogenerated: false,
-      count: 1,
-      order: 2,
-      subvariables: [
-        {
-          placeholder: "{CompanyInfo.Address}",
-          text: "123 Innovation Drive, Tech City, TC 12345"
-        },
-        {
-          placeholder: "{CompanyInfo.Phone}",
-          text: "(555) 123-4567"
-        }
-      ],
-      metadata: {},
-      aiPrompt: ""
-    },
-    {
-      mimeType: "text",
-      name: "Project Assignments",
-      placeholder: "{ProjectAssignments}",
-      text: "Multiple ongoing projects",
-      allowRichTextInjection: 0,
-      autogenerated: false,
-      count: 3,
-      order: 3,
-      subvariables: [],
-      variableStack: {
-        "0": {
-          text: "Project Alpha - Backend Development",
-          subvariables: [
-            {
-              placeholder: "{ProjectAssignments.Duration}",
-              text: "6 months"
-            },
-            {
-              placeholder: "{ProjectAssignments.Priority}",
-              text: "High"
-            }
-          ]
-        },
-        "1": {
-          text: "Project Beta - API Integration",
-          subvariables: [
-            {
-              placeholder: "{ProjectAssignments.Duration}",
-              text: "3 months"
-            },
-            {
-              placeholder: "{ProjectAssignments.Priority}",
-              text: "Medium"
-            }
-          ]
-        },
-        "2": {
-          text: "Project Gamma - Code Review",
-          subvariables: [
-            {
-              placeholder: "{ProjectAssignments.Duration}",
-              text: "Ongoing"
-            },
-            {
-              placeholder: "{ProjectAssignments.Priority}",
-              text: "Low"
-            }
-          ]
-        }
-      },
-      metadata: {
-        totalProjects: 3,
-        estimatedHours: 1200
-      },
-      aiPrompt: "Create detailed project descriptions for software development initiatives"
-    },
-    {
-      mimeType: "text",
-      name: "Benefits Package",
-      placeholder: "{BenefitsPackage}",
-      text: "Comprehensive benefits including health, dental, vision, and 401k",
-      allowRichTextInjection: 1,
-      autogenerated: false,
-      count: 1,
-      order: 4,
-      subvariables: [
-        {
-          placeholder: "{BenefitsPackage.HealthInsurance}",
-          text: "Full coverage health insurance with $500 deductible"
-        },
-        {
-          placeholder: "{BenefitsPackage.PTO}",
-          text: "25 days paid time off annually"
-        },
-        {
-          placeholder: "{BenefitsPackage.Retirement}",
-          text: "401k with 6% company match"
-        }
-      ],
-      metadata: {
-        packageValue: "$15,000 annually",
-        effective: "First day of employment"
-      },
-      aiPrompt: "Outline a competitive benefits package for a senior software engineer"
-    }
-  ];
-}
-
-/**
- * Generate a session ID for metadata tracking
- */
-function generateSessionId() {
-  return Math.random().toString(36).substr(2, 9) + '-' +
-         Math.random().toString(36).substr(2, 9) + '-' +
-         Math.random().toString(36).substr(2, 9);
-}
-
-/**
- * Download the generated deliverable file
- */
-async function downloadDeliverable(deliverableId, filename) {
+fastify.get('/download/:id', async (request, reply) => {
   try {
-    const url = `${BASE_URL}/deliverable/file/${deliverableId}`;
+    const { id } = request.params;
 
-    console.log(`Downloading file: ${filename}`);
+    fastify.log.info(`Downloading deliverable: ${id}`);
 
-    const response = await fetch(url, {
-      method: 'GET',
+    const response = await axios.get(`${BASE_URL}/v1/deliverable/file/${id}`, {
       headers: {
         'Authorization': `Bearer ${API_TOKEN}`,
         'x-rapiddocx-org-id': ORG_ID,
         'User-Agent': 'TurboDocx API Client'
-      }
+      },
+      responseType: 'arraybuffer'
     });
 
-    if (!response.ok) {
-      throw new Error(`Download failed: ${response.status}`);
-    }
+    const contentType = response.headers['content-type'] || 'application/octet-stream';
+    const contentLength = response.headers['content-length'];
 
-    console.log(`✅ File ready for download: ${filename}`);
-    console.log(`📁 Content-Type: ${response.headers.get('content-type')}`);
-    console.log(`📊 Content-Length: ${response.headers.get('content-length')} bytes`);
+    fastify.log.info(`File downloaded - Content-Type: ${contentType}, Size: ${contentLength} bytes`);
 
-    // In a real application, you would save the file
-    // const buffer = await response.buffer();
-    // fs.writeFileSync(filename, buffer);
-
-    return {
-      filename,
-      contentType: response.headers.get('content-type'),
-      contentLength: response.headers.get('content-length')
-    };
+    return reply
+      .header('Content-Type', contentType)
+      .header('Content-Disposition', `attachment; filename="deliverable-${id}.docx"`)
+      .send(Buffer.from(response.data));
 
   } catch (error) {
-    console.error('Error downloading file:', error);
-    throw error;
+    fastify.log.error(error, 'Error downloading deliverable');
+    const status = error.response?.status || 500;
+    const message = error.response?.data || error.message;
+    return reply.status(status).send({ error: message });
   }
-}
+});
 
-/**
- * Example usage with realistic data
- */
-async function exampleGenerateDeliverable() {
+// Start the Fastify server
+const start = async () => {
   try {
-    // This would come from either Path A (upload) or Path B (browse/select)
-    const templateId = "0b1099cf-d7b9-41a4-822b-51b68fd4885a";
-
-    const deliverableData = {
-      name: "Employee Contract - John Smith",
-      description: "Employment contract for new senior software engineer",
-      variables: createComplexVariables(),
-      tags: ["hr", "contract", "employee", "engineering"],
-      fonts: '[{"name":"Arial","usage":269}]',
-      defaultFont: "Arial",
-      replaceFonts: true,
-      metadata: {
-        sessions: [
-          {
-            id: "cf1cd4b9-6fdc-47e3-b59d-594cd6564501",
-            starttime: "2024-01-15T14:12:10.721Z",
-            endtime: "2024-01-15T14:13:45.724Z"
-          }
-        ],
-        createdBy: "HR Department",
-        documentType: "Employment Contract",
-        version: "v1.0"
-      }
-    };
-
-    console.log('=== Final Step: Generate Deliverable ===');
-    const deliverable = await generateDeliverable(templateId, deliverableData);
-
-    // Download the generated file
-    console.log('\n=== Download Generated File ===');
-    await downloadDeliverable(deliverable.id, `${deliverable.name}.docx`);
-
-    return deliverable;
-
-  } catch (error) {
-    console.error('Deliverable generation failed:', error.message);
+    await fastify.listen({ port: 3000, host: '0.0.0.0' });
+    fastify.log.info('TurboDocx Fastify server running on http://localhost:3000');
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
   }
-}
-
-// Export functions for use in other modules
-module.exports = {
-  generateDeliverable,
-  downloadDeliverable,
-  createComplexVariables,
-  exampleGenerateDeliverable
 };
 
-// Run example if script is executed directly
-if (require.main === module) {
-  exampleGenerateDeliverable();
-}
+start();
+
+// Example usage:
+//
+// 1. Generate a deliverable:
+//    curl -X POST http://localhost:3000/generate \
+//      -H "Content-Type: application/json" \
+//      -d '{"templateId": "0b1099cf-d7b9-41a4-822b-51b68fd4885a"}'
+//
+// 2. Download the generated file:
+//    curl -O http://localhost:3000/download/DELIVERABLE_ID
