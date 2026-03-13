@@ -140,7 +140,6 @@ path_a_upload_and_generate() {
           }
         ],
         "tags": ["api-generated", "path-a"],
-        "replaceFonts": true,
         "fonts": "[]",
         "metadata": {
           "sessions": [
@@ -274,7 +273,6 @@ path_b_browse_and_generate() {
           }
         ],
         "tags": ["api-generated", "path-b", "browse-selected"],
-        "replaceFonts": true,
         "fonts": "[]",
         "metadata": {
           "sessions": [

@@ -151,7 +151,6 @@ try {
             ],
         ],
         'tags' => ['hr', 'contract', 'employee'],
-        'replaceFonts' => true,
     ];
 
     $deliverable = generateDeliverable($templateId, $deliverableData);

@@ -255,7 +255,6 @@ def create_deliverable_data(template_id):
         'description': 'Employment contract for new senior software engineer',
         'variables': create_complex_variables(),
         'tags': ['hr', 'contract', 'employee', 'engineering'],
-        'replaceFonts': True,
         'fonts': '[{"name":"Arial","usage":269}]',
         'metadata': {
             'sessions': [

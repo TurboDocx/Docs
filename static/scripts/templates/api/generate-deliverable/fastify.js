@@ -108,7 +108,6 @@ function createDeliverableData(templateId) {
         description: 'Employment contract for new senior software engineer',
         variables: createComplexVariables(),
         tags: ['hr', 'contract', 'employee', 'engineering'],
-        replaceFonts: true,
         fonts: '[{"name":"Arial","usage":269}]',
         metadata: {
             sessions: [

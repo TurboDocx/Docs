@@ -160,9 +160,6 @@ GET https://api.turbodocx.com/v1/deliverable
 | `offset`        | Integer         | No       | 0       | Number of results to skip for pagination       |
 | `query`         | String          | No       | —       | Search query to filter by name                 |
 | `showTags`      | Boolean         | No       | false   | Include tags in the response                   |
-| `selectedTags`  | String or Array | No       | —       | Filter by tag IDs (all must match)             |
-| `column0`       | String          | No       | —       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
-| `order0`        | String          | No       | —       | Sort direction: `asc` or `desc`                |
 
 ### Example Request
 
@@ -195,11 +192,21 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable?limit=10&offset=0&showTags
         "tags": [
           {
             "id": "tag-uuid-1",
-            "name": "hr"
+            "label": "hr",
+            "isActive": true,
+            "updatedOn": "2024-01-10T10:00:00.000Z",
+            "createdOn": "2024-01-10T10:00:00.000Z",
+            "createdBy": "user-uuid-123",
+            "orgId": "org-uuid-123"
           },
           {
             "id": "tag-uuid-2",
-            "name": "contract"
+            "label": "contract",
+            "isActive": true,
+            "updatedOn": "2024-01-10T10:00:00.000Z",
+            "createdOn": "2024-01-10T10:00:00.000Z",
+            "createdBy": "user-uuid-123",
+            "orgId": "org-uuid-123"
           }
         ]
       }
@@ -228,7 +235,7 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable?limit=10&offset=0&showTags
 | `results[].isActive`     | Boolean   | Whether the deliverable is active (not deleted)  |
 | `results[].createdOn`    | String    | ISO 8601 creation timestamp                      |
 | `results[].updatedOn`    | String    | ISO 8601 last update timestamp                   |
-| `results[].tags`         | Array     | Tags (only when `showTags=true`)                 |
+| `results[].tags`         | Array     | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
 
 ---
 
@@ -255,7 +262,6 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 | `variables`          | Array   | **Yes**  | Array of variable objects for substitution            |
 | `description`        | String  | No       | Description (up to 65,535 characters)                |
 | `tags`               | Array   | No       | Array of tag strings to associate                    |
-| `replaceFonts`       | Boolean | No       | Whether to replace fonts during generation (default: `false`) |
 
 ### Variable Object Structure
 
@@ -304,8 +310,7 @@ Each variable in the `variables` array represents a placeholder in the template 
       ]
     }
   ],
-  "tags": ["hr", "contract", "employee"],
-  "replaceFonts": true
+  "tags": ["hr", "contract", "employee"]
 }
 ```
 
@@ -327,8 +332,7 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
         "2": { "text": "<p><strong>Phase 3:</strong> Continue monitoring</p>", "mimeType": "html" }
       }
     }
-  ],
-  "replaceFonts": true
+  ]
 }
 ```
 
@@ -422,7 +426,6 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
       "defaultFont": "Arial",
       "fonts": [{ "name": "Arial", "usage": "body" }],
       "email": "admin@company.com",
-      "fileSize": 287456,
       "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       "isActive": true,
       "createdOn": "2024-01-15T14:12:10.721Z",
@@ -435,8 +438,24 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
         }
       ],
       "tags": [
-        { "id": "tag-uuid-1", "name": "hr" },
-        { "id": "tag-uuid-2", "name": "contract" }
+        {
+          "id": "tag-uuid-1",
+          "label": "hr",
+          "isActive": true,
+          "updatedOn": "2024-01-10T10:00:00.000Z",
+          "createdOn": "2024-01-10T10:00:00.000Z",
+          "createdBy": "user-uuid-123",
+          "orgId": "org-uuid-123"
+        },
+        {
+          "id": "tag-uuid-2",
+          "label": "contract",
+          "isActive": true,
+          "updatedOn": "2024-01-10T10:00:00.000Z",
+          "createdOn": "2024-01-10T10:00:00.000Z",
+          "createdBy": "user-uuid-123",
+          "orgId": "org-uuid-123"
+        }
       ]
     }
   }
@@ -456,13 +475,12 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
 | `results.defaultFont`    | String  | Default font used                                  |
 | `results.fonts`          | JSON    | Array of font objects with `name` and `usage`      |
 | `results.email`          | String  | Creator's email                                    |
-| `results.fileSize`       | Integer | File size in bytes                                 |
 | `results.fileType`       | String  | MIME type of the generated file                    |
 | `results.isActive`       | Boolean | Active status                                      |
 | `results.createdOn`      | String  | ISO 8601 creation timestamp                        |
 | `results.updatedOn`      | String  | ISO 8601 last update timestamp                     |
 | `results.variables`      | Array   | Parsed variable objects with values                |
-| `results.tags`           | Array   | Tags (only when `showTags=true`)                   |
+| `results.tags`           | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
 
 ---
 
@@ -718,7 +736,15 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable-item?limit=10&showTags=tru
         "deliverableCount": 0,
         "templateNotDeleted": true,
         "tags": [
-          { "id": "tag-uuid-1", "name": "hr" }
+          {
+            "id": "tag-uuid-1",
+            "label": "hr",
+            "isActive": true,
+            "updatedOn": "2024-01-10T10:00:00.000Z",
+            "createdOn": "2024-01-10T10:00:00.000Z",
+            "createdBy": "user-uuid-123",
+            "orgId": "org-uuid-123"
+          }
         ]
       }
     ],
@@ -746,7 +772,7 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable-item?limit=10&showTags=tru
 | `results[].fileType`         | String  | MIME type (deliverables only)                        |
 | `results[].deliverableCount` | Integer | Number of deliverables                               |
 | `results[].templateNotDeleted` | Boolean | Source template exists (deliverables only)          |
-| `results[].tags`             | Array   | Tags (only when `showTags=true`)                     |
+| `results[].tags`             | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
 
 ---
 
@@ -768,7 +794,9 @@ GET https://api.turbodocx.com/v1/deliverable-item/:id
 
 ### Query Parameters
 
-Same as [List Deliverable Items](#endpoint-8-list-deliverable-items).
+| Parameter  | Type    | Required | Default | Description                    |
+| ---------- | ------- | -------- | ------- | ------------------------------ |
+| `showTags` | Boolean | No       | false   | Include tags in the response   |
 
 ### Example Request
 
@@ -793,10 +821,17 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable-item/39697685-ca00-43b8-92
       "isActive": true,
       "createdBy": "user-uuid-123",
       "email": "admin@company.com",
-      "fileSize": 287456,
-      "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "deliverableCount": 0,
-      "tags": []
+      "tags": [
+        {
+          "id": "tag-uuid-1",
+          "label": "hr",
+          "isActive": true,
+          "updatedOn": "2024-01-10T10:00:00.000Z",
+          "createdOn": "2024-01-10T10:00:00.000Z",
+          "createdBy": "user-uuid-123",
+          "orgId": "org-uuid-123"
+        }
+      ]
     },
     "type": "deliverable"
   }
@@ -805,12 +840,36 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable-item/39697685-ca00-43b8-92
 
 ### Response Fields
 
-| Field               | Type    | Description                                        |
-| ------------------- | ------- | -------------------------------------------------- |
-| `data.results`      | Object  | The deliverable item object                        |
-| `data.type`         | String  | Item type                                          |
+| Field                    | Type    | Description                                        |
+| ------------------------ | ------- | -------------------------------------------------- |
+| `data.results`           | Object  | The deliverable item object                        |
+| `data.results.id`        | String  | Item identifier (UUID)                             |
+| `data.results.name`      | String  | Item name                                          |
+| `data.results.description` | String | Item description                                  |
+| `data.results.type`      | String  | Item type (always `"deliverable"`)                 |
+| `data.results.createdOn` | String  | ISO 8601 creation timestamp                        |
+| `data.results.updatedOn` | String  | ISO 8601 last update timestamp                     |
+| `data.results.isActive`  | Boolean | Active status                                      |
+| `data.results.createdBy` | String  | Creator user ID                                    |
+| `data.results.email`     | String  | Creator email                                      |
+| `data.results.tags`      | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
+| `data.type`              | String  | Item type                                          |
 
-All other fields match the [List Deliverable Items](#endpoint-8-list-deliverable-items) response.
+---
+
+## Tag Object
+
+When `showTags=true` is passed, tag arrays contain full tag objects with the following fields:
+
+| Field       | Type    | Description                          |
+| ----------- | ------- | ------------------------------------ |
+| `id`        | String  | Tag unique identifier (UUID)         |
+| `label`     | String  | Tag display name                     |
+| `isActive`  | Boolean | Whether the tag is active            |
+| `updatedOn` | String  | ISO 8601 last update timestamp       |
+| `createdOn` | String  | ISO 8601 creation timestamp          |
+| `createdBy` | String  | User ID of the tag creator           |
+| `orgId`     | String  | Organization ID the tag belongs to   |
 
 ---
 
@@ -833,9 +892,6 @@ Here's a full workflow that creates a deliverable, retrieves it, and downloads b
 - Use `subvariables` for structured data within HTML content — the parent variable must have `mimeType: "html"` with HTML containing independent placeholder tokens, and each subvariable provides a value for one of those tokens
 - Use `variableStack` for repeating content (tables, list items)
 - Set `mimeType` to `html` when injecting formatted content
-
-### Font Handling
-- Set `replaceFonts: true` to ensure consistent font rendering across different systems
 
 ### Pagination
 - Use `limit` and `offset` for efficient data retrieval

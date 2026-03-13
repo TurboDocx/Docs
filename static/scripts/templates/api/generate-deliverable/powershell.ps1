@@ -138,7 +138,6 @@ try {
             }
         )
         'tags' = @('hr', 'contract', 'employee')
-        'replaceFonts' = $true
     }
 
     $deliverable = Generate-Deliverable -TemplateId $templateId -DeliverableData $deliverableData

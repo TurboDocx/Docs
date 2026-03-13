@@ -636,7 +636,7 @@ const generatedContent = await Promise.all(
 ### Related Documentation
 
 - [Template Management Guide](/docs/Templates/template-management)
-- [Variable Types and Formatting](/docs/Templates/variable-types)
+- [Variable Types and Formatting](/docs/API/Deliverable%20API#variable-object-structure)
 - [Integration Examples](/docs/Integrations)
 - [Best Practices Guide](/docs/Templates/best-practices)
 
