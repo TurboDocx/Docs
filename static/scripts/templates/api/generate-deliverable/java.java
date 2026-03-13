@@ -99,7 +99,6 @@ public class DeliverableGenerator {
         payload.put("description", deliverableData.get("description").asText());
         payload.set("variables", deliverableData.get("variables"));
         payload.set("tags", deliverableData.get("tags"));
-        payload.put("replaceFonts", true);
 
         System.out.println("Generating deliverable...");
         System.out.println("Template ID: " + templateId);

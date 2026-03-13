@@ -469,7 +469,6 @@ func (tm *TemplateWorkflowManager) generateDeliverable(templateID, name, descrip
 			},
 		},
 		"tags":            []string{"api-generated"},
-		"replaceFonts":   true,
 		"fonts":           "[]",
 		"metadata": map[string]interface{}{
 			"sessions": []map[string]interface{}{

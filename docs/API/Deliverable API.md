@@ -160,7 +160,6 @@ GET https://api.turbodocx.com/v1/deliverable
 | `offset`        | Integer         | No       | 0       | Number of results to skip for pagination       |
 | `query`         | String          | No       | —       | Search query to filter by name                 |
 | `showTags`      | Boolean         | No       | false   | Include tags in the response                   |
-| `selectedTags`  | String or Array | No       | —       | Filter by tag IDs (all must match)             |
 | `column0`       | String          | No       | —       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
 | `order0`        | String          | No       | —       | Sort direction: `asc` or `desc`                |
 
@@ -255,7 +254,6 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 | `variables`          | Array   | **Yes**  | Array of variable objects for substitution            |
 | `description`        | String  | No       | Description (up to 65,535 characters)                |
 | `tags`               | Array   | No       | Array of tag strings to associate                    |
-| `replaceFonts`       | Boolean | No       | Whether to replace fonts during generation (default: `false`) |
 
 ### Variable Object Structure
 
@@ -304,8 +302,7 @@ Each variable in the `variables` array represents a placeholder in the template 
       ]
     }
   ],
-  "tags": ["hr", "contract", "employee"],
-  "replaceFonts": true
+  "tags": ["hr", "contract", "employee"]
 }
 ```
 
@@ -327,8 +324,7 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
         "2": { "text": "<p><strong>Phase 3:</strong> Continue monitoring</p>", "mimeType": "html" }
       }
     }
-  ],
-  "replaceFonts": true
+  ]
 }
 ```
 
@@ -833,9 +829,6 @@ Here's a full workflow that creates a deliverable, retrieves it, and downloads b
 - Use `subvariables` for structured data within HTML content — the parent variable must have `mimeType: "html"` with HTML containing independent placeholder tokens, and each subvariable provides a value for one of those tokens
 - Use `variableStack` for repeating content (tables, list items)
 - Set `mimeType` to `html` when injecting formatted content
-
-### Font Handling
-- Set `replaceFonts: true` to ensure consistent font rendering across different systems
 
 ### Pagination
 - Use `limit` and `offset` for efficient data retrieval

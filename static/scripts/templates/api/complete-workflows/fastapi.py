@@ -317,7 +317,6 @@ class TemplateWorkflowManager:
             'description': f'Employment contract generated via workflow path {path_label}',
             'variables': self.create_complex_variables(),
             'tags': ['hr', 'contract', 'employee', 'engineering'],
-            'replaceFonts': True,
             'fonts': '[{"name":"Arial","usage":269}]',
             'metadata': {
                 'sessions': [

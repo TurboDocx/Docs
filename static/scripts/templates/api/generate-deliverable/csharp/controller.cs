@@ -26,8 +26,7 @@ public record DeliverableRequest(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("description")] string Description,
     [property: JsonPropertyName("variables")] Variable[] Variables,
-    [property: JsonPropertyName("tags")] string[] Tags,
-    [property: JsonPropertyName("replaceFonts")] bool ReplaceFonts = true
+    [property: JsonPropertyName("tags")] string[] Tags
 );
 
 // --- Controller ---
@@ -118,6 +117,5 @@ public class DeliverableController : ControllerBase
 //       ]
 //     }
 //   ],
-//   "tags": ["hr", "contract", "employee"],
-//   "replaceFonts": true
+//   "tags": ["hr", "contract", "employee"]
 // }

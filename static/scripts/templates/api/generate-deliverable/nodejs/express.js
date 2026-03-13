@@ -52,7 +52,6 @@ app.post("/generate", async (req, res) => {
         },
       ],
       tags: ["hr", "contract", "employee"],
-      replaceFonts: true,
     };
 
     console.log("Generating deliverable...");

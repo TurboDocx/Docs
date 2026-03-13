@@ -123,8 +123,7 @@ begin
         ]
       }
     ],
-    'tags' => ['hr', 'contract', 'employee'],
-    'replaceFonts' => true
+    'tags' => ['hr', 'contract', 'employee']
   }
 
   deliverable = generate_deliverable(template_id, deliverable_data)

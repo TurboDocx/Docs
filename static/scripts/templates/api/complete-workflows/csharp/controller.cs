@@ -342,7 +342,6 @@ class TemplateWorkflowManager
             }
           ],
           "tags": ["api-generated"],
-          "replaceFonts": true,
           "fonts": "[]",
           "metadata": {
             "sessions": [

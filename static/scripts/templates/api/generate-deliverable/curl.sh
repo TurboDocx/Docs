@@ -161,7 +161,6 @@ curl -X POST "$BASE_URL/v1/deliverable" \
       }
     ],
     "tags": ["hr", "contract", "employee", "engineering"],
-    "replaceFonts": true,
     "fonts": "[{\"name\":\"Arial\",\"usage\":269}]",
     "metadata": {
       "sessions": [
@@ -240,7 +239,6 @@ curl -X POST "$BASE_URL/v1/deliverable" \
       }
     ],
     "tags": ["simple", "test"],
-    "replaceFonts": true,
     "fonts": "[]",
     "metadata": {
       "sessions": [

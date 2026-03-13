@@ -22,7 +22,6 @@ type DeliverableRequest struct {
 	Description  string     `json:"description"`
 	Variables    []Variable `json:"variables"`
 	Tags         []string   `json:"tags"`
-	ReplaceFonts bool       `json:"replaceFonts"`
 }
 
 type Variable struct {
@@ -245,7 +244,5 @@ func createDeliverableData(templateID string) DeliverableRequest {
 			},
 		},
 		Tags:         []string{"hr", "contract", "employee"},
-		DefaultFont:  "Arial",
-		ReplaceFonts: true,
 	}
 }

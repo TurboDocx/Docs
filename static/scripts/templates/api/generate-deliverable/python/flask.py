@@ -43,7 +43,6 @@ def generate_deliverable():
             },
         ],
         "tags": ["hr", "contract", "employee"],
-        "replaceFonts": True,
     }
 
     try:

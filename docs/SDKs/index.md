@@ -2,7 +2,7 @@
 title: SDKs Overview
 sidebar_position: 1
 sidebar_label: Overview
-description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, digital signatures, and partner management.
+description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, deliverables, digital signatures, and partner management.
 keywords:
   - turbodocx sdk
   - turbosign sdk
@@ -50,6 +50,18 @@ Programmatically manage organizations, users, API keys, and entitlements for mul
 :::info More Languages Coming Soon
 TurboPartner SDKs for Python, Go, and Java are coming soon.
 :::
+
+## Deliverable SDKs
+
+Generate documents from templates with dynamic variable injection, download source files and PDFs.
+
+| Language                  | Package                    | Install Command                                                      | Links                                                                                                                          |
+| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/deliverable-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                 |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/deliverable-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                     |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/deliverable-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                       |
+| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/deliverable-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                         |
+| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/deliverable-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
@@ -409,9 +421,23 @@ Programmatically manage multi-tenant applications with organization provisioning
 
 [Learn more about TurboPartner →](/docs/SDKs/partner-php)
 
-### TurboDocx — Document Generation _(Coming Soon)_
+### Deliverable — Document Generation
 
-Generate documents from templates with dynamic data.
+Generate documents from templates with dynamic variable injection, download source files and PDFs.
+
+| Method                      | Description                                                |
+| :-------------------------- | :--------------------------------------------------------- |
+| `generateDeliverable()`     | Generate a document from a template with variable injection |
+| `listDeliverables()`        | List deliverables with pagination, search, and filtering   |
+| `getDeliverableDetails()`   | Get full details of a deliverable including variables      |
+| `updateDeliverableInfo()`   | Update a deliverable's name, description, or tags          |
+| `deleteDeliverable()`       | Soft-delete a deliverable                                  |
+| `downloadSourceFile()`      | Download the original DOCX/PPTX source file                |
+| `downloadPDF()`             | Download the PDF version                                   |
+| `listDeliverableItems()`    | List all deliverable items with filtering                  |
+| `getDeliverableItem()`      | Get a single deliverable item by ID                        |
+
+[Learn more about Deliverable SDKs →](/docs/SDKs/deliverable-javascript)
 
 ---
 

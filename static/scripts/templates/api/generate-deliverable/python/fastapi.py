@@ -42,7 +42,6 @@ class DeliverableRequest(BaseModel):
     description: Optional[str] = ""
     variables: List[Variable]
     tags: Optional[List[str]] = []
-    replaceFonts: Optional[bool] = True
 
 # ---------------------------------------------------------------------------
 # FastAPI App
@@ -133,7 +132,6 @@ if __name__ == "__main__":
             },
         ],
         "tags": ["hr", "contract", "employee"],
-        "replaceFonts": True,
     }
 
     print("Example payload for POST /generate:")

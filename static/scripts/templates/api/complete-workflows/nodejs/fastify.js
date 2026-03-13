@@ -221,7 +221,6 @@ class TemplateWorkflowManager {
       description: deliverableData.description || '',
       variables: deliverableData.variables,
       tags: deliverableData.tags || ['api-generated'],
-      replaceFonts: true,
       fonts: deliverableData.fonts || '[]',
       metadata: deliverableData.metadata || {
         sessions: [{

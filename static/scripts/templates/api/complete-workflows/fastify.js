@@ -294,7 +294,6 @@ class TemplateWorkflowManager {
             description: `Employment contract generated via workflow path ${pathLabel}`,
             variables: this.createComplexVariables(),
             tags: ['hr', 'contract', 'employee', 'engineering'],
-            replaceFonts: true,
             fonts: '[{"name":"Arial","usage":269}]',
             metadata: {
                 sessions: [

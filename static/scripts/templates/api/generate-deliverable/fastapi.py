@@ -53,7 +53,6 @@ class DeliverableData(BaseModel):
     description: str
     variables: List[Variable]
     tags: List[str]
-    replaceFonts: Optional[bool] = True
     fonts: str
     metadata: Metadata
 
@@ -322,7 +321,6 @@ def create_deliverable_data(template_id: str) -> dict:
         'description': 'Employment contract for new senior software engineer',
         'variables': create_complex_variables(),
         'tags': ['hr', 'contract', 'employee', 'engineering'],
-        'replaceFonts': True,
         'fonts': '[{"name":"Arial","usage":269}]',
         'metadata': {
             'sessions': [

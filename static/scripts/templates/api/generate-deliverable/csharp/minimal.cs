@@ -26,8 +26,7 @@ record DeliverableRequest(
     [property: JsonPropertyName("name")]          string Name,
     [property: JsonPropertyName("description")]   string Description,
     [property: JsonPropertyName("variables")]     Variable[] Variables,
-    [property: JsonPropertyName("tags")]          string[] Tags,
-    [property: JsonPropertyName("replaceFonts")]  bool ReplaceFonts = true
+    [property: JsonPropertyName("tags")]          string[] Tags
 );
 
 // ── App bootstrap ───────────────────────────────────────────────────
@@ -66,9 +65,7 @@ app.MapPost("/api/deliverable/generate", async (IHttpClientFactory httpFactory) 
                 }
             )
         },
-        Tags:         new[] { "hr", "contract", "employee" },
-        DefaultFont:  "Arial",
-        ReplaceFonts: true
+        Tags:         new[] { "hr", "contract", "employee" }
     );
 
     var client  = httpFactory.CreateClient("TurboDocx");

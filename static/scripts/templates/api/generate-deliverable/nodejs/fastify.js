@@ -48,7 +48,6 @@ fastify.post('/generate', async (request, reply) => {
         }
       ],
       tags: ["hr", "contract", "employee"],
-      replaceFonts: true,
     };
 
     fastify.log.info(`Generating deliverable for template: ${templateId}`);

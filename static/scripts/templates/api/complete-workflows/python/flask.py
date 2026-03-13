@@ -227,7 +227,6 @@ class TemplateWorkflowManager:
             "description": deliverable_data.get('description', ''),
             "variables": deliverable_data['variables'],
             "tags": deliverable_data.get('tags', ['api-generated']),
-            "replaceFonts": True,
             "fonts": deliverable_data.get('fonts', '[]'),
             "metadata": deliverable_data.get('metadata', {
                 "sessions": [{

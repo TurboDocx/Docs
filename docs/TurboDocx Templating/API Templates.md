@@ -565,8 +565,6 @@ User-Agent: TurboDocx API Client
     }
   ],
   "tags": ["hr-template", "contract", "full-time"],
-  "replaceFonts": true,
-  "fonts": "[{\"name\":\"Arial\",\"usage\":269}]",
   "metadata": {
     "sessions": [
       {
@@ -684,8 +682,6 @@ Understanding the variable structure is key to successful document generation:
 | `variables[].aiPrompt`               | string  | No       | AI prompt for content generation               |
 | `variables[].metadata`               | object  | No       | Custom metadata for the variable               |
 | `tags`                               | array   | No       | Tags for categorization                        |
-| `replaceFonts`                       | boolean | No       | Whether to replace fonts during generation (default: `false`) |
-| `fonts`                              | string  | No       | JSON string of font usage statistics           |
 | `metadata`                           | object  | No       | Additional metadata (sessions, tracking, etc.) |
 
 ### Step 2: Download Generated File
@@ -864,7 +860,7 @@ Now that you've mastered the basics, consider exploring these advanced capabilit
 ### Related Documentation
 
 - [Template Management Guide](/docs/Templates/template-management)
-- [Variable Types and Formatting](/docs/Templates/variable-types)
+- [Variable Types and Formatting](/docs/API/Deliverable%20API#variable-object-structure)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
 - [Integration Examples](/docs/Integrations)
 
