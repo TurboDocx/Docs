@@ -557,40 +557,101 @@ Request configuration for `UpdateDeliverableInfo`:
 
 Options for `ListDeliverables`:
 
-> `ListDeliverableItems` uses `ListDeliverableItemsOptions` which has the same fields plus `SelectedTags`.
-
 | Property       | Type       | Required | Description                          |
 | -------------- | ---------- | -------- | ------------------------------------ |
 | `Limit`        | `int`      | No       | Results per page (1-100, default 6)  |
 | `Offset`       | `int`      | No       | Results to skip (default 0)          |
 | `Query`        | `string`   | No       | Search query to filter by name       |
 | `ShowTags`     | `bool`     | No       | Include tags in the response         |
-| `Column0`      | `string`   | No       | Sort column                          |
-| `Order0`       | `string`   | No       | Sort direction (`"asc"` or `"desc"`) |
+
+### ListDeliverableItemsOptions
+
+Options for `ListDeliverableItems`:
+
+| Property       | Type       | Required | Description                                    |
+| -------------- | ---------- | -------- | ---------------------------------------------- |
+| `Limit`        | `int`      | No       | Results per page (1-100, default 6)            |
+| `Offset`       | `int`      | No       | Results to skip (default 0)                    |
+| `Query`        | `string`   | No       | Search query to filter by name                 |
+| `ShowTags`     | `bool`     | No       | Include tags in the response                   |
+| `SelectedTags` | `[]string` | No       | Filter by tag IDs (all must match — AND logic) |
+| `Column0`      | `string`   | No       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
+| `Order0`       | `string`   | No       | Sort direction: `"asc"` or `"desc"`            |
 
 ### DeliverableRecord
 
-The deliverable object returned by `GetDeliverableDetails` and included in list results:
+The deliverable object returned by `ListDeliverables`:
 
 | Property       | Type     | Description                           |
 | -------------- | -------- | ------------------------------------- |
-| `ID`                 | `string`        | Unique deliverable ID                                    |
-| `Name`               | `string`        | Deliverable name                                         |
-| `Description`        | `string`        | Description text                                         |
-| `TemplateID`         | `string`        | Source template ID                                       |
-| `TemplateName`       | `string`        | Source template name                                     |
-| `CreatedBy`          | `string`        | User ID of the creator                                   |
-| `Email`              | `string`        | Creator's email address                                  |
-| `CreatedOn`          | `string`        | ISO 8601 creation timestamp                              |
-| `UpdatedOn`          | `string`        | ISO 8601 last update timestamp                           |
-| `IsActive`           | `bool`          | Whether the deliverable is active                        |
-| `FileSize`           | `int64`         | File size in bytes                                       |
-| `FileType`           | `string`        | MIME type of the generated file                          |
-| `DefaultFont`        | `string`        | Default font used                                        |
-| `Fonts`              | `[]Font`        | Fonts used in the document                               |
-| `TemplateNotDeleted` | `*bool`         | Whether the source template still exists                 |
-| `Variables`          | `[]DeliverableVariable` | Parsed variable objects with values (in detail response) |
-| `Tags`               | `[]Tag`         | Associated tags (if requested)                           |
+| `ID`           | `string` | Unique deliverable ID (UUID)          |
+| `Name`         | `string` | Deliverable name                      |
+| `Description`  | `string` | Description text                      |
+| `TemplateID`   | `string` | Source template ID                    |
+| `CreatedBy`    | `string` | User ID of the creator                |
+| `Email`        | `string` | Creator's email address               |
+| `FileSize`     | `int64`  | File size in bytes                    |
+| `FileType`     | `string` | MIME type of the generated file       |
+| `DefaultFont`  | `string` | Default font used                     |
+| `Fonts`        | `[]Font` | Fonts used in the document            |
+| `IsActive`     | `bool`   | Whether the deliverable is active     |
+| `CreatedOn`    | `string` | ISO 8601 creation timestamp           |
+| `UpdatedOn`    | `string` | ISO 8601 last update timestamp        |
+| `Tags`         | `[]Tag`  | Associated tags (when `ShowTags=true`)|
+
+### DeliverableDetailRecord
+
+The deliverable object returned by `GetDeliverableDetails`. Includes all fields from [DeliverableRecord](#deliverablerecord) **except `FileSize`**, plus:
+
+| Property             | Type                    | Description                              |
+| -------------------- | ----------------------- | ---------------------------------------- |
+| `TemplateName`       | `string`                | Source template name                     |
+| `TemplateNotDeleted` | `*bool`                 | Whether the source template still exists |
+| `Variables`          | `[]DeliverableVariable` | Parsed variable objects with values      |
+
+### DeliverableItem
+
+The deliverable item object returned by `ListDeliverableItems` and `GetDeliverableItem`:
+
+| Property             | Type     | Description                                |
+| -------------------- | -------- | ------------------------------------------ |
+| `ID`                 | `string` | Item identifier (UUID)                     |
+| `Name`               | `string` | Item name                                  |
+| `Description`        | `string` | Item description                           |
+| `Type`               | `string` | Item type (always `"deliverable"`)         |
+| `CreatedOn`          | `string` | ISO 8601 creation timestamp                |
+| `UpdatedOn`          | `string` | ISO 8601 last update timestamp             |
+| `IsActive`           | `bool`   | Active status                              |
+| `CreatedBy`          | `string` | Creator user ID                            |
+| `Email`              | `string` | Creator email                              |
+| `FileSize`           | `int64`  | File size in bytes                         |
+| `FileType`           | `string` | MIME type of the generated file            |
+| `DeliverableCount`   | `int`    | Number of deliverables                     |
+| `TemplateNotDeleted` | `*bool`  | Whether the source template still exists   |
+| `Tags`               | `[]Tag`  | Associated tags (when `ShowTags=true`)     |
+
+### DeliverableItemResponse
+
+The response from `GetDeliverableItem`:
+
+| Property  | Type             | Description                 |
+| --------- | ---------------- | --------------------------- |
+| `Results` | `DeliverableItem`| The deliverable item object |
+| `Type`    | `string`         | Item type                   |
+
+### Tag
+
+Tag object included when `ShowTags` is enabled:
+
+| Property    | Type     | Description                          |
+| ----------- | -------- | ------------------------------------ |
+| `ID`        | `string` | Tag unique identifier (UUID)         |
+| `Label`     | `string` | Tag display name                     |
+| `IsActive`  | `bool`   | Whether the tag is active            |
+| `UpdatedOn` | `string` | ISO 8601 last update timestamp       |
+| `CreatedOn` | `string` | ISO 8601 creation timestamp          |
+| `CreatedBy` | `string` | User ID of the tag creator           |
+| `OrgID`     | `string` | Organization ID                      |
 
 ---
 
