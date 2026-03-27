@@ -1,5 +1,5 @@
 ---
-title: Signature Workflow
+title: Example Signature Workflow With TurboSign
 sidebar_position: 7
 description: Send generated Wrike documents for digital signature using TurboSign. Configure custom fields and signature anchors for automated signing workflows.
 keywords:
@@ -10,7 +10,7 @@ keywords:
   - wrike document signing
 ---
 
-# Signature Workflow with TurboSign
+# Example Signature Workflow With TurboSign
 
 TurboDocx supports a signature workflow for Wrike tasks, allowing you to send generated documents for digital signing directly from Wrike.
 

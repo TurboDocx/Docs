@@ -64,5 +64,5 @@ Your signature anchor is now configured. The variable will show a **Signature An
 ![Signature Anchor Complete](/img/wrike-integration/SigAnchor08-Complete.jpeg)
 
 :::tip
-Repeat steps 3–6 for each signature variable in your template (e.g., `{SalesSignerName}`, `{SalesSignerSignature}`, `{ClientSignerName}`, etc.). See [Signature Workflow](./signature-workflow.md) for the full list of required anchor fields.
+Repeat steps 3–6 for each signature variable in your template (e.g., `{SalesSignerName}`, `{SalesSignerSignature}`, `{ClientSignerName}`, etc.). See [Example Signature Workflow With TurboSign](./signature-workflow.md) for the full list of required anchor fields.
 :::
