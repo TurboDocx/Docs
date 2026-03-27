@@ -33,6 +33,8 @@ import ScriptLoader from '@site/src/components/ScriptLoader';
 
 This guide covers the TurboDocx Deliverable API — everything you need to programmatically generate documents from templates, manage deliverables, and download files using the v1 API endpoints.
 
+![Deliverable API](/img/template-generation-api/template-api.webp)
+
 ## Overview
 
 A **deliverable** is a document generated from a template by substituting variables with actual content. The Deliverable API lets you automate the entire document lifecycle: creation, retrieval, updates, downloads, and organization.
@@ -98,6 +100,16 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/file/pdf/DELIVERABLE_ID" \
 | `DELETE` | `/v1/deliverable/:id`                   | Delete a deliverable (soft delete)   |
 | `GET`    | `/v1/deliverable/file/:deliverableId`   | Download source file (DOCX/PPTX)    |
 | `GET`    | `/v1/deliverable/file/pdf/:deliverableId` | Download PDF file                  |
+
+### Complete Workflow Example
+
+Here's a full workflow that creates a deliverable, retrieves it, and downloads both the source file and PDF:
+
+<ScriptLoader
+  scriptPath="templates/api/generate-deliverable"
+  id="complete-workflow"
+  label="Complete Workflow - Code Examples"
+/>
 
 ## Prerequisites
 
@@ -276,39 +288,43 @@ Each variable in the `variables` array represents a placeholder in the template 
 
 ### Example Request
 
-```json
-{
-  "templateId": "YOUR_TEMPLATE_ID",
-  "name": "Employee Contract - John Smith",
-  "description": "Employment contract for new senior developer",
-  "variables": [
-    {
-      "placeholder": "{EmployeeName}",
-      "text": "John Smith",
-      "mimeType": "text"
-    },
-    {
-      "placeholder": "{CompanyName}",
-      "text": "TechCorp Solutions Inc.",
-      "mimeType": "text"
-    },
-    {
-      "placeholder": "{JobTitle}",
-      "text": "Senior Software Engineer",
-      "mimeType": "text"
-    },
-    {
-      "mimeType": "html",
-      "placeholder": "{ContactBlock}",
-      "text": "<div><p>Contact: {contactName}</p><p>Phone: {contactPhone}</p></div>",
-      "subvariables": [
-        { "placeholder": "{contactName}", "text": "Jane Doe", "mimeType": "text" },
-        { "placeholder": "{contactPhone}", "text": "(555) 123-4567", "mimeType": "text" }
-      ]
-    }
-  ],
-  "tags": ["hr", "contract", "employee"]
-}
+```bash
+curl -X POST "https://api.turbodocx.com/v1/deliverable" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "templateId": "YOUR_TEMPLATE_ID",
+    "name": "Employee Contract - John Smith",
+    "description": "Employment contract for new senior developer",
+    "variables": [
+      {
+        "placeholder": "{EmployeeName}",
+        "text": "John Smith",
+        "mimeType": "text"
+      },
+      {
+        "placeholder": "{CompanyName}",
+        "text": "TechCorp Solutions Inc.",
+        "mimeType": "text"
+      },
+      {
+        "placeholder": "{JobTitle}",
+        "text": "Senior Software Engineer",
+        "mimeType": "text"
+      },
+      {
+        "mimeType": "html",
+        "placeholder": "{ContactBlock}",
+        "text": "<div><p>Contact: {contactName}</p><p>Phone: {contactPhone}</p></div>",
+        "subvariables": [
+          { "placeholder": "{contactName}", "text": "Jane Doe", "mimeType": "text" },
+          { "placeholder": "{contactPhone}", "text": "(555) 123-4567", "mimeType": "text" }
+        ]
+      }
+    ],
+    "tags": ["hr", "contract", "employee"]
+  }'
 ```
 
 ### Example with Variable Stacks (Repeating Content)
@@ -695,18 +711,6 @@ When `showTags=true` is passed, tag arrays contain full tag objects with the fol
 | `createdOn` | String  | ISO 8601 creation timestamp          |
 | `createdBy` | String  | User ID of the tag creator           |
 | `orgId`     | String  | Organization ID the tag belongs to   |
-
----
-
-## Complete Workflow Example
-
-Here's a full workflow that creates a deliverable, retrieves it, and downloads both the source file and PDF:
-
-<ScriptLoader
-  scriptPath="templates/api/generate-deliverable"
-  id="complete-workflow"
-  label="Complete Workflow - Code Examples"
-/>
 
 ---
 
