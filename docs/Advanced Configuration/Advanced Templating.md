@@ -1,6 +1,7 @@
 ---
 title: Advanced Templating
 sidebar_position: 4
+draft: true
 description: Learn how to use advanced templating features like loops, conditionals, and expressions to generate dynamic documents with structured JSON data via the API.
 keywords:
   - advanced templating
