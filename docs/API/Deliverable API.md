@@ -14,7 +14,6 @@ keywords:
   - deliverable management
   - file download api
   - pdf generation
-  - deliverable items
   - bearer token authentication
   - api examples
   - variable substitution
