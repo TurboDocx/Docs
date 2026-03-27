@@ -1,6 +1,6 @@
 ---
 title: Static Field Mapping
-sidebar_position: 4
+sidebar_position: 5
 description: Learn how to map Wrike custom fields (like revenue or currency fields) to TurboDocx template variables for automated document generation.
 keywords:
   - wrike field mapping
