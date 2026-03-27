@@ -24,6 +24,8 @@ Your sales team uses Wrike to manage project proposals. When a proposal is ready
 3. Attaches the signed document back to the Wrike task
 4. Updates the task status to "Completed"
 
+![Send for Signature in Wrike](/img/wrike-integration/SendForSignatureWrike.png)
+
 <br/>
 
 ## What You'll Need
@@ -45,12 +47,16 @@ Create a proposal template with your standard content variables (project name, d
 
 Configure each signature variable as a **Wrike Signature Field** using the [Adding Signature Anchors](./signature-anchors.md) guide.
 
+![Template Default Values and AI Values](/img/wrike-integration/TurboDocxTemplateDefaultValuesAndAIValues.png)
+
 ### 2. Create the Automation
 
 Follow [Setting Up a Wrike Automation](./setting-up-automation.md) to connect Wrike and configure a trigger status and folder. Then follow [E-Signature Automation](./signature-automation.md) to:
 
 - Select **Send for e-signature** as the action
-- Map the recipient email and name fields from your Wrike custom fields
+- Map the recipient email and name fields from your Wrike custom fields (shown below)
+
+![Signature Fields in Wrike](/img/wrike-integration/SignatureFieldsInWrike.png)
 - Map document fields to your template anchor tags
 - Choose where the signed document gets attached
 - Set the post-signature task status (e.g., "Completed")
