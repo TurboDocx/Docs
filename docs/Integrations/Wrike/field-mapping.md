@@ -1,5 +1,5 @@
 ---
-title: Mapping Wrike Fields to Template Variables
+title: Static Field Mapping
 sidebar_position: 3
 description: Learn how to map Wrike custom fields (like revenue or currency fields) to TurboDocx template variables for automated document generation.
 keywords:
@@ -11,9 +11,9 @@ keywords:
   - wrike dynamic variables
 ---
 
-# Mapping Wrike Fields to Template Variables
+# Static Field Mapping
 
-Map Wrike custom fields directly to your TurboDocx template variables so that data from Wrike (like revenue, dates, or custom text) is automatically pulled into generated documents.
+Static field mapping lets you map Wrike custom fields directly to TurboDocx template variables. When a document is generated, the exact value from the Wrike field is placed into the template variable — no AI interpretation or transformation is applied.
 
 ## Prerequisites
 
@@ -76,7 +76,9 @@ Click **Save Changes** to persist the field mapping.
 
 ## How It Works at Generation Time
 
-When a Wrike automation triggers document generation, TurboDocx reads the mapped custom field values from the Wrike task and injects them into the corresponding template variables. This means your generated documents always reflect the latest data from Wrike.
+When a Wrike automation triggers document generation, TurboDocx reads the mapped custom field values from the Wrike task and places them directly into the corresponding template variables — the value is used exactly as-is with no AI processing.
+
+This is different from AI-mapped variables, which use AI to interpret and generate content from Wrike data. Static mapping is ideal for structured data like revenue figures, dates, project codes, and other fields where you need the exact value.
 
 :::tip
 You can map multiple variables in the same template to different Wrike fields. Repeat steps 3–8 for each variable you want to connect.
