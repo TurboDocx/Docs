@@ -1,6 +1,6 @@
 ---
 title: Signature Workflow
-sidebar_position: 3
+sidebar_position: 4
 description: Send generated Wrike documents for digital signature using TurboSign. Configure custom fields and signature anchors for automated signing workflows.
 keywords:
   - wrike signature workflow

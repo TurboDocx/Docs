@@ -1,0 +1,83 @@
+---
+title: Mapping Wrike Fields to Template Variables
+sidebar_position: 3
+description: Learn how to map Wrike custom fields (like revenue or currency fields) to TurboDocx template variables for automated document generation.
+keywords:
+  - wrike field mapping
+  - wrike custom fields
+  - wrike revenue field
+  - wrike currency field
+  - wrike template variables
+  - wrike dynamic variables
+---
+
+# Mapping Wrike Fields to Template Variables
+
+Map Wrike custom fields directly to your TurboDocx template variables so that data from Wrike (like revenue, dates, or custom text) is automatically pulled into generated documents.
+
+## Prerequisites
+
+- A template uploaded to TurboDocx with at least one variable
+- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
+
+<br/>
+
+## Map a Wrike Field
+
+### Step 1: Select Your Template
+
+Navigate to your templates and select the template you want to configure with Wrike field mappings.
+
+![Select Template](/img/wrike-integration/FieldMap01-SelectTemplate.jpeg)
+
+### Step 2: Open Template Preferences
+
+Click **Edit Template & Preferences** to open the template configuration view.
+
+![Edit Template and Preferences](/img/wrike-integration/FieldMap02-EditTemplatePreferences.jpeg)
+
+### Step 3: Open Variable Settings
+
+Click the settings icon on the variable you want to map to a Wrike field.
+
+![Open Variable Settings](/img/wrike-integration/FieldMap03-OpenVariableSettings.jpeg)
+
+### Step 4: Open the Field Type Menu
+
+Click the field type selector to change the variable's data source.
+
+![Open Field Type Menu](/img/wrike-integration/FieldMap04-OpenFieldTypeMenu.jpeg)
+
+### Step 5: Select "Wrike Field"
+
+Choose **Wrike Field** from the field type options. This tells TurboDocx to pull data from a Wrike custom field when generating the document.
+
+![Select Wrike Field](/img/wrike-integration/FieldMap05-SelectWrikeField.jpeg)
+
+### Step 6: Search for the Field
+
+Use the search box to look up the Wrike custom field you want to map (e.g., "Revenue", "Budget", or any custom field in your Wrike workspace).
+
+![Search for Wrike Field](/img/wrike-integration/FieldMap06-SearchField.jpeg)
+
+### Step 7: Select the Field
+
+Click the Wrike field from the search results to map it to your template variable.
+
+![Select the Field](/img/wrike-integration/FieldMap07-ClickField.jpeg)
+
+### Step 8: Save Changes
+
+Click **Save Changes** to persist the field mapping.
+
+![Save Changes](/img/wrike-integration/FieldMap08-SaveChanges.jpeg)
+
+<br/>
+
+## How It Works at Generation Time
+
+When a Wrike automation triggers document generation, TurboDocx reads the mapped custom field values from the Wrike task and injects them into the corresponding template variables. This means your generated documents always reflect the latest data from Wrike.
+
+:::tip
+You can map multiple variables in the same template to different Wrike fields. Repeat steps 3–8 for each variable you want to connect.
+:::
