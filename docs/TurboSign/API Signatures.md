@@ -118,6 +118,7 @@ Use this endpoint when you need a preview URL to verify field placement:
 | -------------------- | ------------------------------ | ------------------------- |
 | Sends emails?        | ❌ No                          | ✅ Yes                    |
 | Returns preview URL? | ✅ Yes                         | ❌ No                     |
+| Returns recipients?  | ✅ Yes                         | ✅ Yes                    |
 | Final status         | REVIEW_READY                   | UNDER_REVIEW              |
 | Use when             | Need to verify field placement | Ready to send immediately |
 
@@ -378,6 +379,19 @@ The request format is **identical** to prepare-for-review. See the "Endpoint 1: 
 {
   "success": true,
   "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
+  "status": "UNDER_REVIEW",
+  "recipients": [
+    {
+      "id": "5f673f37-9912-4e72-85aa-8f3649760f6b",
+      "name": "John Smith",
+      "email": "john.smith@company.com",
+      "signingOrder": 1,
+      "metadata": {
+        "color": "hsl(200, 75%, 50%)",
+        "lightColor": "hsl(200, 75%, 93%)"
+      }
+    }
+  ],
   "message": "Document sent for signing. Emails are being sent to recipients."
 }
 ```
@@ -388,6 +402,8 @@ The request format is **identical** to prepare-for-review. See the "Endpoint 1: 
 | ---------- | ------------- | ---------------------------------------------- |
 | success    | Boolean       | Request success status                         |
 | documentId | String (UUID) | Unique document identifier - save for tracking |
+| status     | String        | Document status (UNDER_REVIEW)                 |
+| recipients | Array         | Array of recipient objects with generated IDs  |
 | message    | String        | Human-readable success message                 |
 
 ⚠️ **Note**: This endpoint returns immediately after creating the document. Email sending happens asynchronously in the background. Use webhooks to receive notification when the document is fully signed.
