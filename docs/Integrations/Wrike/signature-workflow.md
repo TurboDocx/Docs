@@ -1,6 +1,7 @@
 ---
 title: Example Signature Workflow With TurboSign
 sidebar_position: 7
+draft: true
 description: A complete end-to-end example of setting up automated document generation and e-signature from Wrike using TurboDocx and TurboSign.
 keywords:
   - wrike signature workflow
