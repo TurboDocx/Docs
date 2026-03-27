@@ -138,6 +138,6 @@ Click **Create Automation** to save and activate your e-signature automation wor
 
 ## What's Next?
 
-- **[Add signature anchors](./signature-anchors.md)** to your template if you haven't already
-- **[Map Wrike fields](./field-mapping.md)** to template variables for static data
+- **[Adding Signature Anchors](./signature-anchors.md)** to your template if you haven't already
+- **[Static Field Mapping](./field-mapping.md)** to template variables for static data
 - If something isn't working, see [Troubleshooting and FAQ](./troubleshooting.md)

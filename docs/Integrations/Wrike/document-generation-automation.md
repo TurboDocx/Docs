@@ -87,7 +87,7 @@ Now that your automation is active, test it end-to-end:
 
 ## What's Next?
 
-- **[Map Wrike fields](./field-mapping.md)** to template variables for static data like revenue and dates
-- **[Add signature anchors](./signature-anchors.md)** to your template for digital signing
+- **[Static Field Mapping](./field-mapping.md)** to template variables for static data like revenue and dates
+- **[Adding Signature Anchors](./signature-anchors.md)** to your template for digital signing
 - **Create multiple automations** for different project types, templates, or trigger statuses
 - If something isn't working, see [Troubleshooting and FAQ](./troubleshooting.md)
