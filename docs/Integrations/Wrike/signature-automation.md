@@ -78,6 +78,10 @@ Select the specific field type for the document field (e.g., signature, date, te
 
 Change the anchor tag to match the placeholder in your template (e.g., `{SalesSigner}`). This tells TurboSign where to place the field in the generated document.
 
+:::caution Anchor Tags Must Match Your Template
+The anchor tag you set here **must exactly match** the corresponding variable in your document template. If they don't match, TurboSign won't be able to place the signature field. See [Adding Signature Anchors](./signature-anchors.md) for how to configure these in your template.
+:::
+
 ![Set Anchor Tag](/img/wrike-integration/SigAuto09-ChangeAnchorTag.jpeg)
 
 ### Step 10: Map Additional Document Fields (Optional)
