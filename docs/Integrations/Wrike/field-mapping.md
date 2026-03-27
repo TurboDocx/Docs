@@ -54,19 +54,13 @@ Choose **Wrike Field** from the field type options. This tells TurboDocx to pull
 
 ![Select Wrike Field](/img/wrike-integration/FieldMap05-SelectWrikeField.jpeg)
 
-### Step 6: Search for the Field
+### Step 6: Search and Select the Wrike Field
 
-Use the search box to look up the Wrike custom field you want to map (e.g., "Revenue", "Budget", or any custom field in your Wrike workspace).
+Use the search box to look up the Wrike custom field you want to map (e.g., "Revenue", "Budget", or any custom field in your Wrike workspace), then click it from the results to map it to your template variable.
 
-![Search for Wrike Field](/img/wrike-integration/FieldMap06-SearchField.jpeg)
+![Search and Select Wrike Field](/img/wrike-integration/FieldMap07-ClickField.jpeg)
 
-### Step 7: Select the Field
-
-Click the Wrike field from the search results to map it to your template variable.
-
-![Select the Field](/img/wrike-integration/FieldMap07-ClickField.jpeg)
-
-### Step 8: Save Changes
+### Step 7: Save Changes
 
 Click **Save Changes** to persist the field mapping.
 
@@ -81,5 +75,5 @@ When a Wrike automation triggers document generation, TurboDocx reads the mapped
 This is different from AI-mapped variables, which use AI to interpret and generate content from Wrike data. Static mapping is ideal for structured data like revenue figures, dates, project codes, and other fields where you need the exact value.
 
 :::tip
-You can map multiple variables in the same template to different Wrike fields. Repeat steps 3–8 for each variable you want to connect.
+You can map multiple variables in the same template to different Wrike fields. Repeat steps 3–7 for each variable you want to connect.
 :::
