@@ -337,29 +337,6 @@ with open("report.pdf", "wb") as f:
     f.write(pdf_bytes)
 ```
 
-### List deliverable items
-
-List all deliverable items (templates + deliverables combined view) with filtering.
-
-```python
-items = await Deliverable.list_deliverable_items(
-    limit=20,
-    query="proposal",
-)
-
-print("Result:", json.dumps(items, indent=2))
-```
-
-### Get deliverable item
-
-Get a single deliverable item by ID.
-
-```python
-item = await Deliverable.get_deliverable_item("item-uuid", show_tags=True)
-
-print("Result:", json.dumps(item, indent=2))
-```
-
 ---
 
 ## Error Handling
@@ -496,22 +473,6 @@ Options for `list_deliverables`:
 | `query`         | `str`   | No       | Search query to filter by name       |
 | `show_tags`     | `bool`  | No       | Include tags in the response         |
 
-### ListDeliverableItemsOptions
-
-Options for `list_deliverable_items`:
-
-&nbsp;
-
-| Property        | Type               | Required | Description                                    |
-| --------------- | ------------------ | -------- | ---------------------------------------------- |
-| `limit`         | `int`              | No       | Results per page (1-100, default 6)            |
-| `offset`        | `int`              | No       | Results to skip (default 0)                    |
-| `query`         | `str`              | No       | Search query to filter by name                 |
-| `show_tags`     | `bool`             | No       | Include tags in the response                   |
-| `selected_tags` | `str \| list[str]` | No       | Filter by tag IDs (all must match — AND logic) |
-| `column0`       | `str`              | No       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
-| `order0`        | `str`              | No       | Sort direction: `"asc"` or `"desc"`            |
-
 ### DeliverableRecord
 
 The deliverable object returned by `list_deliverables`:
@@ -546,40 +507,6 @@ The deliverable object returned by `get_deliverable_details`. Includes all field
 | `templateName`       | `str`        | Source template name                     |
 | `templateNotDeleted` | `bool`       | Whether the source template still exists |
 | `variables`          | `list[dict]` | Parsed variable objects with values      |
-
-### DeliverableItem
-
-The deliverable item object returned by `list_deliverable_items` and `get_deliverable_item`:
-
-&nbsp;
-
-| Property             | Type   | Description                                |
-| -------------------- | ------ | ------------------------------------------ |
-| `id`                 | `str`  | Item identifier (UUID)                     |
-| `name`               | `str`  | Item name                                  |
-| `description`        | `str`  | Item description                           |
-| `type`               | `str`  | Item type (always `"deliverable"`)         |
-| `createdOn`          | `str`  | ISO 8601 creation timestamp                |
-| `updatedOn`          | `str`  | ISO 8601 last update timestamp             |
-| `isActive`           | `bool` | Active status                              |
-| `createdBy`          | `str`  | Creator user ID                            |
-| `email`              | `str`  | Creator email                              |
-| `fileSize`           | `int`  | File size in bytes                         |
-| `fileType`           | `str`  | MIME type of the generated file            |
-| `deliverableCount`   | `int`  | Number of deliverables                     |
-| `templateNotDeleted` | `bool` | Whether the source template still exists   |
-| `tags`               | `list` | Associated tags (when `show_tags=True`)    |
-
-### DeliverableItemResponse
-
-The response from `get_deliverable_item`:
-
-&nbsp;
-
-| Property  | Type   | Description                 |
-| --------- | ------ | --------------------------- |
-| `results` | `dict` | The deliverable item object |
-| `type`    | `str`  | Item type                   |
 
 ### Tag
 

@@ -373,30 +373,6 @@ byte[] pdfData = deliverable.downloadPDF("deliverable-uuid");
 Files.write(Paths.get("report.pdf"), pdfData);
 ```
 
-### List deliverable items
-
-List all deliverable items (templates + deliverables combined view) with filtering.
-
-```java
-ListDeliverableItemsRequest request = new ListDeliverableItemsRequest();
-request.setLimit(20);
-request.setQuery("proposal");
-
-DeliverableItemListResponse items = deliverable.listDeliverableItems(request);
-
-System.out.println("Result: " + gson.toJson(items));
-```
-
-### Get deliverable item
-
-Get a single deliverable item by ID.
-
-```java
-DeliverableItemResponse item = deliverable.getDeliverableItem("item-uuid", true);
-
-System.out.println("Result: " + gson.toJson(item));
-```
-
 ---
 
 ## Error Handling
@@ -514,20 +490,6 @@ Options for `listDeliverables`:
 | `query`        | `String`   | No       | Search query to filter by name       |
 | `showTags`     | `Boolean`  | No       | Include tags in the response         |
 
-### ListDeliverableItemsRequest
-
-Options for `listDeliverableItems`:
-
-| Property       | Type           | Required | Description                                    |
-| -------------- | -------------- | -------- | ---------------------------------------------- |
-| `limit`        | `Integer`      | No       | Results per page (1-100, default 6)            |
-| `offset`       | `Integer`      | No       | Results to skip (default 0)                    |
-| `query`        | `String`       | No       | Search query to filter by name                 |
-| `showTags`     | `Boolean`      | No       | Include tags in the response                   |
-| `selectedTags` | `List<String>` | No       | Filter by tag IDs (all must match — AND logic) |
-| `column0`      | `String`       | No       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
-| `order0`       | `String`       | No       | Sort direction: `"asc"` or `"desc"`            |
-
 ### DeliverableRecord
 
 The deliverable object returned by `listDeliverables`:
@@ -558,36 +520,6 @@ The deliverable object returned by `getDeliverableDetails`. Includes all fields 
 | `templateName`       | `String`       | Source template name                     |
 | `templateNotDeleted` | `Boolean`      | Whether the source template still exists |
 | `variables`          | `List<Object>` | Parsed variable objects with values      |
-
-### DeliverableItem
-
-The deliverable item object returned by `listDeliverableItems` and `getDeliverableItem`:
-
-| Property             | Type        | Description                                |
-| -------------------- | ----------- | ------------------------------------------ |
-| `id`                 | `String`    | Item identifier (UUID)                     |
-| `name`               | `String`    | Item name                                  |
-| `description`        | `String`    | Item description                           |
-| `type`               | `String`    | Item type (always `"deliverable"`)         |
-| `createdOn`          | `String`    | ISO 8601 creation timestamp                |
-| `updatedOn`          | `String`    | ISO 8601 last update timestamp             |
-| `isActive`           | `Boolean`   | Active status                              |
-| `createdBy`          | `String`    | Creator user ID                            |
-| `email`              | `String`    | Creator email                              |
-| `fileSize`           | `Long`      | File size in bytes                         |
-| `fileType`           | `String`    | MIME type of the generated file            |
-| `deliverableCount`   | `Integer`   | Number of deliverables                     |
-| `templateNotDeleted` | `Boolean`   | Whether the source template still exists   |
-| `tags`               | `List<Tag>` | Associated tags (when `showTags=true`)     |
-
-### DeliverableItemResponse
-
-The response from `getDeliverableItem`:
-
-| Property  | Type              | Description                 |
-| --------- | ----------------- | --------------------------- |
-| `results` | `DeliverableItem` | The deliverable item object |
-| `type`    | `String`          | Item type                   |
 
 ### Tag
 

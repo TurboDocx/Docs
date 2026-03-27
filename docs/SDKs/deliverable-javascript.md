@@ -580,66 +580,6 @@ writeFileSync("report.pdf", Buffer.from(buffer));
 </TabItem>
 </Tabs>
 
-### List deliverable items
-
-List all deliverable items (templates + deliverables combined view) with filtering.
-
-<Tabs groupId="js-variant">
-<TabItem value="javascript" label="JavaScript" default>
-
-```javascript
-const items = await Deliverable.listDeliverableItems({
-  limit: 20,
-  query: "proposal",
-});
-
-console.log(JSON.stringify(items, null, 2));
-```
-
-</TabItem>
-<TabItem value="typescript" label="TypeScript">
-
-```typescript
-const items = await Deliverable.listDeliverableItems({
-  limit: 20,
-  query: "proposal",
-});
-
-console.log(JSON.stringify(items, null, 2));
-```
-
-</TabItem>
-</Tabs>
-
-### Get deliverable item
-
-Get a single deliverable item by ID.
-
-<Tabs groupId="js-variant">
-<TabItem value="javascript" label="JavaScript" default>
-
-```javascript
-const item = await Deliverable.getDeliverableItem("item-uuid", {
-  showTags: true,
-});
-
-console.log(JSON.stringify(item, null, 2));
-```
-
-</TabItem>
-<TabItem value="typescript" label="TypeScript">
-
-```typescript
-const item = await Deliverable.getDeliverableItem("item-uuid", {
-  showTags: true,
-});
-
-console.log(JSON.stringify(item, null, 2));
-```
-
-</TabItem>
-</Tabs>
-
 ---
 
 ## Error Handling
@@ -785,9 +725,6 @@ import type {
   DeliverableListResponse,
   // Record types
   DeliverableRecord,
-  DeliverableItem,
-  DeliverableItemListResponse,
-  DeliverableItemResponse,
   Tag,
   Font,
 } from "@turbodocx/sdk";
@@ -852,22 +789,6 @@ Options for `listDeliverables`:
 | `query`        | `string`   | No       | Search query to filter by name       |
 | `showTags`     | `boolean`  | No       | Include tags in the response         |
 
-### ListDeliverableItemsOptions
-
-Options for `listDeliverableItems`:
-
-&nbsp;
-
-| Property       | Type                 | Required | Description                                    |
-| -------------- | -------------------- | -------- | ---------------------------------------------- |
-| `limit`        | `number`             | No       | Results per page (1-100, default 6)            |
-| `offset`       | `number`             | No       | Results to skip (default 0)                    |
-| `query`        | `string`             | No       | Search query to filter by name                 |
-| `showTags`     | `boolean`            | No       | Include tags in the response                   |
-| `selectedTags` | `string \| string[]` | No       | Filter by tag IDs (all must match — AND logic) |
-| `column0`      | `string`             | No       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
-| `order0`       | `string`             | No       | Sort direction: `"asc"` or `"desc"`            |
-
 ### DeliverableRecord
 
 The deliverable object returned by `listDeliverables`:
@@ -902,40 +823,6 @@ The deliverable object returned by `getDeliverableDetails`. Includes all fields 
 | `templateName`       | `string`                | Source template name                     |
 | `templateNotDeleted` | `boolean`               | Whether the source template still exists |
 | `variables`          | `DeliverableVariable[]` | Parsed variable objects with values      |
-
-### DeliverableItem
-
-The deliverable item object returned by `listDeliverableItems` and `getDeliverableItem`:
-
-&nbsp;
-
-| Property             | Type      | Description                                |
-| -------------------- | --------- | ------------------------------------------ |
-| `id`                 | `string`  | Item identifier (UUID)                     |
-| `name`              | `string`  | Item name                                  |
-| `description`       | `string`  | Item description                           |
-| `type`              | `string`  | Item type (always `"deliverable"`)         |
-| `createdOn`         | `string`  | ISO 8601 creation timestamp                |
-| `updatedOn`         | `string`  | ISO 8601 last update timestamp             |
-| `isActive`          | `boolean` | Active status                              |
-| `createdBy`         | `string`  | Creator user ID                            |
-| `email`             | `string`  | Creator email                              |
-| `fileSize`          | `number`  | File size in bytes                         |
-| `fileType`          | `string`  | MIME type of the generated file            |
-| `deliverableCount`  | `number`  | Number of deliverables                     |
-| `templateNotDeleted`| `boolean` | Whether the source template still exists   |
-| `tags`              | `Tag[]`   | Associated tags (when `showTags=true`)     |
-
-### DeliverableItemResponse
-
-The response from `getDeliverableItem`:
-
-&nbsp;
-
-| Property  | Type              | Description                |
-| --------- | ----------------- | -------------------------- |
-| `results` | `DeliverableItem` | The deliverable item object|
-| `type`    | `string`          | Item type                  |
 
 ### Tag
 

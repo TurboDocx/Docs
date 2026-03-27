@@ -354,33 +354,6 @@ header('Content-Disposition: attachment; filename="report.pdf"');
 echo $pdfFile;
 ```
 
-### List deliverable items
-
-List all deliverable items (templates + deliverables combined view) with filtering.
-
-```php
-$items = Deliverable::listDeliverableItems([
-    'limit' => 20,
-    'query' => 'proposal',
-]);
-
-echo "Total: {$items['totalRecords']}\n";
-foreach ($items['results'] as $item) {
-    echo "  {$item['name']} ({$item['type']})\n";
-}
-```
-
-### Get deliverable item
-
-Get a single deliverable item by ID.
-
-```php
-$item = Deliverable::getDeliverableItem('item-uuid', showTags: true);
-
-echo "Name: {$item['results']['name']}\n";
-echo "Type: {$item['type']}\n";
-```
-
 ---
 
 ## Error Handling
@@ -498,20 +471,6 @@ Options array for `listDeliverables`:
 | `query`        | `string` | No       | Search query to filter by name       |
 | `showTags`     | `bool`   | No       | Include tags in the response         |
 
-### List Deliverable Items Options
-
-Options array for `listDeliverableItems`:
-
-| Key            | Type              | Required | Description                                    |
-| -------------- | ----------------- | -------- | ---------------------------------------------- |
-| `limit`        | `int`             | No       | Results per page (1-100, default 6)            |
-| `offset`       | `int`             | No       | Results to skip (default 0)                    |
-| `query`        | `string`          | No       | Search query to filter by name                 |
-| `showTags`     | `bool`            | No       | Include tags in the response                   |
-| `selectedTags` | `string\|array`   | No       | Filter by tag IDs (all must match — AND logic) |
-| `column0`      | `string`          | No       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
-| `order0`       | `string`          | No       | Sort direction: `"asc"` or `"desc"`            |
-
 ### Deliverable Record
 
 The deliverable record returned by `listDeliverables`:
@@ -542,36 +501,6 @@ The deliverable record returned by `getDeliverableDetails`. Includes all fields 
 | `templateName`       | `string` | Source template name                     |
 | `templateNotDeleted` | `bool`   | Whether the source template still exists |
 | `variables`          | `array`  | Parsed variable objects with values      |
-
-### Deliverable Item
-
-The deliverable item record returned by `listDeliverableItems` and `getDeliverableItem`:
-
-| Key                  | Type     | Description                                |
-| -------------------- | -------- | ------------------------------------------ |
-| `id`                 | `string` | Item identifier (UUID)                     |
-| `name`               | `string` | Item name                                  |
-| `description`        | `string` | Item description                           |
-| `type`               | `string` | Item type (always `"deliverable"`)         |
-| `createdOn`          | `string` | ISO 8601 creation timestamp                |
-| `updatedOn`          | `string` | ISO 8601 last update timestamp             |
-| `isActive`           | `bool`   | Active status                              |
-| `createdBy`          | `string` | Creator user ID                            |
-| `email`              | `string` | Creator email                              |
-| `fileSize`           | `int`    | File size in bytes                         |
-| `fileType`           | `string` | MIME type of the generated file            |
-| `deliverableCount`   | `int`    | Number of deliverables                     |
-| `templateNotDeleted` | `bool`   | Whether the source template still exists   |
-| `tags`               | `array`  | Associated tags (when `showTags=true`)     |
-
-### Deliverable Item Response
-
-The response from `getDeliverableItem`:
-
-| Key       | Type    | Description                 |
-| --------- | ------- | --------------------------- |
-| `results` | `array` | The deliverable item record |
-| `type`    | `string`| Item type                   |
 
 ### Tag
 

@@ -434,8 +434,6 @@ Generate documents from templates with dynamic variable injection, download sour
 | `deleteDeliverable()`       | Soft-delete a deliverable                                  |
 | `downloadSourceFile()`      | Download the original DOCX/PPTX source file                |
 | `downloadPDF()`             | Download the PDF version                                   |
-| `listDeliverableItems()`    | List all deliverable items with filtering                  |
-| `getDeliverableItem()`      | Get a single deliverable item by ID                        |
 
 [Learn more about Deliverable SDKs →](/docs/SDKs/deliverable-javascript)
 

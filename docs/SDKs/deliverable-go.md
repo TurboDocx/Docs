@@ -414,37 +414,6 @@ if err != nil {
 }
 ```
 
-### List deliverable items
-
-List all deliverable items (templates + deliverables combined view) with filtering.
-
-```go
-items, err := deliverable.ListDeliverableItems(ctx, &sdk.ListDeliverableItemsOptions{
-    Limit: 20,
-    Query: "proposal",
-})
-if err != nil {
-    log.Fatal(err)
-}
-
-b, _ := json.MarshalIndent(items, "", "  "); fmt.Println("Result:", string(b))
-```
-
-### Get deliverable item
-
-Get a single deliverable item by ID.
-
-```go
-item, err := deliverable.GetDeliverableItem(ctx, "item-uuid", &sdk.GetDeliverableOptions{
-    ShowTags: true,
-})
-if err != nil {
-    log.Fatal(err)
-}
-
-b, _ := json.MarshalIndent(item, "", "  "); fmt.Println("Result:", string(b))
-```
-
 ---
 
 ## Error Handling
@@ -564,20 +533,6 @@ Options for `ListDeliverables`:
 | `Query`        | `string`   | No       | Search query to filter by name       |
 | `ShowTags`     | `bool`     | No       | Include tags in the response         |
 
-### ListDeliverableItemsOptions
-
-Options for `ListDeliverableItems`:
-
-| Property       | Type       | Required | Description                                    |
-| -------------- | ---------- | -------- | ---------------------------------------------- |
-| `Limit`        | `int`      | No       | Results per page (1-100, default 6)            |
-| `Offset`       | `int`      | No       | Results to skip (default 0)                    |
-| `Query`        | `string`   | No       | Search query to filter by name                 |
-| `ShowTags`     | `bool`     | No       | Include tags in the response                   |
-| `SelectedTags` | `[]string` | No       | Filter by tag IDs (all must match — AND logic) |
-| `Column0`      | `string`   | No       | Sort column: `createdOn`, `email`, `name`, `updatedOn` |
-| `Order0`       | `string`   | No       | Sort direction: `"asc"` or `"desc"`            |
-
 ### DeliverableRecord
 
 The deliverable object returned by `ListDeliverables`:
@@ -608,36 +563,6 @@ The deliverable object returned by `GetDeliverableDetails`. Includes all fields 
 | `TemplateName`       | `string`                | Source template name                     |
 | `TemplateNotDeleted` | `*bool`                 | Whether the source template still exists |
 | `Variables`          | `[]DeliverableVariable` | Parsed variable objects with values      |
-
-### DeliverableItem
-
-The deliverable item object returned by `ListDeliverableItems` and `GetDeliverableItem`:
-
-| Property             | Type     | Description                                |
-| -------------------- | -------- | ------------------------------------------ |
-| `ID`                 | `string` | Item identifier (UUID)                     |
-| `Name`               | `string` | Item name                                  |
-| `Description`        | `string` | Item description                           |
-| `Type`               | `string` | Item type (always `"deliverable"`)         |
-| `CreatedOn`          | `string` | ISO 8601 creation timestamp                |
-| `UpdatedOn`          | `string` | ISO 8601 last update timestamp             |
-| `IsActive`           | `bool`   | Active status                              |
-| `CreatedBy`          | `string` | Creator user ID                            |
-| `Email`              | `string` | Creator email                              |
-| `FileSize`           | `int64`  | File size in bytes                         |
-| `FileType`           | `string` | MIME type of the generated file            |
-| `DeliverableCount`   | `int`    | Number of deliverables                     |
-| `TemplateNotDeleted` | `*bool`  | Whether the source template still exists   |
-| `Tags`               | `[]Tag`  | Associated tags (when `ShowTags=true`)     |
-
-### DeliverableItemResponse
-
-The response from `GetDeliverableItem`:
-
-| Property  | Type             | Description                 |
-| --------- | ---------------- | --------------------------- |
-| `Results` | `DeliverableItem`| The deliverable item object |
-| `Type`    | `string`         | Item type                   |
 
 ### Tag
 
