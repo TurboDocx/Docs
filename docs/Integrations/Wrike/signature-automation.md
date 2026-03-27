@@ -18,9 +18,9 @@ After [setting up your Wrike automation](./setting-up-automation.md) with a trig
 
 ## Configure E-Signature Automation
 
-### Step 1: Select Generate Documents and Send for E-Signature
+### Step 1: Select Send for E-Signature
 
-Click the **Generate documents and send for e-signature** action card to select it as the automation action.
+Click the **Send for e-signature** action card to select it as the automation action.
 
 ![Select E-Signature Action](/img/wrike-integration/SigAuto01-SelectESignature.jpeg)
 
