@@ -35,40 +35,34 @@ Click **Edit Template & Preferences** to open the template configuration view.
 
 ![Edit Template and Preferences](/img/wrike-integration/FieldMap02-EditTemplatePreferences.jpeg)
 
-### Step 3: Open Variable Settings
+### Step 3: Edit the Signature Variable
 
-Click the settings icon on the signature variable you want to configure as an anchor.
+Click the edit icon on the signature variable you want to configure as an anchor (e.g., **SalesSigner**).
 
-![Open Variable Settings](/img/wrike-integration/FieldMap03-OpenVariableSettings.jpeg)
+![Edit Signature Variable](/img/wrike-integration/SigAnchor04-OpenFieldTypeMenu.jpeg)
 
 ### Step 4: Open the Field Type Menu
 
-Click the field type selector to change the variable's data source.
+In the variable settings panel, click the **...** menu button next to the Default Value field to see the available field type options.
 
-![Open Field Type Menu](/img/wrike-integration/SigAnchor04-OpenFieldTypeMenu.jpeg)
+![Open Field Type Menu](/img/wrike-integration/SigAnchor05-ExpandFieldOptions.jpeg)
 
-### Step 5: Expand Field Options
+### Step 5: Select "Wrike Signature Field"
 
-Click the icon to expand the available field type options.
-
-![Expand Field Options](/img/wrike-integration/SigAnchor05-ExpandFieldOptions.jpeg)
-
-### Step 6: Select "Wrike Signature Field"
-
-Choose **Wrike Signature Field** from the options. This marks the variable as a signature anchor that TurboSign will use to place signature elements in the generated document.
+Choose **Wrike Signature Field** from the dropdown. This marks the variable as a TurboSign signature anchor that will be used to place signature elements in the generated document.
 
 ![Select Wrike Signature Field](/img/wrike-integration/SigAnchor06-SelectWrikeSignatureField.jpeg)
 
-### Step 7: Save Changes
+### Step 6: Save Changes
 
-Click **Save Changes** to persist the signature anchor configuration.
+The field now shows **TurboSign Signature Anchor**. Click **Save Changes** to persist the configuration.
 
 ![Save Changes](/img/wrike-integration/SigAnchor07-SaveChanges.jpeg)
 
-Your signature anchor is now configured and ready for use.
+Your signature anchor is now configured. The variable will show a **Signature Anchor** tag to confirm it's set up correctly.
 
 ![Signature Anchor Complete](/img/wrike-integration/SigAnchor08-Complete.jpeg)
 
 :::tip
-Repeat steps 3–7 for each signature variable in your template (e.g., `{SalesSignerName}`, `{SalesSignerSignature}`, `{ClientSignerName}`, etc.). See [Signature Workflow](./signature-workflow.md) for the full list of required anchor fields.
+Repeat steps 3–6 for each signature variable in your template (e.g., `{SalesSignerName}`, `{SalesSignerSignature}`, `{ClientSignerName}`, etc.). See [Signature Workflow](./signature-workflow.md) for the full list of required anchor fields.
 :::
