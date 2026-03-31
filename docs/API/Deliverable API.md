@@ -33,7 +33,7 @@ import ScriptLoader from '@site/src/components/ScriptLoader';
 
 This guide covers the TurboDocx Deliverable API — everything you need to programmatically generate documents from templates, manage deliverables, and download files using the v1 API endpoints.
 
-![Deliverable API](/img/template-generation-api/template-api.webp)
+![Deliverable API](/img/template-generation-api/template-api.jpg)
 
 ## Overview
 
@@ -91,14 +91,14 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/file/pdf/DELIVERABLE_ID" \
 
 ### All Endpoints at a Glance
 
-| Method   | Endpoint                                | Description                          |
-| -------- | --------------------------------------- | ------------------------------------ |
-| `GET`    | `/v1/deliverable`                       | List deliverables                    |
-| `POST`   | `/v1/deliverable`                       | Create deliverable from template     |
-| `GET`    | `/v1/deliverable/:id`                   | Get a single deliverable             |
-| `PATCH`  | `/v1/deliverable/:id`                   | Update a deliverable                 |
-| `DELETE` | `/v1/deliverable/:id`                   | Delete a deliverable (soft delete)   |
-| `GET`    | `/v1/deliverable/file/:deliverableId`   | Download source file (DOCX/PPTX)    |
+| Method   | Endpoint                                  | Description                        |
+| -------- | ----------------------------------------- | ---------------------------------- |
+| `GET`    | `/v1/deliverable`                         | List deliverables                  |
+| `POST`   | `/v1/deliverable`                         | Create deliverable from template   |
+| `GET`    | `/v1/deliverable/:id`                     | Get a single deliverable           |
+| `PATCH`  | `/v1/deliverable/:id`                     | Update a deliverable               |
+| `DELETE` | `/v1/deliverable/:id`                     | Delete a deliverable (soft delete) |
+| `GET`    | `/v1/deliverable/file/:deliverableId`     | Download source file (DOCX/PPTX)   |
 | `GET`    | `/v1/deliverable/file/pdf/:deliverableId` | Download PDF file                  |
 
 ### Complete Workflow Example
@@ -132,12 +132,12 @@ All Deliverable API requests require authentication using a Bearer token and you
 
 ### Required Headers
 
-| Header                | Value                      | Required | Description                        |
-| --------------------- | -------------------------- | -------- | ---------------------------------- |
-| `Authorization`       | `Bearer YOUR_API_TOKEN`    | Yes      | Your API access token              |
-| `x-rapiddocx-org-id`  | `YOUR_ORGANIZATION_ID`     | Yes      | Your organization identifier       |
-| `Content-Type`        | `application/json`         | Yes*     | Required for POST and PATCH requests |
-| `User-Agent`          | `TurboDocx API Client`     | No       | Recommended for identification     |
+| Header               | Value                   | Required | Description                          |
+| -------------------- | ----------------------- | -------- | ------------------------------------ |
+| `Authorization`      | `Bearer YOUR_API_TOKEN` | Yes      | Your API access token                |
+| `x-rapiddocx-org-id` | `YOUR_ORGANIZATION_ID`  | Yes      | Your organization identifier         |
+| `Content-Type`       | `application/json`      | Yes\*    | Required for POST and PATCH requests |
+| `User-Agent`         | `TurboDocx API Client`  | No       | Recommended for identification       |
 
 ```http
 Authorization: Bearer YOUR_API_TOKEN
@@ -163,12 +163,12 @@ GET https://api.turbodocx.com/v1/deliverable
 
 ### Query Parameters
 
-| Parameter       | Type            | Required | Default | Description                                    |
-| --------------- | --------------- | -------- | ------- | ---------------------------------------------- |
-| `limit`         | Integer         | No       | 6       | Number of results per page (1–100)             |
-| `offset`        | Integer         | No       | 0       | Number of results to skip for pagination       |
-| `query`         | String          | No       | —       | Search query to filter by name                 |
-| `showTags`      | Boolean         | No       | false   | Include tags in the response                   |
+| Parameter  | Type    | Required | Default | Description                              |
+| ---------- | ------- | -------- | ------- | ---------------------------------------- |
+| `limit`    | Integer | No       | 6       | Number of results per page (1–100)       |
+| `offset`   | Integer | No       | 0       | Number of results to skip for pagination |
+| `query`    | String  | No       | —       | Search query to filter by name           |
+| `showTags` | Boolean | No       | false   | Include tags in the response             |
 
 ### Example Request
 
@@ -227,24 +227,24 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable?limit=10&offset=0&showTags
 
 ### Response Fields
 
-| Field                    | Type      | Description                                      |
-| ------------------------ | --------- | ------------------------------------------------ |
-| `data.results`           | Array     | Array of deliverable objects                     |
-| `data.totalRecords`      | Integer   | Total number of deliverables matching the query  |
-| `results[].id`           | String    | Unique deliverable identifier (UUID)             |
-| `results[].name`         | String    | Deliverable name                                 |
-| `results[].description`  | String    | Deliverable description                          |
-| `results[].templateId`   | String    | Template used for generation                     |
-| `results[].createdBy`    | String    | User ID of the creator                           |
-| `results[].email`        | String    | Email of the creator                             |
-| `results[].fileSize`     | Integer   | File size in bytes                               |
-| `results[].fileType`     | String    | MIME type of the generated file                  |
-| `results[].defaultFont`  | String    | Default font used                                |
-| `results[].fonts`        | JSON      | Array of font objects with `name` and `usage`    |
-| `results[].isActive`     | Boolean   | Whether the deliverable is active (not deleted)  |
-| `results[].createdOn`    | String    | ISO 8601 creation timestamp                      |
-| `results[].updatedOn`    | String    | ISO 8601 last update timestamp                   |
-| `results[].tags`         | Array     | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
+| Field                   | Type    | Description                                                      |
+| ----------------------- | ------- | ---------------------------------------------------------------- |
+| `data.results`          | Array   | Array of deliverable objects                                     |
+| `data.totalRecords`     | Integer | Total number of deliverables matching the query                  |
+| `results[].id`          | String  | Unique deliverable identifier (UUID)                             |
+| `results[].name`        | String  | Deliverable name                                                 |
+| `results[].description` | String  | Deliverable description                                          |
+| `results[].templateId`  | String  | Template used for generation                                     |
+| `results[].createdBy`   | String  | User ID of the creator                                           |
+| `results[].email`       | String  | Email of the creator                                             |
+| `results[].fileSize`    | Integer | File size in bytes                                               |
+| `results[].fileType`    | String  | MIME type of the generated file                                  |
+| `results[].defaultFont` | String  | Default font used                                                |
+| `results[].fonts`       | JSON    | Array of font objects with `name` and `usage`                    |
+| `results[].isActive`    | Boolean | Whether the deliverable is active (not deleted)                  |
+| `results[].createdOn`   | String  | ISO 8601 creation timestamp                                      |
+| `results[].updatedOn`   | String  | ISO 8601 last update timestamp                                   |
+| `results[].tags`        | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
 
 ---
 
@@ -264,27 +264,27 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 
 ### Request Body
 
-| Field                | Type    | Required | Description                                          |
-| -------------------- | ------- | -------- | ---------------------------------------------------- |
-| `name`               | String  | **Yes**  | Deliverable name (3–255 characters)                  |
-| `templateId`         | String  | **Yes**  | Template ID to generate from                         |
-| `variables`          | Array   | **Yes**  | Array of variable objects for substitution            |
-| `description`        | String  | No       | Description (up to 65,535 characters)                |
-| `tags`               | Array   | No       | Array of tag strings to associate                    |
+| Field         | Type   | Required | Description                                |
+| ------------- | ------ | -------- | ------------------------------------------ |
+| `name`        | String | **Yes**  | Deliverable name (3–255 characters)        |
+| `templateId`  | String | **Yes**  | Template ID to generate from               |
+| `variables`   | Array  | **Yes**  | Array of variable objects for substitution |
+| `description` | String | No       | Description (up to 65,535 characters)      |
+| `tags`        | Array  | No       | Array of tag strings to associate          |
 
 ### Variable Object Structure
 
 Each variable in the `variables` array represents a placeholder in the template to be substituted:
 
-| Field                    | Type           | Required | Description                                      |
-| ------------------------ | -------------- | -------- | ------------------------------------------------ |
-| `placeholder`            | String         | Yes      | Template placeholder (e.g., `{CompanyName}`)     |
-| `text`                   | String         | Yes*     | Value to inject (* not required if `variableStack` is provided or `isDisabled` is true) |
-| `mimeType`               | String         | Yes      | Content type: `text`, `html`, `image`, or `markdown` |
-| `isDisabled`             | Boolean        | No       | Skip this variable during generation             |
-| `subvariables`           | Array          | No       | Nested sub-variables (for HTML content with dynamic placeholders) |
-| `variableStack`          | Array or Object| No       | Multiple instances (for repeating content)       |
-| `aiPrompt`               | String         | No       | AI prompt for content generation (max 16,000 chars) |
+| Field           | Type            | Required | Description                                                                              |
+| --------------- | --------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `placeholder`   | String          | Yes      | Template placeholder (e.g., `{CompanyName}`)                                             |
+| `text`          | String          | Yes\*    | Value to inject (\* not required if `variableStack` is provided or `isDisabled` is true) |
+| `mimeType`      | String          | Yes      | Content type: `text`, `html`, `image`, or `markdown`                                     |
+| `isDisabled`    | Boolean         | No       | Skip this variable during generation                                                     |
+| `subvariables`  | Array           | No       | Nested sub-variables (for HTML content with dynamic placeholders)                        |
+| `variableStack` | Array or Object | No       | Multiple instances (for repeating content)                                               |
+| `aiPrompt`      | String          | No       | AI prompt for content generation (max 16,000 chars)                                      |
 
 ### Example Request
 
@@ -340,9 +340,18 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
       "placeholder": "{ProjectPhase}",
       "mimeType": "html",
       "variableStack": {
-        "0": { "text": "<p><strong>Phase 1:</strong> Assess environment</p>", "mimeType": "html" },
-        "1": { "text": "<p><strong>Phase 2:</strong> Remediate findings</p>", "mimeType": "html" },
-        "2": { "text": "<p><strong>Phase 3:</strong> Continue monitoring</p>", "mimeType": "html" }
+        "0": {
+          "text": "<p><strong>Phase 1:</strong> Assess environment</p>",
+          "mimeType": "html"
+        },
+        "1": {
+          "text": "<p><strong>Phase 2:</strong> Remediate findings</p>",
+          "mimeType": "html"
+        },
+        "2": {
+          "text": "<p><strong>Phase 3:</strong> Continue monitoring</p>",
+          "mimeType": "html"
+        }
       }
     }
   ]
@@ -374,19 +383,19 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
 
 ### Response Fields
 
-| Field                          | Type    | Description                              |
-| ------------------------------ | ------- | ---------------------------------------- |
-| `data.results.deliverable`     | Object  | The created deliverable object           |
-| `deliverable.id`               | String  | Unique deliverable identifier (UUID)     |
-| `deliverable.name`             | String  | Deliverable name                         |
-| `deliverable.description`      | String  | Deliverable description                  |
-| `deliverable.templateId`       | String  | Template used for generation             |
-| `deliverable.createdBy`        | String  | User ID of the creator                   |
-| `deliverable.createdOn`        | String  | ISO 8601 creation timestamp              |
-| `deliverable.updatedOn`        | String  | ISO 8601 last update timestamp           |
-| `deliverable.isActive`         | Boolean | Active status (always `true` on creation)|
-| `deliverable.defaultFont`      | String  | Default font (empty string if not specified) |
-| `deliverable.fonts`            | JSON    | Font metadata array (null if not yet generated) |
+| Field                      | Type    | Description                                     |
+| -------------------------- | ------- | ----------------------------------------------- |
+| `data.results.deliverable` | Object  | The created deliverable object                  |
+| `deliverable.id`           | String  | Unique deliverable identifier (UUID)            |
+| `deliverable.name`         | String  | Deliverable name                                |
+| `deliverable.description`  | String  | Deliverable description                         |
+| `deliverable.templateId`   | String  | Template used for generation                    |
+| `deliverable.createdBy`    | String  | User ID of the creator                          |
+| `deliverable.createdOn`    | String  | ISO 8601 creation timestamp                     |
+| `deliverable.updatedOn`    | String  | ISO 8601 last update timestamp                  |
+| `deliverable.isActive`     | Boolean | Active status (always `true` on creation)       |
+| `deliverable.defaultFont`  | String  | Default font (empty string if not specified)    |
+| `deliverable.fonts`        | JSON    | Font metadata array (null if not yet generated) |
 
 :::info Request Cancellation
 If the client disconnects during generation, the server will detect the cancellation, clean up any partially created resources, and return a `499` status code. This prevents orphaned deliverables from consuming storage.
@@ -406,14 +415,14 @@ GET https://api.turbodocx.com/v1/deliverable/:id
 
 ### Path Parameters
 
-| Parameter | Type          | Required | Description                          |
-| --------- | ------------- | -------- | ------------------------------------ |
+| Parameter | Type          | Required | Description                              |
+| --------- | ------------- | -------- | ---------------------------------------- |
 | `id`      | String (UUID) | Yes      | The unique identifier of the deliverable |
 
 ### Query Parameters
 
-| Parameter  | Type    | Required | Description                 |
-| ---------- | ------- | -------- | --------------------------- |
+| Parameter  | Type    | Required | Description                  |
+| ---------- | ------- | -------- | ---------------------------- |
 | `showTags` | Boolean | No       | Include tags in the response |
 
 ### Example Request
@@ -477,23 +486,23 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
 
 ### Response Fields
 
-| Field                    | Type    | Description                                        |
-| ------------------------ | ------- | -------------------------------------------------- |
-| `results.id`             | String  | Unique deliverable identifier                      |
-| `results.name`           | String  | Deliverable name                                   |
-| `results.description`    | String  | Deliverable description                            |
-| `results.templateId`     | String  | Template ID used for generation                    |
-| `results.templateName`   | String  | Template name                                      |
-| `results.templateNotDeleted` | Boolean | Whether the source template still exists       |
-| `results.defaultFont`    | String  | Default font used                                  |
-| `results.fonts`          | JSON    | Array of font objects with `name` and `usage`      |
-| `results.email`          | String  | Creator's email                                    |
-| `results.fileType`       | String  | MIME type of the generated file                    |
-| `results.isActive`       | Boolean | Active status                                      |
-| `results.createdOn`      | String  | ISO 8601 creation timestamp                        |
-| `results.updatedOn`      | String  | ISO 8601 last update timestamp                     |
-| `results.variables`      | Array   | Parsed variable objects with values                |
-| `results.tags`           | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
+| Field                        | Type    | Description                                                      |
+| ---------------------------- | ------- | ---------------------------------------------------------------- |
+| `results.id`                 | String  | Unique deliverable identifier                                    |
+| `results.name`               | String  | Deliverable name                                                 |
+| `results.description`        | String  | Deliverable description                                          |
+| `results.templateId`         | String  | Template ID used for generation                                  |
+| `results.templateName`       | String  | Template name                                                    |
+| `results.templateNotDeleted` | Boolean | Whether the source template still exists                         |
+| `results.defaultFont`        | String  | Default font used                                                |
+| `results.fonts`              | JSON    | Array of font objects with `name` and `usage`                    |
+| `results.email`              | String  | Creator's email                                                  |
+| `results.fileType`           | String  | MIME type of the generated file                                  |
+| `results.isActive`           | Boolean | Active status                                                    |
+| `results.createdOn`          | String  | ISO 8601 creation timestamp                                      |
+| `results.updatedOn`          | String  | ISO 8601 last update timestamp                                   |
+| `results.variables`          | Array   | Parsed variable objects with values                              |
+| `results.tags`               | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
 
 ---
 
@@ -513,17 +522,17 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 
 ### Path Parameters
 
-| Parameter | Type          | Required | Description                          |
-| --------- | ------------- | -------- | ------------------------------------ |
+| Parameter | Type          | Required | Description                              |
+| --------- | ------------- | -------- | ---------------------------------------- |
 | `id`      | String (UUID) | Yes      | The unique identifier of the deliverable |
 
 ### Request Body
 
-| Field                | Type   | Required | Description                                          |
-| -------------------- | ------ | -------- | ---------------------------------------------------- |
-| `name`               | String | No       | Updated name (3–255 characters)                      |
-| `description`        | String | No       | Updated description (up to 65,535 characters)        |
-| `tags`               | Array  | No       | Replace all tags (existing tags are removed first)   |
+| Field         | Type   | Required | Description                                        |
+| ------------- | ------ | -------- | -------------------------------------------------- |
+| `name`        | String | No       | Updated name (3–255 characters)                    |
+| `description` | String | No       | Updated description (up to 65,535 characters)      |
+| `tags`        | Array  | No       | Replace all tags (existing tags are removed first) |
 
 :::caution Tag Replacement
 When you provide `tags` in the update request, **all existing tags are replaced**. To add a tag, you must include the full list of desired tags. To remove all tags, pass an empty array.
@@ -555,10 +564,10 @@ curl -X PATCH "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-
 
 ### Response Fields
 
-| Field               | Type   | Description                          |
-| ------------------- | ------ | ------------------------------------ |
-| `data.message`      | String | Success confirmation message         |
-| `data.deliverableId`| String | ID of the updated deliverable        |
+| Field                | Type   | Description                   |
+| -------------------- | ------ | ----------------------------- |
+| `data.message`       | String | Success confirmation message  |
+| `data.deliverableId` | String | ID of the updated deliverable |
 
 ---
 
@@ -578,8 +587,8 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 
 ### Path Parameters
 
-| Parameter | Type          | Required | Description                          |
-| --------- | ------------- | -------- | ------------------------------------ |
+| Parameter | Type          | Required | Description                              |
+| --------- | ------------- | -------- | ---------------------------------------- |
 | `id`      | String (UUID) | Yes      | The unique identifier of the deliverable |
 
 ### Example Request
@@ -603,10 +612,10 @@ curl -X DELETE "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8
 
 ### Response Fields
 
-| Field               | Type   | Description                          |
-| ------------------- | ------ | ------------------------------------ |
-| `data.message`      | String | Success confirmation message         |
-| `data.deliverableId`| String | ID of the deleted deliverable        |
+| Field                | Type   | Description                   |
+| -------------------- | ------ | ----------------------------- |
+| `data.message`       | String | Success confirmation message  |
+| `data.deliverableId` | String | ID of the deleted deliverable |
 
 ---
 
@@ -622,14 +631,15 @@ GET https://api.turbodocx.com/v1/deliverable/file/:deliverableId
 
 :::important Feature & Authorization Required
 This endpoint requires:
+
 - **Role**: administrator, contributor, or user
 - **License feature**: `hasFileDownload` must be enabled for your organization
-:::
+  :::
 
 ### Path Parameters
 
-| Parameter       | Type          | Required | Description                          |
-| --------------- | ------------- | -------- | ------------------------------------ |
+| Parameter       | Type          | Required | Description                              |
+| --------------- | ------------- | -------- | ---------------------------------------- |
 | `deliverableId` | String (UUID) | Yes      | The unique identifier of the deliverable |
 
 ### Example Request
@@ -674,8 +684,8 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 
 ### Path Parameters
 
-| Parameter       | Type          | Required | Description                          |
-| --------------- | ------------- | -------- | ------------------------------------ |
+| Parameter       | Type          | Required | Description                              |
+| --------------- | ------------- | -------- | ---------------------------------------- |
 | `deliverableId` | String (UUID) | Yes      | The unique identifier of the deliverable |
 
 ### Example Request
@@ -702,36 +712,40 @@ Content-Disposition: attachment; filename="Employee Contract - John Smith.pdf"
 
 When `showTags=true` is passed, tag arrays contain full tag objects with the following fields:
 
-| Field       | Type    | Description                          |
-| ----------- | ------- | ------------------------------------ |
-| `id`        | String  | Tag unique identifier (UUID)         |
-| `label`     | String  | Tag display name                     |
-| `isActive`  | Boolean | Whether the tag is active            |
-| `updatedOn` | String  | ISO 8601 last update timestamp       |
-| `createdOn` | String  | ISO 8601 creation timestamp          |
-| `createdBy` | String  | User ID of the tag creator           |
-| `orgId`     | String  | Organization ID the tag belongs to   |
+| Field       | Type    | Description                        |
+| ----------- | ------- | ---------------------------------- |
+| `id`        | String  | Tag unique identifier (UUID)       |
+| `label`     | String  | Tag display name                   |
+| `isActive`  | Boolean | Whether the tag is active          |
+| `updatedOn` | String  | ISO 8601 last update timestamp     |
+| `createdOn` | String  | ISO 8601 creation timestamp        |
+| `createdBy` | String  | User ID of the tag creator         |
+| `orgId`     | String  | Organization ID the tag belongs to |
 
 ---
 
 ## Best Practices
 
 ### Variable Preparation
+
 - Always match `placeholder` values exactly with your template placeholders (e.g., `{CompanyName}`)
 - Use `subvariables` for structured data within HTML content — the parent variable must have `mimeType: "html"` with HTML containing independent placeholder tokens, and each subvariable provides a value for one of those tokens
 - Use `variableStack` for repeating content (tables, list items)
 - Set `mimeType` to `html` when injecting formatted content
 
 ### Pagination
+
 - Use `limit` and `offset` for efficient data retrieval
 - The default `limit` is 6; set it up to 100 for larger result sets
 - Use `totalRecords` from the response to calculate total pages
 
 ### Tag Filtering
+
 - When passing `selectedTags`, all specified tags must match (AND logic)
 - Tags can be passed as a single UUID string or an array of UUIDs
 
 ### Error Handling
+
 - Always check the HTTP status code before parsing the response body
 - Implement retry logic with exponential backoff for `5xx` errors
 - Handle `499` (Client Closed Request) gracefully — the server has already cleaned up
@@ -742,17 +756,17 @@ When `showTags=true` is passed, tag arrays contain full tag objects with the fol
 
 ### HTTP Status Codes
 
-| Status | Description                   | Common Cause                                     |
-| ------ | ----------------------------- | ------------------------------------------------ |
-| `200`  | Success                       | Request completed successfully                   |
-| `400`  | Bad Request                   | Validation error — check required fields and types |
-| `401`  | Unauthorized                  | Invalid or missing Bearer token                  |
-| `403`  | Forbidden                     | Missing role permission or invalid org ID        |
-| `404`  | Not Found                     | Deliverable or template ID does not exist        |
-| `422`  | Unprocessable Entity          | Field constraint violation                       |
-| `429`  | Too Many Requests             | Rate limit exceeded — use exponential backoff    |
-| `499`  | Client Closed Request         | Request cancelled during deliverable generation  |
-| `500`  | Internal Server Error         | Server-side error — contact support              |
+| Status | Description           | Common Cause                                       |
+| ------ | --------------------- | -------------------------------------------------- |
+| `200`  | Success               | Request completed successfully                     |
+| `400`  | Bad Request           | Validation error — check required fields and types |
+| `401`  | Unauthorized          | Invalid or missing Bearer token                    |
+| `403`  | Forbidden             | Missing role permission or invalid org ID          |
+| `404`  | Not Found             | Deliverable or template ID does not exist          |
+| `422`  | Unprocessable Entity  | Field constraint violation                         |
+| `429`  | Too Many Requests     | Rate limit exceeded — use exponential backoff      |
+| `499`  | Client Closed Request | Request cancelled during deliverable generation    |
+| `500`  | Internal Server Error | Server-side error — contact support                |
 
 ### Error Response Format
 
@@ -766,18 +780,22 @@ When `showTags=true` is passed, tag arrays contain full tag objects with the fol
 ### Common Issues
 
 **Variable validation errors**
+
 - Ensure `text` is provided for each variable (unless `variableStack` is present or `isDisabled` is true)
 - Check that `mimeType` is one of: `text`, `html`, `image`, `markdown`
 - When using `html` mimeType with subvariables, ensure the parent `text` contains the subvariable placeholder tokens
 
 **Template not found**
+
 - Verify the `templateId` exists and has been fully processed (placeholders extracted)
 - Templates must be active (not deleted)
 
 **License limit exceeded**
+
 - Your organization may have reached its deliverable or storage quota
 - Contact your administrator to upgrade your plan
 
 **File download permission errors**
+
 - Source file download (`/v1/deliverable/file/:id`) requires the `hasFileDownload` feature to be enabled on your organization's license
 - Ensure your user role is administrator, contributor, or user (viewers cannot download)
