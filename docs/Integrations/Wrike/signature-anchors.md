@@ -17,7 +17,7 @@ Signature anchors are special template variables that tell TurboSign where to pl
 ## Prerequisites
 
 - A template uploaded to TurboDocx with signature variables (e.g., `{SalesSigner}`)
-- TurboSign configured in your organization (see [Setting up TurboSign](../../TurboSign/Setting%20up%20TurboSign.md))
+- An e-signature automation configured (see [E-Signature Automation](./signature-automation.md))
 
 <br/>
 
