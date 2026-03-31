@@ -64,9 +64,6 @@ class AIVariableGenerator:
             'richTextEnabled': str(rich_text_enabled).lower()
         }
 
-        if template_id:
-            data['templateId'] = template_id
-
         files = {}
 
         # Handle file attachment
@@ -184,7 +181,6 @@ def example2_excel_analysis(file_path: str):
                 'dataRange': 'A1:F50',
                 'contentType': 'financial-data'
             },
-            template_id='quarterly-report-template-123',
             rich_text_enabled=True
         )
 
@@ -209,7 +205,6 @@ def example3_document_analysis(file_path: str):
             file_metadata={
                 'contentType': 'project-document'
             },
-            template_id='project-proposal-template-456',
             rich_text_enabled=True
         )
 
@@ -254,7 +249,6 @@ def example5_rich_text_generation():
             name='Marketing Campaign Summary',
             placeholder='{CampaignSummary}',
             ai_hint='Create a comprehensive marketing campaign summary with structured sections: Executive Overview, Key Metrics (with specific numbers), Strategic Insights, and Action Items. Format with appropriate headings and bullet points.',
-            template_id='marketing-report-template-789',
             rich_text_enabled=True
         )
 
