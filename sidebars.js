@@ -185,6 +185,38 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Deliverable SDKs',
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'SDKs/deliverable-javascript',
+              label: 'JavaScript / TypeScript',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/deliverable-python',
+              label: 'Python',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/deliverable-php',
+              label: 'PHP',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/deliverable-go',
+              label: 'Go',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/deliverable-java',
+              label: 'Java',
+            },
+          ],
+        },
       ],
     },
     {

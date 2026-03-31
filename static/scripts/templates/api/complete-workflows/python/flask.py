@@ -228,8 +228,6 @@ class TemplateWorkflowManager:
             "variables": deliverable_data['variables'],
             "tags": deliverable_data.get('tags', ['api-generated']),
             "fonts": deliverable_data.get('fonts', '[]'),
-            "defaultFont": deliverable_data.get('defaultFont', 'Arial'),
-            "replaceFonts": deliverable_data.get('replaceFonts', True),
             "metadata": deliverable_data.get('metadata', {
                 "sessions": [{
                     "id": self.generate_session_id(),

@@ -1,286 +1,141 @@
-import requests
-import json
-import uuid
-from datetime import datetime
+from typing import Optional, List, Dict, Any
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+import httpx
+import uvicorn
+import io
 
 # Configuration - Update these values
 API_TOKEN = "YOUR_API_TOKEN"
 ORG_ID = "YOUR_ORGANIZATION_ID"
 BASE_URL = "https://api.turbodocx.com"
 
-class DeliverableGenerator:
-    """Final Step: Generate Deliverable (Both Paths Converge Here)"""
+HEADERS = {
+    "Authorization": f"Bearer {API_TOKEN}",
+    "x-rapiddocx-org-id": ORG_ID,
+    "User-Agent": "TurboDocx API Client",
+    "Content-Type": "application/json",
+}
 
-    def __init__(self, api_token, org_id, base_url):
-        self.api_token = api_token
-        self.org_id = org_id
-        self.base_url = base_url
-        self.headers = {
-            'Authorization': f'Bearer {api_token}',
-            'x-rapiddocx-org-id': org_id,
-            'User-Agent': 'TurboDocx API Client',
-            'Content-Type': 'application/json'
-        }
+# ---------------------------------------------------------------------------
+# Pydantic Models
+# ---------------------------------------------------------------------------
 
-    def generate_deliverable(self, template_id, deliverable_data):
-        """Generate a deliverable document from template with variable substitution"""
+class Subvariable(BaseModel):
+    placeholder: str
+    text: Optional[str] = None
+    mimeType: Optional[str] = None
+
+
+class Variable(BaseModel):
+    placeholder: str
+    text: Optional[str] = None
+    mimeType: Optional[str] = None
+    subvariables: Optional[List[Subvariable]] = None
+    variableStack: Optional[Dict[str, Any]] = None
+
+
+class DeliverableRequest(BaseModel):
+    templateId: str
+    name: str
+    description: Optional[str] = ""
+    variables: List[Variable]
+    tags: Optional[List[str]] = []
+
+# ---------------------------------------------------------------------------
+# FastAPI App
+# ---------------------------------------------------------------------------
+
+app = FastAPI(title="TurboDocx Deliverable Generator")
+
+
+@app.post("/generate")
+async def generate_deliverable(request: DeliverableRequest):
+    """Generate a deliverable document from a template with variable substitution."""
+
+    url = f"{BASE_URL}/v1/deliverable"
+    payload = request.model_dump(exclude_none=True)
+
+    async with httpx.AsyncClient() as client:
         try:
-            url = f"{self.base_url}/deliverable"
-
-            payload = {
-                "templateId": template_id,
-                "name": deliverable_data["name"],
-                "description": deliverable_data.get("description", ""),
-                "variables": deliverable_data["variables"],
-                "tags": deliverable_data.get("tags", []),
-                "fonts": deliverable_data.get("fonts", "[]"),
-                "defaultFont": deliverable_data.get("defaultFont", "Arial"),
-                "replaceFonts": deliverable_data.get("replaceFonts", True),
-                "metadata": deliverable_data.get("metadata", {
-                    "sessions": [{
-                        "id": self.generate_session_id(),
-                        "starttime": datetime.utcnow().isoformat() + "Z",
-                        "endtime": datetime.utcnow().isoformat() + "Z"
-                    }]
-                })
-            }
-
-            print(f"Generating deliverable...")
-            print(f"Template ID: {template_id}")
-            print(f"Deliverable Name: {payload['name']}")
-            print(f"Variables: {len(payload['variables'])}")
-
-            response = requests.post(url, headers=self.headers, json=payload)
+            response = await client.post(url, headers=HEADERS, json=payload)
             response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            raise HTTPException(
+                status_code=exc.response.status_code,
+                detail=f"TurboDocx API error: {exc.response.text}",
+            )
 
-            result = response.json()
-            deliverable = result['data']['results']['deliverable']
+    result = response.json()
+    deliverable = result["data"]["results"]["deliverable"]
+    return {
+        "deliverableId": deliverable["id"],
+        "name": deliverable["name"],
+        "createdBy": deliverable["createdBy"],
+        "createdOn": deliverable["createdOn"],
+        "templateId": deliverable["templateId"],
+    }
 
-            print("✅ Deliverable generated successfully!")
-            print(f"Deliverable ID: {deliverable['id']}")
-            print(f"Created by: {deliverable['createdBy']}")
-            print(f"Created on: {deliverable['createdOn']}")
-            print(f"Template ID: {deliverable['templateId']}")
 
-            return deliverable
+@app.get("/download/{deliverable_id}")
+async def download_deliverable(deliverable_id: str):
+    """Download the generated deliverable file."""
 
-        except requests.exceptions.RequestException as e:
-            print(f"Error generating deliverable: {e}")
-            if hasattr(e, 'response') and e.response is not None:
-                print(f"Response body: {e.response.text}")
-            raise
+    url = f"{BASE_URL}/v1/deliverable/file/{deliverable_id}"
 
-    def create_complex_variables(self):
-        """Example: Complex variable structure with all features"""
-        return [
-            {
-                "mimeType": "text",
-                "name": "Employee Name",
-                "placeholder": "{EmployeeName}",
-                "text": "John Smith",
-                "allowRichTextInjection": 0,
-                "autogenerated": False,
-                "count": 1,
-                "order": 1,
-                "subvariables": [
-                    {
-                        "placeholder": "{EmployeeName.Title}",
-                        "text": "Senior Software Engineer"
-                    },
-                    {
-                        "placeholder": "{EmployeeName.StartDate}",
-                        "text": "January 15, 2024"
-                    }
-                ],
-                "metadata": {
-                    "department": "Engineering",
-                    "level": "Senior"
-                },
-                "aiPrompt": "Generate a professional job description for a senior software engineer role"
-            },
-            {
-                "mimeType": "text",
-                "name": "Company Information",
-                "placeholder": "{CompanyInfo}",
-                "text": "TechCorp Solutions Inc.",
-                "allowRichTextInjection": 1,
-                "autogenerated": False,
-                "count": 1,
-                "order": 2,
-                "subvariables": [
-                    {
-                        "placeholder": "{CompanyInfo.Address}",
-                        "text": "123 Innovation Drive, Tech City, TC 12345"
-                    },
-                    {
-                        "placeholder": "{CompanyInfo.Phone}",
-                        "text": "(555) 123-4567"
-                    }
-                ],
-                "metadata": {},
-                "aiPrompt": ""
-            },
-            {
-                "mimeType": "text",
-                "name": "Project Assignments",
-                "placeholder": "{ProjectAssignments}",
-                "text": "Multiple ongoing projects",
-                "allowRichTextInjection": 0,
-                "autogenerated": False,
-                "count": 3,
-                "order": 3,
-                "subvariables": [],
-                "variableStack": {
-                    "0": {
-                        "text": "Project Alpha - Backend Development",
-                        "subvariables": [
-                            {
-                                "placeholder": "{ProjectAssignments.Duration}",
-                                "text": "6 months"
-                            },
-                            {
-                                "placeholder": "{ProjectAssignments.Priority}",
-                                "text": "High"
-                            }
-                        ]
-                    },
-                    "1": {
-                        "text": "Project Beta - API Integration",
-                        "subvariables": [
-                            {
-                                "placeholder": "{ProjectAssignments.Duration}",
-                                "text": "3 months"
-                            },
-                            {
-                                "placeholder": "{ProjectAssignments.Priority}",
-                                "text": "Medium"
-                            }
-                        ]
-                    },
-                    "2": {
-                        "text": "Project Gamma - Code Review",
-                        "subvariables": [
-                            {
-                                "placeholder": "{ProjectAssignments.Duration}",
-                                "text": "Ongoing"
-                            },
-                            {
-                                "placeholder": "{ProjectAssignments.Priority}",
-                                "text": "Low"
-                            }
-                        ]
-                    }
-                },
-                "metadata": {
-                    "totalProjects": 3,
-                    "estimatedHours": 1200
-                },
-                "aiPrompt": "Create detailed project descriptions for software development initiatives"
-            },
-            {
-                "mimeType": "text",
-                "name": "Benefits Package",
-                "placeholder": "{BenefitsPackage}",
-                "text": "Comprehensive benefits including health, dental, vision, and 401k",
-                "allowRichTextInjection": 1,
-                "autogenerated": False,
-                "count": 1,
-                "order": 4,
-                "subvariables": [
-                    {
-                        "placeholder": "{BenefitsPackage.HealthInsurance}",
-                        "text": "Full coverage health insurance with $500 deductible"
-                    },
-                    {
-                        "placeholder": "{BenefitsPackage.PTO}",
-                        "text": "25 days paid time off annually"
-                    },
-                    {
-                        "placeholder": "{BenefitsPackage.Retirement}",
-                        "text": "401k with 6% company match"
-                    }
-                ],
-                "metadata": {
-                    "packageValue": "$15,000 annually",
-                    "effective": "First day of employment"
-                },
-                "aiPrompt": "Outline a competitive benefits package for a senior software engineer"
-            }
-        ]
-
-    def generate_session_id(self):
-        """Generate a session ID for metadata tracking"""
-        return str(uuid.uuid4())
-
-    def download_deliverable(self, deliverable_id, filename):
-        """Download the generated deliverable file"""
+    async with httpx.AsyncClient() as client:
         try:
-            url = f"{self.base_url}/deliverable/file/{deliverable_id}"
-
-            print(f"Downloading file: {filename}")
-            response = requests.get(url, headers=self.headers)
+            response = await client.get(url, headers=HEADERS)
             response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            raise HTTPException(
+                status_code=exc.response.status_code,
+                detail=f"TurboDocx API error: {exc.response.text}",
+            )
 
-            print(f"✅ File ready for download: {filename}")
-            print(f"📁 Content-Type: {response.headers.get('content-type')}")
-            print(f"📊 Content-Length: {response.headers.get('content-length')} bytes")
+    content_type = response.headers.get("content-type", "application/octet-stream")
 
-            # In a real application, you would save the file
-            # with open(filename, 'wb') as f:
-            #     f.write(response.content)
+    return StreamingResponse(
+        io.BytesIO(response.content),
+        media_type=content_type,
+        headers={"Content-Disposition": f'attachment; filename="{deliverable_id}.docx"'},
+    )
 
-            return {
-                'filename': filename,
-                'content_type': response.headers.get('content-type'),
-                'content_length': response.headers.get('content-length')
-            }
 
-        except requests.exceptions.RequestException as e:
-            print(f"Error downloading file: {e}")
-            raise
+# ---------------------------------------------------------------------------
+# Example usage – run this file directly to test
+# ---------------------------------------------------------------------------
 
-def example_generate_deliverable():
-    """Example usage with realistic data"""
-    try:
-        generator = DeliverableGenerator(API_TOKEN, ORG_ID, BASE_URL)
-
-        # This would come from either Path A (upload) or Path B (browse/select)
-        template_id = "0b1099cf-d7b9-41a4-822b-51b68fd4885a"
-
-        deliverable_data = {
-            "name": "Employee Contract - John Smith",
-            "description": "Employment contract for new senior software engineer",
-            "variables": generator.create_complex_variables(),
-            "tags": ["hr", "contract", "employee", "engineering"],
-            "fonts": '[{"name":"Arial","usage":269}]',
-            "defaultFont": "Arial",
-            "replaceFonts": True,
-            "metadata": {
-                "sessions": [
-                    {
-                        "id": "cf1cd4b9-6fdc-47e3-b59d-594cd6564501",
-                        "starttime": "2024-01-15T14:12:10.721Z",
-                        "endtime": "2024-01-15T14:13:45.724Z"
-                    }
-                ],
-                "createdBy": "HR Department",
-                "documentType": "Employment Contract",
-                "version": "v1.0"
-            }
-        }
-
-        print("=== Final Step: Generate Deliverable ===")
-        deliverable = generator.generate_deliverable(template_id, deliverable_data)
-
-        # Download the generated file
-        print("\n=== Download Generated File ===")
-        generator.download_deliverable(deliverable['id'], f"{deliverable['name']}.docx")
-
-        return deliverable
-
-    except Exception as error:
-        print(f"Deliverable generation failed: {error}")
-
-# Example usage
 if __name__ == "__main__":
-    example_generate_deliverable()
+    # Demonstrates the expected payload structure.
+    # Start the server, then POST this JSON to http://localhost:8000/generate
+
+    template_id = "0b1099cf-d7b9-41a4-822b-51b68fd4885a"
+
+    payload = {
+        "templateId": template_id,
+        "name": "Employee Contract - John Smith",
+        "description": "Employment contract for new senior developer",
+        "variables": [
+            {"placeholder": "{EmployeeName}", "text": "John Smith", "mimeType": "text"},
+            {"placeholder": "{CompanyName}", "text": "TechCorp Solutions Inc.", "mimeType": "text"},
+            {"placeholder": "{JobTitle}", "text": "Senior Software Engineer", "mimeType": "text"},
+            {
+                "mimeType": "html",
+                "placeholder": "{ContactBlock}",
+                "text": "<div><p>Contact: {contactName}</p><p>Phone: {contactPhone}</p></div>",
+                "subvariables": [
+                    {"placeholder": "{contactName}", "text": "Jane Doe", "mimeType": "text"},
+                    {"placeholder": "{contactPhone}", "text": "(555) 123-4567", "mimeType": "text"},
+                ],
+            },
+        ],
+        "tags": ["hr", "contract", "employee"],
+    }
+
+    print("Example payload for POST /generate:")
+    import json
+    print(json.dumps(payload, indent=2))
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)

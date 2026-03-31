@@ -16,7 +16,7 @@ echo "Template ID: $TEMPLATE_ID"
 echo "Generating deliverable with complex variable structure..."
 
 # Generate deliverable with complex variable payload
-curl -X POST "$BASE_URL/deliverable" \
+curl -X POST "$BASE_URL/v1/deliverable" \
   -H "Authorization: Bearer $API_TOKEN" \
   -H "x-rapiddocx-org-id: $ORG_ID" \
   -H "User-Agent: TurboDocx API Client" \
@@ -162,8 +162,6 @@ curl -X POST "$BASE_URL/deliverable" \
     ],
     "tags": ["hr", "contract", "employee", "engineering"],
     "fonts": "[{\"name\":\"Arial\",\"usage\":269}]",
-    "defaultFont": "Arial",
-    "replaceFonts": true,
     "metadata": {
       "sessions": [
         {
@@ -188,7 +186,7 @@ if [ "$DELIVERABLE_ID" != "null" ] && [ -n "$DELIVERABLE_ID" ]; then
     echo "\n=== Download Generated File ==="
     echo "Downloading deliverable: $DELIVERABLE_NAME"
 
-    curl -X GET "$BASE_URL/deliverable/file/$DELIVERABLE_ID" \
+    curl -X GET "$BASE_URL/v1/deliverable/file/$DELIVERABLE_ID" \
       -H "Authorization: Bearer $API_TOKEN" \
       -H "x-rapiddocx-org-id: $ORG_ID" \
       -H "User-Agent: TurboDocx API Client" \
@@ -203,7 +201,7 @@ echo -e "\n--- Alternative: Simple Variable Structure ---"
 echo "For a simpler example with basic variables:"
 
 cat << 'EOF'
-curl -X POST "$BASE_URL/deliverable" \
+curl -X POST "$BASE_URL/v1/deliverable" \
   -H "Authorization: Bearer $API_TOKEN" \
   -H "x-rapiddocx-org-id: $ORG_ID" \
   -H "User-Agent: TurboDocx API Client" \
@@ -242,8 +240,6 @@ curl -X POST "$BASE_URL/deliverable" \
     ],
     "tags": ["simple", "test"],
     "fonts": "[]",
-    "defaultFont": "Arial",
-    "replaceFonts": true,
     "metadata": {
       "sessions": [
         {

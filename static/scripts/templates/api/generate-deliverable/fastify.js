@@ -15,7 +15,7 @@ const BASE_URL = "https://api.turbodocx.com";
  * Generate a deliverable document from template with variable substitution
  */
 async function generateDeliverable(templateId, deliverableData) {
-    const url = `${BASE_URL}/deliverable`;
+    const url = `${BASE_URL}/v1/deliverable`;
 
     console.log('Generating deliverable...');
     console.log(`Template ID: ${templateId}`);
@@ -54,7 +54,7 @@ async function generateDeliverable(templateId, deliverableData) {
 async function downloadDeliverable(deliverableId, filename) {
     console.log(`Downloading file: ${filename}`);
 
-    const url = `${BASE_URL}/deliverable/file/${deliverableId}`;
+    const url = `${BASE_URL}/v1/deliverable/file/${deliverableId}`;
 
     try {
         const response = await axios.get(url, {
@@ -109,8 +109,6 @@ function createDeliverableData(templateId) {
         variables: createComplexVariables(),
         tags: ['hr', 'contract', 'employee', 'engineering'],
         fonts: '[{"name":"Arial","usage":269}]',
-        defaultFont: 'Arial',
-        replaceFonts: true,
         metadata: {
             sessions: [
                 {
@@ -350,7 +348,7 @@ async function registerRoutes() {
 
             // Get download info (but don't actually download in this example)
             console.log('\n=== Getting Download Info ===');
-            const downloadUrl = `${BASE_URL}/deliverable/file/${deliverable.id}`;
+            const downloadUrl = `${BASE_URL}/v1/deliverable/file/${deliverable.id}`;
 
             reply.send({
                 success: true,

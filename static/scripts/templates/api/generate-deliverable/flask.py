@@ -19,7 +19,7 @@ def generate_deliverable(template_id, deliverable_data):
     Final Step: Generate Deliverable (Both Paths Converge Here)
     Generate a deliverable document from template with variable substitution
     """
-    url = f"{BASE_URL}/deliverable"
+    url = f"{BASE_URL}/v1/deliverable"
 
     print('Generating deliverable...')
     print(f'Template ID: {template_id}')
@@ -64,7 +64,7 @@ def download_deliverable(deliverable_id, filename):
     """Download the generated deliverable file"""
     print(f'Downloading file: {filename}')
 
-    url = f"{BASE_URL}/deliverable/file/{deliverable_id}"
+    url = f"{BASE_URL}/v1/deliverable/file/{deliverable_id}"
 
     headers = {
         'Authorization': f'Bearer {API_TOKEN}',
@@ -256,8 +256,6 @@ def create_deliverable_data(template_id):
         'variables': create_complex_variables(),
         'tags': ['hr', 'contract', 'employee', 'engineering'],
         'fonts': '[{"name":"Arial","usage":269}]',
-        'defaultFont': 'Arial',
-        'replaceFonts': True,
         'metadata': {
             'sessions': [
                 {
@@ -360,7 +358,7 @@ def complete_workflow_endpoint():
 
         # Get download info (but don't actually download in this example)
         print('\n=== Getting Download Info ===')
-        download_url = f"{BASE_URL}/deliverable/file/{deliverable['id']}"
+        download_url = f"{BASE_URL}/v1/deliverable/file/{deliverable['id']}"
 
         return jsonify({
             'success': True,

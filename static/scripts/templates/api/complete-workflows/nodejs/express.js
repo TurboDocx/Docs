@@ -222,8 +222,6 @@ class TemplateWorkflowManager {
       variables: deliverableData.variables,
       tags: deliverableData.tags || ['api-generated'],
       fonts: deliverableData.fonts || '[]',
-      defaultFont: deliverableData.defaultFont || 'Arial',
-      replaceFonts: deliverableData.replaceFonts !== undefined ? deliverableData.replaceFonts : true,
       metadata: deliverableData.metadata || {
         sessions: [{
           id: this.generateSessionId(),

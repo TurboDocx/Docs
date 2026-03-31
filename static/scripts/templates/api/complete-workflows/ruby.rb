@@ -355,8 +355,6 @@ class TemplateWorkflowManager
       'variables' => create_complex_variables,
       'tags' => ['hr', 'contract', 'employee', 'engineering'],
       'fonts' => '[{"name":"Arial","usage":269}]',
-      'defaultFont' => 'Arial',
-      'replaceFonts' => true,
       'metadata' => {
         'sessions' => [
           {

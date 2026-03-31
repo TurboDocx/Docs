@@ -141,8 +141,6 @@ path_a_upload_and_generate() {
         ],
         "tags": ["api-generated", "path-a"],
         "fonts": "[]",
-        "defaultFont": "Arial",
-        "replaceFonts": true,
         "metadata": {
           "sessions": [
             {
@@ -276,8 +274,6 @@ path_b_browse_and_generate() {
         ],
         "tags": ["api-generated", "path-b", "browse-selected"],
         "fonts": "[]",
-        "defaultFont": "'$DEFAULT_FONT'",
-        "replaceFonts": true,
         "metadata": {
           "sessions": [
             {

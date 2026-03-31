@@ -295,8 +295,6 @@ class TemplateWorkflowManager {
             variables: this.createComplexVariables(),
             tags: ['hr', 'contract', 'employee', 'engineering'],
             fonts: '[{"name":"Arial","usage":269}]',
-            defaultFont: 'Arial',
-            replaceFonts: true,
             metadata: {
                 sessions: [
                     {
