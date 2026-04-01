@@ -76,7 +76,7 @@ Repeat for every signature variable in your template. For the full walkthrough, 
 ![Template Default Values and AI Values](/img/wrike-integration/TurboDocxTemplateDefaultValuesAndAIValues.png)
 
 :::caution Anchor Names Must Match
-The signature anchor variable names in your template **must exactly match** the anchor tags you configure in [Step 2: E-Signature Automation](#step-2-create-the-e-signature-automation). For example, if your template has `{SalesSignerSignature}`, the anchor tag in the automation must also be `SalesSignerSignature`. If they don't match, TurboSign won't be able to place the signature fields.
+The signature anchor variable names in your template **must exactly match** the anchor tags you configure in [Step 2: E-Signature Automation](#step-2-create-the-e-signature-automation). For example, if your template has `{SalesSignerSignature}`, the anchor tag in the automation must also be `{SalesSignerSignature}`. If they don't match, TurboSign won't be able to place the signature fields.
 :::
 
 <br/>
@@ -124,7 +124,7 @@ Add each document field and set the anchor tag to match the corresponding signat
 ![Set Anchor Tag](/img/wrike-integration/SigAuto09-ChangeAnchorTag.jpeg)
 
 :::caution Anchor Tags Must Match Your Template
-The anchor tag you set here **must exactly match** the corresponding signature anchor variable in your template from [Step 1](#step-1-prepare-your-template). If your template has `{SalesSignerSignature}`, the anchor tag here must be `SalesSignerSignature`. See [Adding Signature Anchors](./signature-anchors.md) for how to configure these in your template.
+The anchor tag you set here **must exactly match** the corresponding signature anchor variable in your template from [Step 1](#step-1-prepare-your-template). If your template has `{SalesSignerSignature}`, the anchor tag here must be `{SalesSignerSignature}`. See [Adding Signature Anchors](./signature-anchors.md) for how to configure these in your template.
 :::
 
 Map additional fields as needed.

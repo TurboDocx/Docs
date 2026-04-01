@@ -68,5 +68,5 @@ Repeat steps 3–6 for each signature variable in your template (e.g., `{SalesSi
 :::
 
 :::caution Anchor Names Must Match Your E-Signature Automation
-The signature anchor variable names you configure here **must exactly match** the anchor tags in your [E-Signature Automation](./signature-automation.md). For example, if you set up `{SalesSignerSignature}` as an anchor here, the anchor tag in your e-signature automation must also be `SalesSignerSignature`. If they don't match, TurboSign won't be able to place the signature fields. See [E-Signature Automation](./signature-automation.md) for how to configure the anchor tags on the automation side.
+The signature anchor variable names you configure here **must exactly match** the anchor tags in your [E-Signature Automation](./signature-automation.md). For example, if you set up `{SalesSignerSignature}` as an anchor here, the anchor tag in your e-signature automation must also be `{SalesSignerSignature}`. If they don't match, TurboSign won't be able to place the signature fields. See [E-Signature Automation](./signature-automation.md) for how to configure the anchor tags on the automation side.
 :::
