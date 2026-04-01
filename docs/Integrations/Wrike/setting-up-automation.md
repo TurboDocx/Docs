@@ -46,6 +46,10 @@ Navigate to the **Integrations** page within TurboDocx. Locate the **Wrike Integ
 
 ### Step 2: Enter Your Wrike API Key
 
+:::tip Need an API key?
+See [Wrike's API documentation](https://help.wrike.com/hc/en-us/articles/210409445-Wrike-API) for how to generate a permanent access token.
+:::
+
 In the Wrike Automations connection dialog, locate the **Enter your Wrike API key** text input field. Click inside the field and paste your Wrike API access token.
 
 ![Enter Wrike API Key](/img/wrike-integration/Step02-FocusApiKeyInput.png)
