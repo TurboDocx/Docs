@@ -69,7 +69,6 @@ The Wrike integration uses a **status-triggered automation workflow** that you c
 | [Static Field Mapping](./field-mapping.md) | Map Wrike custom fields (revenue, dates, etc.) directly to template variables |
 | [AI Variable Configuration](./ai-variable.md) | Configure AI-driven variables that generate content from prompts during automation |
 | [Adding Signature Anchors](./signature-anchors.md) | Configure signature anchor fields in your template for TurboSign |
-| [Example Signature Workflow](./signature-workflow.md) | Complete end-to-end example of automated document generation and e-signature |
 | [Troubleshooting and FAQ](./troubleshooting.md) | Common issues, solutions, and frequently asked questions |
 
 <br/>
