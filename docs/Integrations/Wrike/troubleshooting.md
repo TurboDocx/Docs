@@ -57,7 +57,7 @@ keywords:
 - Ensure `Seller email` and `Customer email` custom fields exist and are populated on the Wrike task
 - Verify the document template contains all required signature anchor fields
 - Check that TurboSign is configured in your organization
-- See [Example Signature Workflow With TurboSign](./signature-workflow.md) for full requirements
+- See the [End-to-End Example](./signature-workflow.md) for full requirements
 
 <br/>
 

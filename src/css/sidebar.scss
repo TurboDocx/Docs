@@ -221,6 +221,7 @@
 .integration-wrike .menu__link::before {
   content: "";
   display: inline-block;
+  min-width: 16px;
   width: 16px;
   height: 16px;
   margin-right: 8px;
@@ -229,4 +230,5 @@
   background-repeat: no-repeat;
   vertical-align: middle;
   border-radius: 50%;
+  flex-shrink: 0;
 }

@@ -1,5 +1,5 @@
 ---
-title: Adding Signature Anchors
+title: How to Add Signature Anchors
 sidebar_position: 6
 description: Learn how to add TurboSign signature anchor fields to your TurboDocx template variables for automated document signing from Wrike.
 keywords:
@@ -10,14 +10,14 @@ keywords:
   - turbosign template anchors
 ---
 
-# Adding Signature Anchors
+# How to Add Signature Anchors
 
 Signature anchors are special template variables that tell TurboSign where to place signature elements (name, date, signature) in your generated documents. This guide walks you through adding them to your template.
 
 ## Prerequisites
 
 - A template uploaded to TurboDocx with signature variables (e.g., `{SalesSigner}`)
-- An e-signature automation configured (see [E-Signature Automation](./signature-automation.md))
+- An e-signature automation configured (see [How to Setup E-Signature Automation](./signature-automation.md))
 
 <br/>
 
@@ -68,5 +68,5 @@ Repeat steps 3–6 for each signature variable in your template (e.g., `{SalesSi
 :::
 
 :::caution Anchor Names Must Match Your E-Signature Automation
-The signature anchor variable names you configure here **must exactly match** the anchor tags in your [E-Signature Automation](./signature-automation.md). For example, if you set up `{SalesSignerSignature}` as an anchor here, the anchor tag in your e-signature automation must also be `{SalesSignerSignature}`. If they don't match, TurboSign won't be able to place the signature fields. See [E-Signature Automation](./signature-automation.md) for how to configure the anchor tags on the automation side.
+The signature anchor variable names you configure here **must exactly match** the anchor tags in your [How to Setup E-Signature Automation](./signature-automation.md). For example, if you set up `{SalesSignerSignature}` as an anchor here, the anchor tag in your e-signature automation must also be `{SalesSignerSignature}`. If they don't match, TurboSign won't be able to place the signature fields. See [How to Setup E-Signature Automation](./signature-automation.md) for how to configure the anchor tags on the automation side.
 :::

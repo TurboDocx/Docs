@@ -1,5 +1,5 @@
 ---
-title: AI Variable Configuration
+title: How to Setup AI Variable Configuration
 sidebar_position: 6
 description: Learn how to configure AI-driven variables in your TurboDocx templates so that AI generates content automatically during Wrike document automation.
 keywords:
@@ -12,7 +12,7 @@ keywords:
   - wrike ai content
 ---
 
-# AI Variable Configuration
+# How to Setup AI Variable Configuration
 
 AI variables let you define a prompt that TurboDocx uses to generate content automatically when a document is created from a Wrike automation. Instead of pulling a static value from a Wrike field, AI interprets the project context and writes the content for you.
 

@@ -106,5 +106,5 @@ Click the **Next** button at the bottom-right corner of the setup modal to conti
 
 After completing the base automation setup above, choose which type of automation to configure:
 
-- **[Document Generation Automation](./document-generation-automation.md)** — automatically generate documents from a template when the trigger fires
-- **[E-Signature Automation](./signature-automation.md)** — generate documents and send them for digital signature via TurboSign
+- **[How to Setup Document Generation Automation](./document-generation-automation.md)** — automatically generate documents from a template when the trigger fires
+- **[How to Setup E-Signature Automation](./signature-automation.md)** — generate documents and send them for digital signature via TurboSign
