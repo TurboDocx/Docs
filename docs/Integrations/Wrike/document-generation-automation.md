@@ -87,7 +87,7 @@ Now that your automation is active, test it end-to-end:
 
 ## What's Next?
 
-- **[Static Field Mapping](./field-mapping.md)** to template variables for static data like revenue and dates
+- **[How to Setup Static Field Mapping](./field-mapping.md)** to template variables for static data like revenue and dates
 - **[How to Add Signature Anchors](./signature-anchors.md)** to your template for digital signing
 - **Create multiple automations** for different project types, templates, or trigger statuses
 - If something isn't working, see [Troubleshooting and FAQ](./troubleshooting.md)

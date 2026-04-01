@@ -157,7 +157,7 @@ Ready to configure this workflow for your team? Follow these guides in order:
 | Step | Guide | What You'll Do |
 |------|-------|---------------|
 | 1 | [Setting Up a Wrike Automation](./setting-up-automation.md) | Connect Wrike and create your first automation |
-| 2 | [Static Field Mapping](./field-mapping.md) | Map Wrike custom fields (revenue, dates) to template variables |
-| 3 | [AI Variable Configuration](./ai-variable.md) | Set up AI-generated content like project timelines |
+| 2 | [How to Setup Static Field Mapping](./field-mapping.md) | Map Wrike custom fields (revenue, dates) to template variables |
+| 3 | [How to Setup AI Variable Configuration](./ai-variable.md) | Set up AI-generated content like project timelines |
 | 4 | [How to Add Signature Anchors](./signature-anchors.md) | Mark template variables as signature anchor fields |
-| 5 | [E-Signature Automation](./signature-automation.md) | Configure recipients, anchor tags, and post-signature actions |
+| 5 | [How to Setup E-Signature Automation](./signature-automation.md) | Configure recipients, anchor tags, and post-signature actions |
