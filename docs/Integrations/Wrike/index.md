@@ -22,6 +22,10 @@ keywords:
 
 TurboDocx integrates with Wrike to automatically generate professional documents, proposals, and presentations directly from your project management data. When a task status changes in Wrike, TurboDocx can automatically create and attach documents to your projects.
 
+:::tip See It in Action
+Want to see the full workflow before diving into setup? Check out the [End-to-End Example](./signature-workflow.md) — generate a proposal and send it for signature, all from Wrike.
+:::
+
 ## What You Can Create
 
 - **Statements of Work (SOWs)**: Generate comprehensive SOWs from project folders with timelines and deliverables
@@ -63,12 +67,13 @@ The Wrike integration uses a **status-triggered automation workflow** that you c
 
 | Guide | Description |
 |-------|-------------|
+| [End-to-End Example](./signature-workflow.md) | Watch the full workflow in action — generate a proposal and send it for signature |
 | [Setting Up a Wrike Automation](./setting-up-automation.md) | Connect Wrike and create an automation with a trigger status and folder |
-| [Document Generation Automation](./document-generation-automation.md) | Configure an automation to generate documents from a template |
-| [E-Signature Automation](./signature-automation.md) | Generate documents and send them for e-signature automatically |
-| [Static Field Mapping](./field-mapping.md) | Map Wrike custom fields (revenue, dates, etc.) directly to template variables |
-| [AI Variable Configuration](./ai-variable.md) | Configure AI-driven variables that generate content from prompts during automation |
-| [Adding Signature Anchors](./signature-anchors.md) | Configure signature anchor fields in your template for TurboSign |
+| [How to Setup Document Generation Automation](./document-generation-automation.md) | Configure an automation to generate documents from a template |
+| [How to Setup E-Signature Automation](./signature-automation.md) | Generate documents and send them for e-signature automatically |
+| [How to Setup Static Field Mapping](./field-mapping.md) | Map Wrike custom fields (revenue, dates, etc.) directly to template variables |
+| [How to Setup AI Variable Configuration](./ai-variable.md) | Configure AI-driven variables that generate content from prompts during automation |
+| [How to Add Signature Anchors](./signature-anchors.md) | Configure signature anchor fields in your template for TurboSign |
 | [Troubleshooting and FAQ](./troubleshooting.md) | Common issues, solutions, and frequently asked questions |
 
 <br/>

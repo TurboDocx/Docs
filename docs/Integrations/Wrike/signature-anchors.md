@@ -1,5 +1,5 @@
 ---
-title: Adding Signature Anchors
+title: How to Add Signature Anchors
 sidebar_position: 6
 description: Learn how to add TurboSign signature anchor fields to your TurboDocx template variables for automated document signing from Wrike.
 keywords:
@@ -10,7 +10,7 @@ keywords:
   - turbosign template anchors
 ---
 
-# Adding Signature Anchors
+# How to Add Signature Anchors
 
 Signature anchors are special template variables that tell TurboSign where to place signature elements (name, date, signature) in your generated documents. This guide walks you through adding them to your template.
 

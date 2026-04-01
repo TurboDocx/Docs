@@ -1,5 +1,5 @@
 ---
-title: E-Signature Automation
+title: How to Setup E-Signature Automation
 sidebar_position: 4
 description: Configure a Wrike automation to automatically generate documents and send them for e-signature using TurboSign.
 keywords:
@@ -10,7 +10,7 @@ keywords:
   - wrike document signing
 ---
 
-# E-Signature Automation
+# How to Setup E-Signature Automation
 
 After [setting up your Wrike automation](./setting-up-automation.md) with a trigger status and folder, follow these steps to configure it to generate documents and automatically send them for e-signature.
 
@@ -81,7 +81,7 @@ Change the anchor tag to match the placeholder in your template (e.g., `{SalesSi
 ![Set Anchor Tag](/img/wrike-integration/SigAuto09-ChangeAnchorTag.jpeg)
 
 :::caution Anchor Tags Must Match Your Template
-The anchor tag you set here **must exactly match** the corresponding variable in your document template. If they don't match, TurboSign won't be able to place the signature field. See [Adding Signature Anchors](./signature-anchors.md) for how to configure these in your template.
+The anchor tag you set here **must exactly match** the corresponding variable in your document template. If they don't match, TurboSign won't be able to place the signature field. See [How to Add Signature Anchors](./signature-anchors.md) for how to configure these in your template.
 :::
 
 ### Step 10: Map Additional Document Fields (Optional)
@@ -138,6 +138,6 @@ Click **Create Automation** to save and activate your e-signature automation wor
 
 ## What's Next?
 
-- **[Adding Signature Anchors](./signature-anchors.md)** to your template if you haven't already
+- **[How to Add Signature Anchors](./signature-anchors.md)** to your template if you haven't already
 - **[Static Field Mapping](./field-mapping.md)** to template variables for static data
 - If something isn't working, see [Troubleshooting and FAQ](./troubleshooting.md)
