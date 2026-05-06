@@ -722,10 +722,10 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 
 | Property               | Type    | Required | Description                                                     |
 | ---------------------- | ------- | -------- | --------------------------------------------------------------- |
-| template.anchor        | String  | Yes      | Text anchor to find in document (e.g., "{Signature1}")          |
+| template.anchor        | String  | Yes      | Text anchor to find in document (e.g., `{Signature1}`)          |
 | template.placement     | String  | Yes      | How to place field: "replace", "before", "after"                |
-| template.size          | Object  | Yes      | Field dimensions: { width: number, height: number }             |
-| template.offset        | Object  | No       | Position offset: { x: number, y: number } (default: {x:0, y:0}) |
+| template.size          | Object  | Yes      | Field dimensions: &#123; width: number, height: number &#125;             |
+| template.offset        | Object  | No       | Position offset: &#123; x: number, y: number &#125; (default: &#123;x:0, y:0&#125;) |
 | template.caseSensitive | Boolean | No       | Whether anchor search is case-sensitive (default: true)         |
 | template.useRegex      | Boolean | No       | Whether to treat anchor as regex pattern (default: false)       |
 
@@ -971,7 +971,7 @@ Position a signature field at bottom-right of a US Letter page:
 
 **File Upload Optimization**:
 
-- Compress PDFs when possible (aim for <5MB)
+- Compress PDFs when possible (aim for &lt;5MB)
 - Use fileLink for files already in cloud storage (S3, GCS, etc.)
 - Use deliverableId/templateId to reference existing documents
 - Avoid uploading the same document multiple times

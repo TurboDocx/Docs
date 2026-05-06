@@ -673,7 +673,7 @@ Understanding the variable structure is key to successful document generation:
 | `description`                        | string  | No       | Description of the deliverable                 |
 | `variables[]`                        | array   | Yes      | Array of variable definitions and values       |
 | `variables[].name`                   | string  | Yes      | Variable display name                          |
-| `variables[].placeholder`            | string  | Yes      | Placeholder text in template (e.g., "{Name}")  |
+| `variables[].placeholder`            | string  | Yes      | Placeholder text in template (e.g., `{Name}`)  |
 | `variables[].text`                   | string  | Yes      | Actual value to replace placeholder            |
 | `variables[].mimeType`               | string  | Yes      | Content type ("text", "html", etc.)            |
 | `variables[].allowRichTextInjection` | number  | No       | Allow HTML/rich text (0 or 1)                  |

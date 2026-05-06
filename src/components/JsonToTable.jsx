@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import zlib from 'zlib';
-import { useDoc } from '@docusaurus/theme-common/internal';
+import pako from 'pako';
+import { useDoc } from '@docusaurus/plugin-content-docs/client';
 
 const JsonToTable = () => {
   const [decodedData, setDecodedData] = useState({});
@@ -11,7 +11,7 @@ const JsonToTable = () => {
     if (frontMatter.api) {
       try {
         let decodedJSON = JSON.parse(
-          zlib.inflateSync(Buffer.from(frontMatter.api, 'base64')).toString()
+          new TextDecoder().decode(pako.inflate(Uint8Array.from(atob(frontMatter.api), c => c.charCodeAt(0))))
         );
         decodedJSON.requestBodyValues = extractPropertiesAndExamples(decodedJSON);
         setDecodedData(decodedJSON);

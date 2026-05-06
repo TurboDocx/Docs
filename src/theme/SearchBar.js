@@ -54,6 +54,26 @@ export default function SearchBarWrapper(props) {
     return () => observer.disconnect();
   }, [isApple]);
 
+  useEffect(() => {
+    const hideOramaChatPanel = () => {
+      const searchBox = document.querySelector('orama-search-box');
+      if (searchBox?.shadowRoot) {
+        const existing = searchBox.shadowRoot.querySelector('#hide-chat-panel');
+        if (!existing) {
+          const style = document.createElement('style');
+          style.id = 'hide-chat-panel';
+          style.textContent = 'orama-sliding-panel, .slide-container { display: none !important; }';
+          searchBox.shadowRoot.appendChild(style);
+        }
+      }
+    };
+
+    hideOramaChatPanel();
+    const observer = new MutationObserver(hideOramaChatPanel);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="centerSearchBar">
       <div className="searchBarInner">

@@ -1,8 +1,9 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const { themes } = require('prism-react-renderer');
+const lightCodeTheme = themes.github;
+const darkCodeTheme = themes.dracula;
 
 // [item, [[], [], []]]
 const apiConfig = require('./dev-docs-openapi.js');
@@ -38,14 +39,18 @@ const config = {
   url: 'https://docs.turbodocx.com',
   baseUrl: '/',
   onBrokenLinks: 'ignore',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   favicon: 'img/favicon.ico',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'TurboDocx', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
-  plugins: ['docusaurus-plugin-sass', "@orama/plugin-docusaurus", 
+  plugins: ['docusaurus-plugin-sass', "@orama/plugin-docusaurus-v3",
     [
       'docusaurus-plugin-llms',
       {
@@ -99,7 +104,6 @@ const config = {
       ({
         docs: {
           docItemComponent: "@theme/ApiItem",
-          docLayoutComponent: "@theme/DocPage",
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.

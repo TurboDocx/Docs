@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ResponseSamples from "@theme/ResponseSamples";
+import CodeBlock from "@theme/CodeBlock";
 
 const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) => {
   const [scripts, setScripts] = useState({});
@@ -205,10 +205,9 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
         <div role="tabpanel" className="margin-top--md">
           <div className={`openapi-explorer__code-block-container openapi-explorer__code-block language-${getLanguageForHighlighting(activeTab)} theme-code-block`}>
             <div className="openapi-explorer__code-block-content">
-              <ResponseSamples
-                language={getLanguageForHighlighting(activeTab)}
-                responseExample={currentCode}
-              />
+              <CodeBlock language={getLanguageForHighlighting(activeTab)}>
+                {currentCode}
+              </CodeBlock>
             </div>
           </div>
         </div>
