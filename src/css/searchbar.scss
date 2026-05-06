@@ -72,16 +72,6 @@
   justify-content: unset !important;
 }
 
-.navbar .aa-DetachedSearchButton {
-  border-radius: 0.4375rem !important;
-  border: 2px solid rgba(87, 95, 110, 0.7) !important;
-  background: transparent !important;
-  color: rgba(87, 95, 110, 0.7) !important;
-  height: 3.125rem !important;
-  flex-shrink: 0 !important;
-  width: 20.3125rem !important;
-}
-
 .navbar .DocSearch-Button {
   border: none !important;
   background: transparent !important;
@@ -95,42 +85,11 @@
     position: unset !important;
   }
 
-  .navbar .aa-DetachedSearchButton {
-    border: none !important;
-    height: 2.5rem !important;
-    width: 2.5rem !important;
-    margin-right: 1em !important;
-    .aa-DetachedSearchButtonPlaceholder {
-      display: none;
-    }
-
-    kbd {
-      display: none;
-    }
-  }
-
   .navbar .DocSearch-Button {
     border: none !important;
     width: auto !important;
     min-width: unset !important;
   }
-}
-
-.aa-FooterSearchCredit {
-  display: none !important;
-}
-
-// Fix kbd styling for Ctrl vs ⌘
-.aa-DetachedSearchButton kbd {
-  min-width: auto !important;
-  padding: 0 2px !important;
-  font-size: 10px !important;
-  white-space: nowrap !important;
-  line-height: 1 !important;
-}
-
-.aa-DetachedSearchButton kbd:first-of-type {
-  margin-right: 2px !important;
 }
 
 #__docusaurus > nav > div.navbar__inner > div:nth-child(1) > button > svg > path {

@@ -28,7 +28,7 @@ Before you begin, ensure you have:
 - [ ] **A few minutes** for initial setup 
 
 :::tip Ready to Start?
-If you just want to get up and running quickly, jump to the [Quick Start (5 minutes)](#quick-start-5-minutes) section below. You can always come back to customize further.
+If you just want to get up and running quickly, jump to the [Quick Start](#quick-start) section below. You can always come back to customize further.
 :::
 
 ## Quick Start
