@@ -1,6 +1,14 @@
 ---
 title: How to Create a Knowledgebase Entry
 sidebar_position: 5
+description: Step-by-step guide to creating knowledgebase entries in TurboDocx. Store reusable content variables for document generation workflows.
+keywords:
+  - knowledgebase entry
+  - reusable content
+  - turbodocx knowledgebase
+  - variable storage
+  - document workflow
+  - content management
 ---
 
 Congratulations on starting your first entry in the Knowledgebase. In this guide, we will show you how to create your first entry.
@@ -10,11 +18,11 @@ Congratulations on starting your first entry in the Knowledgebase. In this guide
 Let's start by getting to the Knowledgebase and creating a new entry. <br/><br/><br/>
 
 1. On the left side of the screen click on the tab "Knowledgebases".
-![](/img/how_to_create_knowledgebases/step_1.png)
+![Knowledgebases tab in TurboDocx left navigation sidebar](/img/how_to_create_knowledgebases/step_1.png)
 
 2. Next, click the blue "New" button on the top left of the page.
 
-![](/img/how_to_create_knowledgebases/step_2a.png)
+![New button on the Knowledgebases page to create an entry](/img/how_to_create_knowledgebases/step_2a.png)
 
 <br/><br/><br/>
 
@@ -30,7 +38,7 @@ After clicking "New", a new window should pop-up on the right side of your scree
 - For additional info on how to use these tools, see the "Additional Information" tab under "Variable Entry".
 - You can also add subvariables in your entries. For more information on how, see the "Additional Information" tab under "Subvariables"
 
-![](/img/how_to_create_knowledgebases/step_8.png)
+![Knowledgebase entry form with name, placeholder, and default value fields](/img/how_to_create_knowledgebases/step_8.png)
 
 4. Lastly, press the "Submit" button on the bottom right of the page.
 <br/><br/>
@@ -57,7 +65,7 @@ Once you've clicked the "Submit" button you should go back to the main Knowledge
 From here you can add new entries, delete outdated or uneeded entries, manage your tags, or search for a specific entry. Note: When searching TurboDocx will look for the keyword in the name, tags and content!
 
 
-![](/img/how_to_create_knowledgebases/step_2b.png)
+![Knowledgebases main screen with search bar, tag management, and entry list](/img/how_to_create_knowledgebases/step_2b.png)
 
 <br/><br/><br/>
 

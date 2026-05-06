@@ -71,8 +71,8 @@ Let's start with creating our first document template. <br />
 <br/><br/>
 2. Anything you would like to be a variable or an item that will change from document to document will be put between these `{brackets}`. This can be single items such as `{Date}` or `{CustomerName}` or it can be whole sections such as `{Scope}` as seen in the images below.
 
-![](/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
-![](/img/how_to_create_a_template/CreatingATemplateDoc2Title.PNG)
+![Word document template with bracket variables like CustomerName and Date](/img/how_to_create_a_template/CreatingATemplateDoc1Title.PNG)
+![Second page of template document showing Scope section variable](/img/how_to_create_a_template/CreatingATemplateDoc2Title.PNG)
 
 3. Once you've finished your document with the variables that you want please save it and move on to the next step.
 <br /><br />
@@ -86,7 +86,7 @@ Let's start with creating our first document template. <br />
 - Remember your Knowledgebase, if the variable has the same name as something in your Knowledgebase TurboDocx will use the info from the Knowledgebase to fill in the corresponding Variable.
 
 - If you want to include an image or rich text, make sure the variable is on it's own line. Use the show paragraph tool if you need help. The location for that tool in Word and Google Docs are in the image below.  
-![](/img/how_to_create_a_template/paragraphtool.png)
+![Paragraph marker tool location in Word and Google Docs toolbars](/img/how_to_create_a_template/paragraphtool.png)
 
 :::
 
@@ -98,11 +98,11 @@ Now that we've created our first template, let's upload it to TurboDocx.<br/><br
 
 1. Login to your TurboDocx account you should land on the Templates tab if not it can be found on the left side. Then, On the top right of your window, click on the "New Template" button.
 
-![](/img/how_to_create_a_template/newtemp.png)
+![TurboDocx Templates tab with New Template button highlighted](/img/how_to_create_a_template/newtemp.png)
 
 2. As you can see, there are multiple ways to upload a Document. For this example, we will click on the "Upload Template" area then choose the document you just saved in the last step or drag and drop your that document into the area.
 
-![](/img/how_to_create_a_template/step_1.png)
+![Template upload dialog with drag-and-drop area and upload options](/img/how_to_create_a_template/step_1.png)
 
 <br/><br/><br/>
 
@@ -113,7 +113,7 @@ On the next screen, you will see a preview of your template.<br/><br/><br/>
 1. Check to make sure all the variables you wanted are listed under the variables column.
 - (Optional) - On this page, you can also create default entries for your template that you can change later when you are creating the deliverable.
 
-![](/img/how_to_create_a_template/step_3.png)
+![Template preview screen showing detected variables and Create Template button](/img/how_to_create_a_template/step_3.png)
 
 2. Once you've checked to make sure all your variable are set, go ahead and click the "Create Template" button on the bottom right corner (you may need to scroll)
 <br/><br/>

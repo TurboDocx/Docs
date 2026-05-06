@@ -1,3 +1,16 @@
+---
+title: Single Sign-On (SSO) Configuration
+description: Integrate TurboDocx with your SSO provider using SAML or OpenID Connect. Supports Okta, Azure AD, OneLogin, Auth0, and more.
+keywords:
+  - single sign-on
+  - sso configuration
+  - saml integration
+  - openid connect
+  - okta sso
+  - azure ad sso
+  - turbodocx authentication
+---
+
 # Single Sign-On (SSO) Configuration
 
 TurboDocx offers enterprise customers the ability to integrate their Single Sign-On (SSO) solution with the platform, streamlining user authentication and providing a secure and convenient way to access TurboDocx. Our SSO integration supports both Security Assertion Markup Language (SAML) and OpenID Connect (OIDC) protocols, which means we can seamlessly integrate with a wide variety of SSO providers.

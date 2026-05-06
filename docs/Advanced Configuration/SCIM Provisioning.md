@@ -1,3 +1,16 @@
+---
+title: SCIM User Provisioning
+description: Set up SCIM provisioning to automate user lifecycle management in TurboDocx with Okta, Azure AD, and other identity providers.
+keywords:
+  - scim provisioning
+  - user provisioning
+  - turbodocx scim
+  - okta integration
+  - azure ad provisioning
+  - identity management
+  - automated user management
+---
+
 # SCIM User Provisioning
 
 TurboDocx offers enterprise customers the ability to integrate System for Cross-domain Identity Management (SCIM) provisioning with their platforms, enhancing user and group management across your organization. SCIM provisioning automates the user lifecycle process, ensuring that user accounts are created, updated, and deactivated in a synchronized manner across various applications and services.

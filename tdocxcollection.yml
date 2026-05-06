@@ -497,6 +497,7 @@ paths:
       tags:
         - Variable Routes
       summary: Create Image Variable (Folder)
+      description: Create a new image variable inside a folder in your TurboDocx workspace. Image variables store uploaded files that can be inserted into templates during document generation. Supports tags, placeholders, and default values.
       requestBody:
         content:
           application/json:
@@ -616,6 +617,7 @@ paths:
       tags:
         - Variable Routes
       summary: Read Variables (Folder)
+      description: Retrieve all variables within a specific folder. Returns variable names, placeholders, descriptions, tags, and default values. Use this to list available variables before creating a deliverable.
       parameters:
         - name: accept
           in: header
@@ -712,6 +714,7 @@ paths:
       tags:
         - Template Routes
       summary: Extract Template Placeholders and Generate Preview
+      description: Upload a DOCX or PPTX file to extract all variable placeholders and generate a PDF preview. Returns the list of detected variables and a preview URL. Use this before creating a template to validate your document.
       requestBody:
         content:
           multipart/form-data:
@@ -803,6 +806,7 @@ paths:
       tags:
         - Template Routes
       summary: Upload Template with Optional Default Values
+      description: Upload a DOCX or PPTX template file to TurboDocx with optional default variable values. The template is parsed for placeholders, a PDF preview is generated, and the template becomes available for deliverable creation.
       requestBody:
         content:
           multipart/form-data:
@@ -865,6 +869,7 @@ paths:
       tags:
         - Template Routes
       summary: Get Template by ID
+      description: Retrieve a single template by its unique ID. Returns template metadata, variable definitions, preview URL, tags, and folder information.
       parameters:
         - name: authorization
           in: header
@@ -926,6 +931,7 @@ paths:
       tags:
         - Blueprint > Step 4 - Create a Deliverable
       summary: Create Deliverable
+      description: Generate a document deliverable from a template by providing variable values. Combines template placeholders with supplied data to produce a finished DOCX, PPTX, or PDF document.
       requestBody:
         content:
           application/json:
@@ -1027,6 +1033,7 @@ paths:
       tags:
         - Variable Routes
       summary: Update Variable (by ID)
+      description: Update an existing variable's name, description, placeholder, tags, or default value by its unique ID. Supports text, rich text, image, and date variable types.
       requestBody:
         content:
           application/json:
@@ -1241,6 +1248,7 @@ paths:
       tags:
         - Variable Routes
       summary: Delete Variables (by IDs)
+      description: Permanently delete one or more variables by their IDs. Removes the variables and their associated data from your TurboDocx workspace. This action cannot be undone.
       parameters:
         - name: authorization
           in: header
@@ -1322,6 +1330,7 @@ paths:
       tags:
         - Tag Routes
       summary: Create Tag
+      description: Create a new tag to organize and categorize your templates, variables, and knowledgebase entries. Tags enable filtering and grouping across your TurboDocx workspace.
       requestBody:
         content:
           application/json:
@@ -1413,6 +1422,7 @@ paths:
       tags:
         - Tag Routes
       summary: Read Tag
+      description: Retrieve all tags in your TurboDocx workspace. Returns tag IDs, labels, and associated metadata for use in filtering templates, variables, and knowledgebase entries.
       parameters:
         - name: authorization
           in: header
@@ -1499,6 +1509,7 @@ paths:
       tags:
         - Tag Routes
       summary: Update Tag
+      description: Update an existing tag's label or properties by its unique ID. Use this to rename or modify tags used across templates, variables, and knowledgebase entries.
       requestBody:
         content:
           application/json:
@@ -1596,6 +1607,7 @@ paths:
       tags:
         - Tag Routes
       summary: Delete Tags (by IDs)
+      description: Permanently delete one or more tags by their IDs. Removes the tags from all associated templates, variables, and knowledgebase entries. This action cannot be undone.
       parameters:
         - name: x-rapiddocx-org-id
           in: header
@@ -1677,6 +1689,7 @@ paths:
       tags:
         - Template Routes
       summary: Edit Template Metadata
+      description: Update a template's metadata including its name, tags, and variable definitions without re-uploading the template file. Use this to modify how the template appears and what variables it exposes.
       requestBody:
         content:
           "application/json":
@@ -1745,6 +1758,7 @@ paths:
       tags:
         - Template Routes
       summary: Delete Template
+      description: Permanently delete a template and its associated preview, variable definitions, and metadata. Previously generated deliverables from this template are not affected. This action cannot be undone.
       parameters:
         - name: accept
           in: header
@@ -1833,6 +1847,7 @@ paths:
       tags:
         - Template-Item Routes
       summary: Get Templates and Folders
+      description: Retrieve all templates and folders in your TurboDocx workspace. Returns template names, IDs, variable counts, tags, preview URLs, and folder hierarchy for navigation and template selection.
       parameters:
         - name: x-rapiddocx-org-id
           in: header
@@ -1894,6 +1909,7 @@ paths:
       tags:
         - Deliverable Routes
       summary: Create Deliverable
+      description: Generate a document deliverable by supplying a template ID and variable values. Produces a finished document with all placeholders replaced. Supports DOCX, PPTX, and PDF output formats.
       requestBody:
         content:
           "*/*":

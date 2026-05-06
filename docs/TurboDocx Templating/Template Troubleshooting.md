@@ -1,6 +1,14 @@
 ---
 title: Template Troubleshooting
 sidebar_position: 7
+description: Fix common TurboDocx template issues including broken variables, formatting problems, and placeholder errors with video tutorials and solutions.
+keywords:
+  - template troubleshooting
+  - broken variables
+  - formatting issues
+  - placeholder errors
+  - turbodocx support
+  - template fix
 ---
 
 # Template Troubleshooting
@@ -149,11 +157,11 @@ One of the most common mistakes is thinking a variable is on its own line when i
 - Go to **View → Show non-printing characters**
 - You'll get the same results as Word
 
-![](/img/how_to_create_a_template/paragraphtool.png)
+![Paragraph marker tool location in Word and Google Docs toolbars](/img/how_to_create_a_template/paragraphtool.png)
 
 When you activate the tool, it will resemble the image below. Since `{CustomerName}` is plain text, it can be incorporated into a paragraph. However, we will be utilizing a chart in Rich Text for `{Scope}`, so it needs to be on its own line. Paragraph symbols will indicate this distinction clearly.
 
-![](/img/additional_information/ptoolexample.png)
+![Paragraph markers showing inline text variable vs. section variable on its own line](/img/additional_information/ptoolexample.png)
 
 <br />
 

@@ -1,3 +1,15 @@
+---
+title: Google Drive Integration
+description: Connect TurboDocx to Google Drive to import templates and export generated documents directly to your Drive folders.
+keywords:
+  - google drive integration
+  - turbodocx google drive
+  - import templates
+  - export deliverables
+  - document management
+  - cloud storage integration
+---
+
 # Google Drive Integration
 
 The Google Drive integration in TurboDocx provides a seamless and efficient way to manage your document generation process. With this integration, you can import templates from Google Drive and export deliverables back to your Google Drive environment, streamlining your workflow and enhancing collaboration. Let's delve into the details of the Google Drive integration and explore its features and benefits.
@@ -12,7 +24,7 @@ The integration provides a seamless browsing experience, allowing you to navigat
 
 Upon selecting the templates, TurboDocx securely imports them into your TurboDocx account, ready for customization and document generation. This ensures that your templates are readily available within TurboDocx, eliminating the need for manual file transfers or duplicate storage.
 
-![](https://image.typedream.com/cdn-cgi/image/width=3840,format=auto,fit=scale-down,quality=100/https://api.typedream.com/v0/document/public/de39171b-a5c9-49c5-bd9c-c2dfd5d632a2/2P7GcbCddIpTtDMDZpQltzuC1ff_Import_from_Google_Drive.png)
+![TurboDocx file picker browsing Google Drive folders to import templates](https://image.typedream.com/cdn-cgi/image/width=3840,format=auto,fit=scale-down,quality=100/https://api.typedream.com/v0/document/public/de39171b-a5c9-49c5-bd9c-c2dfd5d632a2/2P7GcbCddIpTtDMDZpQltzuC1ff_Import_from_Google_Drive.png)
 
 ### **Exporting Deliverables**
 
@@ -21,4 +33,4 @@ The Google Drive integration also enables you to export deliverables generated b
 Exporting deliverables to Google Drive ensures that your documents are stored securely in the cloud, providing a reliable backup and making them accessible from any device with an internet connection. By leveraging the familiar Google Drive interface, you can organize your deliverables into folders, share them with collaborators, and control access permissions as needed.
 
 
-![](https://image.typedream.com/cdn-cgi/image/width=3840,format=auto,fit=scale-down,quality=100/https://api.typedream.com/v0/document/public/de39171b-a5c9-49c5-bd9c-c2dfd5d632a2/2P7LjJqYUUFwjrpmKHYZreunEVm_Export_to_Google_Drive.png)
+![TurboDocx export dialog saving a generated deliverable to Google Drive](https://image.typedream.com/cdn-cgi/image/width=3840,format=auto,fit=scale-down,quality=100/https://api.typedream.com/v0/document/public/de39171b-a5c9-49c5-bd9c-c2dfd5d632a2/2P7LjJqYUUFwjrpmKHYZreunEVm_Export_to_Google_Drive.png)
