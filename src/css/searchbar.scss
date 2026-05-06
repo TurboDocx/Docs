@@ -82,12 +82,19 @@
   width: 20.3125rem !important;
 }
 
+.navbar .DocSearch-Button {
+  border: none !important;
+  background: transparent !important;
+  flex-shrink: 0 !important;
+  width: 20rem !important;
+}
+
 @media (max-width: 600px), (max-width: 996px) {
   .centerSearchBar {
     padding-left: 0em;
     position: unset !important;
   }
-  
+
   .navbar .aa-DetachedSearchButton {
     border: none !important;
     height: 2.5rem !important;
@@ -100,6 +107,12 @@
     kbd {
       display: none;
     }
+  }
+
+  .navbar .DocSearch-Button {
+    border: none !important;
+    width: auto !important;
+    min-width: unset !important;
   }
 }
 
