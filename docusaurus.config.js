@@ -50,7 +50,8 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'TurboDocx', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
-  plugins: ['docusaurus-plugin-sass', "@orama/plugin-docusaurus-v3",
+  plugins: ['docusaurus-plugin-sass',
+    "@orama/plugin-docusaurus-v3",
     [
       'docusaurus-plugin-llms',
       {

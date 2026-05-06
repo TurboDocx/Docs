@@ -3,6 +3,23 @@ import SearchBar from '@theme-original/SearchBar';
 
 export default function SearchBarWrapper(props) {
   useEffect(() => {
+    const patchResultMap = () => {
+      const searchBox = document.querySelector('orama-search-box');
+      if (searchBox?.searchStore?.state && !searchBox.searchStore.state.resultMap?.description) {
+        searchBox.searchStore.state.resultMap = {
+          description: 'section',
+          section: 'category',
+        };
+      }
+    };
+
+    patchResultMap();
+    const mapObserver = new MutationObserver(patchResultMap);
+    mapObserver.observe(document.body, { childList: true, subtree: true });
+    return () => mapObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
     const hideOramaChatPanel = () => {
       const searchBox = document.querySelector('orama-search-box');
       if (searchBox?.shadowRoot) {
