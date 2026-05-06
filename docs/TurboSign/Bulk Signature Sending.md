@@ -1,7 +1,7 @@
 ---
 title: Bulk Signature Sending
 sidebar_position: 3
-description: Send personalized documents for e-signature to multiple recipients at once using a spreadsheet. Learn how to use the Bulk Send wizard to upload data, map columns, configure signature fields, preview, and submit batches — all from the TurboDocx UI.
+description: Send personalized documents for e-signature to hundreds of recipients at once. Upload a spreadsheet, map columns, and submit batches from the TurboDocx UI.
 keywords:
   - bulk signature sending
   - bulk send
