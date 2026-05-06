@@ -32,6 +32,8 @@ keywords:
   - api best practices
   - api troubleshooting
   - bearer token authentication
+  - resend email
+  - resend signature
 ---
 
 import ScriptLoader from '@site/src/components/ScriptLoader';
@@ -416,6 +418,10 @@ The request format is **identical** to prepare-for-review. See the "Endpoint 1: 
   label="Prepare for Signing - Code Examples"
 />
 
+:::tip Need to resend emails?
+If a recipient hasn't received or has lost their signing email, you can resend it using the [Resend Email endpoint](#endpoint-5-resend-email). You'll need the `recipientIds` from the response of this endpoint.
+:::
+
 ## Endpoint 3: Download Signed Document
 
 After a document has been signed by all recipients (status: `COMPLETED`), you can download the final signed PDF document.
@@ -631,6 +637,92 @@ This provides strong evidence that the audit trail has not been tampered with af
 - All timestamps are in ISO 8601 format (UTC timezone)
 - The `details` object varies by action type and may contain IP addresses, user agents, and other contextual information
 - Audit trail entries are immutable and cannot be modified or deleted
+
+## Endpoint 5: Resend Email
+
+Resend signature request emails to one or more recipients who haven't yet completed signing. Only recipients at the current signing order who haven't completed are eligible for resend.
+
+### Endpoint
+
+```http
+POST https://api.turbodocx.com/turbosign/documents/{documentId}/resend-email
+```
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| documentId | String (UUID) | Yes      | The unique identifier of the document |
+
+### Request Body (JSON)
+
+| Field        | Type           | Required | Description                                                      |
+| ------------ | -------------- | -------- | ---------------------------------------------------------------- |
+| recipientIds | Array (UUID[]) | **Yes**  | Array of recipient UUIDs to resend emails to (min 1, unique)     |
+
+```json
+{
+  "recipientIds": [
+    "5f673f37-9912-4e72-85aa-8f3649760f6b",
+    "7a891c23-4d56-4e78-9abc-def012345678"
+  ]
+}
+```
+
+:::info Where do I get recipient IDs?
+Recipient IDs are returned in the response of the **Prepare for Review** ([Endpoint 1](#endpoint-1-prepare-for-review)) and **Prepare for Signing** ([Endpoint 2](#endpoint-2-prepare-for-signing)) endpoints. Save these IDs when creating your signature request.
+:::
+
+### Response
+
+```json
+{
+  "data": {
+    "success": true,
+    "recipientCount": 2
+  }
+}
+```
+
+### Response Fields
+
+| Field               | Type    | Description                                 |
+| ------------------- | ------- | ------------------------------------------- |
+| data.success        | Boolean | Whether the resend was successful           |
+| data.recipientCount | Number  | Number of recipients who received the email |
+
+### Error Responses
+
+| Status | Error Message                                                         | Cause                                                                    |
+| ------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| 404    | `"Document not found"`                                                | Document doesn't exist or belongs to another organization                |
+| 400    | `"All recipients have already completed signing"`                     | No eligible recipients remain                                            |
+| 400    | `"Some recipients are not eligible for email resend at this time"`    | Requested recipients aren't at the current signing order or already completed |
+
+The 400 "not eligible" error also returns an `invalidRecipientIds` array showing which IDs were rejected:
+
+```json
+{
+  "error": "Some recipients are not eligible for email resend at this time",
+  "invalidRecipientIds": ["7a891c23-4d56-4e78-9abc-def012345678"]
+}
+```
+
+### Usage Notes
+
+- Only recipients at the **next signing order** who haven't completed signing are eligible for resend
+- If your document uses sequential signing (signingOrder 1, 2, 3...), you can only resend to recipients at the current active step
+- Each resend creates a `document_resent` entry in the [audit trail](#endpoint-4-get-audit-trail) for tracking
+- The `recipientIds` array must contain at least one ID and all IDs must be unique UUIDs
 
 ## Recipients Reference
 
