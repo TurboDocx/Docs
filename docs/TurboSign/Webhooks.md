@@ -1,6 +1,6 @@
 ---
 title: TurboSign Webhooks
-sidebar_position: 3
+sidebar_position: 6
 description: Configure real-time webhooks to receive instant notifications when TurboSign signature documents are completed or voided. Integrate TurboSign events with your existing systems through secure webhook endpoints.
 keywords:
   - webhook configuration
