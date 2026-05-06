@@ -181,7 +181,7 @@ const config = {
       navbar: {
         logo: {
           alt: 'TurboDocx Logo',
-          src: logoJson.logo || "",
+          src: 'img/TurboDocxLogo.svg',
           href: "https://www.turbodocx.com/?utm_source=docs-site",
         },
         items: [
