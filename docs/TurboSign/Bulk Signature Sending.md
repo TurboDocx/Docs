@@ -77,7 +77,7 @@ Navigate to the **Template Details** page for the template you want to send in b
 
 **Click "Bulk Send"** to open the wizard.
 
-{/* Screenshot: Bulk Send button on Template Details page — /img/turbosign/bulk/bulk-send-button.png */}
+![Bulk Send button on Template Details page](/img/turbosign/bulk/bulk-send-button.jpeg)
 
 :::note Non-Pro Users
 If your organization doesn't have the Pro plan, the Bulk Send button displays an upgrade badge. Clicking it opens the upgrade dialog instead of the wizard.
@@ -112,7 +112,11 @@ After uploading, the wizard displays:
 
 Review the preview to make sure your data looks correct before proceeding.
 
-{/* Screenshot: Spreadsheet upload with preview table — /img/turbosign/bulk/spreadsheet-upload.png */}
+![Drag and drop or browse to upload your spreadsheet](/img/turbosign/bulk/spreadsheet-upload.jpeg)
+
+After uploading, review the preview table to confirm your data looks correct, then click **Next**.
+
+![Spreadsheet preview showing column headers and first rows](/img/turbosign/bulk/spreadsheet-preview.jpeg)
 
 :::tip File Tips
 - **Headers matter** — the first row of your spreadsheet should contain column headers, not data
@@ -138,9 +142,11 @@ Each template variable (placeholder) needs to be resolved — either by mapping 
 
 **Manual Override:** You can always override an auto-match by selecting a different column from the dropdown.
 
-**Signature Field Option:** Instead of mapping a variable to a column, you can designate it as a **signature field** — meaning it becomes a field that the recipient fills in or signs during the signing process.
+**Signature Field Option:** Instead of mapping a variable to a column, you can click the **"Sign"** button next to a variable to designate it as a **signature field** — meaning it becomes a field that the recipient fills in or signs during the signing process.
 
-{/* Screenshot: Template variable mapping with auto-match — /img/turbosign/bulk/column-mapping.png */}
+![Click the Sign button to designate a variable as a signature field](/img/turbosign/bulk/signature-field-toggle.jpeg)
+
+![Template variable mapping with auto-match](/img/turbosign/bulk/column-mapping.jpeg)
 
 <br/>
 
@@ -171,7 +177,6 @@ For any variable designated as a signature field, you'll configure:
 - **Read Only** — lock the field so the signer can see it but not change it (requires a default value)
 - **Multiline** — for text fields, allow multi-line input
 
-{/* Screenshot: Signature field configuration — /img/turbosign/bulk/signature-fields.png */}
 
 <br/>
 
@@ -187,20 +192,22 @@ Define who signs each document by mapping spreadsheet columns to recipient slots
 - **Multiple Recipients** — click **"Add Recipient"** to add up to **10 signers** per document. Each recipient is color-coded for easy visual identification
 - **CC Email Column** — optionally select a column containing CC email addresses (supports comma or semicolon-separated lists for multiple CCs per row)
 
-{/* Screenshot: Recipient configuration with color-coded slots — /img/turbosign/bulk/recipient-slots.png */}
+![Recipient configuration with CC email mapping](/img/turbosign/bulk/recipient-config.jpeg)
 
 <br/>
 
 ### 3d. Document Naming (Optional)
 
-Build dynamic document names for each generated document by combining:
-- **Column values** — pull in data from your spreadsheet (e.g., recipient name, project ID)
-- **Static text** — add fixed text like "Contract" or a separator
-- **Date** — include the current date
+Build dynamic document names for each generated document using the name builder toolbar:
+
+- **Insert Column** — pull in a value from your spreadsheet (e.g., a "DocumentTitle" column)
+- **Insert Date** — append the current date
+- **Add Separator** — insert a separator character (hyphen, underscore, slash, etc.)
+- **Static text** — type fixed text directly
 
 Drag segments to reorder them. The wizard shows a live preview of the resulting document name using data from your first row.
 
-{/* Screenshot: Document name builder with segments — /img/turbosign/bulk/document-naming.png */}
+![Document name builder with Insert Column, Insert Date, and Add Separator controls](/img/turbosign/bulk/document-naming.jpeg)
 
 <br/>
 
@@ -243,7 +250,7 @@ Use this step to verify that:
 - The right data appears in the right places
 - The document looks as expected
 
-{/* Screenshot: Document preview with row navigation — /img/turbosign/bulk/preview.png */}
+![Document preview showing merged variable values](/img/turbosign/bulk/preview.jpeg)
 
 :::tip Preview Tips
 - **Check multiple rows** — don't just preview the first row. Navigate through several rows to spot formatting issues or empty fields
@@ -270,7 +277,7 @@ Click **"Submit"** to initiate batch processing. The wizard shows a loading stat
 
 **On success:** the dialog closes and your batch begins processing in the background. You can monitor progress from the Batches dashboard.
 
-{/* Screenshot: Review and submit screen — /img/turbosign/bulk/review-submit.png */}
+![Submit Batch button on the review screen](/img/turbosign/bulk/submit-batch.jpeg)
 
 <br/>
 
@@ -282,7 +289,9 @@ After submitting, navigate to the **Batches** dashboard to track your batch.
 
 ### How to Get There
 
-Go to **E-Signature > Batches** (or navigate to `/e-signature/batches`).
+Go to **E-Signatures** in the sidebar, then click the **"Bulk Batches"** tab to navigate to the batch management page.
+
+![Navigate to E-Signatures and click Bulk Batches](/img/turbosign/bulk/bulk-batches-nav.jpeg)
 
 ### Batch Dashboard
 
@@ -313,7 +322,7 @@ The dashboard shows all your batches with:
 - **Sort** by any column
 - **Paginate** through large result sets
 
-{/* Screenshot: Batches dashboard with status tracking — /img/turbosign/bulk/batches-dashboard.png */}
+![Batches dashboard showing batch status and job counts](/img/turbosign/bulk/batches-dashboard.jpeg)
 
 <br/>
 
