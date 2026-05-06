@@ -73,11 +73,11 @@ Make sure your spreadsheet has clear column headers that match (or are close to)
 
 ## Step 1: Open the Bulk Send Wizard
 
-Navigate to the **Template Details** page for the template you want to send in bulk. You'll see a **"Bulk Send"** button alongside the other template actions.
+Navigate to the **Edit Template & Preferences** page for the template you want to send in bulk. You'll see a **"Bulk Send"** button alongside the other template actions.
 
 **Click "Bulk Send"** to open the wizard.
 
-![Bulk Send button on Template Details page](/img/turbosign/bulk/bulk-send-button.jpeg)
+![Bulk Send button on Edit Template & Preferences page](/img/turbosign/bulk/bulk-send-button.jpeg)
 
 :::note Non-Pro Users
 If your organization doesn't have the Pro plan, the Bulk Send button displays an upgrade badge. Clicking it opens the upgrade dialog instead of the wizard.
@@ -138,15 +138,21 @@ This is the most important step. Here you'll connect your spreadsheet data to yo
 
 Each template variable (placeholder) needs to be resolved — either by mapping it to a spreadsheet column or by designating it as a signature field.
 
+![Template variable mapping with auto-match](/img/turbosign/bulk/column-mapping.jpeg)
+
+<br/>
+
 **Auto-Matching:** The wizard automatically attempts to match your column headers to template placeholders using fuzzy matching. For example, a column named `client_email` would auto-match to a `{clientEmail}` placeholder. Auto-matched mappings display an **"Auto-matched"** chip.
 
+<br/>
+
 **Manual Override:** You can always override an auto-match by selecting a different column from the dropdown.
+
+<br/>
 
 **Signature Field Option:** Instead of mapping a variable to a column, you can click the **"Sign"** button next to a variable to designate it as a **signature field** — meaning it becomes a field that the recipient fills in or signs during the signing process.
 
 ![Click the Sign button to designate a variable as a signature field](/img/turbosign/bulk/signature-field-toggle.jpeg)
-
-![Template variable mapping with auto-match](/img/turbosign/bulk/column-mapping.jpeg)
 
 <br/>
 
@@ -172,6 +178,8 @@ For any variable designated as a signature field, you'll configure:
 
 **Recipient Assignment** — assign the field to a specific recipient (signer).
 
+<br/>
+
 **Optional Settings:**
 - **Default Value** — pre-fill the field with a value the signer can review or edit
 - **Read Only** — lock the field so the signer can see it but not change it (requires a default value)
@@ -187,6 +195,8 @@ Define who signs each document by mapping spreadsheet columns to recipient slots
 **For each recipient, configure:**
 - **Email Column** — which spreadsheet column contains their email address
 - **Name Column** — which spreadsheet column contains their name
+
+<br/>
 
 **Additional options:**
 - **Multiple Recipients** — click **"Add Recipient"** to add up to **10 signers** per document. Each recipient is color-coded for easy visual identification
