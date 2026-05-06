@@ -74,3 +74,38 @@ $color-5-9: #343A40;               // grey-800
 $color-5-10: #212529;              // grey-900
 $color-5-11: #000000;              // grey-darkest
 $color-5-12: #000000;  // defined as darkest
+
+$teal-50: #E6FFFA;
+$teal-100: #B2F5EA;
+$teal-200: #81E6D9;
+$teal-300: #4FD1C5;
+$teal-400: #38B2AC;
+$teal-500: #319795;
+$teal-600: #2C7A7B;
+$teal-700: #285E61;
+
+$purple-50: #FAF5FF;
+$purple-100: #E9D8FD;
+$purple-200: #D6BCFA;
+$purple-300: #B794F4;
+$purple-400: #9F7AEA;
+$purple-500: #805AD5;
+$purple-600: #6B46C1;
+$purple-700: #553C9A;
+
+$gradient-blue: linear-gradient(106.11deg, #6FA3FF, #5B95EC, #2B579A);
+$gradient-purple: linear-gradient(135deg, #7B8FFF, #667eea, #764ba2);
+
+.text-gradient {
+  background: linear-gradient(135deg, #6FA3FF, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-teal {
+  background: linear-gradient(135deg, #38B2AC, #2B579A, #667eea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

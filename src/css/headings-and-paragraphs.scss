@@ -6,12 +6,9 @@
   h4,
   h5,
   h6 {
-    color: white !important;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-      "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
-      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-
-    // font-family: Inter;
+    color: #F8F9FA !important;
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto,
+      sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
   }
 }
 
@@ -31,11 +28,9 @@ row {
   h4,
   h5,
   h6 {
-    color: black !important;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-    "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
-    // font-family: Inter;
+    color: #212529 !important;
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto,
+      sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
   }
 }
 
@@ -43,7 +38,7 @@ h1 {
   font-size: 32.25px;
   font-style: normal;
   font-weight: 800;
-  line-height: normal;
+  line-height: 1.15;
   letter-spacing: -0.645px;
 }
 
@@ -51,12 +46,12 @@ h2 {
   font-size: 25px;
   font-style: normal;
   font-weight: 700;
-  line-height: normal;
+  line-height: 1.2;
   letter-spacing: -0.5px;
 }
 
 p {
-  font-family: Inter;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -74,7 +69,7 @@ h1 {
   font-size: 32.25px;
   font-style: normal;
   font-weight: 800;
-  line-height: normal;
+  line-height: 1.15;
   letter-spacing: -0.645px;
 }
 
@@ -82,7 +77,7 @@ h2 {
   font-size: 25px;
   font-style: normal;
   font-weight: 700;
-  line-height: normal;
+  line-height: 1.2;
   letter-spacing: -0.5px;
 }
 
@@ -226,17 +221,14 @@ img {
 }
 
 a {
-  color: $color-1; /* Default link color */
-  text-decoration: none; /* Remove underline by default */
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-  "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
-  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  color: $color-1;
+  text-decoration: none;
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
+  transition: color 0.2s ease;
 }
 
 a:hover {
-  color: $color-1; /* Change color on hover */
-  text-decoration: underline; /* Underline on hover */
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
-  "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
-  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+  color: $color-1;
+  text-decoration: underline;
 }

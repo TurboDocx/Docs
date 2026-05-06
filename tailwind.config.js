@@ -66,6 +66,37 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        teal: {
+          50: '#E6FFFA',
+          100: '#B2F5EA',
+          200: '#81E6D9',
+          300: '#4FD1C5',
+          400: '#38B2AC',
+          500: '#319795',
+          600: '#2C7A7B',
+          700: '#285E61',
+        },
+        purple: {
+          50: '#FAF5FF',
+          100: '#E9D8FD',
+          200: '#D6BCFA',
+          300: '#B794F4',
+          400: '#9F7AEA',
+          500: '#805AD5',
+          600: '#6B46C1',
+          700: '#553C9A',
+        },
+      },
+      backgroundImage: {
+        'gradient-blue': 'linear-gradient(106.11deg, #6FA3FF 4.35%, #5B95EC 50%, #2B579A 101.1%)',
+        'gradient-purple': 'linear-gradient(135deg, #7B8FFF 0%, #667eea 50%, #764ba2 100%)',
+        'gradient-pink': 'linear-gradient(135deg, #FF7AB8 0%, #f06292 50%, #ef6c00 100%)',
+        'gradient-dev': 'linear-gradient(135deg, #38B2AC 0%, #2B579A 50%, #667eea 100%)',
+      },
+      boxShadow: {
+        'glow-blue': '0 0 20px rgba(43, 87, 154, 0.3)',
+        'glow-purple': '0 0 20px rgba(102, 126, 234, 0.4)',
+        'glow-teal': '0 0 20px rgba(56, 178, 172, 0.3)',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -132,6 +163,34 @@ module.exports = {
             transform: "translate(-50%,-40%) scale(1)",
           },
         },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-up": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "glow": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.8" },
+        },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -143,7 +202,14 @@ module.exports = {
         "fifth": "moveInCircle 20s ease infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "spotlight": "spotlight 2s ease .75s 1 forwards"
+        "spotlight": "spotlight 2s ease .75s 1 forwards",
+        "fade-in": "fade-in 0.5s ease-out forwards",
+        "slide-up": "slide-up 0.6s ease-out forwards",
+        "float": "float 3s ease-in-out infinite",
+        "float-slow": "float-slow 6s ease-in-out infinite",
+        "shimmer": "shimmer 2s linear infinite",
+        "glow": "glow 3s ease-in-out infinite",
+        "pulse-slow": "pulse-slow 3s ease-in-out infinite"
       },
     },
   },

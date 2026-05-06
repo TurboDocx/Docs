@@ -4,26 +4,39 @@
 
 
 .menu__link--active:not(.menu__link--sublist) {
-  border-radius: 7px;
-  background: $color-1-1;
+  border-radius: 6px;
+  background: rgba(#2B579A, 0.08);
   color: $color-1;
-
-  /* Navigation Selected */
-  font-family: Inter;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   line-height: normal;
   letter-spacing: -0.322px;
 }
 
+[data-theme="dark"] .menu__link--active:not(.menu__link--sublist) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
 .menu__link {
-  font-family: Inter;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: -0.322px;
+  transition: color 0.15s ease;
+}
+
+.menu__link:hover:not(.menu__link--active) {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 6px;
+}
+
+[data-theme="dark"] .menu__link:hover:not(.menu__link--active) {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .menu__link--sublist-caret:after,
@@ -105,8 +118,13 @@
 }
 
 .breadcrumbs__item--active .breadcrumbs__link {
-  background: $color-1;
-  color: white;
+  background: transparent;
+  color: inherit;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .breadcrumbs__item--active .breadcrumbs__link {
+  color: #F8F9FA;
 }
 
 /* Integration sidebar icons */

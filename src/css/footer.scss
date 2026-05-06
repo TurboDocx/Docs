@@ -1,32 +1,39 @@
 [data-theme="dark"] .footer--dark {
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: transparent;
+  background-color: #0f1419;
   border: none;
+  border-top: 1px solid #21262d;
 }
 
 [data-theme="light"] .footer--dark {
-  color: #0d0d0d;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: transparent;
+  color: #212529;
+  background-color: #f8f9fa;
   border: none;
+  border-top: 1px solid #e5e7eb;
   .footer__title,
   .footer__link-item {
-    color: #0d0d0d;
+    color: #212529;
   }
 }
 
-.pagination-nav__link--next {
-  border-radius: 0.4375rem;
-  border: 2px solid rgba(87, 95, 110, 0.35);
+.pagination-nav__link--next,
+.pagination-nav__link--prev {
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
   text-align: left;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: #2B579A;
+  }
 }
 
-.pagination-nav__link--prev {
-  border-radius: 0.4375rem;
-  border: 2px solid rgba(87, 95, 110, 0.35);
-  text-align: left;
+[data-theme="dark"] .pagination-nav__link--next,
+[data-theme="dark"] .pagination-nav__link--prev {
+  border-color: #21262d;
+
+  &:hover {
+    border-color: #58a6ff;
+  }
 }
 
 .pagination-nav__sublabel {
