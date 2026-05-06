@@ -62,7 +62,12 @@ export default function SearchBarWrapper(props) {
         if (!existing) {
           const style = document.createElement('style');
           style.id = 'hide-chat-panel';
-          style.textContent = 'orama-sliding-panel, .slide-container { display: none !important; }';
+          style.textContent = `
+            orama-sliding-panel, .slide-container { display: none !important; }
+            .logo-link img { display: none !important; }
+            .logo-link { display: inline-flex !important; align-items: center !important; gap: 4px !important; font-size: 12px !important; color: #838289 !important; text-decoration: none !important; }
+            .logo-link::after { content: "Orama" !important; font-weight: 600 !important; color: #151515 !important; }
+          `;
           searchBox.shadowRoot.appendChild(style);
         }
       }
