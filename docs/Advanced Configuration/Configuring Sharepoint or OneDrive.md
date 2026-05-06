@@ -1,5 +1,15 @@
 ---
+title: Configuring SharePoint and OneDrive
 sidebar_position: 1
+description: Configure SharePoint and OneDrive for Business integration with TurboDocx using Microsoft Graph API to import templates and export deliverables.
+keywords:
+  - sharepoint integration
+  - onedrive integration
+  - microsoft graph api
+  - turbodocx sharepoint
+  - document management
+  - azure active directory
+  - entra id
 ---
 
 # SharePoint and OneDrive Integration
@@ -19,12 +29,12 @@ Access to the Admin/Azure portal and the ability to register an application.
 
 1. Sign in to the SharePoint Dashboard (or Azure Admin Portal) and click on "Entra ID (Azure Active Directory)" in the respective menu. Click on  the "App Registrations and then click on "New registration"
 
-![](/img/sharepoint_and_onedrive/app-reg.png)
+![Entra ID App Registrations page with New Registration button highlighted](/img/sharepoint_and_onedrive/app-reg.png)
 
 
 2. Enter a name for the application such as "TurboDocx Sharepoint integration", select the appropriate account type, and select Single Page Application with the redirect uri: "https://app.turbodocx.com"
 
-![](/img/sharepoint_and_onedrive/Register_Application.png)
+![Register an application form with name, account type, and redirect URI fields](/img/sharepoint_and_onedrive/Register_Application.png)
 
 3. Click on the "Register Button" to create the application.
 

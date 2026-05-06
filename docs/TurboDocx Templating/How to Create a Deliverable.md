@@ -1,6 +1,14 @@
 ---
 title: How to Create a Deliverable
 sidebar_position: 6
+description: Create your first TurboDocx deliverable by combining templates with knowledgebase entries to generate professional documents automatically.
+keywords:
+  - create deliverable
+  - document generation
+  - turbodocx deliverable
+  - template variables
+  - knowledgebase
+  - generate documents
 ---
   
 Now that you have a Template and entries in your Knowledgebase, let's put it all together and create your first document or what we call a Deliverable. 
@@ -30,7 +38,7 @@ For future reference this information can also be found under the "Additional In
 
 In this first example we will be using simple text entries. Things such as "CustomerName" or "ProjectName" already have formating in the template so just clicking on the box and typing your entry will be sufficient for us here.
 
-![](/img/how_to_create_a_deliverable/step_6.png)
+![Simple text variable entry fields for CustomerName and ProjectName](/img/how_to_create_a_deliverable/step_6.png)
 <br/>
 
 ### Advanced Entries

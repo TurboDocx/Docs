@@ -1,3 +1,16 @@
+---
+title: Office Integration
+description: Edit TurboDocx templates and deliverables directly in Microsoft Word and PowerPoint with real-time sync and file locking.
+keywords:
+  - office integration
+  - microsoft word
+  - powerpoint
+  - edit templates
+  - real-time sync
+  - file locking
+  - turbodocx office
+---
+
 # Office Integration
 
 Edit your TurboDocx templates and deliverables directly in Microsoft Word and PowerPoint with full Office functionality, while keeping everything synchronized and preventing editing conflicts.

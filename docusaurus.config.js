@@ -38,6 +38,7 @@ const config = {
   tagline: 'Turbocharging your Document Workflows',
   url: 'https://docs.turbodocx.com',
   baseUrl: '/',
+  trailingSlash: false,
   onBrokenLinks: 'ignore',
   markdown: {
     hooks: {
@@ -45,6 +46,33 @@ const config = {
     },
   },
   favicon: 'img/favicon.ico',
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'TurboDocx',
+        url: 'https://www.turbodocx.com',
+        logo: 'https://docs.turbodocx.com/img/TurboDocxLogo.png',
+      }),
+    },
+    {
+      tagName: 'script',
+      attributes: { type: 'application/ld+json' },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'TurboDocx Documentation',
+        url: 'https://docs.turbodocx.com',
+        publisher: {
+          '@type': 'Organization',
+          name: 'TurboDocx',
+        },
+      }),
+    },
+  ],
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -104,6 +132,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          showLastUpdateTime: true,
           docItemComponent: "@theme/ApiItem",
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
@@ -111,13 +140,7 @@ const config = {
           // editUrl:
             // 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
-        // blog: {
-        //   showReadingTime: true,
-        //   // Please change this to your repo.
-        //   // Remove this to remove the "edit this page" links.
-        //   // editUrl:
-        //     // 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        // },
+        blog: false,
         ...(process.env.GTM_CONTAINER_ID && {
           googleTagManager: {
             containerId: process.env.GTM_CONTAINER_ID,
@@ -133,6 +156,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      image: 'img/turbodocx-og.png',
+      metadata: [
+        { name: 'twitter:site', content: '@turbodocx' },
+        { property: 'og:site_name', content: 'TurboDocx Documentation' },
+        { property: 'og:type', content: 'website' },
+      ],
       colorMode: {
         defaultMode: 'dark',
         disableSwitch: false,

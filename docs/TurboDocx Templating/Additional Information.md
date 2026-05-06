@@ -1,6 +1,14 @@
 ---
 title: Additional Information 
 sidebar_position: 20
+description: Explore TurboDocx variable entry methods, AI-powered content generation, paragraph formatting, and advanced tips for template creation.
+keywords:
+  - variable entries
+  - ai content generation
+  - paragraph formatting
+  - template tips
+  - turbodocx variables
+  - advanced text editor
 ---
 # Guides, Tips and Tricks
 Here you will find additional standalone guides to features, uses and tips.
@@ -15,7 +23,7 @@ There are multiple ways to enter and edit your variables. In this guide we will 
 
 In this first example we will be using simple text entries. Things such as "CustomerName" or "ProjectName" already have formating in the template so just clicking on the box and typing your entry will be sufficient for us here.
 
-![](/img/how_to_create_a_deliverable/step_6.png)
+![Simple text variable entry fields for CustomerName and ProjectName](/img/how_to_create_a_deliverable/step_6.png)
 <br/>
 
 ### Advanced Entries
@@ -107,7 +115,7 @@ In your Knowledgebase you may have entries that you will want to have variables 
 :::tip
 
  When you are a creating a deliverable and choose an entry with a subvariable click on the pencil and paper icon to see the same window in step 3 and enter your subvariable input.
-![](/img/additional_information/subvdeliv.png)
+![Subvariable input field shown when editing a knowledgebase entry in a deliverable](/img/additional_information/subvdeliv.png)
 
 :::
  <br/><br/><br/>
@@ -124,7 +132,7 @@ In your Knowledgebase you may have entries that you will want to have variables 
 
 2. Click on the "Fill in With Notes + AI"
 
-![](/img/additional_information/aibutton.png)
+![Fill in With Notes plus AI button on the deliverable creation page](/img/additional_information/aibutton.png)
 
 <br/><br/>
 
@@ -133,7 +141,7 @@ In your Knowledgebase you may have entries that you will want to have variables 
 #### Landing Page
 After you've navigated to the "Fill in With Notes + AI" page it should look like the image below. As you can see there are areas of input for Websites and other things on the left, an area to input notes you may have on the right (after you click on Advanced Settings) and your variables below. 
 
-![](/img/additional_information/ai1.png)
+![AI Generation landing page with website input, notes area, and variable fields](/img/additional_information/ai1.png)
 
 <br/><br/>
 
@@ -141,13 +149,13 @@ After you've navigated to the "Fill in With Notes + AI" page it should look like
 1. For this example we will be using the a fictional company's website and notes from our CRM. <br/>
 Once we have added our content hit the "Generate" button.
 
-![](/img/additional_information/aiinput.png)
+![AI Generation page with website URL and CRM notes entered, ready to generate](/img/additional_information/aiinput.png)
 
 <br/><br/>
 
 2. Our AI scans through notes and websites to identify anything matching your template variables. It populates this information in the "Value" column, which you can review and approve by checking the corresponding boxes on the right.
 
-![](/img/additional_information/ai2.png)
+![AI-generated variable values with approval checkboxes for review](/img/additional_information/ai2.png)
 
 3. Click the "Save" button and you will be brought back to the original "Create Deliverable" screen where you can continue to fill out your variables and create your Deliverable.
 
@@ -181,10 +189,10 @@ Here are some best practices when troubleshooting why your variable is not showi
  
 2. If the variable will be an image or rich text, make sure the variable is on it's own line. Use the show paragraph tool if you need help. The location for that tool in Word and Google Docs are in the image below. 
 
-![](/img/how_to_create_a_template/paragraphtool.png)
+![Paragraph marker tool location in Word and Google Docs toolbars](/img/how_to_create_a_template/paragraphtool.png)
 
 When you activate the tool, it will resemble the image below. Since `{CustomerName}` is plain text, it can be incorporated into a paragraph. However, we will be utilizing a chart in Rich Text for `{Scope}`, so it needs to be on its own line. Paragraph symbols will indicate this distinction clearly.
 
-![](/img/additional_information/ptoolexample.png)
+![Paragraph markers showing inline text variable vs. section variable on its own line](/img/additional_information/ptoolexample.png)
 
 <br/><br/><br/>
