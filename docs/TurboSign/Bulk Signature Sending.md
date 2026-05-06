@@ -75,6 +75,8 @@ Make sure your spreadsheet has clear column headers that match (or are close to)
 
 Navigate to the **Edit Template & Preferences** page for the template you want to send in bulk. You'll see a **"Bulk Send"** button alongside the other template actions.
 
+<br/>
+
 **Click "Bulk Send"** to open the wizard.
 
 ![Bulk Send button on Edit Template & Preferences page](/img/turbosign/bulk/bulk-send-button.jpeg)
@@ -110,11 +112,9 @@ After uploading, the wizard displays:
 - **Sheet selector** (for Excel files with multiple sheets)
 - **Preview table** showing the first 5 rows of your data with column headers
 
-Review the preview to make sure your data looks correct before proceeding.
-
 ![Drag and drop or browse to upload your spreadsheet](/img/turbosign/bulk/spreadsheet-upload.jpeg)
 
-After uploading, review the preview table to confirm your data looks correct, then click **Next**.
+Review the preview table to confirm your data looks correct, then click **Next**.
 
 ![Spreadsheet preview showing column headers and first rows](/img/turbosign/bulk/spreadsheet-preview.jpeg)
 
@@ -224,6 +224,8 @@ Drag segments to reorder them. The wizard shows a live preview of the resulting 
 ### 3e. Validation
 
 The wizard validates your configuration before allowing you to proceed. If there are issues, you'll see red alert banners explaining what needs to be fixed.
+
+<br/>
 
 **Common validation requirements:**
 
@@ -361,7 +363,7 @@ The dashboard shows all your batches with:
 
 ### Credit Management
 
-- **1 credit per recipient per document** — a batch of 100 documents with 2 signers each uses 200 credits
+- **1 credit per document** — a batch of 100 documents uses 100 credits, regardless of how many recipients each document has
 - **Credits are reserved** when you submit and **refunded** for any failed or cancelled jobs
 - **Check your credit balance** before submitting large batches
 
@@ -408,6 +410,3 @@ Now that you know how to send bulk signatures from the UI, explore these related
 - **[Webhooks](/docs/TurboSign/Webhooks)** — get real-time notifications when documents are signed
 - **[Managing Your Signatures](/docs/TurboSign/Managing%20Your%20Signatures)** — track, resend, void, and download signed documents
 
----
-
-*Have questions about Bulk Signature Sending? Contact our support team at support@turbodocx.com*
