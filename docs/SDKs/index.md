@@ -26,6 +26,14 @@ import TabItem from '@theme/TabItem';
 
 Official client libraries for the TurboDocx API. Build document generation, digital signature, and partner management workflows in your language of choice.
 
+:::tip Install with one prompt
+Skip the boilerplate — use the [TurboDocx Agent Skill](./agent-skills.md) to install the SDK, configure environment variables, and generate working integration code via Claude Code, GitHub Copilot, Cursor, OpenCode, Codex CLI, or Gemini CLI:
+
+```bash
+npx skills add TurboDocx/quickstart
+```
+:::
+
 ## TurboSign SDKs
 
 Send documents for legally-binding eSignatures with full audit trails.
