@@ -95,13 +95,44 @@ When you click **+ Add a permission**, on the **Request API permissions** page c
      Sites.ReadWrite.All    Application    ✅ Granted for {tenant}   ← wrong API
    ```
 
-:::note Why not Delegated?
-Pipelines fire when a file lands in SharePoint — no human is in the loop. If we used Delegated permissions, the integration would only work while a specific user is signed in to TurboDocx, which defeats the purpose. Application permissions let the app act on its own behalf.
+### Add the same permission under Delegated, for the wizard's folder picker
+
+The Application permission you just added is for the server-side **runtime** — when Microsoft Graph fires a notification, TurboDocx authenticates as the app itself (no user in the loop) and reads/writes the watched folder.
+
+The wizard's **folder picker** (the "Browse SharePoint" button when you create a pipeline) is different — it runs in your browser as **you**, and Microsoft's native file picker only accepts user-context tokens. So the same app needs a **Delegated** permission of the same name.
+
+4. Still on **API permissions**, click **+ Add a permission** again → **Microsoft Graph** → this time pick **Delegated permissions** (the left-hand tile).
+5. Add `Sites.ReadWrite.All` (Delegated).
+6. Click **Grant admin consent for {your tenant}** again. Your final list under **Configured permissions** should look like:
+
+   ```
+   Microsoft Graph (2)
+     Sites.ReadWrite.All    Application    ✅ Granted for {tenant}
+     Sites.ReadWrite.All    Delegated      ✅ Granted for {tenant}
+   ```
+
+:::tip One Azure app, two permission types — why
+The Pipelines runtime uses **Application** permissions (so it can act when no human is signed in — that's how a file dropped at 3am still gets processed). The wizard's folder picker uses **Delegated** permissions (so it shows you only the folders *you* have access to, just like any other SharePoint browse experience). Both are on the same app to keep your setup to one registration, one client secret, one admin-consent ceremony — instead of two of each.
 :::
 
 :::note Files.ReadWrite.All — optional
-`Files.ReadWrite.All` (Application, under **Microsoft Graph**) is a OneDrive-centric permission that overlaps significantly with `Sites.ReadWrite.All`. Adding both is fine but not required for SharePoint-only Pipelines. If you only ever plan to use SharePoint (not OneDrive for Business), `Sites.ReadWrite.All` alone is enough.
+`Files.ReadWrite.All` (under **Microsoft Graph**, in either Application or Delegated) is a OneDrive-centric permission that overlaps significantly with `Sites.ReadWrite.All`. Adding it is fine but not required for SharePoint-only Pipelines. If you only ever plan to use SharePoint (not OneDrive for Business), `Sites.ReadWrite.All` alone is enough.
 :::
+
+## Step 2.5: Add a redirect URI for the folder picker
+
+The wizard's folder picker pops open a Microsoft sign-in window so you can authenticate. Microsoft will refuse to redirect back to TurboDocx unless your URL is explicitly registered on the app under **Authentication**.
+
+1. Left nav → **Authentication** → **+ Add a platform** → pick **Single-page application**.
+2. In the **Redirect URIs** field, paste the URL TurboDocx shows you. You can find this in the TurboDocx Pipelines settings dialog under the **Redirect URI** info block — there's a Copy button next to it. (For most customers this is `https://app.turbodocx.com`.)
+3. Leave the other settings at their defaults. Click **Configure**.
+4. Hit **Save** at the top of the page.
+
+:::caution The redirect URI must match exactly
+Microsoft does an exact-string match. `https://app.turbodocx.com` ≠ `https://app.turbodocx.com/` (trailing slash). Use the value the dialog provides as-is — don't add or remove anything.
+:::
+
+If you skip this step or get the value wrong, the picker will pop open and immediately show a Microsoft error like **AADSTS50011: The reply URL specified in the request does not match the reply URLs configured for the application.**
 
 ## Step 3: Create a client secret
 
@@ -133,6 +164,10 @@ You now have three values to paste into TurboDocx:
 4. Click **Connect SharePoint**.
 
 The status chip next to "E-Signature Pipelines" should flip from "Not connected" (amber) to "Connected" (green). The **New Pipeline** button is now enabled.
+
+:::tip Same credentials power the runtime AND the wizard picker
+The clientId / clientSecret / tenantId you just pasted are used by both halves of Pipelines — the server-side runtime (Application permission, via the secret) and the wizard's "Browse SharePoint" folder picker (Delegated permission, via your browser sign-in). One set of credentials, one app, both flows.
+:::
 
 ## You're done with setup
 
@@ -197,6 +232,15 @@ The alert covers four cases:
 | "Couldn't reach Microsoft" | Network / DNS issue between TurboDocx and `login.microsoftonline.com`. | Retry in a moment. If it persists, contact support. |
 
 Each alert also shows a `Details:` line with the raw upstream error message. That's useful for support tickets but not usually needed to fix the issue.
+
+### Folder picker won't sign in — "AADSTS50011" or a Microsoft redirect-mismatch error
+
+You click **Browse SharePoint** in the wizard, a Microsoft sign-in window pops open, then closes immediately or shows an error like _"The reply URL specified in the request does not match the reply URLs configured for the application."_
+
+The picker uses a different permission type than the runtime — it needs a **Delegated** permission AND a registered **Redirect URI** on the same Azure app. Confirm:
+
+- **Delegated `Sites.ReadWrite.All` is added under Microsoft Graph** — open the app in Azure → API permissions. Look for `Sites.ReadWrite.All` with **Type: Delegated** alongside the Application one. If missing, add it and grant admin consent again. See [Step 2](#step-2-grant-the-right-api-permissions) for the walkthrough.
+- **A Redirect URI matching your TurboDocx URL is registered** — Azure → Authentication → Single-page application platform. The URL must match TurboDocx's exactly (no trailing slash, same scheme). TurboDocx shows the value in the Pipelines settings dialog with a Copy button so you can paste it as-is. See [Step 2.5](#step-25-add-a-redirect-uri-for-the-folder-picker).
 
 ### Pipelines created but no runs appear when files are dropped
 
