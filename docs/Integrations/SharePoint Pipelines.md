@@ -103,20 +103,39 @@ The wizard's **folder picker** (the "Browse SharePoint" button when you create a
 
 4. Still on **API permissions**, click **+ Add a permission** again → **Microsoft Graph** → this time pick **Delegated permissions** (the left-hand tile).
 5. Add `Sites.ReadWrite.All` (Delegated).
-6. Click **Grant admin consent for {your tenant}** again. Your final list under **Configured permissions** should look like:
+6. Click **Grant admin consent for {your tenant}** again.
+
+### Add SharePoint (legacy API) Delegated permissions for picker browse
+
+The wizard's folder picker is Microsoft's own embeddable component (the **PnP File Picker**). Even though everything *we* call goes through Microsoft Graph, the picker itself talks to the **legacy SharePoint REST API** (`{tenant}.sharepoint.com/_api/*`) to enumerate files and folders for the browse popup. That means the same app also needs two permissions under the **SharePoint** API.
+
+If you skip these, the picker will open and sign you in successfully — then show an empty file/folder list because it can't enumerate anything.
+
+7. Still on **API permissions**, click **+ Add a permission** → this time pick **SharePoint** (it's lower down in the "Microsoft APIs" tab, separate from Microsoft Graph) → **Delegated permissions**.
+8. Add both of:
+   - `AllSites.Read` — lets the picker browse SharePoint sites you have access to.
+   - `MyFiles.Read` — lets the picker show the **OneDrive** and **Recent** tabs in its sidebar. Required as long as the picker UI surfaces those tabs.
+9. Click **Grant admin consent for {your tenant}** one more time.
+
+Your final list under **Configured permissions** should look like:
 
    ```
    Microsoft Graph (2)
      Sites.ReadWrite.All    Application    ✅ Granted for {tenant}
      Sites.ReadWrite.All    Delegated      ✅ Granted for {tenant}
+   SharePoint (2)
+     AllSites.Read          Delegated      ✅ Granted for {tenant}
+     MyFiles.Read           Delegated      ✅ Granted for {tenant}
    ```
 
+Azure also auto-adds `User.Read` (Microsoft Graph, Delegated) to every new app registration. It's harmless and unused by TurboDocx — leave it alone.
+
 :::tip One Azure app, two permission types — why
-The Pipelines runtime uses **Application** permissions (so it can act when no human is signed in — that's how a file dropped at 3am still gets processed). The wizard's folder picker uses **Delegated** permissions (so it shows you only the folders *you* have access to, just like any other SharePoint browse experience). Both are on the same app to keep your setup to one registration, one client secret, one admin-consent ceremony — instead of two of each.
+The Pipelines runtime uses **Application** permissions on Microsoft Graph (so it can act when no human is signed in — that's how a file dropped at 3am still gets processed). The wizard's folder picker uses **Delegated** permissions on both Microsoft Graph (for the drive-name lookup) and the legacy SharePoint API (for the actual browse popup). All on the same app to keep your setup to one registration, one client secret, one admin-consent ceremony — instead of two of each.
 :::
 
-:::note Files.ReadWrite.All — optional
-`Files.ReadWrite.All` (under **Microsoft Graph**, in either Application or Delegated) is a OneDrive-centric permission that overlaps significantly with `Sites.ReadWrite.All`. Adding it is fine but not required for SharePoint-only Pipelines. If you only ever plan to use SharePoint (not OneDrive for Business), `Sites.ReadWrite.All` alone is enough.
+:::note Files.ReadWrite.All — also recommended
+`Files.ReadWrite.All` (under **Microsoft Graph**, Application) is a OneDrive-adjacent permission that overlaps with `Sites.ReadWrite.All` for SharePoint-only flows. Adding it doesn't expand the runtime's capabilities for the current Pipelines feature (`Sites.ReadWrite.All` alone covers reading from and writing to SharePoint folders), but most customers add it anyway for future-proofing — e.g. if Pipelines later supports OneDrive-for-Business folders or you stand up other TurboDocx integrations on the same app. Leaving it in causes no harm.
 :::
 
 ## Step 2.5: Add a redirect URI for the folder picker
@@ -237,10 +256,21 @@ Each alert also shows a `Details:` line with the raw upstream error message. Tha
 
 You click **Browse SharePoint** in the wizard, a Microsoft sign-in window pops open, then closes immediately or shows an error like _"The reply URL specified in the request does not match the reply URLs configured for the application."_
 
-The picker uses a different permission type than the runtime — it needs a **Delegated** permission AND a registered **Redirect URI** on the same Azure app. Confirm:
+The picker uses different permissions than the runtime — it needs **Delegated** permissions AND a registered **Redirect URI** on the same Azure app. Confirm:
 
 - **Delegated `Sites.ReadWrite.All` is added under Microsoft Graph** — open the app in Azure → API permissions. Look for `Sites.ReadWrite.All` with **Type: Delegated** alongside the Application one. If missing, add it and grant admin consent again. See [Step 2](#step-2-grant-the-right-api-permissions) for the walkthrough.
 - **A Redirect URI matching your TurboDocx URL is registered** — Azure → Authentication → Single-page application platform. The URL must match TurboDocx's exactly (no trailing slash, same scheme). TurboDocx shows the value in the Pipelines settings dialog with a Copy button so you can paste it as-is. See [Step 2.5](#step-25-add-a-redirect-uri-for-the-folder-picker).
+
+### Folder picker opens but the file/folder list is empty
+
+You sign in successfully, the picker pops to the right tenant, but every tab (SharePoint, OneDrive, Recent) shows an empty list — no folders, no files, no error message.
+
+This is a **SharePoint API permission gap**. The picker enumerates folders via the legacy SharePoint REST API (not Microsoft Graph), so it needs its own Delegated permissions on the **SharePoint** API. Open the app in Azure → API permissions and confirm both of these are present and admin-consented:
+
+- `AllSites.Read` (under **SharePoint**, Type: Delegated)
+- `MyFiles.Read` (under **SharePoint**, Type: Delegated)
+
+If they're missing, add them per [the SharePoint Delegated section in Step 2](#add-sharepoint-legacy-api-delegated-permissions-for-picker-browse), grant admin consent, then reopen the picker.
 
 ### Pipelines created but no runs appear when files are dropped
 
@@ -249,13 +279,27 @@ The connection saved fine (probe passed) but Microsoft Graph isn't reaching Turb
 - **Permission scope is too narrow** — if you picked `Sites.Selected`, an admin needs to explicitly grant the app access to each SharePoint site participating in a pipeline. Switch to `Sites.ReadWrite.All` to test, or work with your admin to add the per-site grants.
 - **Client secret expired** — check Azure → Certificates & secrets. The probe ran when you saved, but secrets expire on their own schedule and silently break the integration. Rotate per the section above.
 
+## Appending Terms & Conditions or addendums
+
+In the wizard's **E-Signature → Append Documents** section, drop in a PDF (Terms & Conditions, MSA addendum, payment-terms page — whatever your process needs). Each appendix can have its own signature, date, and initial fields placed visually on its pages.
+
+At runtime, every PDF that lands in the watched SharePoint folder gets the source + every appendix you've configured stitched into a single PDF before it goes out for signature. The signed PDF that lands back in the destination folder contains the invoice AND the appendix pages — fully executed, audit-trail intact.
+
+A few things worth knowing:
+
+- **Upload happens on Save.** While you're configuring the wizard, the appendix sits in your browser only — that's why you'll see "in-session preview" if you refresh mid-edit. Once you click Save, the PDFs upload to TurboDocx storage and persist with the pipeline.
+- **10 MB cap per appendix.** Terms & Conditions docs are typically well under 1 MB; the cap exists to prevent slow runs on scan-quality 200 MB monsters.
+- **PDFs only.** Other formats won't upload. Convert to PDF first if you need a different source format.
+- **Remove cleanly.** Delete an appendix in the wizard and click Save — the file is purged from TurboDocx storage within 24h. Deleting the whole pipeline cascades the cleanup automatically.
+- **Order matters.** Appendices append in the order you arrange them in the wizard, after the source invoice. If your signature anchor is `Last page of merged document`, the signature lands on the final appendix page; if it's `Last page of invoice`, it stays on the original invoice page even when appendices follow.
+
 ## What's next
 
 With the connection live, create your first pipeline through the wizard:
 
 - Pick a SharePoint folder to watch
 - Define what gets extracted from each PDF (regex over the document text)
-- Set the signer and signature placement
+- Set the signer and signature placement (and add appendices if you have any)
 - Pick a destination folder + filename template for the signed PDF
 
 The wizard walks you through each step. You can pause, edit, or delete pipelines anytime through the Pipelines tab.
