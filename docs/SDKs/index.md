@@ -36,6 +36,14 @@ All five modules ship in the **same package** for each language — pick the one
 
 TurboSign, Deliverable, TurboQuote, and TurboWebhooks all use the same `TURBODOCX_API_KEY` + `TURBODOCX_ORG_ID`. See [credential requirements](#which-credentials-does-each-product-need) below.
 
+:::tip Install with one prompt
+Skip the boilerplate — use the [TurboDocx Agent Skill](./agent-skills.md) to install the SDK, configure environment variables, and generate working integration code via Claude Code, GitHub Copilot, Cursor, OpenCode, Codex CLI, or Gemini CLI:
+
+```bash
+npx skills add TurboDocx/quickstart
+```
+:::
+
 ## TurboSign SDKs
 
 Send documents for legally-binding eSignatures with full audit trails.
