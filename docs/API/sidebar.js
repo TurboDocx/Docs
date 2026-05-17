@@ -11,7 +11,7 @@ module.exports = [
   {
     type: "category",
     label: "Templates",
-    collapsed: true,
+    collapsed: false,
     items: [
       { type: "doc", id: "API/upload-template-with-optional-default-values", label: "Upload Template", className: "api-method post" },
       { type: "doc", id: "API/extract-template-placeholders-and-generate-preview", label: "Extract Placeholders & Preview", className: "api-method post" },
@@ -24,7 +24,7 @@ module.exports = [
   {
     type: "category",
     label: "Variables",
-    collapsed: true,
+    collapsed: false,
     items: [
       { type: "doc", id: "API/create-image-variable-folder", label: "Create Image Variable (Folder)", className: "api-method post" },
       { type: "doc", id: "API/read-variables-folder", label: "Read Variables (Folder)", className: "api-method get" },
@@ -35,7 +35,7 @@ module.exports = [
   {
     type: "category",
     label: "Tags",
-    collapsed: true,
+    collapsed: false,
     items: [
       { type: "doc", id: "API/create-tag", label: "Create Tag", className: "api-method post" },
       { type: "doc", id: "API/read-tag", label: "Read Tag", className: "api-method get" },
@@ -46,7 +46,7 @@ module.exports = [
   {
     type: "category",
     label: "Webhooks",
-    collapsed: true,
+    collapsed: false,
     items: [
       { type: "doc", id: "API/create-webhook", label: "Create Webhook", className: "api-method post" },
       { type: "doc", id: "API/get-webhook", label: "Get Webhook", className: "api-method get" },
