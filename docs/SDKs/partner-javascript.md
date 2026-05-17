@@ -17,8 +17,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboPartner JavaScript SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbopartner" product="TurboPartner" />
 
 :::tip Interested in TurboPartner?
 TurboPartner is available for integrators and partners. [Contact us](https://www.turbodocx.com/demo) to get started.

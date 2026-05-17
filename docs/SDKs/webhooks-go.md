@@ -18,8 +18,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboWebhooks Go SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbowebhooks" product="TurboWebhooks" />
 
 The official TurboDocx Webhooks SDK for Go applications (net/http, Gin, Echo, Chi, AWS Lambda, etc.). Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Go 1.21+. Distributed as `github.com/TurboDocx/SDK/packages/go-sdk` (same module as TurboSign).
 

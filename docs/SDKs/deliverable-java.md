@@ -15,8 +15,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Java SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 
 The official TurboDocx Deliverable SDK for Java applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
 
