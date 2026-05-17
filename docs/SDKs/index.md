@@ -63,10 +63,7 @@ Subscribe to TurboSign events (`signature.document.completed`, `signature.docume
 | **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/webhooks-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
 | **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/webhooks-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
 | **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk` | [Docs](/docs/SDKs/webhooks-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
-
-:::info More Languages Coming Soon
-TurboWebhooks SDK reference docs for Java land as the SDK gets validated end-to-end. The package already ships the same `TurboWebhooks` module and `WebhookSignatureVerifier` helper as the four covered languages — see the [SDK GitHub repo](https://github.com/TurboDocx/SDK) for source while these docs are in progress.
-:::
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | `mvn` / `gradle` (see [docs](/docs/SDKs/webhooks-java)) | [Docs](/docs/SDKs/webhooks-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk) |
 
 For the conceptual overview (delivery retries, payload schema, dashboard configuration), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 
