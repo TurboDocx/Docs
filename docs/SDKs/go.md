@@ -14,8 +14,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Go SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 
 The official TurboDocx SDK for Go applications. Build document generation and digital signature workflows with idiomatic Go patterns, context support, and comprehensive error handling. Available as `github.com/TurboDocx/SDK/packages/go-sdk`.
 

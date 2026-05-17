@@ -14,8 +14,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Python SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 
 The official TurboDocx Deliverable SDK for Python applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with async/await patterns and comprehensive error handling. Available on PyPI as `turbodocx-sdk`.
 

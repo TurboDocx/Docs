@@ -16,8 +16,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Python SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 
 The official TurboDocx SDK for Python applications. Build document generation and digital signature workflows with async/await patterns and comprehensive error handling. Available on PyPI as `turbodocx-sdk`.
 

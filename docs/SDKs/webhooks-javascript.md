@@ -18,8 +18,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboWebhooks JavaScript / TypeScript SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbowebhooks" product="TurboWebhooks" />
 
 The official TurboDocx Webhooks SDK for Node.js applications (Express, Fastify, Next.js API routes, AWS Lambda, etc.). Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Node 18+. Available on npm as `@turbodocx/sdk` (same package as TurboSign).
 

@@ -18,8 +18,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboWebhooks PHP SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbowebhooks" product="TurboWebhooks" />
 
 The official TurboDocx Webhooks SDK for PHP applications. Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from PHP 8.1+. Available on Packagist as `turbodocx/sdk` (same package as TurboSign).
 
