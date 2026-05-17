@@ -218,7 +218,15 @@ Each webhook request includes these headers:
 
 ### SDK Verification Examples
 
-Our SDKs include built-in webhook verification. Here are examples for each language:
+Our SDKs include built-in webhook verification. The snippets below show the minimum receiver code; for the full SDK reference (createWebhook, updateWebhook, testWebhook, listWebhookDeliveries, replayWebhookDelivery, rotateSecret, framework integration patterns, and gotchas), see the dedicated TurboWebhooks SDK pages:
+
+- [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks-javascript)
+- [TurboWebhooks Python SDK](/docs/SDKs/webhooks-python)
+- [TurboWebhooks PHP SDK](/docs/SDKs/webhooks-php)
+- [TurboWebhooks Go SDK](/docs/SDKs/webhooks-go)
+- [TurboWebhooks Java SDK](/docs/SDKs/webhooks-java)
+
+Here are examples for each language:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -357,7 +365,7 @@ end
 </TabItem>
 </Tabs>
 
-[View full SDK documentation →](/docs/SDKs)
+**Go deeper:** the [TurboWebhooks SDK pages](/docs/SDKs#turbowebhooks-sdks) cover the full management surface (create/update/delete the webhook, test-fire it, rotate the secret, list and replay delivery history) and per-framework receiver patterns (Express, FastAPI, Spring Boot, net/http, Gin, Laravel, …).
 
 ### Security Best Practices
 
