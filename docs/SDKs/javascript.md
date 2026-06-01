@@ -16,10 +16,13 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartTip from '@site/src/components/QuickstartTip';
 
 # JavaScript / TypeScript SDK
 
 The official TurboDocx SDK for JavaScript and TypeScript applications. Build document generation and digital signature workflows with full TypeScript support, async/await patterns, and comprehensive error handling. Available on npm as `@turbodocx/sdk`.
+
+<QuickstartTip/>
 
 ## Installation
 

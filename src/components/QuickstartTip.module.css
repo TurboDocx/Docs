@@ -1,0 +1,193 @@
+/* Developer-flavored install plug for the TurboDocx Quickstart Agent Skill. */
+
+.wrap {
+  --qs-accent: #2b579a; /* brand primary */
+  --qs-term-bg: #0b1020;
+  --qs-term-fg: #e6edf3;
+  --qs-term-muted: #8b98b0;
+  --qs-prompt: #51cf66;
+
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 1.25rem;
+  align-items: center;
+  margin: 1.5rem 0 2rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: 14px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(43, 87, 154, 0.08), transparent 60%),
+    var(--ifm-background-surface-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.wrap::before {
+  /* top accent hairline */
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--qs-accent), #51cf66 70%, transparent);
+  opacity: 0.9;
+}
+
+[data-theme='dark'] .wrap {
+  border-color: var(--ifm-color-emphasis-300);
+}
+
+/* ---- left: pitch ---- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--qs-accent);
+  background: rgba(43, 87, 154, 0.1);
+  border: 1px solid rgba(43, 87, 154, 0.22);
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+}
+
+[data-theme='dark'] .badge {
+  color: #8fb2e8;
+  background: rgba(43, 87, 154, 0.18);
+  border-color: rgba(143, 178, 232, 0.28);
+}
+
+.bolt {
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.heading {
+  margin: 0.6rem 0 0.35rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.sub {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.sub a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---- right: terminal ---- */
+.terminal {
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--qs-term-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 40px -20px rgba(11, 16, 32, 0.7);
+  font-family: var(--ifm-font-family-monospace);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+.barTitle {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--qs-term-muted);
+  letter-spacing: 0.03em;
+}
+
+.body {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+}
+
+.cmd {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* override Docusaurus global inline-code styling inside the terminal */
+  background: none !important;
+  color: var(--qs-term-fg) !important;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cmd::-webkit-scrollbar { display: none; }
+
+.prompt {
+  color: var(--qs-prompt);
+  user-select: none;
+  margin-right: 0.5rem;
+  font-weight: 700;
+}
+
+.copyBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--ifm-font-family-base);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--qs-term-fg);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.copyBtn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.copyBtn.copied {
+  color: #27c93f;
+  border-color: rgba(39, 201, 63, 0.4);
+  background: rgba(39, 201, 63, 0.12);
+}
+
+.copyIcon {
+  width: 0.95em;
+  height: 0.95em;
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

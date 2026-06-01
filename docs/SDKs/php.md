@@ -17,10 +17,13 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartTip from '@site/src/components/QuickstartTip';
 
 # PHP SDK
 
 The official TurboDocx SDK for PHP applications. Build document generation and digital signature workflows with modern PHP 8.1+ features, strong typing, and comprehensive error handling. Available on Packagist as `turbodocx/sdk`.
+
+<QuickstartTip/>
 
 ## Installation
 

@@ -14,10 +14,13 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartTip from '@site/src/components/QuickstartTip';
 
 # JavaScript / TypeScript SDK
 
 The official TurboDocx Deliverable SDK for JavaScript and TypeScript applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically. Available on npm as `@turbodocx/sdk`.
+
+<QuickstartTip/>
 
 ## Installation
 

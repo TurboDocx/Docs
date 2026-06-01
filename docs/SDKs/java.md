@@ -15,10 +15,13 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartTip from '@site/src/components/QuickstartTip';
 
 # Java SDK
 
 The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
+
+<QuickstartTip/>
 
 ## Installation
 

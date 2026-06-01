@@ -27,7 +27,14 @@ import TabItem from '@theme/TabItem';
 
 The TurboDocx Quickstart Skill is an [Agent Skills](https://agentskills.io) plugin that lets your AI coding agent install and wire up the TurboDocx SDK or `@turbodocx/html-to-docx` in a single prompt. It detects your project's language and framework, installs the package, configures environment variables, and generates working integration code that matches your existing codebase patterns.
 
-[![skills.sh](https://skills.sh/b/TurboDocx/quickstart)](https://skills.sh/TurboDocx/quickstart)
+<div style={{display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap'}}>
+  <a href="https://skills.sh/TurboDocx/quickstart">
+    <img src="https://skills.sh/b/TurboDocx/quickstart" alt="skills.sh" style={{height: '28px', width: 'auto'}} />
+  </a>
+  <a href="https://github.com/TurboDocx/quickstart">
+    <img src="https://img.shields.io/badge/View%20on%20GitHub-2b579a?style=for-the-badge&logo=github&logoColor=white" alt="View on GitHub" style={{height: '28px', width: 'auto'}} />
+  </a>
+</div>
 
 Works with:
 

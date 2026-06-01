@@ -17,6 +17,7 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartTip from '@site/src/components/QuickstartTip';
 
 # TurboPartner JavaScript SDK
 
@@ -31,6 +32,8 @@ The official TurboDocx Partner SDK for JavaScript and TypeScript applications. B
 :::info What is TurboPartner?
 TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements — perfect for building white-label or multi-tenant applications on top of TurboDocx.
 :::
+
+<QuickstartTip/>
 
 ## TLDR
 
