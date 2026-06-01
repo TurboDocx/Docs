@@ -244,4 +244,17 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
+  /* let the command wrap instead of scrolling/clipping on narrow screens */
+  .line {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .cmd {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    font-size: 0.85rem;
+  }
 }
