@@ -245,16 +245,27 @@ const { results, totalRecords, stats } = await TurboQuote.listQuotes({
 Create a new quote in `draft` status.
 
 ```typescript
+// Fixed-term quote — termDays 1–3650, no renewalPeriod (0 = one-time, -1 = auto-renewal)
 const quote = await TurboQuote.createQuote({
   name: 'Q3 Renewal',           // required
   companyId: 'company-uuid',    // required
   contactId: 'contact-uuid',    // required
   currency: 'USD',              // 'USD'|'EUR'|'GBP'|'CAD'|'AUD'|'INR'
-  termDays: 30,
-  renewalPeriod: 'annually',    // 'weekly'|'monthly'|'quarterly'|'annually'
+  termDays: 30,                 // fixed term in days
   validUntil: '2026-09-30',
   taxRate: 8.5,
   priceBookId: 'pb-uuid',
+});
+
+// Auto-renewal quote — termDays: -1 REQUIRES renewalPeriod, and renewalPeriod is ONLY valid
+// when termDays is -1. Pairing renewalPeriod with a fixed term (e.g. termDays: 30) returns a 400.
+const subscription = await TurboQuote.createQuote({
+  name: 'Annual Subscription',
+  companyId: 'company-uuid',
+  contactId: 'contact-uuid',
+  currency: 'USD',
+  termDays: -1,                 // -1 = auto-renewal
+  renewalPeriod: 'annually',    // 'monthly'|'quarterly'|'annually'
 });
 ```
 
