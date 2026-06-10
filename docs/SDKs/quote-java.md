@@ -582,8 +582,10 @@ pricing.setDiscountType(DiscountType.PERCENT);
 pricing.setDiscountPercent(20.0);
 
 CreatePriceBookRequest req = new CreatePriceBookRequest();
-req.setName("Partner Discount");
-req.setPriceBookTypeId(typeId);
+req.setName("Partner Discount");          // required
+req.setPriceBookTypeId(typeId);            // required — from a createType(categoryType=PRICEBOOK_TYPE)
+req.setValidFrom("2025-01-01");            // required
+req.setDiscountPercent(15.0);              // required
 req.setProductPricing(Arrays.asList(pricing));
 req.setShowInQuoteBuilder(true);
 

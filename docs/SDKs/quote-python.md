@@ -122,12 +122,14 @@ async def full_quote_lifecycle():
     items = await TurboQuote.add_line_items(quote_id, [
         {
             "productId": "product-uuid-1",
+            "productName": "Platform License",
             "quantity": 5,
             "unitPrice": "199.00",
             "billingFrequency": "annual",
         },
         {
             "productId": "product-uuid-2",
+            "productName": "Onboarding Package",
             "quantity": 1,
             "unitPrice": "499.00",
             "billingFrequency": "one-time",
@@ -165,10 +167,10 @@ result = await TurboQuote.create_and_send({
     "contactId": "contact-uuid",
     "currency": "USD",
     "items": [
-        {"productId": "product-uuid-1", "quantity": 3, "unitPrice": "299.00"},
+        {"productId": "product-uuid-1", "productName": "Platform License", "quantity": 3, "unitPrice": "299.00", "billingFrequency": "monthly"},
     ],
     "bundleItems": [
-        {"bundleId": "bundle-uuid-1", "quantity": 1},
+        {"bundleId": "bundle-uuid-1", "bundleName": "Starter Pack", "quantity": 1},
     ],
     "send": {
         "ccEmails": ["cc@example.com"],
@@ -351,6 +353,7 @@ Accepts a single item dict or a list. Returns a list of created `LineItem` dicts
 items = await TurboQuote.add_line_items("quote-uuid", [
     {
         "productId": "product-uuid",
+        "productName": "Platform License",
         "quantity": 2,
         "unitPrice": "199.00",
         "billingFrequency": "annual",
@@ -462,12 +465,17 @@ bundle = await TurboQuote.create_bundle({
 | `list_price_book_products` | `(id, options?)` | paginated list |
 
 ```python
+# name, priceBookTypeId, validFrom, and discountPercent are all REQUIRED.
+# priceBookTypeId comes from a create_type with categoryType "pricebook_type".
 pricebook = await TurboQuote.create_price_book({
     "name": "Partner Tier A",
+    "priceBookTypeId": "pricebook-type-uuid",
+    "validFrom": "2026-01-01",
+    "discountPercent": 15,
     "isDefault": False,
-    "products": [
-        {"productId": "product-uuid-1", "unitPrice": "349.00"},
-        {"productId": "product-uuid-2", "unitPrice": "399.00"},
+    "productPricing": [
+        {"productId": "product-uuid-1", "discountType": "percent", "discountPercent": 25},
+        {"productId": "product-uuid-2", "discountType": "percent", "discountPercent": 30},
     ],
 })
 
@@ -588,11 +596,11 @@ result = await TurboQuote.create_and_send({
     "currency": "USD",
     # optional line items added before send
     "items": [
-        {"productId": "product-uuid-1", "quantity": 10, "unitPrice": "99.00"},
+        {"productId": "product-uuid-1", "productName": "Platform License", "quantity": 10, "unitPrice": "99.00", "billingFrequency": "monthly"},
     ],
     # optional bundle items added before send
     "bundleItems": [
-        {"bundleId": "bundle-uuid-1", "quantity": 1},
+        {"bundleId": "bundle-uuid-1", "bundleName": "Starter Pack", "quantity": 1},
     ],
     # send options (ccEmails, validUntil)
     "send": {

@@ -265,7 +265,7 @@ const subscription = await TurboQuote.createQuote({
   contactId: 'contact-uuid',
   currency: 'USD',
   termDays: -1,                 // -1 = auto-renewal
-  renewalPeriod: 'annually',    // 'monthly'|'quarterly'|'annually'
+  renewalPeriod: 'annually',    // 'weekly'|'monthly'|'quarterly'|'annually'
 });
 ```
 

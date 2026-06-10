@@ -127,8 +127,10 @@ echo "Quote created: {$quote->id}\n";
 // 2. Add a product line item
 $items = TurboQuote::addLineItems($quote->id, new AddLineItemRequest(
     productId: 'product-uuid',
+    productName: 'Enterprise Seat',
+    unitPrice: 199.00,
+    billingFrequency: 'monthly',
     quantity: 5,
-    unitPrice: '199.00',
 ));
 
 echo "Added {count($items)} item(s)\n";
@@ -160,7 +162,13 @@ $result = TurboQuote::createAndSend(new CreateAndSendRequest(
     companyId: 'company-uuid',
     contactId: 'contact-uuid',
     items: [
-        new AddLineItemRequest(productId: 'product-uuid', quantity: 1),
+        new AddLineItemRequest(
+            productId: 'product-uuid',
+            productName: 'Starter Plan',
+            unitPrice: 49.00,
+            billingFrequency: 'monthly',
+            quantity: 1,
+        ),
     ],
     send: new SendQuoteRequest(),
 ));
@@ -277,6 +285,7 @@ use TurboDocx\Types\Requests\Quote\SendQuoteWithDeliverableRequest;
 
 $result = TurboQuote::sendQuoteWithDeliverable('quote-uuid', new SendQuoteWithDeliverableRequest(
     deliverableId: 'deliverable-uuid',
+    mergePosition: 'end',
 ));
 // $result->quote
 // $result->message
@@ -310,6 +319,7 @@ use TurboDocx\Types\Requests\Quote\HandleExpiredQuoteRequest;
 
 $quote = TurboQuote::handleExpiredQuote('quote-uuid', new HandleExpiredQuoteRequest(
     action: 'extend',
+    reason: 'Customer requested more time to review',
     newValidUntil: '2026-12-31',
 ));
 ```
@@ -357,8 +367,20 @@ Pass a single `AddLineItemRequest` or an array of them.
 use TurboDocx\Types\Requests\Quote\AddLineItemRequest;
 
 $items = TurboQuote::addLineItems('quote-uuid', [
-    new AddLineItemRequest(productId: 'product-uuid-1', quantity: 2),
-    new AddLineItemRequest(productId: 'product-uuid-2', quantity: 1, unitPrice: '499.00'),
+    new AddLineItemRequest(
+        productId: 'product-uuid-1',
+        productName: 'Platform Subscription',
+        unitPrice: 199.00,
+        billingFrequency: 'monthly',
+        quantity: 2,
+    ),
+    new AddLineItemRequest(
+        productId: 'product-uuid-2',
+        productName: 'Onboarding',
+        unitPrice: 499.00,
+        billingFrequency: 'one-time',
+        quantity: 1,
+    ),
 ]);
 ```
 
@@ -369,6 +391,7 @@ use TurboDocx\Types\Requests\Quote\AddBundleLineItemRequest;
 
 $items = TurboQuote::addBundleLineItems('quote-uuid', new AddBundleLineItemRequest(
     bundleId: 'bundle-uuid',
+    bundleName: 'Starter Bundle',
     quantity: 1,
 ));
 ```
@@ -380,7 +403,7 @@ use TurboDocx\Types\Requests\Quote\UpdateLineItemRequest;
 
 $item = TurboQuote::updateLineItem('quote-uuid', 'item-uuid', new UpdateLineItemRequest(
     quantity: 3,
-    unitPrice: '189.00',
+    unitPrice: 189.00,
 ));
 ```
 
@@ -413,7 +436,9 @@ $page = TurboQuote::listProducts(new ListProductsRequest(limit: 20, query: 'lice
 // Create a product
 $product = TurboQuote::createProduct(new CreateProductRequest(
     name: 'Enterprise Seat',
-    listPrice: '299.00',
+    listPrice: 299.00,
+    billingFrequency: 'monthly',
+    categoryId: 'category-uuid',
     sku: 'ENT-001',
 ));
 
@@ -442,6 +467,7 @@ use TurboDocx\Types\Requests\Quote\CreateBundleRequest;
 
 $bundle = TurboQuote::createBundle(new CreateBundleRequest(
     name: 'Starter Kit',
+    categoryId: 'category-uuid',
     items: [
         ['productId' => 'product-uuid-1', 'quantity' => 1],
         ['productId' => 'product-uuid-2', 'quantity' => 2],
@@ -468,7 +494,9 @@ use TurboDocx\Types\Requests\Quote\CreatePriceBookRequest;
 
 $pb = TurboQuote::createPriceBook(new CreatePriceBookRequest(
     name: 'Partner Discount',
-    discountPercent: '15.00',
+    priceBookTypeId: 'pricebook-type-uuid',
+    validFrom: '2026-01-01',
+    discountPercent: 15.0,
 ));
 
 // List products enrolled in the price book
@@ -493,7 +521,7 @@ use TurboDocx\Types\Requests\Quote\CreateCompanyRequest;
 $company = TurboQuote::createCompany(new CreateCompanyRequest(
     name: 'Acme Corp',
     contacts: [
-        ['firstName' => 'Jane', 'lastName' => 'Doe', 'email' => 'jane@acme.com'],
+        ['name' => 'Jane Doe', 'email' => 'jane@acme.com'],
     ],
 ));
 
@@ -517,10 +545,9 @@ There is no `getContact($id)` — the backend does not expose a `GET /v1/contact
 use TurboDocx\Types\Requests\Quote\CreateContactRequest;
 
 $contact = TurboQuote::createContact(new CreateContactRequest(
-    firstName: 'John',
-    lastName: 'Smith',
-    email: 'john@acme.com',
+    name: 'John Smith',
     companyId: 'company-uuid',
+    email: 'john@acme.com',
 ));
 ```
 
@@ -585,10 +612,20 @@ $result = TurboQuote::createAndSend(new CreateAndSendRequest(
     contactId: 'contact-uuid',
     validUntil: '2026-12-31',
     items: [
-        new AddLineItemRequest(productId: 'product-uuid', quantity: 10),
+        new AddLineItemRequest(
+            productId: 'product-uuid',
+            productName: 'Annual License',
+            unitPrice: 999.00,
+            billingFrequency: 'annual',
+            quantity: 10,
+        ),
     ],
     bundleItems: [
-        new AddBundleLineItemRequest(bundleId: 'bundle-uuid', quantity: 1),
+        new AddBundleLineItemRequest(
+            bundleId: 'bundle-uuid',
+            bundleName: 'Annual Bundle',
+            quantity: 1,
+        ),
     ],
     send: new SendQuoteRequest(),
 ));

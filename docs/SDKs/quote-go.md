@@ -560,10 +560,12 @@ Price books apply per-product discounts or fixed prices to quotes in bulk.
 
 ```go
 validFrom := "2026-01-01"
+discountPercent := 15.0
 priceBook, err := qc.CreatePriceBook(ctx, &turbodocx.CreatePriceBookRequest{
     Name:            "Partner Pricing",
     PriceBookTypeID: "type-uuid",
     ValidFrom:       validFrom,
+    DiscountPercent: &discountPercent,
     ProductPricing: []turbodocx.PriceBookProductPricingInput{
         {
             ProductID:       "product-uuid",
