@@ -79,6 +79,18 @@ Generate documents from templates with dynamic variable injection, download sour
 | **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/deliverable-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                         |
 | **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/deliverable-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
 
+## TurboQuote SDKs
+
+Build sales quotes and proposals programmatically: quotes and line items, a product/bundle catalog, price books, companies/contacts, and quote templates.
+
+| Language                  | Package                    | Install Command                                                      | Links                                                                                                                          |
+| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/quote-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                       |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/quote-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                           |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/quote-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                             |
+| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/quote-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                               |
+| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/quote-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                           |
+
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
 :::

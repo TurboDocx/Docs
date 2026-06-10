@@ -260,6 +260,38 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'TurboQuote SDKs',
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'SDKs/quote-javascript',
+              label: 'JavaScript / TypeScript',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/quote-python',
+              label: 'Python',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/quote-php',
+              label: 'PHP',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/quote-go',
+              label: 'Go',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/quote-java',
+              label: 'Java',
+            },
+          ],
+        },
       ],
     },
     {
