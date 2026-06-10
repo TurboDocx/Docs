@@ -21,10 +21,14 @@ This guide walks you through adding a new custom product to a sales quote in Tur
 
 By the end of this guide, you will have:
 
-- Opened the product catalog from within a quote
-- Created a new product with name, category, and billing frequency
-- Set up list price and optional cost for margin tracking
-- Inserted the product as a line item in your active quote
+- 🗂️ **Opened the product catalog** from within a quote
+- 📦 **Created a new product** with name, category, and billing frequency
+- 💵 **Set up list price** and optional cost for margin tracking
+- ➕ **Inserted the product** as a line item in your active quote
+
+:::tip Quick Start Promise
+Adding products to your catalog takes only a moment, and reusable products make every future quote faster to build. 🚀
+:::
 
 <br/>
 

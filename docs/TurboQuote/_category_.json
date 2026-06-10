@@ -1,0 +1,10 @@
+{
+  "label": "TurboQuote",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "TurboQuote Quotes & Proposals",
+    "description": "Learn how to build professional quotes and proposals with TurboQuote: create quotes, manage a product catalog and price books, and send quotes for review.",
+    "keywords": ["turboquote", "quote", "proposal", "sales quote", "pricing", "product catalog", "price book", "cpq"]
+  }
+}

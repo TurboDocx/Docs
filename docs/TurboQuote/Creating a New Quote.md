@@ -21,10 +21,14 @@ This guide walks you through the complete process of creating a new professional
 
 By the end of this guide, you will have:
 
-- Created a new quote from the TurboDocx home screen
-- Added a new company record with industry classification
-- Set up contact details for the company
-- Named and submitted your completed quote
+- 🧾 **Created a new quote** from the TurboDocx home screen
+- 🏢 **Added a new company record** with industry classification
+- 👤 **Set up contact details** for the company
+- ✅ **Named and submitted** your completed quote
+
+:::tip Quick Start Promise
+Creating your first quote takes just a few minutes. Follow along and you'll have a professional, ready-to-send quote in no time! 🚀
+:::
 
 <br/>
 
