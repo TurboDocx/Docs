@@ -75,7 +75,7 @@ func main() {
     fmt.Printf("User: %s\n", user.Data.Email)
 
     // 4. Create an API key
-    key, _ := partner.CreateOrganizationApiKey(ctx, orgID, &turbodocx.CreateOrgApiKeyRequest{
+    key, _ := partner.CreateOrganizationAPIKey(ctx, orgID, &turbodocx.CreateOrgAPIKeyRequest{
         Name: "Production Key",
         Role: "admin",
     })
@@ -371,13 +371,13 @@ result, err := partner.RemoveUserFromOrganization(ctx,
 
 ## Organization API Key Management
 
-### `CreateOrganizationApiKey()`
+### `CreateOrganizationAPIKey()`
 
 Create an API key for an organization.
 
 ```go
-result, err := partner.CreateOrganizationApiKey(ctx, "org-uuid-here",
-    &turbodocx.CreateOrgApiKeyRequest{
+result, err := partner.CreateOrganizationAPIKey(ctx, "org-uuid-here",
+    &turbodocx.CreateOrgAPIKeyRequest{
         Name: "Production API Key",
         Role: "admin", // admin, contributor, or viewer
     },
@@ -391,13 +391,13 @@ fmt.Printf("Full Key: %s\n", result.Data.Key) // Only shown once!
 The full API key is only returned once during creation. Store it securely — you won't be able to retrieve it again.
 :::
 
-### `ListOrganizationApiKeys()`
+### `ListOrganizationAPIKeys()`
 
 List all API keys for an organization.
 
 ```go
-result, err := partner.ListOrganizationApiKeys(ctx, "org-uuid-here",
-    &turbodocx.ListOrgApiKeysRequest{Limit: turbodocx.IntPtr(50)},
+result, err := partner.ListOrganizationAPIKeys(ctx, "org-uuid-here",
+    &turbodocx.ListOrgAPIKeysRequest{Limit: turbodocx.IntPtr(50)},
 )
 
 for _, key := range result.Data.Results {
@@ -405,27 +405,27 @@ for _, key := range result.Data.Results {
 }
 ```
 
-### `UpdateOrganizationApiKey()`
+### `UpdateOrganizationAPIKey()`
 
 Update an organization API key's name or role.
 
 ```go
-result, err := partner.UpdateOrganizationApiKey(ctx,
+result, err := partner.UpdateOrganizationAPIKey(ctx,
     "org-uuid-here",
     "api-key-uuid-here",
-    &turbodocx.UpdateOrgApiKeyRequest{
+    &turbodocx.UpdateOrgAPIKeyRequest{
         Name: "Updated Key Name",
         Role: "contributor",
     },
 )
 ```
 
-### `RevokeOrganizationApiKey()`
+### `RevokeOrganizationAPIKey()`
 
 Revoke (delete) an organization API key.
 
 ```go
-result, err := partner.RevokeOrganizationApiKey(ctx,
+result, err := partner.RevokeOrganizationAPIKey(ctx,
     "org-uuid-here",
     "api-key-uuid-here",
 )
@@ -435,13 +435,13 @@ result, err := partner.RevokeOrganizationApiKey(ctx,
 
 ## Partner API Key Management
 
-### `CreatePartnerApiKey()`
+### `CreatePartnerAPIKey()`
 
 Create a new partner-level API key with specific scopes.
 
 ```go
-result, err := partner.CreatePartnerApiKey(ctx,
-    &turbodocx.CreatePartnerApiKeyRequest{
+result, err := partner.CreatePartnerAPIKey(ctx,
+    &turbodocx.CreatePartnerAPIKeyRequest{
         Name: "Integration API Key",
         Scopes: []string{
             turbodocx.ScopeOrgCreate,
@@ -458,13 +458,13 @@ fmt.Printf("Key ID: %s\n", result.Data.ID)
 fmt.Printf("Full Key: %s\n", result.Data.Key) // Only shown once!
 ```
 
-### `ListPartnerApiKeys()`
+### `ListPartnerAPIKeys()`
 
 List all partner API keys.
 
 ```go
-result, err := partner.ListPartnerApiKeys(ctx,
-    &turbodocx.ListPartnerApiKeysRequest{Limit: turbodocx.IntPtr(50)},
+result, err := partner.ListPartnerAPIKeys(ctx,
+    &turbodocx.ListPartnerAPIKeysRequest{Limit: turbodocx.IntPtr(50)},
 )
 
 for _, key := range result.Data.Results {
@@ -473,25 +473,25 @@ for _, key := range result.Data.Results {
 }
 ```
 
-### `UpdatePartnerApiKey()`
+### `UpdatePartnerAPIKey()`
 
 Update a partner API key.
 
 ```go
-result, err := partner.UpdatePartnerApiKey(ctx, "partner-key-uuid-here",
-    &turbodocx.UpdatePartnerApiKeyRequest{
+result, err := partner.UpdatePartnerAPIKey(ctx, "partner-key-uuid-here",
+    &turbodocx.UpdatePartnerAPIKeyRequest{
         Name:        "Updated Integration Key",
         Description: "Updated description",
     },
 )
 ```
 
-### `RevokePartnerApiKey()`
+### `RevokePartnerAPIKey()`
 
 Revoke a partner API key.
 
 ```go
-result, err := partner.RevokePartnerApiKey(ctx, "partner-key-uuid-here")
+result, err := partner.RevokePartnerAPIKey(ctx, "partner-key-uuid-here")
 ```
 
 ---
@@ -853,8 +853,8 @@ func main() {
     fmt.Printf("Added admin user: %s\n", user.Data.Email)
 
     // 4. Create an API key for their integration
-    apiKey, err := partner.CreateOrganizationApiKey(ctx, org.Data.ID,
-        &turbodocx.CreateOrgApiKeyRequest{
+    apiKey, err := partner.CreateOrganizationAPIKey(ctx, org.Data.ID,
+        &turbodocx.CreateOrgAPIKeyRequest{
             Name: "Production API Key",
             Role: "admin",
         },
