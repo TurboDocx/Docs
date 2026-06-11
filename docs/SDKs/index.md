@@ -2,11 +2,10 @@
 title: SDKs Overview
 sidebar_position: 1
 sidebar_label: Overview
-description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, deliverables, digital signatures, and partner management.
+description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, deliverables, digital signatures, and quoting.
 keywords:
   - turbodocx sdk
   - turbosign sdk
-  - turbopartner sdk
   - javascript sdk
   - python sdk
   - php sdk
@@ -14,8 +13,6 @@ keywords:
   - java sdk
   - document api
   - esignature sdk
-  - partner api
-  - multi-tenant sdk
   - api client library
 ---
 
@@ -24,7 +21,7 @@ import TabItem from '@theme/TabItem';
 
 # TurboDocx SDKs
 
-Official client libraries for the TurboDocx API. Build document generation, digital signature, and partner management workflows in your language of choice.
+Official client libraries for the TurboDocx API. Build document generation, digital signature, and quoting workflows in your language of choice.
 
 ## Choose Your Product
 
@@ -36,9 +33,8 @@ All five modules ship in the **same package** for each language — pick the one
 | **Deliverable** | Generate documents from templates with variable injection (DOCX / PPTX / PDF output) |
 | **TurboQuote** | Build sales quotes & proposals (CPQ): line items, a product/bundle catalog, price books |
 | **TurboWebhooks** | Receive real-time signature events instead of polling, and verify inbound deliveries |
-| **TurboPartner** | Provision & manage customer organizations, users, and API keys (multi-tenant / reseller) |
 
-TurboSign, Deliverable, TurboQuote, and TurboWebhooks all use the same `TURBODOCX_API_KEY` + `TURBODOCX_ORG_ID`. TurboPartner uses a separate partner key. See [credential requirements](#which-credentials-does-each-product-need) below.
+TurboSign, Deliverable, TurboQuote, and TurboWebhooks all use the same `TURBODOCX_API_KEY` + `TURBODOCX_ORG_ID`. See [credential requirements](#which-credentials-does-each-product-need) below.
 
 ## TurboSign SDKs
 
@@ -51,21 +47,6 @@ Send documents for legally-binding eSignatures with full audit trails.
 | **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)       |
 | **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
 | **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
-
-## TurboPartner SDKs
-
-Programmatically manage organizations, users, API keys, and entitlements for multi-tenant applications.
-
-| Language                  | Package         | Install Command               | Links                                                                                                  |
-| :------------------------ | :-------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------- |
-| **JavaScript/TypeScript** | `@turbodocx/sdk` | `npm install @turbodocx/sdk` | [Docs](/docs/SDKs/partner-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
-| **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/partner-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
-| **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/partner-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
-| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk` | [Docs](/docs/SDKs/partner-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
-
-:::info More Languages Coming Soon
-TurboPartner SDK for Java is coming soon.
-:::
 
 ## TurboWebhooks SDKs
 
@@ -123,7 +104,7 @@ Before you begin, you'll need two things from your TurboDocx account:
 - **Organization ID**: Your unique organization identifier
 
 :::note senderEmail required for TurboSign
-TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). The SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable, TurboQuote, TurboWebhooks, and TurboPartner do not require it.
+TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). The SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable, TurboQuote, and TurboWebhooks do not require it.
 :::
 
 #### Which credentials does each product need?
@@ -134,7 +115,6 @@ TurboSign also requires a `senderEmail` (used as the reply-to address for signat
 | **Deliverable** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
 | **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
 | **TurboWebhooks** | `TURBODOCX_API_KEY` (**administrator** role — non-admin keys get 403) | `TURBODOCX_ORG_ID` | the webhook secret returned by `createWebhook`, to verify inbound events |
-| **TurboPartner** | `TURBODOCX_PARTNER_API_KEY` (`TDXP-…`, **not** the org key) | — | `TURBODOCX_PARTNER_ID` |
 
 #### How to Get Your Credentials
 
@@ -472,23 +452,6 @@ Send documents for legally-binding eSignatures with full audit trails.
 | `getAuditTrail()`             | Get complete audit trail with all events and timestamps |
 
 [Learn more about TurboSign →](/docs/TurboSign/Setting%20up%20TurboSign)
-
-### TurboPartner — Partner Management
-
-Programmatically manage multi-tenant applications with organization provisioning, user management, and entitlement control.
-
-| Method                            | Description                                           |
-| :-------------------------------- | :---------------------------------------------------- |
-| `createOrganization()`            | Create a new organization under your partner account  |
-| `listOrganizations()`             | List all organizations with pagination and search     |
-| `getOrganizationDetails()`        | Get organization details including features/tracking  |
-| `updateOrganizationEntitlements()` | Update feature limits and capabilities               |
-| `addUserToOrganization()`         | Add users to organizations with specific roles        |
-| `createOrganizationApiKey()`      | Create API keys for organizations                     |
-| `createPartnerApiKey()`           | Create partner-level API keys with scoped access      |
-| `getPartnerAuditLogs()`           | Retrieve audit logs with filtering                    |
-
-[Learn more about TurboPartner →](/docs/SDKs/partner-php)
 
 ### Deliverable — Document Generation
 

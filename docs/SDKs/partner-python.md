@@ -1,5 +1,6 @@
 ---
 title: TurboPartner Python SDK
+unlisted: true
 sidebar_position: 11
 sidebar_label: "TurboPartner: Python"
 description: Official TurboDocx Partner SDK for Python. Manage organizations, users, API keys, and entitlements programmatically with async/await support.

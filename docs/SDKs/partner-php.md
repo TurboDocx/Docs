@@ -1,5 +1,6 @@
 ---
 title: TurboPartner PHP SDK
+unlisted: true
 sidebar_position: 10
 sidebar_label: "TurboPartner: PHP"
 description: Official TurboDocx Partner SDK for PHP. Manage organizations, users, API keys, and entitlements programmatically with PHP 8.1+.

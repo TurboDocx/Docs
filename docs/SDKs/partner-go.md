@@ -1,5 +1,6 @@
 ---
 title: TurboPartner Go SDK
+unlisted: true
 sidebar_position: 12
 sidebar_label: "TurboPartner: Go"
 description: Official TurboDocx Partner SDK for Go. Manage organizations, users, API keys, and entitlements programmatically with Go 1.21+.
