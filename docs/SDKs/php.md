@@ -85,7 +85,7 @@ TurboSign::configure(HttpClientConfig::fromEnvironment());
 </Tabs>
 
 :::warning Sender Email Required
-The `senderEmail` parameter is **required** for PHP SDK. This email appears as the reply-to address in signature request emails. Without it, emails will default to "API Service User via TurboSign".
+The `senderEmail` parameter is **required** for TurboSign. This email appears as the reply-to address in signature request emails. If you omit it, `configure()` throws a `ValidationException` before any request is sent (unless `skipSenderValidation` is enabled, which TurboSign does not use).
 :::
 
 ### Environment Variables
@@ -242,10 +242,16 @@ TurboSign supports four different ways to provide document files:
 ### 1. File Upload (Direct)
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
+use TurboDocx\Config\HttpClientConfig;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
 use TurboDocx\Types\Requests\SendSignatureRequest;
+
+TurboSign::configure(HttpClientConfig::fromEnvironment());
 
 $pdfContent = file_get_contents('./contract.pdf');
 
@@ -274,6 +280,9 @@ $result = TurboSign::sendSignature(
 ### 2. File URL
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
@@ -307,6 +316,9 @@ Use `fileLink` when your documents are already hosted on cloud storage (S3, Goog
 ### 3. TurboDocx Deliverable ID
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
@@ -341,6 +353,9 @@ $result = TurboSign::sendSignature(
 ### 4. TurboDocx Template ID
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;

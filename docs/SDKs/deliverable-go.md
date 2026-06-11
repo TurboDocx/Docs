@@ -39,6 +39,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 package main
 
 import (
+    "log"
     "os"
 
     sdk "github.com/TurboDocx/SDK/packages/go-sdk"
@@ -441,6 +442,7 @@ The SDK provides typed errors for different error scenarios:
 ```go
 import (
     "errors"
+    "log"
 
     sdk "github.com/TurboDocx/SDK/packages/go-sdk"
 )

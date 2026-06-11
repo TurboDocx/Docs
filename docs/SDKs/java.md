@@ -21,7 +21,7 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 
-The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
+The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:turbodocx-sdk`.
 
 ## Installation
 
@@ -31,8 +31,8 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 ```xml
 <dependency>
     <groupId>com.turbodocx</groupId>
-    <artifactId>sdk</artifactId>
-    <version>1.0.0</version>
+    <artifactId>turbodocx-sdk</artifactId>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -40,14 +40,14 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:sdk:1.0.0")
+implementation("com.turbodocx:turbodocx-sdk:0.4.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:sdk:1.0.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.4.0'
 ```
 
 </TabItem>
@@ -293,6 +293,10 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 
 ## API Reference
 
+:::note
+The snippets below assume a configured `client` and an available `Gson` instance, e.g. `Gson gson = new GsonBuilder().setPrettyPrinting().create();` (as shown in the [Quick Start](#quick-start)).
+:::
+
 ### Configure
 
 Create a new TurboDocx client using the Builder pattern.
@@ -488,6 +492,8 @@ The `type` field accepts the following string values:
 
 ### Field
 
+The coordinate-based constructor takes positional arguments in this order: `new Field(type, page, x, y, width, height, recipientEmail)`. For template-based fields, use the extended constructor shown in [Using Template-Based Fields](#using-template-based-fields).
+
 | Property          | Type             | Required | Description                                 |
 | ----------------- | ---------------- | -------- | ------------------------------------------- |
 | `type`            | `String`         | Yes      | Field type (see table above)                |
@@ -559,6 +565,6 @@ For detailed information about advanced configuration and API concepts, see:
 ## Resources
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
-- [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk)
+- [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
 - [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

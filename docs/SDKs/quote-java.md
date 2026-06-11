@@ -41,7 +41,7 @@ TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product 
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.2.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -49,14 +49,14 @@ TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product 
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.2.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.4.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.2.0")
+implementation("com.turbodocx:turbodocx-sdk:0.4.0")
 ```
 
 </TabItem>

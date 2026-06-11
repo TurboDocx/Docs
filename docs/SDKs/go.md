@@ -40,13 +40,14 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 package main
 
 import (
+    "log"
     "os"
 
     turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 )
 
 func main() {
-    // Create a new client
+    // Create a new client (reads SenderEmail from TURBODOCX_SENDER_EMAIL)
     client, err := turbodocx.NewClient(
         os.Getenv("TURBODOCX_API_KEY"),
         os.Getenv("TURBODOCX_ORG_ID"),
@@ -54,13 +55,19 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
+    _ = client
 
     // Or with custom configuration
-    client, err := turbodocx.NewClientWithConfig(turbodocx.ClientConfig{
-        APIKey:  os.Getenv("TURBODOCX_API_KEY"),
-        OrgID:   os.Getenv("TURBODOCX_ORG_ID"),
-        BaseURL: "https://api.turbodocx.com", // Optional custom base URL
+    client, err = turbodocx.NewClientWithConfig(turbodocx.ClientConfig{
+        APIKey:      os.Getenv("TURBODOCX_API_KEY"),
+        OrgID:       os.Getenv("TURBODOCX_ORG_ID"),
+        SenderEmail: os.Getenv("TURBODOCX_SENDER_EMAIL"), // Required for TurboSign
+        BaseURL:     "https://api.turbodocx.com",         // Optional custom base URL
     })
+    if err != nil {
+        log.Fatal(err)
+    }
+    _ = client
 }
 ```
 
@@ -69,6 +76,7 @@ func main() {
 ```bash
 export TURBODOCX_API_KEY=your_api_key_here
 export TURBODOCX_ORG_ID=your_org_id_here
+export TURBODOCX_SENDER_EMAIL=you@example.com  # Required for TurboSign (reply-to address)
 ```
 
 ---

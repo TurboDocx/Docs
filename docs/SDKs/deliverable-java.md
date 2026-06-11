@@ -21,7 +21,7 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 
-The official TurboDocx Deliverable SDK for Java applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
+The official TurboDocx Deliverable SDK for Java applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:turbodocx-sdk`.
 
 ## Installation
 
@@ -31,8 +31,8 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 ```xml
 <dependency>
     <groupId>com.turbodocx</groupId>
-    <artifactId>sdk</artifactId>
-    <version>1.0.0</version>
+    <artifactId>turbodocx-sdk</artifactId>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -40,14 +40,14 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:sdk:1.0.0")
+implementation("com.turbodocx:turbodocx-sdk:0.4.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:sdk:1.0.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.4.0'
 ```
 
 </TabItem>
@@ -388,8 +388,10 @@ The SDK provides typed exceptions for different error scenarios:
 | -------------------------------------------- | ----------- | ---------------------------------- |
 | `TurboDocxException`                         | varies      | Base exception for all API errors  |
 | `TurboDocxException.AuthenticationException` | 401         | Invalid or missing API credentials |
+| `TurboDocxException.AuthorizationException`  | 403         | Insufficient permissions           |
 | `TurboDocxException.ValidationException`     | 400         | Invalid request parameters         |
 | `TurboDocxException.NotFoundException`       | 404         | Deliverable or template not found  |
+| `TurboDocxException.ConflictException`       | 409         | Resource conflict                  |
 | `TurboDocxException.RateLimitException`      | 429         | Too many requests                  |
 | `TurboDocxException.NetworkException`        | -           | Network connectivity issues        |
 
@@ -457,6 +459,7 @@ Variable configuration for template injection:
 | `subvariables`           | `List<DeliverableVariable>`   | No       | Nested sub-variables for HTML content                |
 | `variableStack`          | `Object`                      | No       | Multiple instances for repeating content             |
 | `aiPrompt`               | `String`                      | No       | AI prompt for content generation (max 16,000 chars)  |
+| `allowRichTextInjection` | `Boolean`                     | No       | Allow rich text (HTML) to be injected for this variable |
 
 \*Required unless `variableStack` is provided or `isDisabled` is true.
 
@@ -547,5 +550,5 @@ For detailed information about advanced configuration and API concepts, see:
 ## Resources
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
-- [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk)
+- [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
 - [API Reference](/docs/API/Deliverable%20API)

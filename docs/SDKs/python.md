@@ -66,9 +66,11 @@ import os
 
 # Configure globally (recommended)
 TurboSign.configure(
-    api_key=os.environ["TURBODOCX_API_KEY"],  # Required: Your TurboDocx API key
-    org_id=os.environ["TURBODOCX_ORG_ID"],    # Required: Your organization ID
-    # base_url="https://api.turbodocx.com"    # Optional: Override base URL
+    api_key=os.environ["TURBODOCX_API_KEY"],        # Required: Your TurboDocx API key
+    org_id=os.environ["TURBODOCX_ORG_ID"],          # Required: Your organization ID
+    sender_email="contracts@yourcompany.com",       # Required: Reply-to address for signature emails
+    sender_name="Your Company",                     # Recommended: Sender name shown in emails
+    # base_url="https://api.turbodocx.com"          # Optional: Override base URL
 )
 ```
 
@@ -82,10 +84,12 @@ Authenticate using `api_key`. API keys are recommended for server-side applicati
 # .env
 TURBODOCX_API_KEY=your_api_key_here
 TURBODOCX_ORG_ID=your_org_id_here
+TURBODOCX_SENDER_EMAIL=contracts@yourcompany.com
+TURBODOCX_SENDER_NAME=Your Company
 ```
 
 :::warning API Credentials Required
-Both `api_key` and `org_id` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+`api_key` and `org_id` are **required** for all API requests. TurboSign additionally **requires `sender_email`** (set it on `configure()`, per call, or via the `TURBODOCX_SENDER_EMAIL` environment variable) — `configure()` raises a `ValidationError` without it. `sender_name` is optional but strongly recommended. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ---
@@ -96,12 +100,15 @@ Both `api_key` and `org_id` parameters are **required** for all API requests. To
 
 ```python
 import asyncio
-from turbodocx_sdk import TurboSign
+import json
 import os
+from turbodocx_sdk import TurboSign
 
 TurboSign.configure(
     api_key=os.environ["TURBODOCX_API_KEY"],
-    org_id=os.environ["TURBODOCX_ORG_ID"]
+    org_id=os.environ["TURBODOCX_ORG_ID"],
+    sender_email="contracts@acme.com",
+    sender_name="Acme Corp",
 )
 
 async def send_contract():
@@ -132,32 +139,38 @@ asyncio.run(send_contract())
 ### Using Template-Based Fields
 
 ```python
-result = await TurboSign.send_signature(
-    recipients=[{"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1}],
-    fields=[
-        {
-            "type": "signature",
-            "recipientEmail": "alice@example.com",
-            "template": {
-                "anchor": "{SIGNATURE_ALICE}",
-                "placement": "replace",
-                "size": {"width": 200, "height": 50},
-            },
-        },
-        {
-            "type": "date",
-            "recipientEmail": "alice@example.com",
-            "template": {
-                "anchor": "{DATE_ALICE}",
-                "placement": "replace",
-                "size": {"width": 100, "height": 30},
-            },
-        },
-    ],
-    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
-)
+import asyncio
+import json
 
-print("Result:", json.dumps(result, indent=2))
+async def send_with_template():
+    result = await TurboSign.send_signature(
+        recipients=[{"name": "Alice Smith", "email": "alice@example.com", "signingOrder": 1}],
+        fields=[
+            {
+                "type": "signature",
+                "recipientEmail": "alice@example.com",
+                "template": {
+                    "anchor": "{SIGNATURE_ALICE}",
+                    "placement": "replace",
+                    "size": {"width": 200, "height": 50},
+                },
+            },
+            {
+                "type": "date",
+                "recipientEmail": "alice@example.com",
+                "template": {
+                    "anchor": "{DATE_ALICE}",
+                    "placement": "replace",
+                    "size": {"width": 100, "height": 30},
+                },
+            },
+        ],
+        file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
+    )
+
+    print("Result:", json.dumps(result, indent=2))
+
+asyncio.run(send_with_template())
 ```
 
 :::info Template Anchors Required
@@ -169,6 +182,10 @@ print("Result:", json.dumps(result, indent=2))
 ## File Input Methods
 
 TurboSign supports four different ways to provide document files:
+
+:::note Async context
+The examples below use `await`, so they must run inside an `async` function (call them with `asyncio.run(...)`). See the [Send a Document for Signature](#send-a-document-for-signature) Quick Start for the full runnable form.
+:::
 
 ### 1. File Upload (bytes)
 
@@ -279,6 +296,21 @@ result = await TurboSign.send_signature(
 
 ## API Reference
 
+:::note Async context
+The snippets below use `await`, so they must run inside an `async` function. For a standalone script, wrap the call and run it with `asyncio.run(...)`, and add `import json` if the snippet calls `json.dumps`:
+
+```python
+import asyncio
+import json
+
+async def main():
+    result = await TurboSign.get_status("document-uuid")
+    print(json.dumps(result, indent=2))
+
+asyncio.run(main())
+```
+:::
+
 ### Configure
 
 Configure the SDK with your API credentials and organization settings.
@@ -287,6 +319,8 @@ Configure the SDK with your API credentials and organization settings.
 TurboSign.configure(
     api_key: str,                                    # Required: Your TurboDocx API key
     org_id: str,                                     # Required: Your organization ID
+    sender_email: str,                               # Required: Reply-to address for signature emails
+    sender_name: str = None,                         # Recommended: Sender name shown in emails
     base_url: str = "https://api.turbodocx.com"     # Optional: API base URL
 )
 ```
@@ -392,6 +426,7 @@ The SDK provides typed error classes for different failure scenarios. All errors
 ### Handling Errors
 
 ```python
+import asyncio
 from turbodocx_sdk import (
     TurboSign,
     TurboDocxError,
@@ -402,37 +437,40 @@ from turbodocx_sdk import (
     NetworkError,
 )
 
-try:
-    result = await TurboSign.send_signature(
-        recipients=[{"name": "John Doe", "email": "john@example.com", "signingOrder": 1}],
-        fields=[{
-            "type": "signature",
-            "page": 1,
-            "x": 100,
-            "y": 650,
-            "width": 200,
-            "height": 50,
-            "recipientEmail": "john@example.com",
-        }],
-        file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
-    )
-except AuthenticationError as e:
-    print(f"Authentication failed: {e}")
-    # Check your API key and org ID
-except ValidationError as e:
-    print(f"Validation error: {e}")
-    # Check request parameters
-except NotFoundError as e:
-    print(f"Resource not found: {e}")
-    # Document or recipient doesn't exist
-except RateLimitError as e:
-    print(f"Rate limited: {e}")
-    # Wait and retry
-except NetworkError as e:
-    print(f"Network error: {e}")
-    # Check connectivity
-except TurboDocxError as e:
-    print(f"SDK error: {e}, status_code={e.status_code}, code={e.code}")
+async def send_with_error_handling():
+    try:
+        result = await TurboSign.send_signature(
+            recipients=[{"name": "John Doe", "email": "john@example.com", "signingOrder": 1}],
+            fields=[{
+                "type": "signature",
+                "page": 1,
+                "x": 100,
+                "y": 650,
+                "width": 200,
+                "height": 50,
+                "recipientEmail": "john@example.com",
+            }],
+            file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
+        )
+    except AuthenticationError as e:
+        print(f"Authentication failed: {e}")
+        # Check your API key and org ID
+    except ValidationError as e:
+        print(f"Validation error: {e}")
+        # Check request parameters
+    except NotFoundError as e:
+        print(f"Resource not found: {e}")
+        # Document or recipient doesn't exist
+    except RateLimitError as e:
+        print(f"Rate limited: {e}")
+        # Wait and retry
+    except NetworkError as e:
+        print(f"Network error: {e}")
+        # Check connectivity
+    except TurboDocxError as e:
+        print(f"SDK error: {e}, status_code={e.status_code}, code={e.code}")
+
+asyncio.run(send_with_error_handling())
 ```
 
 ### Error Properties
@@ -556,18 +594,21 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `recipients`           | `List[Dict]` | Yes         | Recipients who will sign       |
 | `fields`               | `List[Dict]` | Yes         | Signature fields configuration |
 | `file`                 | `bytes`      | Conditional | PDF file content as bytes      |
+| `file_name`            | `str`        | No          | Original filename (used with `file` bytes) |
 | `file_link`            | `str`        | Conditional | URL to document file           |
 | `deliverable_id`       | `str`        | Conditional | TurboDocx deliverable ID       |
 | `template_id`          | `str`        | Conditional | TurboDocx template ID          |
 | `document_name`        | `str`        | No          | Document name                  |
 | `document_description` | `str`        | No          | Document description           |
-| `sender_name`          | `str`        | No          | Sender name                    |
-| `sender_email`         | `str`        | No          | Sender email                   |
+| `sender_name`          | `str`        | No          | Sender name (overrides the configured value) |
+| `sender_email`         | `str`        | No\*\*      | Sender / reply-to email (overrides the configured value) |
 | `cc_emails`            | `List[str]`  | No          | Array of CC email addresses    |
 
 :::info File Source (Conditional)
 Exactly one file source is required: `file`, `file_link`, `deliverable_id`, or `template_id`.
 :::
+
+\*\* `sender_email` is optional per call but **required at the SDK level** for TurboSign: it must be supplied via `configure()`, the `TURBODOCX_SENDER_EMAIL` environment variable, or this per-call parameter, otherwise the SDK raises a `ValidationError`.
 
 ---
 

@@ -126,59 +126,61 @@ TurboSign.configure({
   senderEmail: process.env.TURBODOCX_SENDER_EMAIL,
 });
 
-// Send document with coordinate-based fields
-const result = await TurboSign.sendSignature({
-  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
-  documentName: "Service Agreement",
-  senderName: "Acme Corp",
-  senderEmail: "contracts@acme.com",
-  recipients: [
-    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
-    { name: "Bob Johnson", email: "bob@example.com", signingOrder: 2 },
-  ],
-  fields: [
-    // Alice's signature
-    {
-      type: "signature",
-      page: 1,
-      x: 100,
-      y: 650,
-      width: 200,
-      height: 50,
-      recipientEmail: "alice@example.com",
-    },
-    {
-      type: "date",
-      page: 1,
-      x: 320,
-      y: 650,
-      width: 100,
-      height: 30,
-      recipientEmail: "alice@example.com",
-    },
-    // Bob's signature
-    {
-      type: "signature",
-      page: 1,
-      x: 100,
-      y: 720,
-      width: 200,
-      height: 50,
-      recipientEmail: "bob@example.com",
-    },
-    {
-      type: "date",
-      page: 1,
-      x: 320,
-      y: 720,
-      width: 100,
-      height: 30,
-      recipientEmail: "bob@example.com",
-    },
-  ],
-});
+(async () => {
+  // Send document with coordinate-based fields
+  const result = await TurboSign.sendSignature({
+    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+    documentName: "Service Agreement",
+    senderName: "Acme Corp",
+    senderEmail: "contracts@acme.com",
+    recipients: [
+      { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+      { name: "Bob Johnson", email: "bob@example.com", signingOrder: 2 },
+    ],
+    fields: [
+      // Alice's signature
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 650,
+        width: 200,
+        height: 50,
+        recipientEmail: "alice@example.com",
+      },
+      {
+        type: "date",
+        page: 1,
+        x: 320,
+        y: 650,
+        width: 100,
+        height: 30,
+        recipientEmail: "alice@example.com",
+      },
+      // Bob's signature
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 720,
+        width: 200,
+        height: 50,
+        recipientEmail: "bob@example.com",
+      },
+      {
+        type: "date",
+        page: 1,
+        x: 320,
+        y: 720,
+        width: 100,
+        height: 30,
+        recipientEmail: "bob@example.com",
+      },
+    ],
+  });
 
-console.log(JSON.stringify(result, null, 2));
+  console.log(JSON.stringify(result, null, 2));
+})();
 ```
 
 </TabItem>
@@ -370,23 +372,25 @@ const { TurboSign } = require("@turbodocx/sdk");
 
 const fileBuffer = readFileSync("./contract.pdf");
 
-const result = await TurboSign.sendSignature({
-  file: fileBuffer,
-  recipients: [
-    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
-  ],
-  fields: [
-    {
-      type: "signature",
-      page: 1,
-      x: 100,
-      y: 650,
-      width: 200,
-      height: 50,
-      recipientEmail: "john@example.com",
-    },
-  ],
-});
+(async () => {
+  const result = await TurboSign.sendSignature({
+    file: fileBuffer,
+    recipients: [
+      { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+    ],
+    fields: [
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 650,
+        width: 200,
+        height: 50,
+        recipientEmail: "john@example.com",
+      },
+    ],
+  });
+})();
 ```
 
 </TabItem>
@@ -793,12 +797,15 @@ Download the completed signed document as a PDF Blob.
 <TabItem value="javascript" label="JavaScript" default>
 
 ```javascript
-const result = await TurboSign.download("document-uuid");
-
-// Node.js: Save to file
 const { writeFileSync } = require("fs");
-const buffer = Buffer.from(await result.arrayBuffer());
-writeFileSync("signed-contract.pdf", buffer);
+
+(async () => {
+  const result = await TurboSign.download("document-uuid");
+
+  // Node.js: Save to file
+  const buffer = Buffer.from(await result.arrayBuffer());
+  writeFileSync("signed-contract.pdf", buffer);
+})();
 ```
 
 </TabItem>
@@ -926,44 +933,46 @@ const {
   NetworkError,
 } = require("@turbodocx/sdk");
 
-try {
-  const result = await TurboSign.sendSignature({
-    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
-    recipients: [
-      { name: "John Doe", email: "john@example.com", signingOrder: 1 },
-    ],
-    fields: [
-      {
-        type: "signature",
-        page: 1,
-        x: 100,
-        y: 650,
-        width: 200,
-        height: 50,
-        recipientEmail: "john@example.com",
-      },
-    ],
-  });
-} catch (error) {
-  if (error instanceof AuthenticationError) {
-    console.error("Authentication failed:", error.message);
-    // Check your API key and org ID
-  } else if (error instanceof ValidationError) {
-    console.error("Validation error:", error.message);
-    // Check request parameters
-  } else if (error instanceof NotFoundError) {
-    console.error("Resource not found:", error.message);
-    // Document or recipient doesn't exist
-  } else if (error instanceof RateLimitError) {
-    console.error("Rate limited:", error.message);
-    // Wait and retry
-  } else if (error instanceof NetworkError) {
-    console.error("Network error:", error.message);
-    // Check connectivity
-  } else if (error instanceof TurboDocxError) {
-    console.error("SDK error:", error.message, error.statusCode, error.code);
+(async () => {
+  try {
+    const result = await TurboSign.sendSignature({
+      fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+      recipients: [
+        { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+      ],
+      fields: [
+        {
+          type: "signature",
+          page: 1,
+          x: 100,
+          y: 650,
+          width: 200,
+          height: 50,
+          recipientEmail: "john@example.com",
+        },
+      ],
+    });
+  } catch (error) {
+    if (error instanceof AuthenticationError) {
+      console.error("Authentication failed:", error.message);
+      // Check your API key and org ID
+    } else if (error instanceof ValidationError) {
+      console.error("Validation error:", error.message);
+      // Check request parameters
+    } else if (error instanceof NotFoundError) {
+      console.error("Resource not found:", error.message);
+      // Document or recipient doesn't exist
+    } else if (error instanceof RateLimitError) {
+      console.error("Rate limited:", error.message);
+      // Wait and retry
+    } else if (error instanceof NetworkError) {
+      console.error("Network error:", error.message);
+      // Check connectivity
+    } else if (error instanceof TurboDocxError) {
+      console.error("SDK error:", error.message, error.statusCode, error.code);
+    }
   }
-}
+})();
 ```
 
 </TabItem>

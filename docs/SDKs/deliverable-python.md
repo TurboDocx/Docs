@@ -94,6 +94,7 @@ Both `api_key` and `org_id` parameters are **required** for all API requests. To
 
 ```python
 import asyncio
+import json
 from turbodocx_sdk import Deliverable
 import os
 
@@ -231,6 +232,10 @@ For repeating content (e.g., table rows), use `variableStack` instead of `text` 
 
 ## API Reference
 
+:::note Async snippets
+The snippets below are partial and run inside an `async` function. They assume you have already called `Deliverable.configure(...)` and that `asyncio` and `json` are imported (`import asyncio, json`). For a complete runnable script, wrap the calls in `async def main(): ...` and run with `asyncio.run(main())`, as shown in [Quick Start](#quick-start).
+:::
+
 ### Configure
 
 Configure the SDK with your API credentials and organization settings.
@@ -363,6 +368,7 @@ The SDK provides typed error classes for different failure scenarios. All errors
 ### Handling Errors
 
 ```python
+import asyncio
 from turbodocx_sdk import (
     Deliverable,
     TurboDocxError,
@@ -375,37 +381,40 @@ from turbodocx_sdk import (
     NetworkError,
 )
 
-try:
-    result = await Deliverable.generate_deliverable(
-        name="Q1 Report",
-        template_id="your-template-id",
-        variables=[
-            {"placeholder": "{CompanyName}", "text": "Acme Corp", "mimeType": "text"},
-        ],
-    )
-except AuthenticationError as e:
-    print(f"Authentication failed: {e}")
-    # Check your API key and org ID
-except AuthorizationError as e:
-    print(f"Not authorized: {e}")
-    # Authenticated, but lacks permission for this operation
-except ValidationError as e:
-    print(f"Validation error: {e}")
-    # Check request parameters
-except NotFoundError as e:
-    print(f"Resource not found: {e}")
-    # Template or deliverable doesn't exist
-except ConflictError as e:
-    print(f"Conflict: {e}")
-    # Request conflicts with the current resource state
-except RateLimitError as e:
-    print(f"Rate limited: {e}")
-    # Wait and retry
-except NetworkError as e:
-    print(f"Network error: {e}")
-    # Check connectivity
-except TurboDocxError as e:
-    print(f"SDK error: {e}, status_code={e.status_code}, code={e.code}")
+async def main():
+    try:
+        result = await Deliverable.generate_deliverable(
+            name="Q1 Report",
+            template_id="your-template-id",
+            variables=[
+                {"placeholder": "{CompanyName}", "text": "Acme Corp", "mimeType": "text"},
+            ],
+        )
+    except AuthenticationError as e:
+        print(f"Authentication failed: {e}")
+        # Check your API key and org ID
+    except AuthorizationError as e:
+        print(f"Not authorized: {e}")
+        # Authenticated, but lacks permission for this operation
+    except ValidationError as e:
+        print(f"Validation error: {e}")
+        # Check request parameters
+    except NotFoundError as e:
+        print(f"Resource not found: {e}")
+        # Template or deliverable doesn't exist
+    except ConflictError as e:
+        print(f"Conflict: {e}")
+        # Request conflicts with the current resource state
+    except RateLimitError as e:
+        print(f"Rate limited: {e}")
+        # Wait and retry
+    except NetworkError as e:
+        print(f"Network error: {e}")
+        # Check connectivity
+    except TurboDocxError as e:
+        print(f"SDK error: {e}, status_code={e.status_code}, code={e.code}")
+
+asyncio.run(main())
 ```
 
 ### Error Properties
