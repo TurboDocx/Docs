@@ -401,7 +401,7 @@ page, err := wh.ListWebhookDeliveries(ctx, turbodocx.ListDeliveriesRequest{
     IsDelivered: &delivered,
     HTTPStatus:  &httpStatus,
 })
-// page["results"]: []WebhookDelivery
+// page["results"]: []interface{} (each element is a map[string]interface{} delivery row)
 // page["totalRecords"]
 ```
 

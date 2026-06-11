@@ -1,5 +1,6 @@
 ---
 title: TurboPartner JavaScript SDK
+unlisted: true
 sidebar_position: 9
 sidebar_label: "TurboPartner: JavaScript"
 description: Official TurboDocx Partner SDK for JavaScript and TypeScript. Manage organizations, users, API keys, and entitlements programmatically.

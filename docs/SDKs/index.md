@@ -2,11 +2,10 @@
 title: SDKs Overview
 sidebar_position: 1
 sidebar_label: Overview
-description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, deliverables, digital signatures, and partner management.
+description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, deliverables, digital signatures, and quoting.
 keywords:
   - turbodocx sdk
   - turbosign sdk
-  - turbopartner sdk
   - javascript sdk
   - python sdk
   - php sdk
@@ -14,8 +13,6 @@ keywords:
   - java sdk
   - document api
   - esignature sdk
-  - partner api
-  - multi-tenant sdk
   - api client library
 ---
 
@@ -24,7 +21,20 @@ import TabItem from '@theme/TabItem';
 
 # TurboDocx SDKs
 
-Official client libraries for the TurboDocx API. Build document generation, digital signature, and partner management workflows in your language of choice.
+Official client libraries for the TurboDocx API. Build document generation, digital signature, and quoting workflows in your language of choice.
+
+## Choose Your Product
+
+All five modules ship in the **same package** for each language — pick the one that matches what you're building:
+
+| Product | Use it when you need to… |
+| :------------- | :----------------------------------------------------------------------------------------- |
+| **TurboSign** | Send documents for legally-binding e-signature; track status; download signed PDFs |
+| **Deliverable** | Generate documents from templates with variable injection (DOCX / PPTX / PDF output) |
+| **TurboQuote** | Build sales quotes & proposals (CPQ): line items, a product/bundle catalog, price books |
+| **TurboWebhooks** | Receive real-time signature events instead of polling, and verify inbound deliveries |
+
+TurboSign, Deliverable, TurboQuote, and TurboWebhooks all use the same `TURBODOCX_API_KEY` + `TURBODOCX_ORG_ID`. See [credential requirements](#which-credentials-does-each-product-need) below.
 
 ## TurboSign SDKs
 
@@ -35,23 +45,8 @@ Send documents for legally-binding eSignatures with full audit trails.
 | **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
 | **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)     |
 | **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)       |
-| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
-| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
-
-## TurboPartner SDKs
-
-Programmatically manage organizations, users, API keys, and entitlements for multi-tenant applications.
-
-| Language                  | Package         | Install Command               | Links                                                                                                  |
-| :------------------------ | :-------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------- |
-| **JavaScript/TypeScript** | `@turbodocx/sdk` | `npm install @turbodocx/sdk` | [Docs](/docs/SDKs/partner-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
-| **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/partner-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
-| **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/partner-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
-| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk` | [Docs](/docs/SDKs/partner-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
-
-:::info More Languages Coming Soon
-TurboPartner SDK for Java is coming soon.
-:::
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
 
 ## TurboWebhooks SDKs
 
@@ -76,8 +71,20 @@ Generate documents from templates with dynamic variable injection, download sour
 | **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/deliverable-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                 |
 | **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/deliverable-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                     |
 | **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/deliverable-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                       |
-| **Go**                    | `github.com/turbodocx/sdk` | `go get github.com/turbodocx/sdk`                                    | [Docs](/docs/SDKs/deliverable-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                         |
-| **Java**                  | `com.turbodocx:sdk`        | [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk) | [Docs](/docs/SDKs/deliverable-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/deliverable-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                         |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/deliverable-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
+
+## TurboQuote SDKs
+
+Build sales quotes and proposals programmatically: quotes and line items, a product/bundle catalog, price books, companies/contacts, and quote templates.
+
+| Language                  | Package                    | Install Command                                                      | Links                                                                                                                          |
+| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/quote-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                       |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/quote-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                           |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/quote-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                             |
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/quote-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                               |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/quote-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                           |
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
@@ -95,6 +102,19 @@ Before you begin, you'll need two things from your TurboDocx account:
 
 - **API Access Token**: Your authentication key
 - **Organization ID**: Your unique organization identifier
+
+:::note senderEmail required for TurboSign
+TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). The SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable, TurboQuote, and TurboWebhooks do not require it.
+:::
+
+#### Which credentials does each product need?
+
+| Product | API key | Org ID | Also needs |
+| :------------- | :----------------------------- | :------------------------- | :-------------------------------------------------------------- |
+| **TurboSign** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | `TURBODOCX_SENDER_EMAIL` (required — reply-to for signer emails) |
+| **Deliverable** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
+| **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
+| **TurboWebhooks** | `TURBODOCX_API_KEY` (**administrator** role — non-admin keys get 403) | `TURBODOCX_ORG_ID` | the webhook secret returned by `createWebhook`, to verify inbound events |
 
 #### How to Get Your Credentials
 
@@ -159,7 +179,7 @@ composer require turbodocx/sdk
 <TabItem value="go" label="Go">
 
 ```bash
-go get github.com/turbodocx/sdk
+go get github.com/TurboDocx/SDK/packages/go-sdk
 ```
 
 </TabItem>
@@ -168,8 +188,8 @@ go get github.com/turbodocx/sdk
 ```xml
 <dependency>
     <groupId>com.turbodocx</groupId>
-    <artifactId>sdk</artifactId>
-    <version>1.0.0</version>
+    <artifactId>turbodocx-sdk</artifactId>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -190,28 +210,31 @@ const { TurboSign } = require("@turbodocx/sdk");
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY,
   orgId: process.env.TURBODOCX_ORG_ID,
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL, // required for TurboSign
 });
 
-// Send a document for signature
-const result = await TurboSign.sendSignature({
-  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
-  recipients: [
-    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
-  ],
-  fields: [
-    {
-      type: "signature",
-      page: 1,
-      x: 100,
-      y: 500,
-      width: 200,
-      height: 50,
-      recipientEmail: "john@example.com",
-    },
-  ],
-});
+(async () => {
+  // Send a document for signature
+  const result = await TurboSign.sendSignature({
+    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+    recipients: [
+      { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+    ],
+    fields: [
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 500,
+        width: 200,
+        height: 50,
+        recipientEmail: "john@example.com",
+      },
+    ],
+  });
 
-console.log(`Document sent! ID: ${result.documentId}`);
+  console.log(`Document sent! ID: ${result.documentId}`);
+})();
 ```
 
 </TabItem>
@@ -224,6 +247,7 @@ import { TurboSign } from "@turbodocx/sdk";
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "",
   orgId: process.env.TURBODOCX_ORG_ID || "",
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL || "", // required for TurboSign
 });
 
 // Send a document for signature
@@ -252,27 +276,32 @@ console.log(`Document sent! ID: ${result.documentId}`);
 <TabItem value="python" label="Python">
 
 ```python
-from turbodocx import TurboSign
+import asyncio
 import os
+from turbodocx_sdk import TurboSign
 
 # Configure with your API key
 TurboSign.configure(
     api_key=os.environ["TURBODOCX_API_KEY"],
-    org_id=os.environ["TURBODOCX_ORG_ID"]
+    org_id=os.environ["TURBODOCX_ORG_ID"],
+    sender_email=os.environ["TURBODOCX_SENDER_EMAIL"]  # required for TurboSign
 )
 
-# Send a document for signature
-result = TurboSign.send_signature(
-    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
-    recipients=[
-        {"name": "John Doe", "email": "john@example.com", "signingOrder": 1}
-    ],
-    fields=[
-        {"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "john@example.com"}
-    ]
-)
+async def main():
+    # Send a document for signature
+    result = await TurboSign.send_signature(
+        file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
+        recipients=[
+            {"name": "John Doe", "email": "john@example.com", "signingOrder": 1}
+        ],
+        fields=[
+            {"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "john@example.com"}
+        ]
+    )
 
-print(f"Document sent! ID: {result.documentId}")
+    print(f"Document sent! ID: {result['documentId']}")
+
+asyncio.run(main())
 ```
 
 </TabItem>
@@ -328,33 +357,38 @@ package main
 import (
     "context"
     "fmt"
+    "log"
     "os"
 
-    "github.com/turbodocx/sdk"
+    turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 )
 
 func main() {
     // Configure with your API key
-    client := sdk.NewTurboSign(
+    client, err := turbodocx.NewClient(
         os.Getenv("TURBODOCX_API_KEY"),
         os.Getenv("TURBODOCX_ORG_ID"),
     )
+    if err != nil {
+        log.Fatal(err)
+    }
 
     // Send a document for signature
-    result, err := client.TurboSign.SendSignature(context.Background(), &sdk.SendSignatureRequest{
-        FileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
-        Recipients: []sdk.Recipient{
+    result, err := client.TurboSign.SendSignature(context.Background(), &turbodocx.SendSignatureRequest{
+        FileLink:    "https://www.turbodocx.com/examples/turbodocx.pdf",
+        SenderEmail: "contracts@acme.com", // required for TurboSign
+        Recipients: []turbodocx.Recipient{
             {Name: "John Doe", Email: "john@example.com", SigningOrder: 1},
         },
-        Fields: []sdk.Field{
+        Fields: []turbodocx.Field{
             {Type: "signature", Page: 1, X: 100, Y: 500, Width: 200, Height: 50, RecipientEmail: "john@example.com"},
         },
     })
     if err != nil {
-        panic(err)
+        log.Fatal(err)
     }
 
-    fmt.Printf("Document sent! ID: %s\n", result.documentId)
+    fmt.Printf("Document sent! ID: %s\n", result.DocumentID)
 }
 ```
 
@@ -362,35 +396,34 @@ func main() {
 <TabItem value="java" label="Java">
 
 ```java
-import com.turbodocx.sdk.TurboSign;
-import com.turbodocx.sdk.models.*;
+import com.turbodocx.TurboDocxClient;
+import com.turbodocx.models.*;
+
+import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // Configure with your API key
-        TurboSign turboSign = new TurboSign(
-            System.getenv("TURBODOCX_API_KEY"),
-            System.getenv("TURBODOCX_ORG_ID")
-        );
+        TurboDocxClient client = new TurboDocxClient.Builder()
+            .apiKey(System.getenv("TURBODOCX_API_KEY"))
+            .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL")) // required for TurboSign
+            .build();
 
         // Send a document for signature
-        SigningResult result = turboSign.sendSignature(
-            SigningRequest.builder()
+        SendSignatureResponse result = client.turboSign().sendSignature(
+            new SendSignatureRequest.Builder()
                 .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
-                .recipient(Recipient.builder()
-                    .name("John Doe")
-                    .email("john@example.com")
-                    .signingOrder(1)
-                    .build())
-                .field(Field.builder()
-                    .type("signature")
-                    .page(1).x(100).y(500).width(200).height(50)
-                    .recipientEmail("john@example.com")
-                    .build())
+                .recipients(Arrays.asList(
+                    new Recipient("John Doe", "john@example.com", 1)
+                ))
+                .fields(Arrays.asList(
+                    new Field("signature", 1, 100, 500, 200, 50, "john@example.com")
+                ))
                 .build()
         );
 
-        System.out.println("Document sent! ID: " + result.documentId);
+        System.out.println("Document sent! ID: " + result.getDocumentId());
     }
 }
 ```
@@ -420,23 +453,6 @@ Send documents for legally-binding eSignatures with full audit trails.
 
 [Learn more about TurboSign →](/docs/TurboSign/Setting%20up%20TurboSign)
 
-### TurboPartner — Partner Management
-
-Programmatically manage multi-tenant applications with organization provisioning, user management, and entitlement control.
-
-| Method                            | Description                                           |
-| :-------------------------------- | :---------------------------------------------------- |
-| `createOrganization()`            | Create a new organization under your partner account  |
-| `listOrganizations()`             | List all organizations with pagination and search     |
-| `getOrganizationDetails()`        | Get organization details including features/tracking  |
-| `updateOrganizationEntitlements()` | Update feature limits and capabilities               |
-| `addUserToOrganization()`         | Add users to organizations with specific roles        |
-| `createOrganizationApiKey()`      | Create API keys for organizations                     |
-| `createPartnerApiKey()`           | Create partner-level API keys with scoped access      |
-| `getPartnerAuditLogs()`           | Retrieve audit logs with filtering                    |
-
-[Learn more about TurboPartner →](/docs/SDKs/partner-php)
-
 ### Deliverable — Document Generation
 
 Generate documents from templates with dynamic variable injection, download source files and PDFs.
@@ -452,6 +468,38 @@ Generate documents from templates with dynamic variable injection, download sour
 | `downloadPDF()`             | Download the PDF version                                   |
 
 [Learn more about Deliverable SDKs →](/docs/SDKs/deliverable-javascript)
+
+### TurboQuote — Sales Quoting & CPQ
+
+Build quotes and proposals: line items, a product/bundle catalog, price books, companies, and contacts.
+
+| Method                       | Description                                                        |
+| :--------------------------- | :---------------------------------------------------------------- |
+| `createQuote()`              | Create a draft quote for a company and contact                    |
+| `addLineItems()`             | Add product or bundle line items to a quote                       |
+| `sendQuote()`                | Send a quote to the customer for review                           |
+| `sendQuoteWithDeliverable()` | Merge a TurboDocx Deliverable with the quote and send for e-signature |
+| `downloadQuotePdf()`         | Download the rendered quote PDF                                    |
+| `createProduct()` / `createBundle()` / `createPriceBook()` | Manage the product catalog and pricing |
+| `createAndSend()`            | Create, add line items, and send in a single call                 |
+
+[Learn more about TurboQuote SDKs →](/docs/SDKs/quote-javascript)
+
+### TurboWebhooks — Signature Events
+
+Subscribe a per-org endpoint to TurboSign events and verify inbound deliveries with HMAC-SHA256. **Requires an administrator API key.**
+
+| Method                       | Description                                                       |
+| :--------------------------- | :--------------------------------------------------------------- |
+| `createWebhook()`            | Subscribe the org's `signature` webhook (returns the secret once) |
+| `getWebhook()`               | Get the webhook plus delivery stats                              |
+| `updateWebhook()`            | Update URLs, events, or active state                            |
+| `testWebhook()`              | Fire a synthetic delivery to all configured URLs                |
+| `regenerateWebhookSecret()`  | Rotate the HMAC secret                                          |
+| `listWebhookDeliveries()` / `replayWebhookDelivery()` | Inspect and retry past deliveries        |
+| `verifyWebhookSignature()`   | Free function — verify the `X-TurboDocx-Signature` header on a received event |
+
+[Learn more about TurboWebhooks SDKs →](/docs/SDKs/webhooks-javascript)
 
 ---
 
@@ -484,19 +532,21 @@ All SDKs provide structured error handling with detailed error codes:
 ```javascript
 const { TurboSign, TurboDocxError } = require("@turbodocx/sdk");
 
-try {
-  const result = await TurboSign.sendSignature({
-    /* ... */
-  });
-} catch (error) {
-  if (error instanceof TurboDocxError) {
-    console.error(`Error ${error.code}: ${error.message}`);
-    // Handle specific error codes
-    if (error.code === "VALIDATION_ERROR") {
-      // Handle validation error
+(async () => {
+  try {
+    const result = await TurboSign.sendSignature({
+      /* ... */
+    });
+  } catch (error) {
+    if (error instanceof TurboDocxError) {
+      console.error(`Error ${error.code}: ${error.message}`);
+      // Handle specific error codes
+      if (error.code === "VALIDATION_ERROR") {
+        // Handle validation error
+      }
     }
   }
-}
+})();
 ```
 
 </TabItem>
@@ -524,16 +574,19 @@ try {
 <TabItem value="python" label="Python">
 
 ```python
-from turbodocx import TurboSign
-from turbodocx.exceptions import TurboDocxError
+import asyncio
+from turbodocx_sdk import TurboSign, TurboDocxError
 
-try:
-    result = await TurboSign.send_signature(...)
-except TurboDocxError as e:
-    print(f"Error {e.code}: {e.message}")
-    if e.code == "VALIDATION_ERROR":
-        # Handle validation error
-        pass
+async def main():
+    try:
+        result = await TurboSign.send_signature(...)
+    except TurboDocxError as e:
+        print(f"Error {e.code}: {e.message}")
+        if e.code == "VALIDATION_ERROR":
+            # Handle validation error
+            pass
+
+asyncio.run(main())
 ```
 
 </TabItem>
