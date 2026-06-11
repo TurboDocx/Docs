@@ -263,14 +263,15 @@ client, err := turbodocx.NewClient(apiKey, orgID string)
 
 // With custom configuration
 client, err := turbodocx.NewClientWithConfig(turbodocx.ClientConfig{
-    APIKey:  "your-api-key",
-    OrgID:   "your-org-id",
-    BaseURL: "https://api.turbodocx.com", // Optional
+    APIKey:      "your-api-key",
+    OrgID:       "your-org-id",
+    SenderEmail: "you@example.com",            // Required for TurboSign (reply-to address)
+    BaseURL:     "https://api.turbodocx.com", // Optional
 })
 ```
 
 :::warning API Credentials Required
-Both `APIKey` and `OrgID` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+`APIKey` (or `AccessToken`), `OrgID`, **and** `SenderEmail` are **required** for TurboSign operations. `SenderEmail` is used as the reply-to address for signature request emails (it can also be supplied via the `TURBODOCX_SENDER_EMAIL` environment variable). To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ### Prepare for review

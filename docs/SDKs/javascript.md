@@ -69,6 +69,8 @@ const { TurboSign } = require("@turbodocx/sdk");
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY, // Required : Your TurboDocx API key
   orgId: process.env.TURBODOCX_ORG_ID, // Required: Your organization ID
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL, // Required: reply-to address for signature request emails
+  senderName: "Your Company Name", // Optional but recommended: appears as the sender name
   // Optional: override base URL for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -84,6 +86,8 @@ import { TurboSign } from "@turbodocx/sdk";
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "", // Required : Your TurboDocx API key
   orgId: process.env.TURBODOCX_ORG_ID || "", // Required: Your organization ID
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL || "", // Required: reply-to address for signature request emails
+  senderName: "Your Company Name", // Optional but recommended: appears as the sender name
   // Optional: override base URL for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -119,6 +123,7 @@ const { TurboSign } = require("@turbodocx/sdk");
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY,
   orgId: process.env.TURBODOCX_ORG_ID,
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL,
 });
 
 // Send document with coordinate-based fields
@@ -185,6 +190,7 @@ import { TurboSign } from "@turbodocx/sdk";
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "",
   orgId: process.env.TURBODOCX_ORG_ID || "",
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL || "",
 });
 
 // Send document with coordinate-based fields
@@ -595,6 +601,8 @@ Configure the SDK with your API credentials and organization settings.
 TurboSign.configure({
   apiKey: string;        // Required : Your TurboDocx API key
   orgId: string;         // Required: Your organization ID
+  senderEmail: string;   // Required: reply-to address for signature request emails
+  senderName?: string;   // Optional: sender name in emails (default: 'API Service User')
   baseUrl?: string;      // Optional: API base URL (default: 'https://api.turbodocx.com')
 });
 ```
@@ -610,6 +618,7 @@ const { TurboSign } = require("@turbodocx/sdk");
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY,
   orgId: process.env.TURBODOCX_ORG_ID,
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL, // Required for TurboSign
   // Optional: override for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -624,6 +633,7 @@ import { TurboSign } from "@turbodocx/sdk";
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "",
   orgId: process.env.TURBODOCX_ORG_ID || "",
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL || "", // Required for TurboSign
   // Optional: override for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -893,8 +903,10 @@ The SDK provides typed error classes for different failure scenarios. All errors
 | --------------------- | ----------- | ---------------------- | ----------------------------------- |
 | `TurboDocxError`      | varies      | varies                 | Base error class for all SDK errors |
 | `AuthenticationError` | 401         | `AUTHENTICATION_ERROR` | Invalid or missing API credentials  |
+| `AuthorizationError`  | 403         | `AUTHORIZATION_ERROR`  | API key lacks required permissions  |
 | `ValidationError`     | 400         | `VALIDATION_ERROR`     | Invalid request parameters          |
 | `NotFoundError`       | 404         | `NOT_FOUND`            | Document or resource not found      |
+| `ConflictError`       | 409         | `CONFLICT`             | Resource conflict                   |
 | `RateLimitError`      | 429         | `RATE_LIMIT_EXCEEDED`  | Too many requests                   |
 | `NetworkError`        | -           | `NETWORK_ERROR`        | Network connectivity issues         |
 
@@ -1096,12 +1108,14 @@ Field configuration supporting both coordinate-based and template-based position
 
 | Property        | Type      | Required | Description                                                      |
 | --------------- | --------- | -------- | ---------------------------------------------------------------- |
-| `anchor`        | `string`  | Yes      | Text anchor pattern like `{TagName}`                             |
-| `placement`     | `string`  | Yes      | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
-| `size`          | `object`  | Yes      | `{ width: number; height: number }`                              |
+| `anchor`        | `string`  | No†      | Text anchor pattern like `{TagName}`                             |
+| `placement`     | `string`  | No       | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size`          | `object`  | No       | `{ width: number; height: number }`                              |
 | `offset`        | `object`  | No       | `{ x: number; y: number }`                                       |
 | `caseSensitive` | `boolean` | No       | Case sensitive search (default: false)                           |
 | `useRegex`      | `boolean` | No       | Use regex for anchor/searchText (default: false)                 |
+
+†All template properties are optional in the type definition, but at least one of `anchor` or `searchText` must be provided for anchor-based positioning to work.
 
 ### CreateSignatureReviewLinkRequest / SendSignatureRequest
 

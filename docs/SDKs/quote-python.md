@@ -465,7 +465,8 @@ bundle = await TurboQuote.create_bundle({
 | `list_price_book_products` | `(id, options?)` | paginated list |
 
 ```python
-# name, priceBookTypeId, validFrom, and discountPercent are all REQUIRED.
+# name, priceBookTypeId, and validFrom are REQUIRED.
+# discountPercent is optional and defaults to 0 if not provided.
 # priceBookTypeId comes from a create_type with categoryType "pricebook_type".
 pricebook = await TurboQuote.create_price_book({
     "name": "Partner Tier A",
@@ -622,6 +623,7 @@ from turbodocx_sdk import (
     AuthorizationError,
     ValidationError,
     NotFoundError,
+    ConflictError,
     RateLimitError,
     NetworkError,
 )

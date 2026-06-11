@@ -253,6 +253,22 @@ for (const err of result.summary.errors) {
 }
 ```
 
+### notifyWebhook
+
+Manually send a notification to all URLs configured on the webhook. Routes through the same backend handler as `testWebhook` and returns an identical response shape. Exposed for symmetry with the backend surface; prefer `testWebhook` in new code.
+
+```typescript
+const result = await TurboWebhooks.notifyWebhook({
+  eventType: 'signature.document.completed',
+  payload: { documentId: '...', documentName: '...' },
+});
+
+console.log(`${result.summary.successful}/${result.summary.total} succeeded`);
+for (const err of result.summary.errors) {
+  console.log(`  failure: ${err}`);  // per-URL failure messages
+}
+```
+
 ### regenerateWebhookSecret
 
 Rotate the HMAC secret. The new secret is shown **once**; old signatures fail immediately after rotation.

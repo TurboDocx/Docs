@@ -93,7 +93,7 @@ TURBODOCX_ORG_ID=your_org_id_here
 ```
 
 :::caution API Credentials Required
-Both `apiKey` and `orgId` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+An `apiKey` (or `accessToken` as an alternative) is **required** for all API requests; `orgId` is optional but recommended for organization-scoped operations. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ---

@@ -386,14 +386,23 @@ $items = TurboQuote::addLineItems('quote-uuid', [
 
 #### addBundleLineItems
 
+Pass a single `AddBundleLineItemRequest` or an array of them.
+
 ```php
 use TurboDocx\Types\Requests\Quote\AddBundleLineItemRequest;
 
-$items = TurboQuote::addBundleLineItems('quote-uuid', new AddBundleLineItemRequest(
-    bundleId: 'bundle-uuid',
-    bundleName: 'Starter Bundle',
-    quantity: 1,
-));
+$items = TurboQuote::addBundleLineItems('quote-uuid', [
+    new AddBundleLineItemRequest(
+        bundleId: 'bundle-uuid-1',
+        bundleName: 'Starter Bundle',
+        quantity: 1,
+    ),
+    new AddBundleLineItemRequest(
+        bundleId: 'bundle-uuid-2',
+        bundleName: 'Premium Add-ons',
+        quantity: 2,
+    ),
+]);
 ```
 
 #### updateLineItem

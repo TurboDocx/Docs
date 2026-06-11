@@ -274,7 +274,7 @@ TurboSign.configure(
 )
 
 # Send a document for signature
-result = TurboSign.send_signature(
+result = await TurboSign.send_signature(
     file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
     recipients=[
         {"name": "John Doe", "email": "john@example.com", "signingOrder": 1}
@@ -284,7 +284,7 @@ result = TurboSign.send_signature(
     ]
 )
 
-print(f"Document sent! ID: {result.documentId}")
+print(f"Document sent! ID: {result['documentId']}")
 ```
 
 </TabItem>
@@ -366,7 +366,7 @@ func main() {
         panic(err)
     }
 
-    fmt.Printf("Document sent! ID: %s\n", result.documentId)
+    fmt.Printf("Document sent! ID: %s\n", result.DocumentID)
 }
 ```
 
@@ -386,8 +386,8 @@ public class Main {
         );
 
         // Send a document for signature
-        SigningResult result = turboSign.sendSignature(
-            SigningRequest.builder()
+        SendSignatureResponse result = turboSign.sendSignature(
+            SendSignatureRequest.builder()
                 .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
                 .recipient(Recipient.builder()
                     .name("John Doe")
@@ -402,7 +402,7 @@ public class Main {
                 .build()
         );
 
-        System.out.println("Document sent! ID: " + result.documentId);
+        System.out.println("Document sent! ID: " + result.getDocumentId());
     }
 }
 ```

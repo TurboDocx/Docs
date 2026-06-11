@@ -237,14 +237,15 @@ Configure the SDK with your API credentials and organization settings.
 
 ```python
 Deliverable.configure(
-    api_key: str,                                    # Required: Your TurboDocx API key
-    org_id: str,                                     # Required: Your organization ID
-    base_url: str = "https://api.turbodocx.com"     # Optional: API base URL
+    api_key: Optional[str] = None,                   # API key (or use access_token)
+    access_token: Optional[str] = None,              # OAuth2 access token (alternative to api_key)
+    base_url: str = "https://api.turbodocx.com",     # Optional: API base URL
+    org_id: Optional[str] = None,                    # Required: Your organization ID
 )
 ```
 
 :::caution API Credentials Required
-Both `api_key` and `org_id` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+All parameters are optional and keyword-only. Either `api_key` or `access_token` must be provided for authentication, and `org_id` is **required** for all Deliverable operations (enforced at runtime). To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ### Generate deliverable
@@ -352,8 +353,10 @@ The SDK provides typed error classes for different failure scenarios. All errors
 | --------------------- | ----------- | ----------------------------------- |
 | `TurboDocxError`      | varies      | Base error class for all SDK errors |
 | `AuthenticationError` | 401         | Invalid or missing API credentials  |
+| `AuthorizationError`  | 403         | Authenticated but lacks required permissions |
 | `ValidationError`     | 400         | Invalid request parameters          |
 | `NotFoundError`       | 404         | Deliverable or template not found   |
+| `ConflictError`       | 409         | Request conflicts with current resource state |
 | `RateLimitError`      | 429         | Too many requests                   |
 | `NetworkError`        | -           | Network connectivity issues         |
 
@@ -364,8 +367,10 @@ from turbodocx_sdk import (
     Deliverable,
     TurboDocxError,
     AuthenticationError,
+    AuthorizationError,
     ValidationError,
     NotFoundError,
+    ConflictError,
     RateLimitError,
     NetworkError,
 )
@@ -381,12 +386,18 @@ try:
 except AuthenticationError as e:
     print(f"Authentication failed: {e}")
     # Check your API key and org ID
+except AuthorizationError as e:
+    print(f"Not authorized: {e}")
+    # Authenticated, but lacks permission for this operation
 except ValidationError as e:
     print(f"Validation error: {e}")
     # Check request parameters
 except NotFoundError as e:
     print(f"Resource not found: {e}")
     # Template or deliverable doesn't exist
+except ConflictError as e:
+    print(f"Conflict: {e}")
+    # Request conflicts with the current resource state
 except RateLimitError as e:
     print(f"Rate limited: {e}")
     # Wait and retry

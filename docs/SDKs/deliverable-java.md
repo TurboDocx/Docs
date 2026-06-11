@@ -495,34 +495,26 @@ Options for `listDeliverables`:
 
 ### DeliverableRecord
 
-The deliverable object returned by `listDeliverables`:
+The deliverable object returned by both `listDeliverables` and `getDeliverableDetails`. Both methods return the same type.
 
-| Property          | Type         | Description                           |
-| ----------------- | ------------ | ------------------------------------- |
-| `id`              | `String`     | Unique deliverable ID (UUID)          |
-| `name`            | `String`     | Deliverable name                      |
-| `description`     | `String`     | Description text                      |
-| `templateId`      | `String`     | Source template ID                    |
-| `createdBy`       | `String`     | User ID of the creator                |
-| `email`           | `String`     | Creator's email address               |
-| `fileSize`        | `Long`       | File size in bytes                    |
-| `fileType`        | `String`     | MIME type of the generated file       |
-| `defaultFont`     | `String`     | Default font used                     |
-| `fonts`           | `List<Font>` | Fonts used in the document            |
-| `isActive`        | `Boolean`    | Whether the deliverable is active     |
-| `createdOn`       | `String`     | ISO 8601 creation timestamp           |
-| `updatedOn`       | `String`     | ISO 8601 last update timestamp        |
-| `tags`            | `List<Tag>`  | Associated tags (when `showTags=true`)|
-
-### DeliverableDetailRecord
-
-The deliverable object returned by `getDeliverableDetails`. Includes all fields from [DeliverableRecord](#deliverablerecord) **except `fileSize`**, plus:
-
-| Property             | Type           | Description                              |
-| -------------------- | -------------- | ---------------------------------------- |
-| `templateName`       | `String`       | Source template name                     |
-| `templateNotDeleted` | `Boolean`      | Whether the source template still exists |
-| `variables`          | `List<Object>` | Parsed variable objects with values      |
+| Property             | Type                         | Description                              |
+| -------------------- | ---------------------------- | ---------------------------------------- |
+| `id`                 | `String`                     | Unique deliverable ID (UUID)             |
+| `name`               | `String`                     | Deliverable name                         |
+| `description`        | `String`                     | Description text                         |
+| `templateId`         | `String`                     | Source template ID                       |
+| `templateName`       | `String`                     | Source template name                     |
+| `templateNotDeleted` | `boolean`                    | Whether the source template still exists |
+| `createdBy`          | `String`                     | User ID of the creator                   |
+| `email`              | `String`                     | Creator's email address                  |
+| `fileSize`           | `Long`                       | File size in bytes                       |
+| `fileType`           | `String`                     | MIME type of the generated file          |
+| `defaultFont`        | `String`                     | Default font used                        |
+| `isActive`           | `boolean`                    | Whether the deliverable is active        |
+| `createdOn`          | `String`                     | ISO 8601 creation timestamp              |
+| `updatedOn`          | `String`                     | ISO 8601 last update timestamp           |
+| `variables`          | `List<DeliverableVariable>`  | Parsed variable objects with values      |
+| `tags`               | `List<Tag>`                  | Associated tags (when `showTags=true`)   |
 
 ### Tag
 

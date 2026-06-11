@@ -502,8 +502,9 @@ use TurboDocx\Types\Responses\VoidDocumentResponse;
 
 $result = TurboSign::void('document-uuid', 'Document needs to be revised');
 
-echo "Success: " . ($result->success ? 'Yes' : 'No') . "\n";
-echo "Message: {$result->message}\n";
+echo "Document ID: {$result->id}\n";
+echo "Status: {$result->status}\n";
+echo "Void Reason: {$result->voidReason}\n";
 ```
 
 ### Resend
@@ -735,7 +736,6 @@ enum DocumentStatus: string {
     case SETUP_COMPLETE = 'setup_complete';
     case REVIEW_READY = 'review_ready';
     case UNDER_REVIEW = 'under_review';
-    case PENDING = 'pending';
     case COMPLETED = 'completed';
     case VOIDED = 'voided';
 }
