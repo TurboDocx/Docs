@@ -185,7 +185,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>0.4.0</version>
 </dependency>
 ```
 
