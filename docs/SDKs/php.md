@@ -17,8 +17,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # PHP SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 
 The official TurboDocx SDK for PHP applications. Build document generation and digital signature workflows with modern PHP 8.1+ features, strong typing, and comprehensive error handling. Available on Packagist as `turbodocx/sdk`.
 
@@ -82,7 +85,7 @@ TurboSign::configure(HttpClientConfig::fromEnvironment());
 </Tabs>
 
 :::warning Sender Email Required
-The `senderEmail` parameter is **required** for PHP SDK. This email appears as the reply-to address in signature request emails. Without it, emails will default to "API Service User via TurboSign".
+The `senderEmail` parameter is **required** for TurboSign. This email appears as the reply-to address in signature request emails. If you omit it, `configure()` throws a `ValidationException` before any request is sent (unless `skipSenderValidation` is enabled, which TurboSign does not use).
 :::
 
 ### Environment Variables
@@ -239,10 +242,16 @@ TurboSign supports four different ways to provide document files:
 ### 1. File Upload (Direct)
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
+use TurboDocx\Config\HttpClientConfig;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
 use TurboDocx\Types\Requests\SendSignatureRequest;
+
+TurboSign::configure(HttpClientConfig::fromEnvironment());
 
 $pdfContent = file_get_contents('./contract.pdf');
 
@@ -271,6 +280,9 @@ $result = TurboSign::sendSignature(
 ### 2. File URL
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
@@ -304,6 +316,9 @@ Use `fileLink` when your documents are already hosted on cloud storage (S3, Goog
 ### 3. TurboDocx Deliverable ID
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
@@ -338,6 +353,9 @@ $result = TurboSign::sendSignature(
 ### 4. TurboDocx Template ID
 
 ```php
+<?php
+
+use TurboDocx\TurboSign;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
@@ -499,8 +517,9 @@ use TurboDocx\Types\Responses\VoidDocumentResponse;
 
 $result = TurboSign::void('document-uuid', 'Document needs to be revised');
 
-echo "Success: " . ($result->success ? 'Yes' : 'No') . "\n";
-echo "Message: {$result->message}\n";
+echo "Document ID: {$result->id}\n";
+echo "Status: {$result->status}\n";
+echo "Void Reason: {$result->voidReason}\n";
 ```
 
 ### Resend
@@ -732,7 +751,6 @@ enum DocumentStatus: string {
     case SETUP_COMPLETE = 'setup_complete';
     case REVIEW_READY = 'review_ready';
     case UNDER_REVIEW = 'under_review';
-    case PENDING = 'pending';
     case COMPLETED = 'completed';
     case VOIDED = 'voided';
 }

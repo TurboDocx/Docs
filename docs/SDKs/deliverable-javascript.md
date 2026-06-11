@@ -14,8 +14,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # JavaScript / TypeScript SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 
 The official TurboDocx Deliverable SDK for JavaScript and TypeScript applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically. Available on npm as `@turbodocx/sdk`.
 
@@ -592,8 +595,10 @@ The SDK provides typed error classes for different failure scenarios. All errors
 | --------------------- | ----------- | ---------------------- | ---------------------------------------- |
 | `TurboDocxError`      | varies      | varies                 | Base error class for all SDK errors      |
 | `AuthenticationError` | 401         | `AUTHENTICATION_ERROR` | Invalid or missing API credentials       |
+| `AuthorizationError`  | 403         | `AUTHORIZATION_ERROR`  | Forbidden: API key lacks required permissions |
 | `ValidationError`     | 400         | `VALIDATION_ERROR`     | Invalid request parameters               |
 | `NotFoundError`       | 404         | `NOT_FOUND`            | Deliverable or template not found        |
+| `ConflictError`       | 409         | `CONFLICT`             | Resource conflict                        |
 | `RateLimitError`      | 429         | `RATE_LIMIT_EXCEEDED`  | Too many requests                        |
 | `NetworkError`        | -           | `NETWORK_ERROR`        | Network connectivity issues              |
 
@@ -751,6 +756,7 @@ Variable configuration for template injection:
 | `subvariables`           | `DeliverableVariable[]` | No       | Nested sub-variables for HTML content                |
 | `variableStack`          | `object \| array`       | No       | Multiple instances for repeating content             |
 | `aiPrompt`               | `string`                | No       | AI prompt for content generation (max 16,000 chars)  |
+| `allowRichTextInjection` | `boolean`               | No       | Whether to allow rich text injection                 |
 
 \*Required unless `variableStack` is provided or `isDisabled` is true.
 
@@ -791,38 +797,29 @@ Options for `listDeliverables`:
 
 ### DeliverableRecord
 
-The deliverable object returned by `listDeliverables`:
+The deliverable object returned by both `listDeliverables` and `getDeliverableDetails`. Fields marked _details only_ are populated only by `getDeliverableDetails`:
 
 &nbsp;
 
-| Property          | Type       | Description                           |
-| ----------------- | ---------- | ------------------------------------- |
-| `id`              | `string`   | Unique deliverable ID (UUID)          |
-| `name`            | `string`   | Deliverable name                      |
-| `description`     | `string`   | Description text                      |
-| `templateId`      | `string`   | Source template ID                    |
-| `createdBy`       | `string`   | User ID of the creator                |
-| `email`           | `string`   | Creator's email address               |
-| `fileSize`        | `number`   | File size in bytes                    |
-| `fileType`        | `string`   | MIME type of the generated file       |
-| `defaultFont`     | `string`   | Default font used                     |
-| `fonts`           | `Font[]`   | Fonts used in the document            |
-| `isActive`        | `boolean`  | Whether the deliverable is active     |
-| `createdOn`       | `string`   | ISO 8601 creation timestamp           |
-| `updatedOn`       | `string`   | ISO 8601 last update timestamp        |
-| `tags`            | `Tag[]`    | Associated tags (when `showTags=true`)|
-
-### DeliverableDetailRecord
-
-The deliverable object returned by `getDeliverableDetails`. Includes all fields from [DeliverableRecord](#deliverablerecord) **except `fileSize`**, plus:
-
-&nbsp;
-
-| Property             | Type                    | Description                              |
-| -------------------- | ----------------------- | ---------------------------------------- |
-| `templateName`       | `string`                | Source template name                     |
-| `templateNotDeleted` | `boolean`               | Whether the source template still exists |
-| `variables`          | `DeliverableVariable[]` | Parsed variable objects with values      |
+| Property             | Type                    | Description                                          |
+| -------------------- | ----------------------- | ---------------------------------------------------- |
+| `id`                 | `string`                | Unique deliverable ID (UUID)                         |
+| `name`               | `string`                | Deliverable name                                     |
+| `description`        | `string`                | Description text                                     |
+| `templateId`         | `string`                | Source template ID                                   |
+| `templateName`       | `string`                | Source template name                                 |
+| `templateNotDeleted` | `boolean`               | Whether the source template still exists             |
+| `createdBy`          | `string`                | User ID of the creator                               |
+| `email`              | `string`                | Creator's email address                              |
+| `fileSize`           | `number`                | File size in bytes                                   |
+| `fileType`           | `string`                | MIME type of the generated file                      |
+| `defaultFont`        | `string`                | Default font used                                    |
+| `fonts`              | `Font[]`                | Fonts used in the document                           |
+| `isActive`           | `boolean`               | Whether the deliverable is active                    |
+| `createdOn`          | `string`                | ISO 8601 creation timestamp                          |
+| `updatedOn`          | `string`                | ISO 8601 last update timestamp                       |
+| `variables`          | `DeliverableVariable[]` | Parsed variable objects with values (_details only_) |
+| `tags`               | `Tag[]`                 | Associated tags (when `showTags=true`)               |
 
 ### Tag
 

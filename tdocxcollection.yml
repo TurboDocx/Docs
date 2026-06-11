@@ -491,6 +491,32 @@ tags:
 
       Folders have type set to folder
   - name: Deliverable Routes
+  - name: Webhook Routes
+    description: >-
+      The Webhook Routes API provides full lifecycle management for
+      TurboDocx signature webhooks. Webhooks let your application receive
+      real-time HTTP notifications when signature events occur — for example
+      when a document is completed or voided.
+
+      The SDK exposes a single fixed-name webhook per org (`signature`) that
+      mirrors the **Signature Webhooks** settings page in the TurboDocx UI.
+      Users who need multi-webhook management may call the REST API directly.
+
+      All routes require an **administrator** TDX- API key. Non-admin keys
+      receive a `403 Forbidden` response.
+
+      ## Endpoints
+
+      - **POST** `/api/webhooks` — Register a new signature webhook.
+      - **GET** `/api/webhooks/signature` — Retrieve the webhook with delivery stats.
+      - **PATCH** `/api/webhooks/signature` — Update URLs, events, or active state.
+      - **DELETE** `/api/webhooks/signature` — Remove the webhook.
+      - **POST** `/api/webhooks/signature/test` — Send a test delivery.
+      - **POST** `/api/webhooks/signature/notify` — Send a manual notification.
+      - **POST** `/api/webhooks/signature/regenerate` — Rotate the HMAC secret.
+      - **GET** `/api/webhooks/signature/deliveries` — List delivery history.
+      - **POST** `/api/webhooks/signature/replay` — Retry a specific delivery.
+      - **GET** `/api/webhooks/signature/stats` — Aggregate delivery statistics.
 paths:
   /Variable:
     post:
@@ -1902,6 +1928,1523 @@ paths:
       responses:
         "200":
           description: Successful response
+          content:
+            application/json: {}
+  /api/webhooks:
+    post:
+      tags:
+        - Webhook Routes
+      summary: Create Webhook
+      description: >-
+        Register a new signature webhook for the org. The `name` field is
+        hardcoded to `signature` by the SDK. The returned `secret` is shown
+        **once** — store it on receipt. It cannot be retrieved later; use
+        Regenerate Webhook Secret if lost.
+
+        Returns 409 if a webhook named `signature` already exists for this org.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Webhook name. The SDK always sends "signature".
+                  example: signature
+                urls:
+                  type: array
+                  description: One or more HTTPS endpoints to receive event payloads. HTTP URLs are rejected.
+                  items:
+                    type: string
+                  example:
+                    - https://example.com/webhooks/turbodocx
+                events:
+                  type: array
+                  description: List of event types to subscribe to.
+                  items:
+                    type: string
+                  example:
+                    - signature.document.completed
+                    - signature.document.voided
+              required:
+                - name
+                - urls
+                - events
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Webhook created successfully. Save the returned secret — it is shown once only.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: Unique webhook ID
+                      secret:
+                        type: string
+                        description: HMAC signing secret. Shown once; store immediately.
+                  message:
+                    type: string
+        "400":
+          description: Bad Request — validation error (e.g. HTTP URL provided)
+          content:
+            application/json: {}
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "409":
+          description: Conflict — a webhook named "signature" already exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+  /api/webhooks/signature:
+    get:
+      tags:
+        - Webhook Routes
+      summary: Get Webhook
+      description: >-
+        Retrieve the org's signature webhook including current configuration,
+        delivery statistics, and the list of available event types.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  urls:
+                    type: array
+                    items:
+                      type: string
+                  events:
+                    type: array
+                    items:
+                      type: string
+                  isActive:
+                    type: boolean
+                  createdOn:
+                    type: string
+                    format: date-time
+                  updatedOn:
+                    type: string
+                    format: date-time
+                  deliveryStats:
+                    type: object
+                    properties:
+                      totalDeliveries:
+                        type: integer
+                      successfulDeliveries:
+                        type: integer
+                      failedDeliveries:
+                        type: integer
+                      pendingRetries:
+                        type: integer
+                  availableEvents:
+                    type: array
+                    items:
+                      type: string
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+    patch:
+      tags:
+        - Webhook Routes
+      summary: Update Webhook
+      description: >-
+        Patch one or more fields on the org's signature webhook. All fields are
+        optional — supply only what you want to change.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                urls:
+                  type: array
+                  description: Replace the full list of delivery URLs.
+                  items:
+                    type: string
+                  example:
+                    - https://example.com/webhooks/turbodocx
+                events:
+                  type: array
+                  description: Replace the subscribed event types.
+                  items:
+                    type: string
+                  example:
+                    - signature.document.completed
+                isActive:
+                  type: boolean
+                  description: Enable or disable delivery without deleting the webhook.
+                  example: true
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Webhook updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      urls:
+                        type: array
+                        items:
+                          type: string
+                      events:
+                        type: array
+                        items:
+                          type: string
+                      isActive:
+                        type: boolean
+                      createdOn:
+                        type: string
+                        format: date-time
+                      updatedOn:
+                        type: string
+                        format: date-time
+                  message:
+                    type: string
+        "400":
+          description: Bad Request — validation error
+          content:
+            application/json: {}
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+    delete:
+      tags:
+        - Webhook Routes
+      summary: Delete Webhook
+      description: >-
+        Soft-delete the org's signature webhook and its delivery history.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Webhook deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Webhook deleted successfully
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+  /api/webhooks/signature/test:
+    post:
+      tags:
+        - Webhook Routes
+      summary: Test Webhook
+      description: >-
+        Send a test event delivery to all URLs configured on the org's
+        signature webhook. Returns a summary of delivery results including
+        any per-URL error messages.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventType:
+                  type: string
+                  description: The event type to simulate.
+                  example: signature.document.completed
+                payload:
+                  type: object
+                  description: Arbitrary JSON payload to include in the test delivery.
+                  example:
+                    documentId: doc_abc123
+                    status: completed
+              required:
+                - eventType
+                - payload
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Test deliveries dispatched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      deliveries:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            webhookId:
+                              type: string
+                            eventType:
+                              type: string
+                            httpStatus:
+                              type: integer
+                              nullable: true
+                            isDelivered:
+                              type: boolean
+                            attemptCount:
+                              type: integer
+                            deliveredAt:
+                              type: string
+                              format: date-time
+                              nullable: true
+                            createdOn:
+                              type: string
+                              format: date-time
+                      summary:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                          successful:
+                            type: integer
+                          failed:
+                            type: integer
+                          errors:
+                            type: array
+                            items:
+                              type: string
+                  message:
+                    type: string
+        "400":
+          description: Bad Request — missing eventType or payload
+          content:
+            application/json: {}
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+  /api/webhooks/signature/notify:
+    post:
+      tags:
+        - Webhook Routes
+      summary: Notify Webhook
+      description: >-
+        Send a manual notification to all URLs configured on the org's
+        signature webhook. Routes through the same backend handler as
+        Test Webhook; use Test Webhook in new code. Both are exposed for
+        API surface symmetry.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventType:
+                  type: string
+                  description: The event type to include in the notification payload.
+                  example: signature.document.completed
+                payload:
+                  type: object
+                  description: Arbitrary JSON payload to deliver.
+                  example:
+                    documentId: doc_abc123
+                    status: completed
+              required:
+                - eventType
+                - payload
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Notification deliveries dispatched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      deliveries:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            webhookId:
+                              type: string
+                            eventType:
+                              type: string
+                            httpStatus:
+                              type: integer
+                              nullable: true
+                            isDelivered:
+                              type: boolean
+                            attemptCount:
+                              type: integer
+                            deliveredAt:
+                              type: string
+                              format: date-time
+                              nullable: true
+                            createdOn:
+                              type: string
+                              format: date-time
+                      summary:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                          successful:
+                            type: integer
+                          failed:
+                            type: integer
+                          errors:
+                            type: array
+                            items:
+                              type: string
+                  message:
+                    type: string
+        "400":
+          description: Bad Request — missing eventType or payload
+          content:
+            application/json: {}
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+  /api/webhooks/signature/regenerate:
+    post:
+      tags:
+        - Webhook Routes
+      summary: Regenerate Webhook Secret
+      description: >-
+        Rotate the org's signature webhook HMAC secret. The new secret is
+        returned **once** — store it immediately. Old HMAC signatures will
+        fail as soon as this call succeeds.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: New secret generated. Store it immediately.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      secret:
+                        type: string
+                        description: New HMAC signing secret. Shown once only.
+                      regeneratedAt:
+                        type: string
+                        format: date-time
+                  message:
+                    type: string
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+  /api/webhooks/signature/deliveries:
+    get:
+      tags:
+        - Webhook Routes
+      summary: List Webhook Deliveries
+      description: >-
+        List historical delivery attempts for the org's signature webhook.
+        Supports pagination and filtering by event type, delivery status,
+        and HTTP response code.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: Number of records to return. Default 20.
+          example: "20"
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          description: Number of records to skip for pagination.
+          example: "0"
+        - name: eventType
+          in: query
+          schema:
+            type: string
+          description: Filter by event type.
+          example: signature.document.completed
+        - name: isDelivered
+          in: query
+          schema:
+            type: boolean
+          description: Filter by delivery success.
+          example: "true"
+        - name: httpStatus
+          in: query
+          schema:
+            type: integer
+          description: Filter by HTTP response status code.
+          example: "200"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        webhookId:
+                          type: string
+                        eventType:
+                          type: string
+                        payload:
+                          type: object
+                        httpStatus:
+                          type: integer
+                          nullable: true
+                        isDelivered:
+                          type: boolean
+                        attemptCount:
+                          type: integer
+                        deliveredAt:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        createdOn:
+                          type: string
+                          format: date-time
+                  totalRecords:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+  /api/webhooks/signature/replay:
+    post:
+      tags:
+        - Webhook Routes
+      summary: Replay Webhook Delivery
+      description: >-
+        Manually retry a specific past delivery by its ID. Creates a new
+        delivery row and immediately attempts re-delivery to all configured
+        URLs. Returns the full delivery object for the new attempt.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deliveryId:
+                  type: string
+                  description: The ID of the delivery to replay.
+                  example: dlv_abc123
+              required:
+                - deliveryId
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+      responses:
+        "200":
+          description: Delivery replayed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      webhookId:
+                        type: string
+                      eventType:
+                        type: string
+                      payload:
+                        type: object
+                      httpStatus:
+                        type: integer
+                        nullable: true
+                      isDelivered:
+                        type: boolean
+                      attemptCount:
+                        type: integer
+                      deliveredAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      createdOn:
+                        type: string
+                        format: date-time
+                  message:
+                    type: string
+        "400":
+          description: Bad Request — missing deliveryId
+          content:
+            application/json: {}
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — delivery or webhook not found
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
+          content:
+            application/json: {}
+  /api/webhooks/signature/stats:
+    get:
+      tags:
+        - Webhook Routes
+      summary: Get Webhook Stats
+      description: >-
+        Retrieve aggregate delivery statistics for the org's signature webhook
+        over a sliding time window. Returns per-event breakdown, success rates,
+        average response times, and last delivery timestamps.
+
+        **Requires administrator role.** Non-admin keys receive 403.
+      parameters:
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TDX- API Key}}
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+          example: en-US,en;q=0.9
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: dnt
+          in: header
+          schema:
+            type: integer
+          example: "1"
+        - name: origin
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com
+        - name: referer
+          in: header
+          schema:
+            type: string
+          example: https://app.turbodocx.com/
+        - name: sec-ch-ua
+          in: header
+          schema:
+            type: string
+          example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+        - name: sec-ch-ua-mobile
+          in: header
+          schema:
+            type: string
+          example: "?0"
+        - name: sec-ch-ua-platform
+          in: header
+          schema:
+            type: string
+          example: '"Windows"'
+        - name: sec-fetch-dest
+          in: header
+          schema:
+            type: string
+          example: empty
+        - name: sec-fetch-mode
+          in: header
+          schema:
+            type: string
+          example: cors
+        - name: sec-fetch-site
+          in: header
+          schema:
+            type: string
+          example: same-site
+        - name: days
+          in: query
+          schema:
+            type: integer
+          description: Number of days to look back (1-365). Defaults to 30.
+          example: "30"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  webhook:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      isActive:
+                        type: boolean
+                      events:
+                        type: array
+                        items:
+                          type: string
+                      urls:
+                        type: array
+                        items:
+                          type: string
+                  period:
+                    type: object
+                    properties:
+                      days:
+                        type: integer
+                      from:
+                        type: string
+                        format: date-time
+                      to:
+                        type: string
+                        format: date-time
+                  summary:
+                    type: object
+                    properties:
+                      totalDeliveries:
+                        type: integer
+                      successfulDeliveries:
+                        type: integer
+                      failedDeliveries:
+                        type: integer
+                      pendingRetries:
+                        type: integer
+                      avgResponseTime:
+                        type: number
+                        description: Average response time in milliseconds
+                      successRate:
+                        type: number
+                      lastSuccessfulDelivery:
+                        type: string
+                        format: date-time
+                        nullable: true
+                      lastFailedDelivery:
+                        type: string
+                        format: date-time
+                        nullable: true
+                  eventBreakdown:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        eventType:
+                          type: string
+                        total:
+                          type: integer
+                        successful:
+                          type: integer
+                        failed:
+                          type: integer
+                        successRate:
+                          type: number
+        "401":
+          description: Unauthorized — missing or invalid API key
+          content:
+            application/json: {}
+        "403":
+          description: Forbidden — requires administrator role
+          content:
+            application/json: {}
+        "404":
+          description: Not Found — no signature webhook exists for this org
+          content:
+            application/json: {}
+        "429":
+          description: Too Many Requests — rate limit exceeded
           content:
             application/json: {}
   /api/deliverable:

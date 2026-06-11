@@ -15,10 +15,13 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Java SDK
 
-The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:sdk`.
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
+
+The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:turbodocx-sdk`.
 
 ## Installation
 
@@ -28,8 +31,8 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 ```xml
 <dependency>
     <groupId>com.turbodocx</groupId>
-    <artifactId>sdk</artifactId>
-    <version>1.0.0</version>
+    <artifactId>turbodocx-sdk</artifactId>
+    <version>0.4.0</version>
 </dependency>
 ```
 
@@ -37,14 +40,14 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:sdk:1.0.0")
+implementation("com.turbodocx:turbodocx-sdk:0.4.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:sdk:1.0.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.4.0'
 ```
 
 </TabItem>
@@ -69,12 +72,14 @@ public class Main {
         TurboDocxClient client = new TurboDocxClient.Builder()
             .apiKey(System.getenv("TURBODOCX_API_KEY"))
             .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
             .build();
 
         // Or with custom base URL
         TurboDocxClient client = new TurboDocxClient.Builder()
             .apiKey(System.getenv("TURBODOCX_API_KEY"))
             .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
             .baseUrl("https://api.turbodocx.com")
             .build();
     }
@@ -86,10 +91,11 @@ public class Main {
 ```bash
 export TURBODOCX_API_KEY=your_api_key_here
 export TURBODOCX_ORG_ID=your_org_id_here
+export TURBODOCX_SENDER_EMAIL=sender@yourcompany.com
 ```
 
 :::warning API Credentials Required
-Both `apiKey` and `orgId` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+Three parameters are **required** for TurboSign operations: `apiKey` (or `accessToken`), `orgId`, and `senderEmail`. The `senderEmail` is used as the reply-to address for signature request emails. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ---
@@ -111,6 +117,7 @@ public class Main {
         TurboDocxClient client = new TurboDocxClient.Builder()
             .apiKey(System.getenv("TURBODOCX_API_KEY"))
             .orgId(System.getenv("TURBODOCX_ORG_ID"))
+            .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
             .build();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -286,6 +293,10 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 
 ## API Reference
 
+:::note
+The snippets below assume a configured `client` and an available `Gson` instance, e.g. `Gson gson = new GsonBuilder().setPrettyPrinting().create();` (as shown in the [Quick Start](#quick-start)).
+:::
+
 ### Configure
 
 Create a new TurboDocx client using the Builder pattern.
@@ -294,6 +305,7 @@ Create a new TurboDocx client using the Builder pattern.
 TurboDocxClient client = new TurboDocxClient.Builder()
     .apiKey("your-api-key")       // Required
     .orgId("your-org-id")         // Required
+    .senderEmail("sender@yourcompany.com")  // Required for TurboSign
     .baseUrl("https://api.turbodocx.com")  // Optional
     .build();
 ```
@@ -406,7 +418,9 @@ The SDK provides typed exceptions for different error scenarios:
 | `TurboDocxException`                         | varies      | Base exception for all API errors  |
 | `TurboDocxException.AuthenticationException` | 401         | Invalid or missing API credentials |
 | `TurboDocxException.ValidationException`     | 400         | Invalid request parameters         |
+| `TurboDocxException.AuthorizationException`  | 403         | Authenticated but lacks permissions for the route |
 | `TurboDocxException.NotFoundException`       | 404         | Document or resource not found     |
+| `TurboDocxException.ConflictException`       | 409         | Request conflicts with current state of resource (e.g., webhook name already exists) |
 | `TurboDocxException.RateLimitException`      | 429         | Too many requests                  |
 | `TurboDocxException.NetworkException`        | -           | Network connectivity issues        |
 
@@ -457,7 +471,7 @@ The `type` field accepts the following string values:
 | Type           | Description      |
 | -------------- | ---------------- |
 | `"signature"`  | Signature field  |
-| `"initials"`   | Initials field   |
+| `"initial"`    | Initials field   |
 | `"text"`       | Text input field |
 | `"date"`       | Date field       |
 | `"checkbox"`   | Checkbox field   |
@@ -477,6 +491,8 @@ The `type` field accepts the following string values:
 | `signingOrder` | `int`    | Yes      | Order in which recipient should sign (1, 2, 3...) |
 
 ### Field
+
+The coordinate-based constructor takes positional arguments in this order: `new Field(type, page, x, y, width, height, recipientEmail)`. For template-based fields, use the extended constructor shown in [Using Template-Based Fields](#using-template-based-fields).
 
 | Property          | Type             | Required | Description                                 |
 | ----------------- | ---------------- | -------- | ------------------------------------------- |
@@ -549,6 +565,6 @@ For detailed information about advanced configuration and API concepts, see:
 ## Resources
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
-- [Maven Central](https://search.maven.org/artifact/com.turbodocx/sdk)
+- [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
 - [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

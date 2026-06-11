@@ -13,8 +13,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Go SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 
 The official TurboDocx Deliverable SDK for Go applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with idiomatic Go patterns, context support, and comprehensive error handling. Available as `github.com/TurboDocx/SDK/packages/go-sdk`.
 
@@ -36,6 +39,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 package main
 
 import (
+    "log"
     "os"
 
     sdk "github.com/TurboDocx/SDK/packages/go-sdk"
@@ -426,8 +430,10 @@ The SDK provides typed errors for different error scenarios:
 | --------------------- | ----------- | ---------------------------------- |
 | `TurboDocxError`      | varies      | Base error type for all API errors |
 | `AuthenticationError` | 401         | Invalid or missing API key         |
+| `AuthorizationError`  | 403         | Authenticated but lacks required permissions |
 | `ValidationError`     | 400         | Invalid request parameters         |
 | `NotFoundError`       | 404         | Deliverable or template not found  |
+| `ConflictError`       | 409         | Request conflicts with current resource state |
 | `RateLimitError`      | 429         | Too many requests                  |
 | `NetworkError`        | -           | Network connectivity issues        |
 
@@ -436,6 +442,7 @@ The SDK provides typed errors for different error scenarios:
 ```go
 import (
     "errors"
+    "log"
 
     sdk "github.com/TurboDocx/SDK/packages/go-sdk"
 )
@@ -497,6 +504,7 @@ Variable configuration for template injection:
 | `Subvariables`           | `[]DeliverableVariable` | No       | Nested sub-variables for HTML content                |
 | `VariableStack`          | `interface{}`           | No       | Multiple instances for repeating content             |
 | `AIPrompt`               | `string`                | No       | AI prompt for content generation (max 16,000 chars)  |
+| `AllowRichTextInjection` | `bool`                  | No       | Whether to allow rich text injection                 |
 
 \*Required unless `VariableStack` is provided or `IsDisabled` is true.
 
@@ -535,34 +543,27 @@ Options for `ListDeliverables`:
 
 ### DeliverableRecord
 
-The deliverable object returned by `ListDeliverables`:
-
-| Property       | Type     | Description                           |
-| -------------- | -------- | ------------------------------------- |
-| `ID`           | `string` | Unique deliverable ID (UUID)          |
-| `Name`         | `string` | Deliverable name                      |
-| `Description`  | `string` | Description text                      |
-| `TemplateID`   | `string` | Source template ID                    |
-| `CreatedBy`    | `string` | User ID of the creator                |
-| `Email`        | `string` | Creator's email address               |
-| `FileSize`     | `int64`  | File size in bytes                    |
-| `FileType`     | `string` | MIME type of the generated file       |
-| `DefaultFont`  | `string` | Default font used                     |
-| `Fonts`        | `[]Font` | Fonts used in the document            |
-| `IsActive`     | `bool`   | Whether the deliverable is active     |
-| `CreatedOn`    | `string` | ISO 8601 creation timestamp           |
-| `UpdatedOn`    | `string` | ISO 8601 last update timestamp        |
-| `Tags`         | `[]Tag`  | Associated tags (when `ShowTags=true`)|
-
-### DeliverableDetailRecord
-
-The deliverable object returned by `GetDeliverableDetails`. Includes all fields from [DeliverableRecord](#deliverablerecord) **except `FileSize`**, plus:
+The deliverable object returned by both `ListDeliverables` and `GetDeliverableDetails`:
 
 | Property             | Type                    | Description                              |
 | -------------------- | ----------------------- | ---------------------------------------- |
+| `ID`                 | `string`                | Unique deliverable ID (UUID)             |
+| `Name`               | `string`                | Deliverable name                         |
+| `Description`        | `string`                | Description text                         |
+| `TemplateID`         | `string`                | Source template ID                       |
 | `TemplateName`       | `string`                | Source template name                     |
 | `TemplateNotDeleted` | `*bool`                 | Whether the source template still exists |
+| `CreatedBy`          | `string`                | User ID of the creator                   |
+| `Email`              | `string`                | Creator's email address                  |
+| `FileSize`           | `int64`                 | File size in bytes                       |
+| `FileType`           | `string`                | MIME type of the generated file          |
+| `DefaultFont`        | `string`                | Default font used                        |
+| `Fonts`              | `[]Font`                | Fonts used in the document               |
+| `IsActive`           | `bool`                  | Whether the deliverable is active        |
+| `CreatedOn`          | `string`                | ISO 8601 creation timestamp              |
+| `UpdatedOn`          | `string`                | ISO 8601 last update timestamp           |
 | `Variables`          | `[]DeliverableVariable` | Parsed variable objects with values      |
+| `Tags`               | `[]Tag`                 | Associated tags (when `ShowTags=true`)   |
 
 ### Tag
 

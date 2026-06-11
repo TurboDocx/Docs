@@ -1,5 +1,6 @@
 ---
 title: TurboPartner JavaScript SDK
+unlisted: true
 sidebar_position: 9
 sidebar_label: "TurboPartner: JavaScript"
 description: Official TurboDocx Partner SDK for JavaScript and TypeScript. Manage organizations, users, API keys, and entitlements programmatically.
@@ -17,8 +18,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboPartner JavaScript SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbopartner" product="TurboPartner" />
 
 :::tip Interested in TurboPartner?
 TurboPartner is available for integrators and partners. [Contact us](https://www.turbodocx.com/demo) to get started.

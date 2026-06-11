@@ -16,8 +16,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # JavaScript / TypeScript SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 
 The official TurboDocx SDK for JavaScript and TypeScript applications. Build document generation and digital signature workflows with full TypeScript support, async/await patterns, and comprehensive error handling. Available on npm as `@turbodocx/sdk`.
 
@@ -66,6 +69,8 @@ const { TurboSign } = require("@turbodocx/sdk");
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY, // Required : Your TurboDocx API key
   orgId: process.env.TURBODOCX_ORG_ID, // Required: Your organization ID
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL, // Required: reply-to address for signature request emails
+  senderName: "Your Company Name", // Optional but recommended: appears as the sender name
   // Optional: override base URL for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -81,6 +86,8 @@ import { TurboSign } from "@turbodocx/sdk";
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "", // Required : Your TurboDocx API key
   orgId: process.env.TURBODOCX_ORG_ID || "", // Required: Your organization ID
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL || "", // Required: reply-to address for signature request emails
+  senderName: "Your Company Name", // Optional but recommended: appears as the sender name
   // Optional: override base URL for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -116,61 +123,64 @@ const { TurboSign } = require("@turbodocx/sdk");
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY,
   orgId: process.env.TURBODOCX_ORG_ID,
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL,
 });
 
-// Send document with coordinate-based fields
-const result = await TurboSign.sendSignature({
-  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
-  documentName: "Service Agreement",
-  senderName: "Acme Corp",
-  senderEmail: "contracts@acme.com",
-  recipients: [
-    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
-    { name: "Bob Johnson", email: "bob@example.com", signingOrder: 2 },
-  ],
-  fields: [
-    // Alice's signature
-    {
-      type: "signature",
-      page: 1,
-      x: 100,
-      y: 650,
-      width: 200,
-      height: 50,
-      recipientEmail: "alice@example.com",
-    },
-    {
-      type: "date",
-      page: 1,
-      x: 320,
-      y: 650,
-      width: 100,
-      height: 30,
-      recipientEmail: "alice@example.com",
-    },
-    // Bob's signature
-    {
-      type: "signature",
-      page: 1,
-      x: 100,
-      y: 720,
-      width: 200,
-      height: 50,
-      recipientEmail: "bob@example.com",
-    },
-    {
-      type: "date",
-      page: 1,
-      x: 320,
-      y: 720,
-      width: 100,
-      height: 30,
-      recipientEmail: "bob@example.com",
-    },
-  ],
-});
+(async () => {
+  // Send document with coordinate-based fields
+  const result = await TurboSign.sendSignature({
+    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+    documentName: "Service Agreement",
+    senderName: "Acme Corp",
+    senderEmail: "contracts@acme.com",
+    recipients: [
+      { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+      { name: "Bob Johnson", email: "bob@example.com", signingOrder: 2 },
+    ],
+    fields: [
+      // Alice's signature
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 650,
+        width: 200,
+        height: 50,
+        recipientEmail: "alice@example.com",
+      },
+      {
+        type: "date",
+        page: 1,
+        x: 320,
+        y: 650,
+        width: 100,
+        height: 30,
+        recipientEmail: "alice@example.com",
+      },
+      // Bob's signature
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 720,
+        width: 200,
+        height: 50,
+        recipientEmail: "bob@example.com",
+      },
+      {
+        type: "date",
+        page: 1,
+        x: 320,
+        y: 720,
+        width: 100,
+        height: 30,
+        recipientEmail: "bob@example.com",
+      },
+    ],
+  });
 
-console.log(JSON.stringify(result, null, 2));
+  console.log(JSON.stringify(result, null, 2));
+})();
 ```
 
 </TabItem>
@@ -182,6 +192,7 @@ import { TurboSign } from "@turbodocx/sdk";
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "",
   orgId: process.env.TURBODOCX_ORG_ID || "",
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL || "",
 });
 
 // Send document with coordinate-based fields
@@ -361,23 +372,25 @@ const { TurboSign } = require("@turbodocx/sdk");
 
 const fileBuffer = readFileSync("./contract.pdf");
 
-const result = await TurboSign.sendSignature({
-  file: fileBuffer,
-  recipients: [
-    { name: "John Doe", email: "john@example.com", signingOrder: 1 },
-  ],
-  fields: [
-    {
-      type: "signature",
-      page: 1,
-      x: 100,
-      y: 650,
-      width: 200,
-      height: 50,
-      recipientEmail: "john@example.com",
-    },
-  ],
-});
+(async () => {
+  const result = await TurboSign.sendSignature({
+    file: fileBuffer,
+    recipients: [
+      { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+    ],
+    fields: [
+      {
+        type: "signature",
+        page: 1,
+        x: 100,
+        y: 650,
+        width: 200,
+        height: 50,
+        recipientEmail: "john@example.com",
+      },
+    ],
+  });
+})();
 ```
 
 </TabItem>
@@ -592,6 +605,8 @@ Configure the SDK with your API credentials and organization settings.
 TurboSign.configure({
   apiKey: string;        // Required : Your TurboDocx API key
   orgId: string;         // Required: Your organization ID
+  senderEmail: string;   // Required: reply-to address for signature request emails
+  senderName?: string;   // Optional: sender name in emails (default: 'API Service User')
   baseUrl?: string;      // Optional: API base URL (default: 'https://api.turbodocx.com')
 });
 ```
@@ -607,6 +622,7 @@ const { TurboSign } = require("@turbodocx/sdk");
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY,
   orgId: process.env.TURBODOCX_ORG_ID,
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL, // Required for TurboSign
   // Optional: override for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -621,6 +637,7 @@ import { TurboSign } from "@turbodocx/sdk";
 TurboSign.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "",
   orgId: process.env.TURBODOCX_ORG_ID || "",
+  senderEmail: process.env.TURBODOCX_SENDER_EMAIL || "", // Required for TurboSign
   // Optional: override for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -780,12 +797,15 @@ Download the completed signed document as a PDF Blob.
 <TabItem value="javascript" label="JavaScript" default>
 
 ```javascript
-const result = await TurboSign.download("document-uuid");
-
-// Node.js: Save to file
 const { writeFileSync } = require("fs");
-const buffer = Buffer.from(await result.arrayBuffer());
-writeFileSync("signed-contract.pdf", buffer);
+
+(async () => {
+  const result = await TurboSign.download("document-uuid");
+
+  // Node.js: Save to file
+  const buffer = Buffer.from(await result.arrayBuffer());
+  writeFileSync("signed-contract.pdf", buffer);
+})();
 ```
 
 </TabItem>
@@ -890,8 +910,10 @@ The SDK provides typed error classes for different failure scenarios. All errors
 | --------------------- | ----------- | ---------------------- | ----------------------------------- |
 | `TurboDocxError`      | varies      | varies                 | Base error class for all SDK errors |
 | `AuthenticationError` | 401         | `AUTHENTICATION_ERROR` | Invalid or missing API credentials  |
+| `AuthorizationError`  | 403         | `AUTHORIZATION_ERROR`  | API key lacks required permissions  |
 | `ValidationError`     | 400         | `VALIDATION_ERROR`     | Invalid request parameters          |
 | `NotFoundError`       | 404         | `NOT_FOUND`            | Document or resource not found      |
+| `ConflictError`       | 409         | `CONFLICT`             | Resource conflict                   |
 | `RateLimitError`      | 429         | `RATE_LIMIT_EXCEEDED`  | Too many requests                   |
 | `NetworkError`        | -           | `NETWORK_ERROR`        | Network connectivity issues         |
 
@@ -911,44 +933,46 @@ const {
   NetworkError,
 } = require("@turbodocx/sdk");
 
-try {
-  const result = await TurboSign.sendSignature({
-    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
-    recipients: [
-      { name: "John Doe", email: "john@example.com", signingOrder: 1 },
-    ],
-    fields: [
-      {
-        type: "signature",
-        page: 1,
-        x: 100,
-        y: 650,
-        width: 200,
-        height: 50,
-        recipientEmail: "john@example.com",
-      },
-    ],
-  });
-} catch (error) {
-  if (error instanceof AuthenticationError) {
-    console.error("Authentication failed:", error.message);
-    // Check your API key and org ID
-  } else if (error instanceof ValidationError) {
-    console.error("Validation error:", error.message);
-    // Check request parameters
-  } else if (error instanceof NotFoundError) {
-    console.error("Resource not found:", error.message);
-    // Document or recipient doesn't exist
-  } else if (error instanceof RateLimitError) {
-    console.error("Rate limited:", error.message);
-    // Wait and retry
-  } else if (error instanceof NetworkError) {
-    console.error("Network error:", error.message);
-    // Check connectivity
-  } else if (error instanceof TurboDocxError) {
-    console.error("SDK error:", error.message, error.statusCode, error.code);
+(async () => {
+  try {
+    const result = await TurboSign.sendSignature({
+      fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+      recipients: [
+        { name: "John Doe", email: "john@example.com", signingOrder: 1 },
+      ],
+      fields: [
+        {
+          type: "signature",
+          page: 1,
+          x: 100,
+          y: 650,
+          width: 200,
+          height: 50,
+          recipientEmail: "john@example.com",
+        },
+      ],
+    });
+  } catch (error) {
+    if (error instanceof AuthenticationError) {
+      console.error("Authentication failed:", error.message);
+      // Check your API key and org ID
+    } else if (error instanceof ValidationError) {
+      console.error("Validation error:", error.message);
+      // Check request parameters
+    } else if (error instanceof NotFoundError) {
+      console.error("Resource not found:", error.message);
+      // Document or recipient doesn't exist
+    } else if (error instanceof RateLimitError) {
+      console.error("Rate limited:", error.message);
+      // Wait and retry
+    } else if (error instanceof NetworkError) {
+      console.error("Network error:", error.message);
+      // Check connectivity
+    } else if (error instanceof TurboDocxError) {
+      console.error("SDK error:", error.message, error.statusCode, error.code);
+    }
   }
-}
+})();
 ```
 
 </TabItem>
@@ -1093,12 +1117,14 @@ Field configuration supporting both coordinate-based and template-based position
 
 | Property        | Type      | Required | Description                                                      |
 | --------------- | --------- | -------- | ---------------------------------------------------------------- |
-| `anchor`        | `string`  | Yes      | Text anchor pattern like `{TagName}`                             |
-| `placement`     | `string`  | Yes      | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
-| `size`          | `object`  | Yes      | `{ width: number; height: number }`                              |
+| `anchor`        | `string`  | No†      | Text anchor pattern like `{TagName}`                             |
+| `placement`     | `string`  | No       | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size`          | `object`  | No       | `{ width: number; height: number }`                              |
 | `offset`        | `object`  | No       | `{ x: number; y: number }`                                       |
 | `caseSensitive` | `boolean` | No       | Case sensitive search (default: false)                           |
 | `useRegex`      | `boolean` | No       | Use regex for anchor/searchText (default: false)                 |
+
+†All template properties are optional in the type definition, but at least one of `anchor` or `searchText` must be provided for anchor-based positioning to work.
 
 ### CreateSignatureReviewLinkRequest / SendSignatureRequest
 

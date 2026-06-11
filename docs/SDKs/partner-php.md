@@ -1,5 +1,6 @@
 ---
 title: TurboPartner PHP SDK
+unlisted: true
 sidebar_position: 10
 sidebar_label: "TurboPartner: PHP"
 description: Official TurboDocx Partner SDK for PHP. Manage organizations, users, API keys, and entitlements programmatically with PHP 8.1+.
@@ -16,8 +17,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboPartner PHP SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbopartner" product="TurboPartner" />
 
 :::tip Interested in TurboPartner?
 TurboPartner is available for integrators and partners. [Contact us](https://www.turbodocx.com/demo) to get started.

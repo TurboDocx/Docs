@@ -16,8 +16,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # PHP SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 
 The official TurboDocx Deliverable SDK for PHP applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically. Available on Packagist as `turbodocx/sdk`.
 
@@ -90,7 +93,7 @@ TURBODOCX_ORG_ID=your_org_id_here
 ```
 
 :::caution API Credentials Required
-Both `apiKey` and `orgId` parameters are **required** for all API requests. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+An `apiKey` (or `accessToken` as an alternative) is **required** for all API requests; `orgId` is optional but recommended for organization-scoped operations. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ---
@@ -366,8 +369,10 @@ The SDK provides typed exceptions for different error scenarios.
 | ------------------------- | ----------- | ---------------------------------- |
 | `TurboDocxException`      | varies      | Base exception for all SDK errors  |
 | `AuthenticationException` | 401         | Invalid or missing API credentials |
+| `AuthorizationException`  | 403         | API key lacks required permissions |
 | `ValidationException`     | 400         | Invalid request parameters         |
 | `NotFoundException`       | 404         | Deliverable or template not found  |
+| `ConflictException`       | 409         | Resource conflict                  |
 | `RateLimitException`      | 429         | Too many requests                  |
 | `NetworkException`        | -           | Network connectivity issues        |
 
@@ -379,8 +384,10 @@ The SDK provides typed exceptions for different error scenarios.
 use TurboDocx\Deliverable;
 use TurboDocx\Exceptions\TurboDocxException;
 use TurboDocx\Exceptions\AuthenticationException;
+use TurboDocx\Exceptions\AuthorizationException;
 use TurboDocx\Exceptions\ValidationException;
 use TurboDocx\Exceptions\NotFoundException;
+use TurboDocx\Exceptions\ConflictException;
 use TurboDocx\Exceptions\RateLimitException;
 use TurboDocx\Exceptions\NetworkException;
 
@@ -395,12 +402,18 @@ try {
 } catch (AuthenticationException $e) {
     // 401 - Invalid API key or access token
     echo "Authentication failed: {$e->getMessage()}\n";
+} catch (AuthorizationException $e) {
+    // 403 - API key lacks required permissions
+    echo "Authorization error: {$e->getMessage()}\n";
 } catch (ValidationException $e) {
     // 400 - Invalid request data
     echo "Validation error: {$e->getMessage()}\n";
 } catch (NotFoundException $e) {
     // 404 - Deliverable or template not found
     echo "Not found: {$e->getMessage()}\n";
+} catch (ConflictException $e) {
+    // 409 - Resource conflict
+    echo "Conflict: {$e->getMessage()}\n";
 } catch (RateLimitException $e) {
     // 429 - Rate limit exceeded
     echo "Rate limit: {$e->getMessage()}\n";
@@ -432,6 +445,7 @@ Variables are passed as associative arrays with the following keys:
 | `text`                   | `string`       | No\*     | Value to inject                                      |
 | `mimeType`               | `string`       | Yes      | `"text"`, `"html"`, `"image"`, or `"markdown"`       |
 | `isDisabled`             | `bool`         | No       | Skip this variable during generation                 |
+| `allowRichTextInjection` | `bool`         | No       | Whether to allow rich text injection                 |
 | `subvariables`           | `array`        | No       | Nested sub-variables for HTML content                |
 | `variableStack`          | `array`        | No       | Multiple instances for repeating content             |
 | `aiPrompt`               | `string`       | No       | AI prompt for content generation (max 16,000 chars)  |

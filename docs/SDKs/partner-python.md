@@ -1,5 +1,6 @@
 ---
 title: TurboPartner Python SDK
+unlisted: true
 sidebar_position: 11
 sidebar_label: "TurboPartner: Python"
 description: Official TurboDocx Partner SDK for Python. Manage organizations, users, API keys, and entitlements programmatically with async/await support.
@@ -16,8 +17,11 @@ keywords:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboPartner Python SDK
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbopartner" product="TurboPartner" />
 
 :::tip Interested in TurboPartner?
 TurboPartner is available for integrators and partners. [Contact us](https://www.turbodocx.com/demo) to get started.
