@@ -1,5 +1,6 @@
 ---
 title: TurboWebhooks Ruby SDK
+draft: true
 sidebar_position: 20
 sidebar_label: "TurboWebhooks: Ruby"
 description: Official TurboDocx Webhooks SDK for Ruby. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
