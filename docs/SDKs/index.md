@@ -26,6 +26,20 @@ import TabItem from '@theme/TabItem';
 
 Official client libraries for the TurboDocx API. Build document generation, digital signature, and partner management workflows in your language of choice.
 
+## Choose Your Product
+
+All five modules ship in the **same package** for each language — pick the one that matches what you're building:
+
+| Product | Use it when you need to… |
+| :------------- | :----------------------------------------------------------------------------------------- |
+| **TurboSign** | Send documents for legally-binding e-signature; track status; download signed PDFs |
+| **Deliverable** | Generate documents from templates with variable injection (DOCX / PPTX / PDF output) |
+| **TurboQuote** | Build sales quotes & proposals (CPQ): line items, a product/bundle catalog, price books |
+| **TurboWebhooks** | Receive real-time signature events instead of polling, and verify inbound deliveries |
+| **TurboPartner** | Provision & manage customer organizations, users, and API keys (multi-tenant / reseller) |
+
+TurboSign, Deliverable, TurboQuote, and TurboWebhooks all use the same `TURBODOCX_API_KEY` + `TURBODOCX_ORG_ID`. TurboPartner uses a separate partner key. See [credential requirements](#which-credentials-does-each-product-need) below.
+
 ## TurboSign SDKs
 
 Send documents for legally-binding eSignatures with full audit trails.
@@ -111,6 +125,16 @@ Before you begin, you'll need two things from your TurboDocx account:
 :::note senderEmail required for TurboSign
 TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). The SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable, TurboQuote, TurboWebhooks, and TurboPartner do not require it.
 :::
+
+#### Which credentials does each product need?
+
+| Product | API key | Org ID | Also needs |
+| :------------- | :----------------------------- | :------------------------- | :-------------------------------------------------------------- |
+| **TurboSign** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | `TURBODOCX_SENDER_EMAIL` (required — reply-to for signer emails) |
+| **Deliverable** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
+| **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
+| **TurboWebhooks** | `TURBODOCX_API_KEY` (**administrator** role — non-admin keys get 403) | `TURBODOCX_ORG_ID` | the webhook secret returned by `createWebhook`, to verify inbound events |
+| **TurboPartner** | `TURBODOCX_PARTNER_API_KEY` (`TDXP-…`, **not** the org key) | — | `TURBODOCX_PARTNER_ID` |
 
 #### How to Get Your Credentials
 
@@ -481,6 +505,38 @@ Generate documents from templates with dynamic variable injection, download sour
 | `downloadPDF()`             | Download the PDF version                                   |
 
 [Learn more about Deliverable SDKs →](/docs/SDKs/deliverable-javascript)
+
+### TurboQuote — Sales Quoting & CPQ
+
+Build quotes and proposals: line items, a product/bundle catalog, price books, companies, and contacts.
+
+| Method                       | Description                                                        |
+| :--------------------------- | :---------------------------------------------------------------- |
+| `createQuote()`              | Create a draft quote for a company and contact                    |
+| `addLineItems()`             | Add product or bundle line items to a quote                       |
+| `sendQuote()`                | Send a quote to the customer for review                           |
+| `sendQuoteWithDeliverable()` | Merge a TurboDocx Deliverable with the quote and send for e-signature |
+| `downloadQuotePdf()`         | Download the rendered quote PDF                                    |
+| `createProduct()` / `createBundle()` / `createPriceBook()` | Manage the product catalog and pricing |
+| `createAndSend()`            | Create, add line items, and send in a single call                 |
+
+[Learn more about TurboQuote SDKs →](/docs/SDKs/quote-javascript)
+
+### TurboWebhooks — Signature Events
+
+Subscribe a per-org endpoint to TurboSign events and verify inbound deliveries with HMAC-SHA256. **Requires an administrator API key.**
+
+| Method                       | Description                                                       |
+| :--------------------------- | :--------------------------------------------------------------- |
+| `createWebhook()`            | Subscribe the org's `signature` webhook (returns the secret once) |
+| `getWebhook()`               | Get the webhook plus delivery stats                              |
+| `updateWebhook()`            | Update URLs, events, or active state                            |
+| `testWebhook()`              | Fire a synthetic delivery to all configured URLs                |
+| `regenerateWebhookSecret()`  | Rotate the HMAC secret                                          |
+| `listWebhookDeliveries()` / `replayWebhookDelivery()` | Inspect and retry past deliveries        |
+| `verifyWebhookSignature()`   | Free function — verify the `X-TurboDocx-Signature` header on a received event |
+
+[Learn more about TurboWebhooks SDKs →](/docs/SDKs/webhooks-javascript)
 
 ---
 
