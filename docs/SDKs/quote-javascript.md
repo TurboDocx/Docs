@@ -696,6 +696,61 @@ const { results } = await TurboQuote.listTypes({
 });
 ```
 
+### Payments
+
+Collect payment for a quote online. The seller connects a payment provider once (Stripe Connect today) and funds are deposited directly to their account. See the [Setting Up Online Payments](../TurboQuote/Setting%20Up%20Online%20Payments.md) guide for the one-time connection.
+
+#### createPaymentLink
+
+Create a hosted pay link for a quote. Returns the checkout URL to send the buyer to and a stable `paymentId`. Requires the org to have a connected provider that can charge (see `getPaymentConnectionStatus`).
+
+```typescript
+const { checkoutUrl, paymentId } = await TurboQuote.createPaymentLink('quote-uuid', {
+  buyerEmail: 'buyer@example.com', // optional; falls back to the quote's contact
+});
+// Send checkoutUrl to the buyer; they pay on a secure, provider-hosted page.
+```
+
+#### getPaymentStatus
+
+Get a quote's current payment status (the latest payment), or `status: 'none'` if unpaid. Poll this, or prefer the `quote.payment.succeeded` webhook below.
+
+```typescript
+const payment = await TurboQuote.getPaymentStatus('quote-uuid');
+// payment.status: 'none' | 'pending' | 'partial' | 'paid' | 'failed' | 'overdue'
+// payment.amountDueToday, payment.currency, payment.paymentId, payment.checkoutId
+```
+
+#### getPaymentConnectionStatus
+
+Check whether the org is set up to collect, plus the active provider's capabilities. Use it to gate "request payment" UI before creating links.
+
+```typescript
+const conn = await TurboQuote.getPaymentConnectionStatus();
+// conn.connected, conn.chargesEnabled, conn.payoutsEnabled
+// conn.capabilities.supportsReferenceMetadata / supportsWebhookEvents / supportsSubscriptions / supportsCustomerPortal
+```
+
+> **Provider capabilities.** Not every payment provider supports every optional feature (rich metadata, subscriptions, a buyer portal). `capabilities` tells you what the org's provider supports. Payment **status** is always reliable regardless — it never depends on optional features.
+
+#### Webhook: `quote.payment.succeeded`
+
+Rather than polling, subscribe to the TurboDocx-native `quote.payment.succeeded` event (provider-agnostic — the same whether the seller is on Stripe or a future provider). Verify it with the shared `verifyWebhookSignature` helper (see the [TurboWebhooks SDK](./webhooks-javascript.md)). Payload `data`:
+
+```typescript
+{
+  quote_id: string;          // TurboQuote UUID
+  quote_number: string | null; // friendly number, e.g. "Q-2026-00001"
+  quote_name: string | null;
+  payment_id: string;
+  status: 'paid';
+  amount: number | null;
+  currency: string | null;
+  provider: string | null;   // e.g. "stripe_connect"
+  paid_at: string;           // ISO timestamp
+}
+```
+
 ---
 
 ## TypeScript Types
