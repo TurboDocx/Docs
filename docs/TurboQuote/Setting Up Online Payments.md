@@ -12,6 +12,9 @@ keywords:
   - ACH
   - recurring billing
   - subscription
+  - disconnect stripe
+  - payment activity log
+  - payment troubleshooting
   - TurboDocx
 ---
 
@@ -106,12 +109,61 @@ Once your account is **Active**, a quote can be paid online:
 
 After a customer pays, TurboQuote updates the quote's payment status automatically — no manual reconciliation. A successful payment marks the quote as **paid**; failed or overdue payments are reflected too, so you always know where each quote stands. Funds settle into your connected Stripe account on your normal payout schedule.
 
+## Step 9: Review Your Payment Activity
+
+Once connected, the Stripe Connect card includes a **Payment activity** log — a running, newest-first timeline of the key moments between TurboQuote and Stripe for your organization. Each entry shows what happened, the outcome, and when. You'll see events such as:
+
+- **Connected** — your payment account was connected.
+- **Checkout created** — a pay link was generated for a quote you sent.
+- **Payment succeeded** / **Payment failed** — the outcome of a customer's payment, as reported by Stripe.
+- **Subscription canceled** — a recurring payment lapsed or was canceled.
+- **Disconnected** — your payment account was disconnected.
+
+Use the **refresh** icon on the Payment activity panel to pull the latest entries. This log is your at-a-glance record of payment activity without leaving TurboQuote — a quick way to confirm a payment came through or to see when a pay link was created.
+
+## Troubleshooting Payments
+
+If payments aren't behaving as expected, the Payment Settings page gives you everything you need to self-diagnose before contacting support.
+
+- **Your connected account ID** is shown on the Stripe Connect card (for example, `acct_…`), with a copy button. This is the exact identifier Stripe support and the TurboDocx team use to look up your account — have it ready if you reach out.
+- Expand **Having trouble collecting payments?** to see a quick diagnostics panel:
+  - **Charges enabled** and **Payouts enabled** — whether your account can take payments and receive deposits.
+  - **Requirements due** — anything Stripe still needs from you (complete these in Stripe to enable payments).
+  - **Last checked** — when TurboQuote last read your status, plus a **Refresh status** button to re-check on demand. If you just finished verification in Stripe, click **Refresh status** to confirm your account is now active without reloading the page.
+- The **Payment activity** log (above) shows whether recent payments succeeded or failed.
+
+:::tip
+Most "I can't collect payments" issues are an incomplete Stripe onboarding — check **Requirements due** first, finish them in Stripe, then **Refresh status**.
+:::
+
+## Disconnecting Your Payment Account
+
+You can disconnect your payment provider at any time — for example, to switch accounts or pause online payments.
+
+1. On the Stripe Connect card, scroll to the bottom and click **Disconnect account**.
+2. A confirmation dialog explains what happens and shows the account you're disconnecting. Review it, then click **Disconnect**.
+
+**What disconnecting does:**
+
+- You **won't be able to collect online payment on new quotes** until you reconnect.
+- **Pay links you've already sent stay active** — customers can still complete those payments.
+- **Payments already collected are unaffected**, and funds already settled remain in your Stripe account.
+
+To start collecting again, return to **Settings → Payments** and connect an account as in Step 3. Reconnecting your original Stripe account links it right back.
+
+:::note
+Disconnecting only removes the connection between TurboQuote and your provider — it does not close or delete your Stripe account.
+:::
+
 ## Summary
 
 You connected your Stripe account to TurboQuote, completed Stripe's onboarding, and confirmed your account is **Active** for charges and payouts. Your customers can now pay quotes online by card, ACH, or recurring subscription, with funds deposited directly to your account and payment status tracked automatically.
+
+You also know how to review your **Payment activity** log, troubleshoot with the connected account ID + **Refresh status**, and **disconnect** your account when needed.
 
 **Next steps:**
 
 - Create or open a quote and share its **Pay** link with your customer.
 - Visit your Stripe **Dashboard** (from Settings → Payments) to view balances and payouts.
-- Manage or revisit your connection any time under **Settings → Payments**.
+- Check the **Payment activity** log under Settings → Payments to confirm payments and track activity.
+- Manage, disconnect, or revisit your connection any time under **Settings → Payments**.
