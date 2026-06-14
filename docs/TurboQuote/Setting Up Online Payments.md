@@ -111,11 +111,27 @@ Payment happens **after** your customer signs the quote. To make sure no one is 
 
 In plain terms:
 
-- When you **send** the quote, TurboQuote takes a **snapshot** of the totals on it — one-time amounts, recurring amounts, tax, term, and currency. These are the exact figures printed on the PDF your customer signs.
-- When they go to pay (even days later), they're charged **from that snapshot** — the numbers on the document they signed.
-- Quotes are locked from edits once they're sent, so the document, the snapshot, and the amount charged always match. Your customer is never billed a different number than the one on the quote they signed.
+- When you **send** the quote, TurboQuote takes a **snapshot** of the totals on it — one-time amounts, recurring amounts, the tax rate, term, and currency. These are the exact figures printed on the PDF your customer signs.
+- When they go to pay (even days later), they're charged **from that snapshot** — the prices on the document they signed.
+- Quotes are locked from edits once they're sent, so the document, the snapshot, and the amount charged always match. Your customer is never billed different prices than the ones on the quote they signed.
 
 You don't have to do anything to turn this on — it happens automatically the moment a quote is sent.
+
+## How Tax Is Collected
+
+If your quote has a tax rate, TurboQuote collects that tax at checkout so the amount your customer pays matches the total on the quote — not just the pre-tax subtotal.
+
+- Your quote's **tax rate** (set on the quote) is applied at payment time. Your customer sees a clear **"Tax"** line on the secure checkout page, on top of the subtotal.
+- For **subscription** quotes, the same tax rate carries onto every future renewal invoice automatically — recurring charges stay taxed, not just the first payment.
+- Tax is collected into **your** account along with the sale (you're the merchant of record), so you remit it the same way you handle tax everywhere else.
+
+:::note On exact amounts
+The **prices** your customer signs are locked exactly (see above). The **tax** is the quoted rate applied at the moment of payment. On quotes with several billing lines, the tax total can differ by **a cent or two** from the figure printed on the PDF — this is normal rounding (each line is taxed and rounded individually). The subtotal your customer signs is always charged exactly.
+:::
+
+:::tip Where does the tax rate come from?
+TurboQuote uses the flat tax rate on the quote itself — there's no separate tax setup to configure. (Address-based automatic tax calculation is planned for a future release; when a quote uses it, the quote will say _"taxes are calculated during payment for applicable jurisdictions"_ instead of showing a fixed amount.)
+:::
 
 ## Step 8: Track Payment Status Automatically
 
