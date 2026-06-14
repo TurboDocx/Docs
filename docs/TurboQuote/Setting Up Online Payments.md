@@ -126,7 +126,7 @@ If your quote has a tax rate, TurboQuote collects that tax at checkout so the am
 - Tax is collected into **your** account along with the sale (you're the merchant of record), so you remit it the same way you handle tax everywhere else.
 
 :::note On exact amounts
-The **prices** your customer signs are locked exactly (see above). The **tax** is the quoted rate applied at the moment of payment. On quotes with several billing lines, the tax total can differ by **a cent or two** from the figure printed on the PDF — this is normal rounding (each line is taxed and rounded individually). The subtotal your customer signs is always charged exactly.
+The **prices** your customer signs are locked exactly (see above). The **tax** is the quoted rate applied at the moment of payment. On quotes with **more than one billing line**, the tax total can differ by **a cent or two** from the figure printed on the PDF — each line is taxed and rounded to the cent on its own, then added up, which can land a penny away from rounding the whole subtotal once. (For example, three $33.33 lines at 8.5% total $8.49 in tax line-by-line, versus $8.50 on the rounded-once subtotal.) The **subtotal** your customer signs is always charged exactly, and single-line quotes never drift.
 :::
 
 :::tip Where does the tax rate come from?
