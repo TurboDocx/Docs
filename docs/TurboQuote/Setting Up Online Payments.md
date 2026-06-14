@@ -105,17 +105,17 @@ Once your account is **Active**, a quote can be paid online:
 2. They see a clear **payment timeline** — what's due today, and any recurring charges (with amounts and dates) for subscription-style quotes.
 3. They click **Confirm & Pay** and complete payment on Stripe's secure, hosted checkout (card details are entered directly with Stripe — the seller never sees the card number).
 
-## Your Customer Pays Exactly What They Signed
+## Your Customer Pays Exactly What's on the Quote They Signed
 
-Payment happens **after** your customer signs the quote. To make sure no one is ever surprised at the payment step, TurboQuote **locks in the price the moment the quote is signed.**
+Payment happens **after** your customer signs the quote. To make sure no one is ever surprised at the payment step, TurboQuote **locks in the price the moment the quote is sent** — because that's when the PDF your customer reviews and signs is created.
 
 In plain terms:
 
-- When the customer signs, TurboQuote takes a **snapshot** of the totals on that quote — one-time amounts, recurring amounts, tax, term, and currency.
-- When they go to pay (even days later), they're charged **from that snapshot** — the exact figures they agreed to.
-- If anything about the quote or its products changes afterward, **the signed amount is what gets charged.** Your customer is never billed a different number than the one they put their signature on.
+- When you **send** the quote, TurboQuote takes a **snapshot** of the totals on it — one-time amounts, recurring amounts, tax, term, and currency. These are the exact figures printed on the PDF your customer signs.
+- When they go to pay (even days later), they're charged **from that snapshot** — the numbers on the document they signed.
+- Quotes are locked from edits once they're sent, so the document, the snapshot, and the amount charged always match. Your customer is never billed a different number than the one on the quote they signed.
 
-You don't have to do anything to turn this on — it happens automatically the moment a quote is signed. (Quotes are also locked from edits once they're sent, so the signed total and the document always match.)
+You don't have to do anything to turn this on — it happens automatically the moment a quote is sent.
 
 ## Step 8: Track Payment Status Automatically
 
