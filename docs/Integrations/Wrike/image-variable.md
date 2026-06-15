@@ -29,6 +29,10 @@ This is the image counterpart to the [Wrike Table](./table-variable.md) variable
 
 On your template's **Details** page, find the variable you want to turn into images, open its three-dot menu, and choose **Wrike Image**.
 
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+  Screenshots Coming Soon
+</div>
+
 ### Step 2: Choose which images to attach
 
 - **Attach all images**: every image attachment on the triggering task or folder is included.

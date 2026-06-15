@@ -30,6 +30,10 @@ This is different from [Static Field Mapping](./field-mapping.md), which maps on
 
 On your template's **Details** page, find the variable you want to turn into a table, open its three-dot menu, and choose **Wrike Table**. This opens the Wrike Table editor with a live preview.
 
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+  Screenshots Coming Soon
+</div>
+
 ### Step 2: Add fields (columns)
 
 Each field is a **value source** plus a **label**:
