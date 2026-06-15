@@ -64,6 +64,11 @@ Add a **Filter** to include only sub-items that match a condition. Pick a field,
 
 The filter keeps a parent row whenever it, or any sub-item beneath it, matches.
 
+When **Expand nested sub-items** is on, two extra options control how a match pulls in the rows around it:
+
+- **Show parent rows of matches** (on by default): keep the parent rows above a match, so a deeply nested match still reads in context. Turn this off to show only the matching rows themselves; a match whose parents are hidden moves up to the top level.
+- **Include all sub-items of matching rows** (off by default): when a row matches, also show everything nested beneath it, even if those sub-items don't match the filter. Use this to filter the top of your hierarchy and then bring each matching branch in whole.
+
 :::tip Matching a formatted value
 For **equals** / **not equals** on a number, currency, or percentage field, type the value exactly as it appears in the table cell, including the currency symbol and decimals. For example, a value shown as `$50,000.00` should be entered as `$50,000.00`, not `$50,000`.
 :::
