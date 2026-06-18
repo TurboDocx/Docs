@@ -8,6 +8,8 @@ keywords:
   - wrike subtasks table
   - wrike nested rows
   - wrike table filter
+  - wrike table multiple filters
+  - wrike table and or conditions
   - wrike folder sub-items
 ---
 
@@ -56,13 +58,27 @@ Turn on **Expand nested sub-items** to recurse beneath the direct children. **Ma
 
 ### Step 5: Filter which sub-items appear (optional)
 
-Add a **Filter** to include only sub-items that match a condition. Pick a field, then an operator and value. The available operators adapt to the field you pick:
+Add a **Filter** to include only sub-items that match one or more conditions. Pick a field, then an operator and value. The available operators adapt to the field you pick:
 
 - **Item Type**: "is any of" / "is none of", choosing from the built-in Task, Folder, and Project types plus your Wrike custom item types.
 - **Date fields**: before, after, on, on or before, on or after, between, plus relative options (overdue, in the next N days, in the last N days).
 - **Other fields**: is set, is not set, is checked, is not checked, equals, not equals.
 
-The filter keeps a parent row whenever it, or any sub-item beneath it, matches.
+#### Combine multiple conditions
+
+Click **+ Add condition** to add another row to the filter (up to 10). When you have two or more conditions, a **Match all (AND) / any (OR)** selector appears:
+
+- **all (AND)**: a sub-item must satisfy *every* condition to appear.
+- **any (OR)**: a sub-item appears if it satisfies *at least one* condition.
+
+Each condition has its own field, operator, and value, and the remove (trash) icon next to a condition deletes just that row. For example, to list only the **milestones due in the next 30 days**, add two conditions combined with **all (AND)**:
+
+1. **Task Type** "is any of" **Milestone**
+2. **Due date** "is in the next" **30** days
+
+Milestone is a Wrike custom item type, so this condition needs a Wrike plan that includes custom item types (see [Notes and limits](#notes-and-limits) below). To exercise multiple conditions on any plan, use a built-in type instead, such as **Task Type** "is any of" **Folder** combined with a due-date condition.
+
+The filter keeps a parent row whenever it, or any sub-item beneath it, matches the conditions.
 
 When **Expand nested sub-items** is on, two extra options control how a match pulls in the rows around it:
 
