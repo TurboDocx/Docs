@@ -360,6 +360,49 @@ Files.write(Paths.get("quote.pdf"), pdf);
 
 ---
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### `getQuoteNumberConfig`
+
+```java
+QuoteNumberConfig getQuoteNumberConfig()
+```
+
+Fetch the org's current quote numbering format and the current per-period issued floor.
+
+```java
+QuoteNumberConfig config = tq.getQuoteNumberConfig();
+System.out.println(config.getFormat().getPrefix());  // e.g. "Q-"
+System.out.println(config.getCurrentFloor());        // the current per-period issued floor
+```
+
+#### `updateQuoteNumberConfig`
+
+```java
+QuoteNumberConfig updateQuoteNumberConfig(QuoteNumberFormat format)
+```
+
+Update the numbering format. All eight fields are sent.
+
+```java
+QuoteNumberFormat format = new QuoteNumberFormat();
+format.setPrefix("INV");
+format.setYearToken("none");      // "none" | "two" | "four"
+format.setMonthToken("off");      // "off" | "two"
+format.setSeparator("-");
+format.setPadWidth(4);            // 0–12
+format.setSuffix("");
+format.setStartNumber(1000);      // >= 0
+format.setResetCadence("never");  // "never" | "yearly" | "monthly"
+
+QuoteNumberConfig config = tq.updateQuoteNumberConfig(format);
+System.out.println(config.getFormat().getStartNumber());  // 1000
+```
+
+---
+
 ### Quotes — Status Transitions
 
 #### `sendQuote`

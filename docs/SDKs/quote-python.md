@@ -262,6 +262,40 @@ with open("quote.pdf", "wb") as f:
 
 ---
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### `get_quote_number_config`
+
+Fetch the org's current quote numbering format and the current per-period issued floor.
+
+```python
+config = await TurboQuote.get_quote_number_config()
+print(config["format"]["prefix"])   # e.g. "Q-"
+print(config["currentFloor"])       # the current per-period issued floor
+```
+
+#### `update_quote_number_config`
+
+Update the numbering format. Pass the full format object; all eight fields are required. Keys stay camelCase.
+
+```python
+config = await TurboQuote.update_quote_number_config({
+    "prefix": "INV",
+    "yearToken": "none",       # "none" | "two" | "four"
+    "monthToken": "off",       # "off" | "two"
+    "separator": "-",
+    "padWidth": 4,             # 0–12
+    "suffix": "",
+    "startNumber": 1000,       # >= 0
+    "resetCadence": "never",   # "never" | "yearly" | "monthly"
+})
+print(config["format"]["startNumber"])  # 1000
+```
+
+---
+
 ### Quote Status Transitions
 
 #### `send_quote`
