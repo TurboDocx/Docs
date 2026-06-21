@@ -642,6 +642,8 @@ This provides strong evidence that the audit trail has not been tampered with af
 
 Resend signature request emails to one or more recipients who haven't yet completed signing. Only recipients at the current signing order who haven't completed are eligible for resend.
 
+This applies to documents that have already been **sent for signing** — there must be an original invitation to resend. A document still in review (no signing emails sent yet) has no eligible recipients.
+
 ### Endpoint
 
 ```http
@@ -704,7 +706,7 @@ Recipient IDs are returned in the response of the **Prepare for Review** ([Endpo
 
 | Status | Error Message                                                         | Cause                                                                    |
 | ------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| 404    | `"Document not found"`                                                | Document doesn't exist or belongs to another organization                |
+| 404    | `"Document not found"`                                                | Document doesn't exist, has been deleted, or belongs to another organization |
 | 400    | `"All recipients have already completed signing"`                     | No eligible recipients remain                                            |
 | 400    | `"Some recipients are not eligible for email resend at this time"`    | Requested recipients aren't at the current signing order or already completed |
 
@@ -717,10 +719,12 @@ The 400 "not eligible" error also returns an `invalidRecipientIds` array showing
 }
 ```
 
+To recover, retry the request without the listed IDs, or wait until those recipients reach the current signing order before resending to them.
+
 ### Usage Notes
 
-- Only recipients at the **next signing order** who haven't completed signing are eligible for resend
-- If your document uses sequential signing (signingOrder 1, 2, 3...), you can only resend to recipients at the current active step
+- Only recipients at the **current signing order** who haven't completed signing are eligible for resend. If your document uses sequential signing (signingOrder 1, 2, 3...), that means the current active step only.
+- The request is **all-or-nothing**: if any requested ID is ineligible, the whole request is rejected with a 400 and **no** emails are sent. Fix the `recipientIds` and retry.
 - Each resend creates a `document_resent` entry in the [audit trail](#endpoint-4-get-audit-trail) for tracking
 - The `recipientIds` array must contain at least one ID and all IDs must be unique UUIDs
 
