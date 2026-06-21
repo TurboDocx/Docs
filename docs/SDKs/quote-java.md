@@ -389,13 +389,13 @@ Update the numbering format. All eight fields are sent.
 ```java
 QuoteNumberFormat format = new QuoteNumberFormat();
 format.setPrefix("INV");
-format.setYearToken("none");      // "none" | "two" | "four"
-format.setMonthToken("off");      // "off" | "two"
+format.setYearToken(QuoteNumberYearToken.NONE);        // NONE | TWO | FOUR
+format.setMonthToken(QuoteNumberMonthToken.OFF);       // OFF | TWO
 format.setSeparator("-");
-format.setPadWidth(4);            // 0–12
+format.setPadWidth(4);                                 // 0–12
 format.setSuffix("");
-format.setStartNumber(1000);      // >= 0
-format.setResetCadence("never");  // "never" | "yearly" | "monthly"
+format.setStartNumber(1000);                           // >= 0
+format.setResetCadence(QuoteNumberResetCadence.NEVER); // NEVER | YEARLY | MONTHLY
 
 QuoteNumberConfig config = tq.updateQuoteNumberConfig(format);
 System.out.println(config.getFormat().getStartNumber());  // 1000
