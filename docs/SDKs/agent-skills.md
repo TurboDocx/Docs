@@ -43,7 +43,7 @@ Works with:
 
 | Skill | What it does |
 | :--- | :--- |
-| **`turbodocx-sdk`** | Installs the TurboDocx SDK and generates working **TurboSign** (digital signatures) and **TurboPartner** (partner/org management) integration code. Supports JavaScript/TypeScript, Python, Go, PHP, and Java. |
+| **`turbodocx-sdk`** | Installs the TurboDocx SDK and generates working integration code for **TurboSign** (e-signatures), **Deliverable** (template document generation), **TurboQuote** (quotes & CPQ), **TurboWebhooks** (signature events), and **TurboPartner** (partner/org management). Supports JavaScript/TypeScript, Python, Go, PHP, and Java. |
 | **`turbodocx-html-to-docx`** | Sets up [`@turbodocx/html-to-docx`](https://www.npmjs.com/package/@turbodocx/html-to-docx) to convert HTML to Microsoft Word documents in Node.js, browser, or hybrid projects. |
 
 ## Install
@@ -101,7 +101,7 @@ After installing, invoke the skill in your editor or terminal:
 The skill will:
 
 1. **Detect** your project language from manifest files (`package.json`, `pyproject.toml`, `go.mod`, `composer.json`, `pom.xml`).
-2. **Ask** which product you need — TurboSign, TurboPartner, or both.
+2. **Ask** which product you need. By default it offers **TurboSign** and **Deliverable** (and the generate-then-sign combo); **TurboPartner**, **TurboWebhooks**, and **TurboQuote** are opt-in via their shortcuts (below).
 3. **Install** the SDK with your project's package manager.
 4. **Configure** environment variables in `.env` and `.env.example`.
 5. **Analyze** your codebase structure (Express, FastAPI, Spring Boot, Laravel, Gin, etc.).
@@ -112,9 +112,13 @@ The skill will:
 Skip the product selection prompt:
 
 ```text
-/turbodocx-sdk turbosign       # TurboSign only
-/turbodocx-sdk turbopartner    # TurboPartner only
-/turbodocx-sdk both            # Both products
+/turbodocx-sdk turbosign              # TurboSign (e-signatures) only
+/turbodocx-sdk deliverable            # Deliverable (template document generation) only
+/turbodocx-sdk turbosign+deliverable  # generate-then-sign workflow
+/turbodocx-sdk turboquote             # TurboQuote (quotes, catalog, price books) only
+/turbodocx-sdk turbowebhooks          # TurboWebhooks (signature events) only
+/turbodocx-sdk turbopartner           # TurboPartner (org provisioning) only
+/turbodocx-sdk both                   # TurboSign + Deliverable
 ```
 
 For HTML-to-DOCX:
@@ -131,6 +135,23 @@ For HTML-to-DOCX:
 - `sendSignature()` — send documents for e-signature
 - `getStatus()` — check document/recipient status
 - A route handler wired into your existing app
+
+### Deliverable
+
+- `generateDeliverable()` — render a document from a template with variable substitution
+- `getDeliverableDetails()` — fetch a generated deliverable by ID
+- If you also pick TurboSign, the generate-then-sign workflow (render a template, then route it for signature)
+
+### TurboQuote
+
+- `createQuote()` and line-item helpers for quotes and proposals
+- Optional catalog scaffolding — `createProduct()`, `createBundle()`, `createPriceBook()`, `applyPriceBook()`
+- Optional payments path — `createPaymentLink()` and `getPaymentStatus()` for collecting payment on a quote
+
+### TurboWebhooks
+
+- A verified webhook endpoint that subscribes to signature events (for example `signature.document.completed`)
+- `X-TurboDocx-Signature` verification so you can trust incoming payloads
 
 ### TurboPartner
 
