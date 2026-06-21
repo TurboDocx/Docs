@@ -124,7 +124,7 @@ On the **Map Columns** step, the fields are split into two groups: **Company Fie
 
 ![The Companies Map Columns step with the Company Fields and Contact Fields groups highlighted](/img/turboquote_bulk_import/06_companies_map.png)
 
-The **Review & Import** step then shows how many companies will be created. In this example, three spreadsheet rows (two contacts for one company, one for another) collapse into **two companies**, and the **Import 2 Companies** button confirms the count before anything is created.
+The **Review & Import** step groups the rows by company before counting, so the headline counts **companies**, not spreadsheet rows. In this example, three spreadsheet rows (two contacts for one company, one for another) become **two companies** — the review reads **"2 of 2 rows will import"** (one per company), and the **Import 2 Companies** button confirms the count before anything is created.
 
 ![The Companies Review and Import step showing 2 of 2 rows will import and the Import 2 Companies button highlighted](/img/turboquote_bulk_import/07_companies_review.png)
 
