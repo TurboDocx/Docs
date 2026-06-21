@@ -343,7 +343,7 @@ echo $config->currentFloor;      // the current per-period issued floor
 Update the numbering format. All eight fields are sent.
 
 ```php
-use TurboDocx\Types\Requests\Quote\QuoteNumberFormat;
+use TurboDocx\Types\Quote\QuoteNumberFormat;
 
 $config = TurboQuote::updateQuoteNumberConfig(new QuoteNumberFormat(
     prefix: 'INV',

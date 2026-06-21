@@ -322,6 +322,9 @@ config, err := qc.UpdateQuoteNumberConfig(ctx, &turbodocx.QuoteNumberFormat{
     StartNumber:  1000,     // >= 0
     ResetCadence: "never",  // "never" | "yearly" | "monthly"
 })
+if err != nil {
+    log.Fatal(err)
+}
 fmt.Println(config.Format.StartNumber)  // 1000
 ```
 
