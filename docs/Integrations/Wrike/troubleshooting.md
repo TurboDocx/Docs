@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting and FAQ
-sidebar_position: 8
+sidebar_position: 11
 description: Troubleshooting common Wrike integration issues and frequently asked questions about TurboDocx document generation from Wrike.
 keywords:
   - wrike troubleshooting
