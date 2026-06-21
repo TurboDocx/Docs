@@ -99,6 +99,9 @@ export default function QuickstartSkillNudge({
             <GitHubIcon />
             <span>View on GitHub</span>
           </a>
+          <a href="/docs/SDKs/agent-skills" className={styles.github}>
+            <span>Full install guide →</span>
+          </a>
         </div>
       </div>
 

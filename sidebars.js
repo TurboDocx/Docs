@@ -138,6 +138,11 @@ const sidebars = {
       },
       items: [
         {
+          type: 'doc',
+          id: 'SDKs/agent-skills',
+          label: 'Install with AI Agents',
+        },
+        {
           type: 'category',
           label: 'TurboSign SDKs',
           collapsed: false,
