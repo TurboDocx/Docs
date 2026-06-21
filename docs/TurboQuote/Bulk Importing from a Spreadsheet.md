@@ -57,9 +57,11 @@ Bulk import is available for each of these record types, from its own list page:
 
 The button to open the importer sits next to **New …** on each page.
 
-> 📸 _Screenshot placeholder: the Products page with the **Import from Spreadsheet** button highlighted._
+![The Products page with the Import From Spreadsheet button highlighted in the top-right toolbar](/img/turboquote_bulk_import/01_products_import_button.png)
 
 ## Step 1: Upload Your File
+
+This walkthrough uses **Products** as the example. Companies, contacts, bundles, price books, and categories follow the same three steps; only the column names differ (see the [Column Reference](#column-reference)). For price books and categories, the button is labeled **Bulk Create** instead of **Import from Spreadsheet**.
 
 1. Click **Import from Spreadsheet** (or **Bulk Create**, for price books and categories) to open the import dialog.
 2. (Recommended) Click **Download template** in the top-right of the **Columns** box to get a correctly formatted CSV with the right column headers and an example row.
@@ -70,7 +72,7 @@ The dialog parses your file and shows the row and column counts plus a preview.
 - 📦 **Maximum 500 rows** per import. A larger file is rejected before anything is created, with a message like _"Spreadsheet contains 750 rows, which exceeds the maximum of 500. Please reduce the number of rows."_ Split the file into batches and import each one.
 - 📅 Date columns (for example, a price book's valid-from and valid-to) are read in `YYYY-MM-DD` format.
 
-> 📸 _Screenshot placeholder: the Upload step showing the Columns box (REQUIRED / OPTIONAL / PER ITEM chips, with the Download template button) and the drag-and-drop area._
+![The Upload step showing the Columns box with REQUIRED and OPTIONAL chips and the Download Template button, and the drag-and-drop upload area highlighted](/img/turboquote_bulk_import/02_upload_step.png)
 
 ## Step 2: Map Your Columns
 
@@ -81,11 +83,11 @@ TurboQuote auto-detects common column names (for example, `product_name` maps to
 
 If you used the downloaded template, every column maps automatically.
 
-> 📸 _Screenshot placeholder: the Map Columns step with required fields mapped._
+![The Map Columns step with the Required Fields group highlighted, each required field auto-mapped to a spreadsheet column](/img/turboquote_bulk_import/03_map_columns.png)
 
 ## Step 3: Review and Import
 
-The **Review & Import** step checks every row **before anything is created**, then sorts your rows into three groups, shown as a colored bar and a summary headline (for example, **"18 of 20 rows will import"**):
+The **Review & Import** step checks every row **before anything is created**, then sorts your rows into three groups, shown as a colored bar and a summary headline (for example, **"4 of 5 rows will import"**):
 
 - ✅ **Import as-is.** The row is clean and imports unchanged.
 - ⚠️ **Import with changes.** The row still imports, but a bad **optional** value was cleared. For example, a non-numeric `cost`, an unrecognized `currency`, or an out-of-range minimum order quantity is dropped and the rest of the row is kept (currency falls back to the default, USD).
@@ -95,11 +97,15 @@ Expand any group to see the affected rows with their row number and the exact re
 
 When you're happy with the split, click **Import _N_ rows**. The button shows how many will import. TurboQuote creates any missing categories or price-book types first, then imports the eligible rows.
 
-> 📸 _Screenshot placeholder: the Review step showing the three groups (import as-is / with changes / won't import) and the **Import N rows** button._
+![The Review and Import step showing the three colored groups (import as-is, import with changes, won't import) and the Import 4 Rows button highlighted](/img/turboquote_bulk_import/04_review_import.png)
+
+:::tip Importing companies with contacts?
+A company can span several rows, one per contact, so it works a little differently. See the [worked example](#example-importing-companies-and-contacts) below.
+:::
 
 ### Adjustments and Error Reports
 
-After importing, the headline updates to something like **"18 of 20 rows imported"**, keeping the same three groups. Two downloads help you follow up:
+After importing, the headline updates to something like **"4 of 5 rows imported"**, keeping the same three groups. Two downloads help you follow up:
 
 - **Download changes.** A report of every row that imported **with changes** (which value was cleared, and why), so you can fill them back in later.
 - **Download errors.** A report of every row that **didn't import**. Fix those rows in your spreadsheet and re-upload just them.
@@ -108,7 +114,23 @@ After importing, the headline updates to something like **"18 of 20 rows importe
 A bad **optional** value never blocks a row. TurboQuote clears just that value and keeps the rest. Only a missing or invalid **required** value skips a row. So even a messy export gets most of your data in, and the change and error reports tell you exactly what to clean up.
 :::
 
+## Example: Importing Companies and Contacts
+
+The companies importer works the same way as the products importer, but with one key difference: a company can span **several rows**, one per contact. You open it from **TurboQuote → Companies** with the **Import From Spreadsheet** button.
+
+![The Companies page with the Import From Spreadsheet button highlighted in the top-right toolbar](/img/turboquote_bulk_import/05_companies_import_button.png)
+
+On the **Map Columns** step, the fields are split into two groups: **Company Fields** (the company-level columns like name, phone, and city) and **Contact Fields** (the per-contact columns like contact name and email). Rows that share the same company name are grouped into one company, and each row adds one contact.
+
+![The Companies Map Columns step with the Company Fields and Contact Fields groups highlighted](/img/turboquote_bulk_import/06_companies_map.png)
+
+The **Review & Import** step then shows how many companies will be created. In this example, three spreadsheet rows (two contacts for one company, one for another) collapse into **two companies**, and the **Import 2 Companies** button confirms the count before anything is created.
+
+![The Companies Review and Import step showing 2 of 2 rows will import and the Import 2 Companies button highlighted](/img/turboquote_bulk_import/07_companies_review.png)
+
 ## Column Reference
+
+You only need this section if you're building a spreadsheet by hand. If you started from **Download template**, your headers already match and every column maps automatically, so you can skip ahead to [Tips and Limits](#tips-and-limits).
 
 The columns below match what **Download template** produces, so the safest path is always to start from the template. Header names are matched flexibly (case, spaces, and underscores are ignored), and a few common alternates are noted. Anything marked optional can be left out entirely.
 
