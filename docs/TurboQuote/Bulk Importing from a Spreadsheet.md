@@ -33,9 +33,9 @@ By the end of this guide, you will have:
 Already have your data in a spreadsheet? You can be importing in under a minute. Start by downloading the template so your columns line up automatically. 🚀
 :::
 
-## No Internal IDs Required
+## How Records Link Together
 
-You never have to look up any internal ID number to import. You reference everything by the names and codes you already use:
+Related records connect using the names and codes you already use, so you can build your spreadsheet straight from data you already have:
 
 - **Products** point at a category by its **name**. If the category doesn't exist yet, TurboQuote creates it for you.
 - **Bundles** and **price books** point at products by their **SKU**.
