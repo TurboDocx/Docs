@@ -125,30 +125,35 @@ For HTML-to-DOCX:
 - Client configuration with environment variable loading
 - `sendSignature()` — send documents for e-signature
 - `getStatus()` — check document/recipient status
+- `download()` — retrieve the signed PDF
+- Optional helpers when you need them: `createSignatureReviewLink()` (preview before sending), `void()`, `resend()`, and `getAuditTrail()`
 - A route handler wired into your existing app
 
 ### Deliverable
 
 - `generateDeliverable()` — render a document from a template with variable substitution
 - `getDeliverableDetails()` — fetch a generated deliverable by ID
+- `downloadPDF()` / `downloadSourceFile()` — download the rendered output
 - If you also pick TurboSign, the generate-then-sign workflow (render a template, then route it for signature)
 
 ### TurboQuote
 
-- `createQuote()` and line-item helpers for quotes and proposals
+- `createQuote()`, `addLineItems()`, `sendQuote()`, `downloadQuotePdf()` — build, send, and export quotes and proposals
 - Optional catalog scaffolding — `createProduct()`, `createBundle()`, `createPriceBook()`, `applyPriceBook()`
-- Optional payments path — `createPaymentLink()` and `getPaymentStatus()` for collecting payment on a quote
+- Optional payments path — `getPaymentConnectionStatus()` (gate on the seller being connected), `createPaymentLink()`, and `getPaymentStatus()`, plus a verified `quote.payment.succeeded` webhook (adds `TURBODOCX_WEBHOOK_SECRET`)
 
 ### TurboWebhooks
 
 - A verified webhook endpoint that subscribes to signature events (for example `signature.document.completed`)
 - `X-TurboDocx-Signature` verification so you can trust incoming payloads
+- Requires an **administrator-role** API key (non-admin keys are rejected); the endpoint is registered under the fixed name `signature`
 
 ### TurboPartner
 
 - Partner client configuration
 - `createOrganization()` — provision customer organizations
 - `listOrganizations()` — list managed orgs
+- `updateOrganizationEntitlements()` — set an organization's features and entitlements
 - A route handler wired into your existing app
 
 ### `@turbodocx/html-to-docx`
@@ -159,8 +164,13 @@ For HTML-to-DOCX:
 
 ## Prerequisites
 
-- Get your API credentials from the [TurboDocx dashboard](https://app.turbodocx.com).
-- Node.js 18+ if using `npx`.
+- **API credentials** from the [TurboDocx dashboard](https://app.turbodocx.com). Which ones depend on the product (the skill writes them into `.env` and `.env.example` for you):
+  - Most products use `TURBODOCX_API_KEY` + `TURBODOCX_ORG_ID`.
+  - **TurboSign** also needs a verified `TURBODOCX_SENDER_EMAIL` (plus optional `TURBODOCX_SENDER_NAME`) — `sendSignature()` fails without it.
+  - **TurboWebhooks** needs an **administrator-role** API key.
+  - **TurboPartner** uses separate `TURBODOCX_PARTNER_API_KEY` + `TURBODOCX_PARTNER_ID`.
+  - **TurboQuote payments** add `TURBODOCX_WEBHOOK_SECRET`.
+- Node.js to run the `npx skills` installer.
 
 ## Source and feedback
 
