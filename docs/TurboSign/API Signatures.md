@@ -37,10 +37,13 @@ keywords:
 ---
 
 import ScriptLoader from '@site/src/components/ScriptLoader';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # TurboSign API Integration
 
 This comprehensive guide walks you through the TurboSign single-step API integration. Learn how to programmatically upload documents, configure recipients, set up signature fields, and send documents for electronic signatures using a single, streamlined API call.
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 
 ![TurboSign API Integration Overview](/img/turbosign/api/api-illustration.png)
 
