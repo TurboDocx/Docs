@@ -72,7 +72,7 @@ The dialog parses your file and shows the row and column counts plus a preview.
 - 📦 **Maximum 500 rows** per import. A larger file is rejected before anything is created, with a message like _"Spreadsheet contains 750 rows, which exceeds the maximum of 500. Please reduce the number of rows."_ Split the file into batches and import each one.
 - 📅 Date columns (for example, a price book's valid-from and valid-to) are read in `YYYY-MM-DD` format.
 
-![The Upload step showing the Columns box with REQUIRED and OPTIONAL chips and the Download Template button, and the drag-and-drop upload area highlighted](/img/turboquote_bulk_import/02_upload_step.png)
+![The Upload step with the drag-and-drop upload area highlighted; above it, the Columns box lists the required and optional fields and the Download Template button](/img/turboquote_bulk_import/02_upload_step.png)
 
 ## Step 2: Map Your Columns
 
