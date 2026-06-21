@@ -35,7 +35,7 @@ Already have your data in a spreadsheet? You can be importing in under a minute.
 
 ## No Internal IDs Required
 
-You never need to know a TurboDocx UUID or internal ID to import. You reference everything by the names and codes you already use:
+You never have to look up any internal ID number to import. You reference everything by the names and codes you already use:
 
 - **Products** point at a category by its **name**. If the category doesn't exist yet, TurboQuote creates it for you.
 - **Bundles** and **price books** point at products by their **SKU**.
@@ -48,12 +48,12 @@ Bulk import is available for each of these record types, from its own list page:
 
 | Record type | Where to find it | Button |
 | --- | --- | --- |
-| **Products** | TurboQuote → Settings → Products | **Import from Spreadsheet** |
+| **Products** | TurboQuote → Products | **Import from Spreadsheet** |
 | **Companies** (with their contacts) | TurboQuote → Companies | **Import from Spreadsheet** |
 | **Contacts** | A company's Contacts page | **Import from Spreadsheet** |
-| **Bundles** | TurboQuote → Settings → Bundles | **Import from Spreadsheet** |
-| **Price Books** | TurboQuote → Settings → Price Books | **Bulk Create** |
-| **Categories** | TurboQuote → Settings → Categories | **Bulk Create** |
+| **Bundles** | TurboQuote → Bundles | **Import from Spreadsheet** |
+| **Price Books** | TurboQuote → Price Books | **Bulk Create** |
+| **Categories** | TurboQuote → Categories | **Bulk Create** |
 
 The button to open the importer sits next to **New …** on each page.
 
@@ -134,7 +134,7 @@ You only need this section if you're building a spreadsheet by hand. If you star
 
 The columns below match what **Download template** produces, so the safest path is always to start from the template. Header names are matched flexibly (case, spaces, and underscores are ignored), and a few common alternates are noted. Anything marked optional can be left out entirely.
 
-### Products (TurboQuote → Settings → Products)
+### Products (TurboQuote → Products)
 
 | Column | Required? | Example | Notes |
 | --- | --- | --- | --- |
@@ -150,7 +150,7 @@ The columns below match what **Download template** produces, so the safest path 
 | `currency` | Optional | USD | One of `USD`, `EUR`, `GBP`, `CAD`, `INR`, `AUD`. Defaults to USD. |
 | `show_in_catalog` | Optional | true | `true` or `false`. Defaults to true. |
 
-### Bundles (TurboQuote → Settings → Bundles)
+### Bundles (TurboQuote → Bundles)
 
 Bundle-level columns (repeat the same values on every row of the bundle):
 
@@ -181,7 +181,7 @@ Per-item columns (one row per bundle item):
 | `item_discount_amount` | Optional | 10 | |
 | `item_cost` | Optional | 40.00 | |
 
-### Price Books (TurboQuote → Settings → Price Books)
+### Price Books (TurboQuote → Price Books)
 
 Price-book-level columns (repeat the same values on every row of the price book):
 
@@ -205,7 +205,7 @@ Per-product override columns (one row per product):
 | `product_discount_percent` | Optional | 15 | |
 | `product_discount_amount` | Optional | 20 | |
 
-### Categories (TurboQuote → Settings → Categories)
+### Categories (TurboQuote → Categories)
 
 | Column | Required? | Example | Notes |
 | --- | --- | --- | --- |
