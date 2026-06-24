@@ -290,6 +290,46 @@ quote, err := qc.RemovePriceBook(ctx, "quote-uuid")
 
 ---
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### GetQuoteNumberConfig
+
+Fetches the org's current quote numbering format and the current per-period issued floor.
+
+```go
+config, err := qc.GetQuoteNumberConfig(ctx)
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println(config.Format.Prefix)   // e.g. "Q-"
+fmt.Println(config.CurrentFloor)    // the current per-period issued floor
+```
+
+#### UpdateQuoteNumberConfig
+
+Updates the numbering format. Pass the full format; all eight fields are sent.
+
+```go
+config, err := qc.UpdateQuoteNumberConfig(ctx, &turbodocx.QuoteNumberFormat{
+    Prefix:       "INV",
+    YearToken:    "none",  // "none" | "two" | "four"
+    MonthToken:   "off",   // "off" | "two"
+    Separator:    "-",
+    PadWidth:     4,        // 0–12
+    Suffix:       "",
+    StartNumber:  1000,     // >= 0
+    ResetCadence: "never",  // "never" | "yearly" | "monthly"
+})
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println(config.Format.StartNumber)  // 1000
+```
+
+---
+
 ### Quote Status Transitions
 
 #### SendQuote

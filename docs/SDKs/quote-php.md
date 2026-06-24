@@ -324,6 +324,40 @@ $quote = TurboQuote::handleExpiredQuote('quote-uuid', new HandleExpiredQuoteRequ
 ));
 ```
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### getQuoteNumberConfig
+
+Fetch the org's current quote numbering format and the current per-period issued floor.
+
+```php
+$config = TurboQuote::getQuoteNumberConfig();
+echo $config->format->prefix;    // e.g. "Q-"
+echo $config->currentFloor;      // the current per-period issued floor
+```
+
+#### updateQuoteNumberConfig
+
+Update the numbering format. All eight fields are sent.
+
+```php
+use TurboDocx\Types\Quote\QuoteNumberFormat;
+
+$config = TurboQuote::updateQuoteNumberConfig(new QuoteNumberFormat(
+    prefix: 'INV',
+    yearToken: 'none',      // 'none' | 'two' | 'four'
+    monthToken: 'off',      // 'off' | 'two'
+    separator: '-',
+    padWidth: 4,            // 0–12
+    suffix: '',
+    startNumber: 1000,      // >= 0
+    resetCadence: 'never',  // 'never' | 'yearly' | 'monthly'
+));
+echo $config->format->startNumber;  // 1000
+```
+
 ### Price Books on Quotes
 
 #### applyPriceBook
