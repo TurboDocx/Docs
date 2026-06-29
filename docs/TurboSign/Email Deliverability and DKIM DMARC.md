@@ -10,20 +10,20 @@ keywords:
   - body hash did not verify
   - avanan
   - email security gateway
-  - amazon ses dkim
+  - dkim signature
   - arc seal
   - safe links
 ---
 
 # Email Deliverability (DKIM / DMARC / SPF)
 
-TurboDocx sends email (including TurboSign signature requests and reminders) through Amazon SES. Occasionally a recipient reports that our messages fail DKIM or DMARC. In nearly every case the cause is a **recipient-side email security gateway that modifies the message after SES has signed it** — not a problem with TurboDocx, SES, or DNS.
+TurboDocx sends email, including TurboSign signature requests and reminders, through an authenticated email delivery service. Occasionally a recipient reports that our messages fail DKIM or DMARC. In nearly every case the cause is a **recipient-side email security gateway that modifies the message after it has been signed** — not a problem with TurboDocx or DNS.
 
 This page explains how to recognize, confirm, and resolve that situation.
 
 ## Why does a TurboDocx email fail DKIM or DMARC?
 
-A DKIM signature includes a cryptographic hash of the message body. Amazon SES signs the email *before* it leaves our infrastructure. If anything downstream changes the signed body, the hash no longer matches and DKIM fails. Because DMARC relies on an aligned SPF **or** DKIM pass, DMARC can fail too.
+A DKIM signature includes a cryptographic hash of the message body. The email is signed *before* it leaves our sending infrastructure. If anything downstream changes the signed body, the hash no longer matches and DKIM fails. Because DMARC relies on an aligned SPF **or** DKIM pass, DMARC can fail too.
 
 Security platforms commonly modify messages in transit by:
 
@@ -44,18 +44,18 @@ A recipient may report any of these:
 - Headers showing `body hash did not verify`
 - SPF passing on first arrival at Microsoft 365 but failing after a relay
 - Message delivers fine to Gmail but fails through Avanan
-- Both the TurboDocx and the Amazon SES DKIM signatures failing at once
+- One or both DKIM signatures on the message failing at once
 
 Typical headers:
 
 ```
 dkim=fail (body hash did not verify) header.d=sign.turbodocx.com
-dkim=fail (body hash did not verify) header.d=amazonses.com
+dkim=fail (body hash did not verify) header.d=<sending provider>
 ```
 
 ## Why does SPF also "softfail" sometimes?
 
-When the gateway relays the message back to Microsoft 365, Microsoft runs SPF again. At that point the source IP belongs to the **security gateway**, not Amazon SES. Since the gateway is not an authorized TurboDocx sender, SPF can show a soft failure:
+When the gateway relays the message back to Microsoft 365, Microsoft runs SPF again. At that point the source IP belongs to the **security gateway**, not the original TurboDocx sender. Since the gateway is not an authorized TurboDocx sender, SPF can show a soft failure:
 
 ```
 spf=softfail smtp.mailfrom=e.sign.turbodocx.com sender IP=<security gateway IP>
@@ -69,20 +69,20 @@ This does not mean the recipient's domain caused the failure, and **the gateway 
 
    ```
    dkim=pass header.d=sign.turbodocx.com
-   dkim=pass header.d=amazonses.com
+   dkim=pass header.d=<sending provider>
    spf=pass
    dmarc=pass
    ```
 
    If it passes when delivered directly but fails only after the recipient's security platform processes it, the downstream platform is the cause.
 
-2. **Read the pre-gateway result.** Look for an `Authentication-Results-Original` header (or similar). If SPF, DKIM, and DMARC passed *before* the gateway processed the message, TurboDocx and SES authenticated correctly.
+2. **Read the pre-gateway result.** Look for an `Authentication-Results-Original` header (or similar). If SPF, DKIM, and DMARC passed *before* the gateway processed the message, TurboDocx authenticated correctly.
 
 3. **Temporarily bypass the policy.** Have the recipient's email admin exclude a test mailbox (or the TurboDocx app URL) from URL-rewriting / content-modification, then send a new message with a unique subject. If DKIM and DMARC pass, the policy modification is confirmed as the cause.
 
 ## How is it resolved?
 
-**No TurboDocx or Amazon SES change is normally required.** The fix is on the recipient side. Their email administrator can choose to:
+**No TurboDocx-side change is normally required.** The fix is on the recipient side. Their email administrator can choose to:
 
 - Leave the policy as-is and rely on **ARC** or the platform's trusted-authentication handling. (ARC is designed to preserve original authentication results across an intermediary that modifies the message, though interoperability between platforms can be finicky.)
 - Exclude the TurboDocx application URL from click-time URL rewriting — for Avanan, this typically means excluding `app.turbodocx.com` from link rewriting.
@@ -95,7 +95,7 @@ Any URL-rewriting exclusion reduces click-time inspection for those links, so th
 ## What should we *not* do?
 
 - ❌ Add the recipient's gateway IP to TurboDocx's SPF record
-- ❌ Replace working Amazon SES DKIM records
+- ❌ Replace working TurboDocx DKIM records
 - ❌ Disable DKIM or DMARC
 - ❌ Exclude an entire organization from email protection without a documented reason
 - ❌ Assume the domain shown in an SPF result is the domain being authenticated
@@ -115,4 +115,4 @@ If you need to escalate, request from the recipient:
 
 ## Bottom line
 
-If TurboDocx messages pass SPF, DKIM, and DMARC when delivered directly but fail after a recipient-side security service modifies the message, the cause is downstream message mutation — not the TurboDocx or Amazon SES configuration. This is especially common in MSP-managed Microsoft 365 environments.
+If TurboDocx messages pass SPF, DKIM, and DMARC when delivered directly but fail after a recipient-side security service modifies the message, the cause is downstream message mutation — not the TurboDocx configuration. This is especially common in MSP-managed Microsoft 365 environments.
