@@ -83,7 +83,7 @@ Work through these in order to pinpoint where the failure is introduced.
 If the failure only appears after a gateway modifies the message, the sending configuration is working and the change is made on the receiving side. The administrator of the affected email environment has a few options:
 
 - **Rely on ARC.** ARC is designed to carry the original authentication results across an intermediary that modifies a message, so a receiver that trusts the gateway's ARC seal can still treat the message as authenticated. Confirm the receiving platform is configured to trust that seal.
-- **Exclude the TurboDocx application URL from link rewriting.** For most gateways this means adding `app.turbodocx.com` to the link-rewriting exclusion list. This stops the body from being modified for those links. Because it also skips click-time inspection for them, treat it as a scoped exception rather than a blanket change.
+- **Exclude the TurboDocx URLs from link rewriting.** For most gateways this means adding both `app.turbodocx.com` and `sign.turbodocx.com` to the link-rewriting exclusion list. TurboSign signature requests link to `sign.turbodocx.com`, so excluding only `app.turbodocx.com` won't stop those messages from being modified. This stops the body from being changed for those links. Because it also skips click-time inspection for them, treat it as a scoped exception rather than a blanket change.
 - **Create a narrowly scoped exception for TurboDocx messages** instead of disabling protection broadly.
 - **Contact the gateway vendor** if messages are being incorrectly quarantined or rejected despite a valid ARC chain.
 
@@ -92,7 +92,7 @@ If the failure only appears after a gateway modifies the message, the sending co
 - Don't loosen or disable DKIM and DMARC enforcement on the receiving side just to make the failure disappear. That hides the problem and weakens protection for all of your inbound mail, not just TurboDocx.
 - Don't read the domain in an SPF result as the domain being authenticated. After a relay it reflects the gateway, not the original sender.
 
-You don't need to change anything in TurboDocx's own DNS (SPF or DKIM records). Those are managed on the sending side and are working when the message passes at a directly delivered mailbox in step 1.
+If the message passes at a directly delivered mailbox in step 1, the TurboDocx sending configuration (SPF and DKIM) is already correct. The fix for a gateway-modified message is on the receiving side, so there's no change to make on the TurboDocx side.
 
 ## What to share if you contact support
 
