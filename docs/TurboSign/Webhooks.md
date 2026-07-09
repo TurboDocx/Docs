@@ -1,14 +1,20 @@
 ---
 title: TurboSign Webhooks
 sidebar_position: 6
-description: Configure real-time webhooks to receive instant notifications when TurboSign signature documents are completed or voided. Integrate TurboSign events with your existing systems through secure webhook endpoints.
+description: Configure real-time webhooks to receive instant notifications across the full TurboSign signature lifecycle — sent, viewed, per-recipient signed, partial progress, completed, voided, and finalization failures. Integrate TurboSign events with your existing systems through secure webhook endpoints.
 keywords:
   - webhook configuration
   - signature webhooks
   - turbosign webhooks
   - webhook events
+  - signature lifecycle events
+  - document sent webhook
+  - document viewed webhook
+  - recipient signed webhook
+  - document signed webhook
   - document completion webhook
   - document voided webhook
+  - finalization failed webhook
   - webhook security
   - webhook signature verification
   - hmac signature
@@ -29,7 +35,7 @@ keywords:
 
 # Webhooks
 
-Webhooks enable your application to receive real-time notifications when important events occur in TurboSign. Instead of polling for changes, webhooks push event data to your specified endpoints immediately when signature documents are completed or voided.
+Webhooks enable your application to receive real-time notifications when important events occur in TurboSign. Instead of polling for changes, webhooks push event data to your specified endpoints immediately across the whole signature lifecycle — when a document is sent, viewed, signed by each recipient, completed, voided, or fails to finalize.
 
 ![Get It Signed button on TurboDocx homepage](/img/webhooks/webhook-schema.png)
 
@@ -62,11 +68,13 @@ Webhooks can be configured through the TurboSign interface in your organization 
 
 ![Get It Signed button on TurboDocx homepage](/img/webhooks/organization-setting.png)
 
-3. **Scroll Down to Signature Configuration**
+3. **Open E-Signature Settings and go to the Webhooks tab**
 
-   - click "Configure Webhooks"
+   - Scroll down to the **Core Features** section, find the **Signatures** card, and click **"Configure E-Signature"**
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/core-features-section.png)
+![Organization Settings Core Features section with the Configure E-Signature button on the Signatures card highlighted](/img/webhooks/core-features-section.png)
+
+   - In the **E-Signature Settings** dialog that opens, select the **"Webhooks"** tab
 
 4. **Add Webhook URLs**
    - Enter your webhook endpoint URL(s)
@@ -74,22 +82,27 @@ Webhooks can be configured through the TurboSign interface in your organization 
    - Each URL will receive all subscribed events
    - URLs must use HTTPS for production environments
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
+![E-Signature Settings Webhooks tab showing the Webhook URLs field and the Add Another URL button](/img/webhooks/signature-webhook-config.png)
 
 5. **Select Events to Subscribe**
    - Choose which events should trigger webhooks:
-     - **Signature Document Completed**: Triggered when all signers have completed signing
-     - **Signature Document Voided**: Triggered when a document is voided/cancelled
+     - **Document Sent**: Triggered when a document is sent out for signature (after recipients are notified)
+     - **Document Viewed**: Triggered the first time each recipient opens and consents to view the document
+     - **Document Progress (Partial)**: Triggered when a signer completes their part but the document is not yet fully signed
+     - **Recipient Signed**: Triggered for every individual signer (including the final one) — use this for per-person notifications
+     - **Signature Completed**: Triggered when all recipients have signed and the signed PDF is finalized
+     - **Finalization Failed**: Triggered when the signed PDF fails to finalize (e.g. KMS signing error); the document is not marked Completed
+     - **Signature Voided**: Triggered when a document is voided or cancelled
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/signature-webhook-config.png)
+![Subscribe to Events section with all seven signature webhook events highlighted](/img/webhooks/signature-webhook-config.png)
 
 6. **Save Configuration**
    - Click "Save Configuration" to activate your webhooks
    - Your webhook secret key will be displayed (only shown once for new configurations)
    - **Important**: Copy and securely store your webhook secret - it won't be shown again
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/dill-signature-webhook-config.png)
-![Get It Signed button on TurboDocx homepage](/img/webhooks/copy-webhook-secret.png)
+![E-Signature Settings Webhooks tab with the Save Configuration button highlighted](/img/webhooks/dill-signature-webhook-config.png)
+![Webhook secret key displayed after saving the configuration](/img/webhooks/copy-webhook-secret.png)
 
 ### Managing Webhook Configuration
 
@@ -118,9 +131,148 @@ Your webhook secret is used to verify that webhooks are genuinely from TurboDocx
 
 ## Webhook Events
 
+TurboSign emits **seven** subscribable events across the signature lifecycle. Every event shares the same envelope (`event`, `event_id`, `created_at`, `version`, `data`); only the `data` object differs per event.
+
+| Event | Fires when |
+| ----- | ---------- |
+| `signature.document.sent` | The document is dispatched to recipients |
+| `signature.document.viewed` | A recipient opens the document for the first time |
+| `signature.document.recipient_signed` | Any individual signer completes their signature (fires once **per signer**) |
+| `signature.document.signed` | A signer signs but the document is **not yet complete** (document-level partial progress) |
+| `signature.document.completed` | All recipients have signed and the signed PDF is finalized |
+| `signature.document.finalization_failed` | The signed PDF fails to finalize (e.g. KMS signing error); the document is **not** completed |
+| `signature.document.voided` | The document is voided or cancelled |
+
+### How the signing events fit together
+
+`recipient_signed`, `signed`, and `completed` are easy to confuse. The key distinction:
+
+- **`recipient_signed`** is the **per-person** event. It fires **once for every individual signer**, including the last one, and carries the signer's identity (`recipient_id`, `recipient_email`, `recipient_name`) plus **`is_final_signer`** (true only on the last signature) and `remaining_signers`.
+- **`signed`** is a **document-level partial-progress** event. It fires **only when a signer signs and the document is not yet complete** — it carries no `is_final_signer` and does not identify a specific recipient's final state the way `recipient_signed` does.
+
+On each signature, `recipient_signed` **always** fires first. Then exactly one of the following fires:
+
+- **`completed`** — if that was the final signature and finalization succeeded (or **`finalization_failed`** if finalization failed), **or**
+- **`signed`** — if signers still remain.
+
+Two consequences worth internalizing:
+
+- **`signed` never fires on the final signature.** Use `completed` (or `recipient_signed` with `is_final_signer: true`) to detect "the whole document is done" — not `signed`.
+- **A single-signer document never emits `signed` at all.** It emits `recipient_signed` (`is_final_signer: true`) followed immediately by `completed`.
+
+```text
+Recipient signs
+   │
+   ├─ signature.document.recipient_signed   (always — one per signer)
+   │
+   └─ more signers remaining?
+        ├─ yes → signature.document.signed              (partial progress)
+        └─ no  → signature.document.completed           (finalized OK)
+                 or signature.document.finalization_failed  (finalization failed)
+```
+
+### Signature Document Sent
+
+Triggered once the document is dispatched to recipients (after signature-request emails go out).
+
+**Event Name**: `signature.document.sent`
+
+**Payload Example**:
+
+```json
+{
+  "event": "signature.document.sent",
+  "event_id": "evt_2f8b1c0a4d5e4f6a8b9c0d1e2f3a4b5c",
+  "created_at": "2025-08-26T11:30:00.100Z",
+  "version": "1.0",
+  "data": {
+    "document_id": "2dea093d-c38f-4898-b440-43dd9a14cd9d",
+    "title": "Statement of Work Example",
+    "status": "under_review",
+    "sent_at": "2025-08-26T11:30:00.090Z"
+  }
+}
+```
+
+### Signature Document Viewed
+
+Triggered the first time a recipient opens and consents to view the document.
+
+**Event Name**: `signature.document.viewed`
+
+**Payload Example**:
+
+```json
+{
+  "event": "signature.document.viewed",
+  "event_id": "evt_3a9c2d1b5e6f7a8b9c0d1e2f3a4b5c6d",
+  "created_at": "2025-08-26T11:35:12.500Z",
+  "version": "1.0",
+  "data": {
+    "document_id": "2dea093d-c38f-4898-b440-43dd9a14cd9d",
+    "title": "Statement of Work Example",
+    "recipient_id": "b1e2c3d4-5678-4abc-9def-0123456789ab",
+    "recipient_email": "signer@example.com",
+    "viewed_at": "2025-08-26T11:35:12.480Z"
+  }
+}
+```
+
+### Signature Document Recipient Signed
+
+Triggered for **every individual signer** (including the final one). This is the per-person event — use it for per-recipient notifications. Inspect `is_final_signer` to tell whether this was the last signature.
+
+**Event Name**: `signature.document.recipient_signed`
+
+**Payload Example**:
+
+```json
+{
+  "event": "signature.document.recipient_signed",
+  "event_id": "evt_4b0d3e2c6f7a8b9c0d1e2f3a4b5c6d7e",
+  "created_at": "2025-08-26T11:40:05.200Z",
+  "version": "1.0",
+  "data": {
+    "document_id": "2dea093d-c38f-4898-b440-43dd9a14cd9d",
+    "title": "Statement of Work Example",
+    "recipient_id": "b1e2c3d4-5678-4abc-9def-0123456789ab",
+    "recipient_email": "signer@example.com",
+    "recipient_name": "Jordan Signer",
+    "signed_at": "2025-08-26T11:40:05.180Z",
+    "remaining_signers": 1,
+    "is_final_signer": false
+  }
+}
+```
+
+### Signature Document Signed (Partial Progress)
+
+Triggered when a signer signs but the document is **not yet complete**. This is a document-level progress event — it does **not** fire on the final signature (that path emits `completed` instead). See [How the signing events fit together](#how-the-signing-events-fit-together).
+
+**Event Name**: `signature.document.signed`
+
+**Payload Example**:
+
+```json
+{
+  "event": "signature.document.signed",
+  "event_id": "evt_5c1e4f3d7a8b9c0d1e2f3a4b5c6d7e8f",
+  "created_at": "2025-08-26T11:40:05.400Z",
+  "version": "1.0",
+  "data": {
+    "document_id": "2dea093d-c38f-4898-b440-43dd9a14cd9d",
+    "title": "Statement of Work Example",
+    "recipient_id": "b1e2c3d4-5678-4abc-9def-0123456789ab",
+    "recipient_email": "signer@example.com",
+    "signed_at": "2025-08-26T11:40:05.180Z",
+    "remaining_signers": 1
+  }
+}
+```
+
 ### Signature Document Completed
 
-Triggered when all required signers have successfully signed a document.
+Triggered when all required signers have successfully signed a document and the signed PDF has been finalized.
 
 **Event Name**: `signature.document.completed`
 
@@ -139,6 +291,30 @@ Triggered when all required signers have successfully signed a document.
     "status_enum": "SignatureDocumentStatus.COMPLETED",
     "completed_at": "2025-08-26T11:44:30.299Z",
     "document_hash": "f516c4b9de36a5c9a999ba87abbc93078fdd0c9f6b855590d883d8bfb143308f"
+  }
+}
+```
+
+### Signature Document Finalization Failed
+
+Triggered when all signers have signed but the signed PDF fails to finalize (for example, a KMS/certificate signing error). The document is **not** marked Completed — treat this as a failure path that needs attention.
+
+**Event Name**: `signature.document.finalization_failed`
+
+**Payload Example**:
+
+```json
+{
+  "event": "signature.document.finalization_failed",
+  "event_id": "evt_6d2f5a4e8b9c0d1e2f3a4b5c6d7e8f90",
+  "created_at": "2025-08-26T11:44:31.000Z",
+  "version": "1.0",
+  "data": {
+    "document_id": "2dea093d-c38f-4898-b440-43dd9a14cd9d",
+    "title": "Statement of Work Example",
+    "status": "finalization_failed",
+    "failed_at": "2025-08-26T11:44:30.980Z",
+    "failure_step": "document_finalization"
   }
 }
 ```
@@ -171,20 +347,32 @@ Triggered when a document is voided or cancelled.
 
 ### Payload Fields
 
-| Field                | Type   | Description                                              |
-| -------------------- | ------ | -------------------------------------------------------- |
-| `event`              | string | The type of event (e.g., `signature.document.completed`) |
-| `event_id`           | string | Unique identifier for this event instance                |
-| `created_at`         | string | ISO 8601 timestamp when the event occurred               |
-| `version`            | string | Webhook payload version (currently "1.0")                |
-| `data.document_id`   | string | Unique identifier of the signature document              |
-| `data.title`         | string | Document title/name                                      |
-| `data.status`        | string | Human-readable status                                    |
-| `data.status_enum`   | string | Programmatic status enum value                           |
-| `data.document_hash` | string | Document content hash for integrity verification         |
-| `data.completed_at`  | string | When the document was completed (completed event only)   |
-| `data.voided_at`     | string | When the document was voided (voided event only)         |
-| `data.void_reason`   | string | Reason for voiding (voided event only)                   |
+Every event shares the top-level envelope fields. The `data` fields present depend on the event — the last column lists which events include each field.
+
+| Field                | Type   | Description                                              | Present on |
+| -------------------- | ------ | -------------------------------------------------------- | ---------- |
+| `event`              | string | The type of event (e.g., `signature.document.completed`) | All |
+| `event_id`           | string | Unique identifier for this event instance                | All |
+| `created_at`         | string | ISO 8601 timestamp when the event occurred               | All |
+| `version`            | string | Webhook payload version (currently "1.0")                | All |
+| `data.document_id`   | string | Unique identifier of the signature document              | All |
+| `data.title`         | string | Document title/name                                      | All |
+| `data.status`        | string | Human-readable status                                    | sent, completed, finalization_failed, voided |
+| `data.status_enum`   | string | Programmatic status enum value                           | completed, voided |
+| `data.sent_at`       | string | When the document was dispatched to recipients           | sent |
+| `data.recipient_id`  | string | Unique identifier of the recipient                       | viewed, recipient_signed, signed |
+| `data.recipient_email` | string | Recipient's email address                              | viewed, recipient_signed, signed |
+| `data.recipient_name`  | string | Recipient's display name                               | recipient_signed |
+| `data.viewed_at`     | string | When the recipient first viewed the document             | viewed |
+| `data.signed_at`     | string | When the signature was applied                           | recipient_signed, signed |
+| `data.remaining_signers` | number | Count of signers who have not yet completed            | recipient_signed, signed |
+| `data.is_final_signer` | boolean | `true` only when this was the last required signature   | recipient_signed |
+| `data.completed_at`  | string | When the document was completed                          | completed |
+| `data.document_hash` | string | Document content hash for integrity verification         | completed, voided |
+| `data.failed_at`     | string | When finalization failed                                 | finalization_failed |
+| `data.failure_step`  | string | Which step failed (e.g. `document_finalization`)         | finalization_failed |
+| `data.voided_at`     | string | When the document was voided                             | voided |
+| `data.void_reason`   | string | Reason for voiding                                       | voided |
 
 ## Signature Verification
 
@@ -509,7 +697,15 @@ If you encounter issues not covered here:
     "https://api.example.com/webhooks/turbosign",
     "https://backup.example.com/webhooks"
   ],
-  "events": ["signature.document.completed", "signature.document.voided"],
+  "events": [
+    "signature.document.sent",
+    "signature.document.viewed",
+    "signature.document.recipient_signed",
+    "signature.document.signed",
+    "signature.document.completed",
+    "signature.document.finalization_failed",
+    "signature.document.voided"
+  ],
   "secretExists": true,
   "maskedSecret": "whs***f6a",
   "isActive": true,
