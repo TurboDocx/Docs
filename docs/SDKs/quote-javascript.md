@@ -367,6 +367,31 @@ const config = await TurboQuote.updateQuoteNumberConfig({
 console.log(config.format.startNumber);  // 1000
 ```
 
+#### Field reference, defaults & validation
+
+All eight `format` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
+
+| Field | Type | Allowed / range | Default |
+|-------|------|-----------------|---------|
+| `prefix` | string | ≤ 12 characters | `"Q"` |
+| `yearToken` | enum | `none` \| `two` \| `four` | `four` |
+| `monthToken` | enum | `off` \| `two` | `off` |
+| `separator` | string | ≤ 4 characters | `"-"` |
+| `padWidth` | integer | `0`–`12` (`0` = no padding) | `5` |
+| `suffix` | string | ≤ 12 characters | `""` |
+| `startNumber` | integer | `0`–`1000000000` | `1` |
+| `resetCadence` | enum | `never` \| `yearly` \| `monthly` | `yearly` |
+
+An org that has never configured numbering uses the **default format** above, which renders like `Q-2026-00001`.
+
+Beyond the per-field caps, the API rejects self-inconsistent formats with a `400`:
+
+- `resetCadence: "yearly"` requires a year token (`yearToken` other than `none`) — otherwise numbers repeat across years.
+- `resetCadence: "monthly"` requires **both** a year token and a month token (`monthToken: "two"`).
+- The rendered quote number must be ≤ 256 characters.
+
+`currentFloor` (returned by both methods) is read-only — the sequence the next quote will use for the current period — and is never sent on update.
+
 ---
 
 ### Quote Status Transitions
@@ -732,6 +757,45 @@ const { results } = await TurboQuote.listTypes({
 
 ---
 
+### Bulk Imports
+
+Every create-family entity has a matching `bulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with an array of rows using the **same shape as that entity's single-create request** (e.g. `bulkCreateProducts` takes `CreateProductRequest[]`). Company rows require a `contacts` array with at least one contact; contact rows require a `companyId`.
+
+Rows process sequentially with **partial success** — a failed row does not throw and does not roll back earlier rows. Every bulk method resolves to a `BulkImportResult`:
+
+- `imported` — count of rows created
+- `failed` — array of `{ row, reason }` for rows that did not import; `row` is the **1-indexed** position in your request array
+- `adjusted` — array of `{ row, reason }` for rows that imported *with* a server-side adjustment (e.g. a bundle item whose product wasn't found was dropped)
+
+Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
+
+```typescript
+const result = await TurboQuote.bulkCreateProducts([
+  { name: 'Enterprise Licence', listPrice: 1200, billingFrequency: 'annual' },
+  { name: 'Onboarding Package', listPrice: 499, billingFrequency: 'one-time' },
+]);
+
+console.log(`Imported ${result.imported} of 2 rows`);
+for (const failure of result.failed) {
+  console.error(`Row ${failure.row} failed: ${failure.reason}`);
+}
+for (const adjustment of result.adjusted) {
+  console.warn(`Row ${adjustment.row} imported with adjustment: ${adjustment.reason}`);
+}
+```
+
+The other five bulk methods follow the exact same pattern:
+
+| Method | Argument | Returns |
+|---|---|---|
+| `bulkCreatePriceBooks` | `CreatePriceBookRequest[]` | `BulkImportResult` |
+| `bulkCreateBundles` | `CreateBundleRequest[]` | `BulkImportResult` |
+| `bulkCreateCompanies` | `CreateCompanyRequest[]` — each row needs `contacts` (min. 1) | `BulkImportResult` |
+| `bulkCreateContacts` | `CreateContactRequest[]` — each row needs `companyId` | `BulkImportResult` |
+| `bulkCreateTypes` | `CreateQuoteTypeRequest[]` | `BulkImportResult` |
+
+---
+
 ## TypeScript Types
 
 Key types exported from `@turbodocx/sdk`:
@@ -883,6 +947,6 @@ npx tsx examples/turboquote-basic.ts
 - [TurboSign JavaScript SDK](/docs/SDKs/javascript) — send documents for e-signature
 - [TurboWebhooks JavaScript SDK](/docs/SDKs/webhooks-javascript) — receive real-time signature events
 - [Deliverable JavaScript SDK](/docs/SDKs/deliverable-javascript) — generate documents from templates
-- [SDKs Overview](/docs/SDKs) — all SDKs across all five languages
+- [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 - [@turbodocx/sdk on npm](https://www.npmjs.com/package/@turbodocx/sdk)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
