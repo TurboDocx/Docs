@@ -70,6 +70,7 @@ Add a **Filter** to include only sub-items that match one or more conditions. Pi
 
 - **Item Type**: "is any of" / "is none of", choosing from the built-in Task, Folder, and Project types plus your Wrike custom item types.
 - **Date fields**: before, after, on, on or before, on or after, between, plus relative options (overdue, in the next N days, in the last N days).
+- **Numeric fields** (currency, numeric, or percentage): is greater than, is greater than or equal to, is less than, is less than or equal to, is between, plus equals / not equals.
 - **Other fields**: is set, is not set, is checked, is not checked, equals, not equals.
 
 #### Combine multiple conditions
@@ -99,8 +100,24 @@ When **Expand nested sub-items** is on, two extra options control how a match pu
 
 ![The Add Condition button with the Keep parent rows and Include sub-items toggles below the conditions](/img/wrike_table_filtering/05_add_condition.png)
 
-:::tip Matching a formatted value
-For **equals** / **not equals** on a number, currency, or percentage field, type the value exactly as it appears in the table cell, including the currency symbol and decimals. For example, a value shown as `$50,000.00` should be entered as `$50,000.00`, not `$50,000`.
+#### Numeric filter operators
+
+When you pick a **numeric** field — a currency, numeric, or percentage field — the condition switches to number comparisons. Pick the field, then choose how to compare it and enter the number.
+
+1. In a condition, open the **field** picker and choose a numeric field (currency, numeric, or percentage). The operator and value controls change to numeric ones automatically.
+
+   ![A filter condition with a numeric currency field chosen, showing a numeric operator and value box](/img/wrike-table-numeric-filters/01_pick_numeric_field.png)
+
+2. Open the **operator** list and choose one: *is greater than*, *is greater than or equal to*, *is less than*, *is less than or equal to*, *is between*, or *equals* / *does not equal*.
+
+   ![The filter operator list open showing the numeric operators](/img/wrike-table-numeric-filters/02_numeric_operators.png)
+
+3. Enter the number to compare against. **is between** shows two boxes — the low and high ends of the range.
+
+   ![The is between operator with a low value and a high value entered](/img/wrike-table-numeric-filters/03_between_values.png)
+
+:::tip Type a plain number
+Enter numeric values as plain numbers — `50000`, not `$50,000.00`. TurboDocx compares the numbers directly, so you don't add the currency symbol, thousands separators, or decimals, and the result isn't affected by how the field is formatted in Wrike.
 :::
 
 ### Step 6: Save
