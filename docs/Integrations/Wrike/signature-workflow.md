@@ -1,5 +1,5 @@
 ---
-title: "End-to-End Example: Generate & Sign a Proposal"
+title: "Wrike Example: Generate & Sign a Proposal"
 sidebar_position: 2
 description: Watch the full Wrike workflow in action — trigger document generation from a task status change, review an AI-powered proposal, and send it for e-signature, all without leaving Wrike.
 keywords:

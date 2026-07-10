@@ -1,5 +1,5 @@
 ---
-title: How to Setup E-Signature Automation
+title: How to Set Up Wrike E-Signature Automation
 sidebar_position: 4
 description: Configure a Wrike automation to automatically generate documents and send them for e-signature using TurboSign.
 keywords:

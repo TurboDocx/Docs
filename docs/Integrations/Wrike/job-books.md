@@ -1,5 +1,5 @@
 ---
-title: How to Set Up Job Books (Combined PDF)
+title: How to Set Up Wrike Job Books (Combined PDF)
 sidebar_position: 9
 description: Configure a Wrike automation that merges every attachment on a task or project into a single combined PDF (a Job Book) and attaches it back to Wrike when a status changes.
 keywords:
