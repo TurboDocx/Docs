@@ -324,6 +324,65 @@ $quote = TurboQuote::handleExpiredQuote('quote-uuid', new HandleExpiredQuoteRequ
 ));
 ```
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### getQuoteNumberConfig
+
+Fetch the org's current quote numbering format and the current per-period issued floor.
+
+```php
+$config = TurboQuote::getQuoteNumberConfig();
+echo $config->format->prefix;    // e.g. "Q-"
+echo $config->currentFloor;      // the current per-period issued floor
+```
+
+#### updateQuoteNumberConfig
+
+Update the numbering format. All eight fields are sent.
+
+```php
+use TurboDocx\Types\Quote\QuoteNumberFormat;
+
+$config = TurboQuote::updateQuoteNumberConfig(new QuoteNumberFormat(
+    prefix: 'INV',
+    yearToken: 'none',      // 'none' | 'two' | 'four'
+    monthToken: 'off',      // 'off' | 'two'
+    separator: '-',
+    padWidth: 4,            // 0–12
+    suffix: '',
+    startNumber: 1000,      // >= 0
+    resetCadence: 'never',  // 'never' | 'yearly' | 'monthly'
+));
+echo $config->format->startNumber;  // 1000
+```
+
+#### Field reference, defaults & validation
+
+All eight `QuoteNumberFormat` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
+
+| Field | Type | Allowed / range | Default |
+|-------|------|-----------------|---------|
+| `prefix` | string | ≤ 12 characters | `"Q"` |
+| `yearToken` | enum | `none` \| `two` \| `four` | `four` |
+| `monthToken` | enum | `off` \| `two` | `off` |
+| `separator` | string | ≤ 4 characters | `"-"` |
+| `padWidth` | int | `0`–`12` (`0` = no padding) | `5` |
+| `suffix` | string | ≤ 12 characters | `""` |
+| `startNumber` | int | `0`–`1000000000` | `1` |
+| `resetCadence` | enum | `never` \| `yearly` \| `monthly` | `yearly` |
+
+The token sets also ship as native enums (`TurboDocx\Types\Enums\QuoteNumberYearToken`, `QuoteNumberMonthToken`, `QuoteNumberResetCadence`) — pass `QuoteNumberYearToken::FOUR->value` if you prefer named cases over raw strings. An org that has never configured numbering uses the **default format** above, which renders like `Q-2026-00001`.
+
+Beyond the per-field caps, the API rejects self-inconsistent formats with a `400`:
+
+- `resetCadence: 'yearly'` requires a year token (`yearToken` other than `none`) — otherwise numbers repeat across years.
+- `resetCadence: 'monthly'` requires **both** a year token and a month token (`monthToken: 'two'`).
+- The rendered quote number must be ≤ 256 characters.
+
+`currentFloor` (returned by both methods) is read-only — the sequence the next quote will use for the current period — and is never sent on update.
+
 ### Price Books on Quotes
 
 #### applyPriceBook
@@ -603,6 +662,53 @@ use TurboDocx\Types\Requests\Quote\CreateQuoteTypeRequest;
 $type = TurboQuote::createType(new CreateQuoteTypeRequest(name: 'Renewal'));
 ```
 
+### Bulk Imports
+
+Every create-family entity has a matching `bulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with an array of the **same typed request objects as that entity's single-create method** (e.g. `bulkCreateProducts` takes an array of `CreateProductRequest`). Company rows require a `contacts` array with at least one contact; contact rows require a `companyId`.
+
+Rows process sequentially with **partial success** — a failed row does not throw and does not roll back earlier rows. Every bulk method returns a typed `BulkImportResult`:
+
+- `$result->imported` — count of rows created
+- `$result->failed` — array of `BulkImportRowIssue` (`row` + `reason`) for rows that did not import; `row` is the **1-indexed** position in your request array
+- `$result->adjusted` — array of `BulkImportRowIssue` for rows that imported *with* a server-side adjustment (e.g. a bundle item whose product wasn't found was dropped)
+
+Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
+
+```php
+use TurboDocx\Types\Requests\Quote\CreateProductRequest;
+
+$result = TurboQuote::bulkCreateProducts([
+    new CreateProductRequest(
+        name: 'Enterprise Seat',
+        listPrice: 299.00,
+        billingFrequency: 'monthly',
+    ),
+    new CreateProductRequest(
+        name: 'Onboarding Package',
+        listPrice: 499.00,
+        billingFrequency: 'one-time',
+    ),
+]);
+
+echo "Imported {$result->imported} of 2 rows\n";
+foreach ($result->failed as $failure) {
+    echo "Row {$failure->row} failed: {$failure->reason}\n";
+}
+foreach ($result->adjusted as $adjustment) {
+    echo "Row {$adjustment->row} imported with adjustment: {$adjustment->reason}\n";
+}
+```
+
+The other five bulk methods follow the exact same pattern:
+
+| Method | Rows | Returns |
+|---|---|---|
+| `bulkCreatePriceBooks` | `CreatePriceBookRequest[]` | `BulkImportResult` |
+| `bulkCreateBundles` | `CreateBundleRequest[]` | `BulkImportResult` |
+| `bulkCreateCompanies` | `CreateCompanyRequest[]` — each row needs `contacts` (min. 1) | `BulkImportResult` |
+| `bulkCreateContacts` | `CreateContactRequest[]` — each row needs `companyId` | `BulkImportResult` |
+| `bulkCreateTypes` | `CreateQuoteTypeRequest[]` | `BulkImportResult` |
+
 ### Convenience Method
 
 #### createAndSend
@@ -704,6 +810,6 @@ try {
 - [TurboSign PHP SDK](/docs/SDKs/php) — sending documents for signature from PHP
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks-php) — receiving signature events in PHP
 - [Deliverable PHP SDK](/docs/SDKs/deliverable-php) — document generation from PHP
-- [SDKs Overview](/docs/SDKs) — all SDKs across all five languages
+- [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 - [TurboDocx SDK on Packagist](https://packagist.org/packages/turbodocx/sdk)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)

@@ -88,7 +88,23 @@ html[data-theme="dark"] {
 html, body {
   //  height: 100%;
   // max-width: 100vw !important;
-  overflow-x: hidden;
+  // Use `clip`, not `hidden`, to hide horizontal overflow: `hidden` forces
+  // `overflow-y` to compute to `auto`, turning the element into a scroll container.
+  overflow-x: clip;
+}
+
+// The Orama search modal locks the background by setting an INLINE
+// `document.body.style.overflow = 'hidden'` on open. That inline style overrides
+// our CSS above and (re)makes <body> a vertical scroll container, whose held
+// scroll offset then collapses to 0 — snapping the page to the top for as long as
+// the modal is open. Force body to never be a vertical scroll container, using
+// `!important` so it beats Orama's inline style. The modal then just opens on top
+// and the page stays exactly where it was (the background remains scrollable
+// behind the modal, which is fine). `clip` + `visible` is a valid pair that keeps
+// body out of scroll-container territory while still hiding horizontal overflow.
+body {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
 }
 
 #__docusaurus_skipToContent_fallback > main > pre {

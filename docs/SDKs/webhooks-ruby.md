@@ -1,6 +1,5 @@
 ---
 title: TurboWebhooks Ruby SDK
-draft: true
 sidebar_position: 20
 sidebar_label: "TurboWebhooks: Ruby"
 description: Official TurboDocx Webhooks SDK for Ruby. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
@@ -25,7 +24,7 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbowebhooks" product="TurboWebhooks" />
 
-The official TurboDocx Webhooks SDK for Ruby applications. Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Ruby 3.0+. Available on RubyGems as `turbodocx-sdk` (same gem as TurboSign).
+The official TurboDocx Webhooks SDK for Ruby applications. Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Ruby 2.7+. Available on RubyGems as `turbodocx-sdk` (same gem as TurboSign).
 
 <br />
 
@@ -53,7 +52,7 @@ bundle install
 
 ## Requirements
 
-- Ruby 3.0 or higher
+- Ruby 2.7 or higher
 - An **administrator** TurboDocx API key (the webhook routes are gated on the administrator role — non-admin keys return HTTP 403)
 
 ## Configuration
@@ -439,6 +438,9 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 ## See Also
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
+- [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks-javascript) — same API, JS idioms
+- [TurboWebhooks Python SDK](/docs/SDKs/webhooks-python) — same API, Python idioms
+- [TurboSign Ruby SDK](/docs/SDKs/ruby) — sending documents for signature
 - [SDKs Overview](/docs/SDKs) — all SDKs across all supported languages
 - [TurboDocx SDK on RubyGems](https://rubygems.org/gems/turbodocx-sdk)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)

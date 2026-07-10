@@ -262,6 +262,65 @@ with open("quote.pdf", "wb") as f:
 
 ---
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### `get_quote_number_config`
+
+Fetch the org's current quote numbering format and the current per-period issued floor.
+
+```python
+config = await TurboQuote.get_quote_number_config()
+print(config["format"]["prefix"])   # e.g. "Q-"
+print(config["currentFloor"])       # the current per-period issued floor
+```
+
+#### `update_quote_number_config`
+
+Update the numbering format. Pass the full format object; all eight fields are required. Keys stay camelCase.
+
+```python
+config = await TurboQuote.update_quote_number_config({
+    "prefix": "INV",
+    "yearToken": "none",       # "none" | "two" | "four"
+    "monthToken": "off",       # "off" | "two"
+    "separator": "-",
+    "padWidth": 4,             # 0–12
+    "suffix": "",
+    "startNumber": 1000,       # >= 0
+    "resetCadence": "never",   # "never" | "yearly" | "monthly"
+})
+print(config["format"]["startNumber"])  # 1000
+```
+
+#### Field reference, defaults & validation
+
+All eight `format` keys are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
+
+| Field | Type | Allowed / range | Default |
+|-------|------|-----------------|---------|
+| `prefix` | string | ≤ 12 characters | `"Q"` |
+| `yearToken` | enum | `none` \| `two` \| `four` | `four` |
+| `monthToken` | enum | `off` \| `two` | `off` |
+| `separator` | string | ≤ 4 characters | `"-"` |
+| `padWidth` | integer | `0`–`12` (`0` = no padding) | `5` |
+| `suffix` | string | ≤ 12 characters | `""` |
+| `startNumber` | integer | `0`–`1000000000` | `1` |
+| `resetCadence` | enum | `never` \| `yearly` \| `monthly` | `yearly` |
+
+An org that has never configured numbering uses the **default format** above, which renders like `Q-2026-00001`.
+
+Beyond the per-field caps, the API rejects self-inconsistent formats with a `400`:
+
+- `resetCadence: "yearly"` requires a year token (`yearToken` other than `none`) — otherwise numbers repeat across years.
+- `resetCadence: "monthly"` requires **both** a year token and a month token (`monthToken: "two"`).
+- The rendered quote number must be ≤ 256 characters.
+
+`currentFloor` (returned by both methods) is read-only — the sequence the next quote will use for the current period — and is never sent on update.
+
+---
+
 ### Quote Status Transitions
 
 #### `send_quote`
@@ -579,6 +638,43 @@ quote_type = await TurboQuote.create_type({"name": "New Business"})
 
 await TurboQuote.update_type(quote_type["id"], {"name": "New Logo Business"})
 ```
+
+---
+
+### Bulk Imports
+
+Every create-family entity has a matching `bulk_create_*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with a list of row dicts using the **same shape as that entity's single-create request** — keys stay camelCase, even in Python. Company rows require a `contacts` list with at least one contact; contact rows require a `companyId`.
+
+Rows process sequentially with **partial success** — a failed row does not raise and does not roll back earlier rows. Every bulk method returns a `BulkImportResult` dict:
+
+- `imported` — count of rows created
+- `failed` — list of `{"row": ..., "reason": ...}` for rows that did not import; `row` is the **1-indexed** position in your request list
+- `adjusted` — list of `{"row": ..., "reason": ...}` for rows that imported *with* a server-side adjustment (e.g. a bundle item whose product wasn't found was dropped)
+
+Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
+
+```python
+result = await TurboQuote.bulk_create_products([
+    {"name": "Enterprise License", "listPrice": "499.00", "billingFrequency": "annual"},
+    {"name": "Onboarding Package", "listPrice": "999.00", "billingFrequency": "one-time"},
+])
+
+print(f"Imported {result['imported']} of 2 rows")
+for failure in result["failed"]:
+    print(f"Row {failure['row']} failed: {failure['reason']}")
+for adjustment in result["adjusted"]:
+    print(f"Row {adjustment['row']} imported with adjustment: {adjustment['reason']}")
+```
+
+The other five bulk methods follow the exact same pattern:
+
+| Method | Rows |
+|---|---|
+| `bulk_create_price_books` | list of `create_price_book` dicts |
+| `bulk_create_bundles` | list of `create_bundle` dicts |
+| `bulk_create_companies` | list of `create_company` dicts — each needs `contacts` (min. 1) |
+| `bulk_create_contacts` | list of `create_contact` dicts — each needs `companyId` |
+| `bulk_create_types` | list of `create_type` dicts |
 
 ---
 

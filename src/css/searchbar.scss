@@ -9,7 +9,30 @@
   bottom: 0;
   left: 0;
   padding-left: 3em;
-  z-index: 0 !important;
+  /* Was z-index: 0, which created a low stacking context that trapped the Orama
+     search modal (a fixed element inside the search-box shadow DOM) BELOW the
+     navbar (--ifm-z-index-fixed: 200), so the open modal overlapped the navbar.
+     Lift it above the navbar so the modal covers the whole viewport. */
+  z-index: 250 !important;
+  /* This element is a full-size absolute overlay (top/right/bottom/left: 0)
+     spanning the whole navbar. At the high z-index above it would swallow every
+     click across the navbar, so make the empty overlay click-through; only the
+     inner search box is interactive (re-enabled below). */
+  pointer-events: none;
+}
+
+/* Re-enable pointer events on the actual search box (and its modal, which
+   renders inside this subtree) so it stays fully interactive. */
+.searchBarInner {
+  pointer-events: auto;
+}
+
+/* The navbar wraps each item (including the search box) in a <div>; the
+   `.navbar__items > div { z-index: 0 }` rule below created another trapping
+   stacking context around the search item. Lift the search item's wrapper too
+   so the modal isn't clipped under the navbar. */
+.navbar__items > div:has(.centerSearchBar) {
+  z-index: 250 !important;
 }
 
 @media (max-width: 600px) {

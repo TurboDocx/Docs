@@ -1,5 +1,5 @@
 ---
-title: Java SDK
+title: TurboSign Java SDK
 sidebar_position: 6
 sidebar_label: "TurboSign: Java"
 description: Official TurboDocx Java SDK. Builder pattern API with comprehensive error handling for document generation and digital signatures.
@@ -17,7 +17,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Java SDK
+# TurboSign Java SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 

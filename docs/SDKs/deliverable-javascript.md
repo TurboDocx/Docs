@@ -1,5 +1,5 @@
 ---
-title: JavaScript / TypeScript SDK
+title: Deliverable JavaScript / TypeScript SDK
 sidebar_position: 8
 sidebar_label: "Deliverable: JavaScript / TypeScript"
 description: Official TurboDocx Deliverable JavaScript and TypeScript SDK. Full TypeScript support with async/await patterns for document generation from templates.
@@ -16,7 +16,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# JavaScript / TypeScript SDK
+# Deliverable JavaScript / TypeScript SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 

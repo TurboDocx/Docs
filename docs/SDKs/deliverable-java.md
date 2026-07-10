@@ -1,5 +1,5 @@
 ---
-title: Java SDK
+title: Deliverable Java SDK
 sidebar_position: 12
 sidebar_label: "Deliverable: Java"
 description: Official TurboDocx Deliverable Java SDK. Builder pattern API with comprehensive error handling for document generation from templates.
@@ -17,7 +17,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Java SDK
+# Deliverable Java SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 

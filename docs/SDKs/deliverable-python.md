@@ -1,5 +1,5 @@
 ---
-title: Python SDK
+title: Deliverable Python SDK
 sidebar_position: 9
 sidebar_label: "Deliverable: Python"
 description: Official TurboDocx Deliverable Python SDK. Async-first design with type hints for document generation from templates.
@@ -16,7 +16,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Python SDK
+# Deliverable Python SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 

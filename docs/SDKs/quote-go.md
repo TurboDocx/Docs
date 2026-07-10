@@ -290,6 +290,71 @@ quote, err := qc.RemovePriceBook(ctx, "quote-uuid")
 
 ---
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### GetQuoteNumberConfig
+
+Fetches the org's current quote numbering format and the current per-period issued floor.
+
+```go
+config, err := qc.GetQuoteNumberConfig(ctx)
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println(config.Format.Prefix)   // e.g. "Q-"
+fmt.Println(config.CurrentFloor)    // the current per-period issued floor
+```
+
+#### UpdateQuoteNumberConfig
+
+Updates the numbering format. Pass the full format; all eight fields are sent.
+
+```go
+config, err := qc.UpdateQuoteNumberConfig(ctx, &turbodocx.QuoteNumberFormat{
+    Prefix:       "INV",
+    YearToken:    "none",  // "none" | "two" | "four"
+    MonthToken:   "off",   // "off" | "two"
+    Separator:    "-",
+    PadWidth:     4,        // 0–12
+    Suffix:       "",
+    StartNumber:  1000,     // >= 0
+    ResetCadence: "never",  // "never" | "yearly" | "monthly"
+})
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println(config.Format.StartNumber)  // 1000
+```
+
+#### Field reference, defaults & validation
+
+All eight `QuoteNumberFormat` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
+
+| Field | Type | Allowed / range | Default |
+|-------|------|-----------------|---------|
+| `Prefix` | string | ≤ 12 characters | `"Q"` |
+| `YearToken` | enum | `none` \| `two` \| `four` | `four` |
+| `MonthToken` | enum | `off` \| `two` | `off` |
+| `Separator` | string | ≤ 4 characters | `"-"` |
+| `PadWidth` | int | `0`–`12` (`0` = no padding) | `5` |
+| `Suffix` | string | ≤ 12 characters | `""` |
+| `StartNumber` | int | `0`–`1000000000` | `1` |
+| `ResetCadence` | enum | `never` \| `yearly` \| `monthly` | `yearly` |
+
+An org that has never configured numbering uses the **default format** above, which renders like `Q-2026-00001`. The token values are also available as typed constants (`turbodocx.QuoteNumberYearTokenFour`, etc.).
+
+Beyond the per-field caps, the API rejects self-inconsistent formats with a `400`:
+
+- `ResetCadence: "yearly"` requires a year token (`YearToken` other than `none`) — otherwise numbers repeat across years.
+- `ResetCadence: "monthly"` requires **both** a year token and a month token (`MonthToken: "two"`).
+- The rendered quote number must be ≤ 256 characters.
+
+`CurrentFloor` (returned by both methods) is read-only — the sequence the next quote will use for the current period — and is never sent on update.
+
+---
+
 ### Quote Status Transitions
 
 #### SendQuote
@@ -773,6 +838,55 @@ There is no `GetType(id)` — the backend has no `GET /v1/types/:id` endpoint. U
 
 ---
 
+### Bulk Imports
+
+Every create-family entity has a matching `BulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with a slice of rows using the **same request type as that entity's single-create method** (e.g. `BulkCreateProducts` takes `[]CreateProductRequest`). Company rows require a `Contacts` slice with at least one contact; contact rows require a `CompanyID`.
+
+Rows process sequentially with **partial success** — a failed row does not produce an error and does not roll back earlier rows. Every bulk method returns `*BulkImportResult`:
+
+- `Imported` — count of rows created
+- `Failed` — `[]BulkImportRowIssue` (`Row` + `Reason`) for rows that did not import; `Row` is the **1-indexed** position in your request slice
+- `Adjusted` — `[]BulkImportRowIssue` for rows that imported *with* a server-side adjustment (e.g. a bundle item whose product wasn't found was dropped)
+
+Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
+
+```go
+result, err := qc.BulkCreateProducts(ctx, []turbodocx.CreateProductRequest{
+    {
+        Name:             "Enterprise License",
+        ListPrice:        1200.00,
+        BillingFrequency: "annual",
+    },
+    {
+        Name:             "Onboarding Package",
+        ListPrice:        499.00,
+        BillingFrequency: "one-time",
+    },
+})
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Printf("Imported %d of 2 rows\n", result.Imported)
+for _, failure := range result.Failed {
+    fmt.Printf("Row %d failed: %s\n", failure.Row, failure.Reason)
+}
+for _, adjustment := range result.Adjusted {
+    fmt.Printf("Row %d imported with adjustment: %s\n", adjustment.Row, adjustment.Reason)
+}
+```
+
+The other five bulk methods follow the exact same pattern — `(ctx, rows)` in, `(*BulkImportResult, error)` out:
+
+| Method | Rows |
+|---|---|
+| `BulkCreatePriceBooks` | `[]CreatePriceBookRequest` |
+| `BulkCreateBundles` | `[]CreateBundleRequest` |
+| `BulkCreateCompanies` | `[]CreateCompanyRequest` — each row needs `Contacts` (min. 1) |
+| `BulkCreateContacts` | `[]CreateContactRequest` — each row needs `CompanyID` |
+| `BulkCreateTypes` | `[]CreateQuoteTypeRequest` |
+
+---
+
 ## Enums and Constants
 
 | Type | Values |
@@ -873,4 +987,4 @@ if err != nil {
 - [TurboSign Go SDK](/docs/SDKs/go) — sending documents for e-signature
 - [Deliverable Go SDK](/docs/SDKs/deliverable-go) — generating documents from templates
 - [TurboWebhooks Go SDK](/docs/SDKs/webhooks-go) — real-time event delivery
-- [SDKs Overview](/docs/SDKs) — all SDKs across all five languages
+- [SDKs Overview](/docs/SDKs) — all SDKs across all six languages

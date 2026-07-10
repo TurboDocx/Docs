@@ -1,5 +1,5 @@
 ---
-title: Go SDK
+title: TurboSign Go SDK
 sidebar_position: 4
 sidebar_label: "TurboSign: Go"
 description: Official TurboDocx Go SDK. Idiomatic Go with context support for document generation and digital signatures.
@@ -16,7 +16,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Go SDK
+# TurboSign Go SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 

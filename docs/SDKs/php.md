@@ -1,5 +1,5 @@
 ---
-title: PHP SDK
+title: TurboSign PHP SDK
 sidebar_position: 5
 sidebar_label: "TurboSign: PHP"
 description: Official TurboDocx PHP SDK. Modern PHP 8.1+ with strong typing, enums, and PSR standards for document generation and digital signatures.
@@ -19,7 +19,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# PHP SDK
+# TurboSign PHP SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 

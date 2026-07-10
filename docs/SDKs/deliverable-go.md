@@ -1,5 +1,5 @@
 ---
-title: Go SDK
+title: Deliverable Go SDK
 sidebar_position: 11
 sidebar_label: "Deliverable: Go"
 description: Official TurboDocx Deliverable Go SDK. Idiomatic Go with context support for document generation from templates.
@@ -15,7 +15,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Go SDK
+# Deliverable Go SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 

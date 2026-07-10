@@ -360,6 +360,74 @@ Files.write(Paths.get("quote.pdf"), pdf);
 
 ---
 
+### Quote Numbering Configuration
+
+Customize the per-org quote number format: prefix, year/month tokens, separator, zero-padding, suffix, starting number, and reset cadence. Both methods are **admin only**; a non-admin API key receives a `403`.
+
+#### `getQuoteNumberConfig`
+
+```java
+QuoteNumberConfig getQuoteNumberConfig()
+```
+
+Fetch the org's current quote numbering format and the current per-period issued floor.
+
+```java
+QuoteNumberConfig config = tq.getQuoteNumberConfig();
+System.out.println(config.getFormat().getPrefix());  // e.g. "Q-"
+System.out.println(config.getCurrentFloor());        // the current per-period issued floor
+```
+
+#### `updateQuoteNumberConfig`
+
+```java
+QuoteNumberConfig updateQuoteNumberConfig(QuoteNumberFormat format)
+```
+
+Update the numbering format. All eight fields are sent.
+
+```java
+QuoteNumberFormat format = new QuoteNumberFormat();
+format.setPrefix("INV");
+format.setYearToken(QuoteNumberYearToken.NONE);        // NONE | TWO | FOUR
+format.setMonthToken(QuoteNumberMonthToken.OFF);       // OFF | TWO
+format.setSeparator("-");
+format.setPadWidth(4);                                 // 0–12
+format.setSuffix("");
+format.setStartNumber(1000);                           // >= 0
+format.setResetCadence(QuoteNumberResetCadence.NEVER); // NEVER | YEARLY | MONTHLY
+
+QuoteNumberConfig config = tq.updateQuoteNumberConfig(format);
+System.out.println(config.getFormat().getStartNumber());  // 1000
+```
+
+#### Field reference, defaults & validation
+
+All eight `QuoteNumberFormat` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
+
+| Field | Type | Allowed / range | Default |
+|-------|------|-----------------|---------|
+| `prefix` | String | ≤ 12 characters | `"Q"` |
+| `yearToken` | enum | `NONE` \| `TWO` \| `FOUR` | `FOUR` |
+| `monthToken` | enum | `OFF` \| `TWO` | `OFF` |
+| `separator` | String | ≤ 4 characters | `"-"` |
+| `padWidth` | int | `0`–`12` (`0` = no padding) | `5` |
+| `suffix` | String | ≤ 12 characters | `""` |
+| `startNumber` | int | `0`–`1000000000` | `1` |
+| `resetCadence` | enum | `NEVER` \| `YEARLY` \| `MONTHLY` | `YEARLY` |
+
+Tokens are the `QuoteNumberYearToken` / `QuoteNumberMonthToken` / `QuoteNumberResetCadence` enums (their wire values are the lowercase strings `none`/`two`/`four`, `off`/`two`, `never`/`yearly`/`monthly`). An org that has never configured numbering uses the **default format** above, which renders like `Q-2026-00001`.
+
+Beyond the per-field caps, the API rejects self-inconsistent formats with a `400`:
+
+- `ResetCadence.YEARLY` requires a year token (`yearToken` other than `NONE`) — otherwise numbers repeat across years.
+- `ResetCadence.MONTHLY` requires **both** a year token and a month token (`MonthToken.TWO`).
+- The rendered quote number must be ≤ 256 characters.
+
+`currentFloor` (returned by both methods) is read-only — the sequence the next quote will use for the current period — and is never sent on update.
+
+---
+
 ### Quotes — Status Transitions
 
 #### `sendQuote`
@@ -723,6 +791,59 @@ QuoteType type = tq.createType(req);
 :::note No `getType`
 There is no `getType(id)` method — the backend has no `GET /v1/types/:id` endpoint by design. Use `listTypes` to retrieve all types.
 :::
+
+---
+
+### Bulk Imports
+
+Every create-family entity has a matching `bulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with a list of the **same request objects as that entity's single-create method** (e.g. `bulkCreateProducts` takes `List<CreateProductRequest>`). Company rows require a `contacts` list with at least one contact; contact rows require a `companyId`.
+
+Rows process sequentially with **partial success** — a failed row does not throw and does not roll back earlier rows. Every bulk method returns a `BulkImportResult`:
+
+- `getImported()` — count of rows created
+- `getFailed()` — list of `BulkImportRowIssue` (`getRow()` + `getReason()`) for rows that did not import; the row number is the **1-indexed** position in your request list
+- `getAdjusted()` — list of `BulkImportRowIssue` for rows that imported *with* a server-side adjustment (e.g. a bundle item whose product wasn't found was dropped)
+
+Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
+
+#### `bulkCreateProducts`
+
+```java
+BulkImportResult bulkCreateProducts(List<CreateProductRequest> rows)
+```
+
+```java
+CreateProductRequest row1 = new CreateProductRequest();
+row1.setName("Enterprise License");
+row1.setListPrice(1200.00);
+row1.setBillingFrequency("annual");
+
+CreateProductRequest row2 = new CreateProductRequest();
+row2.setName("Onboarding Package");
+row2.setListPrice(499.00);
+row2.setBillingFrequency("one-time");
+
+BulkImportResult result = tq.bulkCreateProducts(Arrays.asList(row1, row2));
+
+System.out.println("Imported " + result.getImported() + " of 2 rows");
+for (BulkImportRowIssue failure : result.getFailed()) {
+    System.err.println("Row " + failure.getRow() + " failed: " + failure.getReason());
+}
+for (BulkImportRowIssue adjustment : result.getAdjusted()) {
+    System.out.println("Row " + adjustment.getRow()
+        + " imported with adjustment: " + adjustment.getReason());
+}
+```
+
+The other five bulk methods follow the exact same pattern:
+
+| Method | Rows | Returns |
+|---|---|---|
+| `bulkCreatePriceBooks` | `List<CreatePriceBookRequest>` | `BulkImportResult` |
+| `bulkCreateBundles` | `List<CreateBundleRequest>` | `BulkImportResult` |
+| `bulkCreateCompanies` | `List<CreateCompanyRequest>` — each row needs `contacts` (min. 1) | `BulkImportResult` |
+| `bulkCreateContacts` | `List<CreateContactRequest>` — each row needs `companyId` | `BulkImportResult` |
+| `bulkCreateTypes` | `List<CreateQuoteTypeRequest>` | `BulkImportResult` |
 
 ---
 
