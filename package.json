@@ -14,7 +14,8 @@
     "migrate": "node migrate.js",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.1",
@@ -94,6 +95,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.10.1",
     "@docusaurus/tsconfig": "^3.10.1",
+    "patch-package": "^8.0.1",
     "typescript": "~5.2.2"
   },
   "browserslist": {

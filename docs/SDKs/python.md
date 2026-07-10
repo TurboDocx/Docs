@@ -1,5 +1,5 @@
 ---
-title: Python SDK
+title: TurboSign Python SDK
 sidebar_position: 3
 sidebar_label: "TurboSign: Python"
 description: Official TurboDocx Python SDK. Async-first design with sync wrappers for document generation and digital signatures.
@@ -18,7 +18,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Python SDK
+# TurboSign Python SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 

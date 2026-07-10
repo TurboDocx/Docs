@@ -1,5 +1,5 @@
 ---
-title: JavaScript / TypeScript SDK
+title: TurboSign JavaScript / TypeScript SDK
 sidebar_position: 2
 sidebar_label: "TurboSign: JavaScript / TypeScript"
 description: Official TurboDocx JavaScript and TypeScript SDK. Full TypeScript support with async/await patterns for document generation and digital signatures.
@@ -18,7 +18,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# JavaScript / TypeScript SDK
+# TurboSign JavaScript / TypeScript SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 

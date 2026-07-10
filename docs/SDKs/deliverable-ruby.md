@@ -1,5 +1,5 @@
 ---
-title: Ruby SDK
+title: Deliverable Ruby SDK
 sidebar_position: 13
 sidebar_label: "Deliverable: Ruby"
 description: Official TurboDocx Deliverable Ruby SDK. Simple synchronous API for document generation from templates.
@@ -16,7 +16,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Ruby SDK
+# Deliverable Ruby SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 

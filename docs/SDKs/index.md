@@ -773,6 +773,7 @@ end
             padding: '0.85rem 1.5rem',
             background: 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%)',
             color: '#ffffff',
+            WebkitTextFillColor: '#ffffff',
             textAlign: 'center',
             textDecoration: 'none',
             borderRadius: '10px',
@@ -837,6 +838,7 @@ end
             padding: '0.85rem 1.5rem',
             background: 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%)',
             color: '#ffffff',
+            WebkitTextFillColor: '#ffffff',
             textAlign: 'center',
             textDecoration: 'none',
             borderRadius: '10px',
@@ -858,7 +860,7 @@ end
             e.currentTarget.style.background = 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%)';
           }}
         >
-          Configure Webhooks →
+          View Webhooks →
         </a>
       </div>
     </div>
@@ -901,6 +903,7 @@ end
             padding: '0.85rem 1.5rem',
             background: 'linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%)',
             color: '#ffffff',
+            WebkitTextFillColor: '#ffffff',
             textAlign: 'center',
             textDecoration: 'none',
             borderRadius: '10px',

@@ -1,5 +1,5 @@
 ---
-title: PHP SDK
+title: Deliverable PHP SDK
 sidebar_position: 10
 sidebar_label: "Deliverable: PHP"
 description: Official TurboDocx Deliverable PHP SDK. Modern PHP 8.1+ with strong typing, enums, and PSR standards for document generation from templates.
@@ -18,7 +18,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# PHP SDK
+# Deliverable PHP SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 

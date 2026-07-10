@@ -1,0 +1,22 @@
+diff --git a/node_modules/@orama/plugin-docusaurus-v3/dist/index.js b/node_modules/@orama/plugin-docusaurus-v3/dist/index.js
+index 4a1b45a..e3ffbef 100644
+--- a/node_modules/@orama/plugin-docusaurus-v3/dist/index.js
++++ b/node_modules/@orama/plugin-docusaurus-v3/dist/index.js
+@@ -133,7 +133,7 @@ async function fetchOramaDocs(searchDataConfig, context) {
+                         const currentVersion = loadedVersions.find((v) => v.versionName === version);
+                         if (!currentVersion)
+                             return;
+-                        allOramaDocsPromises.push(...currentVersion.docs.map((data) => generateDocs({
++                        allOramaDocsPromises.push(...currentVersion.docs.filter((data) => !(data && (data.unlisted || data.draft || (data.frontMatter && (data.frontMatter.unlisted || data.frontMatter.draft))))).map((data) => generateDocs({
+                             siteDir: context.siteDir,
+                             version,
+                             category: docsInstance,
+@@ -166,7 +166,7 @@ async function fetchOramaDocs(searchDataConfig, context) {
+                     const loadedInstance = value[instance];
+                     if (!loadedInstance)
+                         return;
+-                    allOramaDocsPromises.push(...loadedInstance.map((data) => generateDocs({
++                    allOramaDocsPromises.push(...loadedInstance.filter((data) => !(data && (data.unlisted || data.draft || (data.frontMatter && (data.frontMatter.unlisted || data.frontMatter.draft))))).map((data) => generateDocs({
+                         siteDir: context.siteDir,
+                         version: 'current',
+                         category: 'pages',

@@ -1,5 +1,5 @@
 ---
-title: Ruby SDK
+title: TurboSign Ruby SDK
 sidebar_position: 7
 sidebar_label: "TurboSign: Ruby"
 description: Official TurboDocx Ruby SDK. Simple synchronous API for document generation and digital signatures from Ruby, Rails, and Sinatra.
@@ -17,7 +17,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
-# Ruby SDK
+# TurboSign Ruby SDK
 
 <QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" />
 
