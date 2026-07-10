@@ -19,20 +19,51 @@ export default function SearchBarWrapper(props) {
   }, [colorMode]);
 
   useEffect(() => {
-    const patchResultMap = () => {
-      const searchBox = document.querySelector('orama-search-box');
-      if (searchBox?.searchStore?.state && !searchBox.searchStore.state.resultMap?.description) {
-        searchBox.searchStore.state.resultMap = {
-          description: 'section',
-          section: 'category',
-        };
+    // How Orama labels each result: show the page/section as the subtitle
+    // ("TurboQuote PHP SDK") and group under a category header ("Default").
+    // Without this the list renders "plain" — just the bold title, no subtitle.
+    const RESULT_MAP = { description: 'section', section: 'category' };
+
+    // Set it whenever it isn't already ours. Orama's store can reset back to the
+    // default map when the modal reopens or you switch the facet tab, so we don't
+    // guard on "already has a description" (that let a reset stick as plain).
+    const applyResultMap = () => {
+      const state = document.querySelector('orama-search-box')?.searchStore?.state;
+      if (!state) return false;
+      if (
+        state.resultMap?.description !== RESULT_MAP.description ||
+        state.resultMap?.section !== RESULT_MAP.section
+      ) {
+        state.resultMap = { ...RESULT_MAP };
       }
+      return true;
     };
 
-    patchResultMap();
-    const mapObserver = new MutationObserver(patchResultMap);
-    mapObserver.observe(document.body, { childList: true, subtree: true });
-    return () => mapObserver.disconnect();
+    // Re-assert on the user's keystroke in the CAPTURE phase — this runs BEFORE
+    // Orama's debounced search + render, so the very first results already carry
+    // the rich mapping instead of showing plain for a render (the flaky part).
+    const onInputCapture = (e) => {
+      const path = e.composedPath ? e.composedPath() : [];
+      if (path.some((el) => el?.tagName === 'ORAMA-SEARCH-BOX')) applyResultMap();
+    };
+    document.addEventListener('input', onInputCapture, true);
+
+    // Also re-apply on DOM changes (modal mount, result re-renders, resets).
+    const observer = new MutationObserver(applyResultMap);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // The store often initializes a beat after the box mounts; briefly poll so
+    // the mapping is in place before the first (no-keystroke) results render.
+    let polls = 0;
+    const poll = setInterval(() => {
+      if (applyResultMap() || polls++ > 40) clearInterval(poll);
+    }, 50);
+
+    return () => {
+      document.removeEventListener('input', onInputCapture, true);
+      observer.disconnect();
+      clearInterval(poll);
+    };
   }, []);
 
   useEffect(() => {

@@ -2599,7 +2599,7 @@
   dependencies:
     "@orama/orama" "3.1.18"
 
-"@orama/plugin-docusaurus-v3@^3.1.18":
+"@orama/plugin-docusaurus-v3@3.1.18":
   version "3.1.18"
   resolved "https://registry.npmjs.org/@orama/plugin-docusaurus-v3/-/plugin-docusaurus-v3-3.1.18.tgz"
   integrity sha512-s9qtHLvK4mX4NGvlTDNeWUMo77LPBqRBCpJcIo9ihICEtWPqromg+PNa0UmumZktjDVMcd2r2ZhDc3jpB5VjbQ==

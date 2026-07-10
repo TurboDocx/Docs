@@ -30,7 +30,12 @@ function scrollActiveSidebarItemIntoView() {
   const activeLink = getActiveLeafSidebarLink();
   if (!activeLink) return;
 
-  // Walk up to the nearest vertically-scrollable ancestor (the sidebar menu).
+  // Walk up to the sidebar's OWN scroll container, but stay WITHIN the sidebar.
+  // If we let the search escape, it lands on the page scroller (html counts as
+  // one because overflow-x is hidden), and "centering" then scrolls the whole
+  // page. Bail if nothing inside the sidebar scrolls (short sidebar → nothing to do).
+  const boundary = activeLink.closest('.theme-doc-sidebar-container');
+  if (!boundary) return;
   let scroller = activeLink.parentElement;
   while (scroller) {
     const { overflowY } = getComputedStyle(scroller);
@@ -38,6 +43,10 @@ function scrollActiveSidebarItemIntoView() {
       (overflowY === 'auto' || overflowY === 'scroll') &&
       scroller.scrollHeight > scroller.clientHeight
     ) {
+      break;
+    }
+    if (scroller === boundary) {
+      scroller = null;
       break;
     }
     scroller = scroller.parentElement;

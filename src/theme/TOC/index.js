@@ -13,9 +13,16 @@ import TOC from '@theme-original/TOC';
 // (via scrollTop on the ToC's scroll container), never the page. Short pages,
 // where the ToC fits without scrolling, are left untouched.
 
-// Nearest vertically-scrollable ancestor — the ToC's own scroll container.
-function findScroller(el) {
-  let node = el && el.parentElement;
+// The ToC's OWN scroll container — never the page. On pages whose ToC is short
+// enough to fit, the ToC isn't scrollable; if we let the search escape the ToC it
+// lands on the page scroller (html counts as one because overflow-x is hidden),
+// and "centering the active link" then scrolls the whole PAGE — which drove
+// short-ToC pages (e.g. Install with AI Agents) to the bottom and locked them.
+// So bound the walk to the desktop ToC region and bail if nothing there scrolls.
+function findScroller(link) {
+  const boundary = link.closest('.theme-doc-toc-desktop');
+  if (!boundary) return null;
+  let node = link.parentElement;
   while (node) {
     const { overflowY } = getComputedStyle(node);
     if (
@@ -24,6 +31,7 @@ function findScroller(el) {
     ) {
       return node;
     }
+    if (node === boundary) break;
     node = node.parentElement;
   }
   return null;
