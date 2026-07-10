@@ -209,6 +209,10 @@ Choose **Pause sending** only if your compliance requirements prohibit any email
 
 Turn on **Apply my organization branding to signature emails and the signing page** to use your organization's logo and colors on both the emails and the public signing page. The logo and colors come from your **Brand Identity settings** in Organization Settings.
 
+:::note Host your email logo at a public URL
+For your logo to show up in emails, it must be hosted at a public `https` URL, for example on your own website. Hosting it on your own domain also keeps the email fully aligned with your sending domain. Logos uploaded directly in Brand Identity are stored inline, and most email clients don't display inline images, so those emails use the standard header instead. The signing page still shows your uploaded logo either way.
+:::
+
 :::note Legal text is never altered
 Branding changes the look only. Consent and legal text in signature emails and on the signing page is never modified, regardless of branding settings.
 :::
