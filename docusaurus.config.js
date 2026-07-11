@@ -34,7 +34,7 @@ const config = {
       href: 'https://cdn.tailwindcss.com/3.4.3'
     }
   ],
-  title: 'TurboDocx Documentation',
+  title: 'TurboDocx',
   tagline: 'Turbocharging your Document Workflows',
   url: 'https://docs.turbodocx.com',
   baseUrl: '/',

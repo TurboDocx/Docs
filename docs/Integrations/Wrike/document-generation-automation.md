@@ -1,5 +1,5 @@
 ---
-title: How to Setup Document Generation Automation
+title: How to Set Up Wrike Document Generation
 sidebar_position: 3
 description: Configure a Wrike automation to automatically generate documents from a template when a task status changes.
 keywords:
