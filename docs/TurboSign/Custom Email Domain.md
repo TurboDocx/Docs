@@ -217,6 +217,26 @@ For your logo to show up in emails, it must be hosted at a public `https` URL, f
 Branding changes the look only. Consent and legal text in signature emails and on the signing page is never modified, regardless of branding settings.
 :::
 
+### Set your product name
+
+Below the branding toggle, the **Product name** field lets you replace the TurboSign name on everything your signers and recipients see:
+
+1. Type your product's name (for example `AcmeSign`) in the **Product name** field.
+2. Click **Save Changes**.
+
+Once saved, your product name appears in place of TurboSign on:
+
+- The document ID stamp on every finalized PDF (for example `AcmeSign Document ID: ...`)
+- The audit trail certificate's title, footer, and file name
+- Signature request emails (the "via" sender line and the audit trail attachment name)
+- The digital seal details on the finalized PDF
+
+Use 2-40 letters, numbers, or common punctuation. Angle brackets (`<` and `>`) aren't allowed. Leave the field blank to keep the standard TurboSign name.
+
+:::note The seal always names the operator
+For signature integrity, the digital seal on finalized documents is applied by TurboDocx on behalf of your product, and the seal's certificate identifies TurboDocx. Validators such as Adobe Acrobat show the certificate identity. This is the same model other major e-signature platforms use, and it keeps every sealed document verifiable.
+:::
+
 <br/>
 
 ## Step 8: Send a Test Email
