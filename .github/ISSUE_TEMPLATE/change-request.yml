@@ -36,10 +36,10 @@ body:
     validations:
       required: true
   - type: textarea
-    id: description
+    id: details
     attributes:
-      label: Description & rationale
-      description: What is changing and why. Note any security impact here.
+      label: Details — description & full context
+      description: 'What is changing and why. Put the full write-up here: summary, scope, bug repro, tracking links, checklists, security impact. Markdown works — this is your free-form space.'
     validations:
       required: true
   - type: input
