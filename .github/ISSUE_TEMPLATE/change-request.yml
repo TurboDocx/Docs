@@ -1,0 +1,82 @@
+name: Change Request
+description: Record a change for change management / SOC 2
+title: "type(scope): short description"
+labels: ["change"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for **Planned** or **Emergency** changes. Standard changes (dependency bumps,
+        low-risk edits) can skip this — the merged PR is the record. The implementing PR should
+        close this issue with `Closes #<this issue>`.
+  - type: dropdown
+    id: change-type
+    attributes:
+      label: Change type
+      options:
+        - Standard — low-risk, pre-approved
+        - Planned — normal review → merge
+        - Emergency — hotfix
+    validations:
+      required: true
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk / impact
+      options: ["Low", "Medium", "High"]
+    validations:
+      required: true
+  - type: dropdown
+    id: security-impact
+    attributes:
+      label: Security impact assessed?
+      options:
+        - "No — no security impact"
+        - "Yes — described below"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description & rationale
+      description: What is changing and why. Note any security impact here.
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component / area
+      placeholder: e.g. Python SDK, API reference page
+  - type: checkboxes
+    id: testing
+    attributes:
+      label: Testing & validation
+      options:
+        - label: CI / build passes on the implementing PR
+        - label: Tests or examples added/updated for the change
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Rollback plan
+      placeholder: "Usually: revert the merge commit. For a published version, ship a patch revert."
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Breaking change for consumers?
+      options:
+        - "No"
+        - "Yes — note the version bump + migration/upgrade impact below"
+    validations:
+      required: true
+  - type: textarea
+    id: related-prs
+    attributes:
+      label: Related PRs (if this spans repos)
+      value: |
+        - Source (backend/frontend):
+        - This repo:
+  - type: input
+    id: approver
+    attributes:
+      label: Reviewer / approver
+      description: A PR review approval satisfies this.
