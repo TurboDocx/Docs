@@ -68,13 +68,6 @@ body:
         - "Yes — note the version bump + migration/upgrade impact below"
     validations:
       required: true
-  - type: textarea
-    id: related-prs
-    attributes:
-      label: Related PRs (if this spans repos)
-      value: |
-        - Source (backend/frontend):
-        - This repo:
   - type: input
     id: approver
     attributes:
