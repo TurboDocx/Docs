@@ -17,10 +17,6 @@ const logoJson = require('./logo.json')
 const config = {
   scripts: [
     {
-      src: 'https://kit.fontawesome.com/c11e540390.js',
-      crossorigin: 'anonymous',
-    },
-    {
       src: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js',
       crossorigin: 'anonymous',
     }
@@ -172,8 +168,8 @@ const config = {
           tagName: 'link',
           attributes: {
             rel: 'stylesheet',
-            href: 'https://use.fontawesome.com/releases/v5.15.4/css/all.css',
-            integrity: 'sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm',
+            href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
+            integrity: 'sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==',
             crossorigin: 'anonymous',
           },
         },
