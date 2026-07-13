@@ -28,3 +28,12 @@ npm run build      # Build static site
 npm run serve      # Serve production build locally
 npm run clear      # Clear Docusaurus cache
 ```
+
+## Change Management (SOC 2)
+
+This is a **public** repo. Every non-standard change is recorded as a **Change Request** issue
+(`.github/ISSUE_TEMPLATE/change-request.yml`); the PR closes it with `Closes #<issue>`. Bugs use
+the **Bug Report** form. Standard changes (dependency bumps, docs typos) skip the issue.
+
+**Never reference internal repos or PRs (e.g. backend/frontend) in this public repo — it leaks
+unreleased internal context.**
