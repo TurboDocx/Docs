@@ -28,7 +28,12 @@ const config = {
     'src/css/custom.css',
     {
       href: 'https://cdn.tailwindcss.com/3.4.3'
-    }
+    },
+    {
+      href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
+      integrity: 'sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==',
+      crossorigin: 'anonymous',
+    },
   ],
   title: 'TurboDocx',
   tagline: 'Turbocharging your Document Workflows',
@@ -163,17 +168,6 @@ const config = {
         disableSwitch: false,
         respectPrefersColorScheme: true,
       },
-      head: [
-        {
-          tagName: 'link',
-          attributes: {
-            rel: 'stylesheet',
-            href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
-            integrity: 'sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==',
-            crossorigin: 'anonymous',
-          },
-        },
-      ],
       navbar: {
         logo: {
           alt: 'TurboDocx Logo',
