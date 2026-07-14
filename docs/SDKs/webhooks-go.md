@@ -316,10 +316,12 @@ created, err := wh.CreateWebhook(ctx, turbodocx.CreateWebhookRequest{
 })
 ```
 
+`URLs` accepts **1 to 10** HTTPS URLs. `Events` requires **at least 1** event. Both are required on create.
+
 | Error type | Why |
 |---|---|
 | `*ConflictError` (409) | The signature webhook already exists for this org. |
-| `*ValidationError` (400) | A URL is not HTTPS, or `Events` is empty. |
+| `*ValidationError` (400) | A URL is not HTTPS, `URLs` is empty or has more than 10 entries, or `Events` is empty. |
 | `*AuthorizationError` (403) | API key lacks the administrator role. |
 
 ### GetWebhook
@@ -343,7 +345,16 @@ updated, err := wh.UpdateWebhook(ctx, turbodocx.UpdateWebhookRequest{
     Events:   []string{"signature.document.completed"},
     IsActive: turbodocx.BoolPtr(true),
 })
+
+// Leaving URLs and Events alone: leave them nil so the SDK omits the keys.
+updated, err = wh.UpdateWebhook(ctx, turbodocx.UpdateWebhookRequest{
+    IsActive: turbodocx.BoolPtr(false),
+})
 ```
+
+:::danger Never send an empty array
+`URLs` and `Events` are optional on update, but optional does **not** relax their minimum length: the API rejects `urls: []` or `events: []` with a **400**. To leave a field unchanged, leave the slice at its `nil` zero value so the key is omitted from the request — never build one out of a deliberately empty `[]string{}`. `URLs` still caps at 10 entries on update.
+:::
 
 ### DeleteWebhook
 
@@ -483,7 +494,7 @@ if err != nil {
 
 | Status | Type | When |
 |---|---|---|
-| 400 | `*ValidationError` | Non-HTTPS URL, empty events, invalid body |
+| 400 | `*ValidationError` | Non-HTTPS URL, empty `urls`/`events` array, more than 10 URLs, invalid body |
 | 401 | `*AuthenticationError` | Missing or invalid API key |
 | 403 | `*AuthorizationError` | Valid key without administrator role |
 | 404 | `*NotFoundError` | Operating on a non-existent webhook |
@@ -506,6 +517,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`VerifyWebhookSignature` is a free function**, not a method on `WebhooksClient` — it has no `APIKey`/`OrgID` dependency. Pass `nil` for `opts` to use the default 300-second tolerance.
 - **Pointer-typed optional fields.** `UpdateWebhookRequest.IsActive` and `ListDeliveriesRequest.{Limit, Offset, IsDelivered, HTTPStatus}` are pointers so a zero value (`false` or `0`) can be told apart from "leave unchanged" / "no filter." Use `turbodocx.BoolPtr(false)` / `&n` to set them.
 - **`TestWebhook` summary now includes per-URL errors.** Type-assert `result["summary"].(map[string]interface{})["errors"].([]interface{})` to see exactly which receiver failed and why.
+- **An empty array is not "no change".** `urls: []` and `events: []` are 400s on update, not no-ops. Leave `URLs`/`Events` `nil` so the key is omitted.
 
 ## See Also
 

@@ -277,9 +277,23 @@ result, err := partner.UpdateOrganizationEntitlements(ctx, "org-uuid-here",
 fmt.Println("Entitlements updated!")
 ```
 
+You can also set the usage counters on the same call:
+
+```go
+_, err = partner.UpdateOrganizationEntitlements(ctx, "org-uuid-here",
+    &turbodocx.UpdateEntitlementsRequest{
+        Tracking: &turbodocx.Tracking{
+            NumUsers:         5,
+            StorageUsed:      1048576,
+            CurrentAICredits: -1, // -1 = unlimited
+        },
+    },
+)
+```
+
 :::info Features vs Tracking
-**Features** are limits and capabilities you can set (MaxUsers, HasTDAI, etc.).
-**Tracking** is read-only usage data (NumUsers, StorageUsed, etc.).
+**Features** are the limits and capabilities you grant (MaxUsers, HasTDAI, …).
+**Tracking** is the current consumption against those limits (NumUsers, StorageUsed, …). It is normally maintained by TurboDocx, but this endpoint **does accept a `Tracking` object**, so you can seed or reconcile counters during a migration.
 See [Entitlements Reference](#entitlements-reference) for all available fields.
 :::
 
@@ -380,7 +394,7 @@ Create an API key for an organization.
 result, err := partner.CreateOrganizationAPIKey(ctx, "org-uuid-here",
     &turbodocx.CreateOrgAPIKeyRequest{
         Name: "Production API Key",
-        Role: "admin", // admin, contributor, or viewer
+        Role: "admin", // ORG role enum: admin, contributor, user, or viewer
     },
 )
 
@@ -499,6 +513,14 @@ result, err := partner.RevokePartnerAPIKey(ctx, "partner-key-uuid-here")
 
 ## Partner User Management
 
+:::danger Partner users use a different role enum
+Partner portal users take `admin`, `member`, or `viewer`. **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer`. The two enums do not overlap beyond `admin`/`viewer` — `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
+:::
+
+:::caution `Permissions` is all-or-nothing
+The `Permissions` object itself is optional, but if you send it, **all seven fields are required**. There is no partial permissions update — the API rejects an incomplete object with `*ValidationError` (400). Because `PartnerPermissions` is a struct of plain `bool`s, any field you leave out silently serializes as `false` rather than "unchanged": read the current values first and re-send them with your change applied.
+:::
+
 ### `AddUserToPartnerPortal()`
 
 Add a user to the partner portal with specific permissions.
@@ -507,7 +529,8 @@ Add a user to the partner portal with specific permissions.
 result, err := partner.AddUserToPartnerPortal(ctx,
     &turbodocx.AddPartnerUserRequest{
         Email: "admin@partner.com",
-        Role:  "admin", // admin, member, or viewer
+        Role:  "admin", // PARTNER role enum: admin, member, or viewer
+        // All 7 fields required whenever Permissions is present.
         Permissions: turbodocx.PartnerPermissions{
             CanManageOrgs:          true,
             CanManageOrgUsers:      true,
@@ -539,12 +562,13 @@ for _, user := range result.Data.Results {
 
 ### `UpdatePartnerUserPermissions()`
 
-Update a partner user's role and permissions.
+Update a partner user's role and permissions. If you set `Permissions`, populate **all seven fields** — a partial object is a 400, and unset bools default to `false`.
 
 ```go
 result, err := partner.UpdatePartnerUserPermissions(ctx, "partner-user-uuid-here",
     &turbodocx.UpdatePartnerUserRequest{
         Role: "admin",
+        // Not a patch: every field below must be set explicitly.
         Permissions: &turbodocx.PartnerPermissions{
             CanManageOrgs:          true,
             CanManageOrgUsers:      true,
@@ -651,9 +675,9 @@ Use the provided helper functions for setting optional fields:
 - `turbodocx.BoolPtr(true)` — for `*bool` fields
 :::
 
-### Tracking (Read-Only Usage)
+### Tracking (Usage Counters)
 
-These are usage counters that are read-only:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `UpdateOrganizationEntitlements()` **accepts a `Tracking` object** — useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -663,7 +687,13 @@ These are usage counters that are read-only:
 | `StorageUsed` | `int64` | Current storage used in bytes |
 | `NumGeneratedDeliverables` | `int` | Total documents generated |
 | `NumSignaturesUsed` | `int` | Total signatures used |
-| `CurrentAICredits` | `int` | Remaining AI credits |
+| `CurrentAICredits` | `int` | Remaining AI credits (-1 = unlimited) |
+
+Every counter except `CurrentAICredits` floors at `0`. Only `CurrentAICredits` accepts `-1`, meaning unlimited.
+
+:::note Zero values are omitted
+`Tracking` fields are plain values tagged `omitempty`, so a field you set to `0` is dropped from the request body rather than sent as `0`. To reset a counter to zero, use the REST API directly.
+:::
 
 ---
 
@@ -711,6 +741,8 @@ turbodocx.ScopeAuditRead            // "audit:read"
 
 ### Organization User Roles
 
+Used by `AddUserToOrganization()`, `UpdateOrganizationUserRole()`, `CreateOrganizationAPIKey()`, and `UpdateOrganizationAPIKey()`.
+
 | Role | Description |
 |------|-------------|
 | `"admin"` | Full organization access |
@@ -720,13 +752,21 @@ turbodocx.ScopeAuditRead            // "audit:read"
 
 ### Partner User Roles
 
+Used by `AddUserToPartnerPortal()` and `UpdatePartnerUserPermissions()` only.
+
 | Role | Description |
 |------|-------------|
 | `"admin"` | Full partner portal access |
 | `"member"` | Standard partner access (respects permissions) |
 | `"viewer"` | Read-only access to partner portal |
 
+:::danger Do not mix the two enums
+`"member"` exists **only** in the partner role enum; sending it to an organization endpoint is a 400. `"contributor"` and `"user"` exist **only** in the organization role enum; sending either to a partner endpoint is a 400.
+:::
+
 ### PartnerPermissions
+
+All seven fields are required whenever a `PartnerPermissions` object is sent. Partial objects are rejected with a 400.
 
 ```go
 permissions := turbodocx.PartnerPermissions{

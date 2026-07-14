@@ -93,6 +93,10 @@ TurboWebhooks webhooks = new TurboDocxClient.Builder()
 
 `buildWebhooksClient()` does **not** require `senderEmail` — webhook routes don't send email, so the sender validation that `build()` enforces for TurboSign is skipped here. The returned `TurboWebhooks` is an admin-scoped client; construct once and reuse.
 
+:::warning Administrator role required
+TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role throws `TurboDocxException.AuthorizationException` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
+:::
+
 ### Environment Variables
 
 ```bash
@@ -307,10 +311,12 @@ JsonObject created = webhooks.createWebhook(
 );
 ```
 
+The URL list accepts **1 to 10** HTTPS URLs. The events list requires **at least 1** event. Both are required on create.
+
 | Exception | Why |
 |---|---|
 | `TurboDocxException.ConflictException` (409) | The signature webhook already exists for this org. |
-| `TurboDocxException.ValidationException` (400) | A URL is not HTTPS, or the events list is empty. |
+| `TurboDocxException.ValidationException` (400) | A URL is not HTTPS, the URL list is empty or has more than 10 entries, or the events list is empty. |
 | `TurboDocxException.AuthorizationException` (403) | API key lacks the administrator role. |
 
 ### getWebhook
@@ -335,7 +341,14 @@ JsonObject updated = webhooks.updateWebhook(
     Arrays.asList("signature.document.completed"),                         // events
     Boolean.TRUE                                                            // isActive
 );
+
+// Leaving urls and events alone: pass null, NOT an empty list.
+JsonObject deactivated = webhooks.updateWebhook(null, null, Boolean.FALSE);
 ```
+
+:::danger Never pass an empty list
+`urls` and `events` are optional on update, but optional does **not** relax their minimum length. An empty list serializes to `urls: []` / `events: []`, which the API rejects with a **400** — exactly as it would on create. To leave a field unchanged, pass `null` so the key is omitted; never pass `Collections.emptyList()`. The URL list still caps at 10 entries on update.
+:::
 
 ### deleteWebhook
 
@@ -461,7 +474,7 @@ try {
 
 | Status | Type | When |
 |---|---|---|
-| 400 | `TurboDocxException.ValidationException` | Non-HTTPS URL, empty events, invalid body |
+| 400 | `TurboDocxException.ValidationException` | Non-HTTPS URL, empty `urls`/`events` list, more than 10 URLs, invalid body |
 | 401 | `TurboDocxException.AuthenticationException` | Missing or invalid API key |
 | 403 | `TurboDocxException.AuthorizationException` | Valid key without administrator role |
 | 404 | `TurboDocxException.NotFoundException` | Operating on a non-existent webhook |
@@ -484,6 +497,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **Use the raw bytes for verification.** The HMAC is over the exact request body received. In Spring, bind to `@RequestBody byte[] rawBody` — never `Map`/DTO; Jackson re-serialization breaks verification. In Servlets, use `request.getInputStream().readAllBytes()`. In JAX-RS, declare a `byte[]` entity parameter.
 - **Administrator role required.** The webhook routes are gated on `requireOrgRole(administrator)`. Valid TDX- keys without the role throw `TurboDocxException.AuthorizationException` (403).
 - **`null` skips fields on `updateWebhook` and `listWebhookDeliveries`.** Pass `null` for any argument you don't want to change/filter.
+- **An empty list is not "no change".** On `updateWebhook`, an empty `urls`/`events` list serializes to `[]` and is a **400**, not a no-op. Pass `null` — never `Collections.emptyList()`.
 - **`testWebhook` summary includes per-URL errors.** Read `result.getAsJsonObject("summary").getAsJsonArray("errors")` to see exactly which receiver failed and why.
 - **All TurboWebhooks methods return `JsonObject`.** New server fields surface without an SDK upgrade — use `.has(key)` / `.get(key)` to navigate.
 

@@ -174,10 +174,12 @@ $created = TurboWebhooks::createWebhook(
 );
 ```
 
+`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** event. Both are required on create.
+
 | Throws | Why |
 |---|---|
 | `ConflictException` (409) | The signature webhook already exists for this org. |
-| `ValidationException` (400) | A URL is not HTTPS, or `events` is empty. |
+| `ValidationException` (400) | A URL is not HTTPS, `urls` is empty or has more than 10 entries, or `events` is empty. |
 | `AuthorizationException` (403) | API key lacks the administrator role. |
 
 ### getWebhook
@@ -204,7 +206,14 @@ TurboWebhooks::updateWebhook(
     events: ['signature.document.completed'],
     isActive: true,
 );
+
+// Leaving urls and events alone: just don't pass those named arguments.
+TurboWebhooks::updateWebhook(isActive: false);
 ```
+
+:::danger Never send an empty array
+`urls` and `events` are optional on update, but optional does **not** relax their minimum length. `urls: []` or `events: []` is a **400** — the same as sending an empty array on create. To leave a field unchanged, **omit the argument entirely**. `urls` still caps at 10 entries on update.
+:::
 
 ### deleteWebhook
 
@@ -394,7 +403,7 @@ try {
 
 | Status | Exception | When |
 |---|---|---|
-| 400 | `ValidationException` | Non-HTTPS URL, empty events, invalid body |
+| 400 | `ValidationException` | Non-HTTPS URL, empty `urls`/`events` array, more than 10 URLs, invalid body |
 | 401 | `AuthenticationException` | Missing or invalid API key |
 | 403 | `AuthorizationException` | Valid key without administrator role |
 | 404 | `NotFoundException` | Operating on a non-existent webhook |
@@ -417,6 +426,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`replayWebhookDelivery` returns the full delivery row.** Earlier SDK versions documented a partial shape (`{id, httpStatus, message}`) — current versions return the complete `WebhookDelivery` object.
 - **`testWebhook` summary now includes per-URL errors.** Check `$result['summary']['errors']` to see exactly which receiver failed and why.
 - **`createWebhook` and `regenerateWebhookSecret` return data without a `message` field.** The success message lives at the response envelope and is extracted away by the SDK.
+- **An empty array is not "no change".** On `updateWebhook`, `urls: []` and `events: []` are 400s, not no-ops. Omit the argument to leave the field alone.
 
 ## See Also
 

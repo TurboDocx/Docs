@@ -178,10 +178,12 @@ created = TurboDocxSdk::TurboWebhooks.create_webhook(
 )
 ```
 
+`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** event. Both are required on create.
+
 | Raises | Why |
 |---|---|
 | `TurboDocxSdk::ConflictError` (409) | The signature webhook already exists for this org. |
-| `TurboDocxSdk::ValidationError` (400) | A URL is not HTTPS, or `events` is empty. |
+| `TurboDocxSdk::ValidationError` (400) | A URL is not HTTPS, `urls` is empty or has more than 10 entries, or `events` is empty. |
 | `TurboDocxSdk::AuthorizationError` (403) | API key lacks the administrator role. |
 
 ### get_webhook
@@ -208,7 +210,14 @@ TurboDocxSdk::TurboWebhooks.update_webhook(
   events:    ["signature.document.completed"],
   is_active: true
 )
+
+# Leaving urls and events alone: just don't pass those keyword arguments.
+TurboDocxSdk::TurboWebhooks.update_webhook(is_active: false)
 ```
+
+:::danger Never send an empty array
+`urls` and `events` are optional on update, but optional does **not** relax their minimum length. `urls: []` or `events: []` is a **400** — the same as sending an empty array on create. To leave a field unchanged, **omit the keyword argument entirely**. `urls` still caps at 10 entries on update.
+:::
 
 ### delete_webhook
 
@@ -411,7 +420,7 @@ All errors inherit from `TurboDocxSdk::TurboDocxError` and carry `status_code` a
 
 | Status | Error | When |
 |---|---|---|
-| 400 | `ValidationError` | Non-HTTPS URL, empty events, invalid body |
+| 400 | `ValidationError` | Non-HTTPS URL, empty `urls`/`events` array, more than 10 URLs, invalid body |
 | 401 | `AuthenticationError` | Missing or invalid API key |
 | 403 | `AuthorizationError` | Valid key without administrator role |
 | 404 | `NotFoundError` | Operating on a non-existent webhook |
@@ -434,6 +443,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`verify_webhook_signature` uses keyword arguments** (`payload:`, `signature_header:`, `timestamp_header:`, `secret:`) — not positional args.
 - **`verify_webhook_signature` never raises.** Non-String headers, a missing secret, or a malformed timestamp all return `false` rather than raising; a negative `tolerance_seconds` fails closed.
 - **`update_webhook` only sends what you pass.** Omitted keyword arguments are excluded from the PATCH body, so you can flip `is_active` without resending `urls`/`events`.
+- **An empty array is not "no change".** `urls: []` and `events: []` are 400s on update, not no-ops — omitting the keyword is the only way to leave a field alone.
 
 ## See Also
 

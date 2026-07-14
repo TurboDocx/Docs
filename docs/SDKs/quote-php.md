@@ -206,14 +206,32 @@ foreach ($page->results as $q) {
 ```php
 use TurboDocx\Types\Requests\Quote\CreateQuoteRequest;
 
+// Fixed-term quote — termDays is -1 or 0–3650; omit it to get the default of 60.
 $quote = TurboQuote::createQuote(new CreateQuoteRequest(
     name: 'Q3 Proposal',
     companyId: 'company-uuid',
     contactId: 'contact-uuid',
     validUntil: '2026-09-30',
     currency: 'USD',
+    termDays: 30,               // fixed term — do NOT pass renewalPeriod with this
+));
+
+// Auto-renewal quote — termDays -1 REQUIRES renewalPeriod.
+$subscription = TurboQuote::createQuote(new CreateQuoteRequest(
+    name: 'Annual Subscription',
+    companyId: 'company-uuid',
+    contactId: 'contact-uuid',
+    currency: 'USD',
+    termDays: -1,               // -1 = auto-renewal
+    renewalPeriod: 'annually',  // 'weekly' | 'monthly' | 'quarterly' | 'annually'
 ));
 ```
+
+:::caution `termDays` and `renewalPeriod` are coupled
+`termDays` defaults to **60** when omitted. Valid values are `-1` (auto-renewal) or `0`–`3650` (`0` = one-time).
+
+`renewalPeriod` is **required** when `termDays` is `-1`, and must be **null or absent** for every other `termDays` value — sending it alongside a fixed term returns a `400`. The same rule applies on `updateQuote`.
+:::
 
 #### getQuote
 
@@ -314,15 +332,27 @@ $quote = TurboQuote::voidQuote('quote-uuid', new VoidQuoteRequest(
 
 #### handleExpiredQuote
 
+Handles a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
+
+All three arguments are **required**: `action` (`'void'` or `'decline'`), `reason` (max 190 characters), and `newValidUntil` (ISO date).
+
 ```php
 use TurboDocx\Types\Requests\Quote\HandleExpiredQuoteRequest;
 
 $quote = TurboQuote::handleExpiredQuote('quote-uuid', new HandleExpiredQuoteRequest(
-    action: 'extend',
-    reason: 'Customer requested more time to review',
-    newValidUntil: '2026-12-31',
+    action: 'void',                                  // required — 'void' or 'decline' only
+    reason: 'Customer requested more time to review', // required — max 190 characters
+    newValidUntil: '2026-12-31',                     // required — ISO date, carried onto the duplicate
 ));
 ```
+
+:::warning There is no `extend` or `resend` action
+`action` accepts **only** `'void'` and `'decline'`. `'extend'` and `'resend'` do not exist in the API and return a `400`. Extending is what the endpoint already does — pass `newValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::note Terminal statuses
+`accepted`, `declined`, and `voided` are **terminal** — a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Inspect the `statusInfo` merged onto the `Quote` before attempting a transition, and use `duplicateQuote` when you need to revive a closed-out quote.
+:::
 
 ### Quote Numbering Configuration
 
@@ -420,28 +450,34 @@ foreach ($page->results as $item) {
 
 #### addLineItems
 
-Pass a single `AddLineItemRequest` or an array of them.
+Pass a single `AddLineItemRequest` or an array of up to **50** of them.
+
+`productId`, `productName`, `unitPrice`, and `billingFrequency` are all **required** on every item. `productId` is special: the key must be **present**, but its value may be `null` for a custom (freeform) line item. `quantity` is optional and defaults to `1`.
 
 ```php
 use TurboDocx\Types\Requests\Quote\AddLineItemRequest;
 
 $items = TurboQuote::addLineItems('quote-uuid', [
     new AddLineItemRequest(
-        productId: 'product-uuid-1',
+        productId: 'product-uuid-1',   // required — null for a custom line item
         productName: 'Platform Subscription',
         unitPrice: 199.00,
         billingFrequency: 'monthly',
         quantity: 2,
     ),
     new AddLineItemRequest(
-        productId: 'product-uuid-2',
-        productName: 'Onboarding',
-        unitPrice: 499.00,
+        productId: null,               // custom (freeform) line item — still required, sent as null
+        productName: 'Implementation Credit',
+        unitPrice: -250.00,
         billingFrequency: 'one-time',
         quantity: 1,
     ),
 ]);
 ```
+
+:::note Array caps
+`addLineItems` accepts a single request **or** an array of 1–**50** items. A reorder request accepts up to **200** items. Exceeding either cap returns a `400`.
+:::
 
 #### addBundleLineItems
 
@@ -530,6 +566,8 @@ When `CreateProductRequest` or `UpdateProductRequest` includes an `images` key (
 | `deleteBundle` | `(string $id)` | `MessageResponse` |
 | `duplicateBundle` | `(string $id)` | `Bundle` |
 
+Each entry in `items` **requires** `productId`, `unitPrice`, and `billingFrequency`. `quantity` is optional and defaults to `1`.
+
 ```php
 use TurboDocx\Types\Requests\Quote\CreateBundleRequest;
 
@@ -537,8 +575,18 @@ $bundle = TurboQuote::createBundle(new CreateBundleRequest(
     name: 'Starter Kit',
     categoryId: 'category-uuid',
     items: [
-        ['productId' => 'product-uuid-1', 'quantity' => 1],
-        ['productId' => 'product-uuid-2', 'quantity' => 2],
+        [
+            'productId' => 'product-uuid-1',
+            'unitPrice' => 199.00,
+            'billingFrequency' => 'monthly',
+            'quantity' => 1,
+        ],
+        [
+            'productId' => 'product-uuid-2',
+            'unitPrice' => 49.00,
+            'billingFrequency' => 'monthly',
+            'quantity' => 2,
+        ],
     ],
 ));
 
@@ -624,20 +672,38 @@ $contact = TurboQuote::createContact(new CreateContactRequest(
 | Method | Signature | Returns |
 |---|---|---|
 | `listTemplates` | `(?ListTemplatesRequest)` | `QuoteTemplateListResponse` |
-| `getTemplate` | `()` | `QuoteTemplate` |
+| `getTemplate` | `()` | `QuoteTemplate` — auto-created if none exists |
 | `getTemplateById` | `(string $id)` | `QuoteTemplate` |
-| `createTemplate` | `(CreateQuoteTemplateRequest)` | `QuoteTemplate` |
+| `createTemplate` | `(CreateQuoteTemplateRequest)` | `QuoteTemplate` — `400` if one already exists |
 | `updateTemplate` | `(string $id, UpdateQuoteTemplateRequest)` | `QuoteTemplate` |
-| `deleteTemplate` | `(string $id)` | `MessageResponse` |
+| `deleteTemplate` | `(string $id)` | `MessageResponse` — resets to org branding defaults |
 
 :::note getTemplate vs getTemplateById
 `getTemplate()` (no argument) hits `GET /v1/quote-template` (singular) and returns the org's currently active template. `getTemplateById($id)` hits `GET /v1/quote-templates/:id` and returns any specific template by ID.
 :::
 
+:::warning Templates are auto-provisioned — use getTemplate() → updateTemplate()
+`getTemplate()` **self-heals**: if the org has no template, the API creates one from your org branding and returns it. Every established org therefore already has a template, which means:
+
+- `createTemplate()` returns **400 `TEMPLATE_ALREADY_EXISTS`** and is effectively unreachable. Do not build a get-then-create flow.
+- `deleteTemplate()` is really "reset to org branding defaults" — it soft-deletes, and the next `getTemplate()` regenerates a fresh one.
+
+The correct flow is **`getTemplate()` → `updateTemplate()`**.
+:::
+
 ```php
-// Get the active org template
+use TurboDocx\Types\Requests\Quote\UpdateQuoteTemplateRequest;
+
+// 1. Get the active org template (created from org branding on first read)
 $active = TurboQuote::getTemplate();
 echo $active->name;
+
+// 2. Brand it by updating the template you just fetched
+$branded = TurboQuote::updateTemplate($active->id, new UpdateQuoteTemplateRequest(
+    logoUrl: 'https://cdn.example.com/logo.png',
+    primaryColor: '#0057b8',
+    senderName: 'TurboDocx Sales',
+));
 
 // List all templates
 $templates = TurboQuote::listTemplates();
@@ -674,17 +740,43 @@ Rows process sequentially with **partial success** — a failed row does not thr
 
 Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
 
+:::caution Product rows require a real `categoryId`
+Every `bulkCreateProducts` row **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`categoryType: 'product_category'`) — there is no `categoryName` field on the bulk row schema, and the API rejects unknown keys, so passing one returns a `400`. Resolve or create the category first with `listTypes` / `createType`, then pass its `id`.
+:::
+
 ```php
 use TurboDocx\Types\Requests\Quote\CreateProductRequest;
+use TurboDocx\Types\Requests\Quote\CreateQuoteTypeRequest;
+use TurboDocx\Types\Requests\Quote\ListTypesRequest;
 
+// 1. Resolve the product category first — bulk rows need its UUID, not its name.
+$types = TurboQuote::listTypes(new ListTypesRequest(categoryType: 'product_category'));
+
+$categoryId = null;
+foreach ($types->results as $type) {
+    if ($type->name === 'Software') {
+        $categoryId = $type->id;
+        break;
+    }
+}
+if ($categoryId === null) {
+    $categoryId = TurboQuote::createType(new CreateQuoteTypeRequest(
+        name: 'Software',
+        categoryType: 'product_category',
+    ))->id;
+}
+
+// 2. Import, passing the resolved UUID on every row.
 $result = TurboQuote::bulkCreateProducts([
     new CreateProductRequest(
         name: 'Enterprise Seat',
+        categoryId: $categoryId,
         listPrice: 299.00,
         billingFrequency: 'monthly',
     ),
     new CreateProductRequest(
         name: 'Onboarding Package',
+        categoryId: $categoryId,
         listPrice: 499.00,
         billingFrequency: 'one-time',
     ),

@@ -234,10 +234,12 @@ created = await TurboWebhooks.create_webhook(
 )
 ```
 
+`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** event. Both are required on create.
+
 | Raises | Why |
 |---|---|
 | `ConflictError` (409) | The signature webhook already exists for this org. |
-| `ValidationError` (400) | A URL is not HTTPS, or `events` is empty. |
+| `ValidationError` (400) | A URL is not HTTPS, `urls` is empty or has more than 10 entries, or `events` is empty. |
 | `AuthorizationError` (403) | API key lacks the administrator role. |
 
 ### get_webhook
@@ -261,7 +263,14 @@ await TurboWebhooks.update_webhook(
     events=["signature.document.completed"],
     is_active=True,
 )
+
+# Leaving urls and events alone: just don't pass them.
+await TurboWebhooks.update_webhook(is_active=False)
 ```
+
+:::danger Never send an empty list
+`urls` and `events` are optional on update, but optional does **not** relax their minimum length. `urls=[]` or `events=[]` is a **400** — the same as sending an empty list on create. To leave a field unchanged, **omit the argument entirely**. `urls` still caps at 10 entries on update.
+:::
 
 ### delete_webhook
 
@@ -509,7 +518,7 @@ except TurboDocxError as e:
 
 | Status | Class | When |
 |---|---|---|
-| 400 | `ValidationError` | Non-HTTPS URL, empty events, invalid body |
+| 400 | `ValidationError` | Non-HTTPS URL, empty `urls`/`events` list, more than 10 URLs, invalid body |
 | 401 | `AuthenticationError` | Missing or invalid API key |
 | 403 | `AuthorizationError` | Valid key without administrator role |
 | 404 | `NotFoundError` | Operating on a non-existent webhook |
@@ -532,6 +541,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`verify_webhook_signature` is a free function**, not a method on `TurboWebhooks` — import it directly from `turbodocx_sdk`. It has no `api_key`/`org_id` dependency.
 - **All methods are async.** Call them from inside an `async def`, or wrap with `asyncio.run(...)` from a synchronous context (e.g. a sync Flask view). Mixing `asyncio.run` per-request inside a hot path will reinitialize the event loop on every call — prefer FastAPI or an async Flask variant for production receivers that also need to make SDK calls.
 - **`test_webhook` summary now includes per-URL errors.** Check `result["summary"]["errors"]` to see exactly which receiver failed and why.
+- **An empty list is not "no change".** On `update_webhook`, `urls=[]` and `events=[]` are 400s, not no-ops. Omit the argument to leave the field alone.
 
 ## See Also
 

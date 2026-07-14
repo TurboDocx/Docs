@@ -283,9 +283,24 @@ $result = TurboPartner::updateOrganizationEntitlements(
 echo "Entitlements updated!\n";
 ```
 
+You can also set the usage counters on the same call:
+
+```php
+TurboPartner::updateOrganizationEntitlements(
+    'org-uuid-here',
+    new UpdateEntitlementsRequest(
+        tracking: [
+            'numUsers' => 5,
+            'storageUsed' => 1048576,
+            'currentAICredits' => -1,  // -1 = unlimited
+        ]
+    )
+);
+```
+
 :::info Features vs Tracking
-**Features** are limits and capabilities you can set (maxUsers, hasTDAI, etc.).
-**Tracking** is read-only usage data (numUsers, storageUsed, etc.).
+**Features** are the limits and capabilities you grant (maxUsers, hasTDAI, …).
+**Tracking** is the current consumption against those limits (numUsers, storageUsed, …). It is normally maintained by TurboDocx, but this endpoint **does accept a `tracking` array**, so you can seed or reconcile counters during a migration.
 See [Entitlements Reference](#entitlements-reference) for all available fields.
 :::
 
@@ -396,7 +411,7 @@ $result = TurboPartner::createOrganizationApiKey(
     'org-uuid-here',
     new CreateOrgApiKeyRequest(
         name: 'Production API Key',
-        role: 'admin'  // admin, contributor, or viewer
+        role: 'admin'  // ORG role enum: admin, contributor, user, or viewer
     )
 );
 
@@ -528,6 +543,14 @@ $result = TurboPartner::revokePartnerApiKey('partner-key-uuid-here');
 
 ## Partner User Management
 
+:::danger Partner users use a different role enum
+Partner portal users take `admin`, `member`, or `viewer` (`PartnerUserRole`). **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer` (`OrgUserRole`). The two enums do not overlap beyond `admin`/`viewer` — `'member'` is rejected on an org call, and `'contributor'`/`'user'` are rejected on a partner call. See [Role Enums](#orguserrole-organization-users).
+:::
+
+:::caution `permissions` is all-or-nothing
+The `permissions` object itself is optional, but if you send it, **all seven arguments are required**. There is no partial permissions update — the API rejects an incomplete object with `ValidationException` (400). Read the current values first and re-send them with your change applied.
+:::
+
 ### `addUserToPartnerPortal()`
 
 Add a user to the partner portal with specific permissions.
@@ -539,7 +562,8 @@ use TurboDocx\Types\Partner\PartnerPermissions;
 $result = TurboPartner::addUserToPartnerPortal(
     new AddPartnerUserRequest(
         email: 'admin@partner.com',
-        role: 'admin',  // admin, member, or viewer
+        role: 'admin',  // PARTNER role enum: admin, member, or viewer
+        // All 7 arguments required whenever `permissions` is present.
         permissions: new PartnerPermissions(
             canManageOrgs: true,
             canManageOrgUsers: true,
@@ -573,7 +597,7 @@ foreach ($result->results as $user) {
 
 ### `updatePartnerUserPermissions()`
 
-Update a partner user's role and permissions.
+Update a partner user's role and permissions. If you pass `permissions`, supply **all seven arguments** — a partial object is a 400.
 
 ```php
 use TurboDocx\Types\Requests\Partner\UpdatePartnerUserRequest;
@@ -583,6 +607,7 @@ $result = TurboPartner::updatePartnerUserPermissions(
     'partner-user-uuid-here',
     new UpdatePartnerUserRequest(
         role: 'admin',
+        // Not a patch: every argument below must be supplied.
         permissions: new PartnerPermissions(
             canManageOrgs: true,
             canManageOrgUsers: true,
@@ -680,9 +705,9 @@ These are limits and capabilities you can configure for each organization:
 | `hasBetaFeatures` | bool | Enable beta features |
 | `enableBulkSending` | bool | Enable bulk document sending |
 
-### Tracking (Read-Only Usage)
+### Tracking (Usage Counters)
 
-These are usage counters that are read-only:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` array** — useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -692,7 +717,9 @@ These are usage counters that are read-only:
 | `storageUsed` | int | Current storage used in bytes |
 | `numGeneratedDeliverables` | int | Total documents generated |
 | `numSignaturesUsed` | int | Total signatures used |
-| `currentAICredits` | int | Remaining AI credits |
+| `currentAICredits` | int | Remaining AI credits (-1 = unlimited) |
+
+Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` accepts `-1`, meaning unlimited.
 
 ---
 
@@ -740,7 +767,9 @@ PartnerScope::PARTNER_APIKEYS_DELETE  // 'partner-apikeys:delete'
 PartnerScope::AUDIT_READ          // 'audit:read'
 ```
 
-### OrgUserRole (Organization Users)
+### OrgUserRole (Organization Users and Org API Keys)
+
+Used by `addUserToOrganization()`, `updateOrganizationUserRole()`, `createOrganizationApiKey()`, and `updateOrganizationApiKey()`.
 
 ```php
 use TurboDocx\Types\Enums\OrgUserRole;
@@ -753,6 +782,8 @@ OrgUserRole::VIEWER       // Read-only access
 
 ### PartnerUserRole (Partner Portal Users)
 
+Used by `addUserToPartnerPortal()` and `updatePartnerUserPermissions()` only.
+
 ```php
 use TurboDocx\Types\Enums\PartnerUserRole;
 
@@ -761,7 +792,13 @@ PartnerUserRole::MEMBER  // Standard partner access (respects permissions)
 PartnerUserRole::VIEWER  // Read-only access to partner portal
 ```
 
+:::danger Do not mix the two enums
+`MEMBER` exists **only** on `PartnerUserRole`; sending `'member'` to an organization endpoint is a 400. `CONTRIBUTOR` and `USER` exist **only** on `OrgUserRole`; sending either to a partner endpoint is a 400.
+:::
+
 ### PartnerPermissions
+
+All seven arguments are required whenever a `PartnerPermissions` object is sent. Partial objects are rejected with a 400.
 
 ```php
 use TurboDocx\Types\Partner\PartnerPermissions;

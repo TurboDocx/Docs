@@ -195,17 +195,35 @@ page = TurboDocxSdk::TurboQuote.list_quotes(
 #### `create_quote`
 
 ```ruby
+# Fixed-term quote — termDays is -1 or 0–3650; omit it to get the default of 60.
 quote = TurboDocxSdk::TurboQuote.create_quote(
   "name"       => "Q3 Proposal",
   "companyId"  => "company-uuid",   # required
   "contactId"  => "contact-uuid",   # required
   "currency"   => "USD",
+  "termDays"   => 30,               # fixed term — do NOT send renewalPeriod with this
   "validUntil" => "2026-09-30",
   "notes"      => "Includes implementation services",
   "taxRate"    => "8.5"
 )
 # returns Quote hash
+
+# Auto-renewal quote — termDays -1 REQUIRES renewalPeriod.
+subscription = TurboDocxSdk::TurboQuote.create_quote(
+  "name"          => "Annual Subscription",
+  "companyId"     => "company-uuid",
+  "contactId"     => "contact-uuid",
+  "currency"      => "USD",
+  "termDays"      => -1,           # -1 = auto-renewal
+  "renewalPeriod" => "annually"    # "weekly" | "monthly" | "quarterly" | "annually"
+)
 ```
+
+:::caution `termDays` and `renewalPeriod` are coupled
+`termDays` defaults to **60** when omitted. Valid values are `-1` (auto-renewal) or `0`–`3650` (`0` = one-time).
+
+`renewalPeriod` is **required** when `termDays` is `-1`, and must be **`nil` or absent** for every other `termDays` value — sending it alongside a fixed term returns a `400`. The same rule applies on `update_quote`.
+:::
 
 #### `get_quote`
 
@@ -356,13 +374,25 @@ quote = TurboDocxSdk::TurboQuote.void_quote("quote-uuid",
 
 #### `handle_expired_quote`
 
+Handles a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
+
+All three keys are **required**: `action` (`"void"` or `"decline"`), `reason` (max 190 characters), and `newValidUntil` (ISO date).
+
 ```ruby
 quote = TurboDocxSdk::TurboQuote.handle_expired_quote("quote-uuid",
-  "action"        => "void",          # "void" or "decline"
-  "reason"        => "Quote expired",
-  "newValidUntil" => "2026-12-31"     # optional — extend before re-sending
+  "action"        => "void",          # required — "void" or "decline" only
+  "reason"        => "Quote expired", # required — max 190 characters
+  "newValidUntil" => "2026-12-31"     # required — ISO date, carried onto the duplicate
 )
 ```
+
+:::warning There is no `extend` or `resend` action
+`action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — pass `newValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::note Terminal statuses
+`accepted`, `declined`, and `voided` are **terminal** — a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote["statusInfo"]` before attempting a transition, and use `duplicate_quote` when you need to revive a closed-out quote.
+:::
 
 ---
 
@@ -399,28 +429,43 @@ page = TurboDocxSdk::TurboQuote.list_line_items("quote-uuid", "limit" => 50)
 
 #### `add_line_items`
 
-Accepts a single item hash or an array. Returns an array of created line item hashes.
+Accepts a single item hash **or** an array of up to **50** items. Returns an array of created line item hashes.
+
+`productId`, `productName`, `unitPrice`, and `billingFrequency` are all **required** on every row. `productId` is special: the key must be **present**, but its value may be `nil` for a custom (freeform) line item — omitting the key entirely returns a `400`. `quantity` is optional and defaults to `1`.
 
 ```ruby
 items = TurboDocxSdk::TurboQuote.add_line_items("quote-uuid", [
   {
-    "productId"        => "product-uuid",
+    "productId"        => "product-uuid",   # required key — nil for a custom line item
     "productName"      => "Platform License",
     "quantity"         => 2,
     "unitPrice"        => "199.00",
     "billingFrequency" => "annual",
     "discountPercent"  => "10.0"
+  },
+  {
+    "productId"        => nil,               # custom (freeform) line item — key still required
+    "productName"      => "Implementation Credit",
+    "unitPrice"        => "-250.00",
+    "billingFrequency" => "one-time"
   }
 ])
 ```
 
+:::note Array caps
+`add_line_items` accepts a single hash **or** an array of 1–**50** items. A reorder request accepts up to **200** items. Exceeding either cap returns a `400`.
+:::
+
 #### `add_bundle_line_items`
+
+`bundleId` and `bundleName` are both **required**; the server expands the bundle's child products for you. Accepts a single hash or an array of up to **50** items.
 
 ```ruby
 items = TurboDocxSdk::TurboQuote.add_bundle_line_items("quote-uuid", [
   {
-    "bundleId" => "bundle-uuid",
-    "quantity" => 1
+    "bundleId"   => "bundle-uuid",
+    "bundleName" => "Starter Bundle",   # required
+    "quantity"   => 1
   }
 ])
 ```
@@ -456,10 +501,23 @@ result = TurboDocxSdk::TurboQuote.remove_line_item("quote-uuid", "item-uuid")
 | `duplicate_product` | `(id)` | `Product` |
 | `get_product_primary_images` | `(product_ids)` | `{id => image or nil}` |
 
+:::caution `categoryId` is required on create
+`create_product` **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`categoryType` `"product_category"`) — resolve or create it first with `list_types` / `create_type`. It is optional on `update_product`, so you only need to pass it when creating.
+:::
+
 ```ruby
+# Resolve the product category first — create_product needs its UUID.
+page = TurboDocxSdk::TurboQuote.list_types("categoryType" => "product_category")
+category = page["results"].find { |t| t["name"] == "Software" }
+category ||= TurboDocxSdk::TurboQuote.create_type(
+  "name"         => "Software",
+  "categoryType" => "product_category"
+)
+
 # Create a product with images (multipart upload auto-detected)
 product = TurboDocxSdk::TurboQuote.create_product(
   "name"             => "Enterprise License",
+  "categoryId"       => category["id"],   # required
   "listPrice"        => "499.00",
   "cost"             => "200.00",
   "billingFrequency" => "annual",
@@ -493,13 +551,25 @@ images = TurboDocxSdk::TurboQuote.get_product_primary_images(["id-1", "id-2", "i
 | `delete_bundle` | `(id)` | `{"message" => ...}` |
 | `duplicate_bundle` | `(id)` | `Bundle` |
 
+Each entry in `items` **requires** `productId`, `unitPrice`, and `billingFrequency`. `quantity` is optional and defaults to `1`.
+
 ```ruby
 bundle = TurboDocxSdk::TurboQuote.create_bundle(
   "name"       => "Starter Pack",
   "categoryId" => "bundle-category-uuid",  # required
   "items" => [
-    { "productId" => "product-uuid-1", "quantity" => 1 },
-    { "productId" => "product-uuid-2", "quantity" => 2 }
+    {
+      "productId"        => "product-uuid-1",
+      "unitPrice"        => "199.00",
+      "billingFrequency" => "monthly",
+      "quantity"         => 1
+    },
+    {
+      "productId"        => "product-uuid-2",
+      "unitPrice"        => "49.00",
+      "billingFrequency" => "monthly",
+      "quantity"         => 2
+    }
   ],
   "bundleDiscountType"   => "percent",
   "bundleDiscountAmount" => 5
@@ -604,18 +674,34 @@ contact = TurboDocxSdk::TurboQuote.create_contact(
 | Method | Signature | Returns |
 |---|---|---|
 | `list_templates` | `(options = nil)` | paginated list |
-| `get_template` | `()` | singleton `QuoteTemplate` |
+| `get_template` | `()` | singleton `QuoteTemplate` — auto-created if none exists |
 | `get_template_by_id` | `(id)` | `QuoteTemplate` |
-| `create_template` | `(request)` | `QuoteTemplate` |
+| `create_template` | `(request)` | `QuoteTemplate` — `400` if one already exists |
 | `update_template` | `(id, request)` | `QuoteTemplate` |
-| `delete_template` | `(id)` | `{"message" => ...}` |
+| `delete_template` | `(id)` | `{"message" => ...}` — resets to org branding defaults |
+
+:::warning Templates are auto-provisioned — use `get_template` → `update_template`
+`get_template` **self-heals**: if the org has no template, the API creates one from your org branding and returns it. Every established org therefore already has a template, which means:
+
+- `create_template` returns **400 `TEMPLATE_ALREADY_EXISTS`** and is effectively unreachable. Do not build a get-then-create flow.
+- `delete_template` is really "reset to org branding defaults" — it soft-deletes, and the next `get_template` regenerates a fresh one.
+
+The correct flow is **`get_template` → `update_template`**.
+:::
 
 ```ruby
-# Get the org's default quote template (singleton endpoint)
-default_template = TurboDocxSdk::TurboQuote.get_template
+# 1. Get the org's quote template (created from org branding on first read)
+template = TurboDocxSdk::TurboQuote.get_template
 
-# Get a specific template
-template = TurboDocxSdk::TurboQuote.get_template_by_id("template-uuid")
+# 2. Brand it by updating the template you just fetched
+branded = TurboDocxSdk::TurboQuote.update_template(template["id"],
+  "logoUrl"      => "https://cdn.example.com/logo.png",
+  "primaryColor" => "#0057b8",
+  "senderName"   => "TurboDocx Sales"
+)
+
+# Get a specific named template by ID
+other = TurboDocxSdk::TurboQuote.get_template_by_id("template-uuid")
 ```
 
 ---
@@ -657,11 +743,25 @@ Six methods import many records in one request — ideal for CSV-style migration
 
 Each method takes an array of row hashes; the SDK wraps them in the `{ "rows" => [...] }` envelope the endpoint expects. Rows use the exact request shape of the corresponding single-create method (camelCase keys).
 
+:::caution Product rows require a real `categoryId`
+Every `bulk_create_products` row **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`categoryType` `"product_category"`) — there is no `categoryName` key on the bulk row schema, and the API rejects unknown keys, so passing one returns a `400`. Resolve or create the category first with `list_types` / `create_type`, then pass its `"id"`.
+:::
+
 ```ruby
+# 1. Resolve the product category first — bulk rows need its UUID, not its name.
+page = TurboDocxSdk::TurboQuote.list_types("categoryType" => "product_category")
+category = page["results"].find { |t| t["name"] == "Software" }
+category ||= TurboDocxSdk::TurboQuote.create_type(
+  "name"         => "Software",
+  "categoryType" => "product_category"
+)
+category_id = category["id"]
+
+# 2. Import, passing the resolved UUID on every row.
 report = TurboDocxSdk::TurboQuote.bulk_create_products([
-  { "name" => "Starter License",    "listPrice" => "99.00",  "billingFrequency" => "monthly" },
-  { "name" => "Pro License",        "listPrice" => "299.00", "billingFrequency" => "monthly" },
-  { "name" => "Enterprise License", "listPrice" => "499.00", "billingFrequency" => "annual" }
+  { "name" => "Starter License",    "categoryId" => category_id, "listPrice" => "99.00",  "billingFrequency" => "monthly" },
+  { "name" => "Pro License",        "categoryId" => category_id, "listPrice" => "299.00", "billingFrequency" => "monthly" },
+  { "name" => "Enterprise License", "categoryId" => category_id, "listPrice" => "499.00", "billingFrequency" => "annual" }
 ])
 
 puts "Imported #{report['imported']} rows"

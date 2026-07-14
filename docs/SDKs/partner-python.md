@@ -240,15 +240,19 @@ result = await TurboPartner.update_organization_entitlements(
         "hasFileDownload": True,
         "hasBetaFeatures": False,
     },
-    tracking={"numUsers": 5},  # Optional: set tracking counters
+    tracking={                              # Optional: set usage counters
+        "numUsers": 5,
+        "storageUsed": 1048576,
+        "currentAICredits": -1,             # -1 = unlimited
+    },
 )
 
 print("Entitlements updated!")
 ```
 
 :::info Features vs Tracking
-**Features** are limits and capabilities you can set (maxUsers, hasTDAI, etc.).
-**Tracking** is read-only usage data (numUsers, storageUsed, etc.).
+**Features** are the limits and capabilities you grant (maxUsers, hasTDAI, …).
+**Tracking** is the current consumption against those limits (numUsers, storageUsed, …). It is normally maintained by TurboDocx, but this endpoint **does accept a `tracking` object**, so you can seed or reconcile counters during a migration.
 See [Entitlements Reference](#entitlements-reference) for all available fields.
 :::
 
@@ -347,7 +351,7 @@ Create an API key for an organization.
 result = await TurboPartner.create_organization_api_key(
     "org-uuid-here",
     name="Production API Key",
-    role="admin",  # admin, contributor, or viewer
+    role="admin",  # ORG role enum: admin, contributor, user, or viewer
 )
 
 print(f"Key ID: {result['data']['id']}")
@@ -472,6 +476,14 @@ result = await TurboPartner.revoke_partner_api_key("partner-key-uuid-here")
 
 ## Partner User Management
 
+:::danger Partner users use a different role enum
+Partner portal users take `admin`, `member`, or `viewer`. **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer`. The two enums do not overlap beyond `admin`/`viewer` — `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
+:::
+
+:::caution `permissions` is all-or-nothing
+The `permissions` dict itself is optional, but if you send it, **all seven keys are required**. There is no partial permissions update — omitting even one key raises `ValidationError` (400). Always send the complete dict; read the current values first and re-send them with your change applied.
+:::
+
 ### `add_user_to_partner_portal()`
 
 Add a user to the partner portal with specific permissions.
@@ -479,7 +491,8 @@ Add a user to the partner portal with specific permissions.
 ```python
 result = await TurboPartner.add_user_to_partner_portal(
     email="admin@partner.com",
-    role="admin",  # admin, member, or viewer
+    role="admin",  # PARTNER role enum: admin, member, or viewer
+    # All 7 keys required whenever `permissions` is present.
     permissions={
         "canManageOrgs": True,
         "canManageOrgUsers": True,
@@ -511,12 +524,13 @@ for user in result["data"]["results"]:
 
 ### `update_partner_user_permissions()`
 
-Update a partner user's role and permissions.
+Update a partner user's role and permissions. If you pass `permissions`, send **all seven keys** — a partial dict is a 400.
 
 ```python
 result = await TurboPartner.update_partner_user_permissions(
     "partner-user-uuid-here",
     role="admin",
+    # Not a patch: every key below must be present.
     permissions={
         "canManageOrgs": True,
         "canManageOrgUsers": True,
@@ -619,9 +633,9 @@ features={"maxUsers": 25, "hasTDAI": True}
 ```
 :::
 
-### Tracking (Read-Only Usage)
+### Tracking (Usage Counters)
 
-These are usage counters that are read-only:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `update_organization_entitlements()` **accepts a `tracking` dict** — useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -631,7 +645,9 @@ These are usage counters that are read-only:
 | `storageUsed` | `int` | Current storage used in bytes |
 | `numGeneratedDeliverables` | `int` | Total documents generated |
 | `numSignaturesUsed` | `int` | Total signatures used |
-| `currentAICredits` | `int` | Remaining AI credits |
+| `currentAICredits` | `int` | Remaining AI credits (-1 = unlimited) |
+
+Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` accepts `-1`, meaning unlimited.
 
 ---
 
@@ -681,6 +697,8 @@ from turbodocx_sdk import (
 
 ### Organization User Roles
 
+Used by `add_user_to_organization()`, `update_organization_user_role()`, `create_organization_api_key()`, and `update_organization_api_key()`.
+
 | Role | Description |
 |------|-------------|
 | `"admin"` | Full organization access |
@@ -690,13 +708,21 @@ from turbodocx_sdk import (
 
 ### Partner User Roles
 
+Used by `add_user_to_partner_portal()` and `update_partner_user_permissions()` only.
+
 | Role | Description |
 |------|-------------|
 | `"admin"` | Full partner portal access |
 | `"member"` | Standard partner access (respects permissions) |
 | `"viewer"` | Read-only access to partner portal |
 
+:::danger Do not mix the two enums
+`"member"` exists **only** in the partner role enum; sending it to an organization endpoint is a 400. `"contributor"` and `"user"` exist **only** in the organization role enum; sending either to a partner endpoint is a 400.
+:::
+
 ### Partner Permissions
+
+All seven keys are required whenever a `permissions` dict is sent. Partial dicts are rejected with a 400.
 
 ```python
 permissions = {

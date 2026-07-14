@@ -163,6 +163,7 @@ func main() {
 
 ```go
 currency := "USD"
+productID := "product-uuid"
 resp, err := qc.CreateAndSend(ctx, &turbodocx.CreateAndSendRequest{
     Name:         "Acme Corp — Quick Proposal",
     CompanyID:    "company-uuid",
@@ -170,6 +171,9 @@ resp, err := qc.CreateAndSend(ctx, &turbodocx.CreateAndSendRequest{
     CurrencyCode: &currency,
     Items: []turbodocx.AddLineItemRequest{
         {
+            // ProductID, ProductName, UnitPrice and BillingFrequency are all required.
+            // ProductID may be nil (custom line item), but the key is always sent.
+            ProductID:        &productID,
             ProductName:      "Enterprise License",
             UnitPrice:        500.00,
             BillingFrequency: "annual",
@@ -220,14 +224,34 @@ list, err := qc.ListQuotes(ctx, &turbodocx.ListQuotesOptions{
 #### CreateQuote
 
 ```go
+// Fixed-term quote — TermDays is -1 or 0–3650; omit it to get the default of 60.
+termDays := 30
 quote, err := qc.CreateQuote(ctx, &turbodocx.CreateQuoteRequest{
     Name:      "New Proposal",
     CompanyID: "company-uuid",
     ContactID: "contact-uuid",
+    TermDays:  &termDays, // fixed term — do NOT set RenewalPeriod alongside this
+})
+
+// Auto-renewal quote — TermDays -1 REQUIRES RenewalPeriod.
+autoRenew := -1
+renewalPeriod := "annually" // "weekly" | "monthly" | "quarterly" | "annually"
+subscription, err := qc.CreateQuote(ctx, &turbodocx.CreateQuoteRequest{
+    Name:          "Annual Subscription",
+    CompanyID:     "company-uuid",
+    ContactID:     "contact-uuid",
+    TermDays:      &autoRenew,
+    RenewalPeriod: &renewalPeriod,
 })
 ```
 
 Required: `Name`, `CompanyID`, `ContactID`. Returns `*Quote`.
+
+:::caution TermDays and RenewalPeriod are coupled
+`TermDays` defaults to **60** when omitted. Valid values are `-1` (auto-renewal) or `0`–`3650` (`0` = one-time).
+
+`RenewalPeriod` is **required** when `TermDays` is `-1`, and must be **nil/absent** for every other `TermDays` value — sending it alongside a fixed term returns a `400`. The same rule applies on `UpdateQuote`; use `ClearRenewalPeriod()` when moving a quote off auto-renewal.
+:::
 
 #### GetQuote
 
@@ -401,15 +425,21 @@ quote, err := qc.VoidQuote(ctx, "quote-uuid", &turbodocx.VoidQuoteRequest{
 
 #### HandleExpiredQuote
 
-Handles a `sent` quote that has passed its `validUntil` date. `Action` is one of `"resend"`, `"extend"`, or `"void"`.
+Handles a `sent` quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `Action` — and then **creates a duplicate carrying `NewValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
+
+`Action` is `"void"` or `"decline"`. All three fields are **required**: `Action`, `Reason` (max 190 characters), and `NewValidUntil` (ISO date).
 
 ```go
 quote, err := qc.HandleExpiredQuote(ctx, "quote-uuid", &turbodocx.HandleExpiredQuoteRequest{
-    Action:        "extend",
-    Reason:        "Customer requested more time",
-    NewValidUntil: "2026-10-01",
+    Action:        "void",                          // required — "void" or "decline" only
+    Reason:        "Customer requested more time",  // required — max 190 characters
+    NewValidUntil: "2026-10-01",                    // required — ISO date, carried onto the duplicate
 })
 ```
+
+:::warning There is no `extend` or `resend` action
+`Action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — pass `NewValidUntil` and it lands on the duplicate it creates.
+:::
 
 #### DownloadQuotePdf
 
@@ -442,21 +472,35 @@ list, err := qc.ListLineItems(ctx, "quote-uuid", &turbodocx.ListLineItemsOptions
 
 #### AddLineItems
 
-Accepts one or more `AddLineItemRequest` values (variadic). Returns `[]LineItem`.
+Accepts one or more `AddLineItemRequest` values (variadic), up to **50** per call. Returns `[]LineItem`.
+
+`ProductID`, `ProductName`, `UnitPrice`, and `BillingFrequency` are all **required** on every item. `ProductID` is a `*string`: the `productId` key must be **present** on the wire, but its value may be `null` — set it to `nil` for a custom (freeform) line item. `Quantity` is optional and defaults to `1`.
 
 ```go
 qty := 3
 disc := 10.0
+productID := "product-uuid"
 items, err := qc.AddLineItems(ctx, "quote-uuid",
     turbodocx.AddLineItemRequest{
+        ProductID:        &productID, // required — nil sends productId: null (custom line item)
         ProductName:      "Support Plan",
         UnitPrice:        200.00,
         BillingFrequency: "monthly",
         Quantity:         &qty,
         DiscountPercent:  &disc,
     },
+    turbodocx.AddLineItemRequest{
+        ProductID:        nil, // custom (freeform) line item
+        ProductName:      "Implementation Credit",
+        UnitPrice:        -250.00,
+        BillingFrequency: "one-time",
+    },
 )
 ```
+
+:::note Slice caps
+`AddLineItems` accepts 1–**50** items per call. A reorder request accepts up to **200** items. Exceeding either cap returns a `400`.
+:::
 
 #### AddBundleLineItems
 
@@ -757,9 +801,18 @@ There is no `GetContact(id)` — the backend has no `GET /v1/contacts/:id` endpo
 
 Quote templates control the branding and layout of sent quote emails and the customer-facing quote page (logo, colors, footer text, terms, sender info).
 
+:::warning Templates are auto-provisioned — use GetTemplate → UpdateTemplate
+`GetTemplate` **self-heals**: if the org has no template, the API creates one from your org branding and returns it. Every established org therefore already has a template, which means:
+
+- `CreateTemplate` returns **400 `TEMPLATE_ALREADY_EXISTS`** and is effectively unreachable. Do not build a get-then-create flow.
+- `DeleteTemplate` is really "reset to org branding defaults" — it soft-deletes, and the next `GetTemplate` regenerates a fresh one.
+
+The correct flow is **`GetTemplate` → `UpdateTemplate`**.
+:::
+
 #### GetTemplate
 
-Returns the active (default) quote template for the org. Use this for the most common case.
+Returns the active (default) quote template for the org, creating one from org branding if none exists. Use this for the most common case.
 
 ```go
 tmpl, err := qc.GetTemplate(ctx)
@@ -774,25 +827,28 @@ Retrieves a specific template by ID when you have multiple templates.
 tmpl, err := qc.GetTemplateByID(ctx, "template-uuid")
 ```
 
-#### ListTemplates / CreateTemplate / UpdateTemplate / DeleteTemplate
+#### ListTemplates / UpdateTemplate / DeleteTemplate
+
+Brand the org's template by fetching it and updating it in place — never by creating one.
 
 ```go
 list, err := qc.ListTemplates(ctx, &turbodocx.PaginationParams{
     Limit: &[]int{5}[0],
 })
 
+// Get the auto-provisioned template, then update it.
+tmpl, err := qc.GetTemplate(ctx)
+
 logoURL := "https://cdn.example.com/logo.png"
-tmpl, err := qc.CreateTemplate(ctx, &turbodocx.CreateQuoteTemplateRequest{
+tmpl, err = qc.UpdateTemplate(ctx, tmpl.ID, &turbodocx.UpdateQuoteTemplateRequest{
     LogoURL:      &logoURL,
     PrimaryColor: &[]string{"#0066CC"}[0],
     SenderName:   &[]string{"Sales Team"}[0],
 })
 
-tmpl, err = qc.UpdateTemplate(ctx, "template-uuid", &turbodocx.UpdateQuoteTemplateRequest{
-    PrimaryColor: &[]string{"#003399"}[0],
-})
-
-result, err := qc.DeleteTemplate(ctx, "template-uuid")
+// DeleteTemplate resets the org back to its branding defaults —
+// the next GetTemplate call regenerates a fresh template.
+result, err := qc.DeleteTemplate(ctx, tmpl.ID)
 ```
 
 `UpdateQuoteTemplateRequest` has `Clear*` helpers: `ClearLogoURL`, `ClearDisclaimer`, `ClearTermsAndConditions`, `ClearClosingMessage`, `ClearSenderName`, `ClearSenderPhone`, `ClearContactEmail`.
@@ -850,15 +906,48 @@ Rows process sequentially with **partial success** — a failed row does not pro
 
 Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
 
+:::caution Product rows require a real CategoryID
+Every `BulkCreateProducts` row **requires** `Name`, `CategoryID`, `ListPrice`, and `BillingFrequency`. `CategoryID` must be the **UUID** of an existing type (`CategoryType: "product_category"`) — there is no `CategoryName` field on the bulk row schema, and the API rejects unknown keys, so sending one returns a `400`. Resolve or create the category first with `ListTypes` / `CreateType`, then pass its `ID`.
+:::
+
 ```go
+// 1. Resolve the product category first — bulk rows need its UUID, not its name.
+types, err := qc.ListTypes(ctx, &turbodocx.ListTypesOptions{
+    CategoryType: &[]string{"product_category"}[0],
+})
+if err != nil {
+    log.Fatal(err)
+}
+
+var categoryID string
+for _, t := range types.Results {
+    if t.Name == "Software" {
+        categoryID = t.ID
+        break
+    }
+}
+if categoryID == "" {
+    created, err := qc.CreateType(ctx, &turbodocx.CreateQuoteTypeRequest{
+        Name:         "Software",
+        CategoryType: turbodocx.CategoryTypeProductCategory,
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    categoryID = created.ID
+}
+
+// 2. Import, passing the resolved UUID on every row.
 result, err := qc.BulkCreateProducts(ctx, []turbodocx.CreateProductRequest{
     {
         Name:             "Enterprise License",
+        CategoryID:       categoryID,
         ListPrice:        1200.00,
         BillingFrequency: "annual",
     },
     {
         Name:             "Onboarding Package",
+        CategoryID:       categoryID,
         ListPrice:        499.00,
         BillingFrequency: "one-time",
     },
@@ -899,6 +988,10 @@ The other five bulk methods follow the exact same pattern — `(ctx, rows)` in, 
 | `CategoryType` | `product_category`, `pricebook_type`, `company_industry`, `bundle_category` |
 | `BundleItemStatus` | `active`, `product_deleted`, `product_unavailable`, `currency_mismatch` |
 | `DiscountType` | `percent`, `amount` |
+
+:::note Terminal statuses
+`accepted`, `declined`, and `voided` are **terminal** — a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote.StatusInfo.IsTerminal` (and the `Can*` flags) before attempting a transition, and use `DuplicateQuote` when you need to revive a closed-out quote.
+:::
 
 ---
 
