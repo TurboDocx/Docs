@@ -2,7 +2,7 @@
 title: TurboWebhooks Ruby SDK
 sidebar_position: 20
 sidebar_label: "TurboWebhooks: Ruby"
-description: Official TurboDocx Webhooks SDK for Ruby. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: Official TurboDocx Webhooks SDK for Ruby. Subscribe to all seven TurboSign signature events with the WebhookEvent constants, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
 keywords:
   - turbodocx webhooks
   - turbowebhooks ruby
@@ -14,6 +14,8 @@ keywords:
   - sinatra webhook
   - webhook secret ruby
   - webhook events ruby
+  - webhookevent constants ruby
+  - signature lifecycle events
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,7 +31,7 @@ The official TurboDocx Webhooks SDK for Ruby applications. Subscribe a single pe
 <br />
 
 :::info What is TurboWebhooks?
-TurboWebhooks lets your application receive real-time notifications when signature documents complete or get voided, instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
+TurboWebhooks lets your application receive real-time notifications across the whole signature lifecycle — sent, viewed, each recipient signing, partial progress, completed, voided, and finalization failures — instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
 
 For the full conceptual overview of how webhooks work in TurboSign (delivery retries, payload schema, dashboard UI), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 :::
@@ -85,6 +87,65 @@ TURBODOCX_WEBHOOK_SECRET=whsec_...
 TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role raises `TurboDocxSdk::AuthorizationError` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
 :::
 
+## Webhook Events
+
+TurboSign dispatches **seven** events. Subscribe to any subset — `events` requires at least one.
+
+| Event | Constant | Fires when |
+|---|---|---|
+| `signature.document.sent` | `TurboDocxSdk::WebhookEvent::SENT` | The document is dispatched to recipients |
+| `signature.document.viewed` | `TurboDocxSdk::WebhookEvent::VIEWED` | A recipient opens the document for the first time |
+| `signature.document.recipient_signed` | `TurboDocxSdk::WebhookEvent::RECIPIENT_SIGNED` | Any individual signer completes their signature — fires **once per signer**, including the last |
+| `signature.document.signed` | `TurboDocxSdk::WebhookEvent::SIGNED` | A signer signs and the document is **not yet complete** (document-level partial progress) |
+| `signature.document.completed` | `TurboDocxSdk::WebhookEvent::COMPLETED` | All recipients have signed and the signed PDF is finalized |
+| `signature.document.finalization_failed` | `TurboDocxSdk::WebhookEvent::FINALIZATION_FAILED` | The signed PDF fails to finalize (e.g. a KMS signing error); the document is **not** completed |
+| `signature.document.voided` | `TurboDocxSdk::WebhookEvent::VOIDED` | The document is voided or cancelled |
+
+:::danger `signed` does not mean "the document is done"
+`recipient_signed` is the **per-person** event: it fires once for **every** signer (including the last) and carries the signer's identity plus `is_final_signer` and `remaining_signers`.
+
+`signed` is a document-level **partial-progress** event. On each signature `recipient_signed` fires first, then exactly one of `signed` (signers still remain), `completed` (that was the final signature and finalization succeeded), or `finalization_failed` (final signature, finalization failed). Two consequences:
+
+- **`signed` never fires on the final signature.**
+- **A single-signer document never emits `signed` at all** — it emits `recipient_signed` (`is_final_signer: true`) then `completed`.
+
+To detect "the whole document is done", use `completed` (or `recipient_signed` with `is_final_signer: true`) — never `signed`.
+
+See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload schemas and the lifecycle diagram.
+:::
+
+### Event constants
+
+The events ship as frozen string constants under `TurboDocxSdk::WebhookEvent`, so a typo raises a `NameError` at load time instead of becoming a webhook that silently never fires.
+
+```ruby
+require "turbodocx_sdk"
+
+# Subscribe to a chosen subset
+TurboDocxSdk::TurboWebhooks.create_webhook(
+  urls:   ["https://your-server.example.com/webhooks/turbodocx"],
+  events: [
+    TurboDocxSdk::WebhookEvent::SENT,
+    TurboDocxSdk::WebhookEvent::VIEWED,
+    TurboDocxSdk::WebhookEvent::RECIPIENT_SIGNED,
+    TurboDocxSdk::WebhookEvent::COMPLETED,
+    TurboDocxSdk::WebhookEvent::FINALIZATION_FAILED,
+    TurboDocxSdk::WebhookEvent::VOIDED
+  ]
+)
+
+# ...or to everything TurboSign emits — ALL is the frozen list of all 7,
+# in lifecycle order.
+TurboDocxSdk::TurboWebhooks.create_webhook(
+  urls:   ["https://your-server.example.com/webhooks/turbodocx"],
+  events: TurboDocxSdk::WebhookEvent::ALL
+)
+```
+
+:::note Raw strings still work
+Nothing was narrowed. `events` still accepts plain strings (`"signature.document.completed"`), so existing code keeps running and the backend can add new events without an SDK release. The constants exist for discoverability. `get_webhook` also returns `availableEvents` — the list the backend advertises at runtime.
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -100,7 +161,14 @@ TurboDocxSdk::TurboWebhooks.configure(
 begin
   created = TurboDocxSdk::TurboWebhooks.create_webhook(
     urls:   ["https://your-server.example.com/webhooks/turbodocx"],
-    events: ["signature.document.completed", "signature.document.voided"]
+    events: [
+      TurboDocxSdk::WebhookEvent::SENT,
+      TurboDocxSdk::WebhookEvent::VIEWED,
+      TurboDocxSdk::WebhookEvent::RECIPIENT_SIGNED,
+      TurboDocxSdk::WebhookEvent::COMPLETED,
+      TurboDocxSdk::WebhookEvent::FINALIZATION_FAILED,
+      TurboDocxSdk::WebhookEvent::VOIDED
+    ]
   )
 
   # SAVE THIS SECRET — it is shown ONCE and cannot be retrieved later.
@@ -174,11 +242,17 @@ Subscribe the org to events. Returns `{ "id" => ..., "secret" => ... }` — the 
 ```ruby
 created = TurboDocxSdk::TurboWebhooks.create_webhook(
   urls:   ["https://your-server.example.com/webhooks/turbodocx"],
-  events: ["signature.document.completed", "signature.document.voided"]
+  events: [
+    TurboDocxSdk::WebhookEvent::RECIPIENT_SIGNED,
+    TurboDocxSdk::WebhookEvent::COMPLETED,
+    TurboDocxSdk::WebhookEvent::FINALIZATION_FAILED,
+    TurboDocxSdk::WebhookEvent::VOIDED
+  ]
+  # or subscribe to all 7: events: TurboDocxSdk::WebhookEvent::ALL
 )
 ```
 
-`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** event. Both are required on create.
+`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** of the [seven events](#webhook-events) — raw strings and `TurboDocxSdk::WebhookEvent::*` constants are interchangeable (the constants *are* strings). Both are required on create.
 
 | Raises | Why |
 |---|---|
@@ -350,8 +424,14 @@ class WebhooksController < ApplicationController
 
     event = JSON.parse(raw_body)
     case event["eventType"]
-    when "signature.document.completed" then on_completed(event["data"])
-    when "signature.document.voided"    then on_voided(event["data"])
+    # fires once per signer — event.dig("data", "is_final_signer") marks the last
+    when TurboDocxSdk::WebhookEvent::RECIPIENT_SIGNED    then on_recipient_signed(event["data"])
+    # partial progress only — NEVER fires on the final signature
+    when TurboDocxSdk::WebhookEvent::SIGNED              then on_partial_progress(event["data"])
+    # the document is done
+    when TurboDocxSdk::WebhookEvent::COMPLETED           then on_completed(event["data"])
+    when TurboDocxSdk::WebhookEvent::FINALIZATION_FAILED then on_finalization_failed(event["data"])
+    when TurboDocxSdk::WebhookEvent::VOIDED              then on_voided(event["data"])
     end
 
     head :ok
@@ -444,6 +524,8 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`verify_webhook_signature` never raises.** Non-String headers, a missing secret, or a malformed timestamp all return `false` rather than raising; a negative `tolerance_seconds` fails closed.
 - **`update_webhook` only sends what you pass.** Omitted keyword arguments are excluded from the PATCH body, so you can flip `is_active` without resending `urls`/`events`.
 - **An empty array is not "no change".** `urls: []` and `events: []` are 400s on update, not no-ops — omitting the keyword is the only way to leave a field alone.
+- **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `TurboDocxSdk::WebhookEvent::COMPLETED` to detect a finished document. See [Webhook Events](#webhook-events).
+- **`WebhookEvent::ALL` is frozen.** It's the canonical list of all 7 events — `dup` it before mutating.
 
 ## See Also
 

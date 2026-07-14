@@ -2,7 +2,7 @@
 title: TurboWebhooks Go SDK
 sidebar_position: 18
 sidebar_label: "TurboWebhooks: Go"
-description: Official TurboDocx Webhooks SDK for Go. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: Official TurboDocx Webhooks SDK for Go. Subscribe to all seven TurboSign signature events with the typed WebhookEvent constants, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
 keywords:
   - turbodocx webhooks
   - turbowebhooks go
@@ -14,6 +14,8 @@ keywords:
   - webhook receiver gin
   - webhook secret go
   - webhook events go
+  - webhookevent constants go
+  - signature lifecycle events
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,7 +31,7 @@ The official TurboDocx Webhooks SDK for Go applications (net/http, Gin, Echo, Ch
 <br />
 
 :::info What is TurboWebhooks?
-TurboWebhooks lets your application receive real-time notifications when signature documents complete or get voided, instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
+TurboWebhooks lets your application receive real-time notifications across the whole signature lifecycle — sent, viewed, each recipient signing, partial progress, completed, voided, and finalization failures — instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
 
 For the full conceptual overview of how webhooks work in TurboSign (delivery retries, payload schema, dashboard UI), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 :::
@@ -86,6 +88,74 @@ TURBODOCX_WEBHOOK_SECRET=whsec_...
 TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role returns `*turbodocx.AuthorizationError` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
 :::
 
+## Webhook Events
+
+TurboSign dispatches **seven** events. Subscribe to any subset — `Events` requires at least one.
+
+| Event | Constant | Fires when |
+|---|---|---|
+| `signature.document.sent` | `turbodocx.WebhookEventSent` | The document is dispatched to recipients |
+| `signature.document.viewed` | `turbodocx.WebhookEventViewed` | A recipient opens the document for the first time |
+| `signature.document.recipient_signed` | `turbodocx.WebhookEventRecipientSigned` | Any individual signer completes their signature — fires **once per signer**, including the last |
+| `signature.document.signed` | `turbodocx.WebhookEventSigned` | A signer signs and the document is **not yet complete** (document-level partial progress) |
+| `signature.document.completed` | `turbodocx.WebhookEventCompleted` | All recipients have signed and the signed PDF is finalized |
+| `signature.document.finalization_failed` | `turbodocx.WebhookEventFinalizationFailed` | The signed PDF fails to finalize (e.g. a KMS signing error); the document is **not** completed |
+| `signature.document.voided` | `turbodocx.WebhookEventVoided` | The document is voided or cancelled |
+
+:::danger `signed` does not mean "the document is done"
+`recipient_signed` is the **per-person** event: it fires once for **every** signer (including the last) and carries the signer's identity plus `is_final_signer` and `remaining_signers`.
+
+`signed` is a document-level **partial-progress** event. On each signature `recipient_signed` fires first, then exactly one of `signed` (signers still remain), `completed` (that was the final signature and finalization succeeded), or `finalization_failed` (final signature, finalization failed). Two consequences:
+
+- **`signed` never fires on the final signature.**
+- **A single-signer document never emits `signed` at all** — it emits `recipient_signed` (`is_final_signer: true`) then `completed`.
+
+To detect "the whole document is done", use `completed` (or `recipient_signed` with `is_final_signer: true`) — never `signed`.
+
+See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload schemas and the lifecycle diagram.
+:::
+
+### Event constants
+
+The SDK exports the events as a typed `turbodocx.WebhookEvent` string type, plus `turbodocx.AllWebhookEvents` (a `[]WebhookEvent` holding all 7 in lifecycle order).
+
+:::warning `WebhookEvent` is not a `string` — convert it
+`CreateWebhookRequest.Events` and `UpdateWebhookRequest.Events` are `[]string`, and Go will **not** implicitly assign `[]WebhookEvent` (or a `WebhookEvent`) into them — that's a compile error. Convert with `turbodocx.WebhookEventStrings(...)`, or `string(event)` for a single value.
+:::
+
+```go
+import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
+
+// Subscribe to a chosen subset — WebhookEventStrings turns typed events into []string.
+created, err := wh.CreateWebhook(ctx, turbodocx.CreateWebhookRequest{
+    URLs: []string{"https://your-server.example.com/webhooks/turbodocx"},
+    Events: turbodocx.WebhookEventStrings(
+        turbodocx.WebhookEventSent,
+        turbodocx.WebhookEventViewed,
+        turbodocx.WebhookEventRecipientSigned,
+        turbodocx.WebhookEventCompleted,
+        turbodocx.WebhookEventFinalizationFailed,
+        turbodocx.WebhookEventVoided,
+    ),
+})
+
+// ...or to everything TurboSign emits — spread AllWebhookEvents.
+created, err = wh.CreateWebhook(ctx, turbodocx.CreateWebhookRequest{
+    URLs:   []string{"https://your-server.example.com/webhooks/turbodocx"},
+    Events: turbodocx.WebhookEventStrings(turbodocx.AllWebhookEvents...),
+})
+
+// Single value: use String() (or a string(...) conversion) — e.g. for TestWebhook.
+result, err := wh.TestWebhook(ctx, turbodocx.TestWebhookRequest{
+    EventType: turbodocx.WebhookEventCompleted.String(),
+    Payload:   map[string]interface{}{"documentId": "..."},
+})
+```
+
+:::note Raw strings still work
+Nothing was narrowed. `Events` is still `[]string`, so existing code that passes `[]string{"signature.document.completed"}` keeps compiling and the backend can add new events without an SDK release. The constants exist for discoverability and type safety. `GetWebhook()` also returns `availableEvents` — the list the backend advertises at runtime.
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -115,8 +185,16 @@ func main() {
     }
 
     created, err := wh.CreateWebhook(ctx, turbodocx.CreateWebhookRequest{
-        URLs:   []string{"https://your-server.example.com/webhooks/turbodocx"},
-        Events: []string{"signature.document.completed", "signature.document.voided"},
+        URLs: []string{"https://your-server.example.com/webhooks/turbodocx"},
+        // Events is []string — WebhookEventStrings converts the typed constants.
+        Events: turbodocx.WebhookEventStrings(
+            turbodocx.WebhookEventSent,
+            turbodocx.WebhookEventViewed,
+            turbodocx.WebhookEventRecipientSigned,
+            turbodocx.WebhookEventCompleted,
+            turbodocx.WebhookEventFinalizationFailed,
+            turbodocx.WebhookEventVoided,
+        ),
     })
     if err != nil {
         var conflict *turbodocx.ConflictError
@@ -311,12 +389,19 @@ Subscribe the org to events. Returns `*CreateWebhookResponse` with `ID` and `Sec
 
 ```go
 created, err := wh.CreateWebhook(ctx, turbodocx.CreateWebhookRequest{
-    URLs:   []string{"https://your-server.example.com/webhooks/turbodocx"},
-    Events: []string{"signature.document.completed", "signature.document.voided"},
+    URLs: []string{"https://your-server.example.com/webhooks/turbodocx"},
+    Events: turbodocx.WebhookEventStrings(
+        turbodocx.WebhookEventRecipientSigned,
+        turbodocx.WebhookEventCompleted,
+        turbodocx.WebhookEventFinalizationFailed,
+        turbodocx.WebhookEventVoided,
+    ),
+    // or subscribe to all 7:
+    // Events: turbodocx.WebhookEventStrings(turbodocx.AllWebhookEvents...),
 })
 ```
 
-`URLs` accepts **1 to 10** HTTPS URLs. `Events` requires **at least 1** event. Both are required on create.
+`URLs` accepts **1 to 10** HTTPS URLs. `Events` requires **at least 1** of the [seven events](#webhook-events). `Events` is `[]string`, so raw strings still work — but a typed `turbodocx.WebhookEvent` must go through `WebhookEventStrings` (or `string(...)`) or it won't compile. Both fields are required on create.
 
 | Error type | Why |
 |---|---|
@@ -341,8 +426,11 @@ Patch one or more fields. Leave any field at its zero value to skip it. Use `tur
 
 ```go
 updated, err := wh.UpdateWebhook(ctx, turbodocx.UpdateWebhookRequest{
-    URLs:     []string{"https://your-server.example.com/webhooks/turbodocx"},
-    Events:   []string{"signature.document.completed"},
+    URLs: []string{"https://your-server.example.com/webhooks/turbodocx"},
+    Events: turbodocx.WebhookEventStrings(
+        turbodocx.WebhookEventRecipientSigned,
+        turbodocx.WebhookEventCompleted,
+    ),
     IsActive: turbodocx.BoolPtr(true),
 })
 
@@ -370,7 +458,8 @@ Fire a synthetic delivery to every URL configured on the webhook. Useful for CI 
 
 ```go
 result, err := wh.TestWebhook(ctx, turbodocx.TestWebhookRequest{
-    EventType: "signature.document.completed",
+    // EventType is a string — convert the typed constant with .String().
+    EventType: turbodocx.WebhookEventCompleted.String(),
     Payload: map[string]interface{}{
         "documentId":   "...",
         "documentName": "...",
@@ -518,6 +607,8 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **Pointer-typed optional fields.** `UpdateWebhookRequest.IsActive` and `ListDeliveriesRequest.{Limit, Offset, IsDelivered, HTTPStatus}` are pointers so a zero value (`false` or `0`) can be told apart from "leave unchanged" / "no filter." Use `turbodocx.BoolPtr(false)` / `&n` to set them.
 - **`TestWebhook` summary now includes per-URL errors.** Type-assert `result["summary"].(map[string]interface{})["errors"].([]interface{})` to see exactly which receiver failed and why.
 - **An empty array is not "no change".** `urls: []` and `events: []` are 400s on update, not no-ops. Leave `URLs`/`Events` `nil` so the key is omitted.
+- **`WebhookEvent` is a distinct type — it will not assign into `Events []string`.** `Events: []turbodocx.WebhookEvent{...}` and `Events: turbodocx.AllWebhookEvents` are both **compile errors**. Always wrap with `turbodocx.WebhookEventStrings(...)` (variadic — spread the slice: `WebhookEventStrings(turbodocx.AllWebhookEvents...)`), or use `.String()` / `string(...)` for a single value like `TestWebhookRequest.EventType`.
+- **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `turbodocx.WebhookEventCompleted` to detect a finished document. See [Webhook Events](#webhook-events).
 
 ## See Also
 

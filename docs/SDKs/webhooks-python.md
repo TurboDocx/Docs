@@ -2,7 +2,7 @@
 title: TurboWebhooks Python SDK
 sidebar_position: 17
 sidebar_label: "TurboWebhooks: Python"
-description: Official TurboDocx Webhooks SDK for Python. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: Official TurboDocx Webhooks SDK for Python. Subscribe to all seven TurboSign signature events with the WEBHOOK_EVENT_* constants, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
 keywords:
   - turbodocx webhooks
   - turbowebhooks python
@@ -14,6 +14,8 @@ keywords:
   - webhook receiver fastapi
   - webhook secret python
   - webhook events python
+  - webhook event constants python
+  - signature lifecycle events
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,7 +31,7 @@ The official TurboDocx Webhooks SDK for Python applications (Flask, FastAPI, Dja
 <br />
 
 :::info What is TurboWebhooks?
-TurboWebhooks lets your application receive real-time notifications when signature documents complete or get voided, instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
+TurboWebhooks lets your application receive real-time notifications across the whole signature lifecycle — sent, viewed, each recipient signing, partial progress, completed, voided, and finalization failures — instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
 
 For the full conceptual overview of how webhooks work in TurboSign (delivery retries, payload schema, dashboard UI), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 :::
@@ -95,6 +97,78 @@ TURBODOCX_WEBHOOK_SECRET=whsec_...
 TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role will raise `AuthorizationError` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
 :::
 
+## Webhook Events
+
+TurboSign dispatches **seven** events. Subscribe to any subset — `events` requires at least one.
+
+| Event | Constant | Fires when |
+|---|---|---|
+| `signature.document.sent` | `WEBHOOK_EVENT_SENT` | The document is dispatched to recipients |
+| `signature.document.viewed` | `WEBHOOK_EVENT_VIEWED` | A recipient opens the document for the first time |
+| `signature.document.recipient_signed` | `WEBHOOK_EVENT_RECIPIENT_SIGNED` | Any individual signer completes their signature — fires **once per signer**, including the last |
+| `signature.document.signed` | `WEBHOOK_EVENT_SIGNED` | A signer signs and the document is **not yet complete** (document-level partial progress) |
+| `signature.document.completed` | `WEBHOOK_EVENT_COMPLETED` | All recipients have signed and the signed PDF is finalized |
+| `signature.document.finalization_failed` | `WEBHOOK_EVENT_FINALIZATION_FAILED` | The signed PDF fails to finalize (e.g. a KMS signing error); the document is **not** completed |
+| `signature.document.voided` | `WEBHOOK_EVENT_VOIDED` | The document is voided or cancelled |
+
+:::danger `signed` does not mean "the document is done"
+`recipient_signed` is the **per-person** event: it fires once for **every** signer (including the last) and carries the signer's identity plus `is_final_signer` and `remaining_signers`.
+
+`signed` is a document-level **partial-progress** event. On each signature `recipient_signed` fires first, then exactly one of `signed` (signers still remain), `completed` (that was the final signature and finalization succeeded), or `finalization_failed` (final signature, finalization failed). Two consequences:
+
+- **`signed` never fires on the final signature.**
+- **A single-signer document never emits `signed` at all** — it emits `recipient_signed` (`is_final_signer: True`) then `completed`.
+
+To detect "the whole document is done", use `completed` (or `recipient_signed` with `is_final_signer: True`) — never `signed`.
+
+See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload schemas and the lifecycle diagram.
+:::
+
+### Event constants
+
+The SDK exports the events as module-level constants, so a typo is caught at import time (and by your type checker) rather than becoming a webhook that silently never fires.
+
+```python
+from turbodocx_sdk import (
+    TurboWebhooks,
+    WEBHOOK_EVENTS,                      # tuple of all 7, in lifecycle order
+    WEBHOOK_EVENT_SENT,
+    WEBHOOK_EVENT_VIEWED,
+    WEBHOOK_EVENT_RECIPIENT_SIGNED,
+    WEBHOOK_EVENT_SIGNED,
+    WEBHOOK_EVENT_COMPLETED,
+    WEBHOOK_EVENT_FINALIZATION_FAILED,
+    WEBHOOK_EVENT_VOIDED,
+    WebhookEvent,                        # Literal type of the 7 known events
+)
+
+# Subscribe to a chosen subset
+await TurboWebhooks.create_webhook(
+    urls=["https://your-server.example.com/webhooks/turbodocx"],
+    events=[
+        WEBHOOK_EVENT_SENT,
+        WEBHOOK_EVENT_VIEWED,
+        WEBHOOK_EVENT_RECIPIENT_SIGNED,
+        WEBHOOK_EVENT_COMPLETED,
+        WEBHOOK_EVENT_FINALIZATION_FAILED,
+        WEBHOOK_EVENT_VOIDED,
+    ],
+)
+
+# ...or to everything TurboSign emits
+await TurboWebhooks.create_webhook(
+    urls=["https://your-server.example.com/webhooks/turbodocx"],
+    events=list(WEBHOOK_EVENTS),
+)
+
+# WebhookEvent is a Literal — useful for annotating your own dispatch code.
+event: WebhookEvent = WEBHOOK_EVENT_COMPLETED
+```
+
+:::note Raw strings still work
+Nothing was narrowed. `events` still accepts plain strings (`"signature.document.completed"`), so existing code keeps running and the backend can add new events without an SDK release. The constants exist for discoverability and type safety. `get_webhook()` also returns `availableEvents` — the list the backend advertises at runtime.
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -106,6 +180,12 @@ from turbodocx_sdk import (
     TurboWebhooks,
     ConflictError,
     ValidationError,
+    WEBHOOK_EVENT_SENT,
+    WEBHOOK_EVENT_VIEWED,
+    WEBHOOK_EVENT_RECIPIENT_SIGNED,
+    WEBHOOK_EVENT_COMPLETED,
+    WEBHOOK_EVENT_FINALIZATION_FAILED,
+    WEBHOOK_EVENT_VOIDED,
 )
 
 
@@ -118,7 +198,14 @@ async def setup_webhook():
     try:
         created = await TurboWebhooks.create_webhook(
             urls=["https://your-server.example.com/webhooks/turbodocx"],
-            events=["signature.document.completed", "signature.document.voided"],
+            events=[
+                WEBHOOK_EVENT_SENT,
+                WEBHOOK_EVENT_VIEWED,
+                WEBHOOK_EVENT_RECIPIENT_SIGNED,
+                WEBHOOK_EVENT_COMPLETED,
+                WEBHOOK_EVENT_FINALIZATION_FAILED,
+                WEBHOOK_EVENT_VOIDED,
+            ],
         )
         # SAVE THIS SECRET — it is shown ONCE and cannot be retrieved later.
         with open(".secret", "w") as f:
@@ -228,13 +315,27 @@ All methods are `@classmethod`s on `TurboWebhooks`; configure once, then call on
 Subscribe the org to events. Returns a dict with `id` and `secret` — the **secret is shown once**.
 
 ```python
+from turbodocx_sdk import (
+    WEBHOOK_EVENTS,
+    WEBHOOK_EVENT_RECIPIENT_SIGNED,
+    WEBHOOK_EVENT_COMPLETED,
+    WEBHOOK_EVENT_FINALIZATION_FAILED,
+    WEBHOOK_EVENT_VOIDED,
+)
+
 created = await TurboWebhooks.create_webhook(
     urls=["https://your-server.example.com/webhooks/turbodocx"],
-    events=["signature.document.completed", "signature.document.voided"],
+    events=[
+        WEBHOOK_EVENT_RECIPIENT_SIGNED,
+        WEBHOOK_EVENT_COMPLETED,
+        WEBHOOK_EVENT_FINALIZATION_FAILED,
+        WEBHOOK_EVENT_VOIDED,
+    ],
+    # or subscribe to all 7: events=list(WEBHOOK_EVENTS)
 )
 ```
 
-`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** event. Both are required on create.
+`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** of the [seven events](#webhook-events) — raw strings and `WEBHOOK_EVENT_*` constants are interchangeable. Both are required on create.
 
 | Raises | Why |
 |---|---|
@@ -368,7 +469,14 @@ import asyncio
 import json
 import os
 from flask import Flask, request, abort
-from turbodocx_sdk import TurboWebhooks, verify_webhook_signature
+from turbodocx_sdk import (
+    TurboWebhooks,
+    verify_webhook_signature,
+    WEBHOOK_EVENT_RECIPIENT_SIGNED,
+    WEBHOOK_EVENT_SIGNED,
+    WEBHOOK_EVENT_COMPLETED,
+    WEBHOOK_EVENT_VOIDED,
+)
 
 TurboWebhooks.configure(
     api_key=os.environ["TURBODOCX_API_KEY"],
@@ -390,9 +498,17 @@ def receive_webhook():
         abort(401, "Invalid signature")
 
     event = json.loads(raw_body)
-    if event["eventType"] == "signature.document.completed":
+    event_type = event["eventType"]
+    if event_type == WEBHOOK_EVENT_RECIPIENT_SIGNED:
+        # fires once per signer — event["data"]["is_final_signer"] marks the last
         pass  # ...
-    elif event["eventType"] == "signature.document.voided":
+    elif event_type == WEBHOOK_EVENT_SIGNED:
+        # partial progress only — NEVER fires on the final signature
+        pass  # ...
+    elif event_type == WEBHOOK_EVENT_COMPLETED:
+        # the document is done
+        pass  # ...
+    elif event_type == WEBHOOK_EVENT_VOIDED:
         pass  # ...
     return ("ok", 200)
 
@@ -409,7 +525,14 @@ if __name__ == "__main__":
 import json
 import os
 from fastapi import FastAPI, Request, HTTPException
-from turbodocx_sdk import TurboWebhooks, verify_webhook_signature
+from turbodocx_sdk import (
+    TurboWebhooks,
+    verify_webhook_signature,
+    WEBHOOK_EVENT_RECIPIENT_SIGNED,
+    WEBHOOK_EVENT_SIGNED,
+    WEBHOOK_EVENT_COMPLETED,
+    WEBHOOK_EVENT_VOIDED,
+)
 
 TurboWebhooks.configure(
     api_key=os.environ["TURBODOCX_API_KEY"],
@@ -431,9 +554,17 @@ async def receive_webhook(request: Request):
         raise HTTPException(status_code=401, detail="Invalid signature")
 
     event = json.loads(raw_body)
-    if event["eventType"] == "signature.document.completed":
+    event_type = event["eventType"]
+    if event_type == WEBHOOK_EVENT_RECIPIENT_SIGNED:
+        # fires once per signer — event["data"]["is_final_signer"] marks the last
         pass  # ...
-    elif event["eventType"] == "signature.document.voided":
+    elif event_type == WEBHOOK_EVENT_SIGNED:
+        # partial progress only — NEVER fires on the final signature
+        pass  # ...
+    elif event_type == WEBHOOK_EVENT_COMPLETED:
+        # the document is done
+        pass  # ...
+    elif event_type == WEBHOOK_EVENT_VOIDED:
         pass  # ...
     return {"ok": True}
 ```
@@ -542,6 +673,8 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **All methods are async.** Call them from inside an `async def`, or wrap with `asyncio.run(...)` from a synchronous context (e.g. a sync Flask view). Mixing `asyncio.run` per-request inside a hot path will reinitialize the event loop on every call — prefer FastAPI or an async Flask variant for production receivers that also need to make SDK calls.
 - **`test_webhook` summary now includes per-URL errors.** Check `result["summary"]["errors"]` to see exactly which receiver failed and why.
 - **An empty list is not "no change".** On `update_webhook`, `urls=[]` and `events=[]` are 400s, not no-ops. Omit the argument to leave the field alone.
+- **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `WEBHOOK_EVENT_COMPLETED` to detect a finished document. See [Webhook Events](#webhook-events).
+- **The event constants are singular, the collection is plural.** `WEBHOOK_EVENT_COMPLETED` (one event) vs `WEBHOOK_EVENTS` (a **tuple** of all 7) — easy to typo. Wrap it with `list(...)` when passing it as `events`.
 
 ## See Also
 

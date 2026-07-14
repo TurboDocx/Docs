@@ -2,7 +2,7 @@
 title: TurboWebhooks JavaScript / TypeScript SDK
 sidebar_position: 16
 sidebar_label: "TurboWebhooks: JavaScript"
-description: Official TurboDocx Webhooks SDK for JavaScript and TypeScript. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: Official TurboDocx Webhooks SDK for JavaScript and TypeScript. Subscribe to all seven TurboSign signature events with the typed WebhookEvents constants, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
 keywords:
   - turbodocx webhooks
   - turbowebhooks javascript
@@ -14,6 +14,8 @@ keywords:
   - express raw body webhook
   - webhook secret typescript
   - webhook events node
+  - webhookevents constants
+  - signature lifecycle events
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,7 +31,7 @@ The official TurboDocx Webhooks SDK for Node.js applications (Express, Fastify, 
 <br />
 
 :::info What is TurboWebhooks?
-TurboWebhooks lets your application receive real-time notifications when signature documents complete or get voided, instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
+TurboWebhooks lets your application receive real-time notifications across the whole signature lifecycle — sent, viewed, each recipient signing, partial progress, completed, voided, and finalization failures — instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
 
 For the full conceptual overview of how webhooks work in TurboSign (delivery retries, payload schema, dashboard UI), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 :::
@@ -94,6 +96,73 @@ TURBODOCX_WEBHOOK_SECRET=whsec_...
 TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role will throw `AuthorizationError` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
 :::
 
+## Webhook Events
+
+TurboSign dispatches **seven** events. Subscribe to any subset — `events` requires at least one.
+
+| Event | Constant | Fires when |
+|---|---|---|
+| `signature.document.sent` | `WebhookEvents.SENT` | The document is dispatched to recipients |
+| `signature.document.viewed` | `WebhookEvents.VIEWED` | A recipient opens the document for the first time |
+| `signature.document.recipient_signed` | `WebhookEvents.RECIPIENT_SIGNED` | Any individual signer completes their signature — fires **once per signer**, including the last |
+| `signature.document.signed` | `WebhookEvents.SIGNED` | A signer signs and the document is **not yet complete** (document-level partial progress) |
+| `signature.document.completed` | `WebhookEvents.COMPLETED` | All recipients have signed and the signed PDF is finalized |
+| `signature.document.finalization_failed` | `WebhookEvents.FINALIZATION_FAILED` | The signed PDF fails to finalize (e.g. a KMS signing error); the document is **not** completed |
+| `signature.document.voided` | `WebhookEvents.VOIDED` | The document is voided or cancelled |
+
+:::danger `signed` does not mean "the document is done"
+`recipient_signed` is the **per-person** event: it fires once for **every** signer (including the last) and carries the signer's identity plus `is_final_signer` and `remaining_signers`.
+
+`signed` is a document-level **partial-progress** event. On each signature `recipient_signed` fires first, then exactly one of `signed` (signers still remain), `completed` (that was the final signature and finalization succeeded), or `finalization_failed` (final signature, finalization failed). Two consequences:
+
+- **`signed` never fires on the final signature.**
+- **A single-signer document never emits `signed` at all** — it emits `recipient_signed` (`is_final_signer: true`) then `completed`.
+
+To detect "the whole document is done", use `completed` (or `recipient_signed` with `is_final_signer: true`) — never `signed`.
+
+See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload schemas and the lifecycle diagram.
+:::
+
+### Event constants
+
+The SDK exports the events as first-class symbols, so a typo is a compile error rather than a webhook that silently never fires.
+
+```typescript
+import {
+  TurboWebhooks,
+  WebhookEvents,      // const object — WebhookEvents.COMPLETED, .VOIDED, ...
+  WEBHOOK_EVENTS,     // readonly array of all 7, in lifecycle order
+  type WebhookEvent,  // the event type
+} from '@turbodocx/sdk';
+
+// Subscribe to a chosen subset
+await TurboWebhooks.createWebhook({
+  urls: ['https://your-server.example.com/webhooks/turbodocx'],
+  events: [
+    WebhookEvents.SENT,
+    WebhookEvents.VIEWED,
+    WebhookEvents.RECIPIENT_SIGNED,
+    WebhookEvents.COMPLETED,
+    WebhookEvents.FINALIZATION_FAILED,
+    WebhookEvents.VOIDED,
+  ],
+});
+
+// ...or to everything TurboSign emits (spread — WEBHOOK_EVENTS is readonly)
+await TurboWebhooks.createWebhook({
+  urls: ['https://your-server.example.com/webhooks/turbodocx'],
+  events: [...WEBHOOK_EVENTS],
+});
+
+// Raw strings still work — WebhookEvent is `KnownWebhookEvent | (string & {})`,
+// so you get autocomplete on the 7 known events without the union being closed.
+const event: WebhookEvent = 'signature.document.completed';
+```
+
+:::note Raw strings still work
+Nothing was narrowed. `events` still accepts plain strings, so existing code keeps compiling and the backend can add new events without an SDK release. The constants exist for discoverability and type safety. `getWebhook()` also returns `availableEvents` — the list the backend advertises at runtime.
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -101,6 +170,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 ```typescript
 import {
   TurboWebhooks,
+  WebhookEvents,
   ConflictError,
   ValidationError,
 } from '@turbodocx/sdk';
@@ -114,7 +184,14 @@ TurboWebhooks.configure({
 try {
   const created = await TurboWebhooks.createWebhook({
     urls: ['https://your-server.example.com/webhooks/turbodocx'],
-    events: ['signature.document.completed', 'signature.document.voided'],
+    events: [
+      WebhookEvents.SENT,
+      WebhookEvents.VIEWED,
+      WebhookEvents.RECIPIENT_SIGNED,
+      WebhookEvents.COMPLETED,
+      WebhookEvents.FINALIZATION_FAILED,
+      WebhookEvents.VOIDED,
+    ],
   });
 
   // SAVE THIS SECRET — it is shown ONCE and cannot be retrieved later.
@@ -194,13 +271,21 @@ All methods are static; configure once, then call on the `TurboWebhooks` class.
 Subscribe the org to events. Returns `{id, secret}` — the **secret is shown once**.
 
 ```typescript
+import { WebhookEvents, WEBHOOK_EVENTS } from '@turbodocx/sdk';
+
 const created = await TurboWebhooks.createWebhook({
   urls: ['https://your-server.example.com/webhooks/turbodocx'],
-  events: ['signature.document.completed', 'signature.document.voided'],
+  events: [
+    WebhookEvents.RECIPIENT_SIGNED,
+    WebhookEvents.COMPLETED,
+    WebhookEvents.FINALIZATION_FAILED,
+    WebhookEvents.VOIDED,
+  ],
+  // or subscribe to all 7: events: [...WEBHOOK_EVENTS]
 });
 ```
 
-`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** event. Both are required on create.
+`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** of the [seven events](#webhook-events) — raw strings and `WebhookEvents.*` constants are interchangeable. Both fields are required on create.
 
 | Throws | Why |
 |---|---|
@@ -348,7 +433,7 @@ const ok = verifyWebhookSignature(
 ```typescript
 // server.ts
 import express from 'express';
-import { TurboWebhooks, verifyWebhookSignature } from '@turbodocx/sdk';
+import { TurboWebhooks, WebhookEvents, verifyWebhookSignature } from '@turbodocx/sdk';
 
 TurboWebhooks.configure({
   apiKey: process.env.TURBODOCX_API_KEY!,
@@ -372,8 +457,16 @@ app.post(
 
     const event = JSON.parse((req.body as Buffer).toString('utf8'));
     switch (event.eventType) {
-      case 'signature.document.completed': /* ... */ break;
-      case 'signature.document.voided':    /* ... */ break;
+      case WebhookEvents.SENT:                 /* ... */ break;
+      case WebhookEvents.VIEWED:               /* ... */ break;
+      // fires once per signer — event.data.is_final_signer marks the last one
+      case WebhookEvents.RECIPIENT_SIGNED:     /* ... */ break;
+      // partial progress only — NEVER fires on the final signature
+      case WebhookEvents.SIGNED:               /* ... */ break;
+      // the document is done
+      case WebhookEvents.COMPLETED:            /* ... */ break;
+      case WebhookEvents.FINALIZATION_FAILED:  /* ... */ break;
+      case WebhookEvents.VOIDED:               /* ... */ break;
     }
     res.status(200).send('ok');
   },
@@ -515,6 +608,8 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`replayWebhookDelivery` returns the full delivery row.** Earlier SDK versions documented a partial shape — current versions return the complete `WebhookDelivery` object.
 - **`testWebhook` summary now includes per-URL errors.** Check `result.summary.errors` to see exactly which receiver failed and why.
 - **An empty array is not "no change".** On `updateWebhook`, `urls: []` and `events: []` are 400s, not no-ops. Omit the key to leave the field alone.
+- **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `WebhookEvents.COMPLETED` to detect a finished document. See [Webhook Events](#webhook-events).
+- **`WEBHOOK_EVENTS` is `readonly`.** It's declared `as const`, so spread it (`events: [...WEBHOOK_EVENTS]`) rather than passing it directly into the mutable `events: WebhookEvent[]` field.
 
 ## See Also
 
