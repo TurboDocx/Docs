@@ -106,5 +106,5 @@ Update the source attachment and move the item back through the trigger status t
 ## Related
 
 - [Setting Up a Wrike Automation](./setting-up-automation.md)
-- [How to Set Up Job Books (Combined PDF)](./job-books.md)
+- [How to Set Up Document Packages (Combined PDF)](./document-packages.md)
 - [Troubleshooting and FAQ](./troubleshooting.md)
