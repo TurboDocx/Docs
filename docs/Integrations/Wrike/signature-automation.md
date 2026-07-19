@@ -129,6 +129,8 @@ In the **Wrike activity updates** section of the signature action step, you'll s
 - **Add a comment** — post a readable note on the Wrike task/folder when the event fires
 - **Set a status** — change the Wrike item's custom status when the event fires (optional per row)
 
+![Wrike activity updates section showing a comment toggle and status dropdown for each signature event](/img/wrike-integration/SigAuto-WrikeActivityUpdates.png)
+
 ### Supported events
 
 | Row | Fires when | Notes |
