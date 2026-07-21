@@ -76,7 +76,7 @@ The Wrike integration uses a **status-triggered automation workflow** that you c
 | [How to Add a Wrike Table](./table-variable.md) | Turn a variable into a table of a folder or project's sub-items, with nesting and filtering |
 | [How to Add a Wrike Image](./image-variable.md) | Pull image attachments from the triggering task or folder into your document |
 | [How to Convert Documents to PDF](./convert-to-pdf.md) | Convert the first attachment to PDF when a task, project, or folder changes status, with in-place versioning |
-| [How to Set Up Job Books (Combined PDF)](./job-books.md) | Merge every attachment on a task or project into one combined PDF and attach it back to Wrike |
+| [How to Set Up Document Packages (Combined PDF)](./document-packages.md) | Merge every attachment on a task or project into one combined PDF and attach it back to Wrike |
 | [How to Add Signature Anchors](./signature-anchors.md) | Configure signature anchor fields in your template for TurboSign |
 | [Troubleshooting and FAQ](./troubleshooting.md) | Common issues, solutions, and frequently asked questions |
 

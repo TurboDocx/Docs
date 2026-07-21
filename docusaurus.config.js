@@ -77,6 +77,20 @@ const config = {
   plugins: ['docusaurus-plugin-sass',
     "@orama/plugin-docusaurus-v3",
     [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // "Job Book" was renamed to "Document Package" (BE #1529). The guide's
+        // filename drives its URL, so without this every previously-shared or
+        // indexed link to the old page would 404.
+        redirects: [
+          {
+            from: '/docs/Integrations/Wrike/job-books',
+            to: '/docs/Integrations/Wrike/document-packages',
+          },
+        ],
+      },
+    ],
+    [
       'docusaurus-plugin-llms',
       {
         generateLLMsTxt: true,

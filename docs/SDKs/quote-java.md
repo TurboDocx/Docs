@@ -155,8 +155,11 @@ public class QuoteLifecycle {
         Quote quote = tq.createQuote(quoteReq);
         System.out.println("Quote: " + quote.getId() + " status=" + quote.getStatus());
 
-        // Step 3: Add a line item
+        // Step 3: Add a line item.
+        // productId, productName, unitPrice and billingFrequency are all required.
+        // productId may be null (custom line item), but must always be set.
         AddLineItemRequest item = new AddLineItemRequest();
+        item.setProductId("product-uuid");
         item.setProductName("Enterprise Software License");
         item.setUnitPrice(1200.00);
         item.setQuantity(3.0);
@@ -190,9 +193,11 @@ req.setCompanyId(companyId);
 req.setContactId(contactId);
 
 AddLineItemRequest item = new AddLineItemRequest();
+item.setProductId("product-uuid");     // required — null for a custom line item
 item.setProductName("Starter Plan");
 item.setUnitPrice(499.00);
 item.setQuantity(1.0);
+item.setBillingFrequency("monthly");   // required
 req.setItems(Arrays.asList(item));
 
 // req.setSend(...) to configure send options, or omit to use defaults
@@ -254,15 +259,33 @@ Quote createQuote(CreateQuoteRequest request)
 Create a new quote. Returns the created `Quote`.
 
 ```java
+// Fixed-term quote — termDays is -1 or 0–3650; leave it unset to get the default of 60.
 CreateQuoteRequest req = new CreateQuoteRequest();
 req.setName("Enterprise Proposal");
 req.setCompanyId(companyId);
 req.setContactId(contactId);
 req.setCurrency(Currency.USD);
-req.setTermDays(30);
+req.setTermDays(30);        // fixed term — do NOT set renewalPeriod alongside this
 
 Quote quote = tq.createQuote(req);
+
+// Auto-renewal quote — termDays -1 REQUIRES renewalPeriod.
+CreateQuoteRequest subReq = new CreateQuoteRequest();
+subReq.setName("Annual Subscription");
+subReq.setCompanyId(companyId);
+subReq.setContactId(contactId);
+subReq.setCurrency(Currency.USD);
+subReq.setTermDays(-1);                            // -1 = auto-renewal
+subReq.setRenewalPeriod(RenewalPeriod.ANNUALLY);   // WEEKLY | MONTHLY | QUARTERLY | ANNUALLY
+
+Quote subscription = tq.createQuote(subReq);
 ```
+
+:::caution `termDays` and `renewalPeriod` are coupled
+`termDays` defaults to **60** when left unset. Valid values are `-1` (auto-renewal) or `0`–`3650` (`0` = one-time).
+
+`renewalPeriod` is **required** when `termDays` is `-1`, and must be **null or unset** for every other `termDays` value — sending it alongside a fixed term returns a `400`. The same rule applies on `updateQuote`.
+:::
 
 #### `getQuote`
 
@@ -497,15 +520,26 @@ Quote voided = tq.voidQuote(quoteId, req);
 Quote handleExpiredQuote(String id, HandleExpiredQuoteRequest request)
 ```
 
-Handle an expired sent quote — extend, re-send, or void it.
+Handle a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on the action — and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned `Quote` is the new duplicate; the original stays terminal.
+
+All three fields are **required**: `action` (`"void"` or `"decline"`), `reason` (max 190 characters), and `newValidUntil` (ISO date).
 
 ```java
 HandleExpiredQuoteRequest req = new HandleExpiredQuoteRequest();
-req.setAction("extend");          // "extend" | "resend" | "void"
-req.setNewValidUntil("2026-12-31");
+req.setAction("void");                    // required — "void" or "decline" only
+req.setReason("Expired — re-quoting");    // required — max 190 characters
+req.setNewValidUntil("2026-12-31");       // required — ISO date, carried onto the duplicate
 
 Quote quote = tq.handleExpiredQuote(quoteId, req);
 ```
+
+:::warning There is no `extend` or `resend` action
+`action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — set `newValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::note Terminal statuses
+`accepted`, `declined`, and `voided` are **terminal** — a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote.getStatusInfo()` before attempting a transition, and use `duplicateQuote` when you need to revive a closed-out quote.
+:::
 
 ---
 
@@ -533,17 +567,31 @@ List<LineItem> addLineItems(String quoteId, AddLineItemRequest item)
 List<LineItem> addLineItems(String quoteId, List<AddLineItemRequest> items)
 ```
 
-Add one or more product line items to a quote. A single `AddLineItemRequest` is automatically wrapped.
+Add one or more product line items to a quote. A single `AddLineItemRequest` is automatically wrapped; a list is capped at **50** items.
+
+`productId`, `productName`, `unitPrice`, and `billingFrequency` are all **required** on every item. `productId` is special: the key must be **present** on the wire, but its value may be `null` — call `setProductId(null)` for a custom (freeform) line item. `quantity` is optional and defaults to `1`.
 
 ```java
 AddLineItemRequest item = new AddLineItemRequest();
+item.setProductId(productId);              // required — null for a custom line item
 item.setProductName("Enterprise License");
 item.setUnitPrice(1200.00);
 item.setQuantity(5.0);
 item.setBillingFrequency("annual");
 
-List<LineItem> added = tq.addLineItems(quoteId, item);
+// Custom (freeform) line item — productId is still set, explicitly to null
+AddLineItemRequest custom = new AddLineItemRequest();
+custom.setProductId(null);
+custom.setProductName("Implementation Credit");
+custom.setUnitPrice(-250.00);
+custom.setBillingFrequency("one-time");
+
+List<LineItem> added = tq.addLineItems(quoteId, Arrays.asList(item, custom));
 ```
+
+:::note List caps
+`addLineItems` accepts a single request **or** a list of 1–**50** items. A reorder request accepts up to **200** items. Exceeding either cap returns a `400`.
+:::
 
 #### `addBundleLineItems`
 
@@ -552,11 +600,12 @@ List<LineItem> addBundleLineItems(String quoteId, AddBundleLineItemRequest item)
 List<LineItem> addBundleLineItems(String quoteId, List<AddBundleLineItemRequest> items)
 ```
 
-Add one or more bundle line items to a quote.
+Add one or more bundle line items to a quote. `bundleId` and `bundleName` are both **required**; the server expands the bundle's child products for you. A list is capped at **50** items.
 
 ```java
 AddBundleLineItemRequest bundleItem = new AddBundleLineItemRequest();
 bundleItem.setBundleId(bundleId);
+bundleItem.setBundleName("Starter Bundle");   // required
 bundleItem.setQuantity(2.0);
 
 List<LineItem> added = tq.addBundleLineItems(quoteId, bundleItem);
@@ -604,10 +653,31 @@ tq.removeLineItem(quoteId, itemId);
 | `duplicateProduct` | `duplicateProduct(String id)` | `Product` |
 | `getProductPrimaryImages` | `getProductPrimaryImages(List<String> productIds)` | `Map<String, ProductImage>` |
 
+:::caution `categoryId` is required on create
+`createProduct` **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`CategoryType.PRODUCT_CATEGORY`) — resolve or create it first with `listTypes` / `createType`. It is optional on `updateProduct`, so you only need to pass it when creating.
+:::
+
 ```java
+// Resolve the product category first — createProduct needs its UUID.
+ListTypesOptions typeOpts = new ListTypesOptions();
+typeOpts.setCategoryType(CategoryType.PRODUCT_CATEGORY);
+
+QuoteType category = tq.listTypes(typeOpts).getResults().stream()
+    .filter(t -> "Software".equals(t.getName()))
+    .findFirst()
+    .orElse(null);
+
+if (category == null) {
+    CreateQuoteTypeRequest typeReq = new CreateQuoteTypeRequest();
+    typeReq.setName("Software");
+    typeReq.setCategoryType(CategoryType.PRODUCT_CATEGORY);
+    category = tq.createType(typeReq);
+}
+
 // Create a product
 CreateProductRequest req = new CreateProductRequest();
 req.setName("Pro Platform");
+req.setCategoryId(category.getId());   // required
 req.setSku("PRO-001");
 req.setListPrice(500.00);
 req.setBillingFrequency("monthly");
@@ -677,10 +747,50 @@ System.out.println("Products: " + pbProducts.getTotalRecords());
 | `deleteBundle` | `deleteBundle(String id)` | `SuccessResponse` |
 | `duplicateBundle` | `duplicateBundle(String id)` | `Bundle` |
 
+`name` and `categoryId` are **required** on the bundle itself. Each `BundleItemInput` **requires** `productId`, `unitPrice`, and `billingFrequency`; `quantity` is optional and defaults to `1`.
+
+:::caution `categoryId` is required
+`createBundle` needs the **UUID** of an existing type with `CategoryType.BUNDLE_CATEGORY` — resolve or create it first with `listTypes` / `createType`, exactly as you would for a product category.
+:::
+
 ```java
+// 1. Resolve the bundle category — createBundle needs its UUID.
+ListTypesOptions typeOpts = new ListTypesOptions();
+typeOpts.setCategoryType(CategoryType.BUNDLE_CATEGORY);
+
+QuoteType category = tq.listTypes(typeOpts).getResults().stream()
+    .filter(t -> "Starter Kits".equals(t.getName()))
+    .findFirst()
+    .orElse(null);
+
+if (category == null) {
+    CreateQuoteTypeRequest typeReq = new CreateQuoteTypeRequest();
+    typeReq.setName("Starter Kits");
+    typeReq.setCategoryType(CategoryType.BUNDLE_CATEGORY);
+    category = tq.createType(typeReq);
+}
+
+// 2. Build the bundle items — productId, unitPrice and billingFrequency are all required.
+BundleItemInput platform = new BundleItemInput();
+platform.setProductId("product-uuid-1");
+platform.setUnitPrice(199.00);
+platform.setBillingFrequency("monthly");
+platform.setQuantity(1.0);
+
+BundleItemInput support = new BundleItemInput();
+support.setProductId("product-uuid-2");
+support.setUnitPrice(49.00);
+support.setBillingFrequency("monthly");
+support.setQuantity(2.0);
+
+// 3. Create the bundle.
 CreateBundleRequest req = new CreateBundleRequest();
-req.setName("Starter Bundle");
-// configure items, pricing, etc.
+req.setName("Starter Bundle");                       // required
+req.setCategoryId(category.getId());                 // required
+req.setItems(Arrays.asList(platform, support));
+req.setBundleDiscountType(DiscountType.PERCENT);
+req.setBundleDiscountPercent(5.0);
+req.setShowInCatalog(true);
 
 Bundle bundle = tq.createBundle(req);
 ```
@@ -746,15 +856,32 @@ Contact contact = tq.createContact(req);
 | Method | Signature | Returns |
 |---|---|---|
 | `listTemplates` | `listTemplates()` / `listTemplates(PaginationParams)` | `QuoteTemplateListResponse` |
-| `getTemplate` | `getTemplate()` | `QuoteTemplate` |
+| `getTemplate` | `getTemplate()` | `QuoteTemplate` — auto-created if none exists |
 | `getTemplateById` | `getTemplateById(String id)` | `QuoteTemplate` |
-| `createTemplate` | `createTemplate(CreateQuoteTemplateRequest)` | `QuoteTemplate` |
+| `createTemplate` | `createTemplate(CreateQuoteTemplateRequest)` | `QuoteTemplate` — `400` if one already exists |
 | `updateTemplate` | `updateTemplate(String id, UpdateQuoteTemplateRequest)` | `QuoteTemplate` |
-| `deleteTemplate` | `deleteTemplate(String id)` | `SuccessResponse` |
+| `deleteTemplate` | `deleteTemplate(String id)` | `SuccessResponse` — resets to org branding defaults |
+
+:::warning Templates are auto-provisioned — use `getTemplate()` → `updateTemplate()`
+`getTemplate()` **self-heals**: if the org has no template, the API creates one from your org branding and returns it. Every established org therefore already has a template, which means:
+
+- `createTemplate()` returns **400 `TEMPLATE_ALREADY_EXISTS`** and is effectively unreachable. Do not build a get-then-create flow.
+- `deleteTemplate()` is really "reset to org branding defaults" — it soft-deletes, and the next `getTemplate()` regenerates a fresh one.
+
+The correct flow is **`getTemplate()` → `updateTemplate()`**.
+:::
 
 ```java
-// Get the org's default template (singleton)
+// 1. Get the org's template (created from org branding on first read)
 QuoteTemplate defaultTemplate = tq.getTemplate();
+
+// 2. Brand it by updating the template you just fetched
+UpdateQuoteTemplateRequest brandReq = new UpdateQuoteTemplateRequest();
+brandReq.setLogoUrl("https://cdn.example.com/logo.png");
+brandReq.setPrimaryColor("#0057b8");
+brandReq.setSenderName("TurboDocx Sales");
+
+QuoteTemplate branded = tq.updateTemplate(defaultTemplate.getId(), brandReq);
 
 // Get a specific template by ID
 QuoteTemplate template = tq.getTemplateById(templateId);
@@ -778,7 +905,7 @@ QuoteTemplateListResponse templates = tq.listTemplates();
 | `updateType` | `updateType(String id, UpdateQuoteTypeRequest)` | `QuoteType` |
 | `deleteType` | `deleteType(String id)` | `SuccessResponse` |
 
-Types are used for categorization — `PRICEBOOK_TYPE` and `PRODUCT_CATEGORY` are the two `CategoryType` values.
+Types are used for categorization. `CategoryType` has four values — `PRODUCT_CATEGORY`, `PRICEBOOK_TYPE`, `COMPANY_INDUSTRY`, and `BUNDLE_CATEGORY` — and a type's `id` is the UUID you pass as `categoryId` when creating a product (`PRODUCT_CATEGORY`) or a bundle (`BUNDLE_CATEGORY`), or as `priceBookTypeId` when creating a price book (`PRICEBOOK_TYPE`).
 
 ```java
 CreateQuoteTypeRequest req = new CreateQuoteTypeRequest();
@@ -812,14 +939,40 @@ Requests are capped at **500 rows** — anything above the cap returns a `400`. 
 BulkImportResult bulkCreateProducts(List<CreateProductRequest> rows)
 ```
 
+:::caution Product rows require a real `categoryId`
+Every `bulkCreateProducts` row **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`CategoryType.PRODUCT_CATEGORY`) — there is no `categoryName` field on the bulk row schema, and the API rejects unknown keys, so sending one returns a `400`. Resolve or create the category first with `listTypes` / `createType`, then pass its ID.
+:::
+
 ```java
+// 1. Resolve the product category first — bulk rows need its UUID, not its name.
+ListTypesOptions typeOpts = new ListTypesOptions();
+typeOpts.setCategoryType(CategoryType.PRODUCT_CATEGORY);
+
+String categoryId = tq.listTypes(typeOpts).getResults().stream()
+    .filter(t -> "Software".equals(t.getName()))
+    .map(QuoteType::getId)
+    .findFirst()
+    .orElseGet(() -> {
+        CreateQuoteTypeRequest typeReq = new CreateQuoteTypeRequest();
+        typeReq.setName("Software");
+        typeReq.setCategoryType(CategoryType.PRODUCT_CATEGORY);
+        try {
+            return tq.createType(typeReq).getId();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    });
+
+// 2. Import, passing the resolved UUID on every row.
 CreateProductRequest row1 = new CreateProductRequest();
 row1.setName("Enterprise License");
+row1.setCategoryId(categoryId);
 row1.setListPrice(1200.00);
 row1.setBillingFrequency("annual");
 
 CreateProductRequest row2 = new CreateProductRequest();
 row2.setName("Onboarding Package");
+row2.setCategoryId(categoryId);
 row2.setListPrice(499.00);
 row2.setBillingFrequency("one-time");
 
@@ -859,9 +1012,11 @@ Create a quote, add line items and bundle items, and send it — all in one meth
 
 ```java
 AddLineItemRequest item = new AddLineItemRequest();
+item.setProductId("product-uuid");     // required — null for a custom line item
 item.setProductName("Starter License");
 item.setUnitPrice(999.00);
 item.setQuantity(1.0);
+item.setBillingFrequency("annual");    // required
 
 CreateAndSendRequest req = new CreateAndSendRequest();
 req.setName("Quick Proposal");

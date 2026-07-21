@@ -245,13 +245,13 @@ const { results, totalRecords, stats } = await TurboQuote.listQuotes({
 Create a new quote in `draft` status.
 
 ```typescript
-// Fixed-term quote — termDays 1–3650, no renewalPeriod (0 = one-time, -1 = auto-renewal)
+// Fixed-term quote — termDays 0–3650, no renewalPeriod (0 = one-time, -1 = auto-renewal)
 const quote = await TurboQuote.createQuote({
   name: 'Q3 Renewal',           // required
   companyId: 'company-uuid',    // required
   contactId: 'contact-uuid',    // required
   currency: 'USD',              // 'USD'|'EUR'|'GBP'|'CAD'|'AUD'|'INR'
-  termDays: 30,                 // fixed term in days
+  termDays: 30,                 // fixed term in days — omit to get the default of 60
   validUntil: '2026-09-30',
   taxRate: 8.5,
   priceBookId: 'pb-uuid',
@@ -268,6 +268,12 @@ const subscription = await TurboQuote.createQuote({
   renewalPeriod: 'annually',    // 'weekly'|'monthly'|'quarterly'|'annually'
 });
 ```
+
+:::caution termDays and renewalPeriod are coupled
+`termDays` defaults to **60** when omitted. Valid values are `-1` (auto-renewal) or `0`–`3650` (`0` = one-time).
+
+`renewalPeriod` is **required** when `termDays` is `-1`, and must be **null or absent** for every other `termDays` value — sending it alongside a fixed term returns a `400`. The same rule applies on `updateQuote`.
+:::
 
 #### getQuote
 
@@ -445,15 +451,21 @@ const quote = await TurboQuote.voidQuote('quote-uuid', {
 
 #### handleExpiredQuote
 
-Handle a quote that has passed its `validUntil` date. Choose to `void` or `decline` it and optionally extend with a new validity date.
+Handle a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate draft carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
+
+All three fields are **required**: `action` (`'void'` or `'decline'`), `reason` (≤ 190 characters), and `newValidUntil` (ISO date).
 
 ```typescript
 const quote = await TurboQuote.handleExpiredQuote('quote-uuid', {
-  action: 'void',               // 'void' | 'decline'
-  reason: 'Expired — re-quoting',
-  newValidUntil: '2026-08-31',
+  action: 'void',                 // 'void' | 'decline' — the only two valid actions
+  reason: 'Expired — re-quoting',  // required, max 190 chars
+  newValidUntil: '2026-08-31',    // required, ISO date carried onto the duplicate
 });
 ```
+
+:::warning There is no `extend` or `resend` action
+`action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does for you — pass `newValidUntil` and it lands on the duplicate it creates.
+:::
 
 ---
 
@@ -472,12 +484,14 @@ const { results, totalRecords } = await TurboQuote.listLineItems('quote-uuid', {
 
 #### addLineItems
 
-Add one or more product line items. Pass a single object or an array.
+Add one or more product line items. Pass a single object or an array of up to **50** items.
+
+`productId`, `productName`, `unitPrice`, and `billingFrequency` are all **required** on every item. `productId` is special: the key must be **present**, but its value may be `null` for a custom (freeform) line item. Omitting the key entirely returns a `400`. `quantity` is optional and defaults to `1`.
 
 ```typescript
 // Single item
 await TurboQuote.addLineItems('quote-uuid', {
-  productId: 'product-uuid',       // null for a custom (freeform) line item
+  productId: 'product-uuid',       // required key — pass null for a custom (freeform) line item
   productName: 'Professional Services',
   unitPrice: 150,
   billingFrequency: 'one-time',
@@ -486,12 +500,17 @@ await TurboQuote.addLineItems('quote-uuid', {
   discountType: 'percent',
 });
 
-// Multiple items at once
+// Multiple items at once — array is capped at 50 items
 await TurboQuote.addLineItems('quote-uuid', [
   { productId: 'p1', productName: 'Licence A', unitPrice: 500, billingFrequency: 'annual' },
   { productId: 'p2', productName: 'Licence B', unitPrice: 300, billingFrequency: 'annual' },
+  { productId: null, productName: 'Custom Discount Credit', unitPrice: -100, billingFrequency: 'one-time' },
 ]);
 ```
+
+:::note Array caps
+`addLineItems` accepts a single object **or** an array of 1–**50** items. A reorder request accepts up to **200** items. Exceeding either cap returns a `400`.
+:::
 
 #### addBundleLineItems
 
@@ -700,22 +719,31 @@ Quote templates control the visual presentation of the sent quote (logo, brand c
 `getTemplate()` returns the org's single active template via `GET /v1/quote-template` (singular path). `listTemplates()` returns all named templates via `GET /v1/quote-templates` (plural path).
 :::
 
+:::warning Templates are auto-provisioned — use getTemplate() → updateTemplate()
+`getTemplate()` **self-heals**: if the org has no template, the API creates one from your org branding and returns it. Every established org therefore already has a template, which means:
+
+- `createTemplate()` returns **400 `TEMPLATE_ALREADY_EXISTS`** and is effectively unreachable. Do not build a get-then-create flow.
+- `deleteTemplate()` is really "reset to org branding defaults" — it soft-deletes, and the next `getTemplate()` regenerates a fresh one.
+
+The correct flow is **`getTemplate()` → `updateTemplate(tmpl.id, …)`**.
+:::
+
 | Method | Signature | Returns |
 |---|---|---|
-| `getTemplate` | `() → QuoteTemplate` | Active org template |
+| `getTemplate` | `() → QuoteTemplate` | Active org template (auto-created if none exists) |
 | `listTemplates` | `(opts?) → QuoteTemplateListResponse` | All named templates |
 | `getTemplateById` | `(id) → QuoteTemplate` | Named template by ID |
-| `createTemplate` | `(req) → QuoteTemplate` | Created template |
+| `createTemplate` | `(req) → QuoteTemplate` | Created template — `400` if one already exists |
 | `updateTemplate` | `(id, req) → QuoteTemplate` | Updated template |
-| `deleteTemplate` | `(id) → SuccessResponse` | Message |
+| `deleteTemplate` | `(id) → SuccessResponse` | Resets to org branding defaults |
 
 ```typescript
-// Fetch the active template
+// 1. Fetch the active template — created from org branding on first read
 const tmpl = await TurboQuote.getTemplate();
 console.log(tmpl.primaryColor);  // e.g. "#1a73e8"
 
-// Create a named template
-const branded = await TurboQuote.createTemplate({
+// 2. Brand it by updating the template you just fetched
+const branded = await TurboQuote.updateTemplate(tmpl.id, {
   logoUrl: 'https://cdn.example.com/logo.png',
   primaryColor: '#0057b8',
   primaryTextColor: '#ffffff',
@@ -769,10 +797,21 @@ Rows process sequentially with **partial success** — a failed row does not thr
 
 Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
 
+:::caution Product rows require a real `categoryId`
+Every `bulkCreateProducts` row **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`categoryType: 'product_category'`) — there is no `categoryName` field on the bulk row, and the API rejects unknown keys, so passing one returns a `400`. Resolve or create the category first with `listTypes` / `createType`, then pass its `id`.
+:::
+
 ```typescript
+// 1. Resolve the product category first — bulk rows need its UUID, not its name.
+const { results: categories } = await TurboQuote.listTypes({ categoryType: 'product_category' });
+const category =
+  categories.find((t) => t.name === 'Software') ??
+  (await TurboQuote.createType({ name: 'Software', categoryType: 'product_category' }));
+
+// 2. Import, passing the resolved UUID on every row.
 const result = await TurboQuote.bulkCreateProducts([
-  { name: 'Enterprise Licence', listPrice: 1200, billingFrequency: 'annual' },
-  { name: 'Onboarding Package', listPrice: 499, billingFrequency: 'one-time' },
+  { name: 'Enterprise Licence', categoryId: category.id, listPrice: 1200, billingFrequency: 'annual' },
+  { name: 'Onboarding Package', categoryId: category.id, listPrice: 499, billingFrequency: 'one-time' },
 ]);
 
 console.log(`Imported ${result.imported} of 2 rows`);
@@ -865,6 +904,10 @@ import type {
 | `RenewalPeriod` | `'weekly'` `'monthly'` `'quarterly'` `'annually'` |
 | `DiscountType` | `'percent'` `'amount'` |
 | `CategoryType` | `'product_category'` `'pricebook_type'` `'company_industry'` `'bundle_category'` |
+
+:::note Terminal statuses
+`accepted`, `declined`, and `voided` are **terminal** — a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote.statusInfo` (`canSend`, `canAccept`, `canDecline`, `canVoid`) before attempting a transition, and `duplicateQuote` when you need to revive a closed-out quote.
+:::
 
 ---
 

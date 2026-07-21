@@ -2,7 +2,7 @@
 title: TurboWebhooks PHP SDK
 sidebar_position: 15
 sidebar_label: "TurboWebhooks: PHP"
-description: Official TurboDocx Webhooks SDK for PHP. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: Official TurboDocx Webhooks SDK for PHP. Subscribe to all seven TurboSign signature events with the WebhookEvent backed enum, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
 keywords:
   - turbodocx webhooks
   - turbowebhooks php
@@ -14,6 +14,8 @@ keywords:
   - symfony webhook
   - webhook secret php
   - webhook events php
+  - webhookevent enum php
+  - signature lifecycle events
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,7 +31,7 @@ The official TurboDocx Webhooks SDK for PHP applications. Subscribe a single per
 <br />
 
 :::info What is TurboWebhooks?
-TurboWebhooks lets your application receive real-time notifications when signature documents complete or get voided, instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
+TurboWebhooks lets your application receive real-time notifications across the whole signature lifecycle — sent, viewed, each recipient signing, partial progress, completed, voided, and finalization failures — instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
 
 For the full conceptual overview of how webhooks work in TurboSign (delivery retries, payload schema, dashboard UI), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 :::
@@ -81,6 +83,72 @@ TURBODOCX_WEBHOOK_SECRET=whsec_...
 TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role will throw `AuthorizationException` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
 :::
 
+## Webhook Events
+
+TurboSign dispatches **seven** events. Subscribe to any subset — `events` requires at least one.
+
+| Event | Enum case | Fires when |
+|---|---|---|
+| `signature.document.sent` | `WebhookEvent::SENT` | The document is dispatched to recipients |
+| `signature.document.viewed` | `WebhookEvent::VIEWED` | A recipient opens the document for the first time |
+| `signature.document.recipient_signed` | `WebhookEvent::RECIPIENT_SIGNED` | Any individual signer completes their signature — fires **once per signer**, including the last |
+| `signature.document.signed` | `WebhookEvent::SIGNED` | A signer signs and the document is **not yet complete** (document-level partial progress) |
+| `signature.document.completed` | `WebhookEvent::COMPLETED` | All recipients have signed and the signed PDF is finalized |
+| `signature.document.finalization_failed` | `WebhookEvent::FINALIZATION_FAILED` | The signed PDF fails to finalize (e.g. a KMS signing error); the document is **not** completed |
+| `signature.document.voided` | `WebhookEvent::VOIDED` | The document is voided or cancelled |
+
+:::danger `signed` does not mean "the document is done"
+`recipient_signed` is the **per-person** event: it fires once for **every** signer (including the last) and carries the signer's identity plus `is_final_signer` and `remaining_signers`.
+
+`signed` is a document-level **partial-progress** event. On each signature `recipient_signed` fires first, then exactly one of `signed` (signers still remain), `completed` (that was the final signature and finalization succeeded), or `finalization_failed` (final signature, finalization failed). Two consequences:
+
+- **`signed` never fires on the final signature.**
+- **A single-signer document never emits `signed` at all** — it emits `recipient_signed` (`is_final_signer: true`) then `completed`.
+
+To detect "the whole document is done", use `completed` (or `recipient_signed` with `is_final_signer: true`) — never `signed`.
+
+See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload schemas and the lifecycle diagram.
+:::
+
+### Event constants
+
+The events ship as a native PHP 8.1 **backed enum**, `TurboDocx\Types\Enums\WebhookEvent`. `createWebhook` takes wire strings, so pass `->value` (or one of the helpers below).
+
+```php
+<?php
+use TurboDocx\TurboWebhooks;
+use TurboDocx\Types\Enums\WebhookEvent;
+
+// Subscribe to a chosen subset — ->value gives the wire string.
+TurboWebhooks::createWebhook(
+    urls: ['https://your-server.example.com/webhooks/turbodocx'],
+    events: [
+        WebhookEvent::SENT->value,
+        WebhookEvent::VIEWED->value,
+        WebhookEvent::RECIPIENT_SIGNED->value,
+        WebhookEvent::COMPLETED->value,
+        WebhookEvent::FINALIZATION_FAILED->value,
+        WebhookEvent::VOIDED->value,
+    ],
+);
+
+// ...or to everything TurboSign emits.
+TurboWebhooks::createWebhook(
+    urls: ['https://your-server.example.com/webhooks/turbodocx'],
+    events: WebhookEvent::all(),   // array<int, string> — all 7 wire strings
+);
+
+// Helpers:
+WebhookEvent::all();                              // all 7 wire strings, lifecycle order
+WebhookEvent::values();                           // alias of all()
+WebhookEvent::cases();                            // native — the 7 enum cases
+WebhookEvent::from('signature.document.voided');  // native — string -> case (throws on unknown)
+```
+
+:::note Raw strings still work
+Nothing was narrowed. `createWebhook(events: [...])` still takes plain strings, so existing code keeps running and the backend can add new events without an SDK release. The enum exists for discoverability and type safety. `getWebhook()` also returns `availableEvents` — the list the backend advertises at runtime.
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -93,13 +161,21 @@ use TurboDocx\TurboWebhooks;
 use TurboDocx\Config\HttpClientConfig;
 use TurboDocx\Exceptions\ConflictException;
 use TurboDocx\Exceptions\ValidationException;
+use TurboDocx\Types\Enums\WebhookEvent;
 
 TurboWebhooks::configure(HttpClientConfig::fromEnvironment());
 
 try {
     $created = TurboWebhooks::createWebhook(
         urls: ['https://your-server.example.com/webhooks/turbodocx'],
-        events: ['signature.document.completed', 'signature.document.voided'],
+        events: [
+            WebhookEvent::SENT->value,
+            WebhookEvent::VIEWED->value,
+            WebhookEvent::RECIPIENT_SIGNED->value,
+            WebhookEvent::COMPLETED->value,
+            WebhookEvent::FINALIZATION_FAILED->value,
+            WebhookEvent::VOIDED->value,
+        ],
     );
 
     // SAVE THIS SECRET — it is shown ONCE and cannot be retrieved later.
@@ -168,16 +244,26 @@ All methods are static; configure once, then call on the `TurboWebhooks` class.
 Subscribe the org to events. Returns `{id, secret}` — the **secret is shown once**.
 
 ```php
+use TurboDocx\Types\Enums\WebhookEvent;
+
 $created = TurboWebhooks::createWebhook(
     urls: ['https://your-server.example.com/webhooks/turbodocx'],
-    events: ['signature.document.completed', 'signature.document.voided'],
+    events: [
+        WebhookEvent::RECIPIENT_SIGNED->value,
+        WebhookEvent::COMPLETED->value,
+        WebhookEvent::FINALIZATION_FAILED->value,
+        WebhookEvent::VOIDED->value,
+    ],
+    // or subscribe to all 7: events: WebhookEvent::all()
 );
 ```
+
+`urls` accepts **1 to 10** HTTPS URLs. `events` requires **at least 1** of the [seven events](#webhook-events), as wire strings — raw strings and `WebhookEvent::*->value` are interchangeable. Both are required on create.
 
 | Throws | Why |
 |---|---|
 | `ConflictException` (409) | The signature webhook already exists for this org. |
-| `ValidationException` (400) | A URL is not HTTPS, or `events` is empty. |
+| `ValidationException` (400) | A URL is not HTTPS, `urls` is empty or has more than 10 entries, or `events` is empty. |
 | `AuthorizationException` (403) | API key lacks the administrator role. |
 
 ### getWebhook
@@ -204,7 +290,14 @@ TurboWebhooks::updateWebhook(
     events: ['signature.document.completed'],
     isActive: true,
 );
+
+// Leaving urls and events alone: just don't pass those named arguments.
+TurboWebhooks::updateWebhook(isActive: false);
 ```
+
+:::danger Never send an empty array
+`urls` and `events` are optional on update, but optional does **not** relax their minimum length. `urls: []` or `events: []` is a **400** — the same as sending an empty array on create. To leave a field unchanged, **omit the argument entirely**. `urls` still caps at 10 entries on update.
+:::
 
 ### deleteWebhook
 
@@ -323,6 +416,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use TurboDocx\Types\Enums\WebhookEvent;
 use function TurboDocx\Utils\verifyWebhookSignature;
 
 class WebhookController extends Controller
@@ -340,10 +434,17 @@ class WebhookController extends Controller
 
         $event = json_decode($rawBody, true);
 
-        match ($event['eventType']) {
-            'signature.document.completed' => $this->onCompleted($event['data']),
-            'signature.document.voided'    => $this->onVoided($event['data']),
-            default                        => null,
+        // tryFrom() returns null for an event the SDK doesn't know yet (forward-compatible).
+        match (WebhookEvent::tryFrom($event['eventType'])) {
+            // fires once per signer — $event['data']['is_final_signer'] marks the last
+            WebhookEvent::RECIPIENT_SIGNED    => $this->onRecipientSigned($event['data']),
+            // partial progress only — NEVER fires on the final signature
+            WebhookEvent::SIGNED              => $this->onPartialProgress($event['data']),
+            // the document is done
+            WebhookEvent::COMPLETED           => $this->onCompleted($event['data']),
+            WebhookEvent::FINALIZATION_FAILED => $this->onFinalizationFailed($event['data']),
+            WebhookEvent::VOIDED              => $this->onVoided($event['data']),
+            default                           => null,
         };
 
         return response('', 200);
@@ -394,7 +495,7 @@ try {
 
 | Status | Exception | When |
 |---|---|---|
-| 400 | `ValidationException` | Non-HTTPS URL, empty events, invalid body |
+| 400 | `ValidationException` | Non-HTTPS URL, empty `urls`/`events` array, more than 10 URLs, invalid body |
 | 401 | `AuthenticationException` | Missing or invalid API key |
 | 403 | `AuthorizationException` | Valid key without administrator role |
 | 404 | `NotFoundException` | Operating on a non-existent webhook |
@@ -417,6 +518,10 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`replayWebhookDelivery` returns the full delivery row.** Earlier SDK versions documented a partial shape (`{id, httpStatus, message}`) — current versions return the complete `WebhookDelivery` object.
 - **`testWebhook` summary now includes per-URL errors.** Check `$result['summary']['errors']` to see exactly which receiver failed and why.
 - **`createWebhook` and `regenerateWebhookSecret` return data without a `message` field.** The success message lives at the response envelope and is extracted away by the SDK.
+- **An empty array is not "no change".** On `updateWebhook`, `urls: []` and `events: []` are 400s, not no-ops. Omit the argument to leave the field alone.
+- **`createWebhook` takes wire strings, not enum cases.** Pass `WebhookEvent::COMPLETED->value` — a bare `WebhookEvent::COMPLETED` case will not serialize to the right JSON. Use `WebhookEvent::all()` (or its alias `values()`) to get all 7 as strings in one call.
+- **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `WebhookEvent::COMPLETED` to detect a finished document. See [Webhook Events](#webhook-events).
+- **Use `WebhookEvent::tryFrom()` in receivers, not `from()`.** `from()` throws a `ValueError` on an event string the enum doesn't know — a new backend event would crash your receiver. `tryFrom()` returns `null` instead.
 
 ## See Also
 

@@ -2,7 +2,7 @@
 title: TurboWebhooks Java SDK
 sidebar_position: 19
 sidebar_label: "TurboWebhooks: Java"
-description: Official TurboDocx Webhooks SDK for Java. Subscribe to signature.document.completed and signature.document.voided events, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: Official TurboDocx Webhooks SDK for Java. Subscribe to all seven TurboSign signature events with the WebhookEvent enum, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
 keywords:
   - turbodocx webhooks
   - turbowebhooks java
@@ -14,6 +14,8 @@ keywords:
   - webhook receiver servlet
   - webhook secret java
   - webhook events java
+  - webhookevent enum java
+  - signature lifecycle events
 ---
 
 import Tabs from '@theme/Tabs';
@@ -29,7 +31,7 @@ The official TurboDocx Webhooks SDK for Java applications (Spring Boot, Servlet,
 <br />
 
 :::info What is TurboWebhooks?
-TurboWebhooks lets your application receive real-time notifications when signature documents complete or get voided, instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
+TurboWebhooks lets your application receive real-time notifications across the whole signature lifecycle — sent, viewed, each recipient signing, partial progress, completed, voided, and finalization failures — instead of polling the API. Each organization has a single, named webhook (`signature`) that mirrors the **Signature Webhooks** page in the dashboard, so SDK-managed and UI-managed configuration stays in sync.
 
 For the full conceptual overview of how webhooks work in TurboSign (delivery retries, payload schema, dashboard UI), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 :::
@@ -93,6 +95,10 @@ TurboWebhooks webhooks = new TurboDocxClient.Builder()
 
 `buildWebhooksClient()` does **not** require `senderEmail` — webhook routes don't send email, so the sender validation that `build()` enforces for TurboSign is skipped here. The returned `TurboWebhooks` is an admin-scoped client; construct once and reuse.
 
+:::warning Administrator role required
+TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role throws `TurboDocxException.AuthorizationException` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
+:::
+
 ### Environment Variables
 
 ```bash
@@ -108,6 +114,70 @@ TURBODOCX_WEBHOOK_SECRET=whsec_...
 TurboWebhooks endpoints require the **administrator** role on the API key. A valid TDX- key without the role throws `TurboDocxException.AuthorizationException` (HTTP 403). Generate or rotate keys in the **Settings → API Keys** page.
 :::
 
+## Webhook Events
+
+TurboSign dispatches **seven** events. Subscribe to any subset — the events list requires at least one.
+
+| Event | Enum constant | Fires when |
+|---|---|---|
+| `signature.document.sent` | `WebhookEvent.SENT` | The document is dispatched to recipients |
+| `signature.document.viewed` | `WebhookEvent.VIEWED` | A recipient opens the document for the first time |
+| `signature.document.recipient_signed` | `WebhookEvent.RECIPIENT_SIGNED` | Any individual signer completes their signature — fires **once per signer**, including the last |
+| `signature.document.signed` | `WebhookEvent.SIGNED` | A signer signs and the document is **not yet complete** (document-level partial progress) |
+| `signature.document.completed` | `WebhookEvent.COMPLETED` | All recipients have signed and the signed PDF is finalized |
+| `signature.document.finalization_failed` | `WebhookEvent.FINALIZATION_FAILED` | The signed PDF fails to finalize (e.g. a KMS signing error); the document is **not** completed |
+| `signature.document.voided` | `WebhookEvent.VOIDED` | The document is voided or cancelled |
+
+:::danger `signed` does not mean "the document is done"
+`recipient_signed` is the **per-person** event: it fires once for **every** signer (including the last) and carries the signer's identity plus `is_final_signer` and `remaining_signers`.
+
+`signed` is a document-level **partial-progress** event. On each signature `recipient_signed` fires first, then exactly one of `signed` (signers still remain), `completed` (that was the final signature and finalization succeeded), or `finalization_failed` (final signature, finalization failed). Two consequences:
+
+- **`signed` never fires on the final signature.**
+- **A single-signer document never emits `signed` at all** — it emits `recipient_signed` (`is_final_signer: true`) then `completed`.
+
+To detect "the whole document is done", use `completed` (or `recipient_signed` with `is_final_signer: true`) — never `signed`.
+
+See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload schemas and the lifecycle diagram.
+:::
+
+### Event constants
+
+The events ship as the `com.turbodocx.WebhookEvent` enum. `createWebhook` takes a `List<String>` of wire strings, so pass `getValue()` (or `allValues()`).
+
+```java
+import com.turbodocx.WebhookEvent;
+import com.google.gson.JsonObject;
+import java.util.Arrays;
+import java.util.List;
+
+// Subscribe to a chosen subset — getValue() gives the wire string.
+JsonObject created = webhooks.createWebhook(
+    Arrays.asList("https://your-server.example.com/webhooks/turbodocx"),
+    Arrays.asList(
+        WebhookEvent.SENT.getValue(),
+        WebhookEvent.VIEWED.getValue(),
+        WebhookEvent.RECIPIENT_SIGNED.getValue(),
+        WebhookEvent.COMPLETED.getValue(),
+        WebhookEvent.FINALIZATION_FAILED.getValue(),
+        WebhookEvent.VOIDED.getValue()
+    )
+);
+
+// ...or to everything TurboSign emits.
+JsonObject all = webhooks.createWebhook(
+    Arrays.asList("https://your-server.example.com/webhooks/turbodocx"),
+    WebhookEvent.allValues()   // List<String> — all 7 wire strings, lifecycle order
+);
+
+// Single value, e.g. for testWebhook / listWebhookDeliveries:
+webhooks.testWebhook(WebhookEvent.COMPLETED.getValue(), payload);
+```
+
+:::note Raw strings still work
+Nothing was narrowed. The events list is still `List<String>`, so existing code keeps compiling and the backend can add new events without an SDK release. The enum exists for discoverability and type safety. `getWebhook()` also returns `availableEvents` — the list the backend advertises at runtime.
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -116,6 +186,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 import com.turbodocx.TurboDocxClient;
 import com.turbodocx.TurboDocxException;
 import com.turbodocx.TurboWebhooks;
+import com.turbodocx.WebhookEvent;
 import com.google.gson.JsonObject;
 
 import java.nio.file.Files;
@@ -132,7 +203,14 @@ public class CreateSignatureWebhook {
         try {
             JsonObject created = webhooks.createWebhook(
                 Arrays.asList("https://your-server.example.com/webhooks/turbodocx"),
-                Arrays.asList("signature.document.completed", "signature.document.voided")
+                Arrays.asList(
+                    WebhookEvent.SENT.getValue(),
+                    WebhookEvent.VIEWED.getValue(),
+                    WebhookEvent.RECIPIENT_SIGNED.getValue(),
+                    WebhookEvent.COMPLETED.getValue(),
+                    WebhookEvent.FINALIZATION_FAILED.getValue(),
+                    WebhookEvent.VOIDED.getValue()
+                )
             );
 
             // SAVE THIS SECRET — it is shown ONCE and cannot be retrieved later.
@@ -301,16 +379,28 @@ All methods are instance methods on `com.turbodocx.TurboWebhooks`. Construct onc
 Subscribe the org to events. Returns a `JsonObject` with `id` and `secret` — the **secret is shown once**.
 
 ```java
+import com.turbodocx.WebhookEvent;
+
 JsonObject created = webhooks.createWebhook(
     Arrays.asList("https://your-server.example.com/webhooks/turbodocx"),
-    Arrays.asList("signature.document.completed", "signature.document.voided")
+    Arrays.asList(
+        WebhookEvent.RECIPIENT_SIGNED.getValue(),
+        WebhookEvent.COMPLETED.getValue(),
+        WebhookEvent.FINALIZATION_FAILED.getValue(),
+        WebhookEvent.VOIDED.getValue()
+    )
 );
+
+// or subscribe to all 7:
+// JsonObject created = webhooks.createWebhook(urls, WebhookEvent.allValues());
 ```
+
+The URL list accepts **1 to 10** HTTPS URLs. The events list requires **at least 1** of the [seven events](#webhook-events), as wire strings — raw strings and `WebhookEvent.*.getValue()` are interchangeable. Both are required on create.
 
 | Exception | Why |
 |---|---|
 | `TurboDocxException.ConflictException` (409) | The signature webhook already exists for this org. |
-| `TurboDocxException.ValidationException` (400) | A URL is not HTTPS, or the events list is empty. |
+| `TurboDocxException.ValidationException` (400) | A URL is not HTTPS, the URL list is empty or has more than 10 entries, or the events list is empty. |
 | `TurboDocxException.AuthorizationException` (403) | API key lacks the administrator role. |
 
 ### getWebhook
@@ -332,10 +422,20 @@ Patch one or more fields. Pass `null` for any argument you don't want to change.
 ```java
 JsonObject updated = webhooks.updateWebhook(
     Arrays.asList("https://your-server.example.com/webhooks/turbodocx"),  // urls
-    Arrays.asList("signature.document.completed"),                         // events
+    Arrays.asList(                                                         // events
+        WebhookEvent.RECIPIENT_SIGNED.getValue(),
+        WebhookEvent.COMPLETED.getValue()
+    ),
     Boolean.TRUE                                                            // isActive
 );
+
+// Leaving urls and events alone: pass null, NOT an empty list.
+JsonObject deactivated = webhooks.updateWebhook(null, null, Boolean.FALSE);
 ```
+
+:::danger Never pass an empty list
+`urls` and `events` are optional on update, but optional does **not** relax their minimum length. An empty list serializes to `urls: []` / `events: []`, which the API rejects with a **400** — exactly as it would on create. To leave a field unchanged, pass `null` so the key is omitted; never pass `Collections.emptyList()`. The URL list still caps at 10 entries on update.
+:::
 
 ### deleteWebhook
 
@@ -357,7 +457,7 @@ Map<String, Object> payload = new LinkedHashMap<>();
 payload.put("documentId",   "...");
 payload.put("documentName", "...");
 
-JsonObject result = webhooks.testWebhook("signature.document.completed", payload);
+JsonObject result = webhooks.testWebhook(WebhookEvent.COMPLETED.getValue(), payload);
 
 JsonObject summary = result.getAsJsonObject("summary");
 System.out.println(summary.get("successful") + "/" + summary.get("total") + " succeeded");
@@ -461,7 +561,7 @@ try {
 
 | Status | Type | When |
 |---|---|---|
-| 400 | `TurboDocxException.ValidationException` | Non-HTTPS URL, empty events, invalid body |
+| 400 | `TurboDocxException.ValidationException` | Non-HTTPS URL, empty `urls`/`events` list, more than 10 URLs, invalid body |
 | 401 | `TurboDocxException.AuthenticationException` | Missing or invalid API key |
 | 403 | `TurboDocxException.AuthorizationException` | Valid key without administrator role |
 | 404 | `TurboDocxException.NotFoundException` | Operating on a non-existent webhook |
@@ -484,8 +584,11 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **Use the raw bytes for verification.** The HMAC is over the exact request body received. In Spring, bind to `@RequestBody byte[] rawBody` — never `Map`/DTO; Jackson re-serialization breaks verification. In Servlets, use `request.getInputStream().readAllBytes()`. In JAX-RS, declare a `byte[]` entity parameter.
 - **Administrator role required.** The webhook routes are gated on `requireOrgRole(administrator)`. Valid TDX- keys without the role throw `TurboDocxException.AuthorizationException` (403).
 - **`null` skips fields on `updateWebhook` and `listWebhookDeliveries`.** Pass `null` for any argument you don't want to change/filter.
+- **An empty list is not "no change".** On `updateWebhook`, an empty `urls`/`events` list serializes to `[]` and is a **400**, not a no-op. Pass `null` — never `Collections.emptyList()`.
 - **`testWebhook` summary includes per-URL errors.** Read `result.getAsJsonObject("summary").getAsJsonArray("errors")` to see exactly which receiver failed and why.
 - **All TurboWebhooks methods return `JsonObject`.** New server fields surface without an SDK upgrade — use `.has(key)` / `.get(key)` to navigate.
+- **`createWebhook` takes wire strings, not enum constants.** Pass `WebhookEvent.COMPLETED.getValue()` — the events parameter is `List<String>`. `WebhookEvent.allValues()` returns all 7 wire strings in one call (as an unmodifiable list; copy it if you need to mutate).
+- **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `WebhookEvent.COMPLETED` to detect a finished document. See [Webhook Events](#webhook-events).
 
 ## See Also
 

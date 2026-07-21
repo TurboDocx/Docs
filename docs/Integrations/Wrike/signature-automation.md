@@ -120,6 +120,47 @@ Optionally, choose who gets tagged or notified after a signature is completed.
 
 <br/>
 
+## Wrike Activity Updates (Optional)
+
+Beyond the final **Completed** status you set above, you can have TurboDocx mirror **each step of the signature lifecycle** back into the triggering Wrike item — as a comment, a status change, or both. This keeps signer activity visible in Wrike in near real time, so downstream Wrike automations can react as a document moves through signing.
+
+In the **Wrike activity updates** section of the signature action step, you'll see a row for each signature event. For every event you can independently:
+
+- **Add a comment** — post a readable note on the Wrike task/folder when the event fires
+- **Set a status** — change the Wrike item's custom status when the event fires (optional per row)
+
+![Wrike activity updates section showing a comment toggle and status dropdown for each signature event](/img/wrike-integration/SigAuto-WrikeActivityUpdates.png)
+
+### Supported events
+
+| Row | Fires when | Notes |
+|---|---|---|
+| **Sent** | The document is dispatched to recipients | e.g. `Document sent for signature` |
+| **Viewed** | A recipient opens the document for the first time | e.g. `Document viewed by John Doe` |
+| **Signed** | An individual signer completes their signature | Posts per-signer progress like `1 of 2 signed` |
+| **Progress** | A signer signs but the document is not yet fully complete | Document-level partial-signing progress |
+| **Finalization failed** | The signed PDF could not be finalized (e.g. a signing error) | The document is **not** marked Completed |
+| **Voided** | The signature request is voided or cancelled | e.g. `Document voided` |
+
+These rows map to the same signature lifecycle events surfaced by [TurboSign webhooks](../../TurboSign/Webhooks.md) — see that page if you also want these events pushed to your own endpoints.
+
+:::info The Completed row
+The table also shows a **Completed** row, but it is not configured here — it reuses the post-signature status you set in **Step 12–13** above and posts automatically once all recipients have signed. Set the "all recipients signed" status there, not in this section.
+:::
+
+:::tip Comments and statuses are per event
+Each row is independent. You can, for example, post a comment on **Viewed** and **Signed** but only change the Wrike status on **Voided** — leave any row's comment off and status unset to skip it entirely.
+:::
+
+### How it behaves
+
+- **Comments are off by default.** A row only posts a comment if you turn it on, so existing automations don't suddenly start commenting when you save.
+- **Per-recipient progress.** The **Signed** comment includes how many of the total signers have signed (`X of Y signed`) so multi-signer flows read in sequence.
+- **Non-blocking.** Activity updates never interrupt the signature flow — if a Wrike comment or status change can't be applied, signing still completes and the event is logged.
+- **Deleted status safety.** If a status you selected is later removed in Wrike, TurboDocx posts a warning comment instead of silently failing.
+
+<br/>
+
 ## Finalize the Automation
 
 ### Step 15: Proceed to Final Step

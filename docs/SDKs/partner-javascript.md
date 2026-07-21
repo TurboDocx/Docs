@@ -256,9 +256,21 @@ const result = await TurboPartner.updateOrganizationEntitlements(
 console.log('Entitlements updated!');
 ```
 
+You can also set the usage counters on the same call:
+
+```typescript
+await TurboPartner.updateOrganizationEntitlements('org-uuid-here', {
+  tracking: {
+    numUsers: 5,
+    storageUsed: 1048576,
+    currentAICredits: -1,  // -1 = unlimited
+  },
+});
+```
+
 :::info Features vs Tracking
-**Features** are limits and capabilities you can set (maxUsers, hasTDAI, etc.).
-**Tracking** is read-only usage data (numUsers, storageUsed, etc.).
+**Features** are the limits and capabilities you grant (`maxUsers`, `hasTDAI`, …).
+**Tracking** is the current consumption against those limits (`numUsers`, `storageUsed`, …). It is normally maintained by TurboDocx, but this endpoint **does accept a `tracking` object**, so you can seed or reconcile counters during a migration.
 See [Entitlements Reference](#entitlements-reference) for all available fields.
 :::
 
@@ -359,7 +371,7 @@ const result = await TurboPartner.createOrganizationApiKey(
   'org-uuid-here',
   {
     name: 'Production API Key',
-    role: 'admin',  // 'admin' | 'contributor' | 'viewer'
+    role: 'admin',  // 'admin' | 'contributor' | 'user' | 'viewer' — the ORG role enum
   }
 );
 
@@ -476,6 +488,14 @@ const result = await TurboPartner.revokePartnerApiKey('partner-key-uuid-here');
 
 ## Partner User Management
 
+:::danger Partner users use a different role enum
+Partner portal users take `'admin' | 'member' | 'viewer'`. **Organization** users and organization API keys take `'admin' | 'contributor' | 'user' | 'viewer'`. The two enums do not overlap beyond `admin`/`viewer` — `'member'` is rejected on an org call, and `'contributor'`/`'user'` are rejected on a partner call. See [Role Enums](#orguserrole-organization-users).
+:::
+
+:::caution `permissions` is all-or-nothing
+The `permissions` object itself is optional, but if you send it, **all seven keys are required**. There is no partial permissions update — omitting even one key is a `ValidationError` (400). Always send the complete object; read the current values first and re-send them with your change applied.
+:::
+
 ### `addUserToPartnerPortal()`
 
 Add a user to the partner portal with specific permissions.
@@ -483,7 +503,8 @@ Add a user to the partner portal with specific permissions.
 ```typescript
 const result = await TurboPartner.addUserToPartnerPortal({
   email: 'admin@partner.com',
-  role: 'admin',  // 'admin' | 'member' | 'viewer'
+  role: 'admin',  // 'admin' | 'member' | 'viewer' — the PARTNER role enum
+  // All 7 keys required whenever `permissions` is present.
   permissions: {
     canManageOrgs: true,
     canManageOrgUsers: true,
@@ -512,13 +533,14 @@ for (const user of result.data.results) {
 
 ### `updatePartnerUserPermissions()`
 
-Update a partner user's role and permissions.
+Update a partner user's role and permissions. If you include `permissions`, send **all seven keys** — a partial object is a 400.
 
 ```typescript
 const result = await TurboPartner.updatePartnerUserPermissions(
   'partner-user-uuid-here',
   {
     role: 'admin',
+    // Not a patch: every key below must be present.
     permissions: {
       canManageOrgs: true,
       canManageOrgUsers: true,
@@ -617,9 +639,9 @@ These are limits and capabilities you can configure for each organization:
 | `hasBetaFeatures` | boolean | Enable beta features |
 | `enableBulkSending` | boolean | Enable bulk document sending |
 
-### Tracking (Read-Only Usage)
+### Tracking (Usage Counters)
 
-These are usage counters that are read-only:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` object** — useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -629,7 +651,9 @@ These are usage counters that are read-only:
 | `storageUsed` | number | Current storage used in bytes |
 | `numGeneratedDeliverables` | number | Total documents generated |
 | `numSignaturesUsed` | number | Total signatures used |
-| `currentAICredits` | number | Remaining AI credits |
+| `currentAICredits` | number | Remaining AI credits (-1 = unlimited) |
+
+Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` accepts `-1`, meaning unlimited.
 
 ---
 
@@ -675,7 +699,9 @@ These are usage counters that are read-only:
 'audit:read'
 ```
 
-### OrgUserRole (Organization Users)
+### OrgUserRole (Organization Users and Org API Keys)
+
+Used by `addUserToOrganization()`, `updateOrganizationUserRole()`, `createOrganizationApiKey()`, and `updateOrganizationApiKey()`.
 
 ```typescript
 type OrgUserRole = 'admin' | 'contributor' | 'user' | 'viewer';
@@ -690,6 +716,8 @@ type OrgUserRole = 'admin' | 'contributor' | 'user' | 'viewer';
 
 ### PartnerUserRole (Partner Portal Users)
 
+Used by `addUserToPartnerPortal()` and `updatePartnerUserPermissions()` only.
+
 ```typescript
 type PartnerUserRole = 'admin' | 'member' | 'viewer';
 ```
@@ -700,7 +728,13 @@ type PartnerUserRole = 'admin' | 'member' | 'viewer';
 | `'member'` | Standard partner access (respects permissions) |
 | `'viewer'` | Read-only access to partner portal |
 
+:::danger Do not mix the two enums
+`'member'` exists **only** in `PartnerUserRole`; sending it to an organization endpoint is a 400. `'contributor'` and `'user'` exist **only** in `OrgUserRole`; sending either to a partner endpoint is a 400.
+:::
+
 ### PartnerPermissions
+
+All seven keys are required whenever a `permissions` object is sent. Partial objects are rejected with a 400.
 
 ```typescript
 interface PartnerPermissions {
