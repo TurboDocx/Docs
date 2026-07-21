@@ -58,7 +58,7 @@ Send documents for legally-binding eSignatures with full audit trails.
 
 ## TurboWebhooks SDKs
 
-Subscribe to TurboSign events (`signature.document.completed`, `signature.document.voided`) and verify inbound signatures with HMAC-SHA256.
+Subscribe to all 7 TurboSign signature events — `sent`, `viewed`, `recipient_signed`, `signed`, `completed`, `finalization_failed`, `voided` — and verify inbound signatures with HMAC-SHA256. Each SDK exports the full set as constants, so you never hand-write the wire strings.
 
 | Language                  | Package         | Install Command               | Links                                                                                                  |
 | :------------------------ | :-------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------- |
