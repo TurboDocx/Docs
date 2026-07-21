@@ -481,7 +481,9 @@ Partner portal users take `admin`, `member`, or `viewer`. **Organization** users
 :::
 
 :::caution `permissions` is all-or-nothing
-The `permissions` dict itself is optional, but if you send it, **all seven keys are required**. There is no partial permissions update — omitting even one key raises `ValidationError` (400). Always send the complete dict; read the current values first and re-send them with your change applied.
+On `add_user_to_partner_portal()`, `permissions` is a **required** keyword argument — omitting it raises a Python `TypeError` before any request is sent. On `update_partner_user_permissions()`, the `permissions` dict itself is optional.
+
+Either way, if you send `permissions`, **all seven keys are required**. There is no partial permissions update — omitting even one key raises `ValidationError` (400). Always send the complete dict; read the current values first and re-send them with your change applied.
 :::
 
 ### `add_user_to_partner_portal()`
@@ -492,7 +494,7 @@ Add a user to the partner portal with specific permissions.
 result = await TurboPartner.add_user_to_partner_portal(
     email="admin@partner.com",
     role="admin",  # PARTNER role enum: admin, member, or viewer
-    # All 7 keys required whenever `permissions` is present.
+    # `permissions` is required here, and all 7 keys must be present.
     permissions={
         "canManageOrgs": True,
         "canManageOrgUsers": True,
@@ -745,8 +747,8 @@ The SDK provides typed exceptions for different error scenarios:
 ```python
 from turbodocx_sdk import (
     TurboPartner, TurboDocxError,
-    AuthenticationError, ValidationError,
-    NotFoundError, RateLimitError, NetworkError,
+    AuthenticationError, AuthorizationError, ValidationError,
+    NotFoundError, ConflictError, RateLimitError, NetworkError,
 )
 
 try:
@@ -755,6 +757,10 @@ except AuthenticationError as e:
     # 401 - Invalid API key or partner ID
     print(f"Authentication failed: {e}")
     print(f"  HTTP Status: {e.status_code}")
+except AuthorizationError as e:
+    # 403 - Authenticated, but the key lacks the required partner scope
+    print(f"Not authorized: {e}")
+    print(f"  HTTP Status: {e.status_code}")
 except ValidationError as e:
     # 400 - Invalid request data
     print(f"Validation error: {e}")
@@ -762,6 +768,9 @@ except ValidationError as e:
 except NotFoundError as e:
     # 404 - Resource not found
     print(f"Not found: {e}")
+except ConflictError as e:
+    # 409 - Conflicts with the current resource state
+    print(f"Conflict: {e}")
 except RateLimitError as e:
     # 429 - Too many requests
     print(f"Rate limited: {e}")
@@ -783,8 +792,10 @@ except TurboDocxError as e:
 |------------|-------------|-------------|
 | `TurboDocxError` | varies | Base error for all SDK errors |
 | `AuthenticationError` | 401 | Invalid or missing API credentials |
+| `AuthorizationError` | 403 | Valid credentials without permission for this operation |
 | `ValidationError` | 400 | Invalid request parameters |
 | `NotFoundError` | 404 | Resource not found |
+| `ConflictError` | 409 | Request conflicts with current resource state |
 | `RateLimitError` | 429 | Too many requests |
 | `NetworkError` | - | Network connectivity issues |
 

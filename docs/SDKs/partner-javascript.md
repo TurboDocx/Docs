@@ -179,6 +179,7 @@ Create a new organization under your partner account.
 ```typescript
 const result = await TurboPartner.createOrganization({
   name: 'Acme Corporation',
+  metadata: { crmAccountId: 'ACC-4471', tier: 'gold' },  // Optional arbitrary tenant metadata
   features: { maxUsers: 50 },  // Optional entitlements override
 });
 
@@ -493,7 +494,7 @@ Partner portal users take `'admin' | 'member' | 'viewer'`. **Organization** user
 :::
 
 :::caution `permissions` is all-or-nothing
-The `permissions` object itself is optional, but if you send it, **all seven keys are required**. There is no partial permissions update — omitting even one key is a `ValidationError` (400). Always send the complete object; read the current values first and re-send them with your change applied.
+On `addUserToPartnerPortal()` the `permissions` object is **required**. On `updatePartnerUserPermissions()` it is optional, but if you send it, **all seven keys are required**. Either way there is no partial permissions update — omitting even one key is a `ValidationError` (400). Always send the complete object; read the current values first and re-send them with your change applied.
 :::
 
 ### `addUserToPartnerPortal()`
@@ -504,7 +505,7 @@ Add a user to the partner portal with specific permissions.
 const result = await TurboPartner.addUserToPartnerPortal({
   email: 'admin@partner.com',
   role: 'admin',  // 'admin' | 'member' | 'viewer' — the PARTNER role enum
-  // All 7 keys required whenever `permissions` is present.
+  // Required on this method, and all 7 keys must be present.
   permissions: {
     canManageOrgs: true,
     canManageOrgUsers: true,
@@ -651,6 +652,7 @@ Current consumption against the limits above. TurboDocx maintains these automati
 | `storageUsed` | number | Current storage used in bytes |
 | `numGeneratedDeliverables` | number | Total documents generated |
 | `numSignaturesUsed` | number | Total signatures used |
+| `numQuotesSent` | number | Total quotes sent |
 | `currentAICredits` | number | Remaining AI credits (-1 = unlimited) |
 
 Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` accepts `-1`, meaning unlimited.
@@ -758,8 +760,10 @@ The SDK provides typed error classes for different error scenarios:
 import {
   TurboDocxError,
   AuthenticationError,
+  AuthorizationError,
   ValidationError,
   NotFoundError,
+  ConflictError,
   RateLimitError,
   NetworkError,
 } from '@turbodocx/sdk';
@@ -770,12 +774,18 @@ try {
   if (error instanceof AuthenticationError) {
     // 401 - Invalid API key or partner ID
     console.error(`Authentication failed: ${error.message}`);
+  } else if (error instanceof AuthorizationError) {
+    // 403 - Partner API key lacks the required scope
+    console.error(`Forbidden: ${error.message}`);
   } else if (error instanceof ValidationError) {
     // 400 - Invalid request data
     console.error(`Validation error: ${error.message}`);
   } else if (error instanceof NotFoundError) {
     // 404 - Organization or resource not found
     console.error(`Not found: ${error.message}`);
+  } else if (error instanceof ConflictError) {
+    // 409 - Resource conflict (e.g. user already exists)
+    console.error(`Conflict: ${error.message}`);
   } else if (error instanceof RateLimitError) {
     // 429 - Rate limit exceeded
     console.error(`Rate limit: ${error.message}`);
@@ -795,8 +805,10 @@ try {
 |-------------|-------------|-------------|
 | `TurboDocxError` | varies | Base error for all SDK errors |
 | `AuthenticationError` | 401 | Invalid or missing API credentials |
+| `AuthorizationError` | 403 | API key lacks required permissions (scope) |
 | `ValidationError` | 400 | Invalid request parameters |
 | `NotFoundError` | 404 | Resource not found |
+| `ConflictError` | 409 | Resource conflict |
 | `RateLimitError` | 429 | Too many requests |
 | `NetworkError` | - | Network connectivity issues |
 
@@ -873,4 +885,3 @@ try {
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 - [npm Package](https://www.npmjs.com/package/@turbodocx/sdk)
 - [TurboSign JavaScript SDK](/docs/SDKs/javascript) — For digital signature operations
-- [API Reference](/docs/API/partner-api) — REST API documentation

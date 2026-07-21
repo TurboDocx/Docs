@@ -67,6 +67,8 @@ const { Deliverable } = require("@turbodocx/sdk");
 Deliverable.configure({
   apiKey: process.env.TURBODOCX_API_KEY, // Required: Your TurboDocx API key
   orgId: process.env.TURBODOCX_ORG_ID, // Required: Your organization ID
+  // Optional: OAuth access token instead of an API key
+  // accessToken: process.env.TURBODOCX_ACCESS_TOKEN,
   // Optional: override base URL for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -82,6 +84,8 @@ import { Deliverable } from "@turbodocx/sdk";
 Deliverable.configure({
   apiKey: process.env.TURBODOCX_API_KEY || "", // Required: Your TurboDocx API key
   orgId: process.env.TURBODOCX_ORG_ID || "", // Required: Your organization ID
+  // Optional: OAuth access token instead of an API key
+  // accessToken: process.env.TURBODOCX_ACCESS_TOKEN,
   // Optional: override base URL for testing
   // baseUrl: 'https://api.turbodocx.com'
 });
@@ -90,8 +94,19 @@ Deliverable.configure({
 </TabItem>
 </Tabs>
 
+**`DeliverableConfig` fields:**
+
+| Property      | Type     | Required | Description                                            |
+| ------------- | -------- | -------- | ------------------------------------------------------ |
+| `apiKey`      | `string` | Yes\*    | Your TurboDocx API key                                  |
+| `accessToken` | `string` | Yes\*    | OAuth access token — alternative to `apiKey`            |
+| `orgId`       | `string` | Yes      | Your organization ID                                    |
+| `baseUrl`     | `string` | No       | API base URL (defaults to `https://api.turbodocx.com`) |
+
+\*Supply either `apiKey` or `accessToken`. When both are set, `accessToken` wins.
+
 :::tip No Sender Email Required
-Unlike TurboSign, the Deliverable module only requires `apiKey` and `orgId` — no sender email or name is needed.
+Unlike TurboSign, the Deliverable module only requires a credential and `orgId` — no sender email or name is needed.
 :::
 
 ### Environment Variables

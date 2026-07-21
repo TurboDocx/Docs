@@ -687,6 +687,7 @@ Current consumption against the limits above. TurboDocx maintains these automati
 | `StorageUsed` | `int64` | Current storage used in bytes |
 | `NumGeneratedDeliverables` | `int` | Total documents generated |
 | `NumSignaturesUsed` | `int` | Total signatures used |
+| `NumQuotesSent` | `int` | Total quotes sent |
 | `CurrentAICredits` | `int` | Remaining AI credits (-1 = unlimited) |
 
 Every counter except `CurrentAICredits` floors at `0`. Only `CurrentAICredits` accepts `-1`, meaning unlimited.
@@ -724,20 +725,24 @@ turbodocx.ScopePartnerUsersUpdate  // "partner-users:update"
 turbodocx.ScopePartnerUsersDelete  // "partner-users:delete"
 
 // Organization API Keys
-turbodocx.ScopeOrgApikeysCreate    // "org-apikeys:create"
-turbodocx.ScopeOrgApikeysRead      // "org-apikeys:read"
-turbodocx.ScopeOrgApikeysUpdate    // "org-apikeys:update"
-turbodocx.ScopeOrgApikeysDelete    // "org-apikeys:delete"
+turbodocx.ScopeOrgAPIKeysCreate    // "org-apikeys:create"
+turbodocx.ScopeOrgAPIKeysRead      // "org-apikeys:read"
+turbodocx.ScopeOrgAPIKeysUpdate    // "org-apikeys:update"
+turbodocx.ScopeOrgAPIKeysDelete    // "org-apikeys:delete"
 
 // Partner API Keys
-turbodocx.ScopePartnerApikeysCreate  // "partner-apikeys:create"
-turbodocx.ScopePartnerApikeysRead    // "partner-apikeys:read"
-turbodocx.ScopePartnerApikeysUpdate  // "partner-apikeys:update"
-turbodocx.ScopePartnerApikeysDelete  // "partner-apikeys:delete"
+turbodocx.ScopePartnerAPIKeysCreate  // "partner-apikeys:create"
+turbodocx.ScopePartnerAPIKeysRead    // "partner-apikeys:read"
+turbodocx.ScopePartnerAPIKeysUpdate  // "partner-apikeys:update"
+turbodocx.ScopePartnerAPIKeysDelete  // "partner-apikeys:delete"
 
 // Audit
 turbodocx.ScopeAuditRead            // "audit:read"
 ```
+
+:::note Renamed since v0.3.0
+The eight API-key scopes were spelled `ScopeOrgApikeysCreate`, `ScopePartnerApikeysCreate`, and so on in v0.3.0. Those identifiers still compile as deprecated aliases with identical string values, but they will be removed in a future major release. Use the `APIKeys` spelling above.
+:::
 
 ### Organization User Roles
 
@@ -792,6 +797,7 @@ import "errors"
 result, err := partner.CreateOrganization(ctx, request)
 if err != nil {
     var authErr *turbodocx.AuthenticationError
+    var authzErr *turbodocx.AuthorizationError
     var validErr *turbodocx.ValidationError
     var notFoundErr *turbodocx.NotFoundError
     var rateLimitErr *turbodocx.RateLimitError
@@ -801,6 +807,9 @@ if err != nil {
     case errors.As(err, &authErr):
         // 401 - Invalid API key or partner ID
         fmt.Printf("Authentication failed: %s\n", authErr.Message)
+    case errors.As(err, &authzErr):
+        // 403 - Key is valid but lacks the scope this route requires
+        fmt.Printf("Authorization failed: %s\n", authzErr.Message)
     case errors.As(err, &validErr):
         // 400 - Invalid request data
         fmt.Printf("Validation error: %s\n", validErr.Message)
@@ -825,6 +834,7 @@ if err != nil {
 |------------|-------------|-------------|
 | `TurboDocxError` | varies | Base error for all SDK errors |
 | `AuthenticationError` | 401 | Invalid or missing API credentials |
+| `AuthorizationError` | 403 | Authenticated but the key lacks the required scope |
 | `ValidationError` | 400 | Invalid request parameters |
 | `NotFoundError` | 404 | Resource not found |
 | `RateLimitError` | 429 | Too many requests |
@@ -916,4 +926,3 @@ func main() {
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
 - [Go Package Reference](https://pkg.go.dev/github.com/TurboDocx/SDK/packages/go-sdk)
 - [TurboSign Go SDK](/docs/SDKs/go) — For digital signature operations
-- [API Reference](/docs/API/partner-api) — REST API documentation

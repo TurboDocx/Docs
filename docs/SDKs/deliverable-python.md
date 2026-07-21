@@ -50,9 +50,8 @@ pipenv install turbodocx-sdk
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.9+
 - `httpx` (installed automatically)
-- `pydantic` (installed automatically)
 
 ---
 

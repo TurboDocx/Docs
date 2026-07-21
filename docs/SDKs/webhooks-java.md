@@ -45,7 +45,7 @@ For the full conceptual overview of how webhooks work in TurboSign (delivery ret
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -53,14 +53,14 @@ For the full conceptual overview of how webhooks work in TurboSign (delivery ret
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.4.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.4.0")
+implementation("com.turbodocx:turbodocx-sdk:0.5.0")
 ```
 
 </TabItem>

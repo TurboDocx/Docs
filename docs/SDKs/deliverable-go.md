@@ -500,13 +500,17 @@ Variable configuration for template injection:
 | `Placeholder`            | `string`                | Yes      | Template placeholder (e.g., `{CompanyName}`)         |
 | `Text`                   | `string`                | No\*     | Value to inject                                      |
 | `MimeType`               | `string`                | Yes      | `"text"`, `"html"`, `"image"`, or `"markdown"`       |
-| `IsDisabled`             | `bool`                  | No       | Skip this variable during generation                 |
+| `IsDisabled`             | `FlexBool`              | No       | Skip this variable during generation                 |
 | `Subvariables`           | `[]DeliverableVariable` | No       | Nested sub-variables for HTML content                |
 | `VariableStack`          | `interface{}`           | No       | Multiple instances for repeating content             |
 | `AIPrompt`               | `string`                | No       | AI prompt for content generation (max 16,000 chars)  |
-| `AllowRichTextInjection` | `bool`                  | No       | Whether to allow rich text injection                 |
+| `AllowRichTextInjection` | `FlexBool`              | No       | Whether to allow rich text injection                 |
 
 \*Required unless `VariableStack` is provided or `IsDisabled` is true.
+
+:::note `FlexBool`, not `bool`
+Boolean fields on the deliverable types are the SDK's `FlexBool`, a named `bool`. Untyped literals work as-is (`IsDisabled: true`), but assigning to or from an existing `bool` variable needs an explicit conversion: `var b bool = bool(rec.IsActive)`, `IsDisabled: turbodocx.FlexBool(myBool)`.
+:::
 
 ### CreateDeliverableRequest
 
@@ -552,14 +556,14 @@ The deliverable object returned by both `ListDeliverables` and `GetDeliverableDe
 | `Description`        | `string`                | Description text                         |
 | `TemplateID`         | `string`                | Source template ID                       |
 | `TemplateName`       | `string`                | Source template name                     |
-| `TemplateNotDeleted` | `*bool`                 | Whether the source template still exists |
+| `TemplateNotDeleted` | `*FlexBool`             | Whether the source template still exists |
 | `CreatedBy`          | `string`                | User ID of the creator                   |
 | `Email`              | `string`                | Creator's email address                  |
 | `FileSize`           | `int64`                 | File size in bytes                       |
 | `FileType`           | `string`                | MIME type of the generated file          |
 | `DefaultFont`        | `string`                | Default font used                        |
 | `Fonts`              | `[]Font`                | Fonts used in the document               |
-| `IsActive`           | `bool`                  | Whether the deliverable is active        |
+| `IsActive`           | `FlexBool`              | Whether the deliverable is active        |
 | `CreatedOn`          | `string`                | ISO 8601 creation timestamp              |
 | `UpdatedOn`          | `string`                | ISO 8601 last update timestamp           |
 | `Variables`          | `[]DeliverableVariable` | Parsed variable objects with values      |
@@ -573,7 +577,7 @@ Tag object included when `ShowTags` is enabled:
 | ----------- | -------- | ------------------------------------ |
 | `ID`        | `string` | Tag unique identifier (UUID)         |
 | `Label`     | `string` | Tag display name                     |
-| `IsActive`  | `bool`   | Whether the tag is active            |
+| `IsActive`  | `FlexBool` | Whether the tag is active          |
 | `UpdatedOn` | `string` | ISO 8601 last update timestamp       |
 | `CreatedOn` | `string` | ISO 8601 creation timestamp          |
 | `CreatedBy` | `string` | User ID of the tag creator           |
