@@ -67,7 +67,9 @@ if err != nil {
 }
 ```
 
-`NewQuoteClient` does **not** require `SenderEmail` — TurboQuote does not send signature emails, so the sender validation enforced by `NewClientWithConfig` (TurboSign) is skipped here. `OrgID` is required; both `APIKey` and `OrgID` fall back to `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID` environment variables when not set in config.
+`NewQuoteClient` does **not** take `SenderEmail` — a quote has no per-request sender field. Sender validation is **not** skipped, though: it moves to your org quote template (see below). `OrgID` is required; both `APIKey` and `OrgID` fall back to `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID` when not set in config.
+
+The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, every sender-resolving call — `CreateQuote`, `DuplicateQuote`, `SendQuote` / `SendQuoteWithDeliverable`, and `HandleExpiredQuote` — fails with a `ValidationError` (`400 SenderEmailRequired`) when the org's quote template has no sender email set. A companion `400 SenderNameRequired` is returned when no sender **name** resolves. Configure both **Sender Name** and **Sender Email** once (`UpdateTemplate`) and all of them resolve cleanly.
 
 ### Environment Variables
 
@@ -209,6 +211,10 @@ list, err := qc.ListQuotes(ctx, &turbodocx.ListQuotesOptions{
 // list.Results []Quote
 // list.TotalRecords int
 // list.Stats.WinRate float64
+
+for _, q := range list.Results {
+    fmt.Println(q.Name, q.Status)
+}
 ```
 
 | Field | Type | Description |
@@ -255,14 +261,19 @@ Required: `Name`, `CompanyID`, `ContactID`. Returns `*Quote`.
 
 #### GetQuote
 
-Fetches a quote by ID. The `StatusInfo` field (merged onto the returned `Quote`) describes what transitions are available: `CanSend`, `CanAccept`, `CanDecline`, `CanVoid`, `IsTerminal`.
+Fetches a quote by ID. The `StatusInfo` field (merged onto the returned `Quote`) describes what transitions are available: `CanSend`, `CanAccept`, `CanDecline`, `CanVoid`, `IsTerminal`. The `PreparedBy` field carries the resolved "Prepared by" identity shown on the quote PDF.
 
 ```go
 quote, err := qc.GetQuote(ctx, "quote-uuid")
 if quote.StatusInfo != nil {
     fmt.Printf("Can send: %v\n", quote.StatusInfo.CanSend)
 }
+if quote.PreparedBy != nil && quote.PreparedBy.Name != nil {
+    fmt.Println(*quote.PreparedBy.Name) // e.g. "Acme Billing Integration"; Email may be nil
+}
 ```
+
+`PreparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `Creator`** for any customer-facing display — `Creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 #### UpdateQuote
 
@@ -292,6 +303,8 @@ Creates a new draft quote as a copy of the specified quote.
 ```go
 copy, err := qc.DuplicateQuote(ctx, "quote-uuid")
 ```
+
+The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
 #### ApplyPriceBook
 
@@ -380,6 +393,27 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ---
 
 ### Quote Status Transitions
+
+:::caution Send preconditions
+
+Both send methods share the same server-side checks. Each is rejected with **HTTP 400** and a
+specific error `code` before anything is created or emailed:
+
+| Condition | Code |
+| :--- | :--- |
+| Quote is not a draft | `QuoteNotSendable` |
+| No `validUntil` date set | `QuoteValidUntilRequired` |
+| `validUntil` is in the past | `QuoteExpired` |
+| No line items | `QuoteHasNoLineItems` |
+| Contact missing a name or email | `QuoteContactRequired` |
+| Company or contact deleted/deactivated | `QuoteCustomerInactive` |
+| No sender email resolvable (API-key callers) | `SenderEmailRequired` |
+
+A quote with **no line items cannot be sent** — add at least one product, bundle, or custom
+line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use the
+handle-expired flow to void it and create a fresh draft.
+
+:::
 
 #### SendQuote
 
