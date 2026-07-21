@@ -93,8 +93,10 @@ TurboQuote.configure({
 </TabItem>
 </Tabs>
 
-:::tip No senderEmail required
-Unlike TurboSign, `TurboQuote.configure()` does **not** require `senderEmail` or `senderName` — quotes are not sent as signature emails. Only `apiKey` is required; `orgId` is recommended but falls back to `TURBODOCX_ORG_ID`. If you skip `configure()` entirely, the SDK auto-initialises from environment variables on the first method call.
+:::tip No senderEmail on the client — but set one on your quote template
+`TurboQuote.configure()` does **not** take `senderEmail` or `senderName` — quotes are not sent as signature emails. Only `apiKey` is required; `orgId` falls back to `TURBODOCX_ORG_ID`.
+
+The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, every sender-resolving call — `createQuote`, `duplicateQuote`, `sendQuote` / `sendQuoteWithDeliverable`, and `handleExpiredQuote` — fails with `400 SenderEmailRequired` when the org's quote template has no sender email set. A companion `400 SenderNameRequired` is returned when no sender **name** resolves. Configure both **Sender Name** and **Sender Email** once (`TurboQuote.updateTemplate({ senderEmail, senderName })`) and all of them resolve cleanly.
 :::
 
 ### Environment Variables
@@ -238,6 +240,10 @@ const { results, totalRecords, stats } = await TurboQuote.listQuotes({
   currency: 'USD',
 });
 // stats.total, stats.winRate, stats.monthlyRecurringRevenue, ...
+
+for (const q of results) {
+  console.log(q.name, q.status);
+}
 ```
 
 #### createQuote
@@ -277,12 +283,16 @@ const subscription = await TurboQuote.createQuote({
 
 #### getQuote
 
-Fetch a single quote. The returned object includes a `statusInfo` field with transition flags (`canSend`, `canAccept`, `canDecline`, `canVoid`).
+Fetch a single quote. The returned object includes a `statusInfo` field with transition flags (`canSend`, `canAccept`, `canDecline`, `canVoid`) and a `preparedBy` object — the resolved "Prepared by" identity shown on the quote PDF.
 
 ```typescript
 const quote = await TurboQuote.getQuote('quote-uuid');
 console.log(quote.statusInfo?.canSend);  // true when status is 'draft'
+console.log(quote.preparedBy?.name);     // e.g. "Acme Billing Integration" or the template sender
+console.log(quote.preparedBy?.email);    // may be undefined for an API-created quote — render a placeholder
 ```
+
+`preparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `creator`** for any customer-facing display — `creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 #### updateQuote
 
@@ -310,6 +320,8 @@ Copy a quote (and its line items) into a new draft.
 ```typescript
 const copy = await TurboQuote.duplicateQuote('quote-uuid');
 ```
+
+The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
 #### applyPriceBook
 
@@ -401,6 +413,27 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ---
 
 ### Quote Status Transitions
+
+:::caution Send preconditions
+
+Both send methods share the same server-side checks. Each is rejected with **HTTP 400** and a
+specific error `code` before anything is created or emailed:
+
+| Condition | Code |
+| :--- | :--- |
+| Quote is not a draft | `QuoteNotSendable` |
+| No `validUntil` date set | `QuoteValidUntilRequired` |
+| `validUntil` is in the past | `QuoteExpired` |
+| No line items | `QuoteHasNoLineItems` |
+| Contact missing a name or email | `QuoteContactRequired` |
+| Company or contact deleted/deactivated | `QuoteCustomerInactive` |
+| No sender email resolvable (API-key callers) | `SenderEmailRequired` |
+
+A quote with **no line items cannot be sent** — add at least one product, bundle, or custom
+line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use the
+handle-expired flow to void it and create a fresh draft.
+
+:::
 
 #### sendQuote
 

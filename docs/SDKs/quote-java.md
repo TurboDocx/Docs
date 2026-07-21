@@ -29,7 +29,7 @@ The official TurboDocx TurboQuote SDK for Java applications. Create and send sal
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product catalog, assemble quotes with line items, apply price book discounts, and send branded proposals to contacts — with optional TurboSign e-signature delivery via `sendQuoteWithDeliverable`. No `senderEmail` is required; TurboQuote handles its own email delivery.
+TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product catalog, assemble quotes with line items, apply price book discounts, and send branded proposals to contacts — with optional TurboSign e-signature delivery via `sendQuoteWithDeliverable`. The client config takes no `senderEmail`; the quote's **"Prepared by"** sender comes from your org quote template (see the note below `createQuote`).
 :::
 
 ## Installation
@@ -92,7 +92,9 @@ TurboQuoteClient client = new TurboQuoteClient.Builder()
 TurboQuote tq = client.turboQuote();
 ```
 
-`TurboQuoteClient.Builder` does **not** require `senderEmail` — TurboQuote sends quote emails itself via its own send flow, so the sender validation enforced by `TurboDocxClient` for TurboSign is skipped here. `orgId` is required. Construct `TurboQuoteClient` once and reuse `tq` across the lifetime of your application.
+`TurboQuoteClient.Builder` does **not** take `senderEmail` — a quote has no per-request sender field. Sender validation is **not** skipped, though: it moves to your org quote template (see below). `orgId` is required. Construct `TurboQuoteClient` once and reuse `tq`.
+
+The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, every sender-resolving call — `createQuote`, `duplicateQuote`, `sendQuote` / `sendQuoteWithDeliverable`, and `handleExpiredQuote` — fails with a `ValidationException` (`400 SenderEmailRequired`) when the org's quote template has no sender email set. A companion `400 SenderNameRequired` is returned when no sender **name** resolves. Configure both **Sender Name** and **Sender Email** once (`updateTemplate`) and all of them resolve cleanly.
 
 ### Environment Variables
 
@@ -247,7 +249,8 @@ opts.setOffset(0);
 
 QuoteListResponse list = tq.listQuotes(opts);
 System.out.println("Total: " + list.getTotalRecords());
-list.getResults().forEach(q -> System.out.println(q.getId() + " " + q.getStatus()));
+list.getResults().forEach(q ->
+    System.out.println(q.getId() + " " + q.getStatus()));
 ```
 
 #### `createQuote`
@@ -293,13 +296,19 @@ Quote subscription = tq.createQuote(subReq);
 Quote getQuote(String id)
 ```
 
-Get a quote by ID. Returns the `Quote` with `statusInfo` merged in (expiry dates, status transitions).
+Get a quote by ID. Returns the `Quote` with `statusInfo` (expiry dates, status transitions) and `preparedBy` (the resolved "Prepared by" identity shown on the quote PDF) merged in.
 
 ```java
 Quote quote = tq.getQuote(quoteId);
 System.out.println("Status: " + quote.getStatus());
 // quote.getStatusInfo() — expiry/transition metadata
+if (quote.getPreparedBy() != null) {
+    System.out.println(quote.getPreparedBy().getName());  // e.g. "Acme Billing Integration"
+    System.out.println(quote.getPreparedBy().getEmail()); // may be null — render a placeholder
+}
 ```
+
+`preparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `getCreator()`** for any customer-facing display — the creator may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 #### `updateQuote`
 
@@ -342,6 +351,8 @@ Duplicate a quote (creates a draft copy).
 Quote copy = tq.duplicateQuote(quoteId);
 System.out.println("New quote: " + copy.getId());
 ```
+
+The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
 #### `applyPriceBook`
 
@@ -452,6 +463,27 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ---
 
 ### Quotes — Status Transitions
+
+:::caution Send preconditions
+
+Both send methods share the same server-side checks. Each is rejected with **HTTP 400** and a
+specific error `code` before anything is created or emailed:
+
+| Condition | Code |
+| :--- | :--- |
+| Quote is not a draft | `QuoteNotSendable` |
+| No `validUntil` date set | `QuoteValidUntilRequired` |
+| `validUntil` is in the past | `QuoteExpired` |
+| No line items | `QuoteHasNoLineItems` |
+| Contact missing a name or email | `QuoteContactRequired` |
+| Company or contact deleted/deactivated | `QuoteCustomerInactive` |
+| No sender email resolvable (API-key callers) | `SenderEmailRequired` |
+
+A quote with **no line items cannot be sent** — add at least one product, bundle, or custom
+line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use the
+handle-expired flow to void it and create a fresh draft.
+
+:::
 
 #### `sendQuote`
 

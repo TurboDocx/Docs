@@ -606,7 +606,7 @@ TurboSign.configure({
   apiKey: string;        // Required : Your TurboDocx API key
   orgId: string;         // Required: Your organization ID
   senderEmail: string;   // Required: reply-to address for signature request emails
-  senderName?: string;   // Optional: sender name in emails (default: 'API Service User')
+  senderName?: string;   // Optional: sender name in emails (defaults to your API key's name)
   baseUrl?: string;      // Optional: API base URL (default: 'https://api.turbodocx.com')
 });
 ```
@@ -1140,12 +1140,19 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | `fields`              | `Field[]`     | Yes         | Signature fields configuration |
 | `documentName`        | `string`      | No          | Document name                  |
 | `documentDescription` | `string`      | No          | Document description           |
-| `senderName`          | `string`      | No          | Sender name                    |
-| `senderEmail`         | `string`      | No          | Sender email                   |
+| `senderName`          | `string`      | No          | Sender name — falls back to `senderName` in the SDK config, then your API key's name |
+| `senderEmail`         | `string`      | Conditional | Sender email — **required on the request** unless supplied via `TurboSign.configure({ senderEmail })` or `TURBODOCX_SENDER_EMAIL` |
 | `ccEmails`            | `string[]`    | No          | Array of CC email addresses    |
 
 :::info File Source (Conditional)
 Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.
+:::
+
+:::caution Sender identity is always required for TurboSign
+Unlike TurboQuote (where the sender comes from the org quote template and there is no per-request
+field), TurboSign resolves the sender **from the request body**. If no sender email can be resolved
+from the request, the SDK config, or the environment, the API returns `400 SenderEmailRequired`;
+if no sender name can be resolved it returns `400 SenderNameRequired`.
 :::
 
 ---

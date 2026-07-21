@@ -117,7 +117,9 @@ Before you begin, you'll need two things from your TurboDocx account:
 - **Organization ID**: Your unique organization identifier
 
 :::note senderEmail required for TurboSign
-TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). The SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable, TurboQuote, and TurboWebhooks do not require it.
+TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). It is a **per-request body field on every signature request** and the SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable and TurboWebhooks do not use it at all.
+
+**TurboQuote is different:** there is **no `senderEmail` field on a quote request**, but a sender is still required. It is resolved from your organization's **quote template** (Quote Settings). An API-key caller whose template has no sender email gets `400 SenderEmailRequired` on create, duplicate, send, and handle-expired-sent — see [Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
 :::
 
 #### Which credentials does each product need?
@@ -126,7 +128,7 @@ TurboSign also requires a `senderEmail` (used as the reply-to address for signat
 | :------------- | :----------------------------- | :------------------------- | :-------------------------------------------------------------- |
 | **TurboSign** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | `TURBODOCX_SENDER_EMAIL` (required — reply-to for signer emails) |
 | **Deliverable** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
-| **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
+| **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | a **Sender Email + Sender Name on the org quote template** (no per-request sender field exists) |
 | **TurboWebhooks** | `TURBODOCX_API_KEY` (**administrator** role — non-admin keys get 403) | `TURBODOCX_ORG_ID` | the webhook secret returned by `createWebhook`, to verify inbound events |
 
 #### How to Get Your Credentials
@@ -725,10 +727,76 @@ end
 | Code                   | HTTP Status | Description                           |
 | :--------------------- | :---------- | :------------------------------------ |
 | `AUTHENTICATION_ERROR` | 401         | Invalid or expired API key            |
+| `AUTHORIZATION_ERROR`  | 403         | Authenticated, but lacks permission   |
 | `VALIDATION_ERROR`     | 400         | Invalid request data or parameters    |
 | `NOT_FOUND`            | 404         | Document or resource not found        |
+| `CONFLICT`             | 409         | Conflicts with the resource's state   |
 | `RATE_LIMIT_EXCEEDED`  | 429         | Too many requests, retry with backoff |
 | `NETWORK_ERROR`        | N/A         | Network connection or timeout error   |
+
+`code` is **always populated**. When the API returns a specific code the SDK surfaces it
+verbatim; otherwise it falls back to the class default above, so you can branch on `code`
+without a null check.
+
+### TurboQuote / TurboSign specific codes
+
+These are returned by the API and passed through unchanged. They are more precise than the
+generic codes above — prefer them when handling a specific failure.
+
+| Code                       | HTTP Status | Meaning                                                                                     |
+| :------------------------- | :---------- | :------------------------------------------------------------------------------------------ |
+| `SenderEmailRequired`      | 400         | No sender email could be resolved. TurboSign: set `senderEmail` on the request. TurboQuote: configure one on the org quote template (Quote Settings). |
+| `SenderNameRequired`       | 400         | No sender name could be resolved — the API key has no usable name.                           |
+| `QuoteHasNoLineItems`      | 400         | The quote has no line items. Add at least one product, bundle, or custom line item.          |
+| `QuoteExpired`             | 400         | The quote is past its `validUntil` date. Update the date before sending.                     |
+| `QuoteValidUntilRequired`  | 400         | The quote has no `validUntil` date set.                                                      |
+| `QuoteNotSendable`         | 400         | The quote's current status does not allow sending (only drafts can be sent).                 |
+| `QuoteContactRequired`     | 400         | The quote's contact is missing a name or email.                                              |
+| `QuoteCustomerInactive`    | 400         | The quote's company or contact was deleted or deactivated.                                   |
+| `QUOTE_NOT_FOUND`          | 404         | No quote with that ID in this organization.                                                  |
+
+### Error messages carry the actionable reason
+
+The API reports validation failures in several envelopes. The SDKs unwrap all of them, so
+`error.message` is the specific field-level reason — not a generic
+`"There was an issue validating the body"`. Multiple field errors are joined with `"; "`:
+
+```
+"name" is not allowed to be empty; "companyId" must be a valid GUID
+```
+
+---
+
+## Audit Trail & Client Context
+
+Every action you take through an SDK is recorded in the TurboDocx audit trail. All six SDKs
+automatically attach **client-context headers** to **every** request — including TurboSign,
+Deliverable, TurboQuote, TurboWebhooks, and TurboPartner — so the audit trail records real
+environment details instead of blanks:
+
+| Recorded column | What the SDK sends |
+| :--- | :--- |
+| **Device** | The host machine / runtime the call came from |
+| **Operating system** | The OS the SDK is running on |
+| **Timezone** | The machine's IANA timezone (e.g. `America/New_York`) |
+| **Language** | The machine's locale (e.g. `en-US`) |
+| **Application** | `TurboDocx SDK <version>` |
+
+You do not configure any of this — it is collected and sent for you.
+
+### SDK / n8n calls vs. raw API calls
+
+The audit trail distinguishes how a request reached TurboDocx:
+
+| Caller | How it appears in the audit trail |
+| :--- | :--- |
+| A language SDK | `TurboDocx SDK <version>`, with real device, OS, timezone, and language |
+| The TurboDocx n8n node | `TurboDocx n8n Node <version>`, with real device, OS, timezone, and language |
+| A raw HTTP/API call | The **name of the HTTP library** that made the call, the action `API Request`, and `N/A` for the environment fields it cannot know |
+
+Raw API calls show `N/A` — not `Unknown` — for the fields no client context was supplied for. If
+you want fully attributed audit entries, call through an SDK or the n8n node rather than hand-rolled
+HTTP.
 
 ---
 

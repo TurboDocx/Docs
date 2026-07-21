@@ -203,6 +203,39 @@ These are the two most important user events to monitor for tracking signature p
 
 <br/>
 
+### What Each Event Records
+
+Alongside the timestamp and participant, every audit trail event captures the environment the
+action came from:
+
+| Column | What it shows |
+|--------|---------------|
+| **Device** | The device or host the action came from |
+| **Operating System** | The OS in use at the time of the action |
+| **Timezone** | The actor's IANA timezone (for example, `America/New_York`) |
+| **Language** | The actor's locale (for example, `en-US`) |
+| **Application** | What made the request — a browser, an SDK, the n8n node, or an HTTP client |
+
+**Where these values come from depends on how the action was performed:**
+
+- **In the TurboDocx web app or the signing page** — captured from the browser.
+- **Through a TurboDocx SDK** — the SDK sends client-context headers on every request, so the real
+  device, operating system, timezone, and language are recorded. The application is logged as
+  `TurboDocx SDK <version>`.
+- **Through the TurboDocx n8n node** — same real environment details, logged as
+  `TurboDocx n8n Node <version>`.
+- **Through a raw API call** (curl, Postman, your own HTTP client) — TurboDocx records the **name of
+  the HTTP library** that made the call, the action `API Request`, and `N/A` for the environment
+  fields it has no way to know.
+
+:::tip Want richer audit entries for automated sending?
+Use one of the [TurboDocx SDKs](/docs/SDKs) or the n8n node instead of hand-rolled HTTP
+requests. They populate the device, OS, timezone, and language columns automatically — raw API
+calls leave those as `N/A`.
+:::
+
+<br/>
+
 ### How to Redownload the Audit Trail
 We already send a pretty user-facing Audit Trail with User events, but if you want to download a detailed copy, click **Download Audit Trail as JSON**, 
 

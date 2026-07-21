@@ -88,7 +88,7 @@ The Bulk API supports four source types for your documents:
 
 - Source file (all jobs use same document)
 - Default metadata (documentName, documentDescription)
-- Default sender information
+- Sender information (`senderEmail` is required; `senderName` defaults to your API key's name)
 
 **Document-Level:**
 
@@ -178,9 +178,15 @@ User-Agent: TurboDocx API Client
 | batchName           | String            | **Yes**       | Name for this batch (max 255 chars)                               |
 | documentName        | String            | No            | Default document name for all jobs (max 255 chars)                |
 | documentDescription | String            | No            | Default description for all jobs (max 1000 chars)                 |
-| senderName          | String            | No            | Name of sender (max 255 chars)                                    |
-| senderEmail         | String (email)    | No            | Email of sender                                                   |
+| senderName          | String            | No            | Name of sender (max 255 chars). Defaults to your API key's name.  |
+| senderEmail         | String (email)    | **Yes**       | Batch-level reply-to address and the sender recorded in the audit trail |
 | documents           | String (JSON)     | **Yes**       | JSON string array of document objects                             |
+
+:::warning senderEmail is required
+`senderEmail` is required at the batch level for API/SDK bulk sends — an API key has no mailbox
+of its own, so TurboDocx **rejects the batch (HTTP 400)** without it rather than sending from an
+unmonitored address. `senderName` is optional and defaults to your API key's name.
+:::
 
 \* **File Source**: Must provide exactly ONE of:
 
