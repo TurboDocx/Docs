@@ -509,7 +509,7 @@ Variable configuration for template injection:
 \*Required unless `VariableStack` is provided or `IsDisabled` is true.
 
 :::note `FlexBool`, not `bool`
-Boolean fields on the deliverable types are the SDK's `FlexBool`, a named `bool` that also unmarshals the `0`/`1` MySQL `tinyint` values the API can return. Untyped literals work as-is (`IsDisabled: true`), but assigning to or from an existing `bool` variable needs an explicit conversion: `var b bool = bool(rec.IsActive)`, `IsDisabled: turbodocx.FlexBool(myBool)`.
+Boolean fields on the deliverable types are the SDK's `FlexBool`, a named `bool`. Untyped literals work as-is (`IsDisabled: true`), but assigning to or from an existing `bool` variable needs an explicit conversion: `var b bool = bool(rec.IsActive)`, `IsDisabled: turbodocx.FlexBool(myBool)`.
 :::
 
 ### CreateDeliverableRequest
