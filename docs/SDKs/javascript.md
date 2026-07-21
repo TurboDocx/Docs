@@ -361,7 +361,7 @@ const result = await TurboSign.sendSignature({
 
 TurboSign supports four different ways to provide document files:
 
-### 1. File Upload (Buffer/Blob)
+### 1. File Upload (Path, Buffer, or Browser File)
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -423,6 +423,21 @@ const result = await TurboSign.sendSignature({
 
 </TabItem>
 </Tabs>
+
+:::tip Pass a file path directly
+`file` accepts `string | File | Buffer`. A `string` is treated as a local file path — the SDK reads it and uses the basename as the document filename, so `file: "./contract.pdf"` works without `readFileSync`. A raw `Blob` is not supported; use a `Buffer` (Node) or a `File` (browser).
+
+When `file` is a `Buffer`, the filename defaults to `document.pdf` (extension detected from the content). Pass `fileName` to control it:
+
+```javascript
+await TurboSign.sendSignature({
+  file: fileBuffer,
+  fileName: "acme-msa.pdf",
+  // ...
+});
+```
+
+:::
 
 ### 2. File URL (fileLink)
 
@@ -1118,6 +1133,7 @@ Field configuration supporting both coordinate-based and template-based position
 | Property        | Type      | Required | Description                                                      |
 | --------------- | --------- | -------- | ---------------------------------------------------------------- |
 | `anchor`        | `string`  | No†      | Text anchor pattern like `{TagName}`                             |
+| `searchText`    | `string`  | No†      | Alternative to `anchor`: search for any text in the document     |
 | `placement`     | `string`  | No       | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
 | `size`          | `object`  | No       | `{ width: number; height: number }`                              |
 | `offset`        | `object`  | No       | `{ x: number; y: number }`                                       |
@@ -1132,7 +1148,8 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 
 | Property              | Type          | Required    | Description                    |
 | --------------------- | ------------- | ----------- | ------------------------------ |
-| `file`                | `Buffer`      | Conditional | PDF file as Buffer             |
+| `file`                | `string \| File \| Buffer` | Conditional | Document as a local file path, `Buffer`, or browser `File` |
+| `fileName`            | `string`      | No          | Original filename — used when `file` is a `Buffer` (defaults to `document.<ext>`) |
 | `fileLink`            | `string`      | Conditional | URL to document file           |
 | `deliverableId`       | `string`      | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `string`      | Conditional | TurboDocx template ID          |

@@ -392,6 +392,7 @@ The SDK provides typed errors for different error scenarios:
 | --------------------- | ----------- | ---------------------------------- |
 | `TurboDocxError`      | varies      | Base error type for all API errors |
 | `AuthenticationError` | 401         | Invalid or missing API key         |
+| `AuthorizationError`  | 403         | Authenticated but lacks required permissions |
 | `ValidationError`     | 400         | Invalid request parameters         |
 | `NotFoundError`       | 404         | Resource not found                 |
 | `RateLimitError`      | 429         | Too many requests                  |
@@ -418,6 +419,7 @@ result, err := client.TurboSign.SendSignature(ctx, request)
 if err != nil {
     // Check for specific error types
     var authErr *turbodocx.AuthenticationError
+    var authzErr *turbodocx.AuthorizationError
     var validationErr *turbodocx.ValidationError
     var notFoundErr *turbodocx.NotFoundError
     var rateLimitErr *turbodocx.RateLimitError
@@ -426,6 +428,8 @@ if err != nil {
     switch {
     case errors.As(err, &authErr):
         log.Printf("Authentication failed: %s", authErr.Message)
+    case errors.As(err, &authzErr):
+        log.Printf("Authorization failed: %s", authzErr.Message)
     case errors.As(err, &validationErr):
         log.Printf("Validation error: %s", validationErr.Message)
     case errors.As(err, &notFoundErr):

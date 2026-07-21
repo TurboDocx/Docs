@@ -53,6 +53,26 @@ composer require turbodocx/sdk
 ```php
 <?php
 use TurboDocx\TurboWebhooks;
+
+TurboWebhooks::configureFromCredentials(
+    apiKey: $_ENV['TURBODOCX_API_KEY'],
+    orgId: $_ENV['TURBODOCX_ORG_ID'],
+);
+```
+
+`configureFromCredentials()` is the preferred entry point for webhooks — it builds the `HttpClientConfig` for you with `skipSenderValidation: true`.
+
+Or skip configuration entirely and let the SDK auto-initialize from the environment variables below on the first call:
+
+```php
+// No configure() call needed — TURBODOCX_API_KEY and TURBODOCX_ORG_ID are read
+// on first use. Missing either one raises a RuntimeException naming both.
+$webhook = TurboWebhooks::getWebhook();
+```
+
+If you need to build the config yourself, pass `skipSenderValidation: true` — webhooks never send email, and `HttpClientConfig` otherwise throws `ValidationException` demanding a `senderEmail`:
+
+```php
 use TurboDocx\Config\HttpClientConfig;
 
 TurboWebhooks::configure(new HttpClientConfig(
@@ -62,11 +82,9 @@ TurboWebhooks::configure(new HttpClientConfig(
 ));
 ```
 
-Or load from environment variables:
-
-```php
-TurboWebhooks::configure(HttpClientConfig::fromEnvironment());
-```
+:::warning `HttpClientConfig::fromEnvironment()` needs a sender email
+`fromEnvironment()` does **not** set `skipSenderValidation`, so it throws `ValidationException` unless `TURBODOCX_SENDER_EMAIL` is also exported. For webhooks, use `configureFromCredentials()` or the auto-initialization path above instead.
+:::
 
 ### Environment Variables
 
@@ -158,12 +176,14 @@ Nothing was narrowed. `createWebhook(events: [...])` still takes plain strings, 
 require __DIR__ . '/vendor/autoload.php';
 
 use TurboDocx\TurboWebhooks;
-use TurboDocx\Config\HttpClientConfig;
 use TurboDocx\Exceptions\ConflictException;
 use TurboDocx\Exceptions\ValidationException;
 use TurboDocx\Types\Enums\WebhookEvent;
 
-TurboWebhooks::configure(HttpClientConfig::fromEnvironment());
+TurboWebhooks::configureFromCredentials(
+    apiKey: $_ENV['TURBODOCX_API_KEY'],
+    orgId: $_ENV['TURBODOCX_ORG_ID'],
+);
 
 try {
     $created = TurboWebhooks::createWebhook(
@@ -322,6 +342,21 @@ foreach ($result['summary']['errors'] as $err) {
     echo "  failure: {$err}\n";   // per-URL failure messages
 }
 ```
+
+### notifyWebhook
+
+Send a manual notification. Routes through the same backend handler as `testWebhook` and returns the same shape — the only wire-level difference is the response message string.
+
+```php
+$result = TurboWebhooks::notifyWebhook(
+    eventType: 'signature.document.completed',
+    payload: ['documentId' => '...', 'documentName' => '...'],
+);
+```
+
+:::tip Prefer `testWebhook`
+`notifyWebhook` exists for cross-SDK parity. For smoke-testing a receiver, use [`testWebhook`](#testwebhook) — same behaviour, clearer intent.
+:::
 
 ### regenerateWebhookSecret
 

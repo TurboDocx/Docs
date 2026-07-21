@@ -75,6 +75,7 @@ import { TurboQuote } from '@turbodocx/sdk';
 TurboQuote.configure({
   apiKey: process.env.TURBODOCX_API_KEY!,
   orgId: process.env.TURBODOCX_ORG_ID,   // optional — falls back to env var
+  // accessToken: process.env.TURBODOCX_ACCESS_TOKEN,  // optional — OAuth token instead of apiKey
 });
 ```
 
@@ -87,6 +88,7 @@ const { TurboQuote } = require('@turbodocx/sdk');
 TurboQuote.configure({
   apiKey: process.env.TURBODOCX_API_KEY,
   orgId: process.env.TURBODOCX_ORG_ID,
+  // accessToken: process.env.TURBODOCX_ACCESS_TOKEN,  // optional — OAuth token instead of apiKey
 });
 ```
 
@@ -94,7 +96,7 @@ TurboQuote.configure({
 </Tabs>
 
 :::tip No senderEmail required
-Unlike TurboSign, `TurboQuote.configure()` does **not** require `senderEmail` or `senderName` — quotes are not sent as signature emails. Only `apiKey` is required; `orgId` is recommended but falls back to `TURBODOCX_ORG_ID`. If you skip `configure()` entirely, the SDK auto-initialises from environment variables on the first method call.
+Unlike TurboSign, `TurboQuote.configure()` does **not** require `senderEmail` or `senderName` — quotes are not sent as signature emails. Only a credential is required — either `apiKey` or an OAuth `accessToken` (`accessToken` wins when both are set); `orgId` is recommended but falls back to `TURBODOCX_ORG_ID`. If you skip `configure()` entirely, the SDK auto-initialises from environment variables on the first method call.
 :::
 
 ### Environment Variables

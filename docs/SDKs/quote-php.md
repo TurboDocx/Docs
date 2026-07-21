@@ -133,7 +133,7 @@ $items = TurboQuote::addLineItems($quote->id, new AddLineItemRequest(
     quantity: 5,
 ));
 
-echo "Added {count($items)} item(s)\n";
+echo 'Added ' . count($items) . " item(s)\n";
 
 // 3. Send the quote
 $sent = TurboQuote::sendQuote($quote->id);
@@ -722,10 +722,15 @@ $templates = TurboQuote::listTemplates();
 There is no `getType($id)` — the backend does not expose a `GET /v1/types/:id` endpoint. Use `listTypes` instead.
 :::
 
+`CreateQuoteTypeRequest` requires **both** `name` and `categoryType` — there is no default. `categoryType` is one of `product_category`, `pricebook_type`, `company_industry`, or `bundle_category`.
+
 ```php
 use TurboDocx\Types\Requests\Quote\CreateQuoteTypeRequest;
 
-$type = TurboQuote::createType(new CreateQuoteTypeRequest(name: 'Renewal'));
+$type = TurboQuote::createType(new CreateQuoteTypeRequest(
+    name: 'Renewal',
+    categoryType: 'product_category',
+));
 ```
 
 ### Bulk Imports

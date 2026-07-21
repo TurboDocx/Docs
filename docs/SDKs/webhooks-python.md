@@ -396,6 +396,21 @@ for err in result["summary"].get("errors", []):
     print(f"  failure: {err}")  # per-URL failure messages
 ```
 
+### notify_webhook
+
+Manually send a notification to every URL configured on the webhook. Routes through the same backend handler as `test_webhook` and returns an identical response shape. Exposed for symmetry with the backend surface; prefer `test_webhook` in new code.
+
+```python
+result = await TurboWebhooks.notify_webhook(
+    event_type="signature.document.completed",
+    payload={"documentId": "...", "documentName": "..."},
+)
+
+print(f"{result['summary']['successful']}/{result['summary']['total']} succeeded")
+for err in result["summary"].get("errors", []):
+    print(f"  failure: {err}")  # per-URL failure messages
+```
+
 ### regenerate_webhook_secret
 
 Rotate the HMAC secret. The new secret is shown **once**; old signatures fail immediately after rotation.

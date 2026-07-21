@@ -32,7 +32,7 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -40,14 +40,14 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.4.0")
+implementation("com.turbodocx:turbodocx-sdk:0.5.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.4.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
 ```
 
 </TabItem>
@@ -280,6 +280,26 @@ TurboDocxClient client = new TurboDocxClient.Builder()
     .build();
 DeliverableClient deliverable = client.deliverable();
 ```
+
+The builder authenticates with either `apiKey(...)` or `accessToken(...)` (a bearer token), and exposes three build targets:
+
+| Builder method             | Returns             | Use for                                             |
+| -------------------------- | ------------------- | --------------------------------------------------- |
+| `build()`                  | `TurboDocxClient`   | Full client — `turboSign()` and `deliverable()`      |
+| `buildDeliverableClient()` | `DeliverableClient` | Document generation only (no `senderEmail` needed)   |
+| `buildWebhooksClient()`    | `TurboWebhooks`     | Signature webhook subscriptions — see [TurboWebhooks Java SDK](/docs/SDKs/webhooks-java) |
+
+```java
+// Authenticate with a bearer access token instead of an API key
+DeliverableClient deliverable = new TurboDocxClient.Builder()
+    .accessToken(System.getenv("TURBODOCX_ACCESS_TOKEN"))
+    .orgId(System.getenv("TURBODOCX_ORG_ID"))
+    .buildDeliverableClient();
+```
+
+:::info Sharing one HTTP client
+`DeliverableClient` also has a public constructor, `new DeliverableClient(HttpClient)`, if you already hold a configured `HttpClient` and want the deliverable module to reuse it. Most applications should use the builder instead.
+:::
 
 ### Generate deliverable
 
