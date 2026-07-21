@@ -122,7 +122,9 @@ Enter numeric values as plain numbers — `50000`, not `$50,000.00`. TurboDocx c
 
 ### Step 6: Save
 
-Click **Save** in the table builder to apply your configuration, then **Save Changes** on the variable to store it on the template.
+Click **Save** in the table builder to apply your configuration. That is the last step.
+The template details page saves your variable as you go, so there is no separate
+save action.
 
 ![Wrike Table builder with the Save button highlighted](/img/wrike_table_filtering/09_save.png)
 

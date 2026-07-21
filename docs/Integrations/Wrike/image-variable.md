@@ -49,7 +49,9 @@ Only **PNG and JPEG** images are injected; other formats (GIF, WebP, BMP, TIFF, 
 
 ### Step 4: Save
 
-Click **Save** in the image dialog to apply your configuration, then **Save Changes** on the variable to store it on the template.
+Click **Save** in the image dialog to apply your configuration. That is the last step.
+The template details page saves your variable as you go, so there is no separate
+save action.
 
 ![Wrike Image dialog with the Save button highlighted](/img/wrike_image/04_save.png)
 
