@@ -79,8 +79,10 @@ TurboQuote::configure(QuoteClientConfig::fromEnvironment());
 </TabItem>
 </Tabs>
 
-:::tip No senderEmail required
-Unlike TurboSign, `TurboQuote` does **not** require `senderEmail` or `senderName`. Quotes are not signature emails — only `apiKey` and, optionally, `orgId` are needed.
+:::tip No senderEmail on the client — but set one on your quote template
+`TurboQuote` does **not** take `senderEmail` or `senderName` — quotes are not signature emails; only `apiKey` and, optionally, `orgId` are needed.
+
+The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, every sender-resolving call — `createQuote()`, `duplicateQuote()`, `sendQuote()` / `sendQuoteWithDeliverable()`, and `handleExpiredQuote()` — fails with a `ValidationException` (`400 SenderEmailRequired`) when the org's quote template has no sender email set. A companion `400 SenderNameRequired` is returned when no sender **name** resolves. Configure both **Sender Name** and **Sender Email** once (`TurboQuote::updateTemplate(...)`) and all of them resolve cleanly.
 :::
 
 ### Environment Variables
@@ -237,9 +239,15 @@ $subscription = TurboQuote::createQuote(new CreateQuoteRequest(
 
 ```php
 $quote = TurboQuote::getQuote('quote-uuid');
-// statusInfo is merged onto the returned Quote object when present
+// statusInfo and preparedBy are merged onto the returned Quote object when present
 echo $quote->status;
+
+$prepared = $quote->preparedBy ?? [];
+echo $prepared['name'] ?? '';   // e.g. "Acme Billing Integration" or the template sender
+echo $prepared['email'] ?? '';  // may be absent for an API-created quote — render a placeholder
 ```
+
+`preparedBy` is the resolved "Prepared by" identity (org template first, then the quote's creator). **Prefer it over `creator`** for any customer-facing display — `creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 #### updateQuote
 
@@ -266,6 +274,8 @@ $copy = TurboQuote::duplicateQuote('quote-uuid');
 echo "Copy id: {$copy->id}";
 ```
 
+The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
+
 #### downloadQuotePdf
 
 Returns raw PDF bytes. Save to disk or stream to the browser.
@@ -281,6 +291,27 @@ echo $pdfBytes;
 ```
 
 ### Quote Status Transitions
+
+:::caution Send preconditions
+
+Both send methods share the same server-side checks. Each is rejected with **HTTP 400** and a
+specific error `code` before anything is created or emailed:
+
+| Condition | Code |
+| :--- | :--- |
+| Quote is not a draft | `QuoteNotSendable` |
+| No `validUntil` date set | `QuoteValidUntilRequired` |
+| `validUntil` is in the past | `QuoteExpired` |
+| No line items | `QuoteHasNoLineItems` |
+| Contact missing a name or email | `QuoteContactRequired` |
+| Company or contact deleted/deactivated | `QuoteCustomerInactive` |
+| No sender email resolvable (API-key callers) | `SenderEmailRequired` |
+
+A quote with **no line items cannot be sent** — add at least one product, bundle, or custom
+line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use the
+handle-expired flow to void it and create a fresh draft.
+
+:::
 
 #### sendQuote
 
