@@ -1,6 +1,8 @@
 ---
+# Hidden from the published site: the turbodocx-sdk gem is not on RubyGems yet.
+# Remove `draft: true` when the gem is published (TurboDocx/SDK issue).
+draft: true
 title: TurboPartner Ruby SDK
-unlisted: true
 sidebar_position: 13
 sidebar_label: "TurboPartner: Ruby"
 description: Official TurboDocx Partner SDK for Ruby. Manage organizations, users, API keys, and entitlements programmatically from plain Ruby, Rails, or Sinatra.

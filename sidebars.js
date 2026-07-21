@@ -172,11 +172,6 @@ const sidebars = {
               id: 'SDKs/java',
               label: 'Java',
             },
-            {
-              type: 'doc',
-              id: 'SDKs/ruby',
-              label: 'Ruby',
-            },
           ],
         },
         {
@@ -208,11 +203,6 @@ const sidebars = {
               type: 'doc',
               id: 'SDKs/deliverable-java',
               label: 'Java',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/deliverable-ruby',
-              label: 'Ruby',
             },
           ],
         },
@@ -246,11 +236,6 @@ const sidebars = {
               id: 'SDKs/webhooks-java',
               label: 'Java',
             },
-            {
-              type: 'doc',
-              id: 'SDKs/webhooks-ruby',
-              label: 'Ruby',
-            },
           ],
         },
         {
@@ -283,11 +268,6 @@ const sidebars = {
               id: 'SDKs/quote-java',
               label: 'Java',
             },
-            {
-              type: 'doc',
-              id: 'SDKs/quote-ruby',
-              label: 'Ruby',
-            },
           ],
         },
         {
@@ -319,11 +299,6 @@ const sidebars = {
               type: 'doc',
               id: 'SDKs/partner-java',
               label: 'Java',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/partner-ruby',
-              label: 'Ruby',
             },
           ],
         },

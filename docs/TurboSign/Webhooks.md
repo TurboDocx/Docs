@@ -527,30 +527,6 @@ public async Task<IActionResult> HandleWebhook()
 ```
 
 </TabItem>
-<TabItem value="ruby" label="Ruby">
-
-```ruby
-def turbodocx_webhook
-  body = request.raw_post
-
-  is_valid = TurboDocx::WebhookVerifier.verify(
-    signature: request.headers['X-TurboDocx-Signature'],
-    timestamp: request.headers['X-TurboDocx-Timestamp'],
-    body: body,
-    secret: ENV['TURBODOCX_WEBHOOK_SECRET']
-  )
-
-  unless is_valid
-    return render json: { error: 'Invalid signature' }, status: :unauthorized
-  end
-
-  event = JSON.parse(body)
-  # Process event...
-  render json: { received: true }
-end
-```
-
-</TabItem>
 </Tabs>
 
 **Go deeper:** the [TurboWebhooks SDK pages](/docs/SDKs#turbowebhooks-sdks) cover the full management surface (create/update/delete the webhook, test-fire it, rotate the secret, list and replay delivery history) and per-framework receiver patterns (Express, FastAPI, Spring Boot, net/http, Gin, Laravel, …).

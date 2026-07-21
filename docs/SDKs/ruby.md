@@ -1,4 +1,7 @@
 ---
+# Hidden from the published site: the turbodocx-sdk gem is not on RubyGems yet.
+# Remove `draft: true` when the gem is published (TurboDocx/SDK issue).
+draft: true
 title: TurboSign Ruby SDK
 sidebar_position: 7
 sidebar_label: "TurboSign: Ruby"
