@@ -270,38 +270,6 @@ const sidebars = {
             },
           ],
         },
-        {
-          type: 'category',
-          label: 'TurboPartner SDKs',
-          collapsed: false,
-          items: [
-            {
-              type: 'doc',
-              id: 'SDKs/partner-javascript',
-              label: 'JavaScript / TypeScript',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/partner-python',
-              label: 'Python',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/partner-php',
-              label: 'PHP',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/partner-go',
-              label: 'Go',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/partner-java',
-              label: 'Java',
-            },
-          ],
-        },
       ],
     },
     {
