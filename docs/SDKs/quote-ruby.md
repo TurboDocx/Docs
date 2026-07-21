@@ -627,13 +627,16 @@ page = TurboDocxSdk::TurboQuote.list_price_book_products("pricebook-uuid", "limi
 
 ```ruby
 company = TurboDocxSdk::TurboQuote.create_company(
-  "name"   => "Acme Corporation",
-  "domain" => "acme.com",
-  "contacts" => [  # at least one contact required
+  "name"    => "Acme Corporation",
+  "phone"   => "+1-555-0100",
+  "city"    => "San Francisco",
+  "state"   => "CA",
+  "country" => "US",
+  "contacts" => [  # at least one contact required; each needs name + email
     {
-      "firstName" => "Jane",
-      "lastName"  => "Doe",
-      "email"     => "jane@acme.com"
+      "name"  => "Jane Doe",
+      "email" => "jane@acme.com",
+      "title" => "VP of Engineering"
     }
   ]
 )
@@ -660,8 +663,7 @@ The backend has no `GET /v1/contacts/:id` endpoint. Fetch individual contacts vi
 
 ```ruby
 contact = TurboDocxSdk::TurboQuote.create_contact(
-  "firstName" => "John",
-  "lastName"  => "Smith",
+  "name"      => "John Smith",
   "email"     => "john@acme.com",
   "companyId" => "company-uuid"
 )
@@ -793,12 +795,12 @@ Rules and limits:
 TurboDocxSdk::TurboQuote.bulk_create_companies([
   {
     "name"     => "Acme Corporation",
-    "contacts" => [{ "firstName" => "Jane", "lastName" => "Doe", "email" => "jane@acme.com" }]
+    "contacts" => [{ "name" => "Jane Doe", "email" => "jane@acme.com" }]
   }
 ])
 
 TurboDocxSdk::TurboQuote.bulk_create_contacts([
-  { "firstName" => "John", "lastName" => "Smith", "email" => "john@acme.com", "companyId" => "company-uuid" }
+  { "name" => "John Smith", "email" => "john@acme.com", "companyId" => "company-uuid" }
 ])
 ```
 

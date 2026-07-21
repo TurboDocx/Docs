@@ -440,8 +440,8 @@ updated, err = wh.UpdateWebhook(ctx, turbodocx.UpdateWebhookRequest{
 })
 ```
 
-:::danger Never send an empty array
-`URLs` and `Events` are optional on update, but optional does **not** relax their minimum length: the API rejects `urls: []` or `events: []` with a **400**. To leave a field unchanged, leave the slice at its `nil` zero value so the key is omitted from the request — never build one out of a deliberately empty `[]string{}`. `URLs` still caps at 10 entries on update.
+:::danger You cannot clear `URLs` or `Events`
+`URLs` and `Events` are optional on update, but optional does **not** relax their minimum length: a list you do send must be non-empty, and `URLs` still caps at 10 entries. Both fields are tagged `omitempty`, so an empty `[]string{}` is dropped from the request body exactly like `nil`, leaving the existing list untouched rather than clearing it. There is no way to empty a webhook's URL or event list through the SDK. Delete the webhook and recreate it instead.
 :::
 
 ### DeleteWebhook
@@ -489,7 +489,7 @@ newSecret := rotated["secret"]
 
 ### ListWebhookDeliveries
 
-Page through historical delivery attempts with filters. All filter fields are pointers — leave nil to skip.
+Page through historical delivery attempts with filters. `Limit`, `Offset`, `IsDelivered`, and `HTTPStatus` are pointers, so leave them nil to skip. `EventType` is a plain `string`; leave it empty to skip.
 
 ```go
 limit := 20
@@ -606,7 +606,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`VerifyWebhookSignature` is a free function**, not a method on `WebhooksClient` — it has no `APIKey`/`OrgID` dependency. Pass `nil` for `opts` to use the default 300-second tolerance.
 - **Pointer-typed optional fields.** `UpdateWebhookRequest.IsActive` and `ListDeliveriesRequest.{Limit, Offset, IsDelivered, HTTPStatus}` are pointers so a zero value (`false` or `0`) can be told apart from "leave unchanged" / "no filter." Use `turbodocx.BoolPtr(false)` / `&n` to set them.
 - **`TestWebhook` summary now includes per-URL errors.** Type-assert `result["summary"].(map[string]interface{})["errors"].([]interface{})` to see exactly which receiver failed and why.
-- **An empty array is not "no change".** `urls: []` and `events: []` are 400s on update, not no-ops. Leave `URLs`/`Events` `nil` so the key is omitted.
+- **An empty slice does not clear a list.** `URLs` and `Events` are `omitempty`, so `[]string{}` is omitted from the body just like `nil` and the existing list survives the patch. If an intentional "clear" appears to do nothing, this is why. Delete and recreate the webhook instead.
 - **`WebhookEvent` is a distinct type — it will not assign into `Events []string`.** `Events: []turbodocx.WebhookEvent{...}` and `Events: turbodocx.AllWebhookEvents` are both **compile errors**. Always wrap with `turbodocx.WebhookEventStrings(...)` (variadic — spread the slice: `WebhookEventStrings(turbodocx.AllWebhookEvents...)`), or use `.String()` / `string(...)` for a single value like `TestWebhookRequest.EventType`.
 - **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `turbodocx.WebhookEventCompleted` to detect a finished document. See [Webhook Events](#webhook-events).
 

@@ -548,7 +548,7 @@ Partner portal users take `admin`, `member`, or `viewer` (`PartnerUserRole`). **
 :::
 
 :::caution `permissions` is all-or-nothing
-The `permissions` object itself is optional, but if you send it, **all seven arguments are required**. There is no partial permissions update — the API rejects an incomplete object with `ValidationException` (400). Read the current values first and re-send them with your change applied.
+`AddPartnerUserRequest` **requires** `permissions` — omitting it is an `ArgumentCountError`. On `UpdatePartnerUserRequest` it is optional, but if you send it, **all seven arguments are required**. There is no partial permissions update — the API rejects an incomplete object with `ValidationException` (400). Read the current values first and re-send them with your change applied.
 :::
 
 ### `addUserToPartnerPortal()`
@@ -563,7 +563,7 @@ $result = TurboPartner::addUserToPartnerPortal(
     new AddPartnerUserRequest(
         email: 'admin@partner.com',
         role: 'admin',  // PARTNER role enum: admin, member, or viewer
-        // All 7 arguments required whenever `permissions` is present.
+        // Required on add — all 7 arguments must be supplied.
         permissions: new PartnerPermissions(
             canManageOrgs: true,
             canManageOrgUsers: true,
@@ -717,6 +717,7 @@ Current consumption against the limits above. TurboDocx maintains these automati
 | `storageUsed` | int | Current storage used in bytes |
 | `numGeneratedDeliverables` | int | Total documents generated |
 | `numSignaturesUsed` | int | Total signatures used |
+| `numQuotesSent` | int | Total quotes sent |
 | `currentAICredits` | int | Remaining AI credits (-1 = unlimited) |
 
 Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` accepts `-1`, meaning unlimited.
@@ -939,4 +940,3 @@ try {
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
 - [Packagist Package](https://packagist.org/packages/turbodocx/sdk)
 - [TurboSign PHP SDK](/docs/SDKs/php) — For digital signature operations
-- [API Reference](/docs/API/partner-api) — REST API documentation

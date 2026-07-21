@@ -2,7 +2,7 @@
 title: TurboSign Python SDK
 sidebar_position: 3
 sidebar_label: "TurboSign: Python"
-description: Official TurboDocx Python SDK. Async-first design with sync wrappers for document generation and digital signatures.
+description: Official TurboDocx Python SDK. Async-first design for document generation and digital signatures.
 keywords:
   - turbodocx python
   - turbosign python
@@ -52,9 +52,8 @@ pipenv install turbodocx-sdk
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.9+
 - `httpx` (installed automatically)
-- `pydantic` (installed automatically)
 
 ---
 
@@ -418,8 +417,10 @@ The SDK provides typed error classes for different failure scenarios. All errors
 | --------------------- | ----------- | ----------------------------------- |
 | `TurboDocxError`      | varies      | Base error class for all SDK errors |
 | `AuthenticationError` | 401         | Invalid or missing API credentials  |
+| `AuthorizationError`  | 403         | Authenticated but lacks required permissions |
 | `ValidationError`     | 400         | Invalid request parameters          |
 | `NotFoundError`       | 404         | Document or resource not found      |
+| `ConflictError`       | 409         | Request conflicts with current resource state |
 | `RateLimitError`      | 429         | Too many requests                   |
 | `NetworkError`        | -           | Network connectivity issues         |
 
@@ -431,8 +432,10 @@ from turbodocx_sdk import (
     TurboSign,
     TurboDocxError,
     AuthenticationError,
+    AuthorizationError,
     ValidationError,
     NotFoundError,
+    ConflictError,
     RateLimitError,
     NetworkError,
 )
@@ -455,12 +458,18 @@ async def send_with_error_handling():
     except AuthenticationError as e:
         print(f"Authentication failed: {e}")
         # Check your API key and org ID
+    except AuthorizationError as e:
+        print(f"Not authorized: {e}")
+        # Authenticated, but lacks permission for this operation
     except ValidationError as e:
         print(f"Validation error: {e}")
         # Check request parameters
     except NotFoundError as e:
         print(f"Resource not found: {e}")
         # Document or recipient doesn't exist
+    except ConflictError as e:
+        print(f"Conflict: {e}")
+        # Request conflicts with the current resource state
     except RateLimitError as e:
         print(f"Rate limited: {e}")
         # Wait and retry

@@ -99,6 +99,19 @@ Build sales quotes and proposals programmatically: quotes and line items, a prod
 | **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/quote-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                           |
 | **Ruby**                  | `turbodocx-sdk`            | `gem install turbodocx-sdk`                                          | [Docs](/docs/SDKs/quote-ruby) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)                           |
 
+## TurboPartner SDKs
+
+Manage partner-provisioned organizations: org CRUD and entitlements, org users and API keys, partner users and API keys, and audit logs. Requires a partner API key (`TDXP-` prefix).
+
+| Language                  | Package                    | Install Command                                                      | Links                                                                                                                          |
+| :------------------------ | :------------------------- | :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/partner-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                     |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/partner-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                         |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/partner-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                           |
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/partner-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                             |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/partner-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                         |
+| **Ruby**                  | `turbodocx-sdk`            | `gem install turbodocx-sdk`                                          | [Docs](/docs/SDKs/partner-ruby) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)                         |
+
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
 :::

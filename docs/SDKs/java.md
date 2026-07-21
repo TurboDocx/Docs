@@ -32,7 +32,7 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
 </dependency>
 ```
 
@@ -40,14 +40,14 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.4.0")
+implementation("com.turbodocx:turbodocx-sdk:0.5.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.4.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
 ```
 
 </TabItem>
@@ -85,6 +85,53 @@ public class Main {
     }
 }
 ```
+
+### Builder Options
+
+| Method                          | Type     | Required | Default                       | Description                                        |
+| ------------------------------- | -------- | -------- | ----------------------------- | -------------------------------------------------- |
+| `apiKey(String)`                | `String` | Yes\*    | -                             | Organization API key                               |
+| `accessToken(String)`           | `String` | Yes\*    | -                             | Bearer access token (alternative to `apiKey`)      |
+| `orgId(String)`                 | `String` | Yes      | -                             | Organization ID                                    |
+| `senderEmail(String)`           | `String` | Yes      | -                             | Reply-to address for signature request emails      |
+| `senderName(String)`            | `String` | No       | -                             | Display name used on signature request emails      |
+| `baseUrl(String)`               | `String` | No       | `https://api.turbodocx.com`   | API base URL                                       |
+| `connectTimeoutSeconds(int)`    | `int`    | No       | `60`                          | Connection timeout                                 |
+| `readTimeoutSeconds(int)`       | `int`    | No       | `120`                         | Read timeout — raise it for large document uploads |
+| `writeTimeoutSeconds(int)`      | `int`    | No       | `60`                          | Write timeout — raise it for large document uploads |
+
+\*Provide either `apiKey` or `accessToken`.
+
+```java
+// Tune the timeouts for large documents
+TurboDocxClient client = new TurboDocxClient.Builder()
+    .apiKey(System.getenv("TURBODOCX_API_KEY"))
+    .orgId(System.getenv("TURBODOCX_ORG_ID"))
+    .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
+    .connectTimeoutSeconds(30)
+    .readTimeoutSeconds(300)
+    .writeTimeoutSeconds(300)
+    .build();
+```
+
+### Closing the Client
+
+`TurboDocxClient` implements `AutoCloseable`. Calling `close()` shuts down the underlying OkHttp dispatcher and connection pool, so long-running JVM services should close clients they no longer need — use try-with-resources for short-lived clients:
+
+```java
+try (TurboDocxClient client = new TurboDocxClient.Builder()
+        .apiKey(System.getenv("TURBODOCX_API_KEY"))
+        .orgId(System.getenv("TURBODOCX_ORG_ID"))
+        .senderEmail(System.getenv("TURBODOCX_SENDER_EMAIL"))
+        .build()) {
+
+    SendSignatureResponse result = client.turboSign().sendSignature(request);
+}
+```
+
+:::tip Reuse a single client
+Creating a client per request leaks OkHttp threads until they are closed. Prefer one long-lived client for the life of your application and call `client.close()` during shutdown.
+:::
 
 ### Environment Variables
 
