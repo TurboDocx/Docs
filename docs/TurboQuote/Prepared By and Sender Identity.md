@@ -36,7 +36,9 @@ downloading or sending the quote never changes what the customer sees.
 :::tip Set it once on your quote template
 Configure a **Sender Name**, **Sender Email**, and optional **Sender Phone** on your organization's
 quote template. These appear as the "Prepared by" block on every quote and give you one consistent,
-branded sender identity across your whole team.
+branded sender identity across your whole team. See
+[How to Set Your Quote Sender Information](/docs/TurboQuote/How%20to%20Set%20Your%20Quote%20Sender%20Information)
+for the step-by-step walkthrough.
 :::
 
 ## Quotes created through the API, SDKs, or n8n
