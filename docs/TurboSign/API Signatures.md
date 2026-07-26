@@ -221,11 +221,23 @@ User-Agent: TurboDocx API Client
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
 | recipients          | String (JSON)  | **Yes**       | JSON string array of recipient objects     |
 | fields              | String (JSON)  | **Yes**       | JSON string array of field objects         |
-| senderName          | String         | No            | Name of sender (max 255 chars)             |
-| senderEmail         | String (email) | No            | Email of sender                            |
+| senderName          | String         | No            | Name of sender (max 255 chars). Defaults to your API key's name. |
+| senderEmail         | String (email) | **Yes**       | Reply-to address on the signature email and the sender recorded in the audit trail |
 | ccEmails            | String (JSON)  | No            | JSON string array of CC email addresses    |
 
 \* **File Source**: Must provide exactly ONE of: file, deliverableId, templateId, or fileLink
+
+:::warning senderEmail is required
+`senderEmail` must be supplied on every API/SDK signature request. A request authenticated with
+an API key has no mailbox of its own, so TurboDocx **rejects the request with HTTP 400 and the
+error code `SenderEmailRequired`** rather than sending from an unmonitored address. `senderName`
+is optional — it defaults to the name of your API key (shown in the recipient's email and the
+audit trail); if no name can be resolved at all the API returns `400 SenderNameRequired`.
+
+TurboQuote works differently: quotes have **no `senderEmail` request field** — the sender is
+resolved from the org quote template. See
+[Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
+:::
 
 ### Recipients JSON Format
 
@@ -1326,6 +1338,7 @@ curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-review \
   -H "x-rapiddocx-org-id: YOUR_ORG_ID" \
   -F "file=@document.pdf" \
   -F "documentName=Test Document" \
+  -F "senderEmail=you@yourcompany.com" \
   -F 'recipients=[{"name":"Test User","email":"test@example.com","signingOrder":1}]' \
   -F 'fields=[{"recipientEmail":"test@example.com","type":"signature","page":1,"x":100,"y":200,"width":200,"height":80,"pageWidth":612,"pageHeight":792}]' \
   -v
