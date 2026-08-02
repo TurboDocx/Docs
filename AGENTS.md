@@ -13,6 +13,17 @@ Guidance for AI agents (and humans) working in the TurboDocx **Docs** repo (Docu
   ```
 - Do not target `main` unless you are cutting a release and have been told to.
 
+## Filing issues — use the issue templates, don't write freeform
+
+Every issue in this repo must use one of the `.github/ISSUE_TEMPLATE/` forms (`blank_issues_enabled: false`). Before running `gh issue create`, read `.github/ISSUE_TEMPLATE/` first:
+
+- **Bug Report** (`bug-report.yml`) — for bugs / unexpected behavior.
+- **Change Request** (`change-request.yml`) — SOC 2 change record. Required for Planned/Emergency changes; Standard changes (dependency bumps, low-risk edits) can skip it since the merged PR is the record on its own.
+
+`gh issue create --title/--body/--label` does **not** fill these forms — it bypasses them and writes a blank freeform issue, even though the web UI blocks blank issues. To actually use a form from the CLI, replicate its field structure as markdown headers in `--body-file` (see the form's `body:` fields in the `.yml` for the exact labels/order), and set `--label` to match the template's `labels:` (e.g. `change` for Change Request — create the label first with `gh label create` if it doesn't exist yet).
+
+The implementing PR should close the issue with `Closes #<issue>`.
+
 ## Adding or updating content — use the guidewright skills
 
 When adding new docs or refreshing a guide, use the guidewright skills so screenshots and click targets stay accurate:
