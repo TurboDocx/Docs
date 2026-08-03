@@ -108,12 +108,17 @@ Each row shows the document name on the left, and how long it has been waiting o
 
 1. Click any document in the **Needs a Nudge** list.
 2. TurboDocx takes you to your TurboSign documents, where that document is listed.
-3. Find the document in the list, click the **⋮** (three dots) button at the end of its row, and choose **Send Reminder**.
+3. Find the document in the list and click the **⋮** (three dots) button at the end of its row.
+4. Choose **Send Reminder**.
 
 Everyone who still has to sign gets a reminder email. People who already signed are not emailed again.
 
+:::note
+If **Send Reminder** is greyed out, that document is not waiting on a signer any more. The most common reason is that everybody has now signed and TurboDocx is finishing the document off, in which case there is nobody left to remind.
+:::
+
 :::tip
-**Send Reminder** works on its own, separately from any automatic reminder schedule you have set up. You can use it even if automatic reminders are switched off. For the full set of things you can do to a document after sending it, including resending the original email and voiding a document, see [Managing Your Signatures](./TurboSign/Managing%20Your%20Signatures.md).
+**Send Reminder** works on its own, separately from any automatic reminder schedule you have set up. You can use it even if automatic reminders are switched off, and even if a document has already had all the automatic reminders it was allowed. For the full set of things you can do to a document after sending it, including resending the original email and voiding a document, see [Managing Your Signatures](./TurboSign/Managing%20Your%20Signatures.md).
 :::
 
 ## Step 6: See where your documents are being signed
