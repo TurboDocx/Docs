@@ -455,7 +455,8 @@ Send documents for legally-binding eSignatures with full audit trails.
 | :---------------------------- | :------------------------------------------------------ |
 | `createSignatureReviewLink()` | Upload document for preview without sending emails      |
 | `sendSignature()`             | Upload and immediately send signature requests          |
-| `getStatus()`                 | Check document and recipient signing status             |
+| `getStatus()`                 | Check the document-level status                         |
+| `getRecipients()`             | Per-signer status, email history, and who sent it       |
 | `download()`                  | Download the completed signed document                  |
 | `void()`                      | Cancel/void a signature request                         |
 | `resend()`                    | Resend signature request emails                         |

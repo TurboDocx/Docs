@@ -322,7 +322,8 @@ result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureReque
 
 ### Get status
 
-Check the status of a document.
+Check the document-level status. For per-signer detail, use
+[Get recipients](#get-recipients).
 
 ```go
 status, err := client.TurboSign.GetStatus(ctx, "document-uuid")
@@ -332,6 +333,47 @@ if err != nil {
 
 b, _ := json.MarshalIndent(status, "", "  "); fmt.Println("Result:", string(b))
 ```
+
+### Get recipients
+
+See who the document went to, who has signed, who you are still waiting on,
+and who sent it.
+
+```go
+progress, err := client.TurboSign.GetRecipients(ctx, "document-uuid")
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Printf("%d/%d signed, waiting on %d\n",
+    progress.Summary.Completed, progress.Summary.Total, progress.Summary.WaitingOn)
+
+for _, r := range progress.Recipients {
+    fmt.Printf("%s <%s>: %s (emailed %dx)\n",
+        r.Name, r.Email, r.EffectiveStatus, r.Delivery.TotalSent)
+}
+```
+
+:::tip Two status fields, and they differ on purpose
+
+`status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+is the one to display.
+
+On a voided or expired document an unsigned signer still reads `pending` in `status`, so
+branching on it would show someone as "still to sign" when their signing link is already dead.
+A completed signature is never revoked: someone who signed before the document was voided
+still reads `completed`.
+
+`summary` counts by `effectiveStatus`, and `waitingOn` (pending + viewed) drops to zero once
+the document is terminal.
+
+:::
+
+Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+`reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
+request, resends, reminders, expiry warnings and terminal notices; CC notifications are
+excluded, since a CC address is not a signer.
 
 ### Download document
 

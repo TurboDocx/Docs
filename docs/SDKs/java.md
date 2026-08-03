@@ -403,13 +403,53 @@ System.out.println("Result: " + gson.toJson(result));
 
 ### Get status
 
-Check the status of a document.
+Check the document-level status. For per-signer detail, use
+[Get recipients](#get-recipients).
 
 ```java
 DocumentStatusResponse status = client.turboSign().getStatus("document-uuid");
 
 System.out.println("Result: " + gson.toJson(status));
 ```
+
+### Get recipients
+
+See who the document went to, who has signed, who you are still waiting on,
+and who sent it.
+
+```java
+DocumentRecipientsResponse progress = client.turboSign().getRecipients("document-uuid");
+
+System.out.println(progress.getSummary().getCompleted() + "/"
+        + progress.getSummary().getTotal() + " signed, waiting on "
+        + progress.getSummary().getWaitingOn());
+
+for (DocumentRecipientsResponse.RecipientSignatureStatus r : progress.getRecipients()) {
+    System.out.println(r.getName() + " <" + r.getEmail() + ">: " + r.getEffectiveStatus()
+            + " (emailed " + r.getDelivery().getTotalSent() + "x)");
+}
+```
+
+:::tip Two status fields, and they differ on purpose
+
+`status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+is the one to display.
+
+On a voided or expired document an unsigned signer still reads `pending` in `status`, so
+branching on it would show someone as "still to sign" when their signing link is already dead.
+A completed signature is never revoked: someone who signed before the document was voided
+still reads `completed`.
+
+`summary` counts by `effectiveStatus`, and `waitingOn` (pending + viewed) drops to zero once
+the document is terminal.
+
+:::
+
+Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+`reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
+request, resends, reminders, expiry warnings and terminal notices; CC notifications are
+excluded, since a CC address is not a signer.
 
 ### Download document
 

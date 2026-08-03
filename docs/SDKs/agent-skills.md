@@ -124,7 +124,8 @@ For HTML-to-DOCX:
 
 - Client configuration with environment variable loading
 - `sendSignature()` — send documents for e-signature
-- `getStatus()` — check document/recipient status
+- `getStatus()` — check the document-level status
+- `getRecipients()` — per-signer status, email history, and who sent it
 - `download()` — retrieve the signed PDF
 - Optional helpers when you need them: `createSignatureReviewLink()` (preview before sending), `void()`, `resend()`, and `getAuditTrail()`
 - A route handler wired into your existing app
