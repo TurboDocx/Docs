@@ -484,13 +484,52 @@ echo "Document ID: {$result->documentId}\n";
 
 ### Get status
 
-Retrieve the current status of a document.
+Retrieve the document-level status. For per-signer detail, use
+[Get recipients](#get-recipients).
 
 ```php
 $status = TurboSign::getStatus('document-uuid');
 
 echo "Document Status: {$status->status}\n";  // 'pending', 'completed', 'voided'
 ```
+
+### Get recipients
+
+See who the document went to, who has signed, who you are still waiting on,
+and who sent it.
+
+```php
+$progress = TurboSign::getRecipients('document-uuid');
+
+echo "{$progress->summary->completed}/{$progress->summary->total} signed, ";
+echo "waiting on {$progress->summary->waitingOn}\n";
+
+foreach ($progress->recipients as $r) {
+    echo "  {$r->name} <{$r->email}>: {$r->effectiveStatus}";
+    echo " (emailed {$r->delivery->totalSent}x)\n";
+}
+```
+
+:::tip Two status fields, and they differ on purpose
+
+`status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+is the one to display.
+
+On a voided or expired document an unsigned signer still reads `pending` in `status`, so
+branching on it would show someone as "still to sign" when their signing link is already dead.
+A completed signature is never revoked: someone who signed before the document was voided
+still reads `completed`.
+
+`summary` counts by `effectiveStatus`, and `waitingOn` (pending + viewed) drops to zero once
+the document is terminal.
+
+:::
+
+Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+`reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
+request, resends, reminders, expiry warnings and terminal notices; CC notifications are
+excluded, since a CC address is not a signer.
 
 ### Download document
 
