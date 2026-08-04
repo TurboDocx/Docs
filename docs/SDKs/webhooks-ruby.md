@@ -149,6 +149,32 @@ TurboDocxSdk::TurboWebhooks.create_webhook(
 Nothing was narrowed. `events` still accepts plain strings (`"signature.document.completed"`), so existing code keeps running and the backend can add new events without an SDK release. The constants exist for discoverability. `get_webhook` also returns `availableEvents` — the list the backend advertises at runtime.
 :::
 
+### Delivered payload shape
+
+Every delivery posts this envelope:
+
+```json
+{
+  "event": "signature.document.completed",
+  "event_id": "evt_a1b2c3…",
+  "created_at": "2026-01-15T10:30:00.000Z",
+  "version": "1.0",
+  "data": { "documentId": "…", "documentName": "…" }
+}
+```
+
+:::warning Dispatch on `event`, not `eventType`
+
+The event name travels in the top-level **`event`** field. There is no `eventType` key on the
+wire — a receiver written against it reads `nil` and silently dispatches nothing, which
+looks exactly like "the webhook never fired".
+
+`eventType` **is** correct in two other places, which is where the confusion comes from: it is
+the request parameter name for `test_webhook` and `list_webhook_deliveries`, and it is the column name on
+the stored delivery-history rows those return. Those are not the delivered envelope.
+
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -214,7 +240,7 @@ unless TurboDocxSdk.verify_webhook_signature(
 end
 
 event = JSON.parse(raw_body)
-# process event["eventType"], event["data"], ...
+# process event["event"], event["data"], ... (NOT "eventType" — not on the wire)
 
 [200, {}, ["ok"]]
 ```
@@ -426,7 +452,7 @@ class WebhooksController < ApplicationController
     end
 
     event = JSON.parse(raw_body)
-    case event["eventType"]
+    case event["event"]
     # fires once per signer — event.dig("data", "is_final_signer") marks the last
     when TurboDocxSdk::WebhookEvent::RECIPIENT_SIGNED    then on_recipient_signed(event["data"])
     # partial progress only — NEVER fires on the final signature
@@ -466,7 +492,7 @@ post "/webhooks/turbodocx" do
   )
 
   event = JSON.parse(raw_body)
-  # process event["eventType"], event["data"], ...
+  # process event["event"], event["data"], ... (NOT "eventType" — not on the wire)
   status 200
   "ok"
 end
