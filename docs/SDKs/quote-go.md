@@ -289,6 +289,10 @@ quote, err := qc.UpdateQuote(ctx, "quote-uuid", req)
 
 Available null-clear helpers: `ClearPriceBookID`, `ClearValidUntil`, `ClearTaxRate`, `ClearRenewalPeriod`.
 
+:::info `Name` is trimmed, and renaming is draft-only
+`Name` is trimmed on both `CreateQuote` and `UpdateQuote` — `"  Acme  "` is stored as `"Acme"` — and a name that is empty once trimmed returns a `400`. A quote can only be renamed while it is a **draft**; on any other status the update is rejected with `Cannot update quote that is not in draft status` (`TemplateID` is the only field exempt from that rule). Rename before you send, because **sending snapshots the quote's current name onto the TurboSign document** — that is the name signers see in the request email and on the signed PDF.
+:::
+
 #### DeleteQuote
 
 ```go
@@ -303,6 +307,8 @@ Creates a new draft quote as a copy of the specified quote.
 ```go
 copy, err := qc.DuplicateQuote(ctx, "quote-uuid")
 ```
+
+The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `UpdateQuote` before sending if that is not what you want signers to see.
 
 The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
@@ -461,18 +467,22 @@ quote, err := qc.VoidQuote(ctx, "quote-uuid", &turbodocx.VoidQuoteRequest{
 
 Handles a `sent` quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `Action` — and then **creates a duplicate carrying `NewValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
 
-`Action` is `"void"` or `"decline"`. All three fields are **required**: `Action`, `Reason` (max 190 characters), and `NewValidUntil` (ISO date).
+`Action` (`"void"`, `"decline"` or `"renew"`) and `NewValidUntil` (ISO date) are **required**. `Reason` (max 190 characters) is required for `"void"` and `"decline"`, and optional for `"renew"` — a renewal closes nothing out, so there is nothing to give a reason for. Use `"renew"` when the quote's signature request has already expired on its own; use `"void"` or `"decline"` when the quote is merely past its `ValidUntil` and you are closing it yourself.
 
 ```go
 quote, err := qc.HandleExpiredQuote(ctx, "quote-uuid", &turbodocx.HandleExpiredQuoteRequest{
-    Action:        "void",                          // required — "void" or "decline" only
-    Reason:        "Customer requested more time",  // required — max 190 characters
+    Action:        "void",                          // required — "void", "decline" or "renew"
+    Reason:        "Customer requested more time",  // required for void/decline, optional for renew
     NewValidUntil: "2026-10-01",                    // required — ISO date, carried onto the duplicate
 })
 ```
 
 :::warning There is no `extend` or `resend` action
-`Action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — pass `NewValidUntil` and it lands on the duplicate it creates.
+`Action` accepts **only** `"void"`, `"decline"` and `"renew"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — pass `NewValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::info The replacement draft keeps the original name
+Unlike `DuplicateQuote`, the draft this endpoint creates is **not** prefixed with `Copy of ` — re-issuing the same deal keeps the original quote's name, so repeated renewals cannot compound into `Copy of Copy of …`. That matters because the next send snapshots the name onto the TurboSign document.
 :::
 
 #### DownloadQuotePdf
