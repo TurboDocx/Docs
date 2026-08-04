@@ -708,7 +708,7 @@ User-Agent: TurboDocx API Client
           "lastSentOn": "2024-01-15T10:35:00.000Z",
           "totalSent": 1,
           "reminderCount": 0,
-          "lastRemindedAt": null,
+          "lastRemindedAt": "2024-01-15T10:35:00.000Z",
           "warningCount": 0,
           "lastWarningAt": null
         }
