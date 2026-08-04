@@ -860,6 +860,24 @@ Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, 
 request, resends, reminders, expiry warnings and terminal notices; CC notifications are
 excluded, since a CC address is not a signer.
 
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
+does **not** increment this, even though the email it sends *does* appear in `totalSent`.
+
+`lastRemindedAt` is a **cadence clock**, not a record of a reminder: the initial
+signature-request send, each scheduled reminder, each manual "remind now" and each expiry
+warning all stamp it. Only scheduled reminders bump `reminderCount`.
+
+So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
+timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+chased this person", read `totalSent`, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat.
+
+:::
+
 ### Download document
 
 Download the completed signed document as a PDF Blob.

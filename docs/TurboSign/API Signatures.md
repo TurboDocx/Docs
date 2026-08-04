@@ -773,10 +773,33 @@ User-Agent: TurboDocx API Client
 | firstSentOn    | String \| null | First email of any kind; `null` if this recipient has never been emailed  |
 | lastSentOn     | String \| null | Most recent email of any kind                                            |
 | totalSent      | Number         | Signature request + resends + reminders + expiry warnings + terminal notices |
-| reminderCount  | Number         | Reminder nudges sent                                                     |
-| lastRemindedAt | String \| null | When the last reminder went out                                          |
-| warningCount   | Number         | Expiry warnings sent                                                     |
-| lastWarningAt  | String \| null | When the last expiry warning went out                                    |
+| reminderCount  | Number         | **Automatic (scheduled) reminders only** — see the note below            |
+| lastRemindedAt | String \| null | **When the reminder cadence clock was last reset** — see the note below  |
+| warningCount   | Number         | Expiry warnings sent. Only a warning touches this                        |
+| lastWarningAt  | String \| null | When the last expiry warning went out. Only a warning touches this       |
+
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+**`reminderCount` counts automatic (scheduled) reminders only.** It is the counter that the
+`maxReminders` schedule setting caps. A manual "remind now" (the Send Reminder action) is a
+standalone nudge that deliberately does **not** consume the cap budget, so it does **not**
+increment this — even though the email it sends *does* appear in `totalSent`. A recipient can
+therefore read `reminderCount: 0` while reminder emails have genuinely been sent.
+
+**`lastRemindedAt` is a cadence clock, not a record of a reminder.** Four things stamp it: the
+initial signature-request send (so the first reminder is measured from the invitation), each
+scheduled reminder, each manual "remind now", and each expiry warning (a deliberate cross-reset
+so a reminder never lands adjacent to a warning). Only the second of those bumps
+`reminderCount`.
+
+The common consequence: a freshly-sent document returns a **non-null `lastRemindedAt` equal to
+the invitation timestamp, alongside `reminderCount: 0`**. That is correct — nobody has been
+reminded. To answer "have we actually chased this person", read `totalSent` (all emails) or the
+audit trail's `reminder_sent` entries, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat — only an expiry warning touches them.
+
+:::
 
 #### `summary`
 
