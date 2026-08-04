@@ -167,6 +167,32 @@ WebhookEvent::from('signature.document.voided');  // native — string -> case (
 Nothing was narrowed. `createWebhook(events: [...])` still takes plain strings, so existing code keeps running and the backend can add new events without an SDK release. The enum exists for discoverability and type safety. `getWebhook()` also returns `availableEvents` — the list the backend advertises at runtime.
 :::
 
+### Delivered payload shape
+
+Every delivery posts this envelope:
+
+```json
+{
+  "event": "signature.document.completed",
+  "event_id": "evt_a1b2c3…",
+  "created_at": "2026-01-15T10:30:00.000Z",
+  "version": "1.0",
+  "data": { "documentId": "…", "documentName": "…" }
+}
+```
+
+:::warning Dispatch on `event`, not `eventType`
+
+The event name travels in the top-level **`event`** field. There is no `eventType` key on the
+wire — a receiver written against it reads `null` and silently dispatches nothing, which
+looks exactly like "the webhook never fired".
+
+`eventType` **is** correct in two other places, which is where the confusion comes from: it is
+the request parameter name for `testWebhook` and `listWebhookDeliveries`, and it is the column name on
+the stored delivery-history rows those return. Those are not the delivered envelope.
+
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -235,7 +261,7 @@ if (!verifyWebhookSignature($rawBody, $signatureHeader, $timestampHeader, $secre
 }
 
 $event = json_decode($rawBody, true);
-// process $event['eventType'], $event['data'], ...
+// process $event['event'], $event['data'], ... (NOT 'eventType' — not on the wire)
 
 http_response_code(200);
 ```
@@ -470,7 +496,7 @@ class WebhookController extends Controller
         $event = json_decode($rawBody, true);
 
         // tryFrom() returns null for an event the SDK doesn't know yet (forward-compatible).
-        match (WebhookEvent::tryFrom($event['eventType'])) {
+        match (WebhookEvent::tryFrom($event['event'])) {
             // fires once per signer — $event['data']['is_final_signer'] marks the last
             WebhookEvent::RECIPIENT_SIGNED    => $this->onRecipientSigned($event['data']),
             // partial progress only — NEVER fires on the final signature

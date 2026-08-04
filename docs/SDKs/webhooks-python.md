@@ -169,6 +169,32 @@ event: WebhookEvent = WEBHOOK_EVENT_COMPLETED
 Nothing was narrowed. `events` still accepts plain strings (`"signature.document.completed"`), so existing code keeps running and the backend can add new events without an SDK release. The constants exist for discoverability and type safety. `get_webhook()` also returns `availableEvents` — the list the backend advertises at runtime.
 :::
 
+### Delivered payload shape
+
+Every delivery posts this envelope:
+
+```json
+{
+  "event": "signature.document.completed",
+  "event_id": "evt_a1b2c3…",
+  "created_at": "2026-01-15T10:30:00.000Z",
+  "version": "1.0",
+  "data": { "documentId": "…", "documentName": "…" }
+}
+```
+
+:::warning Dispatch on `event`, not `eventType`
+
+The event name travels in the top-level **`event`** field. There is no `eventType` key on the
+wire — a receiver written against it reads a `KeyError` and silently dispatches nothing, which
+looks exactly like "the webhook never fired".
+
+`eventType` **is** correct in two other places, which is where the confusion comes from: it is
+the request parameter name for `test_webhook` and `list_webhook_deliveries`, and it is the column name on
+the stored delivery-history rows those return. Those are not the delivered envelope.
+
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -256,7 +282,7 @@ def turbodocx_webhook():
         abort(401, "Invalid signature")
 
     event = json.loads(raw_body)
-    # process event["eventType"], event["data"], ...
+    # process event["event"], event["data"], ... (NOT "eventType" — not on the wire)
     return ("ok", 200)
 ```
 
@@ -284,7 +310,7 @@ async def turbodocx_webhook(request: Request):
         raise HTTPException(status_code=401, detail="Invalid signature")
 
     event = json.loads(raw_body)
-    # process event["eventType"], event["data"], ...
+    # process event["event"], event["data"], ... (NOT "eventType" — not on the wire)
     return {"ok": True}
 ```
 
@@ -513,7 +539,7 @@ def receive_webhook():
         abort(401, "Invalid signature")
 
     event = json.loads(raw_body)
-    event_type = event["eventType"]
+    event_type = event["event"]
     if event_type == WEBHOOK_EVENT_RECIPIENT_SIGNED:
         # fires once per signer — event["data"]["is_final_signer"] marks the last
         pass  # ...
@@ -569,7 +595,7 @@ async def receive_webhook(request: Request):
         raise HTTPException(status_code=401, detail="Invalid signature")
 
     event = json.loads(raw_body)
-    event_type = event["eventType"]
+    event_type = event["event"]
     if event_type == WEBHOOK_EVENT_RECIPIENT_SIGNED:
         # fires once per signer — event["data"]["is_final_signer"] marks the last
         pass  # ...
@@ -611,7 +637,7 @@ def turbodocx_webhook(request):
         return HttpResponseBadRequest("Invalid signature")
 
     event = json.loads(raw_body)
-    # dispatch event["eventType"] ...
+    # dispatch event["event"] ... (NOT "eventType" — not on the wire)
     return HttpResponse("ok")
 ```
 
