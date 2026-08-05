@@ -22,10 +22,12 @@ keywords:
 
 # TurboDocx Pipelines
 
-TurboDocx Pipelines turn a folder into a fully automated signing assembly line. Drop a PDF into a watched location, and the pipeline reads it, places the right signature and form fields, sends it for signature through TurboSign, and files the signed result — all without anyone clicking a button.
+TurboDocx Pipelines turn a folder into a fully automated signing assembly line. Drop a PDF into a watched location, and the pipeline reads it, places the right signature and form fields, sends it for signature through TurboSign, and files the signed result, all without anyone clicking a button.
+
+<br/>
 
 :::info Enterprise feature
-Pipelines and Cloud Connectors are **Enterprise** features. **[Contact us](mailto:team@turbodocx.com)** to enable them for your organization.
+Pipelines and Cloud Connectors are **Enterprise** features. **[Contact us](https://www.turbodocx.com/contact)** to enable them for your organization.
 :::
 
 <br/>
@@ -37,7 +39,7 @@ A **pipeline** is an automation that watches a source location for new documents
 1. **Reads the document** and extracts the data you care about (an invoice number, a customer code, a date, an email address).
 2. **Places signature and form fields** in the right spots, based on a layout you defined once.
 3. **Sends it for signature** through TurboSign to the correct signer.
-4. **Files the signed PDF** — plus its audit trail — into a destination folder you choose.
+4. **Files the signed PDF**, along with its audit trail, into a destination folder you choose.
 
 Once it's set up, you never touch it. New documents are picked up, signed, and filed automatically.
 
@@ -49,7 +51,7 @@ Every pipeline follows the same three-part shape:
 
 ### Source
 
-The place the pipeline watches. Today this is a **SharePoint document library** — a "dedicated intake library" where you (or an upstream system) drop PDFs that need signing.
+The place the pipeline watches. Today this is a **SharePoint document library**, a "dedicated intake library" where you (or an upstream system) drop PDFs that need signing.
 
 ### Manipulation
 
@@ -57,7 +59,7 @@ What happens to each document in flight: **field extraction** pulls values out o
 
 ### Destination
 
-Where finished work lands. Signed PDFs — and their audit trails — are filed into a destination folder, with a filename pattern you control.
+Where finished work lands. Signed PDFs and their audit trails are filed into a destination folder, with a filename pattern you control.
 
 <br/>
 
@@ -65,9 +67,9 @@ Where finished work lands. Signed PDFs — and their audit trails — are filed 
 
 Pipelines are built for teams that handle a steady, repeatable flow of documents that all need the same treatment. Common uses include:
 
-- **Invoice signing** — incoming invoices are signed off and filed automatically.
-- **Contract intake** — agreements dropped into a folder are routed to the right signer and archived once complete.
-- **Order forms, approvals, and renewals** — any high-volume document that follows a predictable layout.
+- **Invoice signing**: incoming invoices are signed off and filed automatically.
+- **Contract intake**: agreements dropped into a folder are routed to the right signer and archived once complete.
+- **Order forms, approvals, and renewals**: any high-volume document that follows a predictable layout.
 
 If your team is manually downloading, signing, and re-filing the same kind of document over and over, a pipeline removes that work entirely.
 
@@ -95,6 +97,6 @@ Ready to set one up? See **[Creating an E-Signature Pipeline](./Creating%20an%20
 
 Pipelines and Cloud Connectors are part of TurboDocx's Enterprise offering and are configured with help from our team.
 
-- **Email**: [team@turbodocx.com](mailto:team@turbodocx.com)
+- **[Get in touch](https://www.turbodocx.com/contact)**: Tell us about your intake process and we'll follow up.
 - **Schedule a Demo**: See a pipeline process a real document end-to-end.
 - **Custom Setup**: We'll help map your intake process to a pipeline tailored to your business.

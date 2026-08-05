@@ -19,7 +19,7 @@ keywords:
 
 # Field Extraction
 
-Field extraction is how a pipeline reads each document. As every PDF arrives, the pipeline scans its text for the values you've defined and captures them — so they can be used to name files, look up signers, and route documents to the right place.
+Field extraction is how a pipeline reads each document. As every PDF arrives, the pipeline scans its text for the values you've defined and captures them, so they can be used to name files, look up signers, and route documents to the right place.
 
 <br/>
 
@@ -42,9 +42,9 @@ These captured values become reusable throughout the rest of the pipeline.
 
 A **pattern field** uses a text pattern (a regular expression) to capture a value and store it in a **named variable**. That variable can then be used in:
 
-- **Filenames** — name the signed PDF after a customer code or date.
-- **Signer lookup** — use a captured email to determine who signs.
-- **Routing** — feed a captured value into a routing decision.
+- **Filenames**: name the signed PDF after a customer code or date.
+- **Signer lookup**: use a captured email to determine who signs.
+- **Routing**: feed a captured value into a routing decision.
 
 ### Routing Fields
 
@@ -63,7 +63,9 @@ For example, a routing field might look for the word "Renewal" and file any matc
 | Signer email | A pattern matching an email address | `ap@acme.com` |
 | Amount due | A pattern matching a currency value | `$4,250.00` |
 
-You name each captured value, then reference it later — for instance, building a filename like `Invoice-{customerCode}-{invoiceDate}.pdf`.
+You name each captured value, then reference it later, for instance building a filename like `Invoice-{customerCode}-{invoiceDate}.pdf`.
+
+<br/>
 
 :::tip Test against your sample
 Because the wizard previews against the sample PDF you uploaded, you can confirm a pattern captures the right value before going live.
@@ -75,23 +77,25 @@ Because the wizard previews against the sample PDF you uploaded, you can confirm
 
 Once captured, values flow into three places:
 
-- **Filename builder** — compose meaningful, searchable filenames for signed documents.
-- **Signer resolution** — use an extracted value (such as an email) to determine the recipient per document.
-- **Routing** — steer documents to the correct destination folder based on what's inside them.
+- **Filename builder**: compose meaningful, searchable filenames for signed documents.
+- **Signer resolution**: use an extracted value (such as an email) to determine the recipient per document.
+- **Routing**: steer documents to the correct destination folder based on what's inside them.
 
 <br/>
 
 ## A Note on Scanned Documents
 
-Extraction is **text-based** — it reads the actual text inside the PDF. If a document is an **image-only scan** (a photo or flat scan with no embedded text), there's no text to read, so extraction can't capture values from it.
+Extraction is **text-based**, meaning it reads the actual text inside the PDF. If a document is an **image-only scan** (a photo or flat scan with no embedded text), there's no text to read, so extraction can't capture values from it.
+
+<br/>
 
 :::info Signing still works
-A scanned, image-only PDF can still be signed by the pipeline. Only the *extraction-dependent* features — custom filenames, extracted-field signer lookup, and routing — fall back to their defaults when no text is available. The document still flows through and is filed in the default destination.
+A scanned, image-only PDF can still be signed by the pipeline. The *extraction-dependent* features, namely custom filenames, extracted-field signer lookup, and routing, fall back to their defaults when no text is available. The document still flows through and is filed in the default destination.
 :::
 
 <br/>
 
 ## What's Next?
 
-- **[Field Placement](./Field%20Placement)** — position signature and form fields on the sample.
-- **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** — see where extraction fits in the wizard.
+- **[Field Placement](./Field%20Placement)**: position signature and form fields on the sample.
+- **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)**: see where extraction fits in the wizard.

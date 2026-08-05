@@ -30,18 +30,16 @@ In the wizard's field placer, you work directly on the sample PDF you uploaded:
 1. **Pick a field type** from the toolbar.
 2. **Click to drop it** onto the page where it belongs.
 3. **Position it** by dragging it into place.
-4. **Choose the target page** — the first page, the last page, or a specific page number.
+4. **Choose the target page**: the first page, the last page, or a specific page number.
 5. **Assign the recipient** who will complete that field.
 
 You can place as many fields as you need, mixing types freely across the document.
-
-> 📷 Screenshot: The field placer showing the toolbar of field types, a field being dropped on the sample PDF, the page selector, and the recipient assignment control.
 
 <br/>
 
 ## Supported Field Types
 
-The placer offers full **TurboSign parity** — the same field types you'd use when sending a document manually:
+The placer offers full **TurboSign parity**, with the same field types you'd use when sending a document manually:
 
 | Field | Description |
 | --- | --- |
@@ -57,7 +55,9 @@ The placer offers full **TurboSign parity** — the same field types you'd use w
 | **Company** | The signer's organization. |
 | **Email** | The signer's email address. |
 
-**Signer-fillable fields** — signature, initial, date, text, and checkbox — are completed by the signer as they sign. **Identity fields** — full name, first name, last name, title, company, and email — capture details about the signer, which they confirm or complete during signing.
+**Signer-fillable fields** (signature, initial, date, text, and checkbox) are completed by the signer as they sign. **Identity fields** (full name, first name, last name, title, company, and email) capture details about the signer, which they confirm or complete during signing.
+
+<br/>
 
 :::info All placed fields are required
 Every field you place must be completed before a document can finish signing. Place only the fields you genuinely need.
@@ -67,7 +67,9 @@ Every field you place must be completed before a document can finish signing. Pl
 
 ## How Placement Travels to Every Document
 
-When you position a field, its location is **stored relative to the page** rather than as a fixed pixel spot. That means the layout reprojects cleanly onto each live document at runtime — so a signature you placed at the bottom of the last page of your sample lands at the bottom of the last page of every invoice the pipeline processes, even as the content above it changes.
+When you position a field, its location is **stored relative to the page** rather than as a fixed pixel spot. That means the layout reprojects cleanly onto each live document at runtime, so a signature you placed at the bottom of the last page of your sample lands at the bottom of the last page of every invoice the pipeline processes, even as the content above it changes.
+
+<br/>
 
 :::tip Place against a representative sample
 Because placement is relative to the page, the closer your sample matches your real documents' layout, the more precisely fields will land on live runs.
@@ -77,5 +79,5 @@ Because placement is relative to the page, the closer your sample matches your r
 
 ## What's Next?
 
-- **[Field Extraction](./Field%20Extraction)** — pull data out of each document with patterns.
-- **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** — see the full wizard from start to finish.
+- **[Field Extraction](./Field%20Extraction)**: pull data out of each document with patterns.
+- **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)**: see the full wizard from start to finish.

@@ -19,10 +19,12 @@ keywords:
 
 # Cloud Connectors (Enterprise)
 
-Sometimes the details you need to send a document for signature — the signer's email, their name — live in a system TurboDocx can't reach directly: an internal database behind your firewall, or an internal API that never faces the public internet. A **Cloud connector** bridges that gap, securely, without ever exposing your systems.
+Sometimes the details you need to send a document for signature, such as the signer's name and email, live in a system TurboDocx can't reach directly: an internal database behind your firewall, or an internal API that never faces the public internet. A **Cloud connector** bridges that gap, securely, without ever exposing your systems.
+
+<br/>
 
 :::info Enterprise feature
-Cloud connectors are an **Enterprise** feature, configured with help from our team. **[Contact us](mailto:team@turbodocx.com)** to set one up for your organization.
+Cloud connectors are an **Enterprise** feature, configured with help from our team. **[Contact us](https://www.turbodocx.com/contact)** to set one up for your organization.
 :::
 
 <br/>
@@ -36,10 +38,10 @@ Here's the flow in plain language:
 1. A document arrives and the pipeline needs to resolve the signer from your internal system.
 2. The pipeline **parks the run** and posts the lookup request to TurboDocx.
 3. Your connector, running inside your network, **polls TurboDocx** for any pending lookups.
-4. It **queries your system locally** — your database, your internal API — and gets the answer.
+4. It **queries your system locally**, whether that's your database or your internal API, and gets the answer.
 5. It **returns the resolved values** to TurboDocx, and signing proceeds with the correct signer.
 
-Your sensitive systems are queried where they live. Only the resolved result — the signer's name and email for that document — travels back to TurboDocx.
+Your sensitive systems are queried where they live. Only the resolved result, meaning the signer's name and email for that document, travels back to TurboDocx.
 
 <br/>
 
@@ -48,11 +50,13 @@ Your sensitive systems are queried where they live. Only the resolved result —
 The connector model is designed so your network stays sealed:
 
 - **TurboDocx never reaches into your network.** There is no inbound connection from us to you.
-- **Your connector makes only outbound HTTPS calls** to TurboDocx — the same kind of secure, outbound web traffic your systems already make.
+- **Your connector makes only outbound HTTPS calls** to TurboDocx, the same kind of secure, outbound web traffic your systems already make.
 - **No inbound firewall holes.** Because everything is initiated from inside your network, you don't open any ports or expose any internal systems to the internet.
 - **Authenticated with an org-scoped API key**, so only your connector can pick up and answer your organization's lookups.
 
-This keeps your databases and internal APIs exactly where they are — behind your firewall — while still letting pipelines resolve signers from them.
+This keeps your databases and internal APIs exactly where they are, behind your firewall, while still letting pipelines resolve signers from them.
+
+<br/>
 
 :::tip Why this matters
 Your most sensitive lookups (customer records, internal directories) never have to be copied to the cloud or exposed through a public endpoint. The data stays in your environment; only the answer leaves.
@@ -62,13 +66,13 @@ Your most sensitive lookups (customer records, internal directories) never have 
 
 ## When to Use a Cloud Connector
 
-Reach for a Cloud connector when the signer for a document can't be determined from the document itself or a static value, and instead must be looked up in a system only your network can reach — for example:
+Reach for a Cloud connector when the signer for a document can't be determined from the document itself or a static value, and instead must be looked up in a system only your network can reach. For example:
 
 - The signer is an account owner stored in an **internal database**.
 - The right recipient comes from an **internal API** or directory service.
 - Signer assignment depends on business logic that lives in **your own systems**.
 
-For simpler cases — a single fixed signer, or a signer whose email is printed on the document — you can use a static signer or an extracted field instead. See **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** for those options.
+For simpler cases, such as a single fixed signer or a signer whose email is printed on the document, you can use a static signer or an extracted field instead. See **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** for those options.
 
 <br/>
 
@@ -80,6 +84,6 @@ Cloud connectors are configured **white-glove** by our team. We'll work with you
 
 ## Contact Sales
 
-- **Email**: [team@turbodocx.com](mailto:team@turbodocx.com)
+- **[Get in touch](https://www.turbodocx.com/contact)**: Tell us about your setup and we'll follow up.
 - **Schedule a Demo**: See how a connector resolves a signer from an internal system end-to-end.
 - **Custom Setup**: We'll help connect a pipeline to your database or internal API securely.
