@@ -72,9 +72,9 @@ In the same **E-Signature Settings** dialog, find the **Locked Fields Rendering*
 - Leave **Show locked fields with grey background** **on** (the default) to keep drawing each locked field as a grey box.
 - Turn it **off** to render locked values as plain document text instead. Blank locked fields are then hidden completely, which keeps the page clean and stops an empty box from sitting over the text beneath it.
 
-This setting changes what signers see in the **signing portal**; it does not change the signature stamp on the finished PDF.
+![E-Signature Settings dialog with the Show locked fields with grey background checkbox highlighted](/img/signature-appearance/06-locked-fields-rendering.png)
 
-<!-- TODO(guidewright): capture /img/signature-appearance/06-locked-fields-rendering.png — the E-Signature Settings dialog with the "Show locked fields with grey background" checkbox highlighted. Needs a working app build; tracked in the PR. This step ships without a screenshot until then. -->
+This setting changes what signers see in the **signing portal**; it does not change the signature stamp on the finished PDF.
 
 
 :::tip
