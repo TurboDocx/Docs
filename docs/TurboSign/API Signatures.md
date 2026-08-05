@@ -224,8 +224,39 @@ User-Agent: TurboDocx API Client
 | senderName          | String         | No            | Name of sender (max 255 chars). Defaults to your API key's name. |
 | senderEmail         | String (email) | **Yes**       | Reply-to address on the signature email and the sender recorded in the audit trail |
 | ccEmails            | String (JSON)  | No            | JSON string array of CC email addresses    |
+| remindersEnabled    | Boolean        | No            | Send reminder emails to signers who haven't signed |
+| reminderDelay       | String (JSON)  | No            | Time to the FIRST reminder, `{"value":3,"unit":"days"}` |
+| reminderInterval    | String (JSON)  | No            | Gap between later reminders                |
+| maxReminders        | Number         | No            | Cap per signer. `-1` unlimited, `0` none   |
+| expirationEnabled   | Boolean        | No            | Close the signing window after `expireAfter` |
+| expireAfter         | String (JSON)  | No            | How long the document stays signable       |
+| expirationWarning   | String (JSON)  | No            | How far before expiry warnings start. `0` = never warn |
+| expirationWarningInterval | String (JSON) | No       | Gap between warnings once they start       |
 
 \* **File Source**: Must provide exactly ONE of: file, deliverableId, templateId, or fileLink
+
+:::tip Reminders & expiration are optional
+The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
+inherited from your organization's E-Signature defaults; omit all of them and the document simply
+follows the org policy as it stands at send time. Both reminders and expiration ship **off** by
+default, so leaving these out preserves today's behaviour exactly.
+
+The resolved schedule is **frozen onto the document when it is sent** — changing your org defaults
+later never alters a document already out for signature.
+
+**Durations are `{value, unit}` objects sent as JSON strings**, because `multipart/form-data`
+cannot carry a nested value:
+
+```
+reminderDelay={"value":3,"unit":"days"}
+expireAfter={"value":30,"unit":"hours"}
+```
+
+`unit` is `"hours"` or `"days"`. `value` is a whole number, minimum 1 — except
+`expirationWarning`, where `0` means "never send a warning".
+
+See [Reminders & Expiration](#reminders--expiration) for the full behaviour.
+:::
 
 :::warning senderEmail is required
 `senderEmail` must be supplied on every API/SDK signature request. A request authenticated with
@@ -742,6 +773,176 @@ To recover, retry the request without the listed IDs, or wait until those recipi
 - The request is **all-or-nothing**: if any requested ID is ineligible, the whole request is rejected with a 400 and **no** emails are sent. Fix the `recipientIds` and retry.
 - Each resend creates a `document_resent` entry in the [audit trail](#endpoint-4-get-audit-trail) for tracking
 - The `recipientIds` array must contain at least one ID and all IDs must be unique UUIDs
+
+## Endpoint 6: Send Reminder
+
+Send a reminder email to a document's outstanding signers.
+
+This is a **standalone nudge**, deliberately decoupled from the automatic reminder schedule: it ignores the configured cadence, works even when reminders are disabled or the per-signer cap is already spent, and does **not** consume that cap. Use it when someone asks you to "chase them again" outside the normal rhythm.
+
+Distinct from [Resend Email](#endpoint-5-resend-email): **resend** re-sends the original invitation; **remind** sends the reminder copy.
+
+### Endpoint
+
+```http
+POST https://api.turbodocx.com/turbosign/documents/{documentId}/send-reminder
+```
+
+### Headers
+
+```http
+Content-Type: application/json
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| documentId | String (UUID) | Yes      | The unique identifier of the document |
+
+### Request Body (JSON)
+
+| Field        | Type           | Required | Description                                                              |
+| ------------ | -------------- | -------- | ------------------------------------------------------------------------ |
+| recipientIds | Array (UUID[]) | No       | Subset to remind. **Omit to remind every eligible signer.** Min 1, unique |
+
+Omit the body entirely (or send `{}`) to remind everyone whose turn it is:
+
+```json
+{}
+```
+
+Or name specific signers:
+
+```json
+{
+  "recipientIds": ["5f673f37-9912-4e72-85aa-8f3649760f6b"]
+}
+```
+
+:::warning Don't send an empty array
+`recipientIds` must contain at least one ID **when the key is present**. Sending `{"recipientIds": []}` is rejected with a 400. To remind everyone, omit the key.
+:::
+
+### Response
+
+```json
+{
+  "data": {
+    "results": [
+      { "recipientId": "5f673f37-9912-4e72-85aa-8f3649760f6b", "status": "sent", "reminderCount": 2, "phase": "reminder" },
+      { "recipientId": "7a891c23-4d56-4e78-9abc-def012345678", "status": "skipped_wrong_order" }
+    ]
+  }
+}
+```
+
+### Response Fields
+
+| Field                | Type   | Description                                                       |
+| -------------------- | ------ | ----------------------------------------------------------------- |
+| data.results         | Array  | One entry per recipient considered — including those skipped       |
+| results[].recipientId | String | The recipient this outcome refers to                              |
+| results[].status     | String | What happened — see the table below                                |
+| results[].reminderCount | Number | Reminder count after the send. Only meaningful when `sent`      |
+| results[].phase      | String | `reminder` or `expiring` — which email copy was used               |
+
+A recipient who was **not** emailed is reported rather than silently dropped, so you can tell nobody received anything:
+
+| `status`              | Meaning                                                        |
+| --------------------- | -------------------------------------------------------------- |
+| `sent`                | The reminder email was sent                                     |
+| `failed`              | The send was attempted and the mail transport rejected it       |
+| `skipped_completed`   | That recipient has already signed                               |
+| `skipped_wrong_order` | They're at a later signing order — it isn't their turn yet      |
+| `skipped_not_due`     | Scheduled path only: their next reminder isn't due              |
+| `skipped_max_reached` | Scheduled path only: their reminder cap is spent                |
+| `skipped_disabled`    | Scheduled path only: reminders are off for this document        |
+| `skipped_claim_lost`  | A concurrent request won the send; no duplicate was sent        |
+
+### Error Responses
+
+| Status | Error Message                                                     | Cause                                                                        |
+| ------ | ----------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 404    | `"Document not found"`                                            | Document doesn't exist, has been deleted, or belongs to another organization  |
+| 409    | `"This document has expired, so its signers can no longer be reminded."` | The signing window has closed — the link is dead, so a reminder would be useless |
+| 409    | `"This document has been voided, so its signers can no longer be reminded."` | The document was voided                                                  |
+| 400    | `"Some recipients are not eligible for a reminder at this time"`   | A named recipient isn't a current-order pending signer                        |
+
+The 409 responses carry `code: "DocumentNotActionable"` plus the document's `status`, so a client can refresh a stale row rather than guessing.
+
+The 400 returns an `invalidRecipientIds` array showing which IDs were rejected. The request is **all-or-nothing** — if any named ID is ineligible, **no** emails are sent:
+
+```json
+{
+  "error": "Some recipients are not eligible for a reminder at this time",
+  "invalidRecipientIds": ["7a891c23-4d56-4e78-9abc-def012345678"]
+}
+```
+
+### Usage Notes
+
+- Only recipients at the **current signing order** who haven't completed are eligible.
+- Unlike the automatic schedule, this is **not** gated by `remindersEnabled` or `maxReminders`, and it does **not** increment the reminder count — so it works on a document that never turned reminders on, or one whose cap is already spent.
+- Each send creates a `reminder_sent` entry in the [audit trail](#endpoint-4-get-audit-trail), recorded against the user who triggered it.
+
+---
+
+## Reminders & Expiration
+
+Two independent, opt-in features you can configure organization-wide in **E-Signature Settings → Reminders & Expiration**, or per-document via the [schedule fields](#endpoint-1-prepare-for-review) on either send endpoint.
+
+**Both ship off by default.** A document sent without any schedule fields behaves exactly as it always has: no reminders, no expiry.
+
+### The schedule
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `remindersEnabled` | `false` | Send reminder emails at all |
+| `reminderDelay` | 3 days | Time to the **first** reminder, measured from that signer's invitation |
+| `reminderInterval` | 3 days | Gap between **subsequent** reminders |
+| `maxReminders` | 5 | Cap per signer. `-1` unlimited, `0` none. **Never caps expiry warnings** |
+| `expirationEnabled` | `false` | Expire the document at all |
+| `expireAfter` | 120 days | How long the document stays signable, counted from **sending** |
+| `expirationWarning` | 3 days | How far **before** expiry warnings start. `0` = never warn |
+| `expirationWarningInterval` | 1 day | Gap between warnings once they start |
+
+`reminderDelay` and `reminderInterval` are separate because a single interval can't express "first at 3 days, then every 5". `expirationWarning` / `expirationWarningInterval` mirror that split exactly.
+
+### Two independent tracks
+
+Reminders and expiry warnings run as **two separate clocks**, so a signer gets the full escalating stream — reminders keep coming even after the warning window opens. The two are coordinated so they never collide: on any given tick a due warning takes priority and restarts the reminder clock, so a signer never receives a reminder and a warning at the same moment.
+
+Expiry warnings also still fire when reminders are **off** or **capped** — the deadline notice belongs to expiration, not to reminders.
+
+### Expiry
+
+When `expirationEnabled` is on, the document carries an absolute deadline:
+
+- `expiresAt` — an ISO timestamp on the document, absent when it has no deadline.
+- Once that instant passes, every signing link returns **HTTP 410** with `code: "DocumentExpired"`, and the document moves to the terminal status `expired`.
+- Expiry is enforced **in real time** on every signing request, so a link stops working exactly on time regardless of background processing.
+
+A document that was already **completed** keeps working — the deadline exists to stop signing, and signing is already finished.
+
+### Validation
+
+The API rejects contradictory combinations with `400` and `error: "InvalidSignatureSchedule"`, plus a machine-readable `data.code` and the conflicting `data.fields`:
+
+| Code | Rule |
+| --- | --- |
+| `ExpiryWindowTooShort` | `expireAfter` must be at least one hour |
+| `WarningExceedsExpiry` | `expirationWarning` must be **less than** `expireAfter` |
+| `WarningIntervalTooShort` | `expirationWarningInterval` must be at least one hour when warnings are on |
+| `ReminderDelayExceedsExpiry` | The first reminder must fall inside the expiry window, or it would never send |
+| `ReminderIntervalExceedsExpiry` | Follow-up reminders must fit inside the window |
+
+The canonical mistake these prevent: *"remind every 4 days"* with *"expire in 2 days"* — the document would die before the first nudge was ever due, and you'd believe reminders were on while no email ever sent.
+
+---
 
 ## Recipients Reference
 
