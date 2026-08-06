@@ -288,6 +288,35 @@ console.log(`Success: ${result.success}`);
 Deleting an organization is a destructive operation. All organization data, users, and API keys will be affected.
 :::
 
+### `getOrganizationPreferences()`
+
+Read an organization's TurboSign display preferences. Returns only the partner-settable keys, with defaults applied for any the org never set.
+
+```typescript
+const { data } = await TurboPartner.getOrganizationPreferences('org-uuid-here');
+
+console.log(data.preferences.hideSignatureOutline);   // boolean
+console.log(data.preferences.hideSignatureHash);      // boolean
+console.log(data.preferences.lockedFieldsBackground); // boolean
+```
+
+### `updateOrganizationPreferences()`
+
+Update one or more of an organization's TurboSign display preferences. Only the keys you pass are changed; every other org setting is preserved. The response echoes the full, merged preferences.
+
+```typescript
+const { data } = await TurboPartner.updateOrganizationPreferences(
+  'org-uuid-here',
+  {
+    lockedFieldsBackground: false,  // render locked fields as plain text, not a grey box
+  }
+);
+
+console.log(data.preferences.lockedFieldsBackground); // false
+```
+
+See [Preferences Reference](#preferences-reference) for every settable key and its meaning.
+
 ---
 
 ## Organization User Management
@@ -656,6 +685,20 @@ Current consumption against the limits above. TurboDocx maintains these automati
 | `currentAICredits` | number | Remaining AI credits (-1 = unlimited) |
 
 Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` accepts `-1`, meaning unlimited.
+
+---
+
+## Preferences Reference
+
+TurboSign display preferences you can read and set per organization. Every key is a boolean; the API returns only these keys and never any of the organization's other settings.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `hideSignatureOutline` | boolean | `false` | Hide the outline/label around signed fields in the finished PDF |
+| `hideSignatureHash` | boolean | `false` | Hide the verification hash printed on signed fields |
+| `lockedFieldsBackground` | boolean | `true` | Render locked fields with a grey box background (`true`) or as plain text (`false`) |
+
+`getOrganizationPreferences()` returns every key with its effective value (the default is applied for any key the org never set). `updateOrganizationPreferences()` changes only the keys you pass and preserves all other organization settings.
 
 ---
 
