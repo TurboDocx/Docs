@@ -32,7 +32,39 @@ Click **Next** to continue to the signer configuration step.
 
 <br/>
 
+## Choose a Delivery Mode
+
+Before configuring signers, choose **how** the automation delivers the document. This is the first section of the signature step, and it decides which of the sections below you need to fill in.
+
+![The Delivery Mode section with the "Place signature fields manually" option highlighted](/img/wrike-integration/SigAuto-DeliveryMode.png)
+
+| Mode | What happens when the automation fires | Anchor tags needed? |
+|---|---|---|
+| **Send for review first** | Posts a Wrike comment linking to the TurboDocx review page. You check the field placement, then click **Send** to deliver the signature emails. | Yes |
+| **Send directly to signers** | Signature emails go out immediately. The Wrike comment confirms the request was sent. | Yes |
+| **Place signature fields manually** | Posts a Wrike comment linking to the TurboDocx **field editor**. You drag the signature fields onto the document, then click **Send**. | **No** |
+
+### When to use "Place signature fields manually"
+
+Use it when your document has **no anchor tags** — the `{CustomerSignature}`-style placeholders that tell TurboDocx where each field goes.
+
+The other two modes read those tags to position fields automatically, so a document without them can't be processed. That's common when the file is a scanned PDF, comes from a third party, or is a one-off contract nobody wants to template.
+
+In this mode:
+
+- The **Map Document Fields** section disappears — there is nothing to map, so no anchor tags are required.
+- You still configure **recipients** below. The field editor needs to know who each field belongs to, so at least one recipient with an email field is required in every mode.
+- Nothing is sent to signers until you place the fields and press **Send** yourself. Even if the automation is also set to send directly, manual placement takes priority — a document with no fields would give signers nothing to sign.
+
+Your existing field mappings are kept if you switch to this mode, so you can switch back without reconfiguring them.
+
+<br/>
+
 ## Configure Signers
+
+:::note
+The steps below apply to **all three** delivery modes. If you chose **Place signature fields manually**, complete this section and then skip ahead to [Post-Signature Settings](#post-signature-settings) — the **Map Document Fields** steps won't appear.
+:::
 
 ### Step 3: Select the First Recipient's Email Field
 
