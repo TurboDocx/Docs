@@ -36,7 +36,7 @@ Click **Next** to continue to the signer configuration step.
 
 Before configuring signers, choose **how** the automation delivers the document. This is the first section of the signature step, and it decides which of the sections below you need to fill in.
 
-![The Delivery Mode section showing all three options, with "Place signature fields manually" selected](/img/wrike-integration/SigAuto-DeliveryMode.png)
+![The Delivery Mode section with the "Place signature fields manually" option highlighted](/img/wrike-integration/SigAuto-DeliveryMode.png)
 
 | Mode | What happens when the automation fires | Anchor tags needed? |
 |---|---|---|
