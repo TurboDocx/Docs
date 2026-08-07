@@ -326,6 +326,10 @@ req.setTermDays(60);
 Quote updated = tq.updateQuote(quoteId, req);
 ```
 
+:::info `name` is trimmed, and renaming is draft-only
+`name` is trimmed on both `createQuote` and `updateQuote` — `"  Acme  "` is stored as `"Acme"` — and a name that is empty once trimmed returns a `400`. A quote can only be renamed while it is a **draft**; on any other status the update is rejected with `Cannot update quote that is not in draft status` (`templateId` is the only field exempt from that rule). Rename before you send, because **sending snapshots the quote's current name onto the TurboSign document** — that is the name signers see in the request email and on the signed PDF.
+:::
+
 #### `deleteQuote`
 
 ```java
@@ -351,6 +355,8 @@ Duplicate a quote (creates a draft copy).
 Quote copy = tq.duplicateQuote(quoteId);
 System.out.println("New quote: " + copy.getId());
 ```
+
+The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `updateQuote` before sending if that is not what you want signers to see.
 
 The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
@@ -554,19 +560,23 @@ Quote handleExpiredQuote(String id, HandleExpiredQuoteRequest request)
 
 Handle a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on the action — and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned `Quote` is the new duplicate; the original stays terminal.
 
-All three fields are **required**: `action` (`"void"` or `"decline"`), `reason` (max 190 characters), and `newValidUntil` (ISO date).
+`action` (`"void"`, `"decline"` or `"renew"`) and `newValidUntil` (ISO date) are **required**. `reason` (max 190 characters) is required for `"void"` and `"decline"`, and optional for `"renew"` — a renewal closes nothing out, so there is nothing to give a reason for. Use `"renew"` when the quote's signature request has already expired on its own; use `"void"` or `"decline"` when the quote is merely past its `validUntil` and you are closing it yourself.
 
 ```java
 HandleExpiredQuoteRequest req = new HandleExpiredQuoteRequest();
-req.setAction("void");                    // required — "void" or "decline" only
-req.setReason("Expired — re-quoting");    // required — max 190 characters
+req.setAction("void");                    // required — "void", "decline" or "renew"
+req.setReason("Expired — re-quoting");    // required for void/decline, optional for renew
 req.setNewValidUntil("2026-12-31");       // required — ISO date, carried onto the duplicate
 
 Quote quote = tq.handleExpiredQuote(quoteId, req);
 ```
 
 :::warning There is no `extend` or `resend` action
-`action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — set `newValidUntil` and it lands on the duplicate it creates.
+`action` accepts **only** `"void"`, `"decline"` and `"renew"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — set `newValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::info The replacement draft keeps the original name
+Unlike `duplicateQuote`, the draft this endpoint creates is **not** prefixed with `Copy of ` — re-issuing the same deal keeps the original quote's name, so repeated renewals cannot compound into `Copy of Copy of …`. That matters because the next send snapshots the name onto the TurboSign document.
 :::
 
 :::note Terminal statuses
