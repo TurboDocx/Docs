@@ -434,7 +434,7 @@ The request format is **identical** to prepare-for-review. See the "Endpoint 1: 
 />
 
 :::tip Need to resend emails?
-If a recipient hasn't received or has lost their signing email, you can resend it using the [Resend Email endpoint](#endpoint-5-resend-email). You'll need the `recipientIds` from the response of this endpoint.
+If a recipient hasn't received or has lost their signing email, you can resend it using the [Resend Email endpoint](#endpoint-6-resend-email). You'll need the `recipientIds` from the response of this endpoint.
 :::
 
 ## Endpoint 3: Download Signed Document
@@ -653,7 +653,178 @@ This provides strong evidence that the audit trail has not been tampered with af
 - The `details` object varies by action type and may contain IP addresses, user agents, and other contextual information
 - Audit trail entries are immutable and cannot be modified or deleted
 
-## Endpoint 5: Resend Email
+## Endpoint 5: Get Recipients
+
+Retrieve every recipient on a document with their signing status, their email history, and who sent the document. This is the endpoint to poll when you want to know **who has signed and who you are still waiting on**.
+
+### Endpoint
+
+```http
+GET https://api.turbodocx.com/turbosign/documents/{documentId}/recipients
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| documentId | String (UUID) | Yes      | The unique identifier of the document |
+
+### Response
+
+```json
+{
+  "data": {
+    "document": {
+      "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
+      "name": "Service Agreement 2024",
+      "status": "under_review",
+      "createdOn": "2024-01-15T10:30:00.000Z",
+      "sentOn": "2024-01-15T10:35:00.000Z",
+      "expiresAt": null,
+      "sentBy": {
+        "name": "Jane Sender",
+        "email": "jane@acme.com"
+      }
+    },
+    "recipients": [
+      {
+        "id": "recipient-uuid-1",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "status": "completed",
+        "effectiveStatus": "completed",
+        "signedOn": "2024-01-16T14:02:00.000Z",
+        "signingOrder": 1,
+        "delivery": {
+          "firstSentOn": "2024-01-15T10:35:00.000Z",
+          "lastSentOn": "2024-01-15T10:35:00.000Z",
+          "totalSent": 1,
+          "reminderCount": 0,
+          "lastRemindedAt": "2024-01-15T10:35:00.000Z",
+          "warningCount": 0,
+          "lastWarningAt": null
+        }
+      },
+      {
+        "id": "recipient-uuid-2",
+        "name": "Jane Smith",
+        "email": "jane@example.com",
+        "status": "pending",
+        "effectiveStatus": "pending",
+        "signedOn": null,
+        "signingOrder": 2,
+        "delivery": {
+          "firstSentOn": "2024-01-16T14:02:05.000Z",
+          "lastSentOn": "2024-01-20T09:00:00.000Z",
+          "totalSent": 2,
+          "reminderCount": 1,
+          "lastRemindedAt": "2024-01-20T09:00:00.000Z",
+          "warningCount": 0,
+          "lastWarningAt": null
+        }
+      }
+    ],
+    "summary": {
+      "total": 2,
+      "pending": 1,
+      "viewed": 0,
+      "completed": 1,
+      "voided": 0,
+      "expired": 0,
+      "waitingOn": 1
+    }
+  }
+}
+```
+
+### Response Fields
+
+#### `document`
+
+| Field     | Type   | Description                                                                    |
+| --------- | ------ | ------------------------------------------------------------------------------ |
+| status    | String | Document-level status (`draft`, `under_review`, `completed`, `voided`, `expired`, …) |
+| sentOn    | String \| null | When the document was dispatched to recipients; `null` while it is still a draft |
+| expiresAt | String \| null | When the signing window closes; `null` if it never expires              |
+| sentBy    | Object | `{ name, email }` — the real sender, never the internal service account         |
+
+#### `recipients[]`
+
+| Field           | Type           | Description                                                       |
+| --------------- | -------------- | ----------------------------------------------------------------- |
+| status          | String         | Raw status: `pending`, `viewed` or `completed`                     |
+| effectiveStatus | String         | `pending`, `viewed`, `completed`, `voided` or `expired` — **use this for display** |
+| signedOn        | String \| null | When this recipient signed; `null` while pending or viewed         |
+| signingOrder    | Number         | Position in the signing sequence                                   |
+| delivery        | Object         | This recipient's email history (see below)                         |
+
+#### `recipients[].delivery`
+
+| Field          | Type           | Description                                                              |
+| -------------- | -------------- | ------------------------------------------------------------------------ |
+| firstSentOn    | String \| null | First email of any kind; `null` if this recipient has never been emailed  |
+| lastSentOn     | String \| null | Most recent email of any kind                                            |
+| totalSent      | Number         | Signature request + resends + reminders + expiry warnings + terminal notices |
+| reminderCount  | Number         | **Automatic (scheduled) reminders only** — see the note below            |
+| lastRemindedAt | String \| null | **When the reminder cadence clock was last reset** — see the note below  |
+| warningCount   | Number         | Expiry warnings sent. Only a warning touches this                        |
+| lastWarningAt  | String \| null | When the last expiry warning went out. Only a warning touches this       |
+
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+**`reminderCount` counts automatic (scheduled) reminders only.** It is the counter that the
+`maxReminders` schedule setting caps. A manual "remind now" (the Send Reminder action) is a
+standalone nudge that deliberately does **not** consume the cap budget, so it does **not**
+increment this — even though the email it sends *does* appear in `totalSent`. A recipient can
+therefore read `reminderCount: 0` while reminder emails have genuinely been sent.
+
+**`lastRemindedAt` is a cadence clock, not a record of a reminder.** Four things stamp it: the
+initial signature-request send (so the first reminder is measured from the invitation), each
+scheduled reminder, each manual "remind now", and each expiry warning (a deliberate cross-reset
+so a reminder never lands adjacent to a warning). Only the second of those bumps
+`reminderCount`.
+
+The common consequence: a freshly-sent document returns a **non-null `lastRemindedAt` equal to
+the invitation timestamp, alongside `reminderCount: 0`**. That is correct — nobody has been
+reminded. To answer "have we actually chased this person", read `totalSent` (all emails) or the
+audit trail's `reminder_sent` entries, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat — only an expiry warning touches them.
+
+:::
+
+#### `summary`
+
+Counts by `effectiveStatus`, plus `waitingOn` — the recipients who have not finished (`pending` + `viewed`). `waitingOn` drops to zero once the document reaches a terminal state.
+
+### Two status fields, and they differ on purpose
+
+There is no per-recipient declined, voided or expired state in the system — a recipient row only ever holds `pending`, `viewed` or `completed`. That means on a voided or expired document, an unsigned signer **still reads `pending`** in `status`.
+
+`effectiveStatus` layers the document's outcome on top, so that same signer reads `voided` or `expired`. Branch on `effectiveStatus`, not `status`, or you will chase people whose signing links are already dead.
+
+A completed signature is never revoked: someone who signed before the document was voided still reads `completed` in both fields.
+
+`effectiveStatus` also reflects a **lapsed deadline immediately**. A document past its `expiresAt` keeps its old status until a background sweep updates it, but the signing links are already refused at that moment — so `effectiveStatus` reports `expired` right away rather than waiting for the row to change.
+
+### Usage Notes
+
+- Available at any document status, including drafts (a draft returns its recipients with `sentOn: null` and `delivery.totalSent: 0`)
+- Recipients are returned ordered by `signingOrder`
+- `delivery` counts emails to that signer only — CC notifications are excluded, since a CC address is not a signer
+- On a document with a signing order, only the current turn has been emailed; `delivery.totalSent === 0` distinguishes "not yet invited" from "invited and not acted"
+- Returns `404` if the document does not exist or belongs to another organization
+- All timestamps are ISO 8601 (UTC)
+
+## Endpoint 6: Resend Email
 
 Resend signature request emails to one or more recipients who haven't yet completed signing. Only recipients at the current signing order who haven't completed are eligible for resend.
 

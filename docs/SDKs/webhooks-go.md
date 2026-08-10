@@ -156,6 +156,32 @@ result, err := wh.TestWebhook(ctx, turbodocx.TestWebhookRequest{
 Nothing was narrowed. `Events` is still `[]string`, so existing code that passes `[]string{"signature.document.completed"}` keeps compiling and the backend can add new events without an SDK release. The constants exist for discoverability and type safety. `GetWebhook()` also returns `availableEvents` — the list the backend advertises at runtime.
 :::
 
+### Delivered payload shape
+
+Every delivery posts this envelope:
+
+```json
+{
+  "event": "signature.document.completed",
+  "event_id": "evt_a1b2c3…",
+  "created_at": "2026-01-15T10:30:00.000Z",
+  "version": "1.0",
+  "data": { "documentId": "…", "documentName": "…" }
+}
+```
+
+:::warning Dispatch on `event`, not `eventType`
+
+The event name travels in the top-level **`event`** field. There is no `eventType` key on the
+wire — a receiver written against it reads the zero value and silently dispatches nothing, which
+looks exactly like "the webhook never fired".
+
+`eventType` **is** correct in two other places, which is where the confusion comes from: it is
+the request parameter name for `TestWebhook` and `ListWebhookDeliveries`, and it is the column name on
+the stored delivery-history rows those return. Those are not the delivered envelope.
+
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -263,7 +289,8 @@ func turbodocxWebhook(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Now safe to json.Unmarshal(rawBody, &event) and dispatch on event.eventType.
+    // Now safe to json.Unmarshal(rawBody, &event) and dispatch on the top-level
+    // `event` field (tag it `json:"event"`) — NOT `eventType`, which is not on the wire.
     w.WriteHeader(http.StatusOK)
 }
 
@@ -310,7 +337,7 @@ func main() {
             return
         }
 
-        // dispatch event["eventType"] ...
+        // dispatch event["event"] ... (NOT "eventType" — not on the wire)
         c.Status(http.StatusOK)
     })
 
@@ -353,7 +380,7 @@ func main() {
             return c.String(http.StatusUnauthorized, "invalid signature")
         }
 
-        // dispatch event["eventType"] ...
+        // dispatch event["event"] ... (NOT "eventType" — not on the wire)
         return c.NoContent(http.StatusOK)
     })
 

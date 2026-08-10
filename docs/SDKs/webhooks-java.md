@@ -178,6 +178,32 @@ webhooks.testWebhook(WebhookEvent.COMPLETED.getValue(), payload);
 Nothing was narrowed. The events list is still `List<String>`, so existing code keeps compiling and the backend can add new events without an SDK release. The enum exists for discoverability and type safety. `getWebhook()` also returns `availableEvents` — the list the backend advertises at runtime.
 :::
 
+### Delivered payload shape
+
+Every delivery posts this envelope:
+
+```json
+{
+  "event": "signature.document.completed",
+  "event_id": "evt_a1b2c3…",
+  "created_at": "2026-01-15T10:30:00.000Z",
+  "version": "1.0",
+  "data": { "documentId": "…", "documentName": "…" }
+}
+```
+
+:::warning Dispatch on `event`, not `eventType`
+
+The event name travels in the top-level **`event`** field. There is no `eventType` key on the
+wire — a receiver written against it reads `null` and silently dispatches nothing, which
+looks exactly like "the webhook never fired".
+
+`eventType` **is** correct in two other places, which is where the confusion comes from: it is
+the request parameter name for `testWebhook` and `listWebhookDeliveries`, and it is the column name on
+the stored delivery-history rows those return. Those are not the delivered envelope.
+
+:::
+
 ## Quick Start
 
 ### 1. Create the signature webhook
@@ -272,7 +298,8 @@ public class TurboDocxWebhookController {
             return ResponseEntity.status(401).build();
         }
 
-        // Now safe to parse rawBody as JSON and dispatch on event.eventType.
+        // Now safe to parse rawBody as JSON and dispatch on the top-level "event"
+        // field — NOT "eventType", which is not on the wire.
         return ResponseEntity.ok().build();
     }
 }
@@ -310,7 +337,7 @@ public class TurboDocxWebhookServlet extends HttpServlet {
             return;
         }
 
-        // dispatch on event.eventType ...
+        // dispatch on the top-level "event" field ... (NOT "eventType")
         resp.setStatus(HttpServletResponse.SC_OK);
     }
 }
@@ -346,7 +373,7 @@ public class TurboDocxWebhookResource {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
-        // dispatch on event.eventType ...
+        // dispatch on the top-level "event" field ... (NOT "eventType")
         return Response.ok().build();
     }
 }
