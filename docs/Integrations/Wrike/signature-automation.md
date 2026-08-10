@@ -53,10 +53,14 @@ The other two modes read those tags to position fields automatically, so a docum
 In this mode:
 
 - The **Map Document Fields** section disappears — there is nothing to map, so no anchor tags are required.
-- You still configure **recipients** below. The field editor needs to know who each field belongs to, so at least one recipient with an email field is required in every mode.
+- You still configure **recipients** below. The field editor needs to know who each field belongs to, so every recipient you add must have a Wrike email field — in this mode and in the other two.
 - Nothing is sent to signers until you place the fields and press **Send** yourself. Even if the automation is also set to send directly, manual placement takes priority — a document with no fields would give signers nothing to sign.
 
 Your existing field mappings are kept if you switch to this mode, so you can switch back without reconfiguring them.
+
+:::tip Every recipient needs at least one field
+In the field editor, **Send** stays disabled until *each* recipient has at least one field assigned to them. If you added three signers, place at least one field for all three — a signer with no fields has nothing to sign, so the editor won't let the document go out.
+:::
 
 <br/>
 
