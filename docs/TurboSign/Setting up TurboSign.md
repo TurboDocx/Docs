@@ -297,14 +297,18 @@ Perfect for information you already know:
 You can set default values for each recipient to pre-fill common information.
 
 :::note Field Types Without Defaults
-**Signature**, **Initials**, and **Date** fields cannot have default values because they must be completed by the recipient at signing time.
+**Signature** and **Initials** fields cannot have default values because they must be drawn or typed by the recipient at signing time.
+
+**Date** fields are a special case: they fill automatically with the date the recipient signs, so they need no default. If you need a specific date instead, you can pin one — see [Setting a Date Field's Value](#setting-a-date-fields-value) below.
 :::
 
 <br/>
 
 ### Setting Default Values Per Recipient
 
-Default values are set per recipient and will pre-fill their fields.
+Default values are set per recipient and will pre-fill their fields. There are **two places** to set them, and they edit the same value — whichever you use, the other updates to match.
+
+#### Option 1: The Default Values accordion
 
 **Step 1: Find the Default Values Accordion**
 
@@ -323,6 +327,36 @@ Fill in any of the available fields:
 **Step 3: Switch Between Recipients**
 
 Use the recipient tabs at the top to set different default values for each signer.
+
+#### Option 2: Directly on the field
+
+If you have already placed a field on the document, you don't need to hunt for the accordion:
+
+1. **Click the field** on the document.
+2. The right panel opens with a **"Default Value for [field type]"** box.
+3. **Type the value.** It saves as you type.
+
+![Field properties panel showing the Default Value box for a Full name field](/img/turbosign/SetDefaultValueOnField.png)
+
+The panel tells you the scope right underneath the box — *"Applies to every [field type] field for [recipient]"* — because this is the **same** value the accordion holds, not a per-field override. Change it here and every field of that type for that recipient changes too.
+
+:::note Text fields work differently
+A **Text** field's default is its own — each Text field keeps a separate value, since a free-text box usually means something different in each spot. Its panel says **"Default Value for This Field"** rather than naming a recipient.
+:::
+
+### Setting a Date Field's Value
+
+A **Date** field fills in automatically with the date the recipient signs — for most documents that is exactly what you want, and you don't have to do anything.
+
+If the document needs a **specific** date instead (an effective date, a policy start date), you can pin one:
+
+1. **Click the Date field** on the document.
+2. In the right panel, under **Date Value**, choose **"Use a fixed date"**.
+3. **Pick the date.** It starts on today's date so you have something valid to adjust.
+
+![Date field panel with "Use a fixed date" selected and a date chosen](/img/turbosign/SetDateFieldValue.png)
+
+Choose **"Use the signing date"** to go back to the automatic behavior. The panel states which mode you're in underneath the control, so there's no guessing.
 
 :::tip Character Limits
 Each field has a maximum character limit. TurboSign will show you a character counter when you're approaching the limit so you don't lose any information.
@@ -358,6 +392,7 @@ Now when Sarah receives the document, these fields will be pre-filled with this 
 **Don't:**
 - ❌ **Don't force information** - Recipients can edit defaults if needed
 - ❌ **Don't use for signatures/initials** - These fields must be completed during signing
+- ❌ **Don't pin a date unless you mean it** - Date fields already fill with the signing date; only set a fixed date when the document needs that exact date
 - ❌ **Don't include sensitive data** - Avoid passwords, SSNs, or confidential information
 - ❌ **Don't overfill** - Only set defaults for information you truly know
 
