@@ -396,10 +396,15 @@ result = await TurboQuote.send_quote_with_deliverable("quote-uuid", {
 
 #### `decline_quote`
 
+Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent and optional for a draft, which never reached the customer.
+
 ```python
 quote = await TurboQuote.decline_quote("quote-uuid", {
     "reason": "Customer selected a competitor",
 })
+
+# A draft can be declined with no reason at all.
+closed_out = await TurboQuote.decline_quote("draft-quote-uuid", {})
 ```
 
 #### `void_quote`

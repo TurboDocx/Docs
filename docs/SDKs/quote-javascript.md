@@ -29,7 +29,7 @@ The official TurboDocx TurboQuote SDK for Node.js and browser applications. Buil
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
+TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
 :::
 
 ## Installation
@@ -466,12 +466,17 @@ const { quote, message, documentId } = await TurboQuote.sendQuoteWithDeliverable
 
 #### declineQuote
 
-Mark a sent quote as declined (typically called on behalf of the recipient).
+Mark a quote as declined — either a **sent** quote (typically on behalf of the recipient) or a **draft** whose deal died before it was ever sent.
+
+`reason` (max 190 characters) is **required once a quote has been sent**, and **optional for a draft** — a draft never reached the customer, so there is nothing to justify. Declining a sent quote without one returns `400 CANNOT_DECLINE_QUOTE`.
 
 ```typescript
 const quote = await TurboQuote.declineQuote('quote-uuid', {
   reason: 'Budget constraints for this quarter',
 });
+
+// A draft can be declined with no reason at all.
+const closedOut = await TurboQuote.declineQuote('draft-quote-uuid', {});
 ```
 
 #### voidQuote

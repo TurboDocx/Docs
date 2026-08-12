@@ -443,10 +443,15 @@ resp, err := qc.SendQuoteWithDeliverable(ctx, "quote-uuid", &turbodocx.SendQuote
 
 #### DeclineQuote
 
+Declines a **sent** quote or a **draft**. `Reason` (max 190 characters) is required once a quote has been sent and optional for a draft, which never reached the customer — an unset `Reason` is omitted from the request.
+
 ```go
 quote, err := qc.DeclineQuote(ctx, "quote-uuid", &turbodocx.DeclineQuoteRequest{
     Reason: "Budget constraints for this quarter",
 })
+
+// A draft can be declined with no reason at all.
+closedOut, err := qc.DeclineQuote(ctx, "draft-quote-uuid", &turbodocx.DeclineQuoteRequest{})
 ```
 
 #### VoidQuote

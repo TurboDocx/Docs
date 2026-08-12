@@ -522,13 +522,18 @@ System.out.println("Document ID: " + resp.getDocumentId());
 Quote declineQuote(String id, DeclineQuoteRequest request)
 ```
 
-Mark a sent quote as declined.
+Mark a quote as declined — either a **sent** quote or a **draft** whose deal died before it was ever sent.
+
+`reason` (max 190 characters) is **required once a quote has been sent**, and **optional for a draft** — a draft never reached the customer, so there is nothing to justify. Declining a sent quote without one returns `400 CANNOT_DECLINE_QUOTE`.
 
 ```java
 DeclineQuoteRequest req = new DeclineQuoteRequest();
 req.setReason("Budget constraints");
 
 Quote declined = tq.declineQuote(quoteId, req);
+
+// A draft can be declined with no reason — an unset reason is omitted from the request.
+Quote closedOut = tq.declineQuote(draftQuoteId, new DeclineQuoteRequest());
 ```
 
 #### `voidQuote`
