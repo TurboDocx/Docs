@@ -393,14 +393,14 @@ result = TurboDocxSdk::TurboQuote.send_quote_with_deliverable("quote-uuid",
 
 #### `decline_quote`
 
-Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent and optional for a draft, which never reached the customer.
+Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.
 
 ```ruby
 quote = TurboDocxSdk::TurboQuote.decline_quote("quote-uuid",
   "reason" => "Customer selected a competitor"
 )
 
-# A draft can be declined with no reason at all.
+# A draft is declined with no reason — one passed here would not be recorded.
 closed_out = TurboDocxSdk::TurboQuote.decline_quote("draft-quote-uuid", {})
 ```
 

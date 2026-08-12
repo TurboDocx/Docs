@@ -343,7 +343,7 @@ $result = TurboQuote::sendQuoteWithDeliverable('quote-uuid', new SendQuoteWithDe
 
 #### declineQuote
 
-Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent and optional for a draft, which never reached the customer.
+Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.
 
 ```php
 use TurboDocx\Types\Requests\Quote\DeclineQuoteRequest;
@@ -352,7 +352,7 @@ $quote = TurboQuote::declineQuote('quote-uuid', new DeclineQuoteRequest(
     reason: 'Price out of budget',
 ));
 
-// A draft can be declined with no reason at all.
+// A draft is declined with no reason — one passed here would not be recorded.
 $closedOut = TurboQuote::declineQuote('draft-quote-uuid', new DeclineQuoteRequest());
 ```
 

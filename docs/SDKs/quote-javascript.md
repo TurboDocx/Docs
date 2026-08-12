@@ -468,14 +468,14 @@ const { quote, message, documentId } = await TurboQuote.sendQuoteWithDeliverable
 
 Mark a quote as declined — either a **sent** quote (typically on behalf of the recipient) or a **draft** whose deal died before it was ever sent.
 
-`reason` (max 190 characters) is **required once a quote has been sent**, and **optional for a draft** — a draft never reached the customer, so there is nothing to justify. Declining a sent quote without one returns `400 CANNOT_DECLINE_QUOTE`.
+`reason` (max 190 characters) is **required once a quote has been sent** — declining a sent quote without one returns `400 CANNOT_DECLINE_QUOTE`. A **draft is declined without a reason**: the reason is stored on the quote's linked signature document, and a draft has none, so any reason passed for a draft is accepted by the API and **not recorded**.
 
 ```typescript
 const quote = await TurboQuote.declineQuote('quote-uuid', {
   reason: 'Budget constraints for this quarter',
 });
 
-// A draft can be declined with no reason at all.
+// A draft is declined with no reason — one passed here would not be recorded.
 const closedOut = await TurboQuote.declineQuote('draft-quote-uuid', {});
 ```
 
