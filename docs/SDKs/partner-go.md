@@ -323,6 +323,7 @@ if err != nil {
 fmt.Println(resp.Data.Preferences.HideSignatureOutline)   // bool
 fmt.Println(resp.Data.Preferences.HideSignatureHash)      // bool
 fmt.Println(resp.Data.Preferences.LockedFieldsBackground) // bool
+fmt.Println(resp.Data.Preferences.AllowDownloadBeforeSigning) // bool
 ```
 
 ### `UpdateOrganizationPreferences()`
@@ -331,14 +332,17 @@ Update one or more of an organization's TurboSign display preferences. Only the 
 
 ```go
 disabled := false
+enabled := true
 resp, err := partner.UpdateOrganizationPreferences(ctx, "org-uuid-here", &turbodocx.UpdateOrgPreferencesRequest{
-    LockedFieldsBackground: &disabled, // render locked fields as plain text, not a grey box
+    LockedFieldsBackground:     &disabled, // render locked fields as plain text, not a grey box
+    AllowDownloadBeforeSigning: &enabled,  // let signers download the unsigned PDF before they sign
 })
 if err != nil {
     log.Fatal(err)
 }
 
 fmt.Println(resp.Data.Preferences.LockedFieldsBackground) // false
+fmt.Println(resp.Data.Preferences.AllowDownloadBeforeSigning) // true
 ```
 
 See [Preferences Reference](#preferences-reference) for every settable key and its meaning.
@@ -740,6 +744,7 @@ TurboSign display preferences you can read and set per organization. Every key i
 | `hideSignatureOutline` | boolean | `false` | Hide the outline/label around signed fields in the finished PDF |
 | `hideSignatureHash` | boolean | `false` | Hide the verification hash printed on signed fields |
 | `lockedFieldsBackground` | boolean | `true` | Render locked fields with a grey box background (`true`) or as plain text (`false`) |
+| `allowDownloadBeforeSigning` | boolean | `false` | When enabled, a signer can download the unsigned PDF from the signing page before they sign it (for example, to review it with their legal team). Defaults to off. |
 
 `GetOrganizationPreferences()` returns every key with its effective value (the default is applied for any key the org never set). `UpdateOrganizationPreferences()` changes only the keys you pass and preserves all other organization settings.
 
