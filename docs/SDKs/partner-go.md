@@ -733,7 +733,7 @@ Every counter except `CurrentAICredits` floors at `0`. Only `CurrentAICredits` a
 
 ## Preferences Reference
 
-TurboSign display preferences you can read and set per organization. Every key is a boolean; the API returns only these keys and never any of the organization's other settings.
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
