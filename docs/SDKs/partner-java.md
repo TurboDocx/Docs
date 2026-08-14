@@ -330,6 +330,7 @@ PartnerOrgPreferencesResponse result = client.turboPartner()
 System.out.println(result.getData().getPreferences().getHideSignatureOutline());   // Boolean
 System.out.println(result.getData().getPreferences().getHideSignatureHash());      // Boolean
 System.out.println(result.getData().getPreferences().getLockedFieldsBackground()); // Boolean
+System.out.println(result.getData().getPreferences().getAllowDownloadBeforeSigning()); // Boolean
 ```
 
 ### `updateOrganizationPreferences()`
@@ -340,10 +341,13 @@ Update one or more of an organization's TurboSign display preferences. Only the 
 PartnerOrgPreferencesResponse result = client.turboPartner()
     .updateOrganizationPreferences(
         "org-uuid-here",
-        new PartnerOrgPreferences().setLockedFieldsBackground(false) // plain text, not a grey box
+        new PartnerOrgPreferences()
+            .setLockedFieldsBackground(false)         // plain text, not a grey box
+            .setAllowDownloadBeforeSigning(true)      // let signers download the unsigned PDF before they sign
     );
 
 System.out.println(result.getData().getPreferences().getLockedFieldsBackground()); // false
+System.out.println(result.getData().getPreferences().getAllowDownloadBeforeSigning()); // true
 ```
 
 See [Preferences Reference](#preferences-reference) for every settable key and its meaning.
@@ -749,6 +753,7 @@ TurboSign display preferences you can read and set per organization. Every key i
 | `hideSignatureOutline` | boolean | `false` | Hide the outline/label around signed fields in the finished PDF |
 | `hideSignatureHash` | boolean | `false` | Hide the verification hash printed on signed fields |
 | `lockedFieldsBackground` | boolean | `true` | Render locked fields with a grey box background (`true`) or as plain text (`false`) |
+| `allowDownloadBeforeSigning` | boolean | `false` | When enabled, a signer can download the unsigned PDF from the signing page before they sign it (for example, to review it with their legal team). Defaults to off. |
 
 `getOrganizationPreferences()` returns every key with its effective value (the default is applied for any key the org never set). `updateOrganizationPreferences()` changes only the keys you pass and preserves all other organization settings.
 

@@ -306,6 +306,7 @@ prefs = result["data"]["preferences"]
 puts prefs["hideSignatureOutline"]    # boolean
 puts prefs["hideSignatureHash"]       # boolean
 puts prefs["lockedFieldsBackground"]  # boolean
+puts prefs["allowDownloadBeforeSigning"]  # boolean
 ```
 
 ### `update_organization_preferences(organization_id, preferences)`
@@ -314,10 +315,12 @@ Update one or more of an organization's TurboSign display preferences. Only the 
 
 ```ruby
 result = TurboDocxSdk::TurboPartner.update_organization_preferences("org-uuid-here",
-  "lockedFieldsBackground" => false   # render locked fields as plain text, not a grey box
+  "lockedFieldsBackground" => false,   # render locked fields as plain text, not a grey box
+  "allowDownloadBeforeSigning" => true   # let signers download the unsigned PDF before they sign
 )
 
 puts result["data"]["preferences"]["lockedFieldsBackground"]   # false
+puts result["data"]["preferences"]["allowDownloadBeforeSigning"]   # true
 ```
 
 See [Preferences Reference](#preferences-reference) for every settable key and its meaning.
@@ -709,6 +712,7 @@ TurboSign display preferences you can read and set per organization. Every key i
 | `hideSignatureOutline` | boolean | `false` | Hide the outline/label around signed fields in the finished PDF |
 | `hideSignatureHash` | boolean | `false` | Hide the verification hash printed on signed fields |
 | `lockedFieldsBackground` | boolean | `true` | Render locked fields with a grey box background (`true`) or as plain text (`false`) |
+| `allowDownloadBeforeSigning` | boolean | `false` | When enabled, a signer can download the unsigned PDF from the signing page before they sign it (for example, to review it with their legal team). Defaults to off. |
 
 `get_organization_preferences()` returns every key with its effective value (the default is applied for any key the org never set). `update_organization_preferences()` changes only the keys you pass and preserves all other organization settings.
 
