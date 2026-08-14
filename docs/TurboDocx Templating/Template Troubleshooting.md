@@ -1,7 +1,7 @@
 ---
 title: Template Troubleshooting
 sidebar_position: 7
-description: Fix common TurboDocx template issues including broken variables, formatting problems, and placeholder errors with video tutorials and solutions.
+description: Fix common TurboDocx template issues including broken variables, formatting problems, unsupported image formats, and placeholder errors with video tutorials and solutions.
 keywords:
   - template troubleshooting
   - broken variables
@@ -9,6 +9,9 @@ keywords:
   - placeholder errors
   - turbodocx support
   - template fix
+  - image not supported
+  - supported image formats
+  - png jpeg only
 ---
 
 # Template Troubleshooting
@@ -165,6 +168,37 @@ When you activate the tool, it will resemble the image below. Since `{CustomerNa
 
 <br />
 
+### 4. Images Must Be PNG or JPEG
+
+Your document or presentation can only carry **PNG** and **JPEG** images. If you put any other
+format into a rich text or image variable, TurboDocx leaves a short message in its place:
+
+```
+[Image not supported: SVG — use PNG or JPEG (diagram.svg)]
+```
+
+That message tells you three things: the format that wasn't accepted, what to use instead, and
+the file name, so you can find it among many images.
+
+**Formats that get replaced with the message:** SVG, GIF, WebP, BMP, TIFF, HEIC, AVIF and ICO.
+
+:::caution The editor will show you the image anyway
+
+The rich text editor previews SVGs, GIFs and WebP files perfectly well, because your browser can
+display them even though a Word or PowerPoint file can't store them. So an image can look right
+while you're editing and still be replaced in the finished deliverable.
+
+If you see the "Image not supported" message in a document you just generated, that's why —
+nothing is broken. Convert the image and generate again.
+
+:::
+
+**How to fix it:** open the image in any editor and re-save it as PNG or JPEG, then replace it in
+your variable. For logos and diagrams saved as SVG, exporting at 2× the size you need keeps them
+looking sharp.
+
+<br />
+
 ## Quick Troubleshooting Steps
 
 When your variables aren't working, follow these steps in order:
@@ -178,10 +212,13 @@ Variables for images, rich text, or sections must be on their own line
 ### 3. Use Paragraph Markers
 Turn on ¶ symbols to see hidden formatting issues
 
-### 4. For Presentation Templates
+### 4. Check Your Image Formats
+Only PNG and JPEG can go into a deliverable — convert SVG, GIF, WebP, BMP, TIFF, HEIC, AVIF and ICO first
+
+### 5. For Presentation Templates
 Use invisible rectangle shapes, not text boxes → [See presentation setup guide](./How%20to%20Create%20a%20Presentation%20Template)
 
-### 5. Test Your Template
+### 6. Test Your Template
 Create a simple deliverable to verify everything works → [Learn how to create deliverables](./How%20to%20Create%20a%20Deliverable)
 <br/>
 
