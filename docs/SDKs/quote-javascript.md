@@ -29,7 +29,7 @@ The official TurboDocx TurboQuote SDK for Node.js and browser applications. Buil
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
+TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
 :::
 
 ## Installation
@@ -289,7 +289,8 @@ Fetch a single quote. The returned object includes a `statusInfo` field with tra
 
 ```typescript
 const quote = await TurboQuote.getQuote('quote-uuid');
-console.log(quote.statusInfo?.canSend);  // true when status is 'draft'
+console.log(quote.statusInfo?.canSend);     // true when status is 'draft'
+console.log(quote.statusInfo?.canDecline);  // also true when status is 'draft'
 console.log(quote.preparedBy?.name);     // e.g. "Acme Billing Integration" or the template sender
 console.log(quote.preparedBy?.email);    // may be undefined for an API-created quote — render a placeholder
 ```
@@ -466,17 +467,22 @@ const { quote, message, documentId } = await TurboQuote.sendQuoteWithDeliverable
 
 #### declineQuote
 
-Mark a sent quote as declined (typically called on behalf of the recipient).
+Mark a quote as declined — either a **sent** quote (typically on behalf of the recipient) or a **draft** whose deal died before it was ever sent.
+
+`reason` (max 190 characters) is **required once a quote has been sent** — declining a sent quote without one returns `400 CANNOT_DECLINE_QUOTE`. A **draft is declined without a reason**: the reason is stored on the quote's linked signature document, and a draft has none, so any reason passed for a draft is accepted by the API and **not recorded**.
 
 ```typescript
 const quote = await TurboQuote.declineQuote('quote-uuid', {
   reason: 'Budget constraints for this quarter',
 });
+
+// A draft is declined with no reason — one passed here would not be recorded.
+const closedOut = await TurboQuote.declineQuote('draft-quote-uuid', {});
 ```
 
 #### voidQuote
 
-Void a quote that should no longer be valid.
+Void a **sent** quote that should no longer be valid; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```typescript
 const quote = await TurboQuote.voidQuote('quote-uuid', {

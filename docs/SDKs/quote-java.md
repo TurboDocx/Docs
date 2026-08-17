@@ -29,7 +29,7 @@ The official TurboDocx TurboQuote SDK for Java applications. Create and send sal
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product catalog, assemble quotes with line items, apply price book discounts, and send branded proposals to contacts — with optional TurboSign e-signature delivery via `sendQuoteWithDeliverable`. The client config takes no `senderEmail`; the quote's **"Prepared by"** sender comes from your org quote template (see the note below `createQuote`).
+TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product catalog, assemble quotes with line items, apply price book discounts, and send branded proposals to contacts — with optional TurboSign e-signature delivery via `sendQuoteWithDeliverable`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. The client config takes no `senderEmail`; the quote's **"Prepared by"** sender comes from your org quote template (see the note below `createQuote`).
 :::
 
 ## Installation
@@ -522,13 +522,18 @@ System.out.println("Document ID: " + resp.getDocumentId());
 Quote declineQuote(String id, DeclineQuoteRequest request)
 ```
 
-Mark a sent quote as declined.
+Mark a quote as declined — either a **sent** quote or a **draft** whose deal died before it was ever sent.
+
+`reason` (max 190 characters) is **required once a quote has been sent** — declining a sent quote without one returns `400 CANNOT_DECLINE_QUOTE`. A **draft is declined without a reason**: the reason is stored on the quote's linked signature document, and a draft has none, so any reason passed for a draft is accepted by the API and **not recorded**.
 
 ```java
 DeclineQuoteRequest req = new DeclineQuoteRequest();
 req.setReason("Budget constraints");
 
 Quote declined = tq.declineQuote(quoteId, req);
+
+// A draft is declined with no reason — one passed here would not be recorded.
+Quote closedOut = tq.declineQuote(draftQuoteId, new DeclineQuoteRequest());
 ```
 
 #### `voidQuote`
@@ -537,7 +542,7 @@ Quote declined = tq.declineQuote(quoteId, req);
 Quote voidQuote(String id, VoidQuoteRequest request)
 ```
 
-Void a quote (cannot be undone).
+Void a **sent** quote (cannot be undone); a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```java
 VoidQuoteRequest req = new VoidQuoteRequest();

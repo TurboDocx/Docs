@@ -28,7 +28,7 @@ The official TurboDocx TurboQuote SDK for Python applications. Build full CPQ (c
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote lifecycle — draft, send, accept/decline/void — with a product catalog, bundle groupings, price books, company/contact CRM, and customizable quote templates. Quotes can be sent with an attached Deliverable document for a branded proposal experience.
+TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote lifecycle — draft, send, accept/decline/void — with a product catalog, bundle groupings, price books, company/contact CRM, and customizable quote templates. A draft can also be marked declined directly, for a deal that dies before the quote is ever sent. Quotes can be sent with an attached Deliverable document for a branded proposal experience.
 :::
 
 ## Installation
@@ -396,13 +396,20 @@ result = await TurboQuote.send_quote_with_deliverable("quote-uuid", {
 
 #### `decline_quote`
 
+Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.
+
 ```python
 quote = await TurboQuote.decline_quote("quote-uuid", {
     "reason": "Customer selected a competitor",
 })
+
+# A draft is declined with no reason — one passed here would not be recorded.
+closed_out = await TurboQuote.decline_quote("draft-quote-uuid", {})
 ```
 
 #### `void_quote`
+
+Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```python
 quote = await TurboQuote.void_quote("quote-uuid", {
