@@ -29,7 +29,7 @@ The official TurboDocx TurboQuote SDK for PHP applications. Build full CPQ (conf
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote lifecycle — draft, send, accept/decline/void — with a product catalog, bundle groupings, price books, company/contact CRM, and customizable quote templates. Quotes can be sent with an attached Deliverable document for a branded proposal experience.
+TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote lifecycle — draft, send, accept/decline/void — with a product catalog, bundle groupings, price books, company/contact CRM, and customizable quote templates. A draft can also be marked declined directly, for a deal that dies before the quote is ever sent. Quotes can be sent with an attached Deliverable document for a branded proposal experience.
 :::
 
 ## Installation
@@ -357,6 +357,8 @@ $closedOut = TurboQuote::declineQuote('draft-quote-uuid', new DeclineQuoteReques
 ```
 
 #### voidQuote
+
+Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```php
 use TurboDocx\Types\Requests\Quote\VoidQuoteRequest;

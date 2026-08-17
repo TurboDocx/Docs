@@ -27,7 +27,7 @@ The official TurboDocx TurboQuote SDK for Go applications. Create quotes, attach
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. It lets your application generate professional, branded quote documents and send them to customers for acceptance or rejection, with full lifecycle management (draft, sent, accepted, declined, voided).
+TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. It lets your application generate professional, branded quote documents and send them to customers for acceptance or rejection, with full lifecycle management (draft, sent, accepted, declined, voided). A draft can also be marked declined directly, for a deal that dies before the quote is ever sent.
 
 For the dashboard UI, quote template configuration, and sending behavior, see the TurboQuote product documentation.
 :::
@@ -455,6 +455,8 @@ closedOut, err := qc.DeclineQuote(ctx, "draft-quote-uuid", &turbodocx.DeclineQuo
 ```
 
 #### VoidQuote
+
+Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```go
 quote, err := qc.VoidQuote(ctx, "quote-uuid", &turbodocx.VoidQuoteRequest{

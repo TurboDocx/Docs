@@ -289,7 +289,8 @@ Fetch a single quote. The returned object includes a `statusInfo` field with tra
 
 ```typescript
 const quote = await TurboQuote.getQuote('quote-uuid');
-console.log(quote.statusInfo?.canSend);  // true when status is 'draft'
+console.log(quote.statusInfo?.canSend);     // true when status is 'draft'
+console.log(quote.statusInfo?.canDecline);  // also true when status is 'draft'
 console.log(quote.preparedBy?.name);     // e.g. "Acme Billing Integration" or the template sender
 console.log(quote.preparedBy?.email);    // may be undefined for an API-created quote — render a placeholder
 ```
@@ -481,7 +482,7 @@ const closedOut = await TurboQuote.declineQuote('draft-quote-uuid', {});
 
 #### voidQuote
 
-Void a quote that should no longer be valid.
+Void a **sent** quote that should no longer be valid; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```typescript
 const quote = await TurboQuote.voidQuote('quote-uuid', {

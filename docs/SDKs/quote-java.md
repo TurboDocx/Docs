@@ -29,7 +29,7 @@ The official TurboDocx TurboQuote SDK for Java applications. Create and send sal
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product catalog, assemble quotes with line items, apply price book discounts, and send branded proposals to contacts — with optional TurboSign e-signature delivery via `sendQuoteWithDeliverable`. The client config takes no `senderEmail`; the quote's **"Prepared by"** sender comes from your org quote template (see the note below `createQuote`).
+TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product catalog, assemble quotes with line items, apply price book discounts, and send branded proposals to contacts — with optional TurboSign e-signature delivery via `sendQuoteWithDeliverable`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. The client config takes no `senderEmail`; the quote's **"Prepared by"** sender comes from your org quote template (see the note below `createQuote`).
 :::
 
 ## Installation
@@ -542,7 +542,7 @@ Quote closedOut = tq.declineQuote(draftQuoteId, new DeclineQuoteRequest());
 Quote voidQuote(String id, VoidQuoteRequest request)
 ```
 
-Void a quote (cannot be undone).
+Void a **sent** quote (cannot be undone); a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```java
 VoidQuoteRequest req = new VoidQuoteRequest();
