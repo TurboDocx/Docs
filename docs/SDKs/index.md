@@ -133,6 +133,15 @@ TurboSign also requires a `senderEmail` (used as the reply-to address for signat
 3. **API Keys Section**: Generate or copy your API access token
 4. **Organization ID**: Copy your organization ID from the same settings page
 
+:::note `apiKey` vs `accessToken`
+Some SDKs accept an `accessToken` as an alternative to `apiKey` (when both are set, `accessToken` wins). They are not interchangeable in practice:
+
+- **`apiKey`** — a long-lived organization credential from the settings page above. It does not expire with a browser session, so it is the right choice for servers, scheduled jobs, and every example in these guides.
+- **`accessToken`** — a short-lived OAuth token issued by TurboDocx's identity provider when a user signs in. It is tied to that user's session and must be refreshed when it expires.
+
+Use `apiKey` unless your integration specifically has to act as a signed-in user.
+:::
+
 ![TurboSign API Key](/img/turbosign/api/api-key.png)
 ![TurboSign Organization ID](/img/turbosign/api/org-id.png)
 

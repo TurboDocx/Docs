@@ -40,18 +40,29 @@ https://api.turbodocx.com
 
 ## Authentication
 
-TurboDocx is working on it's API Key flows, and for the time being, we recommend grabbing the access token used from your user's accounts to leverage our APIs. You can find an example on how to get your access token in the `Blueprint` folder.
+Every request is authenticated with a bearer credential in the `Authorization` header. There are two kinds, and for server-to-server integrations you want the first one.
 
-To use the Access Token, use the following under the `Authorization Header`
+**API key (recommended).** A long-lived key you generate in your organization settings. It belongs to the organization rather than to a browser session, so it does not expire when someone logs out and it is the credential every TurboDocx SDK uses by default. See [Get Your Credentials](/docs/SDKs#1-get-your-credentials).
+
+``` typescript
+Authorization: Bearer YOUR_API_KEY
+
+ ```
+
+**User access token (alternative).** A short-lived OAuth token issued by TurboDocx's identity provider when a user signs in. It is scoped to that user's session, so it expires and must be refreshed — which makes it a poor fit for unattended backend jobs. Prefer an API key unless you are acting on behalf of a signed-in user.
 
 ``` typescript
 Authorization: Bearer YOUR_ACCESS_TOKEN
 
  ```
 
+:::tip Which one should I use?
+If your code runs on a server without a person present, use an **API key**. Reach for a user access token only when the request genuinely has to act as a specific signed-in user.
+:::
+
 ### Authentication error response
 
-If an Access Token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.
+If the credential is missing, malformed, expired, or invalid, you will receive an HTTP 401 Unauthorized response code.
 
 ### **Need some help?**
 
