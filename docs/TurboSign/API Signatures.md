@@ -999,6 +999,7 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | defaultValue    | String  | No       | Pre-filled value for the field                                 |
 | isReadonly      | Boolean | No       | Makes field non-editable (for prefilled values)                |
 | backgroundColor | String  | No       | Custom background color (hex or rgba)                          |
+| metadata        | Object  | No       | Optional field metadata. Carries `fieldKey` (on a controlling checkbox) and/or a `conditional` rule (on a dependent field). See [Conditional (IF/THEN) Fields](#conditional-if-then-fields). |
 
 #### Template-based Properties
 
@@ -1022,6 +1023,116 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | height     | Number | Yes      | Field height in pixels                                             |
 | pageWidth  | Number | No       | Total page width in pixels (optional, for responsive positioning)  |
 | pageHeight | Number | No       | Total page height in pixels (optional, for responsive positioning) |
+
+### Conditional (IF/THEN) Fields {#conditional-if-then-fields}
+
+Any field can carry an optional `metadata` object. It is used to build **conditional
+(IF/THEN) relationships** between fields: a **controlling checkbox** decides whether one or
+more **dependent fields** are shown or unlocked. This works with both the
+**prepare-for-signing** and **prepare-for-review** single-step routes (and with the
+[Bulk API](/docs/TurboSign/API%20Bulk%20Signatures), which uses the same field format).
+
+The relationship has two halves:
+
+1. **The controlling checkbox** gets a stable identifier via `metadata.fieldKey`. It must be
+   a field of `type: "checkbox"`.
+2. **Each dependent field** points back at that checkbox with a `metadata.conditional` rule
+   whose `controllingFieldKey` equals the checkbox's `fieldKey`.
+
+#### metadata Object
+
+| Property      | Type   | Required | Description                                                                                   |
+| ------------- | ------ | -------- | --------------------------------------------------------------------------------------------- |
+| `fieldKey`    | String | No       | Stable identifier for a **controlling checkbox**. Referenced by dependent fields' `controllingFieldKey`. Set this on the checkbox (`type: "checkbox"`). |
+| `conditional` | Object | No       | Rule placed on a **dependent field** that makes its visibility/editability depend on a controlling checkbox. See below. |
+
+#### metadata.conditional Object
+
+| Property              | Type   | Required | Description                                                                                             |
+| --------------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------- |
+| `controllingFieldKey` | String | **Yes**  | The `metadata.fieldKey` of the controlling checkbox this field depends on. Must be non-empty.           |
+| `operator`            | String | **Yes**  | Condition to evaluate against the checkbox: `"is_checked"` or `"is_not_checked"`.                       |
+| `action`              | String | **Yes**  | What happens to this field when the condition is met: `"show"` or `"unlock"`.                           |
+
+#### show vs. unlock
+
+The `action` controls the dependent field's starting state and what the condition changes:
+
+- **`show`** — the dependent field is **hidden** until the condition is met. When the checkbox
+  matches the `operator`, the field appears.
+- **`unlock`** — the dependent field is **visible but read-only** until the condition is met.
+  When the checkbox matches the `operator`, the field becomes editable.
+
+#### Worked Example
+
+A recipient checks "Request changes" and a text box appears asking them to explain. The
+checkbox is the controller (`fieldKey: "request_changes"`); the text field shows only when the
+box is checked.
+
+```javascript
+const fields = JSON.stringify([
+  // Controlling checkbox — gets a stable fieldKey
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "checkbox",
+    page: 1,
+    x: 100,
+    y: 400,
+    width: 20,
+    height: 20,
+    required: false,
+    metadata: {
+      fieldKey: "request_changes",
+    },
+  },
+  // Dependent text field — hidden until the checkbox above is checked
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "text",
+    page: 1,
+    x: 130,
+    y: 400,
+    width: 300,
+    height: 60,
+    required: false,
+    defaultValue: "",
+    metadata: {
+      conditional: {
+        controllingFieldKey: "request_changes",
+        operator: "is_checked",
+        action: "show",
+      },
+    },
+  },
+]);
+formData.append("fields", fields);
+```
+
+To instead keep the field visible but locked until the box is checked, change the dependent
+field's `action` to `"unlock"`. To reveal a field when a box is **cleared** (for example, an
+"I do not consent — explain why" note), use `operator: "is_not_checked"`.
+
+#### Validation and Fail-Open Behavior
+
+The API **validates the shape** of every `conditional` rule. A malformed rule is rejected with
+HTTP **400** and the `type` **`InvalidConditionalRule`**. A rule is malformed when:
+
+- `operator` is anything other than `"is_checked"` or `"is_not_checked"`, or
+- `action` is anything other than `"show"` or `"unlock"`, or
+- `controllingFieldKey` is missing or empty.
+
+```json
+{
+  "message": "Field 2: metadata.conditional.operator must be one of: is_checked, is_not_checked",
+  "type": "InvalidConditionalRule"
+}
+```
+
+A **well-formed** rule whose `controllingFieldKey` does not match any checkbox's `fieldKey` in
+the same request does **not** error — it **fails open**. The dependent field stays visible and
+editable as if it had no rule, so a typo in `controllingFieldKey` silently disables the
+condition rather than blocking the send. Double-check that the `controllingFieldKey` on each
+dependent field exactly matches the `fieldKey` of an existing checkbox.
 
 ### Field Type Special Behaviors
 

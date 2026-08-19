@@ -39,7 +39,11 @@ app.MapPost("/prepare-for-signing", async (IFormFile file, IHttpClientFactory ht
         formData.Add(new StringContent(recipients), "recipients");
 
         // Add fields (as JSON string) - Coordinate-based
-        var fields = JsonSerializer.Serialize(new[]
+        // A controlling checkbox carries a stable metadata.fieldKey; a dependent field
+        // references it with metadata.conditional.controllingFieldKey. Here, checking
+        // "Request changes" reveals a text box asking the signer to explain.
+        // (object[] because the field objects have different shapes.)
+        var fields = JsonSerializer.Serialize(new object[]
         {
             new
             {
@@ -62,6 +66,44 @@ app.MapPost("/prepare-for-signing", async (IFormFile file, IHttpClientFactory ht
                 width = 150,
                 height = 30,
                 required = true
+            },
+            // Controlling checkbox — carries a stable fieldKey
+            new
+            {
+                recipientEmail = "john.smith@company.com",
+                type = "checkbox",
+                page = 1,
+                x = 100,
+                y = 400,
+                width = 20,
+                height = 20,
+                required = false,
+                metadata = new
+                {
+                    fieldKey = "request_changes"
+                }
+            },
+            // Dependent text field — hidden until the checkbox above is checked
+            new
+            {
+                recipientEmail = "john.smith@company.com",
+                type = "text",
+                page = 1,
+                x = 130,
+                y = 400,
+                width = 300,
+                height = 60,
+                required = false,
+                defaultValue = "",
+                metadata = new
+                {
+                    conditional = new
+                    {
+                        controllingFieldKey = "request_changes", // = the checkbox's fieldKey
+                        @operator = "is_checked",                // serializes to "operator": "is_checked" | "is_not_checked"
+                        action = "show"                          // "show" (hidden until met) | "unlock" (locked until met)
+                    }
+                }
             }
         });
         formData.Add(new StringContent(fields), "fields");

@@ -22,6 +22,9 @@ def prepare_document_for_signing
   ]
 
   # Prepare fields - Coordinate-based
+  # A controlling checkbox carries a stable metadata.fieldKey; a dependent field
+  # references it with metadata.conditional.controllingFieldKey. Here, checking
+  # "Request changes" reveals a text box asking the signer to explain.
   fields = [
     {
       recipientEmail: "john.smith@company.com",
@@ -52,6 +55,39 @@ def prepare_document_for_signing
       width: 200,
       height: 80,
       required: true
+    },
+    # Controlling checkbox — carries a stable fieldKey
+    {
+      recipientEmail: "john.smith@company.com",
+      type: "checkbox",
+      page: 1,
+      x: 100,
+      y: 400,
+      width: 20,
+      height: 20,
+      required: false,
+      metadata: {
+        fieldKey: "request_changes"
+      }
+    },
+    # Dependent text field — hidden until the checkbox above is checked
+    {
+      recipientEmail: "john.smith@company.com",
+      type: "text",
+      page: 1,
+      x: 130,
+      y: 400,
+      width: 300,
+      height: 60,
+      required: false,
+      defaultValue: "",
+      metadata: {
+        conditional: {
+          controllingFieldKey: "request_changes", # = the checkbox's fieldKey
+          operator: "is_checked",                 # "is_checked" | "is_not_checked"
+          action: "show"                          # "show" (hidden until met) | "unlock" (locked until met)
+        }
+      }
     }
   ]
 
