@@ -32,6 +32,9 @@ public class TurboSignPrepareForSigning {
         String recipientsJson = objectMapper.writeValueAsString(recipients);
 
         // Prepare fields - Coordinate-based
+        // A controlling checkbox carries a stable metadata.fieldKey; a dependent field
+        // references it with metadata.conditional.controllingFieldKey. Here, checking
+        // "Request changes" reveals a text box asking the signer to explain.
         List<Map<String, Object>> fields = new ArrayList<>();
 
         Map<String, Object> field1 = new HashMap<>();
@@ -66,6 +69,41 @@ public class TurboSignPrepareForSigning {
         field3.put("height", 80);
         field3.put("required", true);
         fields.add(field3);
+
+        // Controlling checkbox — carries a stable fieldKey
+        Map<String, Object> checkbox = new HashMap<>();
+        checkbox.put("recipientEmail", "john.smith@company.com");
+        checkbox.put("type", "checkbox");
+        checkbox.put("page", 1);
+        checkbox.put("x", 100);
+        checkbox.put("y", 400);
+        checkbox.put("width", 20);
+        checkbox.put("height", 20);
+        checkbox.put("required", false);
+        Map<String, Object> checkboxMetadata = new HashMap<>();
+        checkboxMetadata.put("fieldKey", "request_changes");
+        checkbox.put("metadata", checkboxMetadata);
+        fields.add(checkbox);
+
+        // Dependent text field — hidden until the checkbox above is checked
+        Map<String, Object> dependent = new HashMap<>();
+        dependent.put("recipientEmail", "john.smith@company.com");
+        dependent.put("type", "text");
+        dependent.put("page", 1);
+        dependent.put("x", 130);
+        dependent.put("y", 400);
+        dependent.put("width", 300);
+        dependent.put("height", 60);
+        dependent.put("required", false);
+        dependent.put("defaultValue", "");
+        Map<String, Object> conditional = new HashMap<>();
+        conditional.put("controllingFieldKey", "request_changes"); // = the checkbox's fieldKey
+        conditional.put("operator", "is_checked");                 // "is_checked" | "is_not_checked"
+        conditional.put("action", "show");                         // "show" (hidden until met) | "unlock" (locked until met)
+        Map<String, Object> dependentMetadata = new HashMap<>();
+        dependentMetadata.put("conditional", conditional);
+        dependent.put("metadata", dependentMetadata);
+        fields.add(dependent);
 
         String fieldsJson = objectMapper.writeValueAsString(fields);
 

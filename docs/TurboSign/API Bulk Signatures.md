@@ -271,6 +271,15 @@ The `documents` parameter must be a JSON string containing an array of document 
 All field types from the single-step API are supported: `signature`, `initial`, `date`, `full_name`, `first_name`, `last_name`, `title`, `company`, `email`, `text`, `checkbox`. See the [single-step API documentation](/docs/TurboSign/API%20Signatures) for details.
 :::
 
+:::note Conditional (IF/THEN) fields are supported
+Bulk documents use the same field format as the single-step API, so **conditional fields work in
+bulk batches too**. Add a `metadata.fieldKey` to a controlling checkbox and a
+`metadata.conditional` rule (`controllingFieldKey`, `operator`, `action`) to each dependent field
+within the same job's `fields` array. See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields) for the full contract, the
+`show` vs. `unlock` behavior, and the `InvalidConditionalRule` / fail-open rules.
+:::
+
 ### Response (Success)
 
 ```json

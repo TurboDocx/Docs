@@ -557,8 +557,53 @@ The `Type` field accepts the following string values:
 | `Required`        | `bool`            | No       | Make field required                         |
 | `BackgroundColor` | `string`          | No       | Background color                            |
 | `Template`        | `*TemplateAnchor` | No       | Template anchor configuration               |
+| `Metadata`        | `*FieldMetadata`  | No       | Conditional (IF/THEN) metadata — see below  |
 
 \*Required when not using template anchors
+
+#### Metadata Configuration (Conditional Fields)
+
+The optional `Metadata` builds IF/THEN relationships between fields. Put a `FieldKey` on a
+controlling `checkbox`, then point each dependent field's `Conditional.ControllingFieldKey` back
+at it.
+
+| Property                          | Type              | Required | Description                                                    |
+| --------------------------------- | ----------------- | -------- | ------------------------------------------------------------- |
+| `FieldKey`                        | `string`          | No       | Stable id on a **controlling checkbox** (`Type: "checkbox"`). |
+| `Conditional`                     | `*FieldConditional`| No      | Rule on a **dependent field** (see below).                    |
+| `Conditional.ControllingFieldKey` | `string`          | Yes      | The controlling checkbox's `FieldKey`. Must be non-empty.     |
+| `Conditional.Operator`            | `string`          | Yes      | `"is_checked"` or `"is_not_checked"`.                         |
+| `Conditional.Action`              | `string`          | Yes      | `"show"` (hidden until met) or `"unlock"` (locked until met). |
+
+```go
+// Checkbox reveals a text field when checked
+fields := []turbodocx.Field{
+    {
+        Type:           "checkbox",
+        RecipientEmail: "reviewer@company.com",
+        Page:           1, X: 100, Y: 400, Width: 20, Height: 20,
+        Metadata: &turbodocx.FieldMetadata{
+            FieldKey: "request_changes",
+        },
+    },
+    {
+        Type:           "text",
+        RecipientEmail: "reviewer@company.com",
+        Page:           1, X: 130, Y: 400, Width: 300, Height: 60,
+        Metadata: &turbodocx.FieldMetadata{
+            Conditional: &turbodocx.FieldConditional{
+                ControllingFieldKey: "request_changes",
+                Operator:            "is_checked",
+                Action:              "show",
+            },
+        },
+    },
+}
+```
+
+A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
+`ControllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
 
 #### Template Configuration
 

@@ -1199,8 +1199,51 @@ Field configuration supporting both coordinate-based and template-based position
 | `required`        | `boolean`            | No       | Whether field is required                           |
 | `backgroundColor` | `string`             | No       | Background color (hex, rgb, or named)               |
 | `template`        | `object`             | No       | Template anchor configuration                       |
+| `metadata`        | `object`             | No       | Conditional (IF/THEN) metadata — see below          |
 
 \*Required when not using template anchors
+
+**Metadata Configuration (Conditional Fields):**
+
+The optional `metadata` object builds IF/THEN relationships between fields. Put a `fieldKey` on a
+controlling `checkbox`, then point each dependent field's `conditional.controllingFieldKey` back
+at it.
+
+| Property                            | Type     | Required | Description                                                       |
+| ----------------------------------- | -------- | -------- | ---------------------------------------------------------------- |
+| `fieldKey`                          | `string` | No       | Stable id on a **controlling checkbox** (`type: "checkbox"`).    |
+| `conditional`                       | `object` | No       | Rule on a **dependent field** (see below).                       |
+| `conditional.controllingFieldKey`   | `string` | Yes      | The controlling checkbox's `fieldKey`. Must be non-empty.        |
+| `conditional.operator`              | `string` | Yes      | `"is_checked"` \| `"is_not_checked"`.                            |
+| `conditional.action`                | `string` | Yes      | `"show"` (hidden until met) \| `"unlock"` (locked until met).    |
+
+```typescript
+// Checkbox reveals a text field when checked
+const fields: Field[] = [
+  {
+    type: "checkbox",
+    recipientEmail: "reviewer@company.com",
+    page: 1, x: 100, y: 400, width: 20, height: 20,
+    metadata: { fieldKey: "request_changes" },
+  },
+  {
+    type: "text",
+    recipientEmail: "reviewer@company.com",
+    page: 1, x: 130, y: 400, width: 300, height: 60,
+    metadata: {
+      conditional: {
+        controllingFieldKey: "request_changes",
+        operator: "is_checked",
+        action: "show",
+      },
+    },
+  },
+];
+```
+
+A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
+`controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
 
 **Template Configuration:**
 

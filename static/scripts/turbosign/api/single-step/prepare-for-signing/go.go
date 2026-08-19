@@ -24,14 +24,32 @@ type Recipient struct {
 }
 
 type Field struct {
-	RecipientEmail string `json:"recipientEmail"`
-	Type           string `json:"type"`
-	Page           int    `json:"page,omitempty"`
-	X              int    `json:"x,omitempty"`
-	Y              int    `json:"y,omitempty"`
-	Width          int    `json:"width,omitempty"`
-	Height         int    `json:"height,omitempty"`
-	Required       bool   `json:"required"`
+	RecipientEmail string         `json:"recipientEmail"`
+	Type           string         `json:"type"`
+	Page           int            `json:"page,omitempty"`
+	X              int            `json:"x,omitempty"`
+	Y              int            `json:"y,omitempty"`
+	Width          int            `json:"width,omitempty"`
+	Height         int            `json:"height,omitempty"`
+	Required       bool           `json:"required"`
+	DefaultValue   string         `json:"defaultValue,omitempty"`
+	Metadata       *FieldMetadata `json:"metadata,omitempty"`
+}
+
+// FieldMetadata carries optional conditional (IF/THEN) logic: a fieldKey on a
+// controlling checkbox, or a conditional rule on a dependent field.
+type FieldMetadata struct {
+	FieldKey    string            `json:"fieldKey,omitempty"`
+	Conditional *FieldConditional `json:"conditional,omitempty"`
+}
+
+// FieldConditional is the rule on a dependent field. controllingFieldKey must equal
+// a controlling checkbox's metadata.fieldKey; operator is "is_checked" or
+// "is_not_checked"; action is "show" or "unlock".
+type FieldConditional struct {
+	ControllingFieldKey string `json:"controllingFieldKey"`
+	Operator            string `json:"operator"`
+	Action              string `json:"action"`
 }
 
 type Response struct {
@@ -63,6 +81,9 @@ func prepareDocumentForSigning() error {
 	}
 
 	// Prepare fields - Coordinate-based
+	// A controlling checkbox carries a stable metadata.fieldKey; a dependent field
+	// references it with metadata.conditional.controllingFieldKey. Here, checking
+	// "Request changes" reveals a text box asking the signer to explain.
 	fields := []Field{
 		{
 			RecipientEmail: "john.smith@company.com",
@@ -93,6 +114,39 @@ func prepareDocumentForSigning() error {
 			Width:          200,
 			Height:         80,
 			Required:       true,
+		},
+		// Controlling checkbox — carries a stable fieldKey
+		{
+			RecipientEmail: "john.smith@company.com",
+			Type:           "checkbox",
+			Page:           1,
+			X:              100,
+			Y:              400,
+			Width:          20,
+			Height:         20,
+			Required:       false,
+			Metadata: &FieldMetadata{
+				FieldKey: "request_changes",
+			},
+		},
+		// Dependent text field — hidden until the checkbox above is checked
+		{
+			RecipientEmail: "john.smith@company.com",
+			Type:           "text",
+			Page:           1,
+			X:              130,
+			Y:              400,
+			Width:          300,
+			Height:         60,
+			Required:       false,
+			DefaultValue:   "",
+			Metadata: &FieldMetadata{
+				Conditional: &FieldConditional{
+					ControllingFieldKey: "request_changes", // = the checkbox's fieldKey
+					Operator:            "is_checked",       // "is_checked" | "is_not_checked"
+					Action:              "show",             // "show" (hidden until met) | "unlock" (locked until met)
+				},
+			},
 		},
 	}
 
