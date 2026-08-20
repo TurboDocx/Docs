@@ -156,6 +156,8 @@ result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureReque
         {
             Type:           "date",
             RecipientEmail: "alice@example.com",
+            // Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+            DefaultValue:   "12/31/2026",
             Template: &turbodocx.TemplateAnchor{
                 Anchor:    "{DATE_ALICE}",
                 Placement: "replace",
@@ -551,7 +553,7 @@ The `Type` field accepts the following string values:
 | `Y`               | `int`             | No\*     | Y coordinate in pixels                      |
 | `Width`           | `int`             | No\*     | Field width in pixels                       |
 | `Height`          | `int`             | No\*     | Field height in pixels                      |
-| `DefaultValue`    | `string`          | No       | Pre-filled value                            |
+| `DefaultValue`    | `string`          | No       | Pre-filled value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `IsMultiline`     | `bool`            | No       | Enable multiline for text fields            |
 | `IsReadonly`      | `bool`            | No       | Make field read-only                        |
 | `Required`        | `bool`            | No       | Make field required                         |

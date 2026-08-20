@@ -150,6 +150,8 @@ result = TurboDocxSdk::TurboSign.send_signature(
     {
       type:           "date",
       recipientEmail: "alice@example.com",
+      # Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+      defaultValue:   "12/31/2026",
       template: {
         anchor:    "{DATE_ALICE}",
         placement: "replace",
@@ -570,7 +572,7 @@ Field configuration supporting both coordinate-based and template-based position
 | `y`               | `Integer` | No\*     | Y coordinate in pixels                              |
 | `width`           | `Integer` | No\*     | Field width in pixels                               |
 | `height`          | `Integer` | No\*     | Field height in pixels                              |
-| `defaultValue`    | `String`  | No       | Default value (for checkbox: `"true"` or `"false"`) |
+| `defaultValue`    | `String`  | No       | Default value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `isMultiline`     | `Boolean` | No       | Enable multiline text                               |
 | `isReadonly`      | `Boolean` | No       | Make field read-only (pre-filled)                   |
 | `required`        | `Boolean` | No       | Whether field is required                           |

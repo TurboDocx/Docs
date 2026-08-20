@@ -182,7 +182,9 @@ public class Main {
                 .fields(Arrays.asList(
                     // Alice's signature
                     new Field("signature", 1, 100, 650, 200, 50, "alice@example.com"),
-                    new Field("date", 1, 320, 650, 100, 30, "alice@example.com"),
+                    // defaultValue pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+                    new Field("date", 1, 320, 650, 100, 30, "alice@example.com",
+                        "12/31/2026", null, null, null, null, null, null),
                     // Bob's signature
                     new Field("signature", 1, 100, 720, 200, 50, "bob@example.com"),
                     new Field("date", 1, 320, 720, 100, 30, "bob@example.com")
@@ -608,7 +610,7 @@ The coordinate-based constructor takes positional arguments in this order: `new 
 | `y`               | `Integer`        | No\*     | Y coordinate in pixels                      |
 | `width`           | `Integer`        | No\*     | Field width in pixels                       |
 | `height`          | `Integer`        | No\*     | Field height in pixels                      |
-| `defaultValue`    | `String`         | No       | Pre-filled value                            |
+| `defaultValue`    | `String`         | No       | Pre-filled value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `isMultiline`     | `Boolean`        | No       | Enable multiline for text fields            |
 | `isReadonly`      | `Boolean`        | No       | Make field read-only                        |
 | `required`        | `Boolean`        | No       | Make field required                         |
