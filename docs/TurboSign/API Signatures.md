@@ -1148,7 +1148,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - Format: MM/DD/YYYY (US) or DD/MM/YYYY (configurable)
 - Fills automatically with the date the recipient signs
 - To pin a specific date instead, set `defaultValue` to that date in `MM/DD/YYYY` format (e.g. `"12/31/2026"`). Omit `defaultValue` (or send `""`) to keep the signing-date behavior
-- `defaultValue` must be a real date string — there is no `"today"` keyword
+- `defaultValue` must be a **real calendar date** in `MM/DD/YYYY` — a non-existent date such as `"02/31/2026"` (or any malformed value) is rejected with `400 InvalidDateValue`. There is no `"today"` keyword
 
 **full_name, first_name, last_name, email**
 
