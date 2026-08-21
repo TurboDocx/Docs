@@ -156,6 +156,8 @@ TurboSign.configure({
         width: 100,
         height: 30,
         recipientEmail: "alice@example.com",
+        // Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+        defaultValue: "12/31/2026",
       },
       // Bob's signature
       {
@@ -1193,7 +1195,7 @@ Field configuration supporting both coordinate-based and template-based position
 | `y`               | `number`             | No\*     | Y coordinate in pixels                              |
 | `width`           | `number`             | No\*     | Field width in pixels                               |
 | `height`          | `number`             | No\*     | Field height in pixels                              |
-| `defaultValue`    | `string`             | No       | Default value (for checkbox: `"true"` or `"false"`) |
+| `defaultValue`    | `string`             | No       | Default value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `isMultiline`     | `boolean`            | No       | Enable multiline text                               |
 | `isReadonly`      | `boolean`            | No       | Make field read-only (pre-filled)                   |
 | `required`        | `boolean`            | No       | Whether field is required                           |

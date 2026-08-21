@@ -157,6 +157,8 @@ async def send_with_template():
             {
                 "type": "date",
                 "recipientEmail": "alice@example.com",
+                # Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+                "defaultValue": "12/31/2026",
                 "template": {
                     "anchor": "{DATE_ALICE}",
                     "placement": "replace",
@@ -616,7 +618,7 @@ Field configuration supporting both coordinate-based and template-based position
 | `y`               | `int`  | No\*     | Y coordinate in pixels                              |
 | `width`           | `int`  | No\*     | Field width in pixels                               |
 | `height`          | `int`  | No\*     | Field height in pixels                              |
-| `defaultValue`    | `str`  | No       | Default value (for checkbox: `"true"` or `"false"`) |
+| `defaultValue`    | `str`  | No       | Default value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `isMultiline`     | `bool` | No       | Enable multiline text                               |
 | `isReadonly`      | `bool` | No       | Make field read-only (pre-filled)                   |
 | `required`        | `bool` | No       | Whether field is required                           |

@@ -145,7 +145,8 @@ $result = TurboSign::sendSignature(
                 x: 320,
                 y: 650,
                 width: 100,
-                height: 30
+                height: 30,
+                defaultValue: '12/31/2026' // Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
             ),
             // Bob's signature
             new Field(
@@ -895,7 +896,7 @@ final class Field {
         public ?int $width = null,
         public ?int $height = null,
         public ?TemplateConfig $template = null,
-        public ?string $defaultValue = null,
+        public ?string $defaultValue = null,           // checkbox: 'true'/'false'; date: a fixed MM/DD/YYYY (omit to auto-fill the signing date)
         public bool $isMultiline = false,
         public bool $isReadonly = false,
         public bool $required = false,
