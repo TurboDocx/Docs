@@ -996,7 +996,7 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | recipientEmail  | String  | Yes      | Email address of recipient (matches email in recipients array) |
 | type            | String  | Yes      | Field type (see table above)                                   |
 | required        | Boolean | No       | Whether field must be completed (default: true)                |
-| defaultValue    | String  | No       | Pre-filled value for the field                                 |
+| defaultValue    | String  | No       | Pre-filled value for the field (max 600 characters)            |
 | isReadonly      | Boolean | No       | Makes field non-editable (for prefilled values)                |
 | backgroundColor | String  | No       | Custom background color (hex or rgba)                          |
 | metadata        | Object  | No       | Optional field metadata. Carries `fieldKey` (on a controlling checkbox) and/or a `conditional` rule (on a dependent field). See [Conditional (IF/THEN) Fields](#conditional-if-then-fields). |
@@ -1141,6 +1141,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - Draws a signature pad for user input
 - Can be text-based or drawn
 - Cryptographically signed and hashed for legal validity
+- Cannot carry a `defaultValue` — sending one is rejected
 
 **date**
 
@@ -1149,6 +1150,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - Fills automatically with the date the recipient signs
 - To pin a specific date instead, set `defaultValue` to that date in `MM/DD/YYYY` format (e.g. `"12/31/2026"`). Omit `defaultValue` (or send `""`) to keep the signing-date behavior
 - `defaultValue` must be a **real calendar date** in `MM/DD/YYYY` — a non-existent date such as `"02/31/2026"` (or any malformed value) is rejected with `400 InvalidDateValue`. There is no `"today"` keyword
+- A date field cannot be `isReadonly` — a pinned date still shows to the signer, it is not locked
 
 **full_name, first_name, last_name, email**
 
