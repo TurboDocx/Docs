@@ -482,14 +482,67 @@ $result = TurboSign::sendSignature(
 echo "Document ID: {$result->documentId}\n";
 ```
 
+### Reminders and expiration
+
+`sendSignature` can also schedule automatic reminder emails and an expiration deadline. All eight
+schedule fields are optional and **both features are off by default**, so omitting them preserves
+the original send behavior. The resolved schedule is **frozen onto the document when it is sent** —
+changing your org defaults later never alters a document already out for signature.
+
+```php
+use TurboDocx\Types\Requests\SendSignatureRequest;
+
+$result = TurboSign::sendSignature(
+    new SendSignatureRequest(
+        // ...recipients, fields, fileLink, documentName
+        remindersEnabled: true,
+        reminderDelay: ['value' => 3, 'unit' => 'days'],     // time to the FIRST reminder
+        reminderInterval: ['value' => 3, 'unit' => 'days'],  // gap between later reminders
+        maxReminders: 5,                                      // -1 unlimited, 0 none, max 50 (default 5)
+        expirationEnabled: true,
+        expireAfter: ['value' => 30, 'unit' => 'days'],      // how long the document stays signable
+        expirationWarning: ['value' => 3, 'unit' => 'days'], // 0 = never warn
+        expirationWarningInterval: ['value' => 1, 'unit' => 'days']
+    )
+);
+```
+
+Durations are `['value' => N, 'unit' => 'hours'|'days']` objects. `value` is a whole number from
+**1** up to a maximum of **999 days (23976 hours)**; `expirationWarning` also accepts `0` to disable
+warnings. `maxReminders` accepts `-1` (unlimited), `0` (none), or any value up to `50`. The resulting
+deadline is readable afterwards via `getStatus()->expiresAt`.
+
+### Send a reminder
+
+Send a standalone reminder to whoever's turn it is to sign
+(`POST /turbosign/documents/{documentId}/send-reminder`). It is independent of the automatic
+cadence — it works even when reminders are disabled or the per-signer cap is already spent, does
+**not** consume that cap, and only emails signers at the *current* signing order. Pass `null` (or
+omit the argument) to remind everyone eligible; do not pass an empty array, which the API rejects.
+
+```php
+// Remind everyone whose turn it is to sign.
+$result = TurboSign::sendReminder('document-uuid');
+
+foreach ($result['results'] as $r) {
+    // 'sent', 'skipped_wrong_order', 'skipped_completed', ...
+    echo "{$r['recipientId']}: {$r['status']}\n";
+}
+
+// Or limit to specific recipients — all-or-nothing: every id must be a current-order pending signer.
+TurboSign::sendReminder('document-uuid', ['recipient-uuid-1', 'recipient-uuid-2']);
+```
+
 ### Get status
 
-Retrieve the current status of a document.
+Retrieve the current status of a document. When expiration is enabled, the response also carries the signing-window deadline as `expiresAt`; once that instant passes the document reaches the terminal `expired` status. The same `expiresAt` is available on the document returned by `getRecipients()`.
 
 ```php
 $status = TurboSign::getStatus('document-uuid');
 
-echo "Document Status: {$status->status}\n";  // 'pending', 'completed', 'voided'
+echo "Document Status: {$status->status}\n";  // 'under_review', 'completed', 'voided', 'expired'
+// expiresAt is the signing-window deadline (ISO 8601), or null when expiration is off.
+echo "Expires: " . ($status->expiresAt ?? 'never') . "\n";
 ```
 
 ### Download document

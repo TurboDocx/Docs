@@ -227,7 +227,7 @@ User-Agent: TurboDocx API Client
 | remindersEnabled    | Boolean        | No            | Send reminder emails to signers who haven't signed |
 | reminderDelay       | String (JSON)  | No            | Time to the FIRST reminder, `{"value":3,"unit":"days"}` |
 | reminderInterval    | String (JSON)  | No            | Gap between later reminders                |
-| maxReminders        | Number         | No            | Cap per signer. `-1` unlimited, `0` none   |
+| maxReminders        | Number         | No            | Cap per signer, max `50`. `-1` unlimited, `0` none |
 | expirationEnabled   | Boolean        | No            | Close the signing window after `expireAfter` |
 | expireAfter         | String (JSON)  | No            | How long the document stays signable       |
 | expirationWarning   | String (JSON)  | No            | How far before expiry warnings start. `0` = never warn |
@@ -252,8 +252,8 @@ reminderDelay={"value":3,"unit":"days"}
 expireAfter={"value":30,"unit":"hours"}
 ```
 
-`unit` is `"hours"` or `"days"`. `value` is a whole number, minimum 1 — except
-`expirationWarning`, where `0` means "never send a warning".
+`unit` is `"hours"` or `"days"`. `value` is a whole number, minimum 1 and at most
+**999 days (23976 hours)** — except `expirationWarning`, where `0` means "never send a warning".
 
 See [Reminders & Expiration](#reminders--expiration) for the full behaviour.
 :::
@@ -465,7 +465,7 @@ The request format is **identical** to prepare-for-review. See the "Endpoint 1: 
 />
 
 :::tip Need to resend emails?
-If a recipient hasn't received or has lost their signing email, you can resend it using the [Resend Email endpoint](#endpoint-5-resend-email). You'll need the `recipientIds` from the response of this endpoint.
+If a recipient hasn't received or has lost their signing email, you can resend it using the [Resend Email endpoint](#endpoint-6-resend-email). You'll need the `recipientIds` from the response of this endpoint.
 :::
 
 ## Endpoint 3: Download Signed Document
@@ -774,13 +774,13 @@ To recover, retry the request without the listed IDs, or wait until those recipi
 - Each resend creates a `document_resent` entry in the [audit trail](#endpoint-4-get-audit-trail) for tracking
 - The `recipientIds` array must contain at least one ID and all IDs must be unique UUIDs
 
-## Endpoint 6: Send Reminder
+## Endpoint 7: Send Reminder
 
 Send a reminder email to a document's outstanding signers.
 
 This is a **standalone nudge**, deliberately decoupled from the automatic reminder schedule: it ignores the configured cadence, works even when reminders are disabled or the per-signer cap is already spent, and does **not** consume that cap. Use it when someone asks you to "chase them again" outside the normal rhythm.
 
-Distinct from [Resend Email](#endpoint-5-resend-email): **resend** re-sends the original invitation; **remind** sends the reminder copy.
+Distinct from [Resend Email](#endpoint-6-resend-email): **resend** re-sends the original invitation; **remind** sends the reminder copy.
 
 ### Endpoint
 
@@ -904,7 +904,7 @@ Two independent, opt-in features you can configure organization-wide in **E-Sign
 | `remindersEnabled` | `false` | Send reminder emails at all |
 | `reminderDelay` | 3 days | Time to the **first** reminder, measured from that signer's invitation |
 | `reminderInterval` | 3 days | Gap between **subsequent** reminders |
-| `maxReminders` | 5 | Cap per signer. `-1` unlimited, `0` none. **Never caps expiry warnings** |
+| `maxReminders` | 5 | Cap per signer, max `50`. `-1` unlimited, `0` none. **Never caps expiry warnings** |
 | `expirationEnabled` | `false` | Expire the document at all |
 | `expireAfter` | 120 days | How long the document stays signable, counted from **sending** |
 | `expirationWarning` | 3 days | How far **before** expiry warnings start. `0` = never warn |

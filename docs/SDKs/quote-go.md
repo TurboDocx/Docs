@@ -441,6 +441,27 @@ resp, err := qc.SendQuoteWithDeliverable(ctx, "quote-uuid", &turbodocx.SendQuote
 // resp.DocumentID string — TurboSign document ID for tracking
 ```
 
+#### Reminders and expiration on send
+
+Both `SendQuoteRequest` and `SendQuoteWithDeliverableRequest` embed a `SignatureSchedule` — the same eight reminder/expiration override fields used by TurboSign's [`SendSignature`](./go.md#schedule-reminders-and-expiration), with `Duration{Value, Unit}` durations (`Unit` is `"hours"` or `"days"`). This drives the reminder and expiry-warning cadence on the quote's signature request.
+
+```go
+sent, err := qc.SendQuote(ctx, "quote-uuid", &turbodocx.SendQuoteRequest{
+    ValidUntil: &[]string{"2026-09-01"}[0],
+    SignatureSchedule: turbodocx.SignatureSchedule{
+        RemindersEnabled:  turbodocx.BoolPtr(true),
+        ReminderDelay:     &turbodocx.Duration{Value: 3, Unit: "days"},
+        ReminderInterval:  &turbodocx.Duration{Value: 7, Unit: "days"},
+        ExpirationEnabled: turbodocx.BoolPtr(true),
+        // ExpireAfter is intentionally omitted — see below.
+    },
+})
+```
+
+:::caution Quote expiry is pinned to `validUntil`
+For a quote, the signing deadline is **hard-pinned to the quote's `ValidUntil`** — it always equals `validUntil`, so `ExpireAfter` is **ignored** on the quote send paths. `ExpirationEnabled` still toggles expiry on or off. The reminder and expiry-warning cadence still applies, but every scheduled reminder/warning must fall **inside** the `validUntil` window; a cadence that would outlive the quote's validity is rejected with **HTTP 400**.
+:::
+
 #### DeclineQuote
 
 ```go

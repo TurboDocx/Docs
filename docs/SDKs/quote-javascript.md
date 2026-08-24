@@ -439,18 +439,31 @@ handle-expired flow to void it and create a fresh draft.
 
 #### sendQuote
 
-Send a draft quote to the contact. Optionally include CC recipients or set a validity deadline.
+Send a draft quote to the contact. Optionally include CC recipients, set a validity deadline, or attach a **reminder & expiration schedule**.
 
 ```typescript
 const { quote, message } = await TurboQuote.sendQuote('quote-uuid', {
   validUntil: '2026-07-31',
   ccEmails: ['manager@example.com'],
+
+  // Optional reminder & expiration schedule (same shape as TurboSign sendSignature)
+  remindersEnabled: true,
+  reminderDelay: { value: 3, unit: 'days' },     // { value, unit } — 'hours' | 'days'
+  reminderInterval: { value: 3, unit: 'days' },
+  maxReminders: 5,                               // -1 unlimited, 0 none, max 50
+  expirationEnabled: true,                       // toggles expiry on/off
+  expirationWarning: { value: 3, unit: 'days' },
+  expirationWarningInterval: { value: 1, unit: 'days' },
 });
 ```
 
+:::info Quote expiry is pinned to `validUntil`
+For a quote, the signing deadline is **hard-pinned to the quote's `validUntil` date** — you do **not** set `expireAfter`. `expirationEnabled` still toggles whether the signing window closes at all, but when it's on, the deadline is `validUntil` (any `expireAfter` you pass is ignored). The reminder and expiration-warning cadence still applies, and it must **fit inside** the `validUntil` window — a cadence that would outlive the quote's validity is rejected with a `400`.
+:::
+
 #### sendQuoteWithDeliverable
 
-Send a quote paired with a TurboDocx deliverable (e.g., a contract generated from a template). The deliverable is merged before or after the quote PDF.
+Send a quote paired with a TurboDocx deliverable (e.g., a contract generated from a template). The deliverable is merged before or after the quote PDF. It accepts the **same reminder & expiration schedule** as `sendQuote` (expiry pinned to `validUntil`, per the note above).
 
 ```typescript
 const { quote, message, documentId } = await TurboQuote.sendQuoteWithDeliverable(
@@ -459,6 +472,11 @@ const { quote, message, documentId } = await TurboQuote.sendQuoteWithDeliverable
     deliverableId: 'deliverable-uuid',
     mergePosition: 'end',   // 'beginning' | 'end'
     ccEmails: ['legal@example.com'],
+
+    // Optional — same schedule fields as sendQuote
+    remindersEnabled: true,
+    reminderDelay: { value: 3, unit: 'days' },
+    expirationEnabled: true,
   },
 );
 // documentId — TurboSign document created for the merged PDF

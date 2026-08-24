@@ -391,6 +391,27 @@ result = TurboDocxSdk::TurboQuote.send_quote_with_deliverable("quote-uuid",
 # result["quote"], result["message"], result["documentId"]
 ```
 
+#### Reminders & expiration on a sent quote
+
+`send_quote` and `send_quote_with_deliverable` accept the same reminder/expiration schedule as a TurboSign send — the eight `remindersEnabled` / `reminderDelay` / `reminderInterval` / `maxReminders` / `expirationEnabled` / `expireAfter` / `expirationWarning` / `expirationWarningInterval` keys, each duration a `{ "value" =>, "unit" => }` hash whose `"unit"` is `"days"` or `"hours"`. Both features are off by default. `maxReminders` is `-1` unlimited, `0` none, **max `50`**; `expirationWarning` may be `0` to never warn.
+
+```ruby
+sent = TurboDocxSdk::TurboQuote.send_quote("quote-uuid",
+  "validUntil"                => "2026-09-30",
+  "remindersEnabled"          => true,
+  "reminderDelay"             => { "value" => 3, "unit" => "days" },
+  "reminderInterval"          => { "value" => 3, "unit" => "days" },
+  "maxReminders"              => 5,
+  "expirationEnabled"         => true,
+  "expirationWarning"         => { "value" => 2, "unit" => "days" },
+  "expirationWarningInterval" => { "value" => 1, "unit" => "days" }
+)
+```
+
+:::warning Quote expiry is pinned to `validUntil`
+Unlike a plain TurboSign send, a quote's signing deadline is **hard-pinned to the quote's `validUntil` date**. When expiration is on, `expireAfter` is **ignored** — the deadline is always `validUntil`. `expirationEnabled` still toggles expiry on or off. The reminder and expiry-warning cadence still applies, but every reminder and warning must fall **inside** the `validUntil` window; a cadence that would outlive it is rejected with a `400`.
+:::
+
 #### `decline_quote`
 
 ```ruby

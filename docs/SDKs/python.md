@@ -357,6 +357,32 @@ result = await TurboSign.send_signature(
 print(result["documentId"])
 ```
 
+#### Schedule reminders and expiration
+
+`send_signature()` also accepts an optional reminder + expiration schedule. Both features are
+**off by default**, so omitting these kwargs preserves the original send behavior. The resolved
+deadline is frozen onto the document at send time and is then readable via
+`get_status()["expiresAt"]`.
+
+```python
+result = await TurboSign.send_signature(
+    # ...recipients, fields, file source, etc.
+    reminders_enabled=True,
+    reminder_delay={"value": 2, "unit": "days"},       # time to the FIRST reminder
+    reminder_interval={"value": 3, "unit": "days"},    # gap between later reminders
+    max_reminders=5,                                   # -1 unlimited, 0 none, max 50
+    expiration_enabled=True,
+    expire_after={"value": 14, "unit": "days"},        # how long the document stays signable
+    expiration_warning={"value": 1, "unit": "days"},   # 0 = never warn
+    expiration_warning_interval={"value": 1, "unit": "days"},
+)
+```
+
+Durations are `{"value": N, "unit": "days" | "hours"}` objects. `value` is a whole number from
+`1` up to a maximum of **999 days / 23976 hours**; `max_reminders` accepts `-1` (unlimited),
+`0` (none), or up to `50`, defaulting to `5`; `expiration_warning` may be `0` to disable
+warnings. See the full field reference under [Request Parameters](#request-parameters).
+
 ### Get status
 
 Retrieve the current status of a document.
@@ -365,7 +391,16 @@ Retrieve the current status of a document.
 result = await TurboSign.get_status("document-uuid")
 
 print("Result:", json.dumps(result, indent=2))
+
+# status is 'under_review', 'completed', 'voided', or the terminal 'expired'
+print("Status:", result["status"])
+# expiresAt is the signing-window deadline (ISO 8601), or None when expiration is off.
+print("Expires:", result.get("expiresAt"))
 ```
+
+Once a document's deadline passes it moves to the terminal `expired` status and its signing
+links stop working. The same `expiresAt` deadline is also returned on the document object from
+`get_recipients()` (`result["document"]["expiresAt"]`).
 
 ### Download document
 
@@ -393,6 +428,26 @@ Resend signature request emails to specific recipients.
 
 ```python
 result = await TurboSign.resend_email("document-uuid", recipient_ids=["recipient-uuid-1", "recipient-uuid-2"])
+```
+
+### Send reminder
+
+Send a standalone reminder (`POST /turbosign/documents/:id/send-reminder`) to whoever's turn it
+is to sign. It is independent of the automatic reminder cadence — it works even when reminders
+are disabled or the per-signer `max_reminders` cap is already spent, does **not** consume that
+cap, and only emails signers at the *current* signing order. Omit `recipient_ids` to remind
+everyone eligible; do not pass an empty list, which the API rejects.
+
+```python
+# Remind everyone whose turn it is:
+result = await TurboSign.send_reminder("document-uuid")
+
+# Or limit to specific recipients:
+result = await TurboSign.send_reminder("document-uuid", recipient_ids=["recipient-uuid-1"])
+
+for entry in result["results"]:
+    # status is e.g. 'sent' or 'skipped_wrong_order'
+    print(f"{entry['recipientId']}: {entry['status']}")
 ```
 
 ### Get audit trail
@@ -612,6 +667,20 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `sender_name`          | `str`        | No          | Sender name (overrides the configured value) |
 | `sender_email`         | `str`        | No\*\*      | Sender / reply-to email (overrides the configured value) |
 | `cc_emails`            | `List[str]`  | No          | Array of CC email addresses    |
+| `reminders_enabled`    | `bool`       | No          | Send reminder emails to signers who haven't signed. Off by default |
+| `reminder_delay`       | `Dict`       | No          | `{"value": N, "unit": "days"\|"hours"}` — time to the FIRST reminder |
+| `reminder_interval`    | `Dict`       | No          | `{"value": N, "unit": ...}` — gap between later reminders |
+| `max_reminders`        | `int`        | No          | Cap per signer. `-1` unlimited, `0` none, max `50`. Default `5` |
+| `expiration_enabled`   | `bool`       | No          | Close the signing window after `expire_after`. Off by default |
+| `expire_after`         | `Dict`       | No          | `{"value": N, "unit": ...}` — how long the document stays signable |
+| `expiration_warning`   | `Dict`       | No          | `{"value": N, "unit": ...}` — how far before expiry warnings start. `0` = never warn |
+| `expiration_warning_interval` | `Dict` | No          | `{"value": N, "unit": ...}` — gap between warnings once they start |
+
+:::info Duration bounds
+Each duration `{"value", "unit"}` uses `"days"` or `"hours"`; `value` is a whole number from `1`
+up to **999 days / 23976 hours**. Reminder and expiration are independent and both **off by
+default**. See [Schedule reminders and expiration](#schedule-reminders-and-expiration).
+:::
 
 :::info File Source (Conditional)
 Exactly one file source is required: `file`, `file_link`, `deliverable_id`, or `template_id`.
