@@ -522,6 +522,28 @@ SendQuoteWithDeliverableResponse resp = tq.sendQuoteWithDeliverable(quoteId, req
 System.out.println("Document ID: " + resp.getDocumentId());
 ```
 
+##### Reminders and expiration on a quote send
+
+`sendQuote` and `sendQuoteWithDeliverable` accept the same `SignatureSchedule` as TurboSign (`remindersEnabled` / `reminderDelay` / `reminderInterval` / `maxReminders` and `expirationEnabled` / `expireAfter` / `expirationWarning` / `expirationWarningInterval`), with **one quote-specific difference**: the signing deadline is **hard-pinned to the quote's `validUntil` date**. When `expirationEnabled` is `true` the document expires exactly at `validUntil` — **any `expireAfter` you pass is ignored** — while `expirationEnabled` still toggles whether expiry is enforced at all. The reminder and warning cadence still applies, but every reminder and warning must fall **inside** the `validUntil` window; a cadence that would outlive it is rejected with `400`.
+
+```java
+SignatureSchedule schedule = SignatureSchedule.builder()
+    .remindersEnabled(true)
+    .reminderDelay(new SignatureSchedule.Duration(3, "days"))        // must fit inside validUntil
+    .maxReminders(5)                                                 // -1..50 (-1 unlimited, 0 none)
+    .expirationEnabled(true)                                         // expire at validUntil (expireAfter ignored)
+    .expirationWarning(new SignatureSchedule.Duration(2, "days"))    // 0 = never warn
+    .build();
+
+SendQuoteWithDeliverableRequest scheduledReq = new SendQuoteWithDeliverableRequest();
+scheduledReq.setDeliverableId("your-deliverable-id");
+scheduledReq.setSchedule(schedule);
+
+tq.sendQuoteWithDeliverable(quoteId, scheduledReq);
+```
+
+Each `Duration` is a `{value, unit}` pair (`unit` is `"hours"` or `"days"`, `value` a whole number from 1 up to 999 days / 23976 hours).
+
 #### `declineQuote`
 
 ```java

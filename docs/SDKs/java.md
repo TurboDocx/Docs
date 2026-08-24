@@ -403,14 +403,41 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 System.out.println("Result: " + gson.toJson(result));
 ```
 
+### Schedule reminders and expiration
+
+`sendSignature` accepts an optional `SignatureSchedule` that turns on automatic reminder emails and/or a signing deadline. Both features are **off by default**, so omitting the schedule preserves the original send behavior. The resolved deadline is frozen onto the document at send time and is then readable via `getStatus().getExpiresAt()`.
+
+```java
+SignatureSchedule schedule = SignatureSchedule.builder()
+    .remindersEnabled(true)
+    .reminderDelay(new SignatureSchedule.Duration(3, "days"))        // time to the first reminder
+    .reminderInterval(new SignatureSchedule.Duration(3, "days"))     // gap between later reminders
+    .maxReminders(5)                                                 // -1..50: -1 unlimited, 0 none (default 5)
+    .expirationEnabled(true)
+    .expireAfter(new SignatureSchedule.Duration(14, "days"))         // how long the document stays signable
+    .expirationWarning(new SignatureSchedule.Duration(2, "days"))    // 0 = never warn
+    .expirationWarningInterval(new SignatureSchedule.Duration(1, "days"))
+    .build();
+
+SendSignatureResponse result = client.turboSign().sendSignature(
+    new SendSignatureRequest.Builder()
+        // ...file, recipients, fields, etc.
+        .schedule(schedule)
+        .build()
+);
+```
+
+Each `Duration` is a `{value, unit}` pair where `unit` is `"hours"` or `"days"` and `value` is a whole number from **1 up to 999 days (23976 hours)**. `maxReminders` accepts **-1 to 50** (`-1` unlimited, `0` none, default `5`) and caps only automatic reminders — never expiry warnings; `expirationWarning` may be `0` to disable warnings. Reminders and expiry warnings run as two independent clocks, coordinated so a signer never receives both at the same moment — and a reminder cadence that would outlive the expiry window is rejected with `400`.
+
 ### Get status
 
-Check the document-level status. For per-signer detail, use
-[Get recipients](#get-recipients).
+Check the document-level status. When an expiration schedule is set, the response also carries `getExpiresAt()` — the signing-window deadline (ISO 8601), or `null` when expiration is off. Once that deadline passes, the document moves to the terminal `expired` status and its signing links stop working. `getRecipients()` exposes the same deadline on `getDocument().getExpiresAt()`. For per-signer detail, use [Get recipients](#get-recipients).
 
 ```java
 DocumentStatusResponse status = client.turboSign().getStatus("document-uuid");
 
+System.out.println("Status: " + status.getStatus());       // "under_review", "completed", "voided", "expired"
+System.out.println("Expires: " + status.getExpiresAt());   // ISO 8601, or null when expiration is off
 System.out.println("Result: " + gson.toJson(status));
 ```
 
@@ -510,6 +537,23 @@ ResendEmailResponse result = client.turboSign().resendEmail(
     "document-uuid",
     Arrays.asList("recipient-uuid-1", "recipient-uuid-2")
 );
+```
+
+### Send reminder
+
+Send a standalone reminder to whoever's turn it is to sign (`POST /turbosign/documents/:id/send-reminder`). It is independent of the automatic reminder cadence — it works even when reminders are disabled or the `maxReminders` cap is spent, does **not** consume that cap, and only emails signers at the **current** signing order. Use the single-arg overload to remind everyone eligible; pass a list to limit it to specific recipients, but do **not** pass an empty list, which the API rejects.
+
+```java
+// Remind everyone whose turn it is
+SendReminderResponse reminder = client.turboSign().sendReminder("document-uuid");
+
+for (SendReminderResponse.ReminderResult r : reminder.getResults()) {
+    // status is e.g. "sent", "skipped_wrong_order", "skipped_completed"
+    System.out.println(r.getRecipientId() + " — " + r.getStatus());
+}
+
+// Or limit to specific recipients
+client.turboSign().sendReminder("document-uuid", Arrays.asList("recipient-uuid-1"));
 ```
 
 ---
@@ -693,6 +737,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `senderName`          | `String`          | No          | Sender's name            |
 | `senderEmail`         | `String`          | No          | Sender's email           |
 | `ccEmails`            | `List<String>`    | No          | CC email addresses       |
+| `schedule`            | `SignatureSchedule` | No        | Reminder + expiration schedule (see [Schedule reminders and expiration](#schedule-reminders-and-expiration)) |
 
 :::info File Source (Conditional)
 Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.

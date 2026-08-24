@@ -336,13 +336,48 @@ result = TurboDocxSdk::TurboSign.send_signature(
 puts result["documentId"]
 ```
 
+### Reminders and expiration
+
+`send_signature` accepts an optional per-document schedule. Both reminders and expiration are **off by default**, so omitting these keys preserves the original send behavior. Keys are camelCase like every other send key, and each duration is a `{ value:, unit: }` hash whose `unit` is `"days"` or `"hours"`.
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_signature(
+  recipients:   [{ name: "Recipient Name", email: "recipient@example.com", signingOrder: 1 }],
+  fields:       [{ type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "recipient@example.com" }],
+  fileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
+  documentName: "Service Agreement",
+
+  # Reminders — chase signers who haven't signed yet
+  remindersEnabled:  true,
+  reminderDelay:     { value: 3, unit: "days" },   # time to the FIRST reminder
+  reminderInterval:  { value: 3, unit: "days" },   # gap between later reminders
+  maxReminders:      5,                             # -1 unlimited, 0 none, max 50 (default 5)
+
+  # Expiration — close the signing window
+  expirationEnabled:         true,
+  expireAfter:               { value: 14, unit: "days" }, # how long it stays signable
+  expirationWarning:         { value: 3,  unit: "days" }, # lead time before warnings (0 = never warn)
+  expirationWarningInterval: { value: 1,  unit: "days" }
+)
+```
+
+| Field | Bounds |
+| --- | --- |
+| `maxReminders` | Cap per signer: `-1` unlimited, `0` none, **max `50`** (default `5`). |
+| any duration `value` | Whole number, **min 1**, **max 999 days (23976 hours)**. |
+| `expirationWarning` | May be `0` to never warn. |
+
+The resolved deadline is **frozen onto the document at send time** and is then readable via `get_status(...)["expiresAt"]`.
+
 ### Get status
 
-Retrieve the document-level status. For per-signer detail, use
-[Get recipients](#get-recipients).
+Retrieve the current status of a document. The `status` reaches the terminal value `"expired"` once the signing window closes, and `expiresAt` carries the deadline (ISO 8601, `nil` when expiration is off). For per-signer detail, use [Get recipients](#get-recipients).
 
 ```ruby
 result = TurboDocxSdk::TurboSign.get_status("document-uuid")
+
+puts result["status"]     # "under_review" | "completed" | "voided" | "expired" | ...
+puts result["expiresAt"]  # ISO 8601 deadline, or nil when expiration is off
 
 puts JSON.pretty_generate(result)
 ```
@@ -429,6 +464,24 @@ Resend signature request emails to specific recipients.
 ```ruby
 result = TurboDocxSdk::TurboSign.resend_email("document-uuid", ["recipient-uuid-1", "recipient-uuid-2"])
 ```
+
+### Send a reminder
+
+`send_reminder` is a standalone nudge, independent of the automatic reminder cadence above: it works even when reminders are disabled or the per-signer cap is spent, does **not** consume that cap, and only emails signers at the **current** signing order. (Distinct from **Resend** above, which re-sends the original invitation — this sends the reminder copy.) Omit `recipient_ids` to remind everyone eligible; do not pass an empty array, which the API rejects.
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_reminder("document-uuid")
+
+result["results"].each do |r|
+  # "sent", or a "skipped_*" reason (e.g. "skipped_wrong_order", "skipped_completed")
+  puts "#{r['recipientId']}: #{r['status']}"
+end
+
+# Or limit the reminder to specific recipients:
+TurboDocxSdk::TurboSign.send_reminder("document-uuid", ["recipient-uuid-1"])
+```
+
+Calls `POST /turbosign/documents/:id/send-reminder`.
 
 ### Get audit trail
 

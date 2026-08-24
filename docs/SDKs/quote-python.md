@@ -400,6 +400,34 @@ result = await TurboQuote.send_quote_with_deliverable("quote-uuid", {
 # result["quote"], result["message"], result["documentId"]
 ```
 
+#### Reminders and expiration when sending a quote
+
+Both `send_quote` and `send_quote_with_deliverable` accept the same reminder/expiration schedule
+as TurboSign. Because these are quote request-body fields, the keys are **camelCase** (like
+`ccEmails` / `validUntil` above), even though the method names are snake_case:
+
+```python
+sent = await TurboQuote.send_quote("quote-uuid", {
+    "validUntil": "2026-09-30",
+    "remindersEnabled": True,
+    "reminderDelay": {"value": 3, "unit": "days"},     # {value, unit}: "days" or "hours"
+    "reminderInterval": {"value": 3, "unit": "days"},
+    "maxReminders": 5,                                  # -1 unlimited, 0 none, max 50
+    "expirationEnabled": True,
+    "expirationWarning": {"value": 1, "unit": "days"},  # 0 = never warn
+    "expirationWarningInterval": {"value": 1, "unit": "days"},
+})
+```
+
+:::warning Quote expiry is pinned to `validUntil`
+For a quote, the signing deadline is **hard-pinned to the quote's `validUntil` date**. Any
+`expireAfter` you pass is **ignored** — `expirationEnabled` still toggles expiry on or off, but
+when on, the document expires exactly at `validUntil`. The reminder and expiration-warning
+cadence still applies and **must fit inside the `validUntil` window**; a cadence that would
+outlive the quote is rejected with `400`. Duration values are `{value, unit}` (`"days"` or
+`"hours"`), min `1`, max **999 days / 23976 hours**.
+:::
+
 #### `decline_quote`
 
 Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.

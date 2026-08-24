@@ -347,6 +347,35 @@ $result = TurboQuote::sendQuoteWithDeliverable('quote-uuid', new SendQuoteWithDe
 // $result->documentId   — TurboSign document ID
 ```
 
+#### Reminders and expiration on quote sends
+
+Both `sendQuote` and `sendQuoteWithDeliverable` accept the same TurboSign schedule fields as
+`TurboSign::sendSignature` — `remindersEnabled` / `reminderDelay` / `reminderInterval` /
+`maxReminders` and `expirationEnabled` / `expirationWarning` / `expirationWarningInterval`, each a
+`['value' => N, 'unit' => 'hours'|'days']` duration where applicable.
+
+```php
+$result = TurboQuote::sendQuoteWithDeliverable('quote-uuid', new SendQuoteWithDeliverableRequest(
+    deliverableId: 'deliverable-uuid',
+    mergePosition: 'end',
+    remindersEnabled: true,
+    reminderDelay: ['value' => 3, 'unit' => 'days'],
+    reminderInterval: ['value' => 3, 'unit' => 'days'],
+    maxReminders: 5,                                       // -1 unlimited, 0 none, max 50
+    expirationEnabled: true,                               // toggles expiry on the signature request
+    expirationWarning: ['value' => 3, 'unit' => 'days'],  // 0 = never warn
+));
+```
+
+:::warning Quote expiry is pinned to `validUntil`
+For a quote send, **the signing deadline is hard-pinned to the quote's `validUntil` date** —
+`expireAfter` is **ignored**. `expirationEnabled` still toggles whether the signature request
+expires at all, but when on, the deadline is always `validUntil` (never a relative `expireAfter`
+window). The reminder and expiration-warning cadence still applies and **must fit inside
+`validUntil`**; a cadence that would outlive the quote's validity is rejected with a `400`. Set a
+`validUntil` far enough out to contain the reminders you schedule.
+:::
+
 #### declineQuote
 
 Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.

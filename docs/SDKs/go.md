@@ -322,10 +322,41 @@ result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureReque
 })
 ```
 
+### Schedule reminders and expiration
+
+`SendSignature` accepts an optional `SignatureSchedule` that turns on automatic reminder emails and a signing deadline. Every field is a pointer, and **both features are off by default** — omit the schedule entirely to preserve the original send behavior. The resolved schedule is **frozen onto the document at send time**, so later changes to your org defaults never touch a document already out for signature.
+
+```go
+result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
+    // ...file, recipients, fields, etc.
+    SignatureSchedule: turbodocx.SignatureSchedule{
+        RemindersEnabled:  turbodocx.BoolPtr(true),
+        ReminderDelay:     &turbodocx.Duration{Value: 2, Unit: "days"},  // time to the first reminder
+        ReminderInterval:  &turbodocx.Duration{Value: 3, Unit: "days"},  // gap between later reminders
+        MaxReminders:      turbodocx.IntPtr(5),                          // cap per signer
+        ExpirationEnabled: turbodocx.BoolPtr(true),
+        ExpireAfter:       &turbodocx.Duration{Value: 14, Unit: "days"}, // how long the document stays signable
+        ExpirationWarning: &turbodocx.Duration{Value: 3, Unit: "days"},  // how far before expiry warnings start
+    },
+})
+```
+
+| Field | Type | Notes |
+| ----- | ---- | ----- |
+| `RemindersEnabled` | `*bool` | Master switch for automatic reminders. Default off. |
+| `ReminderDelay` | `*Duration` | Time to the **first** reminder, measured from that signer's invitation. |
+| `ReminderInterval` | `*Duration` | Gap between **subsequent** reminders. |
+| `MaxReminders` | `*int` | Automatic reminders per signer. Valid range **-1..50** — `-1` unlimited, `0` none, default `5`. |
+| `ExpirationEnabled` | `*bool` | Master switch for the signing deadline. Default off. |
+| `ExpireAfter` | `*Duration` | How long the document stays signable, counted from sending. |
+| `ExpirationWarning` | `*Duration` | How far **before** expiry warnings start. `0` = never warn. |
+| `ExpirationWarningInterval` | `*Duration` | Gap between warnings once they start. |
+
+A `Duration` is a `{Value, Unit}` pair; `Unit` is `"hours"` or `"days"`. `Value` is a whole number, **minimum 1** and at most **999 days (23976 hours)**. Reminders and expiry warnings run as two independent clocks, so a signer can receive both streams; they are coordinated so a reminder and a warning never land in the same moment.
+
 ### Get status
 
-Check the document-level status. For per-signer detail, use
-[Get recipients](#get-recipients).
+Check the status of a document. The response includes `ExpiresAt` — the signing-window deadline as an ISO 8601 string, or `""` when expiration is off — and a `Status` that can reach the terminal value `expired` once the deadline passes. For per-signer detail, use [Get recipients](#get-recipients).
 
 ```go
 status, err := client.TurboSign.GetStatus(ctx, "document-uuid")
@@ -333,7 +364,9 @@ if err != nil {
     log.Fatal(err)
 }
 
-b, _ := json.MarshalIndent(status, "", "  "); fmt.Println("Result:", string(b))
+fmt.Printf("Status: %s\n", status.Status)  // "under_review", "completed", "voided", "expired", ...
+// ExpiresAt is the signing-window deadline (ISO 8601), or "" when expiration is off.
+fmt.Printf("Expires: %s\n", status.ExpiresAt)
 ```
 
 ### Get recipients
@@ -441,6 +474,24 @@ Resend signature request emails.
 // Resend to specific recipients
 result, err := client.TurboSign.ResendEmail(ctx, "document-uuid", []string{"recipient-uuid-1", "recipient-uuid-2"})
 ```
+
+### Send reminder
+
+Send a standalone reminder to whoever's turn it is to sign (`POST /turbosign/documents/:id/send-reminder`). It is independent of the automatic reminder cadence — it works even when reminders are disabled or the per-signer `MaxReminders` cap is already spent, does **not** consume that cap, and only emails signers at the **current** signing order. Pass `nil` for `recipientIDs` to remind everyone eligible; do **not** pass an empty slice, which the API rejects.
+
+```go
+resp, err := client.TurboSign.SendReminder(ctx, "document-uuid", nil)
+if err != nil {
+    log.Fatal(err)
+}
+
+for _, r := range resp.Results {
+    // "sent", "skipped_wrong_order", "skipped_completed", ...
+    fmt.Printf("%s: %s\n", r.RecipientID, r.Status)
+}
+```
+
+This differs from **Resend**: resend re-sends the original invitation email, while send-reminder sends the reminder copy.
 
 ---
 
