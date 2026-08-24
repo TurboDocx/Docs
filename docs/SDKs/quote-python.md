@@ -28,7 +28,7 @@ The official TurboDocx TurboQuote SDK for Python applications. Build full CPQ (c
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote lifecycle — draft, send, accept/decline/void — with a product catalog, bundle groupings, price books, company/contact CRM, and customizable quote templates. Quotes can be sent with an attached Deliverable document for a branded proposal experience.
+TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote lifecycle — draft, send, accept/decline/void — with a product catalog, bundle groupings, price books, company/contact CRM, and customizable quote templates. A draft can also be marked declined directly, for a deal that dies before the quote is ever sent. Quotes can be sent with an attached Deliverable document for a branded proposal experience.
 :::
 
 ## Installation
@@ -262,6 +262,10 @@ updated = await TurboQuote.update_quote("quote-uuid", {
 })
 ```
 
+:::info `name` is trimmed, and renaming is draft-only
+`name` is trimmed on both `create_quote` and `update_quote` — `"  Acme  "` is stored as `"Acme"` — and a name that is empty once trimmed returns a `400`. A quote can only be renamed while it is a **draft**; on any other status the update is rejected with `Cannot update quote that is not in draft status` (`templateId` is the only field exempt from that rule). Rename before you send, because **sending snapshots the quote's current name onto the TurboSign document** — that is the name signers see in the request email and on the signed PDF.
+:::
+
 #### `delete_quote`
 
 ```python
@@ -275,6 +279,8 @@ result = await TurboQuote.delete_quote("quote-uuid")
 new_quote = await TurboQuote.duplicate_quote("quote-uuid")
 # returns new Quote in draft status
 ```
+
+The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `update_quote` before sending if that is not what you want signers to see.
 
 The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
@@ -424,13 +430,20 @@ outlive the quote is rejected with `400`. Duration values are `{value, unit}` (`
 
 #### `decline_quote`
 
+Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.
+
 ```python
 quote = await TurboQuote.decline_quote("quote-uuid", {
     "reason": "Customer selected a competitor",
 })
+
+# A draft is declined with no reason — one passed here would not be recorded.
+closed_out = await TurboQuote.decline_quote("draft-quote-uuid", {})
 ```
 
 #### `void_quote`
+
+Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```python
 quote = await TurboQuote.void_quote("quote-uuid", {
@@ -442,18 +455,22 @@ quote = await TurboQuote.void_quote("quote-uuid", {
 
 Handles a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
 
-All three keys are **required**: `action` (`"void"` or `"decline"`), `reason` (max 190 characters), and `newValidUntil` (ISO date).
+`action` (`"void"`, `"decline"` or `"renew"`) and `newValidUntil` (ISO date) are **required**. `reason` (max 190 characters) is required for `"void"` and `"decline"`, and optional for `"renew"` — a renewal closes nothing out, so there is nothing to give a reason for. Use `"renew"` when the quote's signature request has already expired on its own; use `"void"` or `"decline"` when the quote is merely past its `validUntil` and you are closing it yourself.
 
 ```python
 quote = await TurboQuote.handle_expired_quote("quote-uuid", {
-    "action": "void",               # required — "void" or "decline" only
-    "reason": "Quote expired",      # required — max 190 characters
+    "action": "void",               # required — "void", "decline" or "renew"
+    "reason": "Quote expired",      # required for void/decline, optional for renew
     "newValidUntil": "2026-12-31",  # required — ISO date carried onto the duplicate
 })
 ```
 
 :::warning There is no `extend` or `resend` action
-`action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — pass `newValidUntil` and it lands on the duplicate it creates.
+`action` accepts **only** `"void"`, `"decline"` and `"renew"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does — pass `newValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::info The replacement draft keeps the original name
+Unlike `duplicate_quote`, the draft this endpoint creates is **not** prefixed with `Copy of ` — re-issuing the same deal keeps the original quote's name, so repeated renewals cannot compound into `Copy of Copy of …`. That matters because the next send snapshots the name onto the TurboSign document.
 :::
 
 :::note Terminal statuses

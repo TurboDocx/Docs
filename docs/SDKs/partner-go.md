@@ -310,6 +310,43 @@ fmt.Printf("Success: %t\n", result.Success)
 Deleting an organization is a destructive operation. All organization data, users, and API keys will be affected.
 :::
 
+### `GetOrganizationPreferences()`
+
+Read an organization's TurboSign display preferences. Returns only the partner-settable keys, with defaults applied for any the org never set.
+
+```go
+resp, err := partner.GetOrganizationPreferences(ctx, "org-uuid-here")
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Println(resp.Data.Preferences.HideSignatureOutline)   // bool
+fmt.Println(resp.Data.Preferences.HideSignatureHash)      // bool
+fmt.Println(resp.Data.Preferences.LockedFieldsBackground) // bool
+fmt.Println(resp.Data.Preferences.AllowDownloadBeforeSigning) // bool
+```
+
+### `UpdateOrganizationPreferences()`
+
+Update one or more of an organization's TurboSign display preferences. Only the non-nil keys are sent; every other org setting is preserved. Use a `*bool` so a `false` value is transmitted. The response echoes the full, merged preferences.
+
+```go
+disabled := false
+enabled := true
+resp, err := partner.UpdateOrganizationPreferences(ctx, "org-uuid-here", &turbodocx.UpdateOrgPreferencesRequest{
+    LockedFieldsBackground:     &disabled, // render locked fields as plain text, not a grey box
+    AllowDownloadBeforeSigning: &enabled,  // let signers download the unsigned PDF before they sign
+})
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Println(resp.Data.Preferences.LockedFieldsBackground) // false
+fmt.Println(resp.Data.Preferences.AllowDownloadBeforeSigning) // true
+```
+
+See [Preferences Reference](#preferences-reference) for every settable key and its meaning.
+
 ---
 
 ## Organization User Management
@@ -695,6 +732,21 @@ Every counter except `CurrentAICredits` floors at `0`. Only `CurrentAICredits` a
 :::note Zero values are omitted
 `Tracking` fields are plain values tagged `omitempty`, so a field you set to `0` is dropped from the request body rather than sent as `0`. To reset a counter to zero, use the REST API directly.
 :::
+
+---
+
+## Preferences Reference
+
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `hideSignatureOutline` | boolean | `false` | Hide the outline/label around signed fields in the finished PDF |
+| `hideSignatureHash` | boolean | `false` | Hide the verification hash printed on signed fields |
+| `lockedFieldsBackground` | boolean | `true` | Render locked fields with a grey box background (`true`) or as plain text (`false`) |
+| `allowDownloadBeforeSigning` | boolean | `false` | When enabled, a signer can download the unsigned PDF from the signing page before they sign it (for example, to review it with their legal team). Defaults to off. |
+
+`GetOrganizationPreferences()` returns every key with its effective value (the default is applied for any key the org never set). `UpdateOrganizationPreferences()` changes only the keys you pass and preserves all other organization settings.
 
 ---
 

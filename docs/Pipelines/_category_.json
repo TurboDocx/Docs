@@ -1,0 +1,10 @@
+{
+  "label": "Pipelines",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "title": "TurboDocx Pipelines",
+    "description": "Automate document intake, field extraction, signature placement, and signing end-to-end with TurboDocx Pipelines and Cloud Connectors.",
+    "keywords": ["pipelines", "automation", "e-signature automation", "document intake", "field extraction", "cloud connectors"]
+  }
+}

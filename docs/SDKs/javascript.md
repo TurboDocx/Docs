@@ -156,6 +156,8 @@ TurboSign.configure({
         width: 100,
         height: 30,
         recipientEmail: "alice@example.com",
+        // Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+        defaultValue: "12/31/2026",
       },
       // Bob's signature
       {
@@ -885,7 +887,7 @@ To remind everyone eligible, **omit** `recipientIds` entirely. Passing an empty 
 
 ### Get status
 
-Retrieve the current status of a document.
+Retrieve the document-level status. For per-signer detail, use [Get recipients](#get-recipients).
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -893,7 +895,7 @@ Retrieve the current status of a document.
 ```javascript
 const result = await TurboSign.getStatus("document-uuid");
 
-console.log(JSON.stringify(result, null, 2));
+console.log(result.status); // 'under_review' | 'completed' | 'voided' | ...
 ```
 
 </TabItem>
@@ -902,13 +904,87 @@ console.log(JSON.stringify(result, null, 2));
 ```typescript
 const result = await TurboSign.getStatus("document-uuid");
 
-console.log(JSON.stringify(result, null, 2));
+console.log(result.status); // 'under_review' | 'completed' | 'voided' | ...
 ```
 
 </TabItem>
 </Tabs>
 
 The response carries the document-level **`status`** (`under_review`, `completed`, `voided`, `expired`, …) and **`expiresAt`** — the ISO 8601 signing-window deadline, or `undefined`/`null` when expiration is off. Once that deadline passes the document moves to the terminal **`expired`** status and its signing links stop working. The same `document.expiresAt` is returned by `getRecipients()` alongside per-recipient detail.
+
+### Get recipients
+
+See who the document went to, who has signed, who you are still waiting on, and who sent it.
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const { document, recipients, summary } = await TurboSign.getRecipients("document-uuid");
+
+console.log(`Sent by ${document.sentBy.name} on ${document.sentOn ?? "not sent yet"}`);
+console.log(`${summary.completed}/${summary.total} signed, waiting on ${summary.waitingOn}`);
+
+recipients.forEach((r) => {
+  console.log(`${r.name} <${r.email}>: ${r.effectiveStatus}`);
+  console.log(`  emailed ${r.delivery.totalSent}x, last ${r.delivery.lastSentOn ?? "never"}`);
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+const { document, recipients, summary } = await TurboSign.getRecipients("document-uuid");
+
+console.log(`${summary.completed}/${summary.total} signed, waiting on ${summary.waitingOn}`);
+
+const chasing = recipients.filter(
+  (r) => r.effectiveStatus === "pending" || r.effectiveStatus === "viewed",
+);
+```
+
+</TabItem>
+</Tabs>
+
+:::tip Two status fields, and they differ on purpose
+
+`status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+is the one to display.
+
+On a voided or expired document an unsigned signer still reads `pending` in `status`, so
+branching on it would show someone as "still to sign" when their signing link is already dead.
+A completed signature is never revoked: someone who signed before the document was voided
+still reads `completed`.
+
+`summary` counts by `effectiveStatus`, and `waitingOn` (pending + viewed) drops to zero once
+the document is terminal.
+
+:::
+
+Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+`reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
+request, resends, reminders, expiry warnings and terminal notices; CC notifications are
+excluded, since a CC address is not a signer.
+
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
+does **not** increment this, even though the email it sends *does* appear in `totalSent`.
+
+`lastRemindedAt` is a **cadence clock**, not a record of a reminder: the initial
+signature-request send, each scheduled reminder, each manual "remind now" and each expiry
+warning all stamp it. Only scheduled reminders bump `reminderCount`.
+
+So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
+timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+chased this person", read `totalSent`, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat.
+
+:::
 
 ### Download document
 
@@ -1225,14 +1301,57 @@ Field configuration supporting both coordinate-based and template-based position
 | `y`               | `number`             | No\*     | Y coordinate in pixels                              |
 | `width`           | `number`             | No\*     | Field width in pixels                               |
 | `height`          | `number`             | No\*     | Field height in pixels                              |
-| `defaultValue`    | `string`             | No       | Default value (for checkbox: `"true"` or `"false"`) |
+| `defaultValue`    | `string`             | No       | Default value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `isMultiline`     | `boolean`            | No       | Enable multiline text                               |
 | `isReadonly`      | `boolean`            | No       | Make field read-only (pre-filled)                   |
 | `required`        | `boolean`            | No       | Whether field is required                           |
 | `backgroundColor` | `string`             | No       | Background color (hex, rgb, or named)               |
 | `template`        | `object`             | No       | Template anchor configuration                       |
+| `metadata`        | `object`             | No       | Conditional (IF/THEN) metadata — see below          |
 
 \*Required when not using template anchors
+
+**Metadata Configuration (Conditional Fields):**
+
+The optional `metadata` object builds IF/THEN relationships between fields. Put a `fieldKey` on a
+controlling `checkbox`, then point each dependent field's `conditional.controllingFieldKey` back
+at it.
+
+| Property                            | Type     | Required | Description                                                       |
+| ----------------------------------- | -------- | -------- | ---------------------------------------------------------------- |
+| `fieldKey`                          | `string` | No       | Stable id on a **controlling checkbox** (`type: "checkbox"`).    |
+| `conditional`                       | `object` | No       | Rule on a **dependent field** (see below).                       |
+| `conditional.controllingFieldKey`   | `string` | Yes      | The controlling checkbox's `fieldKey`. Must be non-empty.        |
+| `conditional.operator`              | `string` | Yes      | `"is_checked"` \| `"is_not_checked"`.                            |
+| `conditional.action`                | `string` | Yes      | `"show"` (hidden until met) \| `"unlock"` (locked until met).    |
+
+```typescript
+// Checkbox reveals a text field when checked
+const fields: Field[] = [
+  {
+    type: "checkbox",
+    recipientEmail: "reviewer@company.com",
+    page: 1, x: 100, y: 400, width: 20, height: 20,
+    metadata: { fieldKey: "request_changes" },
+  },
+  {
+    type: "text",
+    recipientEmail: "reviewer@company.com",
+    page: 1, x: 130, y: 400, width: 300, height: 60,
+    metadata: {
+      conditional: {
+        controllingFieldKey: "request_changes",
+        operator: "is_checked",
+        action: "show",
+      },
+    },
+  },
+];
+```
+
+A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
+`controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
 
 **Template Configuration:**
 

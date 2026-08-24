@@ -156,6 +156,8 @@ result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureReque
         {
             Type:           "date",
             RecipientEmail: "alice@example.com",
+            // Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+            DefaultValue:   "12/31/2026",
             Template: &turbodocx.TemplateAnchor{
                 Anchor:    "{DATE_ALICE}",
                 Placement: "replace",
@@ -354,7 +356,7 @@ A `Duration` is a `{Value, Unit}` pair; `Unit` is `"hours"` or `"days"`. `Value`
 
 ### Get status
 
-Check the status of a document. The response includes `ExpiresAt` — the signing-window deadline as an ISO 8601 string, or `""` when expiration is off — and a `Status` that can reach the terminal value `expired` once the deadline passes.
+Check the status of a document. The response includes `ExpiresAt` — the signing-window deadline as an ISO 8601 string, or `""` when expiration is off — and a `Status` that can reach the terminal value `expired` once the deadline passes. For per-signer detail, use [Get recipients](#get-recipients).
 
 ```go
 status, err := client.TurboSign.GetStatus(ctx, "document-uuid")
@@ -366,6 +368,65 @@ fmt.Printf("Status: %s\n", status.Status)  // "under_review", "completed", "void
 // ExpiresAt is the signing-window deadline (ISO 8601), or "" when expiration is off.
 fmt.Printf("Expires: %s\n", status.ExpiresAt)
 ```
+
+### Get recipients
+
+See who the document went to, who has signed, who you are still waiting on,
+and who sent it.
+
+```go
+progress, err := client.TurboSign.GetRecipients(ctx, "document-uuid")
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Printf("%d/%d signed, waiting on %d\n",
+    progress.Summary.Completed, progress.Summary.Total, progress.Summary.WaitingOn)
+
+for _, r := range progress.Recipients {
+    fmt.Printf("%s <%s>: %s (emailed %dx)\n",
+        r.Name, r.Email, r.EffectiveStatus, r.Delivery.TotalSent)
+}
+```
+
+:::tip Two status fields, and they differ on purpose
+
+`status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+is the one to display.
+
+On a voided or expired document an unsigned signer still reads `pending` in `status`, so
+branching on it would show someone as "still to sign" when their signing link is already dead.
+A completed signature is never revoked: someone who signed before the document was voided
+still reads `completed`.
+
+`summary` counts by `effectiveStatus`, and `waitingOn` (pending + viewed) drops to zero once
+the document is terminal.
+
+:::
+
+Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+`reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
+request, resends, reminders, expiry warnings and terminal notices; CC notifications are
+excluded, since a CC address is not a signer.
+
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
+does **not** increment this, even though the email it sends *does* appear in `totalSent`.
+
+`lastRemindedAt` is a **cadence clock**, not a record of a reminder: the initial
+signature-request send, each scheduled reminder, each manual "remind now" and each expiry
+warning all stamp it. Only scheduled reminders bump `reminderCount`.
+
+So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
+timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+chased this person", read `totalSent`, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat.
+
+:::
 
 ### Download document
 
@@ -543,14 +604,59 @@ The `Type` field accepts the following string values:
 | `Y`               | `int`             | No\*     | Y coordinate in pixels                      |
 | `Width`           | `int`             | No\*     | Field width in pixels                       |
 | `Height`          | `int`             | No\*     | Field height in pixels                      |
-| `DefaultValue`    | `string`          | No       | Pre-filled value                            |
+| `DefaultValue`    | `string`          | No       | Pre-filled value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `IsMultiline`     | `bool`            | No       | Enable multiline for text fields            |
 | `IsReadonly`      | `bool`            | No       | Make field read-only                        |
 | `Required`        | `bool`            | No       | Make field required                         |
 | `BackgroundColor` | `string`          | No       | Background color                            |
 | `Template`        | `*TemplateAnchor` | No       | Template anchor configuration               |
+| `Metadata`        | `*FieldMetadata`  | No       | Conditional (IF/THEN) metadata — see below  |
 
 \*Required when not using template anchors
+
+#### Metadata Configuration (Conditional Fields)
+
+The optional `Metadata` builds IF/THEN relationships between fields. Put a `FieldKey` on a
+controlling `checkbox`, then point each dependent field's `Conditional.ControllingFieldKey` back
+at it.
+
+| Property                          | Type              | Required | Description                                                    |
+| --------------------------------- | ----------------- | -------- | ------------------------------------------------------------- |
+| `FieldKey`                        | `string`          | No       | Stable id on a **controlling checkbox** (`Type: "checkbox"`). |
+| `Conditional`                     | `*FieldConditional`| No      | Rule on a **dependent field** (see below).                    |
+| `Conditional.ControllingFieldKey` | `string`          | Yes      | The controlling checkbox's `FieldKey`. Must be non-empty.     |
+| `Conditional.Operator`            | `string`          | Yes      | `"is_checked"` or `"is_not_checked"`.                         |
+| `Conditional.Action`              | `string`          | Yes      | `"show"` (hidden until met) or `"unlock"` (locked until met). |
+
+```go
+// Checkbox reveals a text field when checked
+fields := []turbodocx.Field{
+    {
+        Type:           "checkbox",
+        RecipientEmail: "reviewer@company.com",
+        Page:           1, X: 100, Y: 400, Width: 20, Height: 20,
+        Metadata: &turbodocx.FieldMetadata{
+            FieldKey: "request_changes",
+        },
+    },
+    {
+        Type:           "text",
+        RecipientEmail: "reviewer@company.com",
+        Page:           1, X: 130, Y: 400, Width: 300, Height: 60,
+        Metadata: &turbodocx.FieldMetadata{
+            Conditional: &turbodocx.FieldConditional{
+                ControllingFieldKey: "request_changes",
+                Operator:            "is_checked",
+                Action:              "show",
+            },
+        },
+    },
+}
+```
+
+A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
+`ControllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
 
 #### Template Configuration
 

@@ -684,7 +684,178 @@ This provides strong evidence that the audit trail has not been tampered with af
 - The `details` object varies by action type and may contain IP addresses, user agents, and other contextual information
 - Audit trail entries are immutable and cannot be modified or deleted
 
-## Endpoint 5: Resend Email
+## Endpoint 5: Get Recipients
+
+Retrieve every recipient on a document with their signing status, their email history, and who sent the document. This is the endpoint to poll when you want to know **who has signed and who you are still waiting on**.
+
+### Endpoint
+
+```http
+GET https://api.turbodocx.com/turbosign/documents/{documentId}/recipients
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| documentId | String (UUID) | Yes      | The unique identifier of the document |
+
+### Response
+
+```json
+{
+  "data": {
+    "document": {
+      "id": "4a20eca5-7944-430c-97d5-fcce4be24296",
+      "name": "Service Agreement 2024",
+      "status": "under_review",
+      "createdOn": "2024-01-15T10:30:00.000Z",
+      "sentOn": "2024-01-15T10:35:00.000Z",
+      "expiresAt": null,
+      "sentBy": {
+        "name": "Jane Sender",
+        "email": "jane@acme.com"
+      }
+    },
+    "recipients": [
+      {
+        "id": "recipient-uuid-1",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "status": "completed",
+        "effectiveStatus": "completed",
+        "signedOn": "2024-01-16T14:02:00.000Z",
+        "signingOrder": 1,
+        "delivery": {
+          "firstSentOn": "2024-01-15T10:35:00.000Z",
+          "lastSentOn": "2024-01-15T10:35:00.000Z",
+          "totalSent": 1,
+          "reminderCount": 0,
+          "lastRemindedAt": "2024-01-15T10:35:00.000Z",
+          "warningCount": 0,
+          "lastWarningAt": null
+        }
+      },
+      {
+        "id": "recipient-uuid-2",
+        "name": "Jane Smith",
+        "email": "jane@example.com",
+        "status": "pending",
+        "effectiveStatus": "pending",
+        "signedOn": null,
+        "signingOrder": 2,
+        "delivery": {
+          "firstSentOn": "2024-01-16T14:02:05.000Z",
+          "lastSentOn": "2024-01-20T09:00:00.000Z",
+          "totalSent": 2,
+          "reminderCount": 1,
+          "lastRemindedAt": "2024-01-20T09:00:00.000Z",
+          "warningCount": 0,
+          "lastWarningAt": null
+        }
+      }
+    ],
+    "summary": {
+      "total": 2,
+      "pending": 1,
+      "viewed": 0,
+      "completed": 1,
+      "voided": 0,
+      "expired": 0,
+      "waitingOn": 1
+    }
+  }
+}
+```
+
+### Response Fields
+
+#### `document`
+
+| Field     | Type   | Description                                                                    |
+| --------- | ------ | ------------------------------------------------------------------------------ |
+| status    | String | Document-level status (`draft`, `under_review`, `completed`, `voided`, `expired`, …) |
+| sentOn    | String \| null | When the document was dispatched to recipients; `null` while it is still a draft |
+| expiresAt | String \| null | When the signing window closes; `null` if it never expires              |
+| sentBy    | Object | `{ name, email }` — the real sender, never the internal service account         |
+
+#### `recipients[]`
+
+| Field           | Type           | Description                                                       |
+| --------------- | -------------- | ----------------------------------------------------------------- |
+| status          | String         | Raw status: `pending`, `viewed` or `completed`                     |
+| effectiveStatus | String         | `pending`, `viewed`, `completed`, `voided` or `expired` — **use this for display** |
+| signedOn        | String \| null | When this recipient signed; `null` while pending or viewed         |
+| signingOrder    | Number         | Position in the signing sequence                                   |
+| delivery        | Object         | This recipient's email history (see below)                         |
+
+#### `recipients[].delivery`
+
+| Field          | Type           | Description                                                              |
+| -------------- | -------------- | ------------------------------------------------------------------------ |
+| firstSentOn    | String \| null | First email of any kind; `null` if this recipient has never been emailed  |
+| lastSentOn     | String \| null | Most recent email of any kind                                            |
+| totalSent      | Number         | Signature request + resends + reminders + expiry warnings + terminal notices |
+| reminderCount  | Number         | **Automatic (scheduled) reminders only** — see the note below            |
+| lastRemindedAt | String \| null | **When the reminder cadence clock was last reset** — see the note below  |
+| warningCount   | Number         | Expiry warnings sent. Only a warning touches this                        |
+| lastWarningAt  | String \| null | When the last expiry warning went out. Only a warning touches this       |
+
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+**`reminderCount` counts automatic (scheduled) reminders only.** It is the counter that the
+`maxReminders` schedule setting caps. A manual "remind now" (the Send Reminder action) is a
+standalone nudge that deliberately does **not** consume the cap budget, so it does **not**
+increment this — even though the email it sends *does* appear in `totalSent`. A recipient can
+therefore read `reminderCount: 0` while reminder emails have genuinely been sent.
+
+**`lastRemindedAt` is a cadence clock, not a record of a reminder.** Four things stamp it: the
+initial signature-request send (so the first reminder is measured from the invitation), each
+scheduled reminder, each manual "remind now", and each expiry warning (a deliberate cross-reset
+so a reminder never lands adjacent to a warning). Only the second of those bumps
+`reminderCount`.
+
+The common consequence: a freshly-sent document returns a **non-null `lastRemindedAt` equal to
+the invitation timestamp, alongside `reminderCount: 0`**. That is correct — nobody has been
+reminded. To answer "have we actually chased this person", read `totalSent` (all emails) or the
+audit trail's `reminder_sent` entries, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat — only an expiry warning touches them.
+
+:::
+
+#### `summary`
+
+Counts by `effectiveStatus`, plus `waitingOn` — the recipients who have not finished (`pending` + `viewed`). `waitingOn` drops to zero once the document reaches a terminal state.
+
+### Two status fields, and they differ on purpose
+
+There is no per-recipient declined, voided or expired state in the system — a recipient row only ever holds `pending`, `viewed` or `completed`. That means on a voided or expired document, an unsigned signer **still reads `pending`** in `status`.
+
+`effectiveStatus` layers the document's outcome on top, so that same signer reads `voided` or `expired`. Branch on `effectiveStatus`, not `status`, or you will chase people whose signing links are already dead.
+
+A completed signature is never revoked: someone who signed before the document was voided still reads `completed` in both fields.
+
+`effectiveStatus` also reflects a **lapsed deadline immediately**. A document past its `expiresAt` keeps its old status until a background sweep updates it, but the signing links are already refused at that moment — so `effectiveStatus` reports `expired` right away rather than waiting for the row to change.
+
+### Usage Notes
+
+- Available at any document status, including drafts (a draft returns its recipients with `sentOn: null` and `delivery.totalSent: 0`)
+- Recipients are returned ordered by `signingOrder`
+- `delivery` counts emails to that signer only — CC notifications are excluded, since a CC address is not a signer
+- On a document with a signing order, only the current turn has been emailed; `delivery.totalSent === 0` distinguishes "not yet invited" from "invited and not acted"
+- Returns `404` if the document does not exist or belongs to another organization
+- All timestamps are ISO 8601 (UTC)
+
+## Endpoint 6: Resend Email
 
 Resend signature request emails to one or more recipients who haven't yet completed signing. Only recipients at the current signing order who haven't completed are eligible for resend.
 
@@ -1026,9 +1197,10 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | recipientEmail  | String  | Yes      | Email address of recipient (matches email in recipients array) |
 | type            | String  | Yes      | Field type (see table above)                                   |
 | required        | Boolean | No       | Whether field must be completed (default: true)                |
-| defaultValue    | String  | No       | Pre-filled value for the field                                 |
+| defaultValue    | String  | No       | Pre-filled value for the field (max 600 characters)            |
 | isReadonly      | Boolean | No       | Makes field non-editable (for prefilled values)                |
 | backgroundColor | String  | No       | Custom background color (hex or rgba)                          |
+| metadata        | Object  | No       | Optional field metadata. Carries `fieldKey` (on a controlling checkbox) and/or a `conditional` rule (on a dependent field). See [Conditional (IF/THEN) Fields](#conditional-if-then-fields). |
 
 #### Template-based Properties
 
@@ -1053,6 +1225,116 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | pageWidth  | Number | No       | Total page width in pixels (optional, for responsive positioning)  |
 | pageHeight | Number | No       | Total page height in pixels (optional, for responsive positioning) |
 
+### Conditional (IF/THEN) Fields {#conditional-if-then-fields}
+
+Any field can carry an optional `metadata` object. It is used to build **conditional
+(IF/THEN) relationships** between fields: a **controlling checkbox** decides whether one or
+more **dependent fields** are shown or unlocked. This works with both the
+**prepare-for-signing** and **prepare-for-review** single-step routes (and with the
+[Bulk API](/docs/TurboSign/API%20Bulk%20Signatures), which uses the same field format).
+
+The relationship has two halves:
+
+1. **The controlling checkbox** gets a stable identifier via `metadata.fieldKey`. It must be
+   a field of `type: "checkbox"`.
+2. **Each dependent field** points back at that checkbox with a `metadata.conditional` rule
+   whose `controllingFieldKey` equals the checkbox's `fieldKey`.
+
+#### metadata Object
+
+| Property      | Type   | Required | Description                                                                                   |
+| ------------- | ------ | -------- | --------------------------------------------------------------------------------------------- |
+| `fieldKey`    | String | No       | Stable identifier for a **controlling checkbox**. Referenced by dependent fields' `controllingFieldKey`. Set this on the checkbox (`type: "checkbox"`). |
+| `conditional` | Object | No       | Rule placed on a **dependent field** that makes its visibility/editability depend on a controlling checkbox. See below. |
+
+#### metadata.conditional Object
+
+| Property              | Type   | Required | Description                                                                                             |
+| --------------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------- |
+| `controllingFieldKey` | String | **Yes**  | The `metadata.fieldKey` of the controlling checkbox this field depends on. Must be non-empty.           |
+| `operator`            | String | **Yes**  | Condition to evaluate against the checkbox: `"is_checked"` or `"is_not_checked"`.                       |
+| `action`              | String | **Yes**  | What happens to this field when the condition is met: `"show"` or `"unlock"`.                           |
+
+#### show vs. unlock
+
+The `action` controls the dependent field's starting state and what the condition changes:
+
+- **`show`** — the dependent field is **hidden** until the condition is met. When the checkbox
+  matches the `operator`, the field appears.
+- **`unlock`** — the dependent field is **visible but read-only** until the condition is met.
+  When the checkbox matches the `operator`, the field becomes editable.
+
+#### Worked Example
+
+A recipient checks "Request changes" and a text box appears asking them to explain. The
+checkbox is the controller (`fieldKey: "request_changes"`); the text field shows only when the
+box is checked.
+
+```javascript
+const fields = JSON.stringify([
+  // Controlling checkbox — gets a stable fieldKey
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "checkbox",
+    page: 1,
+    x: 100,
+    y: 400,
+    width: 20,
+    height: 20,
+    required: false,
+    metadata: {
+      fieldKey: "request_changes",
+    },
+  },
+  // Dependent text field — hidden until the checkbox above is checked
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "text",
+    page: 1,
+    x: 130,
+    y: 400,
+    width: 300,
+    height: 60,
+    required: false,
+    defaultValue: "",
+    metadata: {
+      conditional: {
+        controllingFieldKey: "request_changes",
+        operator: "is_checked",
+        action: "show",
+      },
+    },
+  },
+]);
+formData.append("fields", fields);
+```
+
+To instead keep the field visible but locked until the box is checked, change the dependent
+field's `action` to `"unlock"`. To reveal a field when a box is **cleared** (for example, an
+"I do not consent — explain why" note), use `operator: "is_not_checked"`.
+
+#### Validation and Fail-Open Behavior
+
+The API **validates the shape** of every `conditional` rule. A malformed rule is rejected with
+HTTP **400** and the `type` **`InvalidConditionalRule`**. A rule is malformed when:
+
+- `operator` is anything other than `"is_checked"` or `"is_not_checked"`, or
+- `action` is anything other than `"show"` or `"unlock"`, or
+- `controllingFieldKey` is missing or empty.
+
+```json
+{
+  "message": "Field 2: metadata.conditional.operator must be one of: is_checked, is_not_checked",
+  "type": "InvalidConditionalRule"
+}
+```
+
+A **well-formed** rule whose `controllingFieldKey` does not match any checkbox's `fieldKey` in
+the same request does **not** error — it **fails open**. The dependent field stays visible and
+editable as if it had no rule, so a typo in `controllingFieldKey` silently disables the
+condition rather than blocking the send. Double-check that the `controllingFieldKey` on each
+dependent field exactly matches the `fieldKey` of an existing checkbox.
+
 ### Field Type Special Behaviors
 
 **signature & initial**
@@ -1060,12 +1342,16 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 - Draws a signature pad for user input
 - Can be text-based or drawn
 - Cryptographically signed and hashed for legal validity
+- Cannot carry a `defaultValue` — sending one is rejected
 
 **date**
 
 - Shows date picker interface
 - Format: MM/DD/YYYY (US) or DD/MM/YYYY (configurable)
-- Can set defaultValue to "today" for auto-population
+- Fills automatically with the date the recipient signs
+- To pin a specific date instead, set `defaultValue` to that date in `MM/DD/YYYY` format (e.g. `"12/31/2026"`). Omit `defaultValue` (or send `""`) to keep the signing-date behavior
+- `defaultValue` must be a **real calendar date** in `MM/DD/YYYY` — a non-existent date such as `"02/31/2026"` (or any malformed value) is rejected with `400 InvalidDateValue`. There is no `"today"` keyword
+- A date field cannot be `isReadonly` — a pinned date still shows to the signer, it is not locked
 
 **full_name, first_name, last_name, email**
 

@@ -145,7 +145,8 @@ $result = TurboSign::sendSignature(
                 x: 320,
                 y: 650,
                 width: 100,
-                height: 30
+                height: 30,
+                defaultValue: '12/31/2026' // Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
             ),
             // Bob's signature
             new Field(
@@ -535,7 +536,7 @@ TurboSign::sendReminder('document-uuid', ['recipient-uuid-1', 'recipient-uuid-2'
 
 ### Get status
 
-Retrieve the current status of a document. When expiration is enabled, the response also carries the signing-window deadline as `expiresAt`; once that instant passes the document reaches the terminal `expired` status. The same `expiresAt` is available on the document returned by `getRecipients()`.
+Retrieve the current status of a document. When expiration is enabled, the response also carries the signing-window deadline as `expiresAt`; once that instant passes the document reaches the terminal `expired` status. The same `expiresAt` is available on the document returned by `getRecipients()`. For per-signer detail, use [Get recipients](#get-recipients).
 
 ```php
 $status = TurboSign::getStatus('document-uuid');
@@ -544,6 +545,62 @@ echo "Document Status: {$status->status}\n";  // 'under_review', 'completed', 'v
 // expiresAt is the signing-window deadline (ISO 8601), or null when expiration is off.
 echo "Expires: " . ($status->expiresAt ?? 'never') . "\n";
 ```
+
+### Get recipients
+
+See who the document went to, who has signed, who you are still waiting on,
+and who sent it.
+
+```php
+$progress = TurboSign::getRecipients('document-uuid');
+
+echo "{$progress->summary->completed}/{$progress->summary->total} signed, ";
+echo "waiting on {$progress->summary->waitingOn}\n";
+
+foreach ($progress->recipients as $r) {
+    echo "  {$r->name} <{$r->email}>: {$r->effectiveStatus}";
+    echo " (emailed {$r->delivery->totalSent}x)\n";
+}
+```
+
+:::tip Two status fields, and they differ on purpose
+
+`status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+is the one to display.
+
+On a voided or expired document an unsigned signer still reads `pending` in `status`, so
+branching on it would show someone as "still to sign" when their signing link is already dead.
+A completed signature is never revoked: someone who signed before the document was voided
+still reads `completed`.
+
+`summary` counts by `effectiveStatus`, and `waitingOn` (pending + viewed) drops to zero once
+the document is terminal.
+
+:::
+
+Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+`reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
+request, resends, reminders, expiry warnings and terminal notices; CC notifications are
+excluded, since a CC address is not a signer.
+
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
+does **not** increment this, even though the email it sends *does* appear in `totalSent`.
+
+`lastRemindedAt` is a **cadence clock**, not a record of a reminder: the initial
+signature-request send, each scheduled reminder, each manual "remind now" and each expiry
+warning all stamp it. Only scheduled reminders bump `reminderCount`.
+
+So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
+timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+chased this person", read `totalSent`, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat.
+
+:::
 
 ### Download document
 
@@ -715,6 +772,53 @@ new Field(
 )
 ```
 
+### Conditional (IF/THEN) Fields
+
+The optional `metadata` builds IF/THEN relationships between fields. Put a `fieldKey` on a
+controlling checkbox, then point each dependent field's `controllingFieldKey` back at it.
+
+```php
+use TurboDocx\Types\FieldMetadata;
+use TurboDocx\Types\FieldConditional;
+use TurboDocx\Types\ConditionalOperator;
+use TurboDocx\Types\ConditionalAction;
+
+// Controlling checkbox — carries a stable fieldKey
+new Field(
+    type: SignatureFieldType::CHECKBOX,
+    recipientEmail: 'reviewer@company.com',
+    page: 1,
+    x: 100,
+    y: 400,
+    width: 20,
+    height: 20,
+    metadata: new FieldMetadata(fieldKey: 'request_changes')
+);
+
+// Dependent text field — hidden until the checkbox is checked
+new Field(
+    type: SignatureFieldType::TEXT,
+    recipientEmail: 'reviewer@company.com',
+    page: 1,
+    x: 130,
+    y: 400,
+    width: 300,
+    height: 60,
+    metadata: new FieldMetadata(
+        conditional: new FieldConditional(
+            controllingFieldKey: 'request_changes',      // = the checkbox's fieldKey
+            operator: ConditionalOperator::IS_CHECKED,   // ::IS_CHECKED | ::IS_NOT_CHECKED
+            action: ConditionalAction::SHOW              // ::SHOW | ::UNLOCK
+        )
+    )
+);
+```
+
+Use `action: 'unlock'` to keep a field visible but read-only until the box is checked. A
+malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
+`controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
+
 ---
 
 ## Error Handling
@@ -807,6 +911,18 @@ enum DocumentStatus: string {
     case COMPLETED = 'completed';
     case VOIDED = 'voided';
 }
+
+// Conditional (IF/THEN) operator — the condition evaluated against the controlling checkbox
+enum ConditionalOperator: string {
+    case IS_CHECKED = 'is_checked';
+    case IS_NOT_CHECKED = 'is_not_checked';
+}
+
+// Conditional (IF/THEN) action — what happens to the dependent field until the condition is met
+enum ConditionalAction: string {
+    case SHOW = 'show';     // hidden until met
+    case UNLOCK = 'unlock'; // visible but read-only until met
+}
 ```
 
 ### Readonly Classes
@@ -832,11 +948,28 @@ final class Field {
         public ?int $width = null,
         public ?int $height = null,
         public ?TemplateConfig $template = null,
-        public ?string $defaultValue = null,
+        public ?string $defaultValue = null,           // checkbox: 'true'/'false'; date: a fixed MM/DD/YYYY (omit to auto-fill the signing date)
         public bool $isMultiline = false,
         public bool $isReadonly = false,
         public bool $required = false,
-        public ?string $backgroundColor = null
+        public ?string $backgroundColor = null,
+        public ?FieldMetadata $metadata = null   // Conditional (IF/THEN) metadata
+    ) {}
+}
+
+// Conditional (IF/THEN) metadata
+final class FieldMetadata {
+    public function __construct(
+        public ?string $fieldKey = null,              // On a controlling checkbox
+        public ?FieldConditional $conditional = null  // On a dependent field
+    ) {}
+}
+
+final class FieldConditional {
+    public function __construct(
+        public string $controllingFieldKey,   // = the checkbox's fieldKey (non-empty)
+        public ConditionalOperator $operator, // ConditionalOperator::IS_CHECKED | ::IS_NOT_CHECKED
+        public ConditionalAction $action      // ConditionalAction::SHOW | ::UNLOCK
     ) {}
 }
 ```

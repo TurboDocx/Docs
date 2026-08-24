@@ -182,7 +182,9 @@ public class Main {
                 .fields(Arrays.asList(
                     // Alice's signature
                     new Field("signature", 1, 100, 650, 200, 50, "alice@example.com"),
-                    new Field("date", 1, 320, 650, 100, 30, "alice@example.com"),
+                    // defaultValue pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+                    new Field("date", 1, 320, 650, 100, 30, "alice@example.com",
+                        "12/31/2026", null, null, null, null, null, null),
                     // Bob's signature
                     new Field("signature", 1, 100, 720, 200, 50, "bob@example.com"),
                     new Field("date", 1, 320, 720, 100, 30, "bob@example.com")
@@ -429,7 +431,7 @@ Each `Duration` is a `{value, unit}` pair where `unit` is `"hours"` or `"days"` 
 
 ### Get status
 
-Check the document-level status. When an expiration schedule is set, the response also carries `getExpiresAt()` — the signing-window deadline (ISO 8601), or `null` when expiration is off. Once that deadline passes, the document moves to the terminal `expired` status and its signing links stop working. `getRecipients()` exposes the same deadline on `getDocument().getExpiresAt()`.
+Check the document-level status. When an expiration schedule is set, the response also carries `getExpiresAt()` — the signing-window deadline (ISO 8601), or `null` when expiration is off. Once that deadline passes, the document moves to the terminal `expired` status and its signing links stop working. `getRecipients()` exposes the same deadline on `getDocument().getExpiresAt()`. For per-signer detail, use [Get recipients](#get-recipients).
 
 ```java
 DocumentStatusResponse status = client.turboSign().getStatus("document-uuid");
@@ -438,6 +440,63 @@ System.out.println("Status: " + status.getStatus());       // "under_review", "c
 System.out.println("Expires: " + status.getExpiresAt());   // ISO 8601, or null when expiration is off
 System.out.println("Result: " + gson.toJson(status));
 ```
+
+### Get recipients
+
+See who the document went to, who has signed, who you are still waiting on,
+and who sent it.
+
+```java
+DocumentRecipientsResponse progress = client.turboSign().getRecipients("document-uuid");
+
+System.out.println(progress.getSummary().getCompleted() + "/"
+        + progress.getSummary().getTotal() + " signed, waiting on "
+        + progress.getSummary().getWaitingOn());
+
+for (DocumentRecipientsResponse.RecipientSignatureStatus r : progress.getRecipients()) {
+    System.out.println(r.getName() + " <" + r.getEmail() + ">: " + r.getEffectiveStatus()
+            + " (emailed " + r.getDelivery().getTotalSent() + "x)");
+}
+```
+
+:::tip Two status fields, and they differ on purpose
+
+`status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+is the one to display.
+
+On a voided or expired document an unsigned signer still reads `pending` in `status`, so
+branching on it would show someone as "still to sign" when their signing link is already dead.
+A completed signature is never revoked: someone who signed before the document was voided
+still reads `completed`.
+
+`summary` counts by `effectiveStatus`, and `waitingOn` (pending + viewed) drops to zero once
+the document is terminal.
+
+:::
+
+Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+`reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
+request, resends, reminders, expiry warnings and terminal notices; CC notifications are
+excluded, since a CC address is not a signer.
+
+:::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
+
+`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
+does **not** increment this, even though the email it sends *does* appear in `totalSent`.
+
+`lastRemindedAt` is a **cadence clock**, not a record of a reminder: the initial
+signature-request send, each scheduled reminder, each manual "remind now" and each expiry
+warning all stamp it. Only scheduled reminders bump `reminderCount`.
+
+So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
+timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+chased this person", read `totalSent`, not `reminderCount`.
+
+`warningCount` / `lastWarningAt` have no such caveat.
+
+:::
 
 ### Download document
 
@@ -595,14 +654,58 @@ The coordinate-based constructor takes positional arguments in this order: `new 
 | `y`               | `Integer`        | No\*     | Y coordinate in pixels                      |
 | `width`           | `Integer`        | No\*     | Field width in pixels                       |
 | `height`          | `Integer`        | No\*     | Field height in pixels                      |
-| `defaultValue`    | `String`         | No       | Pre-filled value                            |
+| `defaultValue`    | `String`         | No       | Pre-filled value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
 | `isMultiline`     | `Boolean`        | No       | Enable multiline for text fields            |
 | `isReadonly`      | `Boolean`        | No       | Make field read-only                        |
 | `required`        | `Boolean`        | No       | Make field required                         |
 | `backgroundColor` | `String`         | No       | Background color                            |
 | `template`        | `TemplateAnchor` | No       | Template anchor configuration               |
+| `metadata`        | `FieldMetadata`  | No       | Conditional (IF/THEN) metadata — see below  |
 
 \*Required when not using template anchors
+
+#### Metadata Configuration (Conditional Fields)
+
+The optional `metadata` builds IF/THEN relationships between fields. Put a `fieldKey` on a
+controlling `checkbox`, then point each dependent field's `conditional.controllingFieldKey` back
+at it.
+
+| Property                            | Type                    | Required | Description                                                    |
+| ----------------------------------- | ----------------------- | -------- | ------------------------------------------------------------- |
+| `fieldKey`                          | `String`                | No       | Stable id on a **controlling checkbox** (`type: "checkbox"`). |
+| `conditional`                       | `FieldConditional`      | No       | Rule on a **dependent field** (see below).                    |
+| `conditional.controllingFieldKey`   | `String`                | Yes      | The controlling checkbox's `fieldKey`. Must be non-empty.     |
+| `conditional.operator`              | `String`                | Yes      | `"is_checked"` or `"is_not_checked"`.                         |
+| `conditional.action`                | `String`                | Yes      | `"show"` (hidden until met) or `"unlock"` (locked until met). |
+
+`FieldMetadata` and `FieldConditional` are top-level model classes — import them with
+`import com.turbodocx.models.*;`. `Field` is immutable and built with `Field.Builder` (there are
+no setters), so attach the metadata while building the field.
+
+```java
+import com.turbodocx.models.*;
+
+// Controlling checkbox — carries a stable fieldKey
+Field checkbox = new Field.Builder()
+    .type("checkbox")
+    .recipientEmail("reviewer@company.com")
+    .page(1).x(100).y(400).width(20).height(20)
+    .metadata(FieldMetadata.forFieldKey("request_changes"))
+    .build();
+
+// Dependent text field — hidden until the checkbox is checked
+Field explain = new Field.Builder()
+    .type("text")
+    .recipientEmail("reviewer@company.com")
+    .page(1).x(130).y(400).width(300).height(60)
+    .metadata(FieldMetadata.forConditional(
+        new FieldConditional("request_changes", "is_checked", "show")))
+    .build();
+```
+
+A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
+`controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
 
 #### Template Configuration
 

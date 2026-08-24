@@ -29,7 +29,7 @@ The official TurboDocx TurboQuote SDK for Node.js and browser applications. Buil
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
+TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
 :::
 
 ## Installation
@@ -289,7 +289,8 @@ Fetch a single quote. The returned object includes a `statusInfo` field with tra
 
 ```typescript
 const quote = await TurboQuote.getQuote('quote-uuid');
-console.log(quote.statusInfo?.canSend);  // true when status is 'draft'
+console.log(quote.statusInfo?.canSend);     // true when status is 'draft'
+console.log(quote.statusInfo?.canDecline);  // also true when status is 'draft'
 console.log(quote.preparedBy?.name);     // e.g. "Acme Billing Integration" or the template sender
 console.log(quote.preparedBy?.email);    // may be undefined for an API-created quote — render a placeholder
 ```
@@ -307,6 +308,10 @@ const updated = await TurboQuote.updateQuote('quote-uuid', {
 });
 ```
 
+:::info `name` is trimmed, and renaming is draft-only
+`name` is trimmed on both `createQuote` and `updateQuote` — `'  Acme  '` is stored as `'Acme'` — and a name that is empty once trimmed returns a `400`. A quote can only be renamed while it is a **draft**; on any other status the update is rejected with `Cannot update quote that is not in draft status` (`templateId` is the only field exempt from that rule). Rename before you send, because **sending snapshots the quote's current name onto the TurboSign document** — that is the name signers see in the request email and on the signed PDF.
+:::
+
 #### deleteQuote
 
 Soft-delete a quote.
@@ -322,6 +327,8 @@ Copy a quote (and its line items) into a new draft.
 ```typescript
 const copy = await TurboQuote.duplicateQuote('quote-uuid');
 ```
+
+The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `updateQuote` before sending if that is not what you want signers to see.
 
 The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator — duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
@@ -484,17 +491,22 @@ const { quote, message, documentId } = await TurboQuote.sendQuoteWithDeliverable
 
 #### declineQuote
 
-Mark a sent quote as declined (typically called on behalf of the recipient).
+Mark a quote as declined — either a **sent** quote (typically on behalf of the recipient) or a **draft** whose deal died before it was ever sent.
+
+`reason` (max 190 characters) is **required once a quote has been sent** — declining a sent quote without one returns `400 CANNOT_DECLINE_QUOTE`. A **draft is declined without a reason**: the reason is stored on the quote's linked signature document, and a draft has none, so any reason passed for a draft is accepted by the API and **not recorded**.
 
 ```typescript
 const quote = await TurboQuote.declineQuote('quote-uuid', {
   reason: 'Budget constraints for this quarter',
 });
+
+// A draft is declined with no reason — one passed here would not be recorded.
+const closedOut = await TurboQuote.declineQuote('draft-quote-uuid', {});
 ```
 
 #### voidQuote
 
-Void a quote that should no longer be valid.
+Void a **sent** quote that should no longer be valid; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
 ```typescript
 const quote = await TurboQuote.voidQuote('quote-uuid', {
@@ -506,18 +518,22 @@ const quote = await TurboQuote.voidQuote('quote-uuid', {
 
 Handle a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate draft carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
 
-All three fields are **required**: `action` (`'void'` or `'decline'`), `reason` (≤ 190 characters), and `newValidUntil` (ISO date).
+`action` (`'void'`, `'decline'` or `'renew'`) and `newValidUntil` (ISO date) are **required**. `reason` (≤ 190 characters) is required for `'void'` and `'decline'`, and optional for `'renew'` — a renewal closes nothing out, so there is nothing to give a reason for. Use `'renew'` when the quote's signature request has already expired on its own; use `'void'` or `'decline'` when the quote is merely past its `validUntil` and you are closing it yourself.
 
 ```typescript
 const quote = await TurboQuote.handleExpiredQuote('quote-uuid', {
-  action: 'void',                 // 'void' | 'decline' — the only two valid actions
-  reason: 'Expired — re-quoting',  // required, max 190 chars
+  action: 'void',                 // 'void' | 'decline' | 'renew'
+  reason: 'Expired — re-quoting',  // required for void/decline, optional for renew
   newValidUntil: '2026-08-31',    // required, ISO date carried onto the duplicate
 });
 ```
 
 :::warning There is no `extend` or `resend` action
-`action` accepts **only** `"void"` and `"decline"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does for you — pass `newValidUntil` and it lands on the duplicate it creates.
+`action` accepts **only** `"void"`, `"decline"` and `"renew"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does for you — pass `newValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::info The replacement draft keeps the original name
+Unlike `duplicateQuote`, the draft this endpoint creates is **not** prefixed with `Copy of ` — re-issuing the same deal keeps the original quote's name, so repeated renewals cannot compound into `Copy of Copy of …`. That matters because the next send snapshots the name onto the TurboSign document.
 :::
 
 ---
