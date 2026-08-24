@@ -17,6 +17,7 @@
 const sidebars = {
   mySidebar: [
     'Welcome to TurboDocx',
+    'Dashboard',
     {
       type: 'category',
       label: 'TurboDocx Templating',
