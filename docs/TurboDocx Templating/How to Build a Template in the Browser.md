@@ -75,25 +75,55 @@ The menu offers what a business document needs:
 
 You can also use the keyboard shortcuts shown beside each entry — **Ctrl-Alt-1** for Heading 1, **Ctrl-Shift-8** for a bullet list, and so on.
 
-:::note Adding blocks with the mouse
-Hovering over any line shows a **+** button on its left. Click it to open the same menu without typing `/`.
+## Step 5: Add Blocks with the + Button
+
+If you would rather use the mouse than the keyboard, every line has a **+** button.
+
+1. Move your pointer over the line where you want the new block. A **+** appears to its left.
+2. Click the **+**.
+
+![Block editor with the pointer over an empty line, showing the + add-block button highlighted to the left of the line](/img/block_template_editor/step_5_add_block_button.png)
+
+The same menu opens. This is the identical list you get from `/` — use whichever you prefer.
+
+### Add a heading
+
+1. Click **Heading 2** in the menu.
+2. Type the heading text, for example `Pricing`.
+
+![Add block menu open with Heading 2 highlighted](/img/block_template_editor/step_6_choose_heading.png)
+
+### Add a table
+
+1. Press **Enter** to start a new line below your heading.
+2. Click the **+** button again.
+3. Click **Table** under **Advanced**.
+
+![Add block menu open with Table highlighted under the Advanced group](/img/block_template_editor/step_7_choose_table.png)
+
+A table appears in your document. Click any cell and type to fill it in, and press **Tab** to move to the next cell.
+
+![Document showing a Pricing heading above a completed table of services and rates, with the table highlighted](/img/block_template_editor/step_8_heading_and_table.png)
+
+:::tip
+You can put variables inside table cells too — press **@** while your cursor is in a cell.
 :::
 
-## Step 5: Name and Create the Template
+## Step 6: Name and Create the Template
 
 1. Click **Untitled** at the top of the page and type a name for your template.
 2. Click **Create Template** in the top-right corner.
 
-![Block editor containing a Statement of Work heading and a companyName variable, with the Create Template button highlighted](/img/block_template_editor/step_5_create_template.png)
+![Block editor containing a Statement of Work heading and a companyName variable, with the Create Template button highlighted](/img/block_template_editor/step_9_create_template.png)
 
-## Step 6: Generate a Document
+## Step 7: Generate a Document
 
 Your new template opens ready to use.
 
 1. Fill in each variable in the **Template Variables** panel on the right. The document preview updates to show your values.
 2. Click **Generate Deliverable** in the top-right corner.
 
-![Generate page showing the finished document with the variable filled in and the Generate Deliverable button highlighted](/img/block_template_editor/step_6_generate_deliverable.png)
+![Generate page showing the finished document with the variable filled in and the Generate Deliverable button highlighted](/img/block_template_editor/step_10_generate_deliverable.png)
 
 Your document is created and appears under **Deliverables**, where you can download it as a Word file or PDF, or send it for signature.
 
