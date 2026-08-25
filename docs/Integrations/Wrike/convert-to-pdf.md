@@ -1,6 +1,6 @@
 ---
 title: How to Convert Wrike Documents to PDF
-sidebar_position: 10
+sidebar_position: 11
 description: Configure a Wrike automation that converts the first attachment to PDF and attaches it back when a task, project, or folder changes status, with automatic in-place versioning on re-runs.
 keywords:
   - wrike convert to pdf
