@@ -1817,6 +1817,58 @@
           "response": []
         },
         {
+          "name": "Update Template Metadata (settings + slide roles)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-rapiddocx-org-id",
+                "value": "{{TurboDocx Organization ID}}"
+              },
+              {
+                "key": "authorization",
+                "value": "Bearer {{TurboDocx Access Token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json, text/plain, */*"
+              },
+              {
+                "key": "accept-language",
+                "value": "en-US,en;q=0.9"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              },
+              {
+                "key": "dnt",
+                "value": "1"
+              },
+              {
+                "key": "origin",
+                "value": "https://app.turbodocx.com"
+              },
+              {
+                "key": "referer",
+                "value": "https://app.turbodocx.com/"
+              }
+            ],
+            "description": "Updates a template's metadata JSON. Both body fields are optional and independent, so send only the part you are changing.\n\n`templateSettings` is merged into the template's existing settings.\n\n`slideRoles` replaces the whole slideRoles object. It marks which slides PowerPoint slide automation should treat specially, numbered from 1, where PPTX slide N is PDF page N:\n\n- `summarySlide` — the slide whose tables are filled with one row per project.\n- `loopingSlides` — independent slides that each repeat once per project.\n- `loopingSlideBlock` `{ start, count }` — a contiguous block of slides that repeats as a unit.\n- `loopingSlide` — a legacy single looping slide, superseded by the two options above.\n\nRequires the administrator or contributor role, and returns an error if another user holds the template lock.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"templateSettings\": { \"defaultFont\": \"Aptos\" },\n  \"slideRoles\": { \"summarySlide\": 2, \"loopingSlides\": [4, 7] }\n}"
+            },
+            "url": {
+              "raw": "https://api.turbodocx.com/template/{{TemplateId}}/metadata",
+              "protocol": "https",
+              "host": ["api", "turbodocx", "com"],
+              "path": ["template", "{{TemplateId}}", "metadata"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Delete Template",
           "request": {
             "method": "DELETE",

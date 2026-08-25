@@ -1868,6 +1868,106 @@ paths:
           description: Successful response
           content:
             application/json: {}
+  /template/{TemplateId}/metadata:
+    put:
+      tags:
+        - Template Routes
+      summary: Update Template Metadata
+      description: >-
+        Update a template's metadata JSON. Both body fields are optional and
+        independent, so send only the part you are changing. `templateSettings`
+        is merged into the template's existing settings, while `slideRoles`
+        replaces the whole slideRoles object.
+
+
+        `slideRoles` marks which slides PowerPoint slide automation should treat
+        specially. Slides are numbered from 1, and PPTX slide N is PDF page N:
+
+
+        - `summarySlide` — the slide whose tables are filled with one row per
+        project.
+
+        - `loopingSlides` — independent slides that each repeat once per project.
+
+        - `loopingSlideBlock` with `start` and `count` — a contiguous block of
+        slides that repeats as a unit.
+
+        - `loopingSlide` — a legacy single looping slide, superseded by the two
+        options above.
+
+
+        Requires the administrator or contributor role, and returns an error if
+        another user holds the template lock.
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                templateSettings:
+                  type: object
+                  description: Template settings, merged into any existing settings
+                slideRoles:
+                  type: object
+                  description: >-
+                    Slide-automation roles. Replaces the whole object; omit to
+                    leave the existing roles untouched.
+                  properties:
+                    summarySlide:
+                      type: integer
+                      description: 1-based slide filled as the summary slide
+                    loopingSlides:
+                      type: array
+                      description: 1-based slides that each repeat once per project
+                      items:
+                        type: integer
+                    loopingSlideBlock:
+                      type: object
+                      description: A contiguous block of slides that repeats as a unit
+                      properties:
+                        start:
+                          type: integer
+                        count:
+                          type: integer
+                    loopingSlide:
+                      type: integer
+                      description: Legacy single looping slide
+              example:
+                {
+                  "templateSettings": { "defaultFont": "Aptos" },
+                  "slideRoles": { "summarySlide": 2, "loopingSlides": [4, 7] },
+                }
+      parameters:
+        - name: x-rapiddocx-org-id
+          in: header
+          schema:
+            type: string
+          example: "{{TurboDocx Organization ID}}"
+        - name: authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{TurboDocx Access Token}}
+        - name: accept
+          in: header
+          schema:
+            type: string
+          example: application/json, text/plain, */*
+        - name: content-type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: TemplateId
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
   /template-item:
     get:
       tags:
