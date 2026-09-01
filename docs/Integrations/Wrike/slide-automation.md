@@ -91,6 +91,20 @@ Find the **Slide Automation** panel and turn its switch on.
 
 Turning this on reveals the settings in the rest of this guide. Leave it off and the automation generates a normal document, ignoring any slide roles you marked.
 
+### Step 5a: Decide what happens when a table outgrows its slide
+
+A summary table can end up with more rows than fit on one slide — you have more projects than the table was drawn for. **Continue long tables on extra slides** decides what happens then. It is **on by default**, which means the rows that don't fit continue on new slides instead of being dropped.
+
+![The Continue long tables on extra slides toggle highlighted, switched on](/img/wrike_slide_automation/11_continue_long_tables.png)
+
+Leave it on and TurboDocx adds as many slides as the rows need. Each new slide is a copy of the summary slide carrying the next batch of rows, and it keeps the table's columns, widths and cell colours. The heading above a table — "Delivered", "In Flight" — is printed once, where that table starts, so a continued table reads as the same table rather than a new section.
+
+Turn it off and each table shows only the rows that fit on its own slide; the rest are left out of the deck.
+
+:::tip
+The deck grows only as much as it needs to. If every project already fits, no extra slides are added and the deck looks exactly as it did before.
+:::
+
 <br/>
 
 ## Part 3: Choose which projects appear
@@ -179,6 +193,9 @@ The Checkbox field chosen in Step 6 no longer works — it may have been deleted
 
 **Some projects are missing from the summary.**
 Their Wrike status isn't listed in any of your tables. Add it to the right table's **Statuses** in Step 8.
+
+**Rows are missing from the end of a summary table.**
+The table ran out of room on its slide and **Continue long tables on extra slides** (Step 5a) is switched off, so the rows that didn't fit were left out. Switch it on to carry them onto extra slides.
 
 **A summary table stayed empty.**
 The **Table tag** doesn't match the table on the slide. Check the table's alt-text (or shape name) in PowerPoint and make it match the tag exactly.
