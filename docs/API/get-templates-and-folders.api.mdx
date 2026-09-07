@@ -1,7 +1,7 @@
 ---
 id: get-templates-and-folders
 title: "Get Templates and Folders"
-description: "Get Templates and Folders"
+description: "List all templates and folders in your TurboDocx workspace via the API. Returns template IDs, names, folders, and tags so you can browse or build a template picker. Includes example request, response, and pagination."
 sidebar_label: "Get Templates and Folders"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,63 @@ custom_edit_url: null
   
 
   # Get Templates and Folders
-  
-  Get Templates and Folders
-  
+
+The Get Templates and Folders endpoint returns every template and folder in your TurboDocx workspace, including each template's ID, name, parent folder, and tags. It is the starting point for most integrations: call it to discover the `TemplateId` values you pass to document generation, or to build a template picker inside your own app.
+
+## When to use it
+
+Use this endpoint to populate a "choose a template" dropdown, sync your template library into another system, or look up the ID of a template before generating a document or deleting it. Pass `showTags=true` when you want tag metadata for filtering, and use `limit` to page through large libraries.
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/template-item?limit=50&showTags=true" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+## Example response
+
+```json
+{
+  "results": {
+    "templateItems": [
+      {
+        "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
+        "name": "SOW Template",
+        "type": "template",
+        "folderId": null,
+        "tags": ["sales", "legal"]
+      },
+      {
+        "id": "7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90",
+        "name": "Proposals",
+        "type": "folder"
+      }
+    ],
+    "total": 2
+  }
+}
+```
+
+## Pagination
+
+Results are capped by `limit` (default applies when omitted). To page through a large library, increase `limit` or request successive pages and stop when the number of returned items is less than your `limit`.
+
+## Common errors
+
+| Status | Meaning | How to fix |
+| ------ | ------- | ---------- |
+| 401 | Missing or invalid API key | Send a valid `Authorization: Bearer` token. |
+| 403 | Key lacks access to this org | Confirm `x-rapiddocx-org-id` matches the key's organization. |
+
+## Related endpoints
+
+- [Get Template by ID](/docs/API/get-template-by-id) to fetch one template's full details
+- [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values) to add a new template
+- [Delete Template](/docs/API/delete-template) to remove a template you found here
+
   <DisplayEndpoint method="GET" endpoint="/template-item"/>
   <QueryTable title="query" data="W3sia2V5IjoibGltaXQiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzaG93VGFncyIsImV4YW1wbGUiOiIifV0=" />
   <HeadersTable title="headers" data="W3sia2V5IjoieC1yYXBpZGRvY3gtb3JnLWlkIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImlmLW5vbmUtbWF0Y2giLCJleGFtcGxlIjoiIn0seyJrZXkiOiJvcmlnaW4iLCJleGFtcGxlIjoiIn0seyJrZXkiOiJyZWZlcmVyIiwiZXhhbXBsZSI6IiJ9XQ==" />

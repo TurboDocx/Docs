@@ -1,7 +1,7 @@
 ---
 id: delete-template
 title: "Delete Template"
-description: "Delete Template"
+description: "Delete a TurboDocx template and its variable definitions, preview, and metadata with a single DELETE API call. Documents already generated from the template are unaffected. Includes example request, response, and error handling."
 sidebar_label: "Delete Template"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,49 @@ custom_edit_url: null
   
 
   # Delete Template
-  
-  Delete Template
-  
+
+The Delete Template endpoint permanently removes a template from your TurboDocx workspace, along with its preview, variable definitions, and metadata. Documents you have already generated from the template are not affected, so this is a safe way to clean up unused or outdated templates without touching delivered files. This action cannot be undone.
+
+## When to use it
+
+Use this endpoint to remove templates that are no longer in rotation, deduplicate templates created during testing, or let your users manage their own template library from inside your app. If you only want to change a template's name, description, or tags, use [Edit Template Metadata](/docs/API/edit-template-metadata) instead of deleting and re-uploading.
+
+## Example request
+
+```bash
+curl -X DELETE "https://api.turbodocx.com/template/2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+Replace the path segment with the `TemplateId` returned by [Get Templates and Folders](/docs/API/get-templates-and-folders).
+
+## Example response
+
+```json
+{
+  "results": {
+    "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
+    "deleted": true
+  }
+}
+```
+
+## Common errors
+
+| Status | Meaning | How to fix |
+| ------ | ------- | ---------- |
+| 401 | Missing or invalid API key | Send a valid `Authorization: Bearer` token. |
+| 403 | Key lacks access to this org | Confirm `x-rapiddocx-org-id` matches the key's organization. |
+| 404 | Template not found | The `TemplateId` is wrong or already deleted. List templates to confirm it exists. |
+
+## Related endpoints
+
+- [Get Templates and Folders](/docs/API/get-templates-and-folders) to find the `TemplateId` to delete
+- [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values) to create a replacement template
+- [Edit Template Metadata](/docs/API/edit-template-metadata) to rename or retag instead of deleting
+
   <DisplayEndpoint method="DELETE" endpoint="/template/{TemplateId}"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYWNjZXB0IiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYWNjZXB0LWxhbmd1YWdlIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoidXNlci1hZ2VudCIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifV0=" />
