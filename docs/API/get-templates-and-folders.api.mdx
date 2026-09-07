@@ -21,12 +21,12 @@ The Get Templates and Folders endpoint returns every template and folder in your
 
 ## When to use it
 
-Use this endpoint to populate a "choose a template" dropdown, sync your template library into another system, or look up the ID of a template before generating a document or deleting it. Pass `showTags=true` when you want tag metadata for filtering, and use `limit` to page through large libraries.
+Use this endpoint to populate a "choose a template" dropdown, sync your template library into another system, or look up the ID of a template before generating a document or deleting it. Results include each item's `tags` by default (`showTags` defaults to `true`); page through large libraries with `limit` and `offset`.
 
 ## Example request
 
 ```bash
-curl "https://api.turbodocx.com/template-item?limit=50&showTags=true" \
+curl "https://api.turbodocx.com/template-item?limit=25&offset=0" \
   -H "Authorization: Bearer $TURBODOCX_API_KEY" \
   -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
   -H "Accept: application/json"
@@ -34,38 +34,61 @@ curl "https://api.turbodocx.com/template-item?limit=50&showTags=true" \
 
 ## Example response
 
+Responses are wrapped in a `data` object. `results` is the array of items and `totalRecords` is the total count for paging.
+
 ```json
 {
-  "results": {
-    "templateItems": [
+  "data": {
+    "results": [
       {
         "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
         "name": "SOW Template",
+        "description": "Standard statement of work",
         "type": "template",
-        "folderId": null,
+        "isActive": true,
+        "templateFolderId": null,
+        "createdBy": "Jane Doe",
+        "email": "jane@example.com",
+        "deliverableCount": 12,
+        "templateCount": 0,
+        "fileSize": 48213,
+        "fileType": "docx",
+        "createdOn": "2026-05-01T14:22:10.000Z",
+        "updatedOn": "2026-05-01T14:22:10.000Z",
         "tags": ["sales", "legal"]
       },
       {
         "id": "7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90",
         "name": "Proposals",
-        "type": "folder"
+        "type": "folder",
+        "isActive": true,
+        "templateFolderId": null,
+        "templateCount": 5,
+        "deliverableCount": 0
       }
     ],
-    "total": 2
+    "totalRecords": 2
   }
 }
 ```
 
-## Pagination
+Each item's `type` is either `"template"` or `"folder"`. The `tags` array is included when `showTags` is true (the default).
 
-Results are capped by `limit` (default applies when omitted). To page through a large library, increase `limit` or request successive pages and stop when the number of returned items is less than your `limit`.
+## Pagination and filtering
+
+Page with `limit` (default `9`) and `offset` (default `0`): request successive pages by increasing `offset` by `limit`, and use `totalRecords` to know when to stop. Other supported query parameters:
+
+- `query` — free-text search across template names
+- `selectedTags` — one or more tag IDs (GUIDs) to filter by
+- `column0` + `order0` — sort by `name`, `createdOn`, `updatedOn`, `email`, or `templateCount`, in `asc` or `desc` order
+- `showTags` — set to `false` to omit the `tags` array
 
 ## Common errors
 
-| Status | Meaning | How to fix |
-| ------ | ------- | ---------- |
-| 401 | Missing or invalid API key | Send a valid `Authorization: Bearer` token. |
-| 403 | Key lacks access to this org | Confirm `x-rapiddocx-org-id` matches the key's organization. |
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 400 | A query parameter fails validation (for example a non-numeric `limit`) | Validation error envelope (`{ "message", "error", "data" }`) |
 
 ## Related endpoints
 

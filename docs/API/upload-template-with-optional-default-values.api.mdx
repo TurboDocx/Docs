@@ -50,24 +50,45 @@ Each entry in `variables` maps a placeholder in your document (for example `{Cus
 
 ## Example response
 
+On success the endpoint returns `201 Created`. The new template row is returned under `data.results.template`:
+
 ```json
 {
-  "results": {
-    "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
-    "name": "SOW Template",
-    "variableCount": 3
+  "data": {
+    "results": {
+      "template": {
+        "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
+        "name": "SOW Template",
+        "description": "Standard statement of work",
+        "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+        "isActive": true,
+        "templateFolderId": null,
+        "defaultFont": null,
+        "fonts": null,
+        "metadata": null,
+        "projectspaceId": null,
+        "createdOn": "2026-05-01T14:22:10.000Z",
+        "updatedOn": "2026-05-01T14:22:10.000Z"
+      }
+    }
   }
 }
 ```
 
+Use the returned `id` as the `TemplateId` for generating documents or for [Delete Template](/docs/API/delete-template).
+
 ## Common errors
 
-| Status | Meaning | How to fix |
-| ------ | ------- | ---------- |
-| 400 | Malformed `variables` or `tags` | These must be JSON strings. Validate the JSON before sending. |
-| 401 | Missing or invalid API key | Send a valid `Authorization: Bearer` token. |
-| 403 | Key lacks access to this org | Confirm `x-rapiddocx-org-id` matches the key's organization. |
-| 413 | File too large | Reduce the template file size or contact support about limits. |
+Error bodies use the standard envelope `{ "message", "error", "data": { "explanation", "context" } }` (the plan-limit error uses `type` in place of `error`).
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | Your plan's template or storage limit is reached | `{ "message", "type", "data": { "explanation", "context" } }` |
+| 400 | The file is invalid, or `variables`/`tags` are not valid JSON, or body validation fails | Error envelope |
+| 503 | The storage service is temporarily unavailable | Error envelope |
 
 ## Related endpoints
 

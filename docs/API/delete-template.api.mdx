@@ -1,7 +1,7 @@
 ---
 id: delete-template
 title: "Delete Template"
-description: "Delete a TurboDocx template and its variable definitions, preview, and metadata with a single DELETE API call. Documents already generated from the template are unaffected. Includes example request, response, and error handling."
+description: "Remove a template from your TurboDocx workspace with a single DELETE API call. Documents already generated from it are not affected. Includes a real example request, response, and error handling."
 sidebar_label: "Delete Template"
 hide_title: true
 hide_table_of_contents: true
@@ -17,7 +17,7 @@ custom_edit_url: null
 
   # Delete Template
 
-The Delete Template endpoint permanently removes a template from your TurboDocx workspace, along with its preview, variable definitions, and metadata. Documents you have already generated from the template are not affected, so this is a safe way to clean up unused or outdated templates without touching delivered files. This action cannot be undone.
+The Delete Template endpoint removes a template from your TurboDocx workspace so it can no longer be used to generate documents. Documents you have already generated from the template are not affected, so this is a safe way to retire unused or outdated templates without touching delivered files. There is no un-delete endpoint, so treat deletion as final.
 
 ## When to use it
 
@@ -36,22 +36,23 @@ Replace the path segment with the `TemplateId` returned by [Get Templates and Fo
 
 ## Example response
 
+On success the endpoint returns `200 OK` with an empty data object:
+
 ```json
 {
-  "results": {
-    "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
-    "deleted": true
-  }
+  "data": {}
 }
 ```
 
+Deletion is idempotent from the caller's side: deleting an ID that does not exist, or was already deleted, still returns `200` with `{ "data": {} }` rather than a `404`.
+
 ## Common errors
 
-| Status | Meaning | How to fix |
-| ------ | ------- | ---------- |
-| 401 | Missing or invalid API key | Send a valid `Authorization: Bearer` token. |
-| 403 | Key lacks access to this org | Confirm `x-rapiddocx-org-id` matches the key's organization. |
-| 404 | Template not found | The `TemplateId` is wrong or already deleted. List templates to confirm it exists. |
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user, or the template is locked | Empty (status only) |
+| 400 | The `id` path parameter is not a valid UUID | Validation error envelope (`{ "message", "error", "data" }`) |
 
 ## Related endpoints
 
