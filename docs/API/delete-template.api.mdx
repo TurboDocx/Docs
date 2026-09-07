@@ -51,8 +51,9 @@ Deletion is idempotent from the caller's side: deleting an ID that does not exis
 | Status | When | Response body |
 | ------ | ---- | ------------- |
 | 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
-| 403 | The key's role is not administrator, contributor, or user, or the template is locked | Empty (status only) |
-| 400 | The `id` path parameter is not a valid UUID | Validation error envelope (`{ "message", "error", "data" }`) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 423 | The template is locked | `{ "error": "Resource is locked", "message", "data": { "locked": true, "lockedBy", "lockedOn" } }` |
+| 400 | The `id` path parameter is not a valid UUID | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
 
 ## Related endpoints
 

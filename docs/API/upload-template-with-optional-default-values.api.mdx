@@ -25,13 +25,15 @@ Use this endpoint to let your users bring their own templates, to migrate a libr
 
 ## Request fields
 
-| Field | Type | Description |
-| ----- | ---- | ----------- |
-| `templateFile` | file (binary) | The DOCX or PPTX file to upload. Required. |
-| `name` | string | Display name for the template, for example `SOW Template`. |
-| `description` | string | Optional human-readable description. |
-| `variables` | JSON string | Array of placeholder definitions with optional default values. |
-| `tags` | JSON string | Optional array of tags for filtering and organization. |
+| Field | Type | Required | Description |
+| ----- | ---- | :------: | ----------- |
+| `templateFile` | file (binary) | Yes | The DOCX or PPTX file to upload. |
+| `name` | string | Yes | Display name for the template, for example `SOW Template`. |
+| `variables` | JSON string | Yes | Array of placeholder definitions with optional default values. Send `[]` if the template has none. |
+| `description` | string | No | Human-readable description. |
+| `tags` | JSON string | No | Array of tags for filtering and organization. |
+
+The "optional default values" in the name refers to the per-variable defaults, not to the `variables` field itself: the field is required, but each variable's default value is optional.
 
 ## Example request
 
@@ -80,15 +82,16 @@ Use the returned `id` as the `TemplateId` for generating documents or for [Delet
 
 ## Common errors
 
-Error bodies use the standard envelope `{ "message", "error", "data": { "explanation", "context" } }` (the plan-limit error uses `type` in place of `error`).
+Error bodies vary by type: schema validation uses `{ "message", "type": "ValidationError", "data": { "errors": [...] } }`, while file, storage, and plan-limit errors use `{ "message", ("error" | "type"), "data": { "explanation", "context" } }`.
 
 | Status | When | Response body |
 | ------ | ---- | ------------- |
 | 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
 | 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | `name` or `variables` is missing, or `variables`/`tags` is not valid JSON (schema validation) | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+| 400 | The uploaded file is invalid ("Improper File Upload") | `{ "message", "error", "data": { "explanation", "context" } }` |
 | 400 | Your plan's template or storage limit is reached | `{ "message", "type", "data": { "explanation", "context" } }` |
-| 400 | The file is invalid, or `variables`/`tags` are not valid JSON, or body validation fails | Error envelope |
-| 503 | The storage service is temporarily unavailable | Error envelope |
+| 503 | The storage service is temporarily unavailable | `{ "message", "error", "data": { "explanation", "context" } }` |
 
 ## Related endpoints
 

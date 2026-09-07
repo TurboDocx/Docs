@@ -17,7 +17,7 @@ custom_edit_url: null
 
   # Get Templates and Folders
 
-The Get Templates and Folders endpoint returns every template and folder in your TurboDocx workspace, including each template's ID, name, parent folder, and tags. It is the starting point for most integrations: call it to discover the `TemplateId` values you pass to document generation, or to build a template picker inside your own app.
+The Get Templates and Folders endpoint lists the templates and folders at the root of your TurboDocx workspace, including each item's ID, name, parent folder, and tags. By default it returns only root-level items; pass `type=template` to enumerate every template across all folders. It is the starting point for most integrations: call it to discover the `TemplateId` values you pass to document generation, or to build a template picker inside your own app.
 
 ## When to use it
 
@@ -47,12 +47,12 @@ Responses are wrapped in a `data` object. `results` is the array of items and `t
         "type": "template",
         "isActive": true,
         "templateFolderId": null,
-        "createdBy": "Jane Doe",
+        "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
         "email": "jane@example.com",
         "deliverableCount": 12,
         "templateCount": 0,
         "fileSize": 48213,
-        "fileType": "docx",
+        "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "createdOn": "2026-05-01T14:22:10.000Z",
         "updatedOn": "2026-05-01T14:22:10.000Z",
         "tags": ["sales", "legal"]
@@ -72,7 +72,7 @@ Responses are wrapped in a `data` object. `results` is the array of items and `t
 }
 ```
 
-Each item's `type` is either `"template"` or `"folder"`. The `tags` array is included when `showTags` is true (the default).
+Each item's `type` is either `"template"` or `"folder"`. `createdBy` is the creator's user ID (a UUID), not a display name; use `email` for the human identity. `fileType` is the file's MIME type (for example `application/vnd.openxmlformats-officedocument.wordprocessingml.document` for a DOCX). The `tags` array is included when `showTags` is true (the default).
 
 ## Pagination and filtering
 
@@ -88,7 +88,7 @@ Page with `limit` (default `9`) and `offset` (default `0`): request successive p
 | Status | When | Response body |
 | ------ | ---- | ------------- |
 | 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
-| 400 | A query parameter fails validation (for example a non-numeric `limit`) | Validation error envelope (`{ "message", "error", "data" }`) |
+| 400 | A query parameter fails validation (for example a non-numeric `limit`) | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
 
 ## Related endpoints
 
