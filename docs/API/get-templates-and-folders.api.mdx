@@ -1,7 +1,7 @@
 ---
 id: get-templates-and-folders
 title: "Get Templates and Folders"
-description: "Get Templates and Folders"
+description: "List all templates and folders in your TurboDocx workspace via the API. Returns template IDs, names, folders, and tags so you can browse or build a template picker. Includes example request, response, and pagination."
 sidebar_label: "Get Templates and Folders"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,86 @@ custom_edit_url: null
   
 
   # Get Templates and Folders
-  
-  Get Templates and Folders
-  
+
+The Get Templates and Folders endpoint lists the templates and folders at the root of your TurboDocx workspace, including each item's ID, name, parent folder, and tags. By default it returns only root-level items; pass `type=template` to enumerate every template across all folders. It is the starting point for most integrations: call it to discover the `TemplateId` values you pass to document generation, or to build a template picker inside your own app.
+
+## When to use it
+
+Use this endpoint to populate a "choose a template" dropdown, sync your template library into another system, or look up the ID of a template before generating a document or deleting it. Results include each item's `tags` by default (`showTags` defaults to `true`); page through large libraries with `limit` and `offset`.
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/template-item?limit=25&offset=0" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+## Example response
+
+Responses are wrapped in a `data` object. `results` is the array of items and `totalRecords` is the total count for paging.
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
+        "name": "SOW Template",
+        "description": "Standard statement of work",
+        "type": "template",
+        "isActive": true,
+        "templateFolderId": null,
+        "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+        "email": "jane@example.com",
+        "deliverableCount": 12,
+        "templateCount": 0,
+        "fileSize": 48213,
+        "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "createdOn": "2026-05-01T14:22:10.000Z",
+        "updatedOn": "2026-05-01T14:22:10.000Z",
+        "tags": ["sales", "legal"]
+      },
+      {
+        "id": "7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90",
+        "name": "Proposals",
+        "type": "folder",
+        "isActive": true,
+        "templateFolderId": null,
+        "templateCount": 5,
+        "deliverableCount": 0
+      }
+    ],
+    "totalRecords": 2
+  }
+}
+```
+
+Each item's `type` is either `"template"` or `"folder"`. `createdBy` is the creator's user ID (a UUID), not a display name; use `email` for the human identity. `fileType` is the file's MIME type (for example `application/vnd.openxmlformats-officedocument.wordprocessingml.document` for a DOCX). The `tags` array is included when `showTags` is true (the default).
+
+## Pagination and filtering
+
+Page with `limit` (default `9`) and `offset` (default `0`): request successive pages by increasing `offset` by `limit`, and use `totalRecords` to know when to stop. Other supported query parameters:
+
+- `query` — free-text search across template names
+- `selectedTags` — one or more tag IDs (GUIDs) to filter by
+- `column0` + `order0` — sort by `name`, `createdOn`, `updatedOn`, `email`, or `templateCount`, in `asc` or `desc` order
+- `showTags` — set to `false` to omit the `tags` array
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 400 | A query parameter fails validation (for example a non-numeric `limit`) | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Get Template by ID](/docs/API/get-template-by-id) to fetch one template's full details
+- [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values) to add a new template
+- [Delete Template](/docs/API/delete-template) to remove a template you found here
+
   <DisplayEndpoint method="GET" endpoint="/template-item"/>
   <QueryTable title="query" data="W3sia2V5IjoibGltaXQiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzaG93VGFncyIsImV4YW1wbGUiOiIifV0=" />
   <HeadersTable title="headers" data="W3sia2V5IjoieC1yYXBpZGRvY3gtb3JnLWlkIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImlmLW5vbmUtbWF0Y2giLCJleGFtcGxlIjoiIn0seyJrZXkiOiJvcmlnaW4iLCJleGFtcGxlIjoiIn0seyJrZXkiOiJyZWZlcmVyIiwiZXhhbXBsZSI6IiJ9XQ==" />

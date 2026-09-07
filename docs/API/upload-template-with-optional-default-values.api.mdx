@@ -1,7 +1,7 @@
 ---
 id: upload-template-with-optional-default-values
 title: "Upload Template with Optional Default Values"
-description: "Upload Template with Optional Default Values"
+description: "Programmatically upload a DOCX or PPTX template to TurboDocx via the API, with named variables, placeholders, and default values. Includes a full multipart example request, response, and error handling."
 sidebar_label: "Upload Template with Optional Default Values"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,89 @@ custom_edit_url: null
   
 
   # Upload Template with Optional Default Values
-  
-  Upload Template with Optional Default Values
-  
+
+The Upload Template endpoint adds a new DOCX or PPTX template to your TurboDocx workspace in a single multipart request. Alongside the file, you can define the template's variables (the placeholders TurboDocx fills at generation time), give each one a default value, and attach tags. This lets you provision templates programmatically instead of uploading them by hand in the UI, which is how most developers onboard templates at scale.
+
+## When to use it
+
+Use this endpoint to let your users bring their own templates, to migrate a library of documents into TurboDocx during onboarding, or to keep templates in version control and push updates from CI. Once uploaded, generate documents from the returned template ID and manage it with [Get Templates and Folders](/docs/API/get-templates-and-folders) and [Delete Template](/docs/API/delete-template).
+
+## Request fields
+
+| Field | Type | Required | Description |
+| ----- | ---- | :------: | ----------- |
+| `templateFile` | file (binary) | Yes | The DOCX or PPTX file to upload. |
+| `name` | string | Yes | Display name for the template, for example `SOW Template`. |
+| `variables` | JSON string | Yes | Array of placeholder definitions with optional default values. Send `[]` if the template has none. |
+| `description` | string | No | Human-readable description. |
+| `tags` | JSON string | No | Array of tags for filtering and organization. |
+
+The "optional default values" in the name refers to the per-variable defaults, not to the `variables` field itself: the field is required, but each variable's default value is optional.
+
+## Example request
+
+```bash
+curl -X POST "https://api.turbodocx.com/template" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -F "templateFile=@./sow-template.docx" \
+  -F "name=SOW Template" \
+  -F "description=Standard statement of work" \
+  -F 'variables=[{"placeholder":"CustomerName","name":"CustomerName","allowRichTextInjection":false,"order":0},{"placeholder":"ProjectName","name":"ProjectName","allowRichTextInjection":false,"order":1},{"placeholder":"BillRate","name":"BillRate","allowRichTextInjection":false,"order":2}]' \
+  -F 'tags=["sales","legal"]'
+```
+
+Each entry in `variables` maps a placeholder in your document (for example `{CustomerName}`) to a named variable. Set `allowRichTextInjection` to `true` for fields that accept formatted content such as logos or rich blocks.
+
+## Example response
+
+On success the endpoint returns `201 Created`. The new template row is returned under `data.results.template`:
+
+```json
+{
+  "data": {
+    "results": {
+      "template": {
+        "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
+        "name": "SOW Template",
+        "description": "Standard statement of work",
+        "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+        "isActive": true,
+        "templateFolderId": null,
+        "defaultFont": null,
+        "fonts": null,
+        "metadata": null,
+        "projectspaceId": null,
+        "createdOn": "2026-05-01T14:22:10.000Z",
+        "updatedOn": "2026-05-01T14:22:10.000Z"
+      }
+    }
+  }
+}
+```
+
+Use the returned `id` as the `TemplateId` for generating documents or for [Delete Template](/docs/API/delete-template).
+
+## Common errors
+
+Error bodies vary by type: schema validation uses `{ "message", "type": "ValidationError", "data": { "errors": [...] } }`, while file, storage, and plan-limit errors use `{ "message", ("error" | "type"), "data": { "explanation", "context" } }`.
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | `name` or `variables` is missing, or `variables`/`tags` is not valid JSON (schema validation) | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+| 400 | The uploaded file is invalid ("Improper File Upload") | `{ "message", "error", "data": { "explanation", "context" } }` |
+| 400 | Your plan's template or storage limit is reached | `{ "message", "type", "data": { "explanation", "context" } }` |
+| 503 | The storage service is temporarily unavailable | `{ "message", "error", "data": { "explanation", "context" } }` |
+
+## Related endpoints
+
+- [Extract Template Placeholders and Generate Preview](/docs/API/extract-template-placeholders-and-generate-preview) to auto-detect placeholders from a file before uploading
+- [Get Templates and Folders](/docs/API/get-templates-and-folders) to confirm the upload and retrieve the new template ID
+- [Delete Template](/docs/API/delete-template) to remove a template you uploaded
+
   <DisplayEndpoint method="POST" endpoint="/template"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifV0=" />
