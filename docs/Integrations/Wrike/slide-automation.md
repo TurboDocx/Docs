@@ -186,6 +186,60 @@ Your automation is live. The next time a project moves into the trigger status, 
 
 <br/>
 
+## Part 6: Colour and hide shapes on the slide (optional)
+
+Parts 4 and 5 cover tables. A slide often carries other marked-up pieces too — a status banner in the
+corner, a "delay drivers" note — and those are configured from the **template** rather than the
+automation wizard.
+
+Mark a shape in PowerPoint by giving it a name or alt-text wrapped in braces, such as
+`{risk_banner}`. Then open the template's **Details** page, where **Tagged Shapes** lists everything
+the deck carries.
+
+### Step 12: Open a tagged shape
+
+Click the three-dot menu beside a shape and choose **Colours & visibility**.
+
+### Step 13: Say what the shape does
+
+Pick one:
+
+- **Changes colour** — the shape stays on every slide and takes its colour from a Wrike field. A
+  banner that turns red when a project is blocked and green when it is on track.
+- **Appears and disappears** — the shape is dropped from a project's slide unless the field says
+  otherwise. A warning note that only shows on the projects that have something to warn about.
+- **Both** — a shape that does each, keyed on its own field.
+
+Only the settings for your choice are shown.
+
+For **Changes colour**, pick the field, then add a colour for each value. Each rule shows a preview
+of the banner it produces, so you can see the result rather than reading hex codes. **A rule with no
+values is the catch-all** — it covers every value the other rules don't name, which is how you set a
+default colour.
+
+For **Appears and disappears**, pick the field and either list the values that show the shape, or
+switch on **Whenever the field has any value** for a note that appears whenever there is something
+to say.
+
+Leaving a shape unconfigured is fine: it simply appears on every slide, exactly as the template
+draws it.
+
+### Step 14: Colour one cell of a table by a value
+
+A tagged **table** on the Details page also offers **Cell colour**, which paints a single column
+rather than a whole row.
+
+It asks two things, because they are usually different fields:
+
+1. **Decide by** — the Wrike field whose value chooses the colour.
+2. **Paint this column** — the column that actually changes.
+
+That separation is the point. A gate table might show each gate's name, its challenges and its
+mitigations, with no status column anywhere — yet the gate's *status* is what should turn its
+**name** cell green. The column list comes from the table in your deck, so you pick a real column.
+
+<br/>
+
 ## Troubleshooting
 
 **The deck was not generated, and Wrike shows a comment about the inclusion field.**
@@ -199,6 +253,16 @@ The table ran out of room on its slide and **Continue long tables on extra slide
 
 **A summary table stayed empty.**
 The **Table tag** doesn't match the table on the slide. Check the table's alt-text (or shape name) in PowerPoint and make it match the tag exactly.
+
+**A tagged banner is a block of colour with no words in it.**
+The variable behind it lost its Wrike field mapping — most often because the template was edited and
+re-uploaded. Open the template's Details page and check the placeholder is still mapped to a Wrike
+field, then re-map it if not.
+
+**A tagged shape never changes colour.**
+Its rule lists values the chosen field never reports. Reopen **Colours & visibility** and check the
+values match what the field actually contains — if you changed the field after writing the rules, the
+old values no longer apply.
 
 **The looping slide didn't repeat.**
 Check the slide is still marked as a **Looping slide** in Part 1, and that **Slide Automation** is switched on in Step 5.
