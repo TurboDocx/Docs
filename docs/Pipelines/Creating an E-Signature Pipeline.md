@@ -60,7 +60,7 @@ Use a document that represents the *common* case. If most of your invoices follo
 
 ## Step 2: Source
 
-Now name the pipeline and connect the source it will watch.
+Now name the pipeline and connect the source it will watch. **SharePoint** is the source available today, with more connectors on the way.
 
 1. **Name the pipeline** something descriptive, for example "Vendor Invoice Signing" or "NDA Intake."
 2. **Pick the SharePoint document library** to watch. This is your **dedicated intake library**, the folder where PDFs are dropped to kick off the pipeline. If the picker has nothing to choose, SharePoint isn't connected yet, see **Before You Begin** above.
@@ -99,8 +99,6 @@ This step defines what the pipeline reads from each document and, optionally, wh
 2. **Set routing rules (optional)** to send documents that match certain text to different destination folders. For example, route anything containing "West Region" to one folder and "East Region" to another. Anything that doesn't match a rule simply lands in the default destination folder you'll choose later.
 3. **Place signature fields (required)**. This step also has a **Signature Placement** section. Click **Place Fields**, then click on the sample document to drop signature, date, initial, and other fields. You must place **at least one signature field** before you can continue to the next step. TurboDocx pins each field to the same spot on every document the pipeline processes. See **[Field Placement](./Field%20Placement)** for all the field types and details.
 
-![The Extract & Route step with the customerCode extraction field highlighted, above the routing rules list](/img/creating-an-e-signature-pipeline/step3-extract-route.png)
-
 <br/>
 
 :::info Routing and extraction are optional, but signature placement is not
@@ -121,8 +119,6 @@ Then set the sender identity recipients will see on the signature email:
 
 - **Sender name**: the name that appears as the sender of the signature request.
 - **Reply-to email**: the address recipients reach if they reply to the signature email.
-
-![The Signers step with the three signer-resolution options highlighted: fixed email, extracted field, and cloud connector](/img/creating-an-e-signature-pipeline/step4-signers.png)
 
 <br/>
 
@@ -155,10 +151,6 @@ The final step decides where finished documents go and lets you review everythin
 4. **Deliver as a single ZIP file**: toggle on to bundle the signed PDF (and the audit trail, if enabled) into one `.zip` in the destination folder, instead of filing them as separate files.
 5. **Notifications**: set who is emailed when a document is signed and delivered, and who is alerted when one fails. A failure recipient is required, so problems never go unnoticed. See **[Pipeline Notifications](./Pipeline%20Notifications)** for default recipients, per-store overrides, and how to customize the completion email.
 6. **Review and save**: confirm the source, extraction, signer, and destination settings, then save to activate the pipeline.
-
-![The Destination & Review step with the filename pattern builder highlighted, alongside the destination folder, audit-trail toggle, and review summary](/img/creating-an-e-signature-pipeline/step5-destination-review.png)
-
-<br/>
 
 To file everything as one archive instead of separate files, turn on **Deliver as a single ZIP file**.
 

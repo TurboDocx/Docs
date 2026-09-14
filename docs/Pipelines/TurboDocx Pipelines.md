@@ -51,7 +51,7 @@ Every pipeline follows the same three-part shape:
 
 ### Source
 
-The place the pipeline watches. Today this is a **SharePoint document library**, a "dedicated intake library" where you (or an upstream system) drop PDFs that need signing.
+The place the pipeline watches. **SharePoint** is the source available today, a "dedicated intake library" where you (or an upstream system) drop PDFs that need signing. It's the first of several planned connectors, with more sources on the way.
 
 ### Manipulation
 
@@ -59,7 +59,7 @@ What happens to each document in flight: **field extraction** pulls values out o
 
 ### Destination
 
-Where finished work lands. Signed PDFs and their audit trails are filed into a destination folder, with a filename pattern you control.
+Where finished work lands. Signed PDFs and their audit trails are filed into a **SharePoint** destination folder today, with a filename pattern you control. As with sources, SharePoint is the first available connector and more destinations are on the way.
 
 <br/>
 
