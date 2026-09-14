@@ -74,6 +74,20 @@ Create a library used *only* for this pipeline's intake. That keeps unrelated fi
 
 <br/>
 
+### Move Processed Files to a Sent Folder (Optional)
+
+Turn on **Move files to a Sent folder once sent for signing** to keep your intake library tidy. As soon as a document is sent for signing, its original moves out of the intake library into a Sent folder you choose. From then on, the intake library only ever shows what still needs sending.
+
+![The Source step with the Move files to a Sent folder toggle highlighted](/img/creating-an-e-signature-pipeline/step2-source-move-to-sent.png)
+
+<br/>
+
+:::caution Keep the Sent folder separate
+The Sent folder must be a different folder from the intake library. If they were the same, moving a file back into the watched library would trigger the pipeline again.
+:::
+
+<br/>
+
 ## Step 3: Extract & Route
 
 This step defines what the pipeline reads from each document and, optionally, where it sends matched documents.
@@ -114,6 +128,19 @@ Recipients are more likely to trust and act on an email when the sender name and
 
 <br/>
 
+### What Signers See (Optional)
+
+Two optional fields control how the signature request appears to each signer:
+
+- **Document name shown to signers**: the name signers see for the document in the request email. Leave it blank to use the delivered file name. This is useful when the source file name is a code or an ID that wouldn't mean anything to the signer.
+- **Message to signers**: a short note shown in the body of each signer's request email. Leave it blank for no message.
+
+Both fields accept **insert-field** chips, so you can drop in values like the document name or the pipeline name and have them fill in for each document.
+
+![The Signers step with the Document name shown to signers field highlighted, above the Message to signers field](/img/creating-an-e-signature-pipeline/step4-signer-document-name.png)
+
+<br/>
+
 ## Step 5: Destination & Review
 
 The final step decides where finished documents go and lets you review everything before saving.
@@ -121,10 +148,17 @@ The final step decides where finished documents go and lets you review everythin
 1. **Default destination folder**: where signed PDFs are filed when no routing rule sends them elsewhere.
 2. **Filename pattern**: how each signed file is named. You can build the name from extracted values (for example, a customer code or date) so files are easy to find later.
 3. **Audit-trail upload**: toggle on to file the signing audit trail alongside each signed PDF.
-4. **Error-alert email**: the address that's notified if a document can't be processed, so issues never go unnoticed.
-5. **Review and save**: confirm the source, extraction, signer, and destination settings, then save to activate the pipeline.
+4. **Deliver as a single ZIP file**: toggle on to bundle the signed PDF (and the audit trail, if enabled) into one `.zip` in the destination folder, instead of filing them as separate files.
+5. **Notifications**: set who is emailed when a document is signed and delivered, and who is alerted when one fails. A failure recipient is required, so problems never go unnoticed. See **[Pipeline Notifications](./Pipeline%20Notifications)** for default recipients, per-store overrides, and how to customize the completion email.
+6. **Review and save**: confirm the source, extraction, signer, and destination settings, then save to activate the pipeline.
 
-![The Destination & Review step with the filename pattern builder highlighted, alongside the destination folder, audit-trail toggle, error-alert email, and review summary](/img/creating-an-e-signature-pipeline/step5-destination-review.png)
+![The Destination & Review step with the filename pattern builder highlighted, alongside the destination folder, audit-trail toggle, and review summary](/img/creating-an-e-signature-pipeline/step5-destination-review.png)
+
+<br/>
+
+To file everything as one archive instead of separate files, turn on **Deliver as a single ZIP file**.
+
+![The Destination step with the Deliver as a single ZIP file toggle highlighted](/img/creating-an-e-signature-pipeline/step5-deliver-as-zip.png)
 
 <br/>
 
@@ -136,6 +170,7 @@ Once saved, the pipeline starts watching its intake library. From now on, every 
 
 ## What's Next?
 
+- **[Pipeline Notifications](./Pipeline%20Notifications)**: choose who is alerted on success and failure, and customize the completion email.
 - **[Field Extraction](./Field%20Extraction)**: pull data out of each document with patterns.
 - **[Field Placement](./Field%20Placement)**: position signature and form fields on the sample.
 - **[Cloud Connectors](./Cloud%20Connectors)**: resolve signers from your own internal systems.
