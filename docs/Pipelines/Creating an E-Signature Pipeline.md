@@ -21,6 +21,8 @@ keywords:
 
 This guide walks you through the pipeline wizard one step at a time. By the end, you'll have a hands-free automation that picks up PDFs from a folder, signs them, and files the results.
 
+The wizard has five steps, shown in the progress rail on the left: **Sample**, **Source**, **Extract & Route**, **Sign**, and **Deliver**. This guide follows them in that order.
+
 <br/>
 
 :::info Enterprise feature
@@ -33,6 +35,7 @@ Pipelines are an **Enterprise** feature. If you don't see the option to create o
 
 You'll need:
 
+- **SharePoint connected to TurboDocx.** An administrator must connect your SharePoint or OneDrive account before you can pick an intake library. If it isn't connected yet, open **Pipelines**, click the settings gear, and choose **Connect SharePoint**. This is a one-time setup that includes registering an Azure AD app. See **[Configuring SharePoint or OneDrive](../Advanced%20Configuration/Configuring%20Sharepoint%20or%20OneDrive)** and the **[SharePoint Pipelines Troubleshooting & FAQ](./SharePoint%20Pipelines%20Troubleshooting%20and%20FAQ)** for the full setup.
 - A **SharePoint document library** to use as your intake folder.
 - A **representative sample PDF**, meaning a real example of the kind of document this pipeline will process.
 - The details of who should sign these documents.
@@ -60,7 +63,7 @@ Use a document that represents the *common* case. If most of your invoices follo
 Now name the pipeline and connect the source it will watch.
 
 1. **Name the pipeline** something descriptive, for example "Vendor Invoice Signing" or "NDA Intake."
-2. **Connect and pick the SharePoint document library** to watch. This is your **dedicated intake library**, the folder where PDFs are dropped to kick off the pipeline.
+2. **Pick the SharePoint document library** to watch. This is your **dedicated intake library**, the folder where PDFs are dropped to kick off the pipeline. If the picker has nothing to choose, SharePoint isn't connected yet, see **Before You Begin** above.
 
 Think of the intake library as the pipeline's inbox: anything that lands there gets processed automatically.
 
@@ -92,20 +95,21 @@ The Sent folder must be a different folder from the intake library. If they were
 
 This step defines what the pipeline reads from each document and, optionally, where it sends matched documents.
 
-1. **Define field extraction**, meaning the values to pull out of each PDF such as a customer code, a date, an email, or an amount. These extracted values can drive filenames, signer lookup, and routing. See **[Field Extraction](./Field%20Extraction)** for the full details and examples.
+1. **Define field extraction (optional)**, meaning the values to pull out of each PDF such as a customer code, a date, an email, or an amount. These extracted values can drive filenames, signer lookup, and routing. See **[Field Extraction](./Field%20Extraction)** for the full details and examples.
 2. **Set routing rules (optional)** to send documents that match certain text to different destination folders. For example, route anything containing "West Region" to one folder and "East Region" to another. Anything that doesn't match a rule simply lands in the default destination folder you'll choose later.
+3. **Place signature fields (required)**. This step also has a **Signature Placement** section. Click **Place Fields**, then click on the sample document to drop signature, date, initial, and other fields. You must place **at least one signature field** before you can continue to the next step. TurboDocx pins each field to the same spot on every document the pipeline processes. See **[Field Placement](./Field%20Placement)** for all the field types and details.
 
 ![The Extract & Route step with the customerCode extraction field highlighted, above the routing rules list](/img/creating-an-e-signature-pipeline/step3-extract-route.png)
 
 <br/>
 
-:::info Routing is optional
-If every document should land in the same place, skip routing and everything goes to the default destination folder.
+:::info Routing and extraction are optional, but signature placement is not
+If every document should land in the same place, skip routing and everything goes to the default destination folder. You must still place at least one signature field before you can continue.
 :::
 
 <br/>
 
-## Step 4: Signers
+## Step 4: Signers (the "Sign" step)
 
 Tell the pipeline who should sign each document. Choose how the signer is resolved:
 
@@ -141,11 +145,11 @@ Both fields accept **insert-field** chips, so you can drop in values like the do
 
 <br/>
 
-## Step 5: Destination & Review
+## Step 5: Destination & Review (the "Deliver" step)
 
-The final step decides where finished documents go and lets you review everything before saving.
+The final step decides where finished documents go and lets you review everything before saving. When everything looks right, click **Create Pipeline** to save and activate it.
 
-1. **Default destination folder**: where signed PDFs are filed when no routing rule sends them elsewhere.
+1. **Default destination folder**: the fallback folder where signed PDFs are filed. Each Step 2 routing rule can send matches to its own folder; anything that matches no rule lands here.
 2. **Filename pattern**: how each signed file is named. You can build the name from extracted values (for example, a customer code or date) so files are easy to find later.
 3. **Audit-trail upload**: toggle on to file the signing audit trail alongside each signed PDF.
 4. **Deliver as a single ZIP file**: toggle on to bundle the signed PDF (and the audit trail, if enabled) into one `.zip` in the destination folder, instead of filing them as separate files.

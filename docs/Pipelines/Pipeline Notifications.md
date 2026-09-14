@@ -27,7 +27,7 @@ Pipelines are an **Enterprise** feature. If you don't see the option to create o
 
 <br/>
 
-You set all of this on the **Destination & Review** step of the pipeline wizard. If you haven't built a pipeline yet, start with **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** and come back here to fine-tune the alerts.
+You set **default notifications** on the **Destination** step (labeled **Deliver** in the wizard's progress rail), and **per-store overrides** on the **Extract & Route** step. If you haven't built a pipeline yet, start with **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** and come back here to fine-tune the alerts.
 
 <br/>
 
