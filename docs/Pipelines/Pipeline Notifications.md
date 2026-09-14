@@ -40,7 +40,7 @@ The **Default notifications** section defines two recipient lists that apply to 
 
 Type an address into either box and press **Enter** to add it. Each address becomes a removable chip, so you can build a small distribution list for each outcome.
 
-![The Default notifications section highlighted, with the Signed and delivered and Failed recipient lists](/img/pipeline-notifications-delivery/default-notifications.png)
+![The Default notifications section highlighted, with the Signed and delivered and Failed recipient lists](/img/pipeline-notifications/default-notifications.png)
 
 <br/>
 
@@ -62,7 +62,7 @@ You can set:
 
 To drop live values into the subject or message, use the **Insert a field** chips below each box. Available fields include the pipeline name, the signed file name, and the run ID, so a subject like `Your signed agreement is ready: {pipelineName}` fills in automatically for each run.
 
-![The completion email customizer highlighted, showing the subject line, message, insert-field chips, and the attach-as-ZIP toggle](/img/pipeline-notifications-delivery/completion-email-customizer.png)
+![The completion email customizer highlighted, showing the subject line, message, insert-field chips, and the attach-as-ZIP toggle](/img/pipeline-notifications/completion-email-customizer.png)
 
 <br/>
 
@@ -78,7 +78,7 @@ If your pipeline uses routing rules on the **Extract & Route** step, each routin
 
 Each routing rule has a **Notify** chip. It reads **Default** when the store uses the pipeline's default notifications, and **Custom** once you override it.
 
-![A routing rule with its Notify chip highlighted in the Extract and Route step](/img/pipeline-notifications-delivery/route-notify-chip.png)
+![A routing rule with its Notify chip highlighted in the Extract and Route step](/img/pipeline-notifications/route-notify-chip.png)
 
 <br/>
 
@@ -89,7 +89,7 @@ Click the **Notify** chip to open the **Store notifications** panel for that sto
 
 Enter each address and press **Enter**, then click **Save**. If you leave a custom **Failed** list empty, that store falls back to the default failure recipients, so failures always reach someone.
 
-![The Store notifications panel with the Custom recipients option highlighted for the Signed and delivered outcome](/img/pipeline-notifications-delivery/store-notifications-drawer.png)
+![The Store notifications panel with the Custom recipients option highlighted for the Signed and delivered outcome](/img/pipeline-notifications/store-notifications-drawer.png)
 
 <br/>
 
