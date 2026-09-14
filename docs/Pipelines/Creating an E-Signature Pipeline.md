@@ -107,6 +107,8 @@ This step has three sections, matching the wizard: **Route each Document**, **Al
 2. **Also extract (optional)**: pull additional values out of each PDF, such as a customer code, a date, an email, or an amount. Extracted values can drive filenames, signer lookup, and routing. See **[Field Extraction](./Field%20Extraction)** for the details and examples.
 3. **Signature Placement (required)**: click **Place Fields** to open the placement tool, then pick a field type and click on the sample to drop signature, date, initial, and other fields. You must place **at least one signature field** before you can continue. TurboDocx pins each field to the same spot on every document the pipeline processes. See **[Field Placement](./Field%20Placement)** for all the field types and details.
 
+![The Extract & Route step, showing its Route each Document, Also extract, and Signature Placement sections](/img/creating-an-e-signature-pipeline/step3-extract-route.png)
+
 <br/>
 
 :::info Routing and extraction are optional, but signature placement is not
@@ -127,6 +129,8 @@ Then set the sender identity recipients will see on the signature email:
 
 - **Sender name**: the name that appears as the sender of the signature request.
 - **Reply-to email**: the address recipients reach if they reply to the signature email.
+
+![The Signers step, showing the three ways to resolve a signer: a fixed email and name, an extracted Document field, or a Cloud connector](/img/creating-an-e-signature-pipeline/step4-signers.png)
 
 <br/>
 
@@ -159,6 +163,10 @@ The final step decides where finished documents go and lets you review everythin
 4. **Deliver as a single ZIP file**: toggle on to bundle the signed PDF (and the audit trail, if enabled) into one `.zip` in the destination folder, instead of filing them as separate files.
 5. **Notifications**: set who is emailed when a document is signed and delivered, and who is alerted when one fails. A failure recipient is required, so problems never go unnoticed. See **[Pipeline Notifications](./Pipeline%20Notifications)** for default recipients, per-store overrides (a "store" is one routing rule), and how to customize the completion email.
 6. **Review and save**: confirm the source, extraction, signer, and destination settings, then save to activate the pipeline.
+
+![The Destination step, showing the destination picker, the default destination folder, and the filename pattern builder](/img/creating-an-e-signature-pipeline/step5-destination-review.png)
+
+<br/>
 
 To file everything as one archive instead of separate files, turn on **Deliver as a single ZIP file**.
 
