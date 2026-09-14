@@ -1,6 +1,6 @@
 ---
 title: SharePoint Pipelines Troubleshooting & FAQ
-sidebar_position: 6
+sidebar_position: 7
 description: Fix common SharePoint Pipelines setup and connection errors, including the AADSTS500113 "no reply address is registered" redirect URI error.
 keywords:
   - sharepoint pipelines

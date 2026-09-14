@@ -1,6 +1,6 @@
 ---
 title: Cloud Connectors (Enterprise)
-sidebar_position: 5
+sidebar_position: 6
 description: Resolve signer details from systems behind your firewall. A Cloud connector runs inside your network, makes only outbound HTTPS calls to TurboDocx, and keeps your data in place. No inbound firewall access required.
 keywords:
   - cloud connectors
