@@ -72,6 +72,12 @@ For local development you can add an `http://localhost` (or `http://127.0.0.1`) 
 `http://` origins can be spoofed and weaken clickjacking protection, so they are for **local development and testing only**. Remove every `http://` origin and use `https://` before the configuration is used in production. Production origins must be `https`.
 :::
 
+## What your signer sees
+
+When identity verification is on, the signer opens the embedded page and is met by the passcode gate before the document loads. They click **Send Code**, receive the one-time code by email (or SMS), enter it, and then continue to the document.
+
+![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-enable-embedded-signing/07-signer-otp-gate.png)
+
 ## What's next
 
 - [Embedded Signing and Identity Verification](./Embedded%20Signing.md) — request a signing URL, the three verification modes, and the SDK calls your backend makes.
