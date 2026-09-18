@@ -28,19 +28,19 @@ Go to **Settings**, open the **Organization Settings** tab, find the **Signature
 
 In the E-Signature Settings dialog, click **Identity Verification** in the left-hand section list. This section has two tabs: **One-time passcode** and **Identity & embedding**.
 
+<!-- RECAPTURE: this screenshot was shot in a wider browser window than the other step screenshots (2133x987 vs 1422x676), so the dialog renders smaller and shifts position between steps. Reshoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) to match 01 and 03-06. -->
 ![The E-Signature Settings dialog with the Identity Verification section highlighted](/img/how-to-enable-embedded-signing/02-identity-verification-tab.png)
 
-## Step 3: Require a passcode and choose the channel
+## Step 3: Require a passcode
 
-On the **One-time passcode** tab, turn on **Require identity verification** and choose how the passcode reaches the signer:
-
-- **Email** sends the passcode to the signer's email address.
-- **SMS** texts it. SMS needs a connected provider and a mobile number on each SMS signer, and it is offered only if your plan includes it.
+On the **One-time passcode** tab, turn on **Require identity verification** so signers enter a passcode before they can sign.
 
 ![The One-time passcode tab with Require identity verification highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
+Choosing the passcode channel (email or SMS), connecting an SMS provider, and setting up delivery-failure alerts are covered in a dedicated guide: [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md).
+
 :::note
-Identity verification is optional and set per recipient. A recipient sent without it signs with no extra step. The channel you pick here is the default for signatures created in the app; when you send through the SDK or API, you set verification on each recipient yourself.
+Identity verification is optional and set per recipient. A recipient sent without it signs with no extra step. The channel you pick is the default for signatures created in the app; when you send through the SDK or API, you set verification on each recipient yourself.
 :::
 
 ## Step 4: Allow external identity verification or an override
@@ -72,12 +72,7 @@ For local development you can add an `http://localhost` (or `http://127.0.0.1`) 
 `http://` origins can be spoofed and weaken clickjacking protection, so they are for **local development and testing only**. Remove every `http://` origin and use `https://` before the configuration is used in production. Production origins must be `https`.
 :::
 
-## What your signer sees
-
-When identity verification is on, the signer opens the embedded page and is met by the passcode gate before the document loads. They click **Send Code**, receive the one-time code by email (or SMS), enter it, and then continue to the document.
-
-![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-enable-embedded-signing/07-signer-otp-gate.png)
-
 ## What's next
 
+- [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md) - choose email or SMS delivery, connect an SMS provider, set up delivery-failure alerts, and see what the signer sees.
 - [Embedded Signing and Identity Verification](./Embedded%20Signing.md) — request a signing URL, the three verification modes, and the SDK calls your backend makes.
