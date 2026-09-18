@@ -19,7 +19,7 @@ keywords:
 
 Embedded signing lets your application take a signer straight from your own UI to a TurboSign signing page, without sending signing-link emails. When a signer is ready, your backend asks TurboSign for a short-lived signing URL and opens it (a new tab, a redirect, or an iframe). The signer keeps their real email as the signer of record, and the verification is recorded on the certificate of completion.
 
-Every embedded signer is verified in one of three ways.
+Identity verification is optional and set per recipient. A recipient with no verification signs with no extra step. When you do verify an embedded signer, it happens in one of three ways.
 
 | Mode | Who verifies the signer | When |
 |---|---|---|
@@ -27,14 +27,18 @@ Every embedded signer is verified in one of three ways.
 | External identity verification (`external_idv`) | Your own identity provider (for example CAPA) | Your backend asserts the verification when it requests the signing URL |
 | Override (`override`) | Nobody. An explicit opt-out for development and testing | Recorded on the certificate and in the audit trail |
 
+Verification is not tied to embedding: the same per-recipient step-up applies whether the signer arrives through an embedded URL or an emailed link.
+
 ## Before you start
 
 An organization admin enables embedded signing in the E-Signature settings, on the **Identity & embedding** tab:
 
-- **Require identity verification** turns on the one-time passcode flow and sets the default method (email or SMS).
+- **Require identity verification** turns on the one-time passcode flow and sets the default method (email or SMS). This default applies to signatures created in the TurboDocx UI. For SDK and API sends it is *not* applied automatically — you set `identityVerification` on each recipient yourself (see [The recipient](#the-recipient) below).
 - **Allow external identity verification** lets your integration assert a signer's identity with your own provider.
 - **Allow identity verification override** lets a sender send a link that skips verification. This is intended for development and testing. While it is on, the settings page shows a persistent banner.
-- **Allowed embedding domains** lists the origins allowed to embed the signing page in an iframe. Leave it empty to allow embedding from anywhere.
+- **Allowed embedding domains** lists the origins allowed to embed the signing page in an iframe. This is **deny by default**: while the list is empty, no site may embed the signing page. Add your app's origin (for example `https://app.yourcompany.com`) before you try to iframe it.
+
+Your integration can read (but not change) these org gates with `TurboSign.getEmbeddedSigningSettings()`, so it can check what is enabled before requesting a signing URL. Changing the gates is done in the settings UI, where the change is recorded in the settings audit trail.
 
 ## The recipient
 
@@ -133,4 +137,4 @@ When your own provider verifies the signer, pass the assertion in `createSigning
 - **Never store a signing URL.** Request one when the signer clicks. The single-use URLs expire quickly by design.
 - **Verify the signer in your own app first.** Confirm the logged-in user is the recipient before you request a URL.
 - **Use `externalId`** to reference a signer by your own record (an Airtable row, a CRM contact) instead of storing TurboDocx's recipient id.
-- **Set allowed embedding domains** if you iframe the signing page, so only your app can embed it.
+- **Set allowed embedding domains** before you iframe the signing page. Embedding is denied by default, so until your app's origin is on the list the signing page will refuse to frame.
