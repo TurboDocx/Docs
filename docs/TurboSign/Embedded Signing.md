@@ -24,7 +24,7 @@ Identity verification is optional and set per recipient. A recipient with no ver
 | Mode | Who verifies the signer | When |
 |---|---|---|
 | One-time passcode (`otp`) | TurboSign, by email or SMS | On the signing page, before the document is shown |
-| External identity verification (`external_idv`) | Your own identity provider (for example CAPA) | Your backend asserts the verification when it requests the signing URL |
+| External identity verification (`external_idv`) | Your identity verification vendor | Your backend asserts the verification when it requests the signing URL |
 | Override (`override`) | Nobody. An explicit opt-out for development and testing | Recorded on the certificate and in the audit trail |
 
 Verification is not tied to embedding: the same per-recipient step-up applies whether the signer arrives through an embedded URL or an emailed link.
@@ -59,7 +59,7 @@ When you prepare a document, mark a recipient for embedded signing by giving it 
 - `externalId` is your own identifier for the signer (for example an Airtable record id). It is unique within a document and lets you request a signing URL by your key instead of storing TurboDocx's recipient id.
 - `identityVerification` is one of:
   - `{ "mode": "otp", "channel": "email" | "sms" }`
-  - `{ "mode": "external_idv", "provider": "CAPA", "maxAgeMinutes": 1440 }`
+  - `{ "mode": "external_idv", "provider": "your-idv-vendor", "maxAgeMinutes": 1440 }`
   - `{ "mode": "override", "overrideIdentityVerification": true, "reason": "Sandbox testing" }`
 
 ## Requesting a signing URL
@@ -73,14 +73,16 @@ import { TurboSign } from "@turbodocx/sdk"
 const { url, expiresAt, identityVerificationMode, pendingChecks } =
   await TurboSign.createSigningUrl(documentId, { externalId: "your_customer_123" })
 
-// external_idv recipient — pass the assertion from your own identity provider:
+// external_idv recipient — pass the assertion from your identity verification vendor:
 const { url } = await TurboSign.createSigningUrl(documentId, {
   recipientId,
   identityAssertion: {
-    provider: "CAPA",
-    verificationId: "capa_verif_8f2a91",
+    provider: "your-idv-vendor",
+    verificationId: "idv_verif_8f2a91",
     verifiedAt: "2026-09-16T15:02:00Z",
     subjectEmail: "jane@example.com",
+    method: "id_document_liveness",
+    assuranceLevel: "ial2_aal2",
   },
   returnUrl: "https://app.yourcompany.com/signed",
 })
@@ -124,9 +126,61 @@ Open `url` for the signer. The signing page handles the rest: for `external_idv`
 
 ## External identity verification
 
-When your own provider verifies the signer, pass the assertion in `createSigningUrl`. TurboSign checks that the provider matches the recipient, the asserted email matches the recipient's email, the verification is recent (within `maxAgeMinutes`, default 24 hours) and not future-dated, and that the same verification has not already been used by another signer on the document. The provider and reference are recorded on the certificate:
+When your identity verification vendor verifies the signer, pass the assertion in `createSigningUrl`. TurboSign checks that the provider matches the recipient, the asserted email matches the recipient's email (unless you set `overrideEmailMatching`, see below), the verification is recent (within `maxAgeMinutes`, default 24 hours) and not future-dated, and that the same verification has not already been used by another signer on the document. The provider and reference are recorded on the certificate:
 
-> Identity verification: Verified by CAPA (reference capa_verif_8f2a91) on Sep 16, 2026 at 3:02 PM UTC.
+> Identity verification: Verified by your identity verification vendor (reference idv_verif_8f2a91) on Sep 16, 2026 at 3:02 PM UTC.
+
+### The assertion
+
+The assertion has four required fields:
+
+| Field | Description |
+|---|---|
+| `provider` | The identity verification vendor that performed the check. Must match the `provider` on the recipient's `identityVerification` block. |
+| `verificationId` | The vendor's reference id for this verification. Recorded on the certificate and reused to detect a verification replayed across signers. |
+| `verifiedAt` | ISO 8601 timestamp of when the vendor verified the signer. Must be recent (within `maxAgeMinutes`) and not future-dated. |
+| `subjectEmail` | The email the vendor verified. By default it must equal the recipient's email. Always sent, even when you override the match. |
+
+You can also send any of these optional fields. They are additive: each one is recorded on the tamper-evident audit trail as evidence, and the five below render on the audit trail alongside the provider and reference.
+
+| Field | Description |
+|---|---|
+| `method` | How the vendor verified the signer. One of `id_document`, `id_document_liveness`, `kba`, `database`, `sso`, or `other`. |
+| `methodDetail` | A free-text description of the technique. Required when `method` is `other`. |
+| `assuranceLevel` | The vendor's proofing level, for example `ial2_aal2`, `eidas_substantial`, or `eidas_high`. |
+| `verifiedName` | The legal name the vendor confirmed for the signer. |
+| `evidenceUrl` | A link to the vendor's verification record. Must be an `https` URL. |
+
+:::note Your responsibility
+When you use external identity verification, you (the integrator) are responsible for verifying the signer's identity. TurboSign records the asserted verification (provider, reference, timestamp, and the fields above) into the tamper-evident audit trail, but it does not independently perform or guarantee the verification. This mirrors how embedded signing works across the major e-signature vendors.
+:::
+
+:::note When to assert
+Assert the verification off your identity vendor's webhook-confirmed result, or a server-side status fetch keyed by the reference id. Do not assert off the client-side "finished" event. Identity vendors deliver the authoritative verdict asynchronously by webhook, so the client "finished" signal is not the approval.
+:::
+
+### Overriding the email match
+
+By default the asserted `subjectEmail` MUST equal the recipient's email. If they differ, `createSigningUrl` rejects the assertion.
+
+Setting `overrideEmailMatching: true` explicitly bypasses only that one check. Every other check still runs: the provider must match the recipient, `verifiedAt` must be recent and not future-dated, and the verification must not already have been used by another signer on the document. `subjectEmail` is still required; it is simply not compared to the recipient's email.
+
+```typescript
+const { url } = await TurboSign.createSigningUrl(documentId, {
+  recipientId,
+  identityAssertion: {
+    provider: "your-idv-vendor",
+    verificationId: "idv_verif_8f2a91",
+    verifiedAt: "2026-09-16T15:02:00Z",
+    subjectEmail: "verified-on-file@example.com",
+    overrideEmailMatching: true,
+  },
+})
+```
+
+:::caution You take responsibility for the match
+With `overrideEmailMatching: true`, TurboDocx no longer confirms that the verified identity belongs to the signer of record. You take responsibility for confirming that the identity your vendor verified is the recipient who signs. The override is recorded in the JSON audit trail, but it is not shown on the rendered audit PDF.
+:::
 
 ## Override
 

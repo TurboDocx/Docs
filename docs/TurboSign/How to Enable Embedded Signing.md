@@ -47,7 +47,7 @@ Identity verification is optional and set per recipient. A recipient sent withou
 
 Switch to the **Identity & embedding** tab. Two optional switches change how a signer can be verified:
 
-- **Allow external identity verification** lets an outside identity provider (for example CAPA) verify a signer. Your integration asserts the verification when it requests the signing link, instead of TurboSign sending a passcode.
+- **Allow external identity verification** lets your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link, instead of TurboSign sending a passcode.
 - **Allow identity verification override** lets a sender send a link that **skips** verification. This is for development and testing; every signature completed this way is marked as **not identity-verified** on the certificate and in the audit trail. While it is on, the settings show a persistent banner.
 
 ![The Identity & embedding tab with the external verification and override switches highlighted](/img/how-to-enable-embedded-signing/04-identity-embedding-toggles.png)
