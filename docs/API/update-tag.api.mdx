@@ -17,7 +17,7 @@ custom_edit_url: null
 
   # Update Tag
 
-The Update Tag endpoint changes a tag's `label`. It is a `PUT`, but in practice `label` is the only field you can usefully send; the tag's other fields (`id`, `orgId`) are not accepted in the body.
+The Update Tag endpoint changes a tag's `label`. It is a `PUT`, but in practice `label` is the only field you should send. `orgId` is not an accepted body field and returns a validation error if sent. `id` is different: it isn't rejected by validation, and it isn't ignored either; the endpoint applies whatever body you send, so an `id` that differs from the `TagId` in the URL will overwrite the tag's actual `id` instead of being discarded. Omit `id` from the body and let the URL path segment identify the tag to update.
 
 ## When to use it
 

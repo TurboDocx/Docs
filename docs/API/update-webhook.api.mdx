@@ -69,7 +69,7 @@ On success the endpoint returns `200 OK` with the updated webhook, in the same s
 | 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
 | 403 | The key's role is not administrator | Empty (status only) |
 | 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
-| 400 | A field fails validation, or a URL in `urls` is not HTTPS | `{ "error": "..." }` |
+| 400 | A field fails validation, or a URL in `urls` is not HTTPS | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
 | 409 | Renaming to a name another active webhook already uses | `{ "message", "error": "WebhookNameTaken", "data": { "constraint", "orgId", "name" } }` |
 
 ## Related endpoints

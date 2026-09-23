@@ -1,7 +1,7 @@
 ---
 id: replay-webhook-delivery
 title: "Replay Webhook Delivery"
-description: "Manually retry one past delivery by its ID. Creates a new delivery row and immediately attempts redelivery to all configured URLs."
+description: "Manually retry one past delivery by its ID. Creates a new delivery row and immediately re-sends the event to the URL the original delivery targeted."
 sidebar_label: "Replay Webhook Delivery"
 hide_title: true
 hide_table_of_contents: true
@@ -17,7 +17,7 @@ custom_edit_url: null
 
   # Replay Webhook Delivery
 
-The Replay Webhook Delivery endpoint manually retries a specific past delivery, identified by its `deliveryId`. It creates a brand-new delivery row for the attempt (the original row is left as-is) and immediately re-sends the event to the webhook's configured URL.
+The Replay Webhook Delivery endpoint manually retries a specific past delivery, identified by its `deliveryId`. It creates a brand-new delivery row for the attempt (the original row is left as-is) and immediately re-sends the event to the URL the original delivery was made to (not every URL configured on the webhook, if it has more than one).
 
 ## When to use it
 
