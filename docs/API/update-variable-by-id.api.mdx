@@ -17,7 +17,7 @@ custom_edit_url: null
 
   # Update Variable (by ID)
 
-The Update Variable (by ID) endpoint replaces a knowledge-base or template-folder variable's content and metadata. Unlike [Edit Template Metadata](/docs/API/edit-template-metadata), this is a full replace, not a partial patch: `mimeType` and `text` are required on every call, along with either `isGlobal` or `templateFolderId`.
+The Update Variable (by ID) endpoint replaces a knowledge-base or template-folder variable's content and metadata. Unlike [Edit Template Metadata](/docs/API/edit-template-metadata), this is a full replace, not a partial patch: `mimeType` and `text` are required on every call. `isGlobal` and `templateFolderId` are both optional; at most one may be set.
 
 ## When to use it
 
@@ -41,7 +41,7 @@ curl -X PUT "https://api.turbodocx.com/Variable/e4f5a6b7-8c9d-4e0f-a1b2-3c4d5e6f
   }'
 ```
 
-`{VariableId}` in the path is the `variableMapId` returned by [Read Variables (Folder)](/docs/API/read-variables-folder), not the underlying `Variable.id`. Send exactly one of `isGlobal: true` or `templateFolderId`; sending both is rejected. For an image variable, set `mimeType` to `"image"` and `text` to a base64 data string.
+`{VariableId}` in the path is the `variableMapId` returned by [Read Variables (Folder)](/docs/API/read-variables-folder), not the underlying `Variable.id`. Optionally send `isGlobal: true` or `templateFolderId`, but not both; sending both is rejected. For an image variable, set `mimeType` to `"image"` and `text` to a base64 data string.
 
 ## Example response
 
@@ -67,8 +67,7 @@ On success the endpoint returns `200 OK` with the updated variable wrapped in a 
 | Status | When | Response body |
 | ------ | ---- | ------------- |
 | 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
-| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
-| 423 | The template the variable belongs to is locked | `{ "error": "Resource is locked", "message", "data": { "locked": true, "lockedBy", "lockedOn" } }` |
+| 403 | The key's role is not administrator, contributor, or user. For `isGlobal: true` updates (as in the example above), only administrator and contributor are allowed; the `user` role is also rejected with `403`. | Empty (status only) |
 | 400 | `mimeType` or `text` is missing, or both `isGlobal` and `templateFolderId` are set | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
 | 409 | The variable was deleted or modified by someone else before this update landed | `{ "error", "data": { "explanation" } }` |
 

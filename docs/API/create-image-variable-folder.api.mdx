@@ -40,7 +40,7 @@ curl -X POST "https://api.turbodocx.com/Variable" \
   }'
 ```
 
-Send exactly one of `templateFolderId` (scopes the variable to that folder) or `isGlobal: true` (adds it to your org-wide knowledge base); sending both is rejected. `text` must be a base64 `data:` URI when `mimeType` is `"image"`, or plain text/HTML otherwise. `placeholder` must be unique within its folder or knowledge base and, if set, must be wrapped in curly braces, for example `{CompanyLogo}`.
+Optionally send `templateFolderId` (scopes the variable to that folder) or `isGlobal: true` (adds it to your org-wide knowledge base); at most one may be set, and sending both is rejected. `text` must be a base64 `data:` URI when `mimeType` is `"image"`, or plain text/HTML otherwise. `placeholder` must be unique within its folder or knowledge base and, if set, must be wrapped in curly braces, for example `{CompanyLogo}`.
 
 ## Example response
 
@@ -73,8 +73,9 @@ On success the endpoint returns the created variable:
 | ------ | ---- | ------------- |
 | 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
 | 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
-| 400 | `mimeType` or `text` is missing, `placeholder` is not wrapped in `{ }`, or both `isGlobal` and `templateFolderId` are set | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
-| 400 | `placeholder` already exists in that folder or knowledge base | `{ "message", "type": "TemplateError", "data": [{ "message", "type", "data": { "explanation", "context" } }] }` |
+| 403 | `isGlobal: true` and the key's role is `user` (creating a knowledge-base variable requires administrator or contributor) | Empty (status only) |
+| 400 | `mimeType` or `text` is missing, or both `isGlobal` and `templateFolderId` are set | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+| 400 | `placeholder` is not wrapped in `{ }`, or already exists in that folder or knowledge base | `{ "message", "type": "TemplateError", "data": [{ "message", "type", "data": { "explanation", "context" } }] }` |
 
 ## Related endpoints
 

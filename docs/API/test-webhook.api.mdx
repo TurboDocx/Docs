@@ -61,7 +61,7 @@ Both `eventType` and `payload` are optional; omit them to send a default sample 
 }
 ```
 
-If a URL returns a non-2xx status or times out, its entry has `isDelivered: false`, `status: "retrying"` or `"failed"`, and the failure is counted in `summary.failed` with a message in `summary.errors`.
+If a URL returns a non-2xx status or times out, its entry has `isDelivered: false` and `status: "retrying"` (while attempts remain) or `"failed"` (once all attempts are exhausted), with details in `errorMessage`. `summary.failed`/`summary.errors` do not currently reflect HTTP-level failures; they only count a database error while creating the delivery record, so a URL that returns 4xx/5xx or times out through all attempts still increments `summary.successful` and leaves `summary.errors` empty. Inspect each `deliveries[]` entry's `isDelivered`, `status`, and `errorMessage` to detect a failing receiver rather than relying on `summary.failed`.
 
 ## Common errors
 

@@ -34,6 +34,8 @@ curl "https://api.turbodocx.com/api/webhooks/signature/deliveries?limit=20&offse
 
 Supported filters: `eventType`, `isDelivered` (`true`/`false`), and `httpStatus` (an exact status code). `limit` defaults to `20`, `offset` to `0`.
 
+> **Known limitation:** `isDelivered=true` and `httpStatus` do not currently filter results correctly due to a backend issue: `isDelivered=true` returns the same (undelivered-only) results as `isDelivered=false`, and `httpStatus` is ignored entirely regardless of value. Only `isDelivered=false` behaves as documented today.
+
 ## Example response
 
 ```json
@@ -64,7 +66,7 @@ Supported filters: `eventType`, `isDelivered` (`true`/`false`), and `httpStatus`
 }
 ```
 
-`status` summarizes the row as `"delivered"`, `"failed"` (all `maxAttempts` attempts exhausted), `"retrying"`, or `"pending"`. Failed deliveries retry automatically with backoff (1, 5, then 10 minutes) up to `maxAttempts` (3) before landing in the dead-letter state.
+`status` summarizes the row as `"delivered"`, `"failed"` (all `maxAttempts` attempts exhausted), `"retrying"`, or `"pending"`. Failed deliveries retry automatically with backoff (immediate, then +1 minute, then +5 minutes) for up to `maxAttempts` (3) attempts total before landing in the dead-letter state.
 
 ## Common errors
 

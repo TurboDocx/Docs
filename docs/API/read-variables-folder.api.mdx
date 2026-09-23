@@ -32,7 +32,7 @@ curl "https://api.turbodocx.com/Variable?isGlobal=true&limit=25&offset=0&showTag
   -H "Accept: application/json"
 ```
 
-Pass exactly one of `isGlobal=true` (your org-wide knowledge base) or `templateFolderId=<folder id>` (a specific folder); the two are mutually exclusive. `limit` defaults to `6`, `offset` to `0`, and `query` filters by name.
+Optionally pass `isGlobal=true` (your org-wide knowledge base) or `templateFolderId=<folder id>` (a specific folder) to scope the list; at most one may be set, and passing both is rejected. Omit both to list across your accessible scope. `limit` defaults to `6`, `offset` to `0`, and `query` filters by name.
 
 ## Example response
 

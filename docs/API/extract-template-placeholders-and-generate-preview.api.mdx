@@ -57,7 +57,7 @@ With `skipFile=true`:
 }
 ```
 
-Without `skipFile`, the response also includes `templatePdf`, a base64-encoded PDF rendering of the uploaded file. Pass the `vars` array as the `variables` field (JSON-stringified) when you subsequently call [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values).
+Without `skipFile`, the response also includes `templatePdf`, the rendered PDF of the uploaded file. It is a JSON-serialized Node.js Buffer, not a base64 string: an object of the form `{"type": "Buffer", "data": [37, 80, 68, 70, ...]}`, where `data` is an array of the PDF's raw bytes. To use it, reconstruct the binary from the byte array, for example `Buffer.from(templatePdf.data)` in Node.js or `new Uint8Array(templatePdf.data)` in the browser. Pass the `vars` array as the `variables` field (JSON-stringified) when you subsequently call [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values).
 
 ## Common errors
 

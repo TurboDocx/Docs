@@ -17,7 +17,7 @@ custom_edit_url: null
 
   # Read Tag
 
-The Read Tag endpoint lists the active tags in your organization, sorted alphabetically by `label` by default. Despite the singular name, it returns a paginated array, not a single tag; there is no dedicated "get tag by ID" endpoint.
+The Read Tag endpoint lists the active tags in your organization, sorted alphabetically by `label` by default. Despite the singular name, it returns a paginated array, not a single tag. To fetch one tag by its ID, use `GET /Tag/:id`, which returns a single tag object under `data.results` (404 if not found).
 
 ## When to use it
 
@@ -67,6 +67,7 @@ curl "https://api.turbodocx.com/Tag?limit=25&offset=0&query=legal" \
 - [Create Tag](/docs/API/create-tag) to add a new tag
 - [Update Tag](/docs/API/update-tag) to rename an existing tag
 - [Delete Tags (by IDs)](/docs/API/delete-tags-by-i-ds) to remove tags in bulk
+- `GET /Tag/:id` to fetch a single tag by ID
 
   <DisplayEndpoint method="GET" endpoint="/Tag"/>
   <QueryTable title="query" data="W3sia2V5IjoibGltaXQiLCJleGFtcGxlIjoiIn1d" />
