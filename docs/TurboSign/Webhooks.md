@@ -1,7 +1,7 @@
 ---
 title: TurboSign Webhooks
 sidebar_position: 6
-description: Configure TurboSign webhooks to receive notifications for signature events: sent, viewed, signed, completed, voided, and finalization failures.
+description: "Configure TurboSign webhooks to receive notifications for signature events: sent, viewed, signed, completed, voided, and finalization failures."
 keywords:
   - webhook configuration
   - signature webhooks
