@@ -848,7 +848,7 @@ All seven keys are required whenever a permissions map is sent. Partial maps are
 
 ## Error Handling
 
-Partner calls most commonly throw `TurboDocxException.AuthenticationException` when the partner API key or partner ID is wrong, since partner credentials are validated separately from organization API keys. Every typed exception extends `TurboDocxException`, a `RuntimeException`, so catch it after any checked `IOException` handling:
+Partner calls throw `TurboDocxException.AuthenticationException` when the partner API key or partner ID is wrong, since partner credentials are validated separately from organization API keys. Every typed exception extends `TurboDocxException`, a `RuntimeException`, so catch it after any checked `IOException` handling:
 
 ```java
 import com.turbodocx.TurboDocxException;

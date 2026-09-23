@@ -400,7 +400,7 @@ Files.write(Paths.get("report.pdf"), pdfData);
 
 ## Error Handling
 
-`deliverable.generateDeliverable()` most commonly throws `TurboDocxException.NotFoundException` when `templateId` doesn't match a template in the org, and `TurboDocxException.ValidationException` when a variable in the request is missing a required field:
+`deliverable.generateDeliverable()` throws `TurboDocxException.NotFoundException` when `templateId` doesn't match a template in the org, and `TurboDocxException.ValidationException` when a variable in the request is missing a required field:
 
 ### Handling Errors
 

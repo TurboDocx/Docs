@@ -790,7 +790,7 @@ permissions = {
 
 ## Error Handling
 
-`TurboPartner.create_organization()` and the other partner calls most commonly raise `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
+`TurboPartner.create_organization()` and the other partner calls raise `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
 
 ```python
 from turbodocx_sdk import (

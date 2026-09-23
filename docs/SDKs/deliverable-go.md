@@ -422,7 +422,7 @@ if err != nil {
 
 ## Error Handling
 
-`GenerateDeliverable` most commonly returns `NotFoundError` when `TemplateID` doesn't match a template in the org, and `ValidationError` when a `DeliverableVariable` is missing `Placeholder` or `MimeType`. Match on the concrete type with `errors.As`, same as every other Go SDK call:
+`GenerateDeliverable` returns `NotFoundError` when `TemplateID` doesn't match a template in the org, and `ValidationError` when a `DeliverableVariable` is missing `Placeholder` or `MimeType`. Match on the concrete type with `errors.As`, same as every other Go SDK call:
 
 ### Handling Errors
 

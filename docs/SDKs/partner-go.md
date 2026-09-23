@@ -841,7 +841,7 @@ permissions := turbodocx.PartnerPermissions{
 
 ## Error Handling
 
-`partner.CreateOrganization` and the other partner calls most commonly return `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
+`partner.CreateOrganization` and the other partner calls return `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
 
 ```go
 import "errors"

@@ -863,7 +863,7 @@ $permissions = new PartnerPermissions(
 
 ## Error Handling
 
-`TurboPartner::createOrganization()` and the other partner calls most commonly throw `AuthenticationException` when the partner API key or partner ID is wrong, since partner credentials are validated separately from organization API keys:
+`TurboPartner::createOrganization()` and the other partner calls throw `AuthenticationException` when the partner API key or partner ID is wrong, since partner credentials are validated separately from organization API keys:
 
 ```php
 use TurboDocx\Exceptions\AuthenticationException;
