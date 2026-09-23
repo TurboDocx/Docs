@@ -1402,11 +1402,14 @@ A `Duration` is `{ value: number, unit: "hours" | "days" }`. `value` is a whole 
 Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.
 :::
 
-:::caution Sender identity is always required for TurboSign
+:::caution Sender email is enforced by the SDK, not by a `SenderEmailRequired`/`SenderNameRequired` API error
 Unlike TurboQuote (where the sender comes from the org quote template and there is no per-request
-field), TurboSign resolves the sender **from the request body**. If no sender email can be resolved
-from the request, the SDK config, or the environment, the API returns `400 SenderEmailRequired`;
-if no sender name can be resolved it returns `400 SenderNameRequired`.
+field), TurboSign expects the sender to come from the request body, `TurboSign.configure({ senderEmail })`,
+or the `TURBODOCX_SENDER_EMAIL` environment variable. The **SDK enforces this itself**: `TurboSign.configure()`
+throws a `ValidationError` if no `senderEmail` is configured (client-side, before any request is sent).
+The API itself does not reject a send that omits a sender: if no sender email or name can be resolved,
+it falls back to a generic TurboDocx sender identity rather than returning `400 SenderEmailRequired` or
+`400 SenderNameRequired`.
 :::
 
 ---

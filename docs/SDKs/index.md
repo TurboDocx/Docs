@@ -111,19 +111,19 @@ Before you begin, you'll need two things from your TurboDocx account:
 - **API Access Token**: Your authentication key
 - **Organization ID**: Your unique organization identifier
 
-:::note senderEmail required for TurboSign
-TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). It is a **per-request body field on every signature request** and the SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable and TurboWebhooks do not use it at all.
+:::note senderEmail for TurboSign
+TurboSign accepts a `senderEmail` (used as the reply-to address for signature request emails). The **JS/TS SDK enforces it client-side**: `TurboSign.configure()` throws a `ValidationError` (generic `VALIDATION_ERROR` code, not an API error code) if no `senderEmail` is supplied in configuration or via the `TURBODOCX_SENDER_EMAIL` environment variable; this check runs once at configure time, not per request. Other SDKs may differ; check each SDK's README. The **backend API itself does not require `senderEmail`** for TurboSign or TurboQuote; a request or org template with no sender falls back to a generic TurboDocx no-reply address and name and is never rejected. Deliverable and TurboWebhooks do not use `senderEmail` at all.
 
-**TurboQuote is different:** there is **no `senderEmail` field on a quote request**, but a sender is still required. It is resolved from your organization's **quote template** (Quote Settings). An API-key caller whose template has no sender email gets `400 SenderEmailRequired` on create, duplicate, send, and handle-expired-sent. See [Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
+**TurboQuote:** there is **no `senderEmail` field on a quote request**. A sender is resolved from your organization's **quote template** (Quote Settings) when set; if none is configured, the quote falls back to a generic TurboDocx sender rather than failing. See [Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
 :::
 
 #### Which credentials does each product need?
 
 | Product | API key | Org ID | Also needs |
 | :------------- | :----------------------------- | :------------------------- | :-------------------------------------------------------------- |
-| **TurboSign** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | `TURBODOCX_SENDER_EMAIL` (required, reply-to for signer emails) |
+| **TurboSign** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | `TURBODOCX_SENDER_EMAIL` (required by the JS/TS SDK at configure time, reply-to for signer emails; the API itself falls back to a generic sender if omitted) |
 | **Deliverable** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | None |
-| **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | a **Sender Email + Sender Name on the org quote template** (no per-request sender field exists) |
+| **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | a **Sender Email + Sender Name on the org quote template** recommended (no per-request sender field exists; falls back to a generic TurboDocx sender if not configured) |
 | **TurboWebhooks** | `TURBODOCX_API_KEY` (**administrator** role, non-admin keys get 403) | `TURBODOCX_ORG_ID` | the webhook secret returned by `createWebhook`, to verify inbound events |
 
 #### How to Get Your Credentials
@@ -688,8 +688,6 @@ generic codes above; prefer them when handling a specific failure.
 
 | Code                       | HTTP Status | Meaning                                                                                     |
 | :------------------------- | :---------- | :------------------------------------------------------------------------------------------ |
-| `SenderEmailRequired`      | 400         | No sender email could be resolved. TurboSign: set `senderEmail` on the request. TurboQuote: configure one on the org quote template (Quote Settings). |
-| `SenderNameRequired`       | 400         | No sender name could be resolved: the API key has no usable name.                           |
 | `QuoteHasNoLineItems`      | 400         | The quote has no line items. Add at least one product, bundle, or custom line item.          |
 | `QuoteExpired`             | 400         | The quote is past its `validUntil` date. Update the date before sending.                     |
 | `QuoteValidUntilRequired`  | 400         | The quote has no `validUntil` date set.                                                      |

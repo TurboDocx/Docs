@@ -852,6 +852,7 @@ if err != nil {
     var authzErr *turbodocx.AuthorizationError
     var validErr *turbodocx.ValidationError
     var notFoundErr *turbodocx.NotFoundError
+    var conflictErr *turbodocx.ConflictError
     var rateLimitErr *turbodocx.RateLimitError
     var networkErr *turbodocx.NetworkError
 
@@ -868,6 +869,9 @@ if err != nil {
     case errors.As(err, &notFoundErr):
         // 404 - Organization or resource not found
         fmt.Printf("Not found: %s\n", notFoundErr.Message)
+    case errors.As(err, &conflictErr):
+        // 409 - Resource conflict (e.g. AddUserToPartnerPortal on an existing user)
+        fmt.Printf("Conflict: %s\n", conflictErr.Message)
     case errors.As(err, &rateLimitErr):
         // 429 - Rate limit exceeded
         fmt.Printf("Rate limit: %s\n", rateLimitErr.Message)
@@ -880,7 +884,7 @@ if err != nil {
 }
 ```
 
-The full typed-error table and HTTP status mapping is documented once in the [Go SDK's Error Handling reference](./go.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`RateLimitError`/`NetworkError` types.
+The full typed-error table and HTTP status mapping is documented once in the [Go SDK's Error Handling reference](./go.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types (for example, `AddUserToPartnerPortal()` returns a `*ConflictError` (409) when the target user already has partner-portal access).
 
 ---
 

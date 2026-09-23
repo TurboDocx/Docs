@@ -879,8 +879,8 @@ try {
 All exceptions extend `TurboDocxException` and include:
 
 - `getMessage()` - Human-readable error message
-- `statusCode` - HTTP status code (if applicable), a public readonly int
-- `errorCode` - Error code string (e.g., `'AUTHENTICATION_ERROR'`), a public readonly string
+- `statusCode` - HTTP status code, a public readonly `?int` (null for `NetworkException`)
+- `errorCode` - Error code string (e.g., `'AUTHENTICATION_ERROR'`), a public readonly `?string`
 
 ---
 

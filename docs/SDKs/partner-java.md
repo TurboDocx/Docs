@@ -82,7 +82,7 @@ public class Main {
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.5.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
@@ -90,14 +90,14 @@ public class Main {
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.5.0")
+implementation("com.turbodocx:turbodocx-sdk:0.7.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 ```
 
 </TabItem>
@@ -885,8 +885,8 @@ The full typed-exception table and HTTP status mapping is documented once in the
 
 Transport failures are **not** wrapped: the partner client propagates OkHttp's checked `IOException` directly, so catch `IOException` for connectivity problems rather than `TurboDocxException.NetworkException`.
 
-:::caution 409 conflicts arrive as the base exception
-`TurboDocxException.ConflictException` exists in the SDK, but the partner client does **not** raise it: a 409 (for example, a user that already exists) surfaces as the base `TurboDocxException` with `getStatusCode() == 409`. Handle it in the base `catch` block rather than adding a `ConflictException` catch, which would never fire on a partner call.
+:::tip 409 Conflicts
+`TurboDocxException.ConflictException` is raised for 409 responses on partner calls too (for example, a user that already exists), the same way as `AuthenticationException`, `ValidationException`, `AuthorizationException`, `NotFoundException`, and `RateLimitException`. Add a `catch (TurboDocxException.ConflictException e)` block if you want to handle conflicts separately from the base `TurboDocxException` catch-all.
 :::
 
 ---

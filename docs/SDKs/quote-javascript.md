@@ -98,7 +98,7 @@ TurboQuote.configure({
 :::tip No senderEmail on the client — but set one on your quote template
 Unlike TurboSign, `TurboQuote.configure()` does **not** require `senderEmail` or `senderName` — quotes are not sent as signature emails. Only a credential is required — either `apiKey` or an OAuth `accessToken` (`accessToken` wins when both are set); `orgId` is recommended but falls back to `TURBODOCX_ORG_ID`. If you skip `configure()` entirely, the SDK auto-initialises from environment variables on the first method call.
 
-The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, every sender-resolving call — `createQuote`, `duplicateQuote`, `sendQuote` / `sendQuoteWithDeliverable`, and `handleExpiredQuote` — fails with `400 SenderEmailRequired` when the org's quote template has no sender email set. A companion `400 SenderNameRequired` is returned when no sender **name** resolves. Configure both **Sender Name** and **Sender Email** once (`TurboQuote.updateTemplate({ senderEmail, senderName })`) and all of them resolve cleanly.
+The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, if the org's quote template has no sender email set, `createQuote`, `duplicateQuote`, `sendQuote` / `sendQuoteWithDeliverable`, and `handleExpiredQuote` still succeed: they fall back to a generic TurboDocx sender (`no-reply@turbodocx.com`) rather than rejecting the call. Configure both **Sender Name** and **Sender Email** once (`const tmpl = await TurboQuote.getTemplate(); await TurboQuote.updateTemplate(tmpl.id, { senderEmail, senderName });`) so quotes show your own sender identity instead of the generic fallback.
 :::
 
 ### Environment Variables
@@ -436,7 +436,6 @@ specific error `code` before anything is created or emailed:
 | No line items | `QuoteHasNoLineItems` |
 | Contact missing a name or email | `QuoteContactRequired` |
 | Company or contact deleted/deactivated | `QuoteCustomerInactive` |
-| No sender email resolvable (API-key callers) | `SenderEmailRequired` |
 
 A quote with **no line items cannot be sent** — add at least one product, bundle, or custom
 line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use the

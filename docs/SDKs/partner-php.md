@@ -863,7 +863,7 @@ $permissions = new PartnerPermissions(
 
 ## Error Handling
 
-`TurboPartner::createOrganization()` and the other partner calls throw `AuthenticationException` when the partner API key or partner ID is wrong, since partner credentials are validated separately from organization API keys:
+`TurboPartner::createOrganization()` and the other partner calls throw `AuthenticationException` when the partner API key is invalid, missing, or the partner account is inactive, and `NotFoundException` when the `partnerId` doesn't match the key's own partner, since partner credentials are validated separately from organization API keys:
 
 ```php
 use TurboDocx\Exceptions\AuthenticationException;
@@ -875,13 +875,13 @@ use TurboDocx\Exceptions\NetworkException;
 try {
     $result = TurboPartner::createOrganization(/* ... */);
 } catch (AuthenticationException $e) {
-    // 401 - Invalid API key or partner ID
+    // 401 - Invalid or missing partner API key
     echo "Authentication failed: {$e->getMessage()}\n";
 } catch (ValidationException $e) {
     // 400 - Invalid request data
     echo "Validation error: {$e->getMessage()}\n";
 } catch (NotFoundException $e) {
-    // 404 - Organization or resource not found
+    // 404 - Organization/resource not found, or partnerId doesn't match the key
     echo "Not found: {$e->getMessage()}\n";
 } catch (RateLimitException $e) {
     // 429 - Rate limit exceeded
