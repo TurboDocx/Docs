@@ -1,7 +1,7 @@
 ---
 title: HubSpot Integration
 sidebar_position: 4
-description: Transform your HubSpot data into professional documents, proposals, and presentations with TurboDocx. Create personalized deliverables using your real customer data — powered by AI.
+description: Transform HubSpot data into professional documents, proposals, and presentations. Create personalized deliverables powered by AI.
 keywords: 
   - hubspot integration
   - crm documents

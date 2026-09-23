@@ -88,7 +88,7 @@ TURBODOCX_SENDER_NAME=Your Company
 ```
 
 :::warning API Credentials Required
-`api_key` and `org_id` are **required** for all API requests. TurboSign additionally **requires `sender_email`** (set it on `configure()`, per call, or via the `TURBODOCX_SENDER_EMAIL` environment variable) — `configure()` raises a `ValidationError` without it. `sender_name` is optional but strongly recommended. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+`api_key` and `org_id` are **required** for all API requests. TurboSign additionally **requires `sender_email`** (set it on `configure()`, per call, or via the `TURBODOCX_SENDER_EMAIL` environment variable): `configure()` raises a `ValidationError` without it. `sender_name` is optional but strongly recommended. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 ---
@@ -424,7 +424,7 @@ for r in result["recipients"]:
 :::tip Two status fields, and they differ on purpose
 
 `status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
-`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired`: that
 is the one to display.
 
 On a voided or expired document an unsigned signer still reads `pending` in `status`, so
@@ -437,14 +437,14 @@ the document is terminal.
 
 :::
 
-Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+Each recipient also carries a `delivery` block: `firstSentOn`, `lastSentOn`, `totalSent`,
 `reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
 request, resends, reminders, expiry warnings and terminal notices; CC notifications are
 excluded, since a CC address is not a signer.
 
 :::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
 
-`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+`reminderCount` counts **automatic (scheduled) reminders only**: the counter `maxReminders`
 caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
 does **not** increment this, even though the email it sends *does* appear in `totalSent`.
 
@@ -453,7 +453,7 @@ signature-request send, each scheduled reminder, each manual "remind now" and ea
 warning all stamp it. Only scheduled reminders bump `reminderCount`.
 
 So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
-timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+timestamp alongside `reminderCount: 0`: nobody has been reminded. To answer "have we actually
 chased this person", read `totalSent`, not `reminderCount`.
 
 `warningCount` / `lastWarningAt` have no such caveat.
@@ -491,7 +491,7 @@ result = await TurboSign.resend_email("document-uuid", recipient_ids=["recipient
 ### Send reminder
 
 Send a standalone reminder (`POST /turbosign/documents/:id/send-reminder`) to whoever's turn it
-is to sign. It is independent of the automatic reminder cadence — it works even when reminders
+is to sign. It is independent of the automatic reminder cadence: it works even when reminders
 are disabled or the per-signer `max_reminders` cap is already spent, does **not** consume that
 cap, and only emails signers at the *current* signing order. Omit `recipient_ids` to remind
 everyone eligible; do not pass an empty list, which the API rejects.
@@ -522,7 +522,7 @@ print("Result:", json.dumps(result, indent=2))
 
 ## Error Handling
 
-The SDK provides typed error classes for different failure scenarios. All errors extend the base `TurboDocxError` class.
+Every error is a plain `Exception` subclass; catch the most specific one first, since `except TurboDocxError` also matches every subclass below it. Each of the 7 named subclasses sets its own `DEFAULT_CODE` class attribute, so `e.code` is populated for those even when the API response itself carries none; the base `TurboDocxError` raised for an unmapped status (e.g. an unexpected 5xx) has `DEFAULT_CODE = None`, so `e.code` can be `None` there.
 
 ### Error Classes
 
@@ -597,13 +597,13 @@ asyncio.run(send_with_error_handling())
 
 ### Error Properties
 
-All errors include these properties:
+All errors include these instance attributes:
 
 | Property      | Type          | Description                                         |
 | ------------- | ------------- | --------------------------------------------------- |
 | `message`     | `str`         | Human-readable error description (via `str(error)`) |
 | `status_code` | `int \| None` | HTTP status code (if applicable)                    |
-| `code`        | `str \| None` | Machine-readable error code                         |
+| `code`        | `str \| None` | Machine-readable error code; the API's code wins when present, otherwise the class's `DEFAULT_CODE` |
 
 ---
 
@@ -679,7 +679,7 @@ Field configuration supporting both coordinate-based and template-based position
 | `required`        | `bool` | No       | Whether field is required                           |
 | `backgroundColor` | `str`  | No       | Background color (hex, rgb, or named)               |
 | `template`        | `Dict` | No       | Template anchor configuration                       |
-| `metadata`        | `Dict` | No       | Conditional (IF/THEN) metadata — see below          |
+| `metadata`        | `Dict` | No       | Conditional (IF/THEN) metadata, see below          |
 
 \*Required when not using template anchors
 
@@ -769,13 +769,13 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `sender_email`         | `str`        | No\*\*      | Sender / reply-to email (overrides the configured value) |
 | `cc_emails`            | `List[str]`  | No          | Array of CC email addresses    |
 | `reminders_enabled`    | `bool`       | No          | Send reminder emails to signers who haven't signed. Off by default |
-| `reminder_delay`       | `Dict`       | No          | `{"value": N, "unit": "days"\|"hours"}` — time to the FIRST reminder |
-| `reminder_interval`    | `Dict`       | No          | `{"value": N, "unit": ...}` — gap between later reminders |
+| `reminder_delay`       | `Dict`       | No          | `{"value": N, "unit": "days"\|"hours"}`, time to the FIRST reminder |
+| `reminder_interval`    | `Dict`       | No          | `{"value": N, "unit": ...}`, gap between later reminders |
 | `max_reminders`        | `int`        | No          | Cap per signer. `-1` unlimited, `0` none, max `50`. Default `5` |
 | `expiration_enabled`   | `bool`       | No          | Close the signing window after `expire_after`. Off by default |
-| `expire_after`         | `Dict`       | No          | `{"value": N, "unit": ...}` — how long the document stays signable |
-| `expiration_warning`   | `Dict`       | No          | `{"value": N, "unit": ...}` — how far before expiry warnings start. `0` = never warn |
-| `expiration_warning_interval` | `Dict` | No          | `{"value": N, "unit": ...}` — gap between warnings once they start |
+| `expire_after`         | `Dict`       | No          | `{"value": N, "unit": ...}`, how long the document stays signable |
+| `expiration_warning`   | `Dict`       | No          | `{"value": N, "unit": ...}`, how far before expiry warnings start. `0` = never warn |
+| `expiration_warning_interval` | `Dict` | No          | `{"value": N, "unit": ...}`, gap between warnings once they start |
 
 :::info Duration bounds
 Each duration `{"value", "unit"}` uses `"days"` or `"hours"`; `value` is a whole number from `1`

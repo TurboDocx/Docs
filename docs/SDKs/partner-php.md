@@ -32,7 +32,7 @@ The official TurboDocx Partner SDK for PHP applications. Build multi-tenant SaaS
 <br />
 
 :::info What is TurboPartner?
-TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements — perfect for building white-label or multi-tenant applications on top of TurboDocx.
+TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements, perfect for building white-label or multi-tenant applications on top of TurboDocx.
 :::
 
 ## TLDR
@@ -77,7 +77,7 @@ $user = TurboPartner::addUserToOrganization($orgId,
 $key = TurboPartner::createOrganizationApiKey($orgId,
     new CreateOrgApiKeyRequest(name: 'Production Key', role: 'admin')
 );
-echo "API Key: {$key->data->key}\n"; // Save this — only shown once!
+echo "API Key: {$key->data->key}\n"; // Save this, only shown once!
 ```
 
 ---
@@ -449,7 +449,7 @@ echo "Full Key: {$result->data->key}\n";  // Only shown once!
 ```
 
 :::caution Save Your API Key
-The full API key is only returned once during creation. Store it securely — you won't be able to retrieve it again.
+The full API key is only returned once during creation. Store it securely: you won't be able to retrieve it again.
 :::
 
 ### `listOrganizationApiKeys()`
@@ -573,11 +573,11 @@ $result = TurboPartner::revokePartnerApiKey('partner-key-uuid-here');
 ## Partner User Management
 
 :::danger Partner users use a different role enum
-Partner portal users take `admin`, `member`, or `viewer` (`PartnerUserRole`). **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer` (`OrgUserRole`). The two enums do not overlap beyond `admin`/`viewer` — `'member'` is rejected on an org call, and `'contributor'`/`'user'` are rejected on a partner call. See [Role Enums](#orguserrole-organization-users).
+Partner portal users take `admin`, `member`, or `viewer` (`PartnerUserRole`). **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer` (`OrgUserRole`). The two enums do not overlap beyond `admin`/`viewer`: `'member'` is rejected on an org call, and `'contributor'`/`'user'` are rejected on a partner call. See [Role Enums](#orguserrole-organization-users-and-org-api-keys).
 :::
 
 :::caution `permissions` is all-or-nothing
-`AddPartnerUserRequest` **requires** `permissions` — omitting it is an `ArgumentCountError`. On `UpdatePartnerUserRequest` it is optional, but if you send it, **all seven arguments are required**. There is no partial permissions update — the API rejects an incomplete object with `ValidationException` (400). Read the current values first and re-send them with your change applied.
+`AddPartnerUserRequest` **requires** `permissions`: omitting it is an `ArgumentCountError`. On `UpdatePartnerUserRequest` it is optional, but if you send it, **all seven arguments are required**. There is no partial permissions update: the API rejects an incomplete object with `ValidationException` (400). Read the current values first and re-send them with your change applied.
 :::
 
 ### `addUserToPartnerPortal()`
@@ -592,7 +592,7 @@ $result = TurboPartner::addUserToPartnerPortal(
     new AddPartnerUserRequest(
         email: 'admin@partner.com',
         role: 'admin',  // PARTNER role enum: admin, member, or viewer
-        // Required on add — all 7 arguments must be supplied.
+        // Required on add: all 7 arguments must be supplied.
         permissions: new PartnerPermissions(
             canManageOrgs: true,
             canManageOrgUsers: true,
@@ -626,7 +626,7 @@ foreach ($result->results as $user) {
 
 ### `updatePartnerUserPermissions()`
 
-Update a partner user's role and permissions. If you pass `permissions`, supply **all seven arguments** — a partial object is a 400.
+Update a partner user's role and permissions. If you pass `permissions`, supply **all seven arguments**: a partial object is a 400.
 
 ```php
 use TurboDocx\Types\Requests\Partner\UpdatePartnerUserRequest;
@@ -736,7 +736,7 @@ These are limits and capabilities you can configure for each organization:
 
 ### Tracking (Usage Counters)
 
-Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` array** — useful for seeding counters when migrating an existing customer:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` array**, useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -755,7 +755,7 @@ Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` a
 
 ## Preferences Reference
 
-TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly: the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -863,7 +863,7 @@ $permissions = new PartnerPermissions(
 
 ## Error Handling
 
-The SDK provides typed exceptions for different error scenarios:
+`TurboPartner::createOrganization()` and the other partner calls throw `AuthenticationException` when the partner API key is invalid, missing, or the partner account is inactive, and `NotFoundException` when the `partnerId` doesn't match the key's own partner, since partner credentials are validated separately from organization API keys:
 
 ```php
 use TurboDocx\Exceptions\AuthenticationException;
@@ -875,13 +875,13 @@ use TurboDocx\Exceptions\NetworkException;
 try {
     $result = TurboPartner::createOrganization(/* ... */);
 } catch (AuthenticationException $e) {
-    // 401 - Invalid API key or partner ID
+    // 401 - Invalid or missing partner API key
     echo "Authentication failed: {$e->getMessage()}\n";
 } catch (ValidationException $e) {
     // 400 - Invalid request data
     echo "Validation error: {$e->getMessage()}\n";
 } catch (NotFoundException $e) {
-    // 404 - Organization or resource not found
+    // 404 - Organization/resource not found, or partnerId doesn't match the key
     echo "Not found: {$e->getMessage()}\n";
 } catch (RateLimitException $e) {
     // 429 - Rate limit exceeded
@@ -892,16 +892,7 @@ try {
 }
 ```
 
-### Error Classes
-
-| Error Class | Status Code | Description |
-|-------------|-------------|-------------|
-| `TurboDocxException` | varies | Base exception for all SDK errors |
-| `AuthenticationException` | 401 | Invalid or missing API credentials |
-| `ValidationException` | 400 | Invalid request parameters |
-| `NotFoundException` | 404 | Resource not found |
-| `RateLimitException` | 429 | Too many requests |
-| `NetworkException` | - | Network connectivity issues |
+The full typed-exception table and HTTP status mapping is documented once in the [PHP SDK's Error Handling reference](./php.md#error-handling).
 
 ---
 
@@ -983,4 +974,4 @@ try {
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
 - [Packagist Package](https://packagist.org/packages/turbodocx/sdk)
-- [TurboSign PHP SDK](/docs/SDKs/php) — For digital signature operations
+- [TurboSign PHP SDK](/docs/SDKs/php): for digital signature operations

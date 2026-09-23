@@ -1,7 +1,7 @@
 ---
 id: edit-template-metadata
 title: "Edit Template Metadata"
-description: "Edit Template Metadata"
+description: "Rename a template, change its description or folder, or replace its tags with a single PATCH call. Includes an example request, response, and error handling."
 sidebar_label: "Edit Template Metadata"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,48 @@ custom_edit_url: null
   
 
   # Edit Template Metadata
-  
-  Edit Template Metadata
-  
+
+The Edit Template Metadata endpoint updates a template's name, description, folder, or tags without touching its file or variables. Send only the fields you want to change; fields you omit are left as-is.
+
+## When to use it
+
+Use this endpoint to rename a template, move it into a different folder (`templateFolderId`), or replace its tags after you have already uploaded it. To change the file itself, delete the template and upload a new one with [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values).
+
+## Example request
+
+```bash
+curl -X PATCH "https://api.turbodocx.com/template/2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "SOW Template (v2)",
+    "description": "Standard statement of work, updated for 2026 pricing",
+    "tags": [{"id": "7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90"}]
+  }'
+```
+
+Sending `tags` replaces the template's entire tag list: existing tags not included in the array are removed. Each entry only needs the tag's `id`, from [Create Tag](/docs/API/create-tag) or [Read Tag](/docs/API/read-tag).
+
+## Example response
+
+On success the endpoint returns `200 OK` with no response body.
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 423 | The template is locked | `{ "error": "Resource is locked", "message", "data": { "locked": true, "lockedBy", "lockedOn" } }` |
+| 400 | A field fails validation (for example `name` under 3 characters) | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Get Template by ID](/docs/API/get-template-by-id) to see the current metadata before editing
+- [Delete Template](/docs/API/delete-template) to remove a template instead of editing it
+- [Get Templates and Folders](/docs/API/get-templates-and-folders) to find the `TemplateId` to edit
+
   <DisplayEndpoint method="PATCH" endpoint="/template/{TemplateId}"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoieC1yYXBpZGRvY3gtb3JnLWlkIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn1d" />

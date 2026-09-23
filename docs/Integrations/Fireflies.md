@@ -1,7 +1,7 @@
 ---
 title: Fireflies AI Integration
 sidebar_position: 7
-description: Transform Fireflies AI meeting transcripts into professional documents and presentations. Coming soon - AI-powered meeting documentation and automated workflow integration.
+description: Transform Fireflies AI meeting transcripts into professional documents and presentations with AI-powered automation and workflow integration.
 keywords:
   - fireflies ai integration
   - fireflies meeting documentation

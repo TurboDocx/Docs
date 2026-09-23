@@ -33,7 +33,7 @@ The official TurboDocx Partner SDK for JavaScript and TypeScript applications. B
 <br />
 
 :::info What is TurboPartner?
-TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements — perfect for building white-label or multi-tenant applications on top of TurboDocx.
+TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements, perfect for building white-label or multi-tenant applications on top of TurboDocx.
 :::
 
 ## TLDR
@@ -69,7 +69,7 @@ const key = await TurboPartner.createOrganizationApiKey(orgId, {
   name: 'Production Key',
   role: 'admin',
 });
-console.log(`API Key: ${key.data.key}`); // Save this — only shown once!
+console.log(`API Key: ${key.data.key}`); // Save this, only shown once!
 ```
 
 ---
@@ -90,7 +90,7 @@ pnpm add @turbodocx/sdk
 - TypeScript 4.7+ (optional, types included)
 
 :::tip Full TypeScript Support
-This SDK includes complete TypeScript type definitions for all request/response types, enums, and configuration options — no additional `@types` packages needed.
+This SDK includes complete TypeScript type definitions for all request/response types, enums, and configuration options: no additional `@types` packages needed.
 :::
 
 ---
@@ -404,7 +404,7 @@ const result = await TurboPartner.createOrganizationApiKey(
   'org-uuid-here',
   {
     name: 'Production API Key',
-    role: 'admin',  // 'admin' | 'contributor' | 'user' | 'viewer' — the ORG role enum
+    role: 'admin',  // 'admin' | 'contributor' | 'user' | 'viewer' (the ORG role enum)
   }
 );
 
@@ -413,7 +413,7 @@ console.log(`Full Key: ${result.data.key}`);  // Only shown once!
 ```
 
 :::caution Save Your API Key
-The full API key is only returned once during creation. Store it securely — you won't be able to retrieve it again.
+The full API key is only returned once during creation. Store it securely: you won't be able to retrieve it again.
 :::
 
 ### `listOrganizationApiKeys()`
@@ -522,11 +522,11 @@ const result = await TurboPartner.revokePartnerApiKey('partner-key-uuid-here');
 ## Partner User Management
 
 :::danger Partner users use a different role enum
-Partner portal users take `'admin' | 'member' | 'viewer'`. **Organization** users and organization API keys take `'admin' | 'contributor' | 'user' | 'viewer'`. The two enums do not overlap beyond `admin`/`viewer` — `'member'` is rejected on an org call, and `'contributor'`/`'user'` are rejected on a partner call. See [Role Enums](#orguserrole-organization-users).
+Partner portal users take `'admin' | 'member' | 'viewer'`. **Organization** users and organization API keys take `'admin' | 'contributor' | 'user' | 'viewer'`. The two enums do not overlap beyond `admin`/`viewer`: `'member'` is rejected on an org call, and `'contributor'`/`'user'` are rejected on a partner call. See [Role Enums](#orguserrole-organization-users-and-org-api-keys).
 :::
 
 :::caution `permissions` is all-or-nothing
-On `addUserToPartnerPortal()` the `permissions` object is **required**. On `updatePartnerUserPermissions()` it is optional, but if you send it, **all seven keys are required**. Either way there is no partial permissions update — omitting even one key is a `ValidationError` (400). Always send the complete object; read the current values first and re-send them with your change applied.
+On `addUserToPartnerPortal()` the `permissions` object is **required**. On `updatePartnerUserPermissions()` it is optional, but if you send it, **all seven keys are required**. Either way there is no partial permissions update: omitting even one key is a `ValidationError` (400). Always send the complete object; read the current values first and re-send them with your change applied.
 :::
 
 ### `addUserToPartnerPortal()`
@@ -536,7 +536,7 @@ Add a user to the partner portal with specific permissions.
 ```typescript
 const result = await TurboPartner.addUserToPartnerPortal({
   email: 'admin@partner.com',
-  role: 'admin',  // 'admin' | 'member' | 'viewer' — the PARTNER role enum
+  role: 'admin',  // 'admin' | 'member' | 'viewer' (the PARTNER role enum)
   // Required on this method, and all 7 keys must be present.
   permissions: {
     canManageOrgs: true,
@@ -566,7 +566,7 @@ for (const user of result.data.results) {
 
 ### `updatePartnerUserPermissions()`
 
-Update a partner user's role and permissions. If you include `permissions`, send **all seven keys** — a partial object is a 400.
+Update a partner user's role and permissions. If you include `permissions`, send **all seven keys**: a partial object is a 400.
 
 ```typescript
 const result = await TurboPartner.updatePartnerUserPermissions(
@@ -674,7 +674,7 @@ These are limits and capabilities you can configure for each organization:
 
 ### Tracking (Usage Counters)
 
-Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` object** — useful for seeding counters when migrating an existing customer:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` object**, useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -693,7 +693,7 @@ Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` a
 
 ## Preferences Reference
 
-TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly: the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -801,7 +801,7 @@ interface PartnerPermissions {
 
 ## Error Handling
 
-The SDK provides typed error classes for different error scenarios:
+`TurboPartner.createOrganization()` and the other partner calls reject with `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
 
 ```typescript
 import {
@@ -846,18 +846,7 @@ try {
 }
 ```
 
-### Error Classes
-
-| Error Class | Status Code | Description |
-|-------------|-------------|-------------|
-| `TurboDocxError` | varies | Base error for all SDK errors |
-| `AuthenticationError` | 401 | Invalid or missing API credentials |
-| `AuthorizationError` | 403 | API key lacks required permissions (scope) |
-| `ValidationError` | 400 | Invalid request parameters |
-| `NotFoundError` | 404 | Resource not found |
-| `ConflictError` | 409 | Resource conflict |
-| `RateLimitError` | 429 | Too many requests |
-| `NetworkError` | - | Network connectivity issues |
+The full typed-error table and HTTP status mapping is documented once in the [JavaScript / TypeScript SDK's Error Handling reference](./javascript.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types.
 
 ---
 
@@ -931,4 +920,4 @@ try {
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 - [npm Package](https://www.npmjs.com/package/@turbodocx/sdk)
-- [TurboSign JavaScript SDK](/docs/SDKs/javascript) — For digital signature operations
+- [TurboSign JavaScript SDK](/docs/SDKs/javascript): for digital signature operations

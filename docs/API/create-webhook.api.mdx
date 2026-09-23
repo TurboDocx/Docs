@@ -1,7 +1,7 @@
 ---
 id: create-webhook
 title: "Create Webhook"
-description: "Register a new signature webhook for the org. The `name` field is hardcoded to `signature` by the SDK. The returned `secret` is shown **once** — store it on receipt. It cannot be retrieved later; use Regenerate Webhook Secret if lost."
+description: "Register a new signature webhook for your org. The SDK always sends name=\"signature\". The returned secret is shown once; store it immediately."
 sidebar_label: "Create Webhook"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,69 @@ custom_edit_url: null
   
 
   # Create Webhook
-  
-  Create Webhook
-  
+
+The Create Webhook endpoint registers a webhook that TurboDocx calls when TurboSign events happen in your organization, such as a document being signed or completed. Each webhook needs a unique `name` among your org's active webhooks; every TurboDocx SDK sends `"signature"`. A second create call with that name conflicts (409) only while an active webhook already has it; if you paused a webhook via [Update Webhook](/docs/API/update-webhook)'s `isActive: false` instead of deleting it, creating a new one with the same name succeeds and leaves two rows sharing that name, and by-name lookups on the other endpoints may then hit either one. Delete the old webhook (see [Delete Webhook](/docs/API/delete-webhook)) before reusing its name, rather than just pausing it.
+
+## When to use it
+
+Use this endpoint once, during integration setup, to start receiving signature lifecycle events instead of polling the API. To change the URLs or subscribed events later, use [Update Webhook](/docs/API/update-webhook) rather than creating a new one.
+
+## Example request
+
+```bash
+curl -X POST "https://api.turbodocx.com/api/webhooks" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "signature",
+    "urls": ["https://example.com/webhooks/turbodocx"],
+    "events": ["signature.document.completed", "signature.document.voided"]
+  }'
+```
+
+`urls` accepts up to 10 HTTPS endpoints (plain HTTP is rejected); `events` must be one or more of the values listed in [Get Webhook](/docs/API/get-webhook)'s `availableEvents`. Requires an API key with the administrator role.
+
+## Example response
+
+On success the endpoint returns `201 Created`:
+
+```json
+{
+  "data": {
+    "id": "b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34",
+    "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "signature",
+    "urls": ["https://example.com/webhooks/turbodocx"],
+    "events": ["signature.document.completed", "signature.document.voided"],
+    "secret": "whsec_REPLACE_WITH_YOUR_WEBHOOK_SECRET",
+    "isActive": true,
+    "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+    "createdOn": "2026-05-01T14:22:10.000Z",
+    "updatedOn": "2026-05-01T14:22:10.000Z",
+    "secretExists": true
+  },
+  "message": "Webhook created successfully. Save the secret - it won't be shown again."
+}
+```
+
+`secret` is only ever returned in full on create and on [Regenerate Webhook Secret](/docs/API/regenerate-webhook-secret); every other endpoint returns a masked `maskedSecret` instead. Use `secret` to verify the `X-TurboDocx-Signature` header on incoming webhook calls.
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 400 | `name`, `urls`, or `events` is missing or invalid, or any URL is not HTTPS | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+| 409 | A webhook named `signature` already exists in your organization | `{ "message", "error": "WebhookNameTaken", "data": { "constraint", "orgId", "name" } }` |
+
+## Related endpoints
+
+- [Get Webhook](/docs/API/get-webhook) to view the webhook you created, its delivery stats, and available event types
+- [Update Webhook](/docs/API/update-webhook) to change its URLs, events, or active state
+- [Test Webhook](/docs/API/test-webhook) to send a sample event before going live
+
   <DisplayEndpoint method="POST" endpoint="/api/webhooks"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

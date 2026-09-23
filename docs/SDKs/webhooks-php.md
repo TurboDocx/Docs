@@ -2,7 +2,7 @@
 title: TurboWebhooks PHP SDK
 sidebar_position: 15
 sidebar_label: "TurboWebhooks: PHP"
-description: Official TurboDocx Webhooks SDK for PHP. Subscribe to all seven TurboSign signature events with the WebhookEvent backed enum, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: "PHP TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks php

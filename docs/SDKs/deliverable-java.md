@@ -32,7 +32,7 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.5.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
@@ -40,14 +40,14 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.5.0")
+implementation("com.turbodocx:turbodocx-sdk:0.7.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 ```
 
 </TabItem>
@@ -87,7 +87,7 @@ public class Main {
 ```
 
 :::tip No senderEmail Required
-Use `buildDeliverableClient()` when you only need document generation — it skips the `senderEmail` validation required by TurboSign.
+Use `buildDeliverableClient()` when you only need document generation: it skips the `senderEmail` validation required by TurboSign.
 :::
 
 ### Environment Variables
@@ -285,9 +285,9 @@ The builder authenticates with either `apiKey(...)` or `accessToken(...)` (a bea
 
 | Builder method             | Returns             | Use for                                             |
 | -------------------------- | ------------------- | --------------------------------------------------- |
-| `build()`                  | `TurboDocxClient`   | Full client — `turboSign()` and `deliverable()`      |
+| `build()`                  | `TurboDocxClient`   | Full client, `turboSign()` and `deliverable()`       |
 | `buildDeliverableClient()` | `DeliverableClient` | Document generation only (no `senderEmail` needed)   |
-| `buildWebhooksClient()`    | `TurboWebhooks`     | Signature webhook subscriptions — see [TurboWebhooks Java SDK](/docs/SDKs/webhooks-java) |
+| `buildWebhooksClient()`    | `TurboWebhooks`     | Signature webhook subscriptions, see [TurboWebhooks Java SDK](/docs/SDKs/webhooks-java) |
 
 ```java
 // Authenticate with a bearer access token instead of an API key
@@ -400,20 +400,7 @@ Files.write(Paths.get("report.pdf"), pdfData);
 
 ## Error Handling
 
-The SDK provides typed exceptions for different error scenarios:
-
-### Error Types
-
-| Error Type                                   | Status Code | Description                        |
-| -------------------------------------------- | ----------- | ---------------------------------- |
-| `TurboDocxException`                         | varies      | Base exception for all API errors  |
-| `TurboDocxException.AuthenticationException` | 401         | Invalid or missing API credentials |
-| `TurboDocxException.AuthorizationException`  | 403         | Insufficient permissions           |
-| `TurboDocxException.ValidationException`     | 400         | Invalid request parameters         |
-| `TurboDocxException.NotFoundException`       | 404         | Deliverable or template not found  |
-| `TurboDocxException.ConflictException`       | 409         | Resource conflict                  |
-| `TurboDocxException.RateLimitException`      | 429         | Too many requests                  |
-| `TurboDocxException.NetworkException`        | -           | Network connectivity issues        |
+`deliverable.generateDeliverable()` throws `TurboDocxException.NotFoundException` when `templateId` doesn't match a template in the org, and `TurboDocxException.ValidationException` when a variable in the request is missing a required field:
 
 ### Handling Errors
 
@@ -443,13 +430,7 @@ try {
 }
 ```
 
-### Error Properties
-
-| Property          | Type     | Description                  |
-| ----------------- | -------- | ---------------------------- |
-| `getMessage()`    | `String` | Human-readable error message |
-| `getStatusCode()` | `int`    | HTTP status code             |
-| `getCode()`       | `String` | Error code (if available)    |
+The full typed-exception table (`AuthenticationException`, `AuthorizationException`, `ConflictException`, `RateLimitException`, `NetworkException`, HTTP status mapping) and the `getMessage()`/`getStatusCode()`/`getCode()` methods shared by every exception are documented once in the [Java SDK's Error Handling reference](./java.md#error-handling).
 
 ---
 

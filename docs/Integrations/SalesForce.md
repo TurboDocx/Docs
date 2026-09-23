@@ -1,7 +1,7 @@
 ---
 title: Salesforce Integration
 sidebar_position: 2
-description: Transform your Salesforce data into professional documents, proposals, and presentations with TurboDocx. Create personalized deliverables using your real CRM data — powered by AI.
+description: Transform Salesforce data into professional documents, proposals, and presentations. Create personalized deliverables powered by AI.
 keywords:
   - salesforce integration
   - crm documents

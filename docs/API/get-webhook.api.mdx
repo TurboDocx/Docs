@@ -16,9 +16,75 @@ custom_edit_url: null
   
 
   # Get Webhook
-  
-  Get Webhook
-  
+
+The Get Webhook endpoint returns a webhook's current configuration (URLs, subscribed events, active state), its secret status, delivery statistics for your organization, and the full list of event types you can subscribe to.
+
+## When to use it
+
+Use this endpoint to display a webhook's settings in your own dashboard, to check whether it is active before troubleshooting missing events, or to read `availableEvents` so you can build an event-picker UI without hardcoding the list.
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/api/webhooks/signature" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+`signature` is the webhook's `name`, not its `id`; every TurboDocx SDK-created webhook uses that name.
+
+## Example response
+
+```json
+{
+  "data": {
+    "id": "b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34",
+    "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "signature",
+    "urls": ["https://example.com/webhooks/turbodocx"],
+    "events": ["signature.document.completed", "signature.document.voided"],
+    "isActive": true,
+    "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+    "createdOn": "2026-05-01T14:22:10.000Z",
+    "updatedOn": "2026-05-01T14:22:10.000Z",
+    "secretExists": true,
+    "maskedSecret": "whs***7f8",
+    "deliveryStats": {
+      "totalDeliveries": 214,
+      "successfulDeliveries": 209,
+      "failedDeliveries": 3,
+      "pendingRetries": 2
+    },
+    "availableEvents": [
+      "signature.document.sent",
+      "signature.document.viewed",
+      "signature.document.signed",
+      "signature.document.recipient_signed",
+      "signature.document.completed",
+      "signature.document.finalization_failed",
+      "signature.document.voided"
+    ]
+  }
+}
+```
+
+`deliveryStats` covers all webhook deliveries across your organization over the last 30 days, not only this webhook's. For per-delivery detail, or stats scoped to a custom time window, use [Get Webhook Stats](/docs/API/get-webhook-stats).
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
+
+## Related endpoints
+
+- [Update Webhook](/docs/API/update-webhook) to change its URLs, events, or active state
+- [Get Webhook Stats](/docs/API/get-webhook-stats) for delivery stats scoped to this webhook over a custom period
+- [List Webhook Deliveries](/docs/API/list-webhook-deliveries) to inspect individual delivery attempts
+
   <DisplayEndpoint method="GET" endpoint="/api/webhooks/signature"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

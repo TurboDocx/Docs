@@ -2,7 +2,7 @@
 title: TurboWebhooks JavaScript / TypeScript SDK
 sidebar_position: 16
 sidebar_label: "TurboWebhooks: JavaScript"
-description: Official TurboDocx Webhooks SDK for JavaScript and TypeScript. Subscribe to all seven TurboSign signature events with the typed WebhookEvents constants, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: "JavaScript/TypeScript TurboWebhooks SDK: subscribe to TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks javascript

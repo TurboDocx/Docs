@@ -427,7 +427,7 @@ const result = await TurboSign.sendSignature({
 </Tabs>
 
 :::tip Pass a file path directly
-`file` accepts `string | File | Buffer`. A `string` is treated as a local file path — the SDK reads it and uses the basename as the document filename, so `file: "./contract.pdf"` works without `readFileSync`. A raw `Blob` is not supported; use a `Buffer` (Node) or a `File` (browser).
+`file` accepts `string | File | Buffer`. A `string` is treated as a local file path: the SDK reads it and uses the basename as the document filename, so `file: "./contract.pdf"` works without `readFileSync`. A raw `Blob` is not supported; use a `Buffer` (Node) or a `File` (browser).
 
 When `file` is a `Buffer`, the filename defaults to `document.pdf` (extension detected from the content). Pass `fileName` to control it:
 
@@ -783,7 +783,7 @@ const { documentId } = await TurboSign.sendSignature({
 
 ### Reminders & expiration schedule
 
-`sendSignature` (and `createSignatureReviewLink`) accept an optional **reminder and expiration schedule**. Both features are **off by default** — omit these fields and the send behaves exactly as before. The resolved schedule is **frozen onto the document when it is sent**, so later changes to your org defaults never touch a document already out for signature.
+`sendSignature` (and `createSignatureReviewLink`) accept an optional **reminder and expiration schedule**. Both features are **off by default**: omit these fields and the send behaves exactly as before. The resolved schedule is **frozen onto the document when it is sent**, so later changes to your org defaults never touch a document already out for signature.
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -792,13 +792,13 @@ const { documentId } = await TurboSign.sendSignature({
 const result = await TurboSign.sendSignature({
   // ...fileLink, recipients, fields, etc.
 
-  // Reminders — nudge signers who haven't signed yet
+  // Reminders: nudge signers who haven't signed yet
   remindersEnabled: true,
   reminderDelay: { value: 3, unit: "days" },     // time to the FIRST reminder
   reminderInterval: { value: 3, unit: "days" },  // gap between later reminders
   maxReminders: 5,                               // cap per signer
 
-  // Expiration — close the signing window
+  // Expiration: close the signing window
   expirationEnabled: true,
   expireAfter: { value: 30, unit: "days" },      // how long the document stays signable
   expirationWarning: { value: 3, unit: "days" }, // how far before expiry warnings start
@@ -813,13 +813,13 @@ const result = await TurboSign.sendSignature({
 const result = await TurboSign.sendSignature({
   // ...fileLink, recipients, fields, etc.
 
-  // Reminders — nudge signers who haven't signed yet
+  // Reminders: nudge signers who haven't signed yet
   remindersEnabled: true,
   reminderDelay: { value: 3, unit: "days" },     // time to the FIRST reminder
   reminderInterval: { value: 3, unit: "days" },  // gap between later reminders
   maxReminders: 5,                               // cap per signer
 
-  // Expiration — close the signing window
+  // Expiration: close the signing window
   expirationEnabled: true,
   expireAfter: { value: 30, unit: "days" },      // how long the document stays signable
   expirationWarning: { value: 3, unit: "days" }, // how far before expiry warnings start
@@ -830,20 +830,20 @@ const result = await TurboSign.sendSignature({
 </TabItem>
 </Tabs>
 
-Durations are `{ value, unit }` objects — `unit` is `"hours"` or `"days"`, and `value` is a whole number from **1 to a maximum of 999 days (23976 hours)**.
+Durations are `{ value, unit }` objects: `unit` is `"hours"` or `"days"`, and `value` is a whole number from **1 to a maximum of 999 days (23976 hours)**.
 
 | Field | Type | Default | Notes |
 | --- | --- | --- | --- |
 | `remindersEnabled` | `boolean` | `false` | Send reminder emails at all |
 | `reminderDelay` | `Duration` | 3 days | Time to the **first** reminder, measured from that signer's invitation |
 | `reminderInterval` | `Duration` | 3 days | Gap between **subsequent** reminders |
-| `maxReminders` | `number` | `5` | Cap per signer, range **-1..50** — `-1` unlimited, `0` none. Never caps expiry warnings |
+| `maxReminders` | `number` | `5` | Cap per signer, range **-1..50** (`-1` unlimited, `0` none). Never caps expiry warnings |
 | `expirationEnabled` | `boolean` | `false` | Expire the document at all |
 | `expireAfter` | `Duration` | 120 days | How long the document stays signable, counted from **sending** |
 | `expirationWarning` | `Duration` | 3 days | How far **before** expiry warnings start. `0` = never warn |
 | `expirationWarningInterval` | `Duration` | 1 day | Gap between warnings once they start |
 
-Reminders and expiry warnings run as **two independent clocks**, so a signer keeps getting reminders even after warnings begin; the two are coordinated so a reminder and a warning never land on the same tick. The API rejects a cadence that can't fit its window — for example a reminder interval that outlives `expireAfter` — with `400 InvalidSignatureSchedule`. See the [API validation rules](/docs/TurboSign/API%20Signatures#reminders--expiration) for the full list.
+Reminders and expiry warnings run as **two independent clocks**, so a signer keeps getting reminders even after warnings begin; the two are coordinated so a reminder and a warning never land on the same tick. The API rejects a cadence that can't fit its window (for example a reminder interval that outlives `expireAfter`) with `400 InvalidSignatureSchedule`. See the [API validation rules](/docs/TurboSign/API%20Signatures#reminders--expiration) for the full list.
 
 ### Send reminder
 
@@ -853,7 +853,7 @@ Send a **standalone reminder** to whoever's turn it is to sign. Unlike the sched
 <TabItem value="javascript" label="JavaScript" default>
 
 ```javascript
-// Remind everyone whose turn it is — omit the recipient ids
+// Remind everyone whose turn it is: omit the recipient ids
 const { results } = await TurboSign.sendReminder("document-uuid");
 
 results.forEach((r) => {
@@ -881,7 +881,7 @@ await TurboSign.sendReminder("document-uuid", ["recipient-uuid-1"]);
 </TabItem>
 </Tabs>
 
-:::warning Omit — don't send an empty array
+:::warning Omit: don't send an empty array
 To remind everyone eligible, **omit** `recipientIds` entirely. Passing an empty array (`[]`) is rejected with a `400`.
 :::
 
@@ -910,7 +910,7 @@ console.log(result.status); // 'under_review' | 'completed' | 'voided' | ...
 </TabItem>
 </Tabs>
 
-The response carries the document-level **`status`** (`under_review`, `completed`, `voided`, `expired`, …) and **`expiresAt`** — the ISO 8601 signing-window deadline, or `undefined`/`null` when expiration is off. Once that deadline passes the document moves to the terminal **`expired`** status and its signing links stop working. The same `document.expiresAt` is returned by `getRecipients()` alongside per-recipient detail.
+The response carries the document-level **`status`** (`under_review`, `completed`, `voided`, `expired`, …) and **`expiresAt`** (the ISO 8601 signing-window deadline, or `undefined`/`null` when expiration is off). Once that deadline passes the document moves to the terminal **`expired`** status and its signing links stop working. The same `document.expiresAt` is returned by `getRecipients()` alongside per-recipient detail.
 
 ### Get recipients
 
@@ -950,7 +950,7 @@ const chasing = recipients.filter(
 :::tip Two status fields, and they differ on purpose
 
 `status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
-`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired`: that
 is the one to display.
 
 On a voided or expired document an unsigned signer still reads `pending` in `status`, so
@@ -963,14 +963,14 @@ the document is terminal.
 
 :::
 
-Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+Each recipient also carries a `delivery` block: `firstSentOn`, `lastSentOn`, `totalSent`,
 `reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
 request, resends, reminders, expiry warnings and terminal notices; CC notifications are
 excluded, since a CC address is not a signer.
 
 :::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
 
-`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+`reminderCount` counts **automatic (scheduled) reminders only**: the counter `maxReminders`
 caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
 does **not** increment this, even though the email it sends *does* appear in `totalSent`.
 
@@ -979,7 +979,7 @@ signature-request send, each scheduled reminder, each manual "remind now" and ea
 warning all stamp it. Only scheduled reminders bump `reminderCount`.
 
 So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
-timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+timestamp alongside `reminderCount: 0`: nobody has been reminded. To answer "have we actually
 chased this person", read `totalSent`, not `reminderCount`.
 
 `warningCount` / `lastWarningAt` have no such caveat.
@@ -1099,7 +1099,7 @@ console.log(JSON.stringify(result, null, 2));
 
 ## Error Handling
 
-The SDK provides typed error classes for different failure scenarios. All errors extend the base `TurboDocxError` class.
+All errors are real `Error` subclasses (`instanceof` works) that extend the base `TurboDocxError`. `code` is a plain string, not an enum member: the HTTP client passes the API's own code through when the response includes one (for example `QUOTE_NOT_FOUND`), and only falls back to the class default below when it doesn't, so you can branch on `err.code` for the precise reason instead of just the HTTP category.
 
 ### Error Classes
 
@@ -1231,7 +1231,7 @@ try {
 
 ### Error Properties
 
-All errors include these properties:
+All errors include these `readonly` properties:
 
 | Property     | Type                  | Description                      |
 | ------------ | --------------------- | -------------------------------- |
@@ -1307,7 +1307,7 @@ Field configuration supporting both coordinate-based and template-based position
 | `required`        | `boolean`            | No       | Whether field is required                           |
 | `backgroundColor` | `string`             | No       | Background color (hex, rgb, or named)               |
 | `template`        | `object`             | No       | Template anchor configuration                       |
-| `metadata`        | `object`             | No       | Conditional (IF/THEN) metadata — see below          |
+| `metadata`        | `object`             | No       | Conditional (IF/THEN) metadata, see below          |
 
 \*Required when not using template anchors
 
@@ -1374,7 +1374,7 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | Property              | Type          | Required    | Description                    |
 | --------------------- | ------------- | ----------- | ------------------------------ |
 | `file`                | `string \| File \| Buffer` | Conditional | Document as a local file path, `Buffer`, or browser `File` |
-| `fileName`            | `string`      | No          | Original filename — used when `file` is a `Buffer` (defaults to `document.<ext>`) |
+| `fileName`            | `string`      | No          | Original filename, used when `file` is a `Buffer` (defaults to `document.<ext>`) |
 | `fileLink`            | `string`      | Conditional | URL to document file           |
 | `deliverableId`       | `string`      | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `string`      | Conditional | TurboDocx template ID          |
@@ -1382,17 +1382,17 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | `fields`              | `Field[]`     | Yes         | Signature fields configuration |
 | `documentName`        | `string`      | No          | Document name                  |
 | `documentDescription` | `string`      | No          | Document description           |
-| `senderName`          | `string`      | No          | Sender name — falls back to `senderName` in the SDK config, then your API key's name |
-| `senderEmail`         | `string`      | Conditional | Sender email — **required on the request** unless supplied via `TurboSign.configure({ senderEmail })` or `TURBODOCX_SENDER_EMAIL` |
+| `senderName`          | `string`      | No          | Sender name, falls back to `senderName` in the SDK config, then your API key's name |
+| `senderEmail`         | `string`      | Conditional | Sender email, **required on the request** unless supplied via `TurboSign.configure({ senderEmail })` or `TURBODOCX_SENDER_EMAIL` |
 | `ccEmails`            | `string[]`    | No          | Array of CC email addresses    |
 | `remindersEnabled`    | `boolean`     | No          | Send reminder emails to signers who haven't signed (default `false`) |
-| `reminderDelay`       | `Duration`    | No          | `{ value, unit }` — time to the first reminder |
-| `reminderInterval`    | `Duration`    | No          | `{ value, unit }` — gap between later reminders |
+| `reminderDelay`       | `Duration`    | No          | `{ value, unit }`, time to the first reminder |
+| `reminderInterval`    | `Duration`    | No          | `{ value, unit }`, gap between later reminders |
 | `maxReminders`        | `number`      | No          | Cap per signer, range **-1..50** (`-1` unlimited, `0` none, default `5`) |
 | `expirationEnabled`   | `boolean`     | No          | Close the signing window after `expireAfter` (default `false`) |
-| `expireAfter`         | `Duration`    | No          | `{ value, unit }` — how long the document stays signable |
-| `expirationWarning`   | `Duration`    | No          | `{ value, unit }` — how far before expiry warnings start (`0` = never warn) |
-| `expirationWarningInterval` | `Duration` | No       | `{ value, unit }` — gap between warnings once they start |
+| `expireAfter`         | `Duration`    | No          | `{ value, unit }`, how long the document stays signable |
+| `expirationWarning`   | `Duration`    | No          | `{ value, unit }`, how far before expiry warnings start (`0` = never warn) |
+| `expirationWarningInterval` | `Duration` | No       | `{ value, unit }`, gap between warnings once they start |
 
 :::info Durations
 A `Duration` is `{ value: number, unit: "hours" | "days" }`. `value` is a whole number from **1 to 999 days (23976 hours)**.
@@ -1402,11 +1402,14 @@ A `Duration` is `{ value: number, unit: "hours" | "days" }`. `value` is a whole 
 Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.
 :::
 
-:::caution Sender identity is always required for TurboSign
+:::caution Sender email is enforced by the SDK, not by a `SenderEmailRequired`/`SenderNameRequired` API error
 Unlike TurboQuote (where the sender comes from the org quote template and there is no per-request
-field), TurboSign resolves the sender **from the request body**. If no sender email can be resolved
-from the request, the SDK config, or the environment, the API returns `400 SenderEmailRequired`;
-if no sender name can be resolved it returns `400 SenderNameRequired`.
+field), TurboSign expects the sender to come from the request body, `TurboSign.configure({ senderEmail })`,
+or the `TURBODOCX_SENDER_EMAIL` environment variable. The **SDK enforces this itself**: `TurboSign.configure()`
+throws a `ValidationError` if no `senderEmail` is configured (client-side, before any request is sent).
+The API itself does not reject a send that omits a sender: if no sender email or name can be resolved,
+it falls back to a generic TurboDocx sender identity rather than returning `400 SenderEmailRequired` or
+`400 SenderNameRequired`.
 :::
 
 ---

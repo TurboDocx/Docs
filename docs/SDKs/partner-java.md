@@ -32,7 +32,7 @@ The official TurboDocx Partner SDK for Java applications. Build multi-tenant Saa
 <br />
 
 :::info What is TurboPartner?
-TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements — perfect for building white-label or multi-tenant applications on top of TurboDocx.
+TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements, perfect for building white-label or multi-tenant applications on top of TurboDocx.
 :::
 
 ## TLDR
@@ -66,7 +66,7 @@ public class Main {
 
         // 4. Create an API key
         JsonObject key = client.turboPartner().createOrganizationApiKey(orgId, "Production Key", "admin");
-        System.out.println("API Key: " + key.getAsJsonObject("data").get("key").getAsString()); // Save this — only shown once!
+        System.out.println("API Key: " + key.getAsJsonObject("data").get("key").getAsString()); // Save this, only shown once!
     }
 }
 ```
@@ -82,7 +82,7 @@ public class Main {
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.5.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
@@ -90,14 +90,14 @@ public class Main {
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.5.0")
+implementation("com.turbodocx:turbodocx-sdk:0.7.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 ```
 
 </TabItem>
@@ -156,7 +156,7 @@ export TURBODOCX_PARTNER_ID=your-partner-uuid
 ```
 
 :::info Responses are raw `JsonObject`
-Every `TurboPartner` method returns a Gson `JsonObject` containing the raw API response — `success`, `data`, and sometimes `message`. Unlike the TurboSign and Deliverable modules, partner responses are **not** unwrapped into typed models, so read them with `getAsJsonObject("data")`, `getAsJsonArray("results")`, `getAsString()`, and friends. Iterating a results array needs `com.google.gson.JsonElement` alongside `com.google.gson.JsonObject`. Every method throws `IOException` on transport failure.
+Every `TurboPartner` method returns a Gson `JsonObject` containing the raw API response: `success`, `data`, and sometimes `message`. Unlike the TurboSign and Deliverable modules, partner responses are **not** unwrapped into typed models, so read them with `getAsJsonObject("data")`, `getAsJsonArray("results")`, `getAsString()`, and friends. Iterating a results array needs `com.google.gson.JsonElement` alongside `com.google.gson.JsonObject`. Every method throws `IOException` on transport failure.
 :::
 
 ---
@@ -269,7 +269,7 @@ JsonObject result = client.turboPartner().updateOrganizationInfo(
 
 ### `updateOrganizationEntitlements()`
 
-Update an organization's feature limits and capabilities. Both `features` and `tracking` are optional — pass `null` for the one you are not changing.
+Update an organization's feature limits and capabilities. Both `features` and `tracking` are optional: pass `null` for the one you are not changing.
 
 ```java
 Map<String, Object> features = new LinkedHashMap<>();
@@ -442,7 +442,7 @@ System.out.println("Full Key: " + data.get("key").getAsString());  // Only shown
 ```
 
 :::caution Save Your API Key
-The full API key is only returned once during creation. Store it securely — you won't be able to retrieve it again.
+The full API key is only returned once during creation. Store it securely: you won't be able to retrieve it again.
 :::
 
 ### `listOrganizationApiKeys()`
@@ -534,7 +534,7 @@ for (JsonElement element : result.getAsJsonObject("data").getAsJsonArray("result
 
 ### `updatePartnerApiKey()`
 
-Update a partner API key. The argument order is `keyId, name, description, scopes` — pass `null` for anything you want to leave unchanged.
+Update a partner API key. The argument order is `keyId, name, description, scopes`: pass `null` for anything you want to leave unchanged.
 
 ```java
 JsonObject result = client.turboPartner().updatePartnerApiKey(
@@ -558,11 +558,11 @@ JsonObject result = client.turboPartner().revokePartnerApiKey("partner-key-uuid-
 ## Partner User Management
 
 :::danger Partner users use different role values
-Partner portal users take `"admin"`, `"member"`, or `"viewer"`. **Organization** users and organization API keys take `"admin"`, `"contributor"`, `"user"`, or `"viewer"`. The two sets do not overlap beyond `admin`/`viewer` — `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Values](#role-values).
+Partner portal users take `"admin"`, `"member"`, or `"viewer"`. **Organization** users and organization API keys take `"admin"`, `"contributor"`, `"user"`, or `"viewer"`. The two sets do not overlap beyond `admin`/`viewer`: `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Values](#role-values).
 :::
 
 :::caution `permissions` is all-or-nothing
-`addUserToPartnerPortal()` **requires** a permissions map containing all seven keys. On `updatePartnerUserPermissions()` the map is optional (`null` keeps the current values), but if you send it, **all seven keys are required**. There is no partial permissions update — the API rejects an incomplete map with `TurboDocxException.ValidationException` (400). Read the current values first and re-send them with your change applied.
+`addUserToPartnerPortal()` **requires** a permissions map containing all seven keys. On `updatePartnerUserPermissions()` the map is optional (`null` keeps the current values), but if you send it, **all seven keys are required**. There is no partial permissions update: the API rejects an incomplete map with `TurboDocxException.ValidationException` (400). Read the current values first and re-send them with your change applied.
 :::
 
 ### `addUserToPartnerPortal()`
@@ -573,7 +573,7 @@ Add a user to the partner portal with specific permissions.
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-// Required on add — all 7 keys must be present.
+// Required on add: all 7 keys must be present.
 Map<String, Boolean> permissions = new LinkedHashMap<>();
 permissions.put("canManageOrgs", true);            // Create, update, delete organizations
 permissions.put("canManageOrgUsers", true);        // Manage users within organizations
@@ -607,7 +607,7 @@ for (JsonElement element : result.getAsJsonObject("data").getAsJsonArray("result
 
 ### `updatePartnerUserPermissions()`
 
-Update a partner user's role and/or permissions. Pass `null` for `role` or `permissions` to keep the current value — but if you pass `permissions`, supply **all seven keys**; a partial map is a 400.
+Update a partner user's role and/or permissions. Pass `null` for `role` or `permissions` to keep the current value, but if you pass `permissions`, supply **all seven keys**; a partial map is a 400.
 
 ```java
 Map<String, Boolean> permissions = new LinkedHashMap<>();
@@ -648,7 +648,7 @@ JsonObject result = client.turboPartner().removeUserFromPartnerPortal("partner-u
 
 ### `getPartnerAuditLogs()`
 
-Get audit logs for all partner activities with filtering. All nine arguments are positional — pass `null` for any filter you don't want.
+Get audit logs for all partner activities with filtering. All nine arguments are positional: pass `null` for any filter you don't want.
 
 ```java
 JsonObject result = client.turboPartner().getPartnerAuditLogs(
@@ -722,12 +722,12 @@ These are limits and capabilities you can configure for each organization:
 | `enableBulkSending` | boolean | Enable bulk document sending |
 
 :::info Map keys stay camelCase
-The `features`, `tracking`, and `permissions` maps are serialized straight into the JSON request body, so the keys must match exactly as written above (`maxUsers`, `hasTDAI`, `canManageOrgAPIKeys`) — Java naming conventions do not apply to request-body keys.
+The `features`, `tracking`, and `permissions` maps are serialized straight into the JSON request body, so the keys must match exactly as written above (`maxUsers`, `hasTDAI`, `canManageOrgAPIKeys`): Java naming conventions do not apply to request-body keys.
 :::
 
 ### Tracking (Usage Counters)
 
-Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` map** — useful for seeding counters when migrating an existing customer:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `updateOrganizationEntitlements()` **accepts a `tracking` map**, useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -746,7 +746,7 @@ Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` a
 
 ## Preferences Reference
 
-TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly: the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -763,7 +763,7 @@ TurboSign display preferences you can read and set per organization. Every key i
 
 ### PartnerScope (22 Scopes)
 
-`com.turbodocx.PartnerScope` is a constants class of `String` values — there is no scope enum. Pass them as a `List<String>` to `createPartnerApiKey()` and `updatePartnerApiKey()`.
+`com.turbodocx.PartnerScope` is a constants class of `String` values: there is no scope enum. Pass them as a `List<String>` to `createPartnerApiKey()` and `updatePartnerApiKey()`.
 
 ```java
 import com.turbodocx.PartnerScope;
@@ -807,9 +807,9 @@ PartnerScope.AUDIT_READ            // "audit:read"
 
 ### Role Values
 
-Roles are plain `String` values in the Java SDK — there is no role enum.
+Roles are plain `String` values in the Java SDK: there is no role enum.
 
-**Organization users and organization API keys** — used by `addUserToOrganization()`, `updateOrganizationUserRole()`, `createOrganizationApiKey()`, and `updateOrganizationApiKey()`:
+**Organization users and organization API keys**, used by `addUserToOrganization()`, `updateOrganizationUserRole()`, `createOrganizationApiKey()`, and `updateOrganizationApiKey()`:
 
 | Value           | Description                  |
 | --------------- | ---------------------------- |
@@ -818,7 +818,7 @@ Roles are plain `String` values in the Java SDK — there is no role enum.
 | `"user"`        | Standard user access         |
 | `"viewer"`      | Read-only access             |
 
-**Partner portal users** — used by `addUserToPartnerPortal()` and `updatePartnerUserPermissions()` only:
+**Partner portal users**, used by `addUserToPartnerPortal()` and `updatePartnerUserPermissions()` only:
 
 | Value      | Description                                  |
 | ---------- | -------------------------------------------- |
@@ -848,7 +848,7 @@ All seven keys are required whenever a permissions map is sent. Partial maps are
 
 ## Error Handling
 
-The SDK provides typed exceptions for different error scenarios. They all extend `TurboDocxException`, which is a `RuntimeException`, so catch it after any checked `IOException` handling:
+Partner calls throw `TurboDocxException.AuthenticationException` when the partner API key or partner ID is wrong, since partner credentials are validated separately from organization API keys. Every typed exception extends `TurboDocxException`, a `RuntimeException`, so catch it after any checked `IOException` handling:
 
 ```java
 import com.turbodocx.TurboDocxException;
@@ -881,30 +881,13 @@ try {
 }
 ```
 
-### Error Types
-
-| Error Type                                   | Status Code | Description                                        |
-| -------------------------------------------- | ----------- | -------------------------------------------------- |
-| `TurboDocxException`                         | varies      | Base exception for all API errors                  |
-| `TurboDocxException.AuthenticationException` | 401         | Invalid or missing partner credentials             |
-| `TurboDocxException.ValidationException`     | 400         | Invalid request parameters                         |
-| `TurboDocxException.AuthorizationException`  | 403         | Partner API key lacks the required scope           |
-| `TurboDocxException.NotFoundException`       | 404         | Resource not found                                 |
-| `TurboDocxException.RateLimitException`      | 429         | Too many requests                                  |
+The full typed-exception table and HTTP status mapping is documented once in the [Java SDK's Error Handling reference](./java.md#error-handling); partner calls use the same `AuthenticationException`/`ValidationException`/`AuthorizationException`/`NotFoundException`/`RateLimitException` types.
 
 Transport failures are **not** wrapped: the partner client propagates OkHttp's checked `IOException` directly, so catch `IOException` for connectivity problems rather than `TurboDocxException.NetworkException`.
 
-:::caution 409 conflicts arrive as the base exception
-`TurboDocxException.ConflictException` exists in the SDK, but the partner client does **not** raise it — a 409 (for example, a user that already exists) surfaces as the base `TurboDocxException` with `getStatusCode() == 409`. Handle it in the base `catch` block rather than adding a `ConflictException` catch, which would never fire on a partner call.
+:::tip 409 Conflicts
+`TurboDocxException.ConflictException` is raised for 409 responses on partner calls too (for example, a user that already exists), the same way as `AuthenticationException`, `ValidationException`, `AuthorizationException`, `NotFoundException`, and `RateLimitException`. Add a `catch (TurboDocxException.ConflictException e)` block if you want to handle conflicts separately from the base `TurboDocxException` catch-all.
 :::
-
-### Error Properties
-
-| Property          | Type     | Description                  |
-| ----------------- | -------- | ---------------------------- |
-| `getMessage()`    | `String` | Human-readable error message |
-| `getStatusCode()` | `int`    | HTTP status code             |
-| `getCode()`       | `String` | Error code (if available)    |
 
 ---
 
@@ -974,4 +957,4 @@ public class PartnerOnboarding {
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
 - [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
-- [TurboSign Java SDK](/docs/SDKs/java) — For digital signature operations
+- [TurboSign Java SDK](/docs/SDKs/java): for digital signature operations

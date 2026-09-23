@@ -1,7 +1,7 @@
 ---
 title: Zoom Integration
 sidebar_position: 4
-description: Automatically turn Zoom transcripts into documents, proposals, and slide decks with TurboDocx. Speed up follow-ups, sales cycles, and client onboarding — powered by AI.
+description: Turn Zoom transcripts into documents, proposals, and slide decks. Speed up follow-ups, sales cycles, and client onboarding with AI.
 keywords: 
   - zoom meeting documents
   - zoom call transcripts

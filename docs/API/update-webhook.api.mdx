@@ -1,7 +1,7 @@
 ---
 id: update-webhook
 title: "Update Webhook"
-description: "Patch one or more fields on the org's signature webhook. All fields are optional — supply only what you want to change."
+description: "Patch one or more fields on the org's signature webhook, changing only what you send: name, URLs, events, or active state."
 sidebar_label: "Update Webhook"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,68 @@ custom_edit_url: null
   
 
   # Update Webhook
-  
-  Update Webhook
-  
+
+The Update Webhook endpoint changes a webhook's URLs, subscribed events, name, or active state. Every field is optional; send only what you want to change, and the rest is left untouched.
+
+## When to use it
+
+Use this endpoint to rotate delivery URLs, add or remove subscribed event types, or temporarily pause delivery by setting `isActive` to `false` without deleting the webhook and losing its secret and delivery history.
+
+## Example request
+
+```bash
+curl -X PATCH "https://api.turbodocx.com/api/webhooks/signature" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": ["https://example.com/webhooks/turbodocx"],
+    "events": ["signature.document.completed"],
+    "isActive": true
+  }'
+```
+
+`urls` and `events` each replace the webhook's full list, they do not merge with the existing values. If you include `name`, it must still be unique among your organization's active webhooks.
+
+## Example response
+
+On success the endpoint returns `200 OK` with the updated webhook, in the same shape as [Get Webhook](/docs/API/get-webhook) (without `deliveryStats` or `availableEvents`):
+
+```json
+{
+  "data": {
+    "id": "b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34",
+    "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "name": "signature",
+    "urls": ["https://example.com/webhooks/turbodocx"],
+    "events": ["signature.document.completed"],
+    "isActive": true,
+    "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+    "createdOn": "2026-05-01T14:22:10.000Z",
+    "updatedOn": "2026-05-02T09:10:00.000Z",
+    "secretExists": true,
+    "maskedSecret": "whs***7f8"
+  },
+  "message": "Webhook updated successfully"
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
+| 400 | A field fails validation, or a URL in `urls` is not HTTPS | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+| 409 | Renaming to a name another active webhook already uses | `{ "message", "error": "WebhookNameTaken", "data": { "constraint", "orgId", "name" } }` |
+
+## Related endpoints
+
+- [Get Webhook](/docs/API/get-webhook) to view the current configuration before editing
+- [Regenerate Webhook Secret](/docs/API/regenerate-webhook-secret) to rotate the signing secret without changing anything else
+- [Delete Webhook](/docs/API/delete-webhook) to remove the webhook entirely
+
   <DisplayEndpoint method="PATCH" endpoint="/api/webhooks/signature"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

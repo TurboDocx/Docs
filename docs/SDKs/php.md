@@ -487,7 +487,7 @@ echo "Document ID: {$result->documentId}\n";
 
 `sendSignature` can also schedule automatic reminder emails and an expiration deadline. All eight
 schedule fields are optional and **both features are off by default**, so omitting them preserves
-the original send behavior. The resolved schedule is **frozen onto the document when it is sent** —
+the original send behavior. The resolved schedule is **frozen onto the document when it is sent**:
 changing your org defaults later never alters a document already out for signature.
 
 ```php
@@ -517,7 +517,7 @@ deadline is readable afterwards via `getStatus()->expiresAt`.
 
 Send a standalone reminder to whoever's turn it is to sign
 (`POST /turbosign/documents/{documentId}/send-reminder`). It is independent of the automatic
-cadence — it works even when reminders are disabled or the per-signer cap is already spent, does
+cadence: it works even when reminders are disabled or the per-signer cap is already spent, does
 **not** consume that cap, and only emails signers at the *current* signing order. Pass `null` (or
 omit the argument) to remind everyone eligible; do not pass an empty array, which the API rejects.
 
@@ -530,7 +530,7 @@ foreach ($result['results'] as $r) {
     echo "{$r['recipientId']}: {$r['status']}\n";
 }
 
-// Or limit to specific recipients — all-or-nothing: every id must be a current-order pending signer.
+// Or limit to specific recipients (all-or-nothing): every id must be a current-order pending signer.
 TurboSign::sendReminder('document-uuid', ['recipient-uuid-1', 'recipient-uuid-2']);
 ```
 
@@ -566,7 +566,7 @@ foreach ($progress->recipients as $r) {
 :::tip Two status fields, and they differ on purpose
 
 `status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
-`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired`: that
 is the one to display.
 
 On a voided or expired document an unsigned signer still reads `pending` in `status`, so
@@ -579,14 +579,14 @@ the document is terminal.
 
 :::
 
-Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+Each recipient also carries a `delivery` block: `firstSentOn`, `lastSentOn`, `totalSent`,
 `reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
 request, resends, reminders, expiry warnings and terminal notices; CC notifications are
 excluded, since a CC address is not a signer.
 
 :::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
 
-`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+`reminderCount` counts **automatic (scheduled) reminders only**: the counter `maxReminders`
 caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
 does **not** increment this, even though the email it sends *does* appear in `totalSent`.
 
@@ -595,7 +595,7 @@ signature-request send, each scheduled reminder, each manual "remind now" and ea
 warning all stamp it. Only scheduled reminders bump `reminderCount`.
 
 So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
-timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+timestamp alongside `reminderCount: 0`: nobody has been reminded. To answer "have we actually
 chased this person", read `totalSent`, not `reminderCount`.
 
 `warningCount` / `lastWarningAt` have no such caveat.
@@ -783,7 +783,7 @@ use TurboDocx\Types\FieldConditional;
 use TurboDocx\Types\ConditionalOperator;
 use TurboDocx\Types\ConditionalAction;
 
-// Controlling checkbox — carries a stable fieldKey
+// Controlling checkbox, carries a stable fieldKey
 new Field(
     type: SignatureFieldType::CHECKBOX,
     recipientEmail: 'reviewer@company.com',
@@ -795,7 +795,7 @@ new Field(
     metadata: new FieldMetadata(fieldKey: 'request_changes')
 );
 
-// Dependent text field — hidden until the checkbox is checked
+// Dependent text field, hidden until the checkbox is checked
 new Field(
     type: SignatureFieldType::TEXT,
     recipientEmail: 'reviewer@company.com',
@@ -823,12 +823,14 @@ malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
 
 ## Error Handling
 
-The SDK provides typed exceptions for different error scenarios:
+Every typed exception extends `TurboDocxException`, itself a plain `Exception` subclass with two extra readonly properties: `statusCode` (int, HTTP status) and `errorCode` (string, e.g. `'VALIDATION_ERROR'`). Because the constructor hardcodes PHP's built-in `Exception::getCode()` to `0`, read `$e->errorCode`, not `$e->getCode()`, for the machine-readable reason:
 
 ```php
 use TurboDocx\Exceptions\AuthenticationException;
+use TurboDocx\Exceptions\AuthorizationException;
 use TurboDocx\Exceptions\ValidationException;
 use TurboDocx\Exceptions\NotFoundException;
+use TurboDocx\Exceptions\ConflictException;
 use TurboDocx\Exceptions\RateLimitException;
 use TurboDocx\Exceptions\NetworkException;
 
@@ -837,18 +839,27 @@ try {
 } catch (AuthenticationException $e) {
     // 401 - Invalid API key or access token
     echo "Authentication failed: {$e->getMessage()}\n";
+} catch (AuthorizationException $e) {
+    // 403 - Valid credentials without permission for this operation
+    echo "Authorization error: {$e->getMessage()}\n";
 } catch (ValidationException $e) {
     // 400 - Invalid request data
     echo "Validation error: {$e->getMessage()}\n";
 } catch (NotFoundException $e) {
     // 404 - Document not found
     echo "Not found: {$e->getMessage()}\n";
+} catch (ConflictException $e) {
+    // 409 - Conflicts with the current resource state
+    echo "Conflict: {$e->getMessage()}\n";
 } catch (RateLimitException $e) {
     // 429 - Rate limit exceeded
     echo "Rate limit: {$e->getMessage()}\n";
 } catch (NetworkException $e) {
     // Network/connection error
     echo "Network error: {$e->getMessage()}\n";
+} catch (TurboDocxException $e) {
+    // Catch-all: read the machine-readable reason from errorCode, not getCode()
+    echo "Error {$e->errorCode}: {$e->getMessage()} (status {$e->statusCode})\n";
 }
 ```
 
@@ -858,16 +869,18 @@ try {
 | ------------------------- | ----------- | ---------------------------------- |
 | `TurboDocxException`      | varies      | Base exception for all SDK errors  |
 | `AuthenticationException` | 401         | Invalid or missing API credentials |
+| `AuthorizationException`  | 403         | Valid credentials without permission for this operation |
 | `ValidationException`     | 400         | Invalid request parameters         |
 | `NotFoundException`       | 404         | Document or resource not found     |
+| `ConflictException`       | 409         | Request conflicts with current resource state |
 | `RateLimitException`      | 429         | Too many requests                  |
 | `NetworkException`        | -           | Network connectivity issues        |
 
 All exceptions extend `TurboDocxException` and include:
 
 - `getMessage()` - Human-readable error message
-- `statusCode` - HTTP status code (if applicable)
-- `errorCode` - Error code string (e.g., 'AUTHENTICATION_ERROR')
+- `statusCode` - HTTP status code, a public readonly `?int` (null for `NetworkException`)
+- `errorCode` - Error code string (e.g., `'AUTHENTICATION_ERROR'`), a public readonly `?string`
 
 ---
 
@@ -912,13 +925,13 @@ enum DocumentStatus: string {
     case VOIDED = 'voided';
 }
 
-// Conditional (IF/THEN) operator — the condition evaluated against the controlling checkbox
+// Conditional (IF/THEN) operator, the condition evaluated against the controlling checkbox
 enum ConditionalOperator: string {
     case IS_CHECKED = 'is_checked';
     case IS_NOT_CHECKED = 'is_not_checked';
 }
 
-// Conditional (IF/THEN) action — what happens to the dependent field until the condition is met
+// Conditional (IF/THEN) action, what happens to the dependent field until the condition is met
 enum ConditionalAction: string {
     case SHOW = 'show';     // hidden until met
     case UNLOCK = 'unlock'; // visible but read-only until met

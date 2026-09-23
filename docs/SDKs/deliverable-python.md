@@ -70,7 +70,7 @@ Deliverable.configure(
 ```
 
 :::tip No Sender Email Required
-Unlike TurboSign, the Deliverable module only requires `api_key` and `org_id` — no sender email or name is needed.
+Unlike TurboSign, the Deliverable module only requires `api_key` and `org_id`: no sender email or name is needed.
 :::
 
 ### Environment Variables
@@ -349,20 +349,7 @@ with open("report.pdf", "wb") as f:
 
 ## Error Handling
 
-The SDK provides typed error classes for different failure scenarios. All errors extend the base `TurboDocxError` class.
-
-### Error Classes
-
-| Error Class           | Status Code | Description                         |
-| --------------------- | ----------- | ----------------------------------- |
-| `TurboDocxError`      | varies      | Base error class for all SDK errors |
-| `AuthenticationError` | 401         | Invalid or missing API credentials  |
-| `AuthorizationError`  | 403         | Authenticated but lacks required permissions |
-| `ValidationError`     | 400         | Invalid request parameters          |
-| `NotFoundError`       | 404         | Deliverable or template not found   |
-| `ConflictError`       | 409         | Request conflicts with current resource state |
-| `RateLimitError`      | 429         | Too many requests                   |
-| `NetworkError`        | -           | Network connectivity issues         |
+`Deliverable.generate_deliverable()` raises `NotFoundError` when `template_id` doesn't match a template in the org, and `ValidationError` for invalid request parameters, most commonly a variable dict missing `text` (required unless it sets `variableStack` or `isDisabled: True`) or specifying an unsupported `mimeType`. Both extend the base `TurboDocxError`:
 
 ### Handling Errors
 
@@ -416,15 +403,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### Error Properties
-
-All errors include these properties:
-
-| Property      | Type          | Description                                         |
-| ------------- | ------------- | --------------------------------------------------- |
-| `message`     | `str`         | Human-readable error description (via `str(error)`) |
-| `status_code` | `int \| None` | HTTP status code (if applicable)                    |
-| `code`        | `str \| None` | Machine-readable error code                         |
+The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `message`/`status_code`/`code` attributes shared by every error are documented once in the [Python SDK's Error Handling reference](./python.md#error-handling).
 
 ---
 

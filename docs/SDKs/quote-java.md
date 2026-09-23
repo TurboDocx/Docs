@@ -2,7 +2,7 @@
 title: TurboQuote Java SDK
 sidebar_position: 21
 sidebar_label: "TurboQuote: Java"
-description: Official TurboDocx TurboQuote SDK for Java. Create and send quotes, manage line items, products, bundles, and price books programmatically with full CPQ lifecycle support.
+description: "Java TurboQuote SDK: create and send quotes, manage line items, products, bundles, and price books with full CPQ support."
 keywords:
   - turboquote java
   - quote sdk java
@@ -41,7 +41,7 @@ TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product 
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.5.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
@@ -49,14 +49,14 @@ TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product 
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.5.0")
+implementation("com.turbodocx:turbodocx-sdk:0.7.0")
 ```
 
 </TabItem>

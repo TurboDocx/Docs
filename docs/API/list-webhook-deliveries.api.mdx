@@ -16,9 +16,72 @@ custom_edit_url: null
   
 
   # List Webhook Deliveries
-  
-  List Webhook Deliveries
-  
+
+The List Webhook Deliveries endpoint returns the individual delivery attempts made to your signature webhook's URLs, newest first, with each attempt's status, HTTP response code, and retry count.
+
+## When to use it
+
+Use this endpoint to build a delivery log for debugging: find which attempts failed, filter to a specific event type, or locate a delivery's `id` to pass to [Replay Webhook Delivery](/docs/API/replay-webhook-delivery).
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/api/webhooks/signature/deliveries?limit=20&offset=0&isDelivered=false" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+Supported filters: `eventType`, `isDelivered` (`true`/`false`), and `httpStatus` (an exact status code). `limit` defaults to `20`, `offset` to `0`.
+
+> **Known limitation:** `isDelivered=true` and `httpStatus` do not currently filter results correctly due to a backend issue: `isDelivered=true` returns the same (undelivered-only) results as `isDelivered=false`, and `httpStatus` is ignored entirely regardless of value. Only `isDelivered=false` behaves as documented today.
+
+## Example response
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "id": "d3a1c2b4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "eventType": "signature.document.completed",
+        "url": "https://example.com/webhooks/turbodocx",
+        "httpStatus": 502,
+        "responseBody": "Bad Gateway",
+        "attemptCount": 2,
+        "maxAttempts": 3,
+        "isDelivered": false,
+        "deliveredAt": null,
+        "nextRetryAt": "2026-05-02T09:15:00.000Z",
+        "errorMessage": "Request failed with status code 502",
+        "status": "retrying",
+        "createdOn": "2026-05-02T09:05:00.000Z",
+        "updatedOn": "2026-05-02T09:10:00.000Z"
+      }
+    ],
+    "totalRecords": 1,
+    "limit": 20,
+    "offset": 0
+  }
+}
+```
+
+`status` summarizes the row as `"delivered"`, `"failed"` (all `maxAttempts` attempts exhausted), `"retrying"`, or `"pending"`. Failed deliveries retry automatically with backoff (immediate, then +1 minute, then +5 minutes) for up to `maxAttempts` (3) attempts total before landing in the dead-letter state.
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
+
+## Related endpoints
+
+- [Replay Webhook Delivery](/docs/API/replay-webhook-delivery) to manually retry a delivery from this list
+- [Get Webhook Stats](/docs/API/get-webhook-stats) for aggregate numbers instead of individual deliveries
+- [Test Webhook](/docs/API/test-webhook) to generate a fresh delivery on demand
+
   <DisplayEndpoint method="GET" endpoint="/api/webhooks/signature/deliveries"/>
   <QueryTable title="query" data="W3sia2V5IjoibGltaXQiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJvZmZzZXQiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJldmVudFR5cGUiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJpc0RlbGl2ZXJlZCIsImV4YW1wbGUiOiIifSx7ImtleSI6Imh0dHBTdGF0dXMiLCJleGFtcGxlIjoiIn1d" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

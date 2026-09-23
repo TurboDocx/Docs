@@ -1,7 +1,7 @@
 ---
 title: TurboSign Webhooks
 sidebar_position: 6
-description: Configure real-time webhooks to receive instant notifications across the full TurboSign signature lifecycle — sent, viewed, per-recipient signed, partial progress, completed, voided, and finalization failures. Integrate TurboSign events with your existing systems through secure webhook endpoints.
+description: "Configure TurboSign webhooks to receive notifications for signature events: sent, viewed, signed, completed, voided, and finalization failures."
 keywords:
   - webhook configuration
   - signature webhooks

@@ -1,7 +1,7 @@
 ---
 title: How to Combine Documents in Wrike
 sidebar_position: 10
-description: Configure a Wrike automation that merges every attachment on a task or project into a single combined PDF (a Document Package) and attaches it back to Wrike when a status changes.
+description: Configure Wrike automation to merge all attachments on a task or project into a single combined PDF and attach back on status change.
 keywords:
   - wrike document package
   - wrike combined pdf

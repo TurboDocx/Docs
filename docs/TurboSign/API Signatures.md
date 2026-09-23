@@ -1,7 +1,7 @@
 ---
 title: TurboSign API Integration
 sidebar_position: 4
-description: Complete guide for integrating TurboSign API using single-step document preparation. Send documents for electronic signatures in one API call with our simplified workflow.
+description: Integrate TurboSign API with single-step document preparation. Send documents for electronic signatures in one API call with simplified workflow.
 keywords:
   - turbosign api
   - single-step signature api
@@ -1844,7 +1844,6 @@ Now that you've integrated the single-step signing flow, the next step is settin
 - [TurboSign Setup Guide](/docs/TurboSign/Setting%20up%20TurboSign)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
-- [Integration Examples](/docs/Integrations)
 
 ## Support
 

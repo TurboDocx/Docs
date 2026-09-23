@@ -1,7 +1,7 @@
 ---
 title: Template Generation API Integration
 sidebar_position: 1
-description: Complete guide for integrating Template Generation API to upload templates, browse existing templates, and generate deliverables. Learn the dual-path process with detailed examples and code samples.
+description: Integrate Template Generation API to upload templates, browse existing templates, and generate deliverables with detailed examples.
 keywords:
   - template generation api
   - document template api
@@ -853,16 +853,12 @@ Content-Length: 287456
 Now that you've mastered the basics, consider exploring these advanced capabilities:
 
 📖 **[AI-Powered Content Generation →](/docs/TurboDocx%20Templating/ai-variable-generation)**
-📖 **[Webhook Integration for Status Updates →](/docs/Webhooks/webhook-configuration)**
-📖 **[Bulk Document Generation →](/docs/Templates/bulk-generation)**
-📖 **[Template Version Management →](/docs/Templates/version-control)**
+📖 **[Webhook Integration for Status Updates →](/docs/TurboSign/Webhooks)**
 
 ### Related Documentation
 
-- [Template Management Guide](/docs/Templates/template-management)
 - [Variable Types and Formatting](/docs/API/Deliverable%20API#variable-object-structure)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
-- [Integration Examples](/docs/Integrations)
 
 ## Support
 

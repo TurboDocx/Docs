@@ -27,12 +27,12 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 TurboPartner is available for integrators and partners. [Contact us](https://www.turbodocx.com/demo) to get started.
 :::
 
-The official TurboDocx Partner SDK for Go applications. Build multi-tenant SaaS applications with programmatic organization management, user provisioning, API key management, and entitlement control. Zero dependencies — standard library only.
+The official TurboDocx Partner SDK for Go applications. Build multi-tenant SaaS applications with programmatic organization management, user provisioning, API key management, and entitlement control. Zero dependencies: standard library only.
 
 <br />
 
 :::info What is TurboPartner?
-TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements — perfect for building white-label or multi-tenant applications on top of TurboDocx.
+TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements, perfect for building white-label or multi-tenant applications on top of TurboDocx.
 :::
 
 ## TLDR
@@ -80,7 +80,7 @@ func main() {
         Name: "Production Key",
         Role: "admin",
     })
-    fmt.Printf("API Key: %s\n", key.Data.Key) // Save this — only shown once!
+    fmt.Printf("API Key: %s\n", key.Data.Key) // Save this, only shown once!
 }
 ```
 
@@ -98,7 +98,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 - No external dependencies (standard library only)
 
 :::tip Zero Dependencies
-The Go SDK uses only the standard library — no third-party packages required. This makes it easy to integrate into any Go project.
+The Go SDK uses only the standard library: no third-party packages required. This makes it easy to integrate into any Go project.
 :::
 
 ---
@@ -440,7 +440,7 @@ fmt.Printf("Full Key: %s\n", result.Data.Key) // Only shown once!
 ```
 
 :::caution Save Your API Key
-The full API key is only returned once during creation. Store it securely — you won't be able to retrieve it again.
+The full API key is only returned once during creation. Store it securely: you won't be able to retrieve it again.
 :::
 
 ### `ListOrganizationAPIKeys()`
@@ -551,11 +551,11 @@ result, err := partner.RevokePartnerAPIKey(ctx, "partner-key-uuid-here")
 ## Partner User Management
 
 :::danger Partner users use a different role enum
-Partner portal users take `admin`, `member`, or `viewer`. **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer`. The two enums do not overlap beyond `admin`/`viewer` — `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
+Partner portal users take `admin`, `member`, or `viewer`. **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer`. The two enums do not overlap beyond `admin`/`viewer`: `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
 :::
 
 :::caution `Permissions` is all-or-nothing
-The `Permissions` object itself is optional, but if you send it, **all seven fields are required**. There is no partial permissions update — the API rejects an incomplete object with `*ValidationError` (400). Because `PartnerPermissions` is a struct of plain `bool`s, any field you leave out silently serializes as `false` rather than "unchanged": read the current values first and re-send them with your change applied.
+The `Permissions` object itself is optional, but if you send it, **all seven fields are required**. There is no partial permissions update: the API rejects an incomplete object with `*ValidationError` (400). Because `PartnerPermissions` is a struct of plain `bool`s, any field you leave out silently serializes as `false` rather than "unchanged": read the current values first and re-send them with your change applied.
 :::
 
 ### `AddUserToPartnerPortal()`
@@ -599,7 +599,7 @@ for _, user := range result.Data.Results {
 
 ### `UpdatePartnerUserPermissions()`
 
-Update a partner user's role and permissions. If you set `Permissions`, populate **all seven fields** — a partial object is a 400, and unset bools default to `false`.
+Update a partner user's role and permissions. If you set `Permissions`, populate **all seven fields**: a partial object is a 400, and unset bools default to `false`.
 
 ```go
 result, err := partner.UpdatePartnerUserPermissions(ctx, "partner-user-uuid-here",
@@ -707,14 +707,14 @@ These are limits and capabilities you can configure for each organization:
 
 :::tip Pointer Helpers
 Use the provided helper functions for setting optional fields:
-- `turbodocx.IntPtr(25)` — for `*int` fields
-- `turbodocx.Int64Ptr(5368709120)` — for `*int64` fields (storage)
-- `turbodocx.BoolPtr(true)` — for `*bool` fields
+- `turbodocx.IntPtr(25)`, for `*int` fields
+- `turbodocx.Int64Ptr(5368709120)`, for `*int64` fields (storage)
+- `turbodocx.BoolPtr(true)`, for `*bool` fields
 :::
 
 ### Tracking (Usage Counters)
 
-Current consumption against the limits above. TurboDocx maintains these automatically, but `UpdateOrganizationEntitlements()` **accepts a `Tracking` object** — useful for seeding counters when migrating an existing customer:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `UpdateOrganizationEntitlements()` **accepts a `Tracking` object**, useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -737,7 +737,7 @@ Every counter except `CurrentAICredits` floors at `0`. Only `CurrentAICredits` a
 
 ## Preferences Reference
 
-TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly: the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -841,7 +841,7 @@ permissions := turbodocx.PartnerPermissions{
 
 ## Error Handling
 
-The SDK provides typed errors for different error scenarios:
+`partner.CreateOrganization` and the other partner calls return `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
 
 ```go
 import "errors"
@@ -852,6 +852,7 @@ if err != nil {
     var authzErr *turbodocx.AuthorizationError
     var validErr *turbodocx.ValidationError
     var notFoundErr *turbodocx.NotFoundError
+    var conflictErr *turbodocx.ConflictError
     var rateLimitErr *turbodocx.RateLimitError
     var networkErr *turbodocx.NetworkError
 
@@ -868,6 +869,9 @@ if err != nil {
     case errors.As(err, &notFoundErr):
         // 404 - Organization or resource not found
         fmt.Printf("Not found: %s\n", notFoundErr.Message)
+    case errors.As(err, &conflictErr):
+        // 409 - Resource conflict (e.g. AddUserToPartnerPortal on an existing user)
+        fmt.Printf("Conflict: %s\n", conflictErr.Message)
     case errors.As(err, &rateLimitErr):
         // 429 - Rate limit exceeded
         fmt.Printf("Rate limit: %s\n", rateLimitErr.Message)
@@ -880,17 +884,7 @@ if err != nil {
 }
 ```
 
-### Error Types
-
-| Error Type | Status Code | Description |
-|------------|-------------|-------------|
-| `TurboDocxError` | varies | Base error for all SDK errors |
-| `AuthenticationError` | 401 | Invalid or missing API credentials |
-| `AuthorizationError` | 403 | Authenticated but the key lacks the required scope |
-| `ValidationError` | 400 | Invalid request parameters |
-| `NotFoundError` | 404 | Resource not found |
-| `RateLimitError` | 429 | Too many requests |
-| `NetworkError` | - | Network connectivity issues |
+The full typed-error table and HTTP status mapping is documented once in the [Go SDK's Error Handling reference](./go.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types (for example, `AddUserToPartnerPortal()` returns a `*ConflictError` (409) when the target user already has partner-portal access).
 
 ---
 
@@ -977,4 +971,4 @@ func main() {
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
 - [Go Package Reference](https://pkg.go.dev/github.com/TurboDocx/SDK/packages/go-sdk)
-- [TurboSign Go SDK](/docs/SDKs/go) — For digital signature operations
+- [TurboSign Go SDK](/docs/SDKs/go): for digital signature operations

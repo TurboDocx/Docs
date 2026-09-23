@@ -81,7 +81,7 @@ Deliverable::configure(DeliverableConfig::fromEnvironment());
 </Tabs>
 
 :::tip No senderEmail Required
-Unlike TurboSign, the Deliverable module only requires `apiKey` and `orgId` — no sender email or name is needed.
+Unlike TurboSign, the Deliverable module only requires `apiKey` and `orgId`: no sender email or name is needed.
 :::
 
 ### Environment Variables
@@ -361,20 +361,7 @@ echo $pdfFile;
 
 ## Error Handling
 
-The SDK provides typed exceptions for different error scenarios.
-
-### Error Classes
-
-| Error Class               | Status Code | Description                        |
-| ------------------------- | ----------- | ---------------------------------- |
-| `TurboDocxException`      | varies      | Base exception for all SDK errors  |
-| `AuthenticationException` | 401         | Invalid or missing API credentials |
-| `AuthorizationException`  | 403         | API key lacks required permissions |
-| `ValidationException`     | 400         | Invalid request parameters         |
-| `NotFoundException`       | 404         | Deliverable or template not found  |
-| `ConflictException`       | 409         | Resource conflict                  |
-| `RateLimitException`      | 429         | Too many requests                  |
-| `NetworkException`        | -           | Network connectivity issues        |
+`Deliverable::generateDeliverable()` throws `NotFoundException` when `templateId` doesn't match a template in the org, and `ValidationException` when a variable in the `variables` array is missing a required field:
 
 ### Handling Errors
 
@@ -423,13 +410,7 @@ try {
 }
 ```
 
-### Error Properties
-
-All exceptions extend `TurboDocxException` and include:
-
-- `getMessage()` - Human-readable error message
-- `statusCode` - HTTP status code (if applicable)
-- `errorCode` - Error code string (e.g., 'AUTHENTICATION_ERROR')
+The full typed-exception table (`AuthenticationException`, `AuthorizationException`, `ConflictException`, `RateLimitException`, `NetworkException`, HTTP status mapping) and the `getMessage()`/`statusCode`/`errorCode` properties shared by every exception are documented once in the [PHP SDK's Error Handling reference](./php.md#error-handling).
 
 ---
 

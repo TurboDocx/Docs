@@ -1,7 +1,7 @@
 ---
 id: create-tag
 title: "Create Tag"
-description: "Create Tag"
+description: "Create a reusable tag in your organization to attach to templates and variables. Includes example request, response, and error handling."
 sidebar_label: "Create Tag"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,55 @@ custom_edit_url: null
   
 
   # Create Tag
-  
-  Create Tag
-  
+
+The Create Tag endpoint adds a new tag to your organization. Tags are a flat, organization-wide label set; once created, a tag can be attached to templates (with [Edit Template Metadata](/docs/API/edit-template-metadata)) or variables to make them easier to filter and organize.
+
+## When to use it
+
+Use this endpoint to build a tag picker that lets users create new tags on the fly, or to seed a starting set of tags when provisioning an organization.
+
+## Example request
+
+```bash
+curl -X POST "https://api.turbodocx.com/Tag" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"label": "legal"}'
+```
+
+## Example response
+
+```json
+{
+  "data": {
+    "results": {
+      "id": "7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90",
+      "label": "legal",
+      "isActive": true,
+      "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+      "createdOn": "2026-05-01T14:22:10.000Z",
+      "updatedOn": "2026-05-01T14:22:10.000Z"
+    }
+  }
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | `label` is missing or not between 1 and 255 characters | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Read Tag](/docs/API/read-tag) to list existing tags before creating a duplicate
+- [Update Tag](/docs/API/update-tag) to rename a tag
+- [Delete Tags (by IDs)](/docs/API/delete-tags-by-i-ds) to remove tags you no longer need
+
   <DisplayEndpoint method="POST" endpoint="/Tag"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

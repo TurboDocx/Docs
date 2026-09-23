@@ -2,7 +2,7 @@
 title: TurboWebhooks Java SDK
 sidebar_position: 19
 sidebar_label: "TurboWebhooks: Java"
-description: Official TurboDocx Webhooks SDK for Java. Subscribe to all seven TurboSign signature events with the WebhookEvent enum, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: "Java TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks java
@@ -45,7 +45,7 @@ For the full conceptual overview of how webhooks work in TurboSign (delivery ret
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.5.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 
@@ -53,14 +53,14 @@ For the full conceptual overview of how webhooks work in TurboSign (delivery ret
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.5.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.5.0")
+implementation("com.turbodocx:turbodocx-sdk:0.7.0")
 ```
 
 </TabItem>

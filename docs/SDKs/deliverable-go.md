@@ -70,7 +70,7 @@ func main() {
 ```
 
 :::tip No SenderEmail Required
-Use `NewDeliverableClientOnly()` when you only need document generation — it skips the `SenderEmail` validation required by TurboSign.
+Use `NewDeliverableClientOnly()` when you only need document generation: it skips the `SenderEmail` validation required by TurboSign.
 :::
 
 ### Environment Variables
@@ -422,20 +422,7 @@ if err != nil {
 
 ## Error Handling
 
-The SDK provides typed errors for different error scenarios:
-
-### Error Types
-
-| Error Type            | Status Code | Description                        |
-| --------------------- | ----------- | ---------------------------------- |
-| `TurboDocxError`      | varies      | Base error type for all API errors |
-| `AuthenticationError` | 401         | Invalid or missing API key         |
-| `AuthorizationError`  | 403         | Authenticated but lacks required permissions |
-| `ValidationError`     | 400         | Invalid request parameters         |
-| `NotFoundError`       | 404         | Deliverable or template not found  |
-| `ConflictError`       | 409         | Request conflicts with current resource state |
-| `RateLimitError`      | 429         | Too many requests                  |
-| `NetworkError`        | -           | Network connectivity issues        |
+`GenerateDeliverable` returns `NotFoundError` when `TemplateID` doesn't match a template in the org, and `ValidationError` for invalid request parameters, most commonly a `DeliverableVariable` missing `Text` (required unless it sets `VariableStack` or `IsDisabled: true`) or specifying an unsupported `MimeType`. Match on the concrete type with `errors.As`, same as every other Go SDK call:
 
 ### Handling Errors
 
@@ -479,13 +466,7 @@ if err != nil {
 }
 ```
 
-### Error Properties
-
-| Property     | Type     | Description                  |
-| ------------ | -------- | ---------------------------- |
-| `Message`    | `string` | Human-readable error message |
-| `StatusCode` | `int`    | HTTP status code             |
-| `Code`       | `string` | Error code (if available)    |
+The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `Message`/`StatusCode`/`Code` fields on every error are documented once in the [Go SDK's Error Handling reference](./go.md#error-handling).
 
 ---
 
