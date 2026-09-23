@@ -2,7 +2,7 @@
 title: Install with AI Agents (Agent Skills)
 sidebar_position: 0
 sidebar_label: Install with AI Agents
-description: TurboDocx Agent Skill: install the SDK and html-to-docx in one prompt via Claude Code, Copilot, Cursor, or Codex CLI.
+description: "TurboDocx Agent Skill: install the SDK and html-to-docx in one prompt via Claude Code, Copilot, Cursor, or Codex CLI."
 keywords:
   - agent skills
   - ai agent

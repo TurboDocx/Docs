@@ -2,7 +2,7 @@
 title: TurboWebhooks Java SDK
 sidebar_position: 19
 sidebar_label: "TurboWebhooks: Java"
-description: Java TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history.
+description: "Java TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks java

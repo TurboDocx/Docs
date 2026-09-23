@@ -2,7 +2,7 @@
 title: TurboQuote Python SDK
 sidebar_position: 20
 sidebar_label: "TurboQuote: Python"
-description: Python TurboQuote SDK: create, manage, and send quotes with line items, products, bundles, and price books. Async, Python 3.9+.
+description: "Python TurboQuote SDK: create, manage, and send quotes with line items, products, bundles, and price books. Async, Python 3.9+."
 keywords:
   - turboquote python
   - quote sdk python

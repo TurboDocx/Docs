@@ -2,7 +2,7 @@
 title: TurboQuote JavaScript / TypeScript SDK
 sidebar_position: 20
 sidebar_label: "TurboQuote: JavaScript / TypeScript"
-description: JavaScript/TypeScript TurboQuote SDK: create quotes, manage line items, products, bundles, price books, companies, contacts.
+description: "JavaScript/TypeScript TurboQuote SDK: create quotes, manage line items, products, bundles, price books, companies, contacts."
 keywords:
   - turboquote javascript
   - turboquote typescript

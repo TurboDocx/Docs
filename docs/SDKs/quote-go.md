@@ -2,7 +2,7 @@
 title: TurboQuote Go SDK
 sidebar_position: 22
 sidebar_label: "TurboQuote: Go"
-description: Go TurboQuote SDK: create and send quotes, manage line items, products, bundles, price books, companies, and contacts.
+description: "Go TurboQuote SDK: create and send quotes, manage line items, products, bundles, price books, companies, and contacts."
 keywords:
   - turboquote go
   - turboquote sdk golang

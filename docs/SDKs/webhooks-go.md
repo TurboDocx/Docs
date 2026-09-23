@@ -2,7 +2,7 @@
 title: TurboWebhooks Go SDK
 sidebar_position: 18
 sidebar_label: "TurboWebhooks: Go"
-description: Go TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history.
+description: "Go TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks go
