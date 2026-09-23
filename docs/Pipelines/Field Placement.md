@@ -1,7 +1,7 @@
 ---
 title: Field Placement
 sidebar_position: 4
-description: Place signature and form fields on your sample PDF once, and the pipeline reprojects them onto every live document. Full TurboSign field-type parity, positioned per page and assigned to recipients.
+description: Place signature and form fields on sample PDF once; pipeline reprojects them onto all live documents. Full field-type parity per page.
 keywords:
   - field placement
   - signature field placement

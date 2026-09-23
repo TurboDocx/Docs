@@ -1,7 +1,7 @@
 ---
 title: Template Generation API Integration
 sidebar_position: 1
-description: Complete guide for integrating Template Generation API to upload templates, browse existing templates, and generate deliverables. Learn the dual-path process with detailed examples and code samples.
+description: Integrate Template Generation API to upload templates, browse existing templates, and generate deliverables with detailed examples.
 keywords:
   - template generation api
   - document template api

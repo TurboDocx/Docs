@@ -1,7 +1,7 @@
 ---
 title: How to Configure One-Time Passcode (OTP)
 sidebar_position: 6.5
-description: Configure one-time passcode identity verification for TurboSign - require a passcode, choose email or SMS delivery, connect an SMS provider, and get alerted when a passcode fails to send.
+description: Configure one-time passcode identity verification for TurboSign. Require passcode, choose email or SMS delivery, and connect SMS providers.
 keywords:
   - one-time passcode
   - otp configuration

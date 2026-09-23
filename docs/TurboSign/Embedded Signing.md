@@ -1,7 +1,7 @@
 ---
 title: Embedded Signing and Identity Verification
 sidebar_position: 5
-description: Embed TurboSign in your own app and verify each signer with a one-time passcode, your own identity provider, or an explicit override. Request a short-lived signing URL at the moment a signer is ready.
+description: Embed TurboSign in your app with signer verification via one-time passcode, identity provider, or override. Request short-lived signing URLs.
 keywords:
   - embedded signing
   - identity verification

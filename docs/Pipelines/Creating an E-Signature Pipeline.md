@@ -1,7 +1,7 @@
 ---
 title: Creating an E-Signature Pipeline
 sidebar_position: 2
-description: Step-by-step walkthrough of the pipeline wizard. Connect a source library, define field extraction and routing, choose signers, and pick a destination for signed documents.
+description: Walkthrough of the pipeline wizard. Connect source library, define field extraction and routing, choose signers, and pick destination.
 keywords:
   - create e-signature pipeline
   - pipeline wizard

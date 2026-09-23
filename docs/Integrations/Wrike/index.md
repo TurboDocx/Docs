@@ -1,7 +1,7 @@
 ---
 title: Wrike Integration
 sidebar_position: 1
-description: Automate document generation from Wrike projects with TurboDocx. Generate SOWs, proposals, and reports directly from your Wrike tasks and folders using AI-powered automation.
+description: Automate document generation from Wrike projects. Generate SOWs, proposals, and reports from tasks and folders with AI-powered automation.
 keywords:
   - wrike integration
   - wrike document automation

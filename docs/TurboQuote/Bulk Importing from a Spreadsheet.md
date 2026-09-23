@@ -1,7 +1,7 @@
 ---
 title: Bulk Importing from a Spreadsheet
 sidebar_position: 3
-description: Import products, companies, contacts, bundles, price books, and categories into TurboQuote in bulk from a CSV or XLSX spreadsheet, with column mapping, validation, and a downloadable error report.
+description: Bulk import products, companies, contacts, and bundles into TurboQuote from CSV or XLSX with column mapping, validation, and error reports.
 keywords:
   - turboquote
   - bulk import

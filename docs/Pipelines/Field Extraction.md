@@ -1,7 +1,7 @@
 ---
 title: Field Extraction
 sidebar_position: 3
-description: Pull values out of every PDF using text patterns. Capture invoice codes, dates, emails, and amounts to drive filenames, signer lookup, and routing in your pipeline.
+description: Extract values from PDFs using text patterns. Capture codes, dates, emails, and amounts for routing and signer lookup in pipelines.
 keywords:
   - field extraction
   - pdf data extraction

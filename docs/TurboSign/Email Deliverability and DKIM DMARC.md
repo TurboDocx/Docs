@@ -1,7 +1,7 @@
 ---
 title: Email Deliverability (DKIM / DMARC / SPF)
 sidebar_position: 7
-description: How to diagnose and resolve DKIM, DMARC, or SPF failures on TurboDocx and TurboSign emails, including the common case where a security gateway rewrites the message in transit.
+description: Diagnose and resolve DKIM, DMARC, or SPF failures on TurboDocx and TurboSign emails, including security gateway message rewrites.
 keywords:
   - turbosign email deliverability
   - dkim failure
