@@ -97,8 +97,8 @@ public class Main {
 | `senderName(String)`            | `String` | No       | -                             | Display name used on signature request emails      |
 | `baseUrl(String)`               | `String` | No       | `https://api.turbodocx.com`   | API base URL                                       |
 | `connectTimeoutSeconds(int)`    | `int`    | No       | `60`                          | Connection timeout                                 |
-| `readTimeoutSeconds(int)`       | `int`    | No       | `120`                         | Read timeout — raise it for large document uploads |
-| `writeTimeoutSeconds(int)`      | `int`    | No       | `60`                          | Write timeout — raise it for large document uploads |
+| `readTimeoutSeconds(int)`       | `int`    | No       | `120`                         | Read timeout, raise it for large document uploads |
+| `writeTimeoutSeconds(int)`      | `int`    | No       | `60`                          | Write timeout, raise it for large document uploads |
 
 \*Provide either `apiKey` or `accessToken`.
 
@@ -116,7 +116,7 @@ TurboDocxClient client = new TurboDocxClient.Builder()
 
 ### Closing the Client
 
-`TurboDocxClient` implements `AutoCloseable`. Calling `close()` shuts down the underlying OkHttp dispatcher and connection pool, so long-running JVM services should close clients they no longer need — use try-with-resources for short-lived clients:
+`TurboDocxClient` implements `AutoCloseable`. Calling `close()` shuts down the underlying OkHttp dispatcher and connection pool, so long-running JVM services should close clients they no longer need. Use try-with-resources for short-lived clients:
 
 ```java
 try (TurboDocxClient client = new TurboDocxClient.Builder()
@@ -427,11 +427,11 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 );
 ```
 
-Each `Duration` is a `{value, unit}` pair where `unit` is `"hours"` or `"days"` and `value` is a whole number from **1 up to 999 days (23976 hours)**. `maxReminders` accepts **-1 to 50** (`-1` unlimited, `0` none, default `5`) and caps only automatic reminders — never expiry warnings; `expirationWarning` may be `0` to disable warnings. Reminders and expiry warnings run as two independent clocks, coordinated so a signer never receives both at the same moment — and a reminder cadence that would outlive the expiry window is rejected with `400`.
+Each `Duration` is a `{value, unit}` pair where `unit` is `"hours"` or `"days"` and `value` is a whole number from **1 up to 999 days (23976 hours)**. `maxReminders` accepts **-1 to 50** (`-1` unlimited, `0` none, default `5`) and caps only automatic reminders, never expiry warnings; `expirationWarning` may be `0` to disable warnings. Reminders and expiry warnings run as two independent clocks, coordinated so a signer never receives both at the same moment, and a reminder cadence that would outlive the expiry window is rejected with `400`.
 
 ### Get status
 
-Check the document-level status. When an expiration schedule is set, the response also carries `getExpiresAt()` — the signing-window deadline (ISO 8601), or `null` when expiration is off. Once that deadline passes, the document moves to the terminal `expired` status and its signing links stop working. `getRecipients()` exposes the same deadline on `getDocument().getExpiresAt()`. For per-signer detail, use [Get recipients](#get-recipients).
+Check the document-level status. When an expiration schedule is set, the response also carries `getExpiresAt()` (the signing-window deadline, ISO 8601, or `null` when expiration is off). Once that deadline passes, the document moves to the terminal `expired` status and its signing links stop working. `getRecipients()` exposes the same deadline on `getDocument().getExpiresAt()`. For per-signer detail, use [Get recipients](#get-recipients).
 
 ```java
 DocumentStatusResponse status = client.turboSign().getStatus("document-uuid");
@@ -462,7 +462,7 @@ for (DocumentRecipientsResponse.RecipientSignatureStatus r : progress.getRecipie
 :::tip Two status fields, and they differ on purpose
 
 `status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
-`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired`: that
 is the one to display.
 
 On a voided or expired document an unsigned signer still reads `pending` in `status`, so
@@ -475,14 +475,14 @@ the document is terminal.
 
 :::
 
-Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+Each recipient also carries a `delivery` block: `firstSentOn`, `lastSentOn`, `totalSent`,
 `reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
 request, resends, reminders, expiry warnings and terminal notices; CC notifications are
 excluded, since a CC address is not a signer.
 
 :::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
 
-`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+`reminderCount` counts **automatic (scheduled) reminders only**: the counter `maxReminders`
 caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
 does **not** increment this, even though the email it sends *does* appear in `totalSent`.
 
@@ -491,7 +491,7 @@ signature-request send, each scheduled reminder, each manual "remind now" and ea
 warning all stamp it. Only scheduled reminders bump `reminderCount`.
 
 So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
-timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+timestamp alongside `reminderCount: 0`: nobody has been reminded. To answer "have we actually
 chased this person", read `totalSent`, not `reminderCount`.
 
 `warningCount` / `lastWarningAt` have no such caveat.
@@ -541,7 +541,7 @@ ResendEmailResponse result = client.turboSign().resendEmail(
 
 ### Send reminder
 
-Send a standalone reminder to whoever's turn it is to sign (`POST /turbosign/documents/:id/send-reminder`). It is independent of the automatic reminder cadence — it works even when reminders are disabled or the `maxReminders` cap is spent, does **not** consume that cap, and only emails signers at the **current** signing order. Use the single-arg overload to remind everyone eligible; pass a list to limit it to specific recipients, but do **not** pass an empty list, which the API rejects.
+Send a standalone reminder to whoever's turn it is to sign (`POST /turbosign/documents/:id/send-reminder`). It is independent of the automatic reminder cadence: it works even when reminders are disabled or the `maxReminders` cap is spent, does **not** consume that cap, and only emails signers at the **current** signing order. Use the single-arg overload to remind everyone eligible; pass a list to limit it to specific recipients, but do **not** pass an empty list, which the API rejects.
 
 ```java
 // Remind everyone whose turn it is
@@ -549,7 +549,7 @@ SendReminderResponse reminder = client.turboSign().sendReminder("document-uuid")
 
 for (SendReminderResponse.ReminderResult r : reminder.getResults()) {
     // status is e.g. "sent", "skipped_wrong_order", "skipped_completed"
-    System.out.println(r.getRecipientId() + " — " + r.getStatus());
+    System.out.println(r.getRecipientId() + ": " + r.getStatus());
 }
 
 // Or limit to specific recipients
@@ -660,7 +660,7 @@ The coordinate-based constructor takes positional arguments in this order: `new 
 | `required`        | `Boolean`        | No       | Make field required                         |
 | `backgroundColor` | `String`         | No       | Background color                            |
 | `template`        | `TemplateAnchor` | No       | Template anchor configuration               |
-| `metadata`        | `FieldMetadata`  | No       | Conditional (IF/THEN) metadata — see below  |
+| `metadata`        | `FieldMetadata`  | No       | Conditional (IF/THEN) metadata, see below  |
 
 \*Required when not using template anchors
 
@@ -678,14 +678,14 @@ at it.
 | `conditional.operator`              | `String`                | Yes      | `"is_checked"` or `"is_not_checked"`.                         |
 | `conditional.action`                | `String`                | Yes      | `"show"` (hidden until met) or `"unlock"` (locked until met). |
 
-`FieldMetadata` and `FieldConditional` are top-level model classes — import them with
+`FieldMetadata` and `FieldConditional` are top-level model classes: import them with
 `import com.turbodocx.models.*;`. `Field` is immutable and built with `Field.Builder` (there are
 no setters), so attach the metadata while building the field.
 
 ```java
 import com.turbodocx.models.*;
 
-// Controlling checkbox — carries a stable fieldKey
+// Controlling checkbox, carries a stable fieldKey
 Field checkbox = new Field.Builder()
     .type("checkbox")
     .recipientEmail("reviewer@company.com")
@@ -693,7 +693,7 @@ Field checkbox = new Field.Builder()
     .metadata(FieldMetadata.forFieldKey("request_changes"))
     .build();
 
-// Dependent text field — hidden until the checkbox is checked
+// Dependent text field, hidden until the checkbox is checked
 Field explain = new Field.Builder()
     .type("text")
     .recipientEmail("reviewer@company.com")
@@ -762,5 +762,5 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
 - [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
-- [API Reference](/docs/TurboSign/API-Signatures)
+- [API Reference](/docs/TurboSign/API%20Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

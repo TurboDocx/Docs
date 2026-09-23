@@ -324,7 +324,7 @@ result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureReque
 
 ### Schedule reminders and expiration
 
-`SendSignature` accepts an optional `SignatureSchedule` that turns on automatic reminder emails and a signing deadline. Every field is a pointer, and **both features are off by default** — omit the schedule entirely to preserve the original send behavior. The resolved schedule is **frozen onto the document at send time**, so later changes to your org defaults never touch a document already out for signature.
+`SendSignature` accepts an optional `SignatureSchedule` that turns on automatic reminder emails and a signing deadline. Every field is a pointer, and **both features are off by default**: omit the schedule entirely to preserve the original send behavior. The resolved schedule is **frozen onto the document at send time**, so later changes to your org defaults never touch a document already out for signature.
 
 ```go
 result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
@@ -346,7 +346,7 @@ result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureReque
 | `RemindersEnabled` | `*bool` | Master switch for automatic reminders. Default off. |
 | `ReminderDelay` | `*Duration` | Time to the **first** reminder, measured from that signer's invitation. |
 | `ReminderInterval` | `*Duration` | Gap between **subsequent** reminders. |
-| `MaxReminders` | `*int` | Automatic reminders per signer. Valid range **-1..50** — `-1` unlimited, `0` none, default `5`. |
+| `MaxReminders` | `*int` | Automatic reminders per signer. Valid range **-1..50**: `-1` unlimited, `0` none, default `5`. |
 | `ExpirationEnabled` | `*bool` | Master switch for the signing deadline. Default off. |
 | `ExpireAfter` | `*Duration` | How long the document stays signable, counted from sending. |
 | `ExpirationWarning` | `*Duration` | How far **before** expiry warnings start. `0` = never warn. |
@@ -356,7 +356,7 @@ A `Duration` is a `{Value, Unit}` pair; `Unit` is `"hours"` or `"days"`. `Value`
 
 ### Get status
 
-Check the status of a document. The response includes `ExpiresAt` — the signing-window deadline as an ISO 8601 string, or `""` when expiration is off — and a `Status` that can reach the terminal value `expired` once the deadline passes. For per-signer detail, use [Get recipients](#get-recipients).
+Check the status of a document. The response includes `ExpiresAt` (the signing-window deadline as an ISO 8601 string, or `""` when expiration is off) and a `Status` that can reach the terminal value `expired` once the deadline passes. For per-signer detail, use [Get recipients](#get-recipients).
 
 ```go
 status, err := client.TurboSign.GetStatus(ctx, "document-uuid")
@@ -392,7 +392,7 @@ for _, r := range progress.Recipients {
 :::tip Two status fields, and they differ on purpose
 
 `status` is the raw database value and is only ever `pending`, `viewed` or `completed`.
-`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired` — that
+`effectiveStatus` layers the document's outcome on top, adding `voided` and `expired`: that
 is the one to display.
 
 On a voided or expired document an unsigned signer still reads `pending` in `status`, so
@@ -405,14 +405,14 @@ the document is terminal.
 
 :::
 
-Each recipient also carries a `delivery` block — `firstSentOn`, `lastSentOn`, `totalSent`,
+Each recipient also carries a `delivery` block: `firstSentOn`, `lastSentOn`, `totalSent`,
 `reminderCount`, `lastRemindedAt`, `warningCount`, `lastWarningAt`. It counts the signature
 request, resends, reminders, expiry warnings and terminal notices; CC notifications are
 excluded, since a CC address is not a signer.
 
 :::warning `reminderCount` and `lastRemindedAt` do not mean what their names suggest
 
-`reminderCount` counts **automatic (scheduled) reminders only** — the counter `maxReminders`
+`reminderCount` counts **automatic (scheduled) reminders only**: the counter `maxReminders`
 caps. A manual "remind now" is a standalone nudge that must not consume the cap budget, so it
 does **not** increment this, even though the email it sends *does* appear in `totalSent`.
 
@@ -421,7 +421,7 @@ signature-request send, each scheduled reminder, each manual "remind now" and ea
 warning all stamp it. Only scheduled reminders bump `reminderCount`.
 
 So a freshly-sent document returns a non-null `lastRemindedAt` equal to the invitation
-timestamp alongside `reminderCount: 0` — nobody has been reminded. To answer "have we actually
+timestamp alongside `reminderCount: 0`: nobody has been reminded. To answer "have we actually
 chased this person", read `totalSent`, not `reminderCount`.
 
 `warningCount` / `lastWarningAt` have no such caveat.
@@ -477,7 +477,7 @@ result, err := client.TurboSign.ResendEmail(ctx, "document-uuid", []string{"reci
 
 ### Send reminder
 
-Send a standalone reminder to whoever's turn it is to sign (`POST /turbosign/documents/:id/send-reminder`). It is independent of the automatic reminder cadence — it works even when reminders are disabled or the per-signer `MaxReminders` cap is already spent, does **not** consume that cap, and only emails signers at the **current** signing order. Pass `nil` for `recipientIDs` to remind everyone eligible; do **not** pass an empty slice, which the API rejects.
+Send a standalone reminder to whoever's turn it is to sign (`POST /turbosign/documents/:id/send-reminder`). It is independent of the automatic reminder cadence: it works even when reminders are disabled or the per-signer `MaxReminders` cap is already spent, does **not** consume that cap, and only emails signers at the **current** signing order. Pass `nil` for `recipientIDs` to remind everyone eligible; do **not** pass an empty slice, which the API rejects.
 
 ```go
 resp, err := client.TurboSign.SendReminder(ctx, "document-uuid", nil)
@@ -610,7 +610,7 @@ The `Type` field accepts the following string values:
 | `Required`        | `bool`            | No       | Make field required                         |
 | `BackgroundColor` | `string`          | No       | Background color                            |
 | `Template`        | `*TemplateAnchor` | No       | Template anchor configuration               |
-| `Metadata`        | `*FieldMetadata`  | No       | Conditional (IF/THEN) metadata — see below  |
+| `Metadata`        | `*FieldMetadata`  | No       | Conditional (IF/THEN) metadata, see below  |
 
 \*Required when not using template anchors
 
@@ -711,5 +711,5 @@ For detailed information about advanced configuration and API concepts, see:
 ## Resources
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
-- [API Reference](/docs/TurboSign/API-Signatures)
+- [API Reference](/docs/TurboSign/API%20Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

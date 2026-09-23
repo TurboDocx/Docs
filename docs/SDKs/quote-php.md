@@ -2,7 +2,7 @@
 title: TurboQuote PHP SDK
 sidebar_position: 16
 sidebar_label: "TurboQuote: PHP"
-description: Official TurboDocx TurboQuote SDK for PHP. Create, manage, and send quotes/proposals with full CPQ capabilities — line items, products, bundles, price books, companies, contacts, and quote templates, all from PHP 8.1+.
+description: PHP TurboQuote SDK: create, manage, and send quotes with line items, products, bundles, price books, companies, and contacts.
 keywords:
   - turboquote php
   - quote sdk php

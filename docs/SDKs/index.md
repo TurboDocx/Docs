@@ -25,7 +25,7 @@ Official client libraries for the TurboDocx API. Build document generation, digi
 
 ## Choose Your Product
 
-All five modules ship in the **same package** for each language — pick the one that matches what you're building:
+All five modules ship in the **same package** for each language: pick the one that matches what you're building:
 
 | Product | Use it when you need to… |
 | :------------- | :----------------------------------------------------------------------------------------- |
@@ -37,7 +37,7 @@ All five modules ship in the **same package** for each language — pick the one
 TurboSign, Deliverable, TurboQuote, and TurboWebhooks all use the same `TURBODOCX_API_KEY` + `TURBODOCX_ORG_ID`. See [credential requirements](#which-credentials-does-each-product-need) below.
 
 :::tip Install with one prompt
-Skip the boilerplate — use the [TurboDocx Agent Skill](./agent-skills.md) to install the SDK, configure environment variables, and generate working integration code via Claude Code, GitHub Copilot, Cursor, OpenCode, Codex CLI, or Gemini CLI:
+Skip the boilerplate: use the [TurboDocx Agent Skill](./agent-skills.md) to install the SDK, configure environment variables, and generate working integration code via Claude Code, GitHub Copilot, Cursor, OpenCode, Codex CLI, or Gemini CLI:
 
 ```bash
 npx skills add TurboDocx/quickstart
@@ -58,7 +58,7 @@ Send documents for legally-binding eSignatures with full audit trails.
 
 ## TurboWebhooks SDKs
 
-Subscribe to all 7 TurboSign signature events — `sent`, `viewed`, `recipient_signed`, `signed`, `completed`, `finalization_failed`, `voided` — and verify inbound signatures with HMAC-SHA256. Each SDK exports the full set as constants, so you never hand-write the wire strings.
+Subscribe to all 7 TurboSign signature events (`sent`, `viewed`, `recipient_signed`, `signed`, `completed`, `finalization_failed`, `voided`) and verify inbound signatures with HMAC-SHA256. Each SDK exports the full set as constants, so you never hand-write the wire strings.
 
 | Language                  | Package         | Install Command               | Links                                                                                                  |
 | :------------------------ | :-------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------- |
@@ -114,17 +114,17 @@ Before you begin, you'll need two things from your TurboDocx account:
 :::note senderEmail required for TurboSign
 TurboSign also requires a `senderEmail` (used as the reply-to address for signature request emails). It is a **per-request body field on every signature request** and the SDK throws a validation error if it is missing. It can be passed in the SDK configuration or supplied via the `TURBODOCX_SENDER_EMAIL` environment variable. Deliverable and TurboWebhooks do not use it at all.
 
-**TurboQuote is different:** there is **no `senderEmail` field on a quote request**, but a sender is still required. It is resolved from your organization's **quote template** (Quote Settings). An API-key caller whose template has no sender email gets `400 SenderEmailRequired` on create, duplicate, send, and handle-expired-sent — see [Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
+**TurboQuote is different:** there is **no `senderEmail` field on a quote request**, but a sender is still required. It is resolved from your organization's **quote template** (Quote Settings). An API-key caller whose template has no sender email gets `400 SenderEmailRequired` on create, duplicate, send, and handle-expired-sent. See [Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
 :::
 
 #### Which credentials does each product need?
 
 | Product | API key | Org ID | Also needs |
 | :------------- | :----------------------------- | :------------------------- | :-------------------------------------------------------------- |
-| **TurboSign** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | `TURBODOCX_SENDER_EMAIL` (required — reply-to for signer emails) |
-| **Deliverable** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | — |
+| **TurboSign** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | `TURBODOCX_SENDER_EMAIL` (required, reply-to for signer emails) |
+| **Deliverable** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | None |
 | **TurboQuote** | `TURBODOCX_API_KEY` | `TURBODOCX_ORG_ID` | a **Sender Email + Sender Name on the org quote template** (no per-request sender field exists) |
-| **TurboWebhooks** | `TURBODOCX_API_KEY` (**administrator** role — non-admin keys get 403) | `TURBODOCX_ORG_ID` | the webhook secret returned by `createWebhook`, to verify inbound events |
+| **TurboWebhooks** | `TURBODOCX_API_KEY` (**administrator** role, non-admin keys get 403) | `TURBODOCX_ORG_ID` | the webhook secret returned by `createWebhook`, to verify inbound events |
 
 #### How to Get Your Credentials
 
@@ -447,7 +447,7 @@ public class Main {
 
 All TurboDocx SDKs provide access to:
 
-### TurboSign — Digital Signatures
+### TurboSign: Digital Signatures
 
 Send documents for legally-binding eSignatures with full audit trails.
 
@@ -464,7 +464,7 @@ Send documents for legally-binding eSignatures with full audit trails.
 
 [Learn more about TurboSign →](/docs/TurboSign/Setting%20up%20TurboSign)
 
-### Deliverable — Document Generation
+### Deliverable: Document Generation
 
 Generate documents from templates with dynamic variable injection, download source files and PDFs.
 
@@ -480,7 +480,7 @@ Generate documents from templates with dynamic variable injection, download sour
 
 [Learn more about Deliverable SDKs →](/docs/SDKs/deliverable-javascript)
 
-### TurboQuote — Sales Quoting & CPQ
+### TurboQuote: Sales Quoting & CPQ
 
 Build quotes and proposals: line items, a product/bundle catalog, price books, companies, and contacts.
 
@@ -496,7 +496,7 @@ Build quotes and proposals: line items, a product/bundle catalog, price books, c
 
 [Learn more about TurboQuote SDKs →](/docs/SDKs/quote-javascript)
 
-### TurboWebhooks — Signature Events
+### TurboWebhooks: Signature Events
 
 Subscribe a per-org endpoint to TurboSign events and verify inbound deliveries with HMAC-SHA256. **Requires an administrator API key.**
 
@@ -508,7 +508,7 @@ Subscribe a per-org endpoint to TurboSign events and verify inbound deliveries w
 | `testWebhook()`              | Fire a synthetic delivery to all configured URLs                |
 | `regenerateWebhookSecret()`  | Rotate the HMAC secret                                          |
 | `listWebhookDeliveries()` / `replayWebhookDelivery()` | Inspect and retry past deliveries        |
-| `verifyWebhookSignature()`   | Free function — verify the `X-TurboDocx-Signature` header on a received event |
+| `verifyWebhookSignature()`   | Free function, verify the `X-TurboDocx-Signature` header on a received event |
 
 [Learn more about TurboWebhooks SDKs →](/docs/SDKs/webhooks-javascript)
 
@@ -616,7 +616,7 @@ try {
     echo "Validation error: {$e->getMessage()}\n";
     // Handle validation error
 } catch (TurboDocxException $e) {
-    echo "Error {$e->getCode()}: {$e->getMessage()}\n";
+    echo "Error {$e->errorCode}: {$e->getMessage()}\n";
     echo "Status code: {$e->statusCode}\n";
 }
 ```
@@ -682,12 +682,12 @@ without a null check.
 ### TurboQuote / TurboSign specific codes
 
 These are returned by the API and passed through unchanged. They are more precise than the
-generic codes above — prefer them when handling a specific failure.
+generic codes above; prefer them when handling a specific failure.
 
 | Code                       | HTTP Status | Meaning                                                                                     |
 | :------------------------- | :---------- | :------------------------------------------------------------------------------------------ |
 | `SenderEmailRequired`      | 400         | No sender email could be resolved. TurboSign: set `senderEmail` on the request. TurboQuote: configure one on the org quote template (Quote Settings). |
-| `SenderNameRequired`       | 400         | No sender name could be resolved — the API key has no usable name.                           |
+| `SenderNameRequired`       | 400         | No sender name could be resolved: the API key has no usable name.                           |
 | `QuoteHasNoLineItems`      | 400         | The quote has no line items. Add at least one product, bundle, or custom line item.          |
 | `QuoteExpired`             | 400         | The quote is past its `validUntil` date. Update the date before sending.                     |
 | `QuoteValidUntilRequired`  | 400         | The quote has no `validUntil` date set.                                                      |
@@ -699,7 +699,7 @@ generic codes above — prefer them when handling a specific failure.
 ### Error messages carry the actionable reason
 
 The API reports validation failures in several envelopes. The SDKs unwrap all of them, so
-`error.message` is the specific field-level reason — not a generic
+`error.message` is the specific field-level reason, not a generic
 `"There was an issue validating the body"`. Multiple field errors are joined with `"; "`:
 
 ```
@@ -711,8 +711,8 @@ The API reports validation failures in several envelopes. The SDKs unwrap all of
 ## Audit Trail & Client Context
 
 Every action you take through an SDK is recorded in the TurboDocx audit trail. All six SDKs
-automatically attach **client-context headers** to **every** request — including TurboSign,
-Deliverable, TurboQuote, TurboWebhooks, and TurboPartner — so the audit trail records real
+automatically attach **client-context headers** to **every** request, including TurboSign,
+Deliverable, TurboQuote, TurboWebhooks, and TurboPartner, so the audit trail records real
 environment details instead of blanks:
 
 | Recorded column | What the SDK sends |
@@ -723,7 +723,7 @@ environment details instead of blanks:
 | **Language** | The machine's locale (e.g. `en-US`) |
 | **Application** | `TurboDocx SDK <version>` |
 
-You do not configure any of this — it is collected and sent for you.
+You do not configure any of this: it is collected and sent for you.
 
 ### SDK / n8n calls vs. raw API calls
 
@@ -735,7 +735,7 @@ The audit trail distinguishes how a request reached TurboDocx:
 | The TurboDocx n8n node | `TurboDocx n8n Node <version>`, with real device, OS, timezone, and language |
 | A raw HTTP/API call | The **name of the HTTP library** that made the call, the action `API Request`, and `N/A` for the environment fields it cannot know |
 
-Raw API calls show `N/A` — not `Unknown` — for the fields no client context was supplied for. If
+Raw API calls show `N/A` (not `Unknown`) for the fields no client context was supplied for. If
 you want fully attributed audit entries, call through an SDK or the n8n node rather than hand-rolled
 HTTP.
 

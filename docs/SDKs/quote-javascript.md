@@ -2,7 +2,7 @@
 title: TurboQuote JavaScript / TypeScript SDK
 sidebar_position: 20
 sidebar_label: "TurboQuote: JavaScript / TypeScript"
-description: Official TurboDocx TurboQuote SDK for JavaScript and TypeScript. Create quotes and proposals, manage line items, products, bundles, price books, companies, and contacts — all with full TypeScript types and async/await patterns.
+description: JavaScript/TypeScript TurboQuote SDK: create quotes, manage line items, products, bundles, price books, companies, contacts.
 keywords:
   - turboquote javascript
   - turboquote typescript
