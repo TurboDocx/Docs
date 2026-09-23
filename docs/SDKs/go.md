@@ -516,7 +516,7 @@ Every typed error embeds `TurboDocxError` by value, which promotes its `Message 
 
 | Property     | Type     | Description                  |
 | ------------ | -------- | ----------------------------- |
-| `Message`    | `string` | Human-readable error message, also returned by the `Error()` method |
+| `Message`    | `string` | Human-readable error message. `Error()` does not return this bare string: it returns `TurboDocx API error [CODE]: MESSAGE (status N)`, omitting the `[CODE]` segment when `Code` is empty. Compare against `.Message` directly, not `err.Error()` |
 | `StatusCode` | `int`    | HTTP status code             |
 | `Code`       | `string` | Machine-readable code; the API's code wins when present, otherwise the SDK fills in a per-status default for each of the 7 named types above. The bare `TurboDocxError` returned for an unmapped status (e.g. an unexpected 5xx) can have an empty `Code` if the API didn't supply one |
 
