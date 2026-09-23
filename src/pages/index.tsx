@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
+import Head from '@docusaurus/Head';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
@@ -35,6 +36,11 @@ export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext()
   const data = landingJson
   return (
-    <Redirect to="/docs" />
+    <>
+      <Head>
+        <meta name="robots" content="noindex, follow" />
+      </Head>
+      <Redirect to="/docs" />
+    </>
   );
 }

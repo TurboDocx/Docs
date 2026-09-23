@@ -159,6 +159,12 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
         },
+        sitemap: {
+          // '/' is a client-side redirect to '/docs' (the real hub) and
+          // carries a noindex meta tag; exclude it from the sitemap too so
+          // the two signals don't conflict.
+          ignorePatterns: ['/'],
+        },
       }),
     ],
   ],
