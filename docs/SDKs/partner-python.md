@@ -32,7 +32,7 @@ The official TurboDocx Partner SDK for Python applications. Build multi-tenant S
 <br />
 
 :::info What is TurboPartner?
-TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements — perfect for building white-label or multi-tenant applications on top of TurboDocx.
+TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements, perfect for building white-label or multi-tenant applications on top of TurboDocx.
 :::
 
 ## TLDR
@@ -70,7 +70,7 @@ async def main():
     key = await TurboPartner.create_organization_api_key(
         org_id, name="Production Key", role="admin"
     )
-    print(f"API Key: {key['data']['key']}")  # Save this — only shown once!
+    print(f"API Key: {key['data']['key']}")  # Save this, only shown once!
 
 asyncio.run(main())
 ```
@@ -392,7 +392,7 @@ print(f"Full Key: {result['data']['key']}")  # Only shown once!
 ```
 
 :::caution Save Your API Key
-The full API key is only returned once during creation. Store it securely — you won't be able to retrieve it again.
+The full API key is only returned once during creation. Store it securely: you won't be able to retrieve it again.
 :::
 
 ### `list_organization_api_keys()`
@@ -510,13 +510,13 @@ result = await TurboPartner.revoke_partner_api_key("partner-key-uuid-here")
 ## Partner User Management
 
 :::danger Partner users use a different role enum
-Partner portal users take `admin`, `member`, or `viewer`. **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer`. The two enums do not overlap beyond `admin`/`viewer` — `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
+Partner portal users take `admin`, `member`, or `viewer`. **Organization** users and organization API keys take `admin`, `contributor`, `user`, or `viewer`. The two enums do not overlap beyond `admin`/`viewer`: `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
 :::
 
 :::caution `permissions` is all-or-nothing
-On `add_user_to_partner_portal()`, `permissions` is a **required** keyword argument — omitting it raises a Python `TypeError` before any request is sent. On `update_partner_user_permissions()`, the `permissions` dict itself is optional.
+On `add_user_to_partner_portal()`, `permissions` is a **required** keyword argument: omitting it raises a Python `TypeError` before any request is sent. On `update_partner_user_permissions()`, the `permissions` dict itself is optional.
 
-Either way, if you send `permissions`, **all seven keys are required**. There is no partial permissions update — omitting even one key raises `ValidationError` (400). Always send the complete dict; read the current values first and re-send them with your change applied.
+Either way, if you send `permissions`, **all seven keys are required**. There is no partial permissions update: omitting even one key raises `ValidationError` (400). Always send the complete dict; read the current values first and re-send them with your change applied.
 :::
 
 ### `add_user_to_partner_portal()`
@@ -559,7 +559,7 @@ for user in result["data"]["results"]:
 
 ### `update_partner_user_permissions()`
 
-Update a partner user's role and permissions. If you pass `permissions`, send **all seven keys** — a partial dict is a 400.
+Update a partner user's role and permissions. If you pass `permissions`, send **all seven keys**: a partial dict is a 400.
 
 ```python
 result = await TurboPartner.update_partner_user_permissions(
@@ -670,7 +670,7 @@ features={"maxUsers": 25, "hasTDAI": True}
 
 ### Tracking (Usage Counters)
 
-Current consumption against the limits above. TurboDocx maintains these automatically, but `update_organization_entitlements()` **accepts a `tracking` dict** — useful for seeding counters when migrating an existing customer:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `update_organization_entitlements()` **accepts a `tracking` dict**, useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -688,7 +688,7 @@ Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` a
 
 ## Preferences Reference
 
-TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly: the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -790,7 +790,7 @@ permissions = {
 
 ## Error Handling
 
-The SDK provides typed exceptions for different error scenarios:
+`TurboPartner.create_organization()` and the other partner calls most commonly raise `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
 
 ```python
 from turbodocx_sdk import (
@@ -834,18 +834,7 @@ except TurboDocxError as e:
         print(f"  Error Code: {e.code}")
 ```
 
-### Error Types
-
-| Error Type | Status Code | Description |
-|------------|-------------|-------------|
-| `TurboDocxError` | varies | Base error for all SDK errors |
-| `AuthenticationError` | 401 | Invalid or missing API credentials |
-| `AuthorizationError` | 403 | Valid credentials without permission for this operation |
-| `ValidationError` | 400 | Invalid request parameters |
-| `NotFoundError` | 404 | Resource not found |
-| `ConflictError` | 409 | Request conflicts with current resource state |
-| `RateLimitError` | 429 | Too many requests |
-| `NetworkError` | - | Network connectivity issues |
+The full typed-error table and HTTP status mapping is documented once in the [Python SDK's Error Handling reference](./python.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types.
 
 ---
 
@@ -905,5 +894,5 @@ asyncio.run(main())
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 - [PyPI Package](https://pypi.org/project/turbodocx-sdk/)
-- [TurboSign Python SDK](/docs/SDKs/python) — For digital signature operations
-- [SDKs Overview](/docs/SDKs/) — All TurboDocx SDKs
+- [TurboSign Python SDK](/docs/SDKs/python): for digital signature operations
+- [SDKs Overview](/docs/SDKs/): all TurboDocx SDKs

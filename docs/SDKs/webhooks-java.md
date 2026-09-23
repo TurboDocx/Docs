@@ -2,7 +2,7 @@
 title: TurboWebhooks Java SDK
 sidebar_position: 19
 sidebar_label: "TurboWebhooks: Java"
-description: Official TurboDocx Webhooks SDK for Java. Subscribe to all seven TurboSign signature events with the WebhookEvent enum, verify inbound webhook signatures with HMAC-SHA256, and manage delivery history programmatically.
+description: Java TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history.
 keywords:
   - turbodocx webhooks
   - turbowebhooks java

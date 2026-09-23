@@ -99,14 +99,14 @@ Deliverable.configure({
 | Property      | Type     | Required | Description                                            |
 | ------------- | -------- | -------- | ------------------------------------------------------ |
 | `apiKey`      | `string` | Yes\*    | Your TurboDocx API key                                  |
-| `accessToken` | `string` | Yes\*    | OAuth access token — alternative to `apiKey`            |
+| `accessToken` | `string` | Yes\*    | OAuth access token, alternative to `apiKey`            |
 | `orgId`       | `string` | Yes      | Your organization ID                                    |
 | `baseUrl`     | `string` | No       | API base URL (defaults to `https://api.turbodocx.com`) |
 
 \*Supply either `apiKey` or `accessToken`. When both are set, `accessToken` wins.
 
 :::tip No Sender Email Required
-Unlike TurboSign, the Deliverable module only requires a credential and `orgId` — no sender email or name is needed.
+Unlike TurboSign, the Deliverable module only requires a credential and `orgId`: no sender email or name is needed.
 :::
 
 ### Environment Variables
@@ -602,20 +602,7 @@ writeFileSync("report.pdf", Buffer.from(buffer));
 
 ## Error Handling
 
-The SDK provides typed error classes for different failure scenarios. All errors extend the base `TurboDocxError` class.
-
-### Error Classes
-
-| Error Class           | Status Code | Code                   | Description                              |
-| --------------------- | ----------- | ---------------------- | ---------------------------------------- |
-| `TurboDocxError`      | varies      | varies                 | Base error class for all SDK errors      |
-| `AuthenticationError` | 401         | `AUTHENTICATION_ERROR` | Invalid or missing API credentials       |
-| `AuthorizationError`  | 403         | `AUTHORIZATION_ERROR`  | Forbidden: API key lacks required permissions |
-| `ValidationError`     | 400         | `VALIDATION_ERROR`     | Invalid request parameters               |
-| `NotFoundError`       | 404         | `NOT_FOUND`            | Deliverable or template not found        |
-| `ConflictError`       | 409         | `CONFLICT`             | Resource conflict                        |
-| `RateLimitError`      | 429         | `RATE_LIMIT_EXCEEDED`  | Too many requests                        |
-| `NetworkError`        | -           | `NETWORK_ERROR`        | Network connectivity issues              |
+`Deliverable.generateDeliverable()` most commonly rejects with `NotFoundError` when `templateId` doesn't match a template in the org, and `ValidationError` when an entry in `variables` is missing `placeholder` or `mimeType`. Both extend the base `TurboDocxError` class:
 
 ### Handling Errors
 
@@ -710,15 +697,7 @@ try {
 </TabItem>
 </Tabs>
 
-### Error Properties
-
-All errors include these properties:
-
-| Property     | Type                  | Description                      |
-| ------------ | --------------------- | -------------------------------- |
-| `message`    | `string`              | Human-readable error description |
-| `statusCode` | `number \| undefined` | HTTP status code (if applicable) |
-| `code`       | `string \| undefined` | Machine-readable error code      |
+The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status and code mapping) and the `message`/`statusCode`/`code` properties shared by every error are documented once in the [JavaScript / TypeScript SDK's Error Handling reference](./javascript.md#error-handling).
 
 ---
 
