@@ -19,7 +19,7 @@ AI variables let you define a prompt that TurboDocx uses to generate content aut
 ## Prerequisites
 
 - A template uploaded to TurboDocx with at least one variable
-- A connected Wrike account (see [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation))
+- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
 
 <br/>
 
@@ -73,7 +73,7 @@ When a Wrike automation triggers document generation, TurboDocx sends the AI pro
 
 <br/>
 
-This is different from [static field mapping](/docs/Integrations/Wrike/field-mapping), which inserts exact Wrike field values with no interpretation. AI variables are ideal for generating summaries, descriptions, recommendations, and other narrative content that benefits from intelligent synthesis of project data.
+This is different from [static field mapping](./field-mapping.md), which inserts exact Wrike field values with no interpretation. AI variables are ideal for generating summaries, descriptions, recommendations, and other narrative content that benefits from intelligent synthesis of project data.
 
 :::tip
 You can mix AI variables and static field mappings in the same template. Use static mappings for structured data (dates, amounts, codes) and AI variables for narrative content (summaries, descriptions, recommendations).

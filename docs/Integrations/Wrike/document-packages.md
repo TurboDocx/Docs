@@ -19,11 +19,11 @@ This is the **Create Document Package** automation action. Use it to roll loose 
 
 ## Prerequisites
 
-- A connected Wrike account (see [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation))
+- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
 - A Wrike workflow status you want to use as the trigger, and the folder or project you want to monitor
 
 :::tip Start with the base setup
-This guide picks up at the automation's action step. If you have not connected Wrike or chosen a trigger status and folder yet, follow [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation) first.
+This guide picks up at the automation's action step. If you have not connected Wrike or chosen a trigger status and folder yet, follow [Setting Up a Wrike Automation](./setting-up-automation.md) first.
 :::
 
 <br/>
@@ -118,6 +118,6 @@ If the automation runs again on the same item, the new Document Package **replac
 
 ## Related
 
-- [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation)
-- [How to Convert Documents to PDF (Task, Project & Folder Triggers)](/docs/Integrations/Wrike/convert-to-pdf)
-- [Troubleshooting and FAQ](/docs/Integrations/Wrike/troubleshooting)
+- [Setting Up a Wrike Automation](./setting-up-automation.md)
+- [How to Convert Documents to PDF (Task, Project & Folder Triggers)](./convert-to-pdf.md)
+- [Troubleshooting and FAQ](./troubleshooting.md)

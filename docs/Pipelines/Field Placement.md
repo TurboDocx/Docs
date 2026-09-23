@@ -79,5 +79,5 @@ Because placement is relative to the page, the closer your sample matches your r
 
 ## What's Next?
 
-- **[Field Extraction](/docs/Pipelines/Field%20Extraction)**: pull data out of each document with patterns.
-- **[Creating an E-Signature Pipeline](/docs/Pipelines/Creating%20an%20E-Signature%20Pipeline)**: see the full wizard from start to finish.
+- **[Field Extraction](./Field%20Extraction)**: pull data out of each document with patterns.
+- **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)**: see the full wizard from start to finish.

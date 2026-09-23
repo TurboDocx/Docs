@@ -44,7 +44,7 @@ for the step-by-step walkthrough.
 ## Quotes created through the API, SDKs, or n8n
 
 When a quote is created by an **API key** — whether directly via the API, through one of the
-[SDKs](/docs/SDKs), or from an n8n workflow — there is an important difference: **an API key
+[SDKs](../SDKs/index.md), or from an n8n workflow — there is an important difference: **an API key
 has no mailbox of its own.**
 
 - The **"Prepared by" name** for an API-created quote resolves to the **name of the API key**
@@ -110,7 +110,7 @@ returned as a **`preparedBy`** object alongside the quote:
 ```
 
 Each SDK's `getQuote` folds `preparedBy` onto the returned quote for you (see the
-[SDK guides](/docs/SDKs)). Both fields are optional — `email` may be absent for an
+[SDK guides](../SDKs/index.md)). Both fields are optional — `email` may be absent for an
 API-created quote whose template has no sender email — so render a placeholder for a missing value.
 
 :::caution `preparedBy` is only on the single-quote fetch

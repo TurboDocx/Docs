@@ -89,7 +89,7 @@ If your team is manually downloading, signing, and re-filing the same kind of do
 
 ## Get Started
 
-Ready to set one up? See **[Creating an E-Signature Pipeline](/docs/Pipelines/Creating%20an%20E-Signature%20Pipeline)** for the step-by-step walkthrough.
+Ready to set one up? See **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** for the step-by-step walkthrough.
 
 <br/>
 

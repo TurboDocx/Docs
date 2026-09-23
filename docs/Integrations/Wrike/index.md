@@ -23,7 +23,7 @@ keywords:
 TurboDocx integrates with Wrike to automatically generate professional documents, proposals, and presentations directly from your project management data. When a task status changes in Wrike, TurboDocx can automatically create and attach documents to your projects.
 
 :::tip See It in Action
-Want to see the full workflow before diving into setup? Check out the [End-to-End Example](/docs/Integrations/Wrike/signature-workflow) — generate a proposal and send it for signature, all from Wrike.
+Want to see the full workflow before diving into setup? Check out the [End-to-End Example](./signature-workflow.md) — generate a proposal and send it for signature, all from Wrike.
 :::
 
 ## What You Can Create
@@ -47,7 +47,7 @@ You'll need:
 
 - Admin access to your Wrike workspace
 - Admin access to your TurboDocx organization
-- A template ready in TurboDocx (see [How to Create a Template](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Template))
+- A template ready in TurboDocx (see [How to Create a Template](../../TurboDocx%20Templating/How%20to%20Create%20a%20Template.md))
 - About 5 minutes
 
 <br/>
@@ -67,18 +67,18 @@ The Wrike integration uses a **status-triggered automation workflow** that you c
 
 | Guide | Description |
 |-------|-------------|
-| [End-to-End Example](/docs/Integrations/Wrike/signature-workflow) | Watch the full workflow in action — generate a proposal and send it for signature |
-| [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation) | Connect Wrike and create an automation with a trigger status and folder |
-| [How to Setup Document Generation Automation](/docs/Integrations/Wrike/document-generation-automation) | Configure an automation to generate documents from a template |
-| [How to Setup E-Signature Automation](/docs/Integrations/Wrike/signature-automation) | Generate documents and send them for e-signature automatically |
-| [How to Setup Static Field Mapping](/docs/Integrations/Wrike/field-mapping) | Map Wrike custom fields (revenue, dates, etc.) directly to template variables |
-| [How to Setup AI Variable Configuration](/docs/Integrations/Wrike/ai-variable) | Configure AI-driven variables that generate content from prompts during automation |
-| [How to Add a Wrike Table](/docs/Integrations/Wrike/table-variable) | Turn a variable into a table of a folder or project's sub-items, with nesting and filtering |
-| [How to Add a Wrike Image](/docs/Integrations/Wrike/image-variable) | Pull image attachments from the triggering task or folder into your document |
-| [How to Convert Documents to PDF](/docs/Integrations/Wrike/convert-to-pdf) | Convert the first attachment to PDF when a task, project, or folder changes status, with in-place versioning |
-| [How to Set Up Document Packages (Combined PDF)](/docs/Integrations/Wrike/document-packages) | Merge every attachment on a task or project into one combined PDF and attach it back to Wrike |
-| [How to Add Signature Anchors](/docs/Integrations/Wrike/signature-anchors) | Configure signature anchor fields in your template for TurboSign |
-| [Troubleshooting and FAQ](/docs/Integrations/Wrike/troubleshooting) | Common issues, solutions, and frequently asked questions |
+| [End-to-End Example](./signature-workflow.md) | Watch the full workflow in action — generate a proposal and send it for signature |
+| [Setting Up a Wrike Automation](./setting-up-automation.md) | Connect Wrike and create an automation with a trigger status and folder |
+| [How to Setup Document Generation Automation](./document-generation-automation.md) | Configure an automation to generate documents from a template |
+| [How to Setup E-Signature Automation](./signature-automation.md) | Generate documents and send them for e-signature automatically |
+| [How to Setup Static Field Mapping](./field-mapping.md) | Map Wrike custom fields (revenue, dates, etc.) directly to template variables |
+| [How to Setup AI Variable Configuration](./ai-variable.md) | Configure AI-driven variables that generate content from prompts during automation |
+| [How to Add a Wrike Table](./table-variable.md) | Turn a variable into a table of a folder or project's sub-items, with nesting and filtering |
+| [How to Add a Wrike Image](./image-variable.md) | Pull image attachments from the triggering task or folder into your document |
+| [How to Convert Documents to PDF](./convert-to-pdf.md) | Convert the first attachment to PDF when a task, project, or folder changes status, with in-place versioning |
+| [How to Set Up Document Packages (Combined PDF)](./document-packages.md) | Merge every attachment on a task or project into one combined PDF and attach it back to Wrike |
+| [How to Add Signature Anchors](./signature-anchors.md) | Configure signature anchor fields in your template for TurboSign |
+| [Troubleshooting and FAQ](./troubleshooting.md) | Common issues, solutions, and frequently asked questions |
 
 <br/>
 

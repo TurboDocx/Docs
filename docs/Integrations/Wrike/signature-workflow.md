@@ -38,7 +38,7 @@ Navigate to the task you want to generate a document for. In this example, we're
 ## Step 2: Trigger Document Generation
 
 :::info How to set this up
-See [How to Setup Document Generation Automation](/docs/Integrations/Wrike/document-generation-automation) to configure the trigger status and template for your automation.
+See [How to Setup Document Generation Automation](./document-generation-automation.md) to configure the trigger status and template for your automation.
 :::
 
 Change the task status to **"Generate Document"**. This is the trigger status configured in the TurboDocx automation — as soon as the status changes, TurboDocx picks it up.
@@ -58,7 +58,7 @@ Within moments, the **TurboDocx Document Bot** generates the document and attach
 ## Step 4: Review the Generated Document
 
 :::info How to set this up
-See [How to Setup Static Field Mapping](/docs/Integrations/Wrike/field-mapping) to map Wrike custom fields to template variables, and [How to Setup AI Variable Configuration](/docs/Integrations/Wrike/ai-variable) to configure AI-generated content.
+See [How to Setup Static Field Mapping](./field-mapping.md) to map Wrike custom fields to template variables, and [How to Setup AI Variable Configuration](./ai-variable.md) to configure AI-generated content.
 :::
 
 Click the attachment to open and review the proposal. Notice two things:
@@ -84,7 +84,7 @@ In the TurboDocx template settings, each of these variables is marked as a **Wri
 
 ![Anchor configuration in template settings](/img/wrike-integration/EndToEnd06-AnchorConfig.jpeg)
 
-For the full setup guide, see [How to Add Signature Anchors](/docs/Integrations/Wrike/signature-anchors).
+For the full setup guide, see [How to Add Signature Anchors](./signature-anchors.md).
 
 </details>
 
@@ -101,7 +101,7 @@ In the e-signature automation configuration, each anchor tag is mapped to a spec
 
 ![Date and Full Name anchor fields](/img/wrike-integration/EndToEnd08-DateAnchorField.jpeg)
 
-For the full setup guide, see [How to Setup E-Signature Automation](/docs/Integrations/Wrike/signature-automation).
+For the full setup guide, see [How to Setup E-Signature Automation](./signature-automation.md).
 
 </details>
 
@@ -112,7 +112,7 @@ The signing request is sent to the email address in the **"Customer email"** cus
 
 ![Customer email field in Wrike task](/img/wrike-integration/EndToEnd09-RecipientEmail.jpeg)
 
-For details on mapping recipient fields, see [How to Setup E-Signature Automation](/docs/Integrations/Wrike/signature-automation).
+For details on mapping recipient fields, see [How to Setup E-Signature Automation](./signature-automation.md).
 
 </details>
 
@@ -125,7 +125,7 @@ Here's what it looks like once TurboSign places the interactive signature fields
 ## Step 6: Send for Signature
 
 :::info How to set this up
-See [How to Setup E-Signature Automation](/docs/Integrations/Wrike/signature-automation) to configure the signature trigger, recipients, and anchor tag mapping.
+See [How to Setup E-Signature Automation](./signature-automation.md) to configure the signature trigger, recipients, and anchor tag mapping.
 :::
 
 Back in Wrike, change the task status to **"Send for Signature"**. This triggers the TurboSign signing workflow.
@@ -156,8 +156,8 @@ Ready to configure this workflow for your team? Follow these guides in order:
 
 | Step | Guide | What You'll Do |
 |------|-------|---------------|
-| 1 | [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation) | Connect Wrike and create your first automation |
-| 2 | [How to Setup Static Field Mapping](/docs/Integrations/Wrike/field-mapping) | Map Wrike custom fields (revenue, dates) to template variables |
-| 3 | [How to Setup AI Variable Configuration](/docs/Integrations/Wrike/ai-variable) | Set up AI-generated content like project timelines |
-| 4 | [How to Add Signature Anchors](/docs/Integrations/Wrike/signature-anchors) | Mark template variables as signature anchor fields |
-| 5 | [How to Setup E-Signature Automation](/docs/Integrations/Wrike/signature-automation) | Configure recipients, anchor tags, and post-signature actions |
+| 1 | [Setting Up a Wrike Automation](./setting-up-automation.md) | Connect Wrike and create your first automation |
+| 2 | [How to Setup Static Field Mapping](./field-mapping.md) | Map Wrike custom fields (revenue, dates) to template variables |
+| 3 | [How to Setup AI Variable Configuration](./ai-variable.md) | Set up AI-generated content like project timelines |
+| 4 | [How to Add Signature Anchors](./signature-anchors.md) | Mark template variables as signature anchor fields |
+| 5 | [How to Setup E-Signature Automation](./signature-automation.md) | Configure recipients, anchor tags, and post-signature actions |
