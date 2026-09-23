@@ -1,7 +1,7 @@
 ---
 id: delete-webhook
 title: "Delete Webhook"
-description: "Soft-delete the org's signature webhook and its delivery history."
+description: "Permanently delete the org's signature webhook and its delivery history. This is a hard delete and cannot be undone."
 sidebar_label: "Delete Webhook"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,46 @@ custom_edit_url: null
   
 
   # Delete Webhook
-  
-  Delete Webhook
-  
+
+The Delete Webhook endpoint permanently removes a webhook and all of its delivery history. Unlike [Delete Template](/docs/API/delete-template), this is a hard delete: the webhook row and its delivery records are removed from the database, not deactivated. There is no un-delete.
+
+## When to use it
+
+Use this endpoint when you are decommissioning an integration and no longer want TurboDocx to call your endpoint. If you only want to pause delivery temporarily, use [Update Webhook](/docs/API/update-webhook) with `isActive: false` instead, so you keep the secret and delivery history.
+
+## Example request
+
+```bash
+curl -X DELETE "https://api.turbodocx.com/api/webhooks/signature" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+## Example response
+
+On success the endpoint returns `200 OK`:
+
+```json
+{
+  "message": "Webhook deleted successfully"
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
+
+## Related endpoints
+
+- [Get Webhook](/docs/API/get-webhook) to confirm the webhook's configuration before deleting it
+- [Update Webhook](/docs/API/update-webhook) to pause delivery instead of deleting
+- [Create Webhook](/docs/API/create-webhook) to register a new webhook afterward
+
   <DisplayEndpoint method="DELETE" endpoint="/api/webhooks/signature"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

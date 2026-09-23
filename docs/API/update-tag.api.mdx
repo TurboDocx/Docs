@@ -1,7 +1,7 @@
 ---
 id: update-tag
 title: "Update Tag"
-description: "Update Tag"
+description: "Rename an existing tag by ID. Includes example request, response, and error handling."
 sidebar_label: "Update Tag"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,53 @@ custom_edit_url: null
   
 
   # Update Tag
-  
-  Update Tag
-  
+
+The Update Tag endpoint changes a tag's `label`. It is a `PUT`, but in practice `label` is the only field you can usefully send; the tag's other fields (`id`, `orgId`) are not accepted in the body.
+
+## When to use it
+
+Use this endpoint to rename a tag across your organization; every template or variable already tagged with it keeps the same tag `id`, so the rename applies everywhere the tag is used.
+
+## Example request
+
+```bash
+curl -X PUT "https://api.turbodocx.com/Tag/7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"label": "legal-2026"}'
+```
+
+## Example response
+
+On success the endpoint returns `200 OK` with the updated tag object directly (not wrapped in a `data` envelope, unlike most other TurboDocx endpoints):
+
+```json
+{
+  "id": "7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90",
+  "label": "legal-2026",
+  "isActive": true,
+  "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+  "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+  "createdOn": "2026-05-01T14:22:10.000Z",
+  "updatedOn": "2026-05-02T09:00:00.000Z"
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | `TagId` is not a valid UUID, or `label` fails validation | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Read Tag](/docs/API/read-tag) to find the `TagId` to update
+- [Create Tag](/docs/API/create-tag) to add a new tag instead
+- [Delete Tags (by IDs)](/docs/API/delete-tags-by-i-ds) to remove tags in bulk
+
   <DisplayEndpoint method="PUT" endpoint="/Tag/{TagId}"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

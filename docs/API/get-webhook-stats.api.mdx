@@ -1,7 +1,7 @@
 ---
 id: get-webhook-stats
 title: "Get Webhook Stats"
-description: "Retrieve aggregate delivery statistics for the org's signature webhook over a sliding time window. Returns per-event breakdown, success rates, average response times, and last delivery timestamps."
+description: "Aggregate delivery statistics for the org's signature webhook over a custom time window: per-event breakdown, success rate, response time."
 sidebar_label: "Get Webhook Stats"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,74 @@ custom_edit_url: null
   
 
   # Get Webhook Stats
-  
-  Get Webhook Stats
-  
+
+The Get Webhook Stats endpoint returns delivery statistics for this specific webhook over a time window you choose, broken down by event type. Unlike the `deliveryStats` on [Get Webhook](/docs/API/get-webhook) (which cover your whole organization's last 30 days), this endpoint is scoped to one webhook and lets you pick the window.
+
+## When to use it
+
+Use this endpoint to build a delivery health dashboard for a single webhook: overall success rate, average response time, and which event types are failing most, over a period you control.
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/api/webhooks/signature/stats?days=7" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+`days` defaults to `30` and accepts 1 to 365.
+
+## Example response
+
+```json
+{
+  "data": {
+    "webhook": {
+      "id": "b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34",
+      "name": "signature",
+      "isActive": true,
+      "events": ["signature.document.completed", "signature.document.voided"],
+      "urls": ["https://example.com/webhooks/turbodocx"]
+    },
+    "period": { "days": 7, "from": "2026-04-25T00:00:00.000Z", "to": "2026-05-02T00:00:00.000Z" },
+    "summary": {
+      "totalDeliveries": 42,
+      "successfulDeliveries": 40,
+      "failedDeliveries": 1,
+      "pendingRetries": 1,
+      "successRate": 95.24,
+      "avgResponseTime": 184,
+      "lastSuccessfulDelivery": "2026-05-01T22:10:05.000Z",
+      "lastFailedDelivery": "2026-04-29T11:02:41.000Z"
+    },
+    "eventBreakdown": [
+      {
+        "eventType": "signature.document.completed",
+        "total": 30,
+        "successful": 29,
+        "failed": 1,
+        "successRate": 96.67
+      }
+    ]
+  }
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
+| 400 | `days` is outside 1 to 365 | Validation error from the query schema |
+
+## Related endpoints
+
+- [Get Webhook](/docs/API/get-webhook) for the webhook's current configuration
+- [List Webhook Deliveries](/docs/API/list-webhook-deliveries) to inspect individual delivery attempts behind these numbers
+
   <DisplayEndpoint method="GET" endpoint="/api/webhooks/signature/stats"/>
   <QueryTable title="query" data="W3sia2V5IjoiZGF5cyIsImV4YW1wbGUiOiIifV0=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

@@ -1,7 +1,7 @@
 ---
 id: delete-tags-by-i-ds
 title: "Delete Tags (by IDs)"
-description: "Delete Tags (by IDs)"
+description: "Delete one or more tags from your organization in a single call, by ID. Includes example request, response, and error handling."
 sidebar_label: "Delete Tags (by IDs)"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,49 @@ custom_edit_url: null
   
 
   # Delete Tags (by IDs)
-  
-  Delete Tags (by IDs)
-  
+
+The Delete Tags (by IDs) endpoint deactivates one or more tags in a single call. It is a soft delete: matching tags are marked inactive rather than removed from the database, so they immediately stop appearing in [Read Tag](/docs/API/read-tag) and tag pickers.
+
+## When to use it
+
+Use this endpoint to let users bulk-remove tags they no longer need, instead of calling a single-tag delete endpoint in a loop.
+
+## Example request
+
+```bash
+curl -X DELETE "https://api.turbodocx.com/Tag/Bulk/Action" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"ids": ["7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90", "9d2b1c63-0f77-4a9c-b1d0-2c5e6f7a8b90"]}'
+```
+
+## Example response
+
+On success the endpoint returns `200 OK` with an empty data object:
+
+```json
+{
+  "data": {}
+}
+```
+
+Deletion is idempotent: IDs that do not exist, or belong to another organization, are silently skipped rather than causing an error.
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | `ids` is missing or not an array | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Read Tag](/docs/API/read-tag) to find the tag IDs to delete
+- [Create Tag](/docs/API/create-tag) to add a new tag
+- [Update Tag](/docs/API/update-tag) to rename a tag instead of deleting it
+
   <DisplayEndpoint method="DELETE" endpoint="/Tag/bulk/action"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoieC1yYXBpZGRvY3gtb3JnLWlkIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

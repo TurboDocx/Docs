@@ -1,7 +1,7 @@
 ---
 id: notify-webhook
 title: "Notify Webhook"
-description: "Send a manual notification to all URLs configured on the org's signature webhook. Routes through the same backend handler as Test Webhook; use Test Webhook in new code. Both are exposed for API surface symmetry."
+description: "Send a manual notification to all URLs on the org's signature webhook. Same backend handler as Test Webhook; kept for API surface symmetry."
 sidebar_label: "Notify Webhook"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,66 @@ custom_edit_url: null
   
 
   # Notify Webhook
-  
-  Notify Webhook
-  
+
+The Notify Webhook endpoint sends a one-off event delivery to every URL configured on your signature webhook. It calls the exact same backend logic as [Test Webhook](/docs/API/test-webhook): both accept the same body and return the same response shape. This endpoint exists for API surface symmetry with the "notify" naming some integrations expect; new integrations should call Test Webhook instead.
+
+## When to use it
+
+Use this endpoint (or Test Webhook) to confirm your receiving endpoint handles a TurboSign event correctly, without waiting for a real document to reach that state.
+
+## Example request
+
+```bash
+curl -X POST "https://api.turbodocx.com/api/webhooks/signature/notify" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventType": "signature.document.completed",
+    "payload": {"documentId": "doc_abc123", "status": "completed"}
+  }'
+```
+
+Both `eventType` and `payload` are optional; omit them to send a default sample payload for a default event type.
+
+## Example response
+
+```json
+{
+  "data": {
+    "deliveries": [
+      {
+        "id": "d3a1c2b4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "eventType": "signature.document.completed",
+        "url": "https://example.com/webhooks/turbodocx",
+        "httpStatus": 200,
+        "attemptCount": 1,
+        "maxAttempts": 3,
+        "isDelivered": true,
+        "status": "delivered"
+      }
+    ],
+    "summary": { "total": 1, "successful": 1, "failed": 0, "errors": [] }
+  },
+  "message": "Manual notification sent successfully to all URLs"
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
+| 400 | The webhook exists but `isActive` is `false` | `{ "error": "Cannot send notification to inactive webhook" }` |
+
+## Related endpoints
+
+- [Test Webhook](/docs/API/test-webhook) for the same behavior under TurboDocx's documented name
+- [List Webhook Deliveries](/docs/API/list-webhook-deliveries) to review past delivery attempts
+- [Get Webhook](/docs/API/get-webhook) to check the webhook's configuration first
+
   <DisplayEndpoint method="POST" endpoint="/api/webhooks/signature/notify"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

@@ -1,7 +1,7 @@
 ---
 id: get-template-by-id
 title: "Get Template by ID"
-description: "Get Template by ID"
+description: "Fetch a single template by ID: its metadata, tags, and merged variables (template, folder, and global). Includes example request, response, and error handling."
 sidebar_label: "Get Template by ID"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,78 @@ custom_edit_url: null
   
 
   # Get Template by ID
-  
-  Get Template by ID
-  
+
+The Get Template by ID endpoint returns a single template's full details: its metadata, creator, and the variables available to it. The variables array merges the template's own variables with any inherited from its folder and from your organization's global (knowledge base) variables, so it reflects everything the template can fill in at generation time.
+
+## When to use it
+
+Use this endpoint to load a template's details and variable list before generating a document, to check whether a template is TurboDocx-provided (and therefore read-only), or to confirm a metadata change made with [Edit Template Metadata](/docs/API/edit-template-metadata).
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/template/2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34?showTags=true" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+Pass `showTags=true` to include the template's `tags` array in the response; it is omitted by default.
+
+## Example response
+
+```json
+{
+  "data": {
+    "results": {
+      "id": "2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34",
+      "name": "SOW Template",
+      "description": "Standard statement of work",
+      "isActive": true,
+      "createdOn": "2026-05-01T14:22:10.000Z",
+      "updatedOn": "2026-05-01T14:22:10.000Z",
+      "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "email": "jane@example.com",
+      "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "templateFolderId": null,
+      "defaultFont": "Calibri",
+      "fonts": [{ "name": "Calibri" }],
+      "metadata": {},
+      "templateFileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "isTurboDocxProvided": false,
+      "deliverableCount": 12,
+      "variables": [
+        {
+          "placeholder": "{CustomerName}",
+          "name": "CustomerName",
+          "mimeType": "text",
+          "order": 0,
+          "count": 1
+        }
+      ]
+    }
+  }
+}
+```
+
+`isTurboDocxProvided` is `true` for templates from the built-in TurboDocx library; those cannot be edited in place and must be downloaded and re-uploaded to customize. Each entry in `variables` mirrors the variable fields returned by generation, with `isTemplateFolder` set on variables inherited from the template's folder.
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 404 | No active template with that ID exists in your organization | Empty (status only) |
+| 400 | The `TemplateID` path parameter is not a valid UUID | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Get Templates and Folders](/docs/API/get-templates-and-folders) to list templates and find a `TemplateId`
+- [Edit Template Metadata](/docs/API/edit-template-metadata) to rename, retag, or move this template
+- [Delete Template](/docs/API/delete-template) to remove this template
+
   <DisplayEndpoint method="GET" endpoint="/template/{TemplateID}"/>
   <QueryTable title="query" data="W3sia2V5Ijoic2hvd1RhZ3MiLCJleGFtcGxlIjoiIn1d" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImlmLW5vbmUtbWF0Y2giLCJleGFtcGxlIjoiIn0seyJrZXkiOiJvcmlnaW4iLCJleGFtcGxlIjoiIn0seyJrZXkiOiJyZWZlcmVyIiwiZXhhbXBsZSI6IiJ9XQ==" />
