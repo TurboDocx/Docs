@@ -1,7 +1,7 @@
 ---
 title: Zapier Integration
 sidebar_position: 5
-description: Export TurboDocx documents to 5,000+ apps with Zapier automation. Connect your document generation to any CRM, project management, or cloud storage platform automatically.
+description: Export TurboDocx documents to 5,000+ apps with Zapier. Connect document generation to any CRM, project management, or cloud storage platform.
 keywords:
   - zapier document automation
   - zapier integration turbodocx

@@ -1,7 +1,7 @@
 ---
 title: "Wrike Example: Generate & Sign a Proposal"
 sidebar_position: 2
-description: Watch the full Wrike workflow in action — trigger document generation from a task status change, review an AI-powered proposal, and send it for e-signature, all without leaving Wrike.
+description: Trigger document generation from task status change, review AI-powered proposal, and send for e-signature in Wrike without leaving the app.
 keywords:
   - wrike end to end example
   - wrike document generation example

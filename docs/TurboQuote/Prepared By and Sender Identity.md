@@ -1,7 +1,7 @@
 ---
 title: 'Prepared By & Sender Identity'
 sidebar_position: 5
-description: 'How TurboQuote decides the "Prepared by" name and email shown on a quote, and how to set your organization''s sender identity for quotes created in the UI or through the API, SDKs, and n8n.'
+description: 'Configure TurboQuote sender identity: manage "Prepared by" name and email on quotes in the UI, API, SDKs, and n8n.'
 keywords:
   - turboquote
   - prepared by
