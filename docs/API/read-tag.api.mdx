@@ -1,7 +1,7 @@
 ---
 id: read-tag
 title: "Read Tag"
-description: "Read Tag"
+description: "List the tags in your organization, with search and sorting. Includes example request, response, and error handling."
 sidebar_label: "Read Tag"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,58 @@ custom_edit_url: null
   
 
   # Read Tag
-  
-  Read Tag
-  
+
+The Read Tag endpoint lists the active tags in your organization, sorted alphabetically by `label` by default. Despite the singular name, it returns a paginated array, not a single tag; there is no dedicated "get tag by ID" endpoint.
+
+## When to use it
+
+Use this endpoint to populate a tag picker or filter dropdown, or to search for an existing tag by name before deciding whether to create a new one with [Create Tag](/docs/API/create-tag).
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/Tag?limit=25&offset=0&query=legal" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+`limit` defaults to `6`, `offset` to `0`. `query` filters by a case-insensitive match on `label`. Sort with `column0` (`label`, `createdOn`, or `updatedOn`) and `order0` (`asc` or `desc`).
+
+## Example response
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "id": "7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90",
+        "label": "legal",
+        "isActive": true,
+        "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+        "createdOn": "2026-05-01T14:22:10.000Z",
+        "updatedOn": "2026-05-01T14:22:10.000Z"
+      }
+    ],
+    "totalRecords": 1
+  }
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 400 | A query parameter fails validation | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Create Tag](/docs/API/create-tag) to add a new tag
+- [Update Tag](/docs/API/update-tag) to rename an existing tag
+- [Delete Tags (by IDs)](/docs/API/delete-tags-by-i-ds) to remove tags in bulk
+
   <DisplayEndpoint method="GET" endpoint="/Tag"/>
   <QueryTable title="query" data="W3sia2V5IjoibGltaXQiLCJleGFtcGxlIjoiIn1d" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

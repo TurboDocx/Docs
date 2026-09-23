@@ -1,7 +1,7 @@
 ---
 id: delete-variables-by-i-ds
 title: "Delete Variables (by IDs)"
-description: "Delete Variables (by IDs)"
+description: "Delete one or more knowledge-base or folder variables in a single call, by variableMapId. Includes example request, response, and errors."
 sidebar_label: "Delete Variables (by IDs)"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,48 @@ custom_edit_url: null
   
 
   # Delete Variables (by IDs)
-  
-  Delete Variables (by IDs)
-  
+
+The Delete Variables (by IDs) endpoint removes one or more variables from your knowledge base or a template folder in a single call, along with their versions, tags, and (for image variables) their stored files.
+
+## When to use it
+
+Use this endpoint to let users bulk-clean their variable library, instead of calling a single-variable delete endpoint in a loop.
+
+## Example request
+
+```bash
+curl -X DELETE "https://api.turbodocx.com/Variable/Bulk/Action" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"ids": ["e4f5a6b7-8c9d-4e0f-a1b2-3c4d5e6f7a8b"]}'
+```
+
+Each entry in `ids` is a `variableMapId`, the same `id` returned by [Read Variables (Folder)](/docs/API/read-variables-folder).
+
+## Example response
+
+On success the endpoint returns `200 OK` with an empty data object:
+
+```json
+{
+  "data": {}
+}
+```
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | `ids` is missing or not an array | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Read Variables (Folder)](/docs/API/read-variables-folder) to find the variable IDs to delete
+- [Update Variable by ID](/docs/API/update-variable-by-id) to edit a variable instead of deleting it
+
   <DisplayEndpoint method="DELETE" endpoint="/Variable/bulk/action"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

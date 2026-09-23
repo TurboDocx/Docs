@@ -1,7 +1,7 @@
 ---
 id: replay-webhook-delivery
 title: "Replay Webhook Delivery"
-description: "Manually retry a specific past delivery by its ID. Creates a new delivery row and immediately attempts re-delivery to all configured URLs. Returns the full delivery object for the new attempt."
+description: "Manually retry one past delivery by its ID. Creates a new delivery row and immediately attempts redelivery to all configured URLs."
 sidebar_label: "Replay Webhook Delivery"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,63 @@ custom_edit_url: null
   
 
   # Replay Webhook Delivery
-  
-  Replay Webhook Delivery
-  
+
+The Replay Webhook Delivery endpoint manually retries a specific past delivery, identified by its `deliveryId`. It creates a brand-new delivery row for the attempt (the original row is left as-is) and immediately re-sends the event to the webhook's configured URL.
+
+## When to use it
+
+Use this endpoint to retry a delivery that permanently failed (exhausted its automatic retries) after you have fixed whatever was wrong with your receiving endpoint, instead of waiting for the same event to occur again.
+
+## Example request
+
+```bash
+curl -X POST "https://api.turbodocx.com/api/webhooks/signature/replay" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"deliveryId": "d3a1c2b4-5e6f-4a7b-8c9d-0e1f2a3b4c5d"}'
+```
+
+Get `deliveryId` from [List Webhook Deliveries](/docs/API/list-webhook-deliveries).
+
+## Example response
+
+On success the endpoint returns `200 OK` with the new delivery:
+
+```json
+{
+  "data": {
+    "id": "f2e1d0c9-8b7a-4695-a3b2-1c0d9e8f7a6b",
+    "eventType": "signature.document.completed",
+    "url": "https://example.com/webhooks/turbodocx",
+    "attemptCount": 0,
+    "maxAttempts": 3,
+    "isDelivered": false,
+    "status": "pending",
+    "createdOn": "2026-05-02T09:30:00.000Z",
+    "updatedOn": "2026-05-02T09:30:00.000Z"
+  },
+  "message": "Webhook delivery replayed successfully - new delivery attempt created"
+}
+```
+
+Check the new delivery's status afterward with [List Webhook Deliveries](/docs/API/list-webhook-deliveries).
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists, or `deliveryId` does not belong to it | `{ "error": "Webhook or delivery not found" }` |
+| 400 | `deliveryId` is missing or not a valid UUID | Validation error from the body schema |
+
+## Related endpoints
+
+- [List Webhook Deliveries](/docs/API/list-webhook-deliveries) to find failed deliveries to replay
+- [Test Webhook](/docs/API/test-webhook) to send a fresh sample event instead of replaying a past one
+- [Get Webhook Stats](/docs/API/get-webhook-stats) to see whether replays are improving your success rate
+
   <DisplayEndpoint method="POST" endpoint="/api/webhooks/signature/replay"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

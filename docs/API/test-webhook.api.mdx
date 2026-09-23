@@ -16,9 +16,68 @@ custom_edit_url: null
   
 
   # Test Webhook
-  
-  Test Webhook
-  
+
+The Test Webhook endpoint sends a sample event delivery to every URL configured on your signature webhook and returns a per-URL summary of the result. It creates a real delivery record, identical to a delivery triggered by an actual TurboSign event, so it also shows up in [List Webhook Deliveries](/docs/API/list-webhook-deliveries).
+
+## When to use it
+
+Use this endpoint right after creating or updating a webhook to confirm your receiving endpoint is reachable and returns a 2xx response, before relying on it for real signature events.
+
+## Example request
+
+```bash
+curl -X POST "https://api.turbodocx.com/api/webhooks/signature/test" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventType": "signature.document.completed",
+    "payload": {"documentId": "doc_abc123", "status": "completed"}
+  }'
+```
+
+Both `eventType` and `payload` are optional; omit them to send a default sample payload for a default event type.
+
+## Example response
+
+```json
+{
+  "data": {
+    "deliveries": [
+      {
+        "id": "d3a1c2b4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "eventType": "signature.document.completed",
+        "url": "https://example.com/webhooks/turbodocx",
+        "httpStatus": 200,
+        "attemptCount": 1,
+        "maxAttempts": 3,
+        "isDelivered": true,
+        "status": "delivered"
+      }
+    ],
+    "summary": { "total": 1, "successful": 1, "failed": 0, "errors": [] }
+  },
+  "message": "Test webhook sent successfully to all URLs"
+}
+```
+
+If a URL returns a non-2xx status or times out, its entry has `isDelivered: false`, `status: "retrying"` or `"failed"`, and the failure is counted in `summary.failed` with a message in `summary.errors`.
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator | Empty (status only) |
+| 404 | No webhook with that name exists in your organization | `{ "error": "Webhook not found" }` |
+| 400 | The webhook exists but `isActive` is `false` | `{ "error": "Cannot test inactive webhook" }` |
+
+## Related endpoints
+
+- [Get Webhook](/docs/API/get-webhook) to confirm the webhook's URLs and events before testing
+- [List Webhook Deliveries](/docs/API/list-webhook-deliveries) to review this and past delivery attempts
+- [Replay Webhook Delivery](/docs/API/replay-webhook-delivery) to retry a specific failed delivery
+
   <DisplayEndpoint method="POST" endpoint="/api/webhooks/signature/test"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />

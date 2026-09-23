@@ -1,7 +1,7 @@
 ---
 id: extract-template-placeholders-and-generate-preview
 title: "Extract Template Placeholders and Generate Preview"
-description: "Extract Template Placeholders and Generate Preview"
+description: "Upload a DOCX or PPTX file to extract its {placeholder} variables and fonts, and optionally render a PDF preview, before creating the template."
 sidebar_label: "Extract Template Placeholders and Generate Preview"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,65 @@ custom_edit_url: null
   
 
   # Extract Template Placeholders and Generate Preview
-  
-  Extract Template Placeholders and Generate Preview
-  
+
+The Extract Template Placeholders and Generate Preview endpoint parses an uploaded DOCX or PPTX file and returns every `{placeholder}` variable and font it found, without creating a template. By default it also renders a PDF preview of the file and returns it inline. This lets you show a user exactly what variables a file contains, and what it looks like, before they commit to uploading it as a template.
+
+## When to use it
+
+Use this endpoint to build an "upload and preview" step ahead of [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values): show the detected placeholders so the user can confirm or rename them, and show the rendered PDF so they can confirm it's the right file. Pass `skipFile=true` if you only need the extracted variables and fonts and want to skip the (slower) PDF render.
+
+## Example request
+
+```bash
+curl -X POST "https://api.turbodocx.com/template/file?skipFile=true" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -F "file=@./sow-template.docx"
+```
+
+## Example response
+
+With `skipFile=true`:
+
+```json
+{
+  "data": {
+    "results": {
+      "filetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "vars": [
+        {
+          "placeholder": "{CustomerName}",
+          "name": "CustomerName",
+          "mimeType": "text",
+          "order": 0,
+          "count": 1,
+          "allowRichTextInjection": false
+        }
+      ],
+      "fonts": [{ "name": "Calibri" }]
+    }
+  }
+}
+```
+
+Without `skipFile`, the response also includes `templatePdf`, a base64-encoded PDF rendering of the uploaded file. Pass the `vars` array as the `variables` field (JSON-stringified) when you subsequently call [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values).
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 403 | The key's role is not administrator, contributor, or user | Empty (status only) |
+| 400 | No file was attached, or the file could not be uploaded ("Improper File Upload") | `{ "message", "error", "data": { "explanation", "context" } }` |
+| 400 | The file type is not supported (not DOCX, PPTX, or HTML) | `{ "message": "Unsupported File Type", "error", "data": { "explanation", "context" } }` |
+| 400 | Your plan's template or storage limit is reached | `{ "message", "type", "data": { "explanation", "context" } }` |
+| 503 | The storage service is temporarily unavailable | `{ "message", "error", "data": { "explanation", "context" } }` |
+
+## Related endpoints
+
+- [Upload Template with Optional Default Values](/docs/API/upload-template-with-optional-default-values) to create the template from the same file
+- [Get Templates and Folders](/docs/API/get-templates-and-folders) to browse existing templates
+
   <DisplayEndpoint method="POST" endpoint="/template/file"/>
   <QueryTable title="query" data="W10=" />
   <HeadersTable title="headers" data="W3sia2V5IjoieC1maWxlbmFtZSIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImF1dGhvcml6YXRpb24iLCJleGFtcGxlIjoiIn0seyJrZXkiOiJhY2NlcHQiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJhY2NlcHQtbGFuZ3VhZ2UiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJkbnQiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJvcmlnaW4iLCJleGFtcGxlIjoiIn0seyJrZXkiOiJyZWZlcmVyIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLW1vYmlsZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1jaC11YS1wbGF0Zm9ybSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1kZXN0IiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLW1vZGUiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtc2l0ZSIsImV4YW1wbGUiOiIifV0=" />

@@ -1,7 +1,7 @@
 ---
 id: read-variables-folder
 title: "Read Variables (Folder)"
-description: "Read Variables (Folder)"
+description: "List the variables in your knowledge base or a template folder, with search, tags, and pagination. Includes example request and response."
 sidebar_label: "Read Variables (Folder)"
 hide_title: true
 hide_table_of_contents: true
@@ -16,9 +16,65 @@ custom_edit_url: null
   
 
   # Read Variables (Folder)
-  
-  Read Variables (Folder)
-  
+
+The Read Variables (Folder) endpoint lists reusable variables scoped to your organization's global knowledge base or to a specific template folder. These are standalone variables you manage independently of any one template, for reuse across many templates (for example a company address or a standard clause).
+
+## When to use it
+
+Use this endpoint to build a variable library browser, or to look up a variable's `id` before updating it with [Update Variable by ID](/docs/API/update-variable-by-id) or deleting it with [Delete Variables (by IDs)](/docs/API/delete-variables-by-i-ds).
+
+## Example request
+
+```bash
+curl "https://api.turbodocx.com/Variable?isGlobal=true&limit=25&offset=0&showTags=true" \
+  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+  -H "Accept: application/json"
+```
+
+Pass exactly one of `isGlobal=true` (your org-wide knowledge base) or `templateFolderId=<folder id>` (a specific folder); the two are mutually exclusive. `limit` defaults to `6`, `offset` to `0`, and `query` filters by name.
+
+## Example response
+
+```json
+{
+  "data": {
+    "results": [
+      {
+        "id": "e4f5a6b7-8c9d-4e0f-a1b2-3c4d5e6f7a8b",
+        "variableMapId": "e4f5a6b7-8c9d-4e0f-a1b2-3c4d5e6f7a8b",
+        "name": "Company Address",
+        "placeholder": "{CompanyAddress}",
+        "description": "Standard mailing address block",
+        "mimeType": "text",
+        "text": "123 Main St, Suite 400, Austin, TX 78701",
+        "isGlobal": true,
+        "templateFolderId": null,
+        "allowRichTextInjection": false,
+        "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
+        "updatedOn": "2026-05-01T14:22:10.000Z"
+      }
+    ],
+    "totalRecords": 1
+  }
+}
+```
+
+An image variable's `text` holds a `data:` URI rather than plain text.
+
+## Common errors
+
+| Status | When | Response body |
+| ------ | ---- | ------------- |
+| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
+| 400 | Both `isGlobal` and `templateFolderId` are set, or a query parameter fails validation | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
+
+## Related endpoints
+
+- [Update Variable by ID](/docs/API/update-variable-by-id) to change a variable found here
+- [Delete Variables (by IDs)](/docs/API/delete-variables-by-i-ds) to remove variables in bulk
+- [Get Template by ID](/docs/API/get-template-by-id) to see how folder and global variables merge into a template
+
   <DisplayEndpoint method="GET" endpoint="/Variable"/>
   <QueryTable title="query" data="W3sia2V5IjoibGltaXQiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzaG93VGFncyIsImV4YW1wbGUiOiIifSx7ImtleSI6InRlbXBsYXRlRm9sZGVySWQiLCJleGFtcGxlIjoiIn1d" />
   <HeadersTable title="headers" data="W3sia2V5IjoiYWNjZXB0IiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYWNjZXB0LWxhbmd1YWdlIiwiZXhhbXBsZSI6IiJ9LHsia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImlmLW5vbmUtbWF0Y2giLCJleGFtcGxlIjoiIn0seyJrZXkiOiJvcmlnaW4iLCJleGFtcGxlIjoiIn0seyJrZXkiOiJyZWZlcmVyIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLW1vYmlsZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1jaC11YS1wbGF0Zm9ybSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1kZXN0IiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLW1vZGUiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtc2l0ZSIsImV4YW1wbGUiOiIifV0=" />
