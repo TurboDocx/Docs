@@ -1,7 +1,7 @@
 ---
 title: OneDrive and SharePoint Integration
 sidebar_position: 3
-description: Import templates and export documents seamlessly with OneDrive and SharePoint. Configure Azure AD integration for secure document management and cloud storage automation.
+description: Import templates and export documents with OneDrive and SharePoint. Configure Azure AD integration for secure document management and automation.
 keywords:
   - sharepoint integration
   - onedrive integration

@@ -1,7 +1,7 @@
 ---
 title: TurboDocx Pipelines
 sidebar_position: 1
-description: Automate document intake, data extraction, signature placement, and e-signature delivery end-to-end. Drop a PDF in a watched folder and TurboDocx Pipelines handles the rest, fully unattended.
+description: Automate document intake, extraction, signature placement, and delivery end-to-end. Drop PDFs in a watched folder for unattended processing.
 keywords:
   - turbodocx pipelines
   - document automation

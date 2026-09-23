@@ -1,7 +1,7 @@
 ---
 title: Microsoft Teams Integration
 sidebar_position: 6
-description: Transform Teams meetings into professional documents and presentations. Coming soon - Microsoft Teams integration for automated meeting documentation and collaboration workflows.
+description: Transform Teams meetings into professional documents and presentations. Automate meeting documentation and collaboration workflows.
 keywords:
   - microsoft teams integration
   - teams meeting documentation

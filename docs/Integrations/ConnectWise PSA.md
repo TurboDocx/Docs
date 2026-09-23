@@ -2,7 +2,7 @@
 
 title: ConnectWise PSA Integration
 sidebar\_position: 6
-description: Automatically generate proposals, contracts, service reports, and presentations from ConnectWise PSA data. Turn companies, contacts, and opportunities into professional documents with AI-powered automation.
+description: Generate proposals, contracts, and service reports from ConnectWise PSA. Automate documents from companies, contacts, and opportunities.
 keywords:
 
 - connectwise psa document automation
