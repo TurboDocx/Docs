@@ -2,7 +2,7 @@
 title: TurboQuote PHP SDK
 sidebar_position: 16
 sidebar_label: "TurboQuote: PHP"
-description: PHP TurboQuote SDK: create, manage, and send quotes with line items, products, bundles, price books, companies, and contacts.
+description: "PHP TurboQuote SDK: create, manage, and send quotes with line items, products, bundles, price books, companies, and contacts."
 keywords:
   - turboquote php
   - quote sdk php

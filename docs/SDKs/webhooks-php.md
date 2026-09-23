@@ -2,7 +2,7 @@
 title: TurboWebhooks PHP SDK
 sidebar_position: 15
 sidebar_label: "TurboWebhooks: PHP"
-description: PHP TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history.
+description: "PHP TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks php

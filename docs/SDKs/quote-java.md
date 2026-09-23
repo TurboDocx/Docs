@@ -2,7 +2,7 @@
 title: TurboQuote Java SDK
 sidebar_position: 21
 sidebar_label: "TurboQuote: Java"
-description: Java TurboQuote SDK: create and send quotes, manage line items, products, bundles, and price books with full CPQ support.
+description: "Java TurboQuote SDK: create and send quotes, manage line items, products, bundles, and price books with full CPQ support."
 keywords:
   - turboquote java
   - quote sdk java

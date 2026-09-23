@@ -2,7 +2,7 @@
 title: TurboWebhooks Python SDK
 sidebar_position: 17
 sidebar_label: "TurboWebhooks: Python"
-description: Python TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history.
+description: "Python TurboWebhooks SDK: subscribe to all seven TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks python

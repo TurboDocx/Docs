@@ -2,7 +2,7 @@
 title: TurboWebhooks JavaScript / TypeScript SDK
 sidebar_position: 16
 sidebar_label: "TurboWebhooks: JavaScript"
-description: JavaScript/TypeScript TurboWebhooks SDK: subscribe to TurboSign events, verify HMAC-SHA256 signatures, manage delivery history.
+description: "JavaScript/TypeScript TurboWebhooks SDK: subscribe to TurboSign events, verify HMAC-SHA256 signatures, manage delivery history."
 keywords:
   - turbodocx webhooks
   - turbowebhooks javascript
