@@ -17,12 +17,12 @@ keywords:
 
 A **Wrike Table** variable turns a single template variable into a table. When the Wrike automation runs, TurboDocx fills that table with the triggering folder or project's **sub-items** (its tasks, and its subfolders or subprojects), one row each. You choose which Wrike fields become the columns, how the rows are laid out, whether nested sub-items are expanded, and an optional filter that limits which sub-items appear.
 
-This is different from [Static Field Mapping](./field-mapping.md), which maps one Wrike field to one variable. A Wrike Table maps one variable to many rows.
+This is different from [Static Field Mapping](/docs/Integrations/Wrike/field-mapping), which maps one Wrike field to one variable. A Wrike Table maps one variable to many rows.
 
 ## Prerequisites
 
 - A template uploaded to TurboDocx with at least one variable that is on its own line (a rich-text variable, so the generated table has room to render)
-- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
+- A connected Wrike account (see [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation))
 
 <br/>
 
@@ -141,7 +141,7 @@ The table is built by the Wrike automation when a document is generated, so a Wr
 
 ## Related
 
-- [How to Add a Wrike Image](./image-variable.md)
-- [How to Setup Static Field Mapping](./field-mapping.md)
-- [Setting Up a Wrike Automation](./setting-up-automation.md)
-- [Troubleshooting and FAQ](./troubleshooting.md)
+- [How to Add a Wrike Image](/docs/Integrations/Wrike/image-variable)
+- [How to Setup Static Field Mapping](/docs/Integrations/Wrike/field-mapping)
+- [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation)
+- [Troubleshooting and FAQ](/docs/Integrations/Wrike/troubleshooting)

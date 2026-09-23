@@ -853,16 +853,16 @@ Content-Length: 287456
 Now that you've mastered the basics, consider exploring these advanced capabilities:
 
 📖 **[AI-Powered Content Generation →](/docs/TurboDocx%20Templating/ai-variable-generation)**
-📖 **[Webhook Integration for Status Updates →](/docs/Webhooks/webhook-configuration)**
-📖 **[Bulk Document Generation →](/docs/Templates/bulk-generation)**
-📖 **[Template Version Management →](/docs/Templates/version-control)**
+📖 **Webhook Integration for Status Updates** (coming soon)
+📖 **Bulk Document Generation** (coming soon)
+📖 **Template Version Management** (coming soon)
 
 ### Related Documentation
 
-- [Template Management Guide](/docs/Templates/template-management)
+- **Template Management Guide** (coming soon)
 - [Variable Types and Formatting](/docs/API/Deliverable%20API#variable-object-structure)
-- [API Authentication](/docs/API/turbodocx-api-documentation)
-- [Integration Examples](/docs/Integrations)
+- [API Authentication](/docs/API/Deliverable%20API)
+- Integration Examples
 
 ## Support
 

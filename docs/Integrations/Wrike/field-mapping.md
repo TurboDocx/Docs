@@ -18,7 +18,7 @@ Static field mapping lets you map Wrike custom fields directly to TurboDocx temp
 ## Prerequisites
 
 - A template uploaded to TurboDocx with at least one variable
-- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
+- A connected Wrike account (see [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation))
 
 <br/>
 

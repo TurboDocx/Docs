@@ -20,11 +20,11 @@ This action now fires not only when a **task** changes status, but also when a *
 
 ## Prerequisites
 
-- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
+- A connected Wrike account (see [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation))
 - A Wrike workflow status you want to use as the trigger, and the folder or project you want to monitor
 
 :::tip Start with the base setup
-This guide picks up at the automation's action step. If you have not connected Wrike or chosen a trigger status and folder yet, follow [Setting Up a Wrike Automation](./setting-up-automation.md) first.
+This guide picks up at the automation's action step. If you have not connected Wrike or chosen a trigger status and folder yet, follow [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation) first.
 :::
 
 <br/>
@@ -105,6 +105,6 @@ Update the source attachment and move the item back through the trigger status t
 
 ## Related
 
-- [Setting Up a Wrike Automation](./setting-up-automation.md)
-- [How to Set Up Document Packages (Combined PDF)](./document-packages.md)
-- [Troubleshooting and FAQ](./troubleshooting.md)
+- [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation)
+- [How to Set Up Document Packages (Combined PDF)](/docs/Integrations/Wrike/document-packages)
+- [Troubleshooting and FAQ](/docs/Integrations/Wrike/troubleshooting)

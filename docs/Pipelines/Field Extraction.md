@@ -97,5 +97,5 @@ A scanned, image-only PDF can still be signed by the pipeline. The *extraction-d
 
 ## What's Next?
 
-- **[Field Placement](./Field%20Placement)**: position signature and form fields on the sample.
-- **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)**: see where extraction fits in the wizard.
+- **[Field Placement](/docs/Pipelines/Field%20Placement)**: position signature and form fields on the sample.
+- **[Creating an E-Signature Pipeline](/docs/Pipelines/Creating%20an%20E-Signature%20Pipeline)**: see where extraction fits in the wizard.

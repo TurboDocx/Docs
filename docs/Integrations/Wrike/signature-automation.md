@@ -12,7 +12,7 @@ keywords:
 
 # How to Setup E-Signature Automation
 
-After [setting up your Wrike automation](./setting-up-automation.md) with a trigger status and folder, follow these steps to configure it to generate documents and automatically send them for e-signature.
+After [setting up your Wrike automation](/docs/Integrations/Wrike/setting-up-automation) with a trigger status and folder, follow these steps to configure it to generate documents and automatically send them for e-signature.
 
 <br/>
 
@@ -117,7 +117,7 @@ Change the anchor tag to match the placeholder in your template (e.g., `{SalesSi
 ![Set Anchor Tag](/img/wrike-integration/SigAuto09-ChangeAnchorTag.jpeg)
 
 :::caution Anchor Tags Must Match Your Template
-The anchor tag you set here **must exactly match** the corresponding variable in your document template. If they don't match, TurboSign won't be able to place the signature field. See [How to Add Signature Anchors](./signature-anchors.md) for how to configure these in your template.
+The anchor tag you set here **must exactly match** the corresponding variable in your document template. If they don't match, TurboSign won't be able to place the signature field. See [How to Add Signature Anchors](/docs/Integrations/Wrike/signature-anchors) for how to configure these in your template.
 :::
 
 ### Step 10: Map Additional Document Fields (Optional)
@@ -178,7 +178,7 @@ In the **Wrike activity updates** section of the signature action step, you'll s
 | **Finalization failed** | The signed PDF could not be finalized (e.g. a signing error) | The document is **not** marked Completed |
 | **Voided** | The signature request is voided or cancelled | e.g. `Document voided` |
 
-These rows map to the same signature lifecycle events surfaced by [TurboSign webhooks](../../TurboSign/Webhooks.md) — see that page if you also want these events pushed to your own endpoints.
+These rows map to the same signature lifecycle events surfaced by [TurboSign webhooks](/docs/TurboSign/Webhooks) — see that page if you also want these events pushed to your own endpoints.
 
 :::info The Completed row
 The table also shows a **Completed** row, but it is not configured here — it reuses the post-signature status you set in **Step 12–13** above and posts automatically once all recipients have signed. Set the "all recipients signed" status there, not in this section.
@@ -215,6 +215,6 @@ Click **Create Automation** to save and activate your e-signature automation wor
 
 ## What's Next?
 
-- **[How to Add Signature Anchors](./signature-anchors.md)** to your template if you haven't already
-- **[How to Setup Static Field Mapping](./field-mapping.md)** to template variables for static data
-- If something isn't working, see [Troubleshooting and FAQ](./troubleshooting.md)
+- **[How to Add Signature Anchors](/docs/Integrations/Wrike/signature-anchors)** to your template if you haven't already
+- **[How to Setup Static Field Mapping](/docs/Integrations/Wrike/field-mapping)** to template variables for static data
+- If something isn't working, see [Troubleshooting and FAQ](/docs/Integrations/Wrike/troubleshooting)
