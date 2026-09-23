@@ -497,7 +497,7 @@ This differs from **Resend**: resend re-sends the original invitation email, whi
 
 ## Error Handling
 
-Every typed error embeds `TurboDocxError` (`Message string`, `StatusCode int`, `Code string`) by value, so match the concrete type with `errors.As` rather than a type switch on the interface, and read the fields directly off the matched variable (`authErr.Message`, not a getter):
+Every typed error embeds `TurboDocxError` by value, which promotes its `Message string`, `StatusCode int`, and `Code string` fields onto the typed error, so read them directly off the matched variable (`authErr.Message`, not a getter). Match with `errors.As`, as the example below does:
 
 ### Error Types
 
