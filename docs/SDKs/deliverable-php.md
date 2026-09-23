@@ -361,7 +361,7 @@ echo $pdfFile;
 
 ## Error Handling
 
-`Deliverable::generateDeliverable()` throws `NotFoundException` when `templateId` doesn't match a template in the org, and `ValidationException` when a variable in the `variables` array is missing its required `placeholder`:
+`Deliverable::generateDeliverable()` throws `NotFoundException` when `templateId` doesn't match a template in the org, and `ValidationException` when a variable in the `variables` array is missing a required field:
 
 ### Handling Errors
 
