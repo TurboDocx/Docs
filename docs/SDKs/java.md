@@ -581,7 +581,7 @@ Every typed exception is a nested static class of `TurboDocxException` (`TurboDo
 | ----------------- | -------- | ---------------------------- |
 | `getMessage()`    | `String` | Human-readable error message |
 | `getStatusCode()` | `int`    | HTTP status code             |
-| `getCode()`       | `String` | Machine-readable code; always populated, since each subclass falls back to its own default (e.g. `AuthenticationException`'s `AUTHENTICATION_ERROR`) whenever the API response carries none |
+| `getCode()`       | `String` | Machine-readable code; each of the 7 named subclasses falls back to its own default (e.g. `AuthenticationException`'s `AUTHENTICATION_ERROR`) whenever the API response carries none. The bare `TurboDocxException` thrown for an unmapped status (e.g. an unexpected 5xx) can return `null` |
 
 ### Example
 
