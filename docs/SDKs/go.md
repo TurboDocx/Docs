@@ -497,7 +497,7 @@ This differs from **Resend**: resend re-sends the original invitation email, whi
 
 ## Error Handling
 
-The SDK provides typed errors for different error scenarios:
+Every typed error embeds `TurboDocxError` (`Message string`, `StatusCode int`, `Code string`) by value, so match the concrete type with `errors.As` rather than a type switch on the interface, and read the fields directly off the matched variable (`authErr.Message`, not a getter):
 
 ### Error Types
 
@@ -508,16 +508,17 @@ The SDK provides typed errors for different error scenarios:
 | `AuthorizationError`  | 403         | Authenticated but lacks required permissions |
 | `ValidationError`     | 400         | Invalid request parameters         |
 | `NotFoundError`       | 404         | Resource not found                 |
+| `ConflictError`       | 409         | Request conflicts with current resource state; most common on the webhook routes (creating or renaming to a name that already exists) |
 | `RateLimitError`      | 429         | Too many requests                  |
 | `NetworkError`        | -           | Network connectivity issues        |
 
 ### Error Properties
 
 | Property     | Type     | Description                  |
-| ------------ | -------- | ---------------------------- |
-| `Message`    | `string` | Human-readable error message |
+| ------------ | -------- | ----------------------------- |
+| `Message`    | `string` | Human-readable error message, also returned by the `Error()` method |
 | `StatusCode` | `int`    | HTTP status code             |
-| `Code`       | `string` | Error code (if available)    |
+| `Code`       | `string` | Machine-readable code; always populated, the API's code wins when present, otherwise the SDK fills in a per-status default |
 
 ### Example
 
@@ -535,6 +536,7 @@ if err != nil {
     var authzErr *turbodocx.AuthorizationError
     var validationErr *turbodocx.ValidationError
     var notFoundErr *turbodocx.NotFoundError
+    var conflictErr *turbodocx.ConflictError
     var rateLimitErr *turbodocx.RateLimitError
     var networkErr *turbodocx.NetworkError
 
@@ -547,6 +549,8 @@ if err != nil {
         log.Printf("Validation error: %s", validationErr.Message)
     case errors.As(err, &notFoundErr):
         log.Printf("Not found: %s", notFoundErr.Message)
+    case errors.As(err, &conflictErr):
+        log.Printf("Conflict: %s", conflictErr.Message)
     case errors.As(err, &rateLimitErr):
         log.Printf("Rate limited: %s", rateLimitErr.Message)
     case errors.As(err, &networkErr):

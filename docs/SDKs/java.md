@@ -560,7 +560,7 @@ client.turboSign().sendReminder("document-uuid", Arrays.asList("recipient-uuid-1
 
 ## Error Handling
 
-The SDK provides typed exceptions for different error scenarios:
+Every typed exception is a nested static class of `TurboDocxException` (`TurboDocxException.ValidationException`, not a separate top-level import) and extends `RuntimeException`, so the compiler never forces a catch:
 
 ### Error Types
 
@@ -581,7 +581,7 @@ The SDK provides typed exceptions for different error scenarios:
 | ----------------- | -------- | ---------------------------- |
 | `getMessage()`    | `String` | Human-readable error message |
 | `getStatusCode()` | `int`    | HTTP status code             |
-| `getCode()`       | `String` | Error code (if available)    |
+| `getCode()`       | `String` | Machine-readable code; always populated, since each subclass falls back to its own default (e.g. `AuthenticationException`'s `AUTHENTICATION_ERROR`) whenever the API response carries none |
 
 ### Example
 

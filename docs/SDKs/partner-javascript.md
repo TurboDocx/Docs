@@ -801,7 +801,7 @@ interface PartnerPermissions {
 
 ## Error Handling
 
-`TurboPartner.createOrganization()` and the other partner calls most commonly reject with `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
+`TurboPartner.createOrganization()` and the other partner calls reject with `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
 
 ```typescript
 import {
