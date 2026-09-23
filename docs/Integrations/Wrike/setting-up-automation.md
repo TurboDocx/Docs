@@ -20,7 +20,7 @@ This guide walks you through connecting your Wrike account to TurboDocx and crea
 Before starting, make sure you have:
 
 - A **Wrike API access token** (see [Get Your Wrike Access Token](#get-your-wrike-access-token) below)
-- A **template** in TurboDocx ready for document generation (see [How to Create a Template](../../TurboDocx%20Templating/How%20to%20Create%20a%20Template.md))
+- A **template** in TurboDocx ready for document generation (see [How to Create a Template](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Template))
 - The **Wrike folder permalink** for the folder you want to monitor
 
 <br/>
@@ -110,5 +110,5 @@ Click the **Next** button at the bottom-right corner of the setup modal to conti
 
 After completing the base automation setup above, choose which type of automation to configure:
 
-- **[How to Setup Document Generation Automation](./document-generation-automation.md)** — automatically generate documents from a template when the trigger fires
-- **[How to Setup E-Signature Automation](./signature-automation.md)** — generate documents and send them for digital signature via TurboSign
+- **[How to Setup Document Generation Automation](/docs/Integrations/Wrike/document-generation-automation)** — automatically generate documents from a template when the trigger fires
+- **[How to Setup E-Signature Automation](/docs/Integrations/Wrike/signature-automation)** — generate documents and send them for digital signature via TurboSign

@@ -72,7 +72,7 @@ Reach for a Cloud connector when the signer for a document can't be determined f
 - The right recipient comes from an **internal API** or directory service.
 - Signer assignment depends on business logic that lives in **your own systems**.
 
-For simpler cases, such as a single fixed signer or a signer whose email is printed on the document, you can use a static signer or an extracted field instead. See **[Creating an E-Signature Pipeline](./Creating%20an%20E-Signature%20Pipeline)** for those options.
+For simpler cases, such as a single fixed signer or a signer whose email is printed on the document, you can use a static signer or an extracted field instead. See **[Creating an E-Signature Pipeline](/docs/Pipelines/Creating%20an%20E-Signature%20Pipeline)** for those options.
 
 <br/>
 

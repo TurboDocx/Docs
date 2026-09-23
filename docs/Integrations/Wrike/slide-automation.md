@@ -21,17 +21,17 @@ keywords:
 
 So a two-slide template can produce a fifteen-slide deck, without anyone copying and pasting a slide per project.
 
-This page covers the PowerPoint-specific setup. For the basics of connecting Wrike and creating an automation, start with [Setting Up a Wrike Automation](./setting-up-automation.md).
+This page covers the PowerPoint-specific setup. For the basics of connecting Wrike and creating an automation, start with [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation).
 
 ## Prerequisites
 
 - A **PowerPoint (.pptx)** template uploaded to TurboDocx
-- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
+- A connected Wrike account (see [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation))
 - A Wrike folder that contains the projects you want in the deck
-- Variables on your template mapped to Wrike fields (see [Static Field Mapping](./field-mapping.md))
+- Variables on your template mapped to Wrike fields (see [Static Field Mapping](/docs/Integrations/Wrike/field-mapping))
 
 :::note
-Slide automation only applies to PowerPoint templates. Word templates use [document generation](./document-generation-automation.md) instead.
+Slide automation only applies to PowerPoint templates. Word templates use [document generation](/docs/Integrations/Wrike/document-generation-automation) instead.
 :::
 
 <br/>
@@ -186,4 +186,4 @@ The **Table tag** doesn't match the table on the slide. Check the table's alt-te
 **The looping slide didn't repeat.**
 Check the slide is still marked as a **Looping slide** in Part 1, and that **Slide Automation** is switched on in Step 5.
 
-For anything else, see [Wrike Integration Troubleshooting & FAQ](./troubleshooting.md).
+For anything else, see [Wrike Integration Troubleshooting & FAQ](/docs/Integrations/Wrike/troubleshooting).
