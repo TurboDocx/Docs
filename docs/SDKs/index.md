@@ -592,7 +592,8 @@ async def main():
     try:
         result = await TurboSign.send_signature(...)
     except TurboDocxError as e:
-        print(f"Error {e.code}: {e.message}")
+        # TurboDocxError doesn't set a .message attribute; str(e) is the message
+        print(f"Error {e.code}: {e}")
         if e.code == "VALIDATION_ERROR":
             # Handle validation error
             pass
@@ -627,12 +628,12 @@ try {
 ```go
 result, err := client.TurboSign.SendSignature(ctx, request)
 if err != nil {
-    var turboErr *sdk.TurboDocxError
-    if errors.As(err, &turboErr) {
-        fmt.Printf("Error %s: %s\n", turboErr.Code, turboErr.Message)
-        if turboErr.Code == "VALIDATION_ERROR" {
-            // Handle validation error
-        }
+    // errors.As must target the specific type: a *TurboDocxError target does not match
+    // *ValidationError, *AuthenticationError, etc., even though each embeds TurboDocxError.
+    // See the Go SDK's own Error Handling reference for the full set of named types.
+    var validationErr *sdk.ValidationError
+    if errors.As(err, &validationErr) {
+        fmt.Printf("Validation error [%s]: %s\n", validationErr.Code, validationErr.Message)
     }
 }
 ```
@@ -643,6 +644,7 @@ if err != nil {
 ```java
 import com.turbodocx.TurboDocxException;
 import com.turbodocx.TurboDocxException.*;
+import com.turbodocx.models.*;
 
 try {
     SendSignatureResponse result = client.turboSign().sendSignature(/* ... */);
@@ -674,9 +676,10 @@ try {
 | `RATE_LIMIT_EXCEEDED`  | 429         | Too many requests, retry with backoff |
 | `NETWORK_ERROR`        | N/A         | Network connection or timeout error   |
 
-`code` is **always populated**. When the API returns a specific code the SDK surfaces it
-verbatim; otherwise it falls back to the class default above, so you can branch on `code`
-without a null check.
+When the API returns a specific code the SDK surfaces it verbatim; otherwise, for one of the
+7 named categories above, it falls back to that class's default, so `code` is populated for
+those without a null check. An error for a status code outside this table (an unexpected 5xx,
+for example) is not guaranteed a `code`.
 
 ### TurboQuote / TurboSign specific codes
 

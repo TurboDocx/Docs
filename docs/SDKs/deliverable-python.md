@@ -349,7 +349,7 @@ with open("report.pdf", "wb") as f:
 
 ## Error Handling
 
-`Deliverable.generate_deliverable()` raises `NotFoundError` when `template_id` doesn't match a template in the org, and `ValidationError` when a variable dict is missing its required `placeholder`. Both extend the base `TurboDocxError`:
+`Deliverable.generate_deliverable()` raises `NotFoundError` when `template_id` doesn't match a template in the org, and `ValidationError` when a variable dict is missing a required field. Both extend the base `TurboDocxError`:
 
 ### Handling Errors
 

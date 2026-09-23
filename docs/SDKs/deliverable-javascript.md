@@ -602,7 +602,7 @@ writeFileSync("report.pdf", Buffer.from(buffer));
 
 ## Error Handling
 
-`Deliverable.generateDeliverable()` rejects with `NotFoundError` when `templateId` doesn't match a template in the org, and `ValidationError` when an entry in `variables` is missing its required `placeholder`. Both extend the base `TurboDocxError` class:
+`Deliverable.generateDeliverable()` rejects with `NotFoundError` when `templateId` doesn't match a template in the org, and `ValidationError` when an entry in `variables` is missing a required field. Both extend the base `TurboDocxError` class:
 
 ### Handling Errors
 
