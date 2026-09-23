@@ -11,7 +11,7 @@ keywords:
 
 # How to Setup Document Generation Automation
 
-After [setting up your Wrike automation](/docs/Integrations/Wrike/setting-up-automation) with a trigger status and folder, follow these steps to configure it to automatically generate documents from a template.
+After [setting up your Wrike automation](./setting-up-automation.md) with a trigger status and folder, follow these steps to configure it to automatically generate documents from a template.
 
 <br/>
 
@@ -87,7 +87,7 @@ Now that your automation is active, test it end-to-end:
 
 ## What's Next?
 
-- **[How to Setup Static Field Mapping](/docs/Integrations/Wrike/field-mapping)** to template variables for static data like revenue and dates
-- **[How to Add Signature Anchors](/docs/Integrations/Wrike/signature-anchors)** to your template for digital signing
+- **[How to Setup Static Field Mapping](./field-mapping.md)** to template variables for static data like revenue and dates
+- **[How to Add Signature Anchors](./signature-anchors.md)** to your template for digital signing
 - **Create multiple automations** for different project types, templates, or trigger statuses
-- If something isn't working, see [Troubleshooting and FAQ](/docs/Integrations/Wrike/troubleshooting)
+- If something isn't working, see [Troubleshooting and FAQ](./troubleshooting.md)

@@ -1844,7 +1844,6 @@ Now that you've integrated the single-step signing flow, the next step is settin
 - [TurboSign Setup Guide](/docs/TurboSign/Setting%20up%20TurboSign)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
-- Integration Examples
 
 ## Support
 

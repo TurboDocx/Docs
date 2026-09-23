@@ -14,12 +14,12 @@ keywords:
 
 A **Wrike Image** variable pulls image attachments from the triggering Wrike task or folder into your document. When the Wrike automation runs, TurboDocx attaches the matching images into that variable's place in the template. You can attach all images, or filter them by file name.
 
-This is the image counterpart to the [Wrike Table](/docs/Integrations/Wrike/table-variable) variable, and it reuses the same configuration flow.
+This is the image counterpart to the [Wrike Table](./table-variable.md) variable, and it reuses the same configuration flow.
 
 ## Prerequisites
 
 - A template uploaded to TurboDocx with at least one variable that is on its own line (a rich-text variable, so injected images have room to render)
-- A connected Wrike account (see [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation))
+- A connected Wrike account (see [Setting Up a Wrike Automation](./setting-up-automation.md))
 
 <br/>
 
@@ -68,7 +68,7 @@ Images are injected by the Wrike automation when a document is generated, so a W
 
 ## Related
 
-- [How to Add a Wrike Table](/docs/Integrations/Wrike/table-variable)
-- [How to Setup Static Field Mapping](/docs/Integrations/Wrike/field-mapping)
-- [Setting Up a Wrike Automation](/docs/Integrations/Wrike/setting-up-automation)
-- [Troubleshooting and FAQ](/docs/Integrations/Wrike/troubleshooting)
+- [How to Add a Wrike Table](./table-variable.md)
+- [How to Setup Static Field Mapping](./field-mapping.md)
+- [Setting Up a Wrike Automation](./setting-up-automation.md)
+- [Troubleshooting and FAQ](./troubleshooting.md)

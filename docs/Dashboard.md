@@ -118,7 +118,7 @@ If **Send Reminder** is greyed out, that document is not waiting on a signer any
 :::
 
 :::tip
-**Send Reminder** works on its own, separately from any automatic reminder schedule you have set up. You can use it even if automatic reminders are switched off, and even if a document has already had all the automatic reminders it was allowed. For the full set of things you can do to a document after sending it, including resending the original email and voiding a document, see [Managing Your Signatures](/docs/TurboSign/Managing%20Your%20Signatures).
+**Send Reminder** works on its own, separately from any automatic reminder schedule you have set up. You can use it even if automatic reminders are switched off, and even if a document has already had all the automatic reminders it was allowed. For the full set of things you can do to a document after sending it, including resending the original email and voiding a document, see [Managing Your Signatures](./TurboSign/Managing%20Your%20Signatures.md).
 :::
 
 ## Step 6: See where your documents are being signed
@@ -191,6 +191,6 @@ Scroll down and you will find four more panels.
 
 ## What's Next
 
-- [Managing Your Signatures](/docs/TurboSign/Managing%20Your%20Signatures): resend, remind, void and download signed documents.
-- [Setting up TurboSign](/docs/TurboSign/Setting%20up%20TurboSign): send your first document for signature.
-- [How to Create a Deliverable](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Deliverable): generate a document from one of your templates.
+- [Managing Your Signatures](./TurboSign/Managing%20Your%20Signatures.md): resend, remind, void and download signed documents.
+- [Setting up TurboSign](./TurboSign/Setting%20up%20TurboSign.md): send your first document for signature.
+- [How to Create a Deliverable](./TurboDocx%20Templating/How%20to%20Create%20a%20Deliverable.md): generate a document from one of your templates.

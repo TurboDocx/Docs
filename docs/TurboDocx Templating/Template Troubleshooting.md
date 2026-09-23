@@ -216,10 +216,10 @@ Turn on ¶ symbols to see hidden formatting issues
 Only PNG and JPEG can go into a deliverable — convert SVG, GIF, WebP, BMP, TIFF, HEIC, AVIF and ICO first
 
 ### 5. For Presentation Templates
-Use invisible rectangle shapes, not text boxes → [See presentation setup guide](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Presentation%20Template)
+Use invisible rectangle shapes, not text boxes → [See presentation setup guide](./How%20to%20Create%20a%20Presentation%20Template)
 
 ### 6. Test Your Template
-Create a simple deliverable to verify everything works → [Learn how to create deliverables](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Deliverable)
+Create a simple deliverable to verify everything works → [Learn how to create deliverables](./How%20to%20Create%20a%20Deliverable)
 <br/>
 
 :::tip Advanced Troubleshooting & Best Practices
@@ -230,9 +230,9 @@ Create a simple deliverable to verify everything works → [Learn how to create 
 - **For presentations:** Ensure shapes are truly invisible (no fill, no outline)
 
 **Best practices for success:**
-- **Test your template** by creating a deliverable before finalizing → [See how](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Deliverable)
+- **Test your template** by creating a deliverable before finalizing → [See how](./How%20to%20Create%20a%20Deliverable)
 - **Keep variable names descriptive** but concise
-- **Use consistent formatting** across all templates → [Document templates](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Document%20Template) | [Presentation templates](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Presentation%20Template)
+- **Use consistent formatting** across all templates → [Document templates](./How%20to%20Create%20a%20Document%20Template) | [Presentation templates](./How%20to%20Create%20a%20Presentation%20Template)
 
 :::
 
@@ -240,9 +240,9 @@ Create a simple deliverable to verify everything works → [Learn how to create 
 
 Still stuck? We're here to help! Check out our comprehensive guides:
 
-- [📄 Document Templates](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Document%20Template) - Learn to create Word/Google Doc templates
-- [📊 Presentation Templates](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Presentation%20Template) - Learn to create PowerPoint templates  
-- [🎯 Create Deliverables](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Deliverable) - Learn to generate documents from templates
+- [📄 Document Templates](./How%20to%20Create%20a%20Document%20Template) - Learn to create Word/Google Doc templates
+- [📊 Presentation Templates](./How%20to%20Create%20a%20Presentation%20Template) - Learn to create PowerPoint templates  
+- [🎯 Create Deliverables](./How%20to%20Create%20a%20Deliverable) - Learn to generate documents from templates
 - [📚 Full Documentation](https://docs.turbodocx.com) - Complete TurboDocx documentation
 
 If you need additional help, don't hesitate to reach out to our support team.
