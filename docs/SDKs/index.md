@@ -641,12 +641,11 @@ if err != nil {
 <TabItem value="java" label="Java">
 
 ```java
-import com.turbodocx.sdk.TurboSign;
-import com.turbodocx.sdk.TurboDocxException;
-import com.turbodocx.sdk.TurboDocxException.*;
+import com.turbodocx.TurboDocxException;
+import com.turbodocx.TurboDocxException.*;
 
 try {
-    SigningResult result = turboSign.sendSignature(/* ... */);
+    SendSignatureResponse result = client.turboSign().sendSignature(/* ... */);
 } catch (AuthenticationException e) {
     System.err.println("Invalid API key: " + e.getMessage());
 } catch (ValidationException e) {

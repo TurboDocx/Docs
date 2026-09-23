@@ -518,7 +518,7 @@ Every typed error embeds `TurboDocxError` by value, which promotes its `Message 
 | ------------ | -------- | ----------------------------- |
 | `Message`    | `string` | Human-readable error message, also returned by the `Error()` method |
 | `StatusCode` | `int`    | HTTP status code             |
-| `Code`       | `string` | Machine-readable code; always populated, the API's code wins when present, otherwise the SDK fills in a per-status default |
+| `Code`       | `string` | Machine-readable code; the API's code wins when present, otherwise the SDK fills in a per-status default for each of the 7 named types above. The bare `TurboDocxError` returned for an unmapped status (e.g. an unexpected 5xx) can have an empty `Code` if the API didn't supply one |
 
 ### Example
 

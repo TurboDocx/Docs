@@ -522,7 +522,7 @@ print("Result:", json.dumps(result, indent=2))
 
 ## Error Handling
 
-Every error is a plain `Exception` subclass; catch the most specific one first, since `except TurboDocxError` also matches every subclass below it. Each subclass sets its own `DEFAULT_CODE` class attribute, so `e.code` is always populated even when the API response itself carries none.
+Every error is a plain `Exception` subclass; catch the most specific one first, since `except TurboDocxError` also matches every subclass below it. Each of the 7 named subclasses sets its own `DEFAULT_CODE` class attribute, so `e.code` is populated for those even when the API response itself carries none; the base `TurboDocxError` raised for an unmapped status (e.g. an unexpected 5xx) has `DEFAULT_CODE = None`, so `e.code` can be `None` there.
 
 ### Error Classes
 
