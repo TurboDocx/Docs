@@ -1,7 +1,7 @@
 ---
 title: How to Configure Signature Appearance
 sidebar_position: 8
-description: Control how signed fields look on the finished PDF in TurboSign — turn the signature outline and label or the verification hash on or off — and how locked fields appear to signers in the signing portal, for your whole organization.
+description: "Control how signed fields look on TurboSign PDFs: toggle the signature outline, label and verification hash, and how locked fields appear to signers."
 keywords:
   - turbosign signature appearance
   - signature outline

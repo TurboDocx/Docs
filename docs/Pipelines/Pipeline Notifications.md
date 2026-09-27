@@ -1,7 +1,7 @@
 ---
 title: Pipeline Notifications
 sidebar_position: 3
-description: Choose who is notified when a pipeline run succeeds or fails, override recipients per routing store, and customize the completion email including a signed-document ZIP attachment.
+description: Choose who is notified when a pipeline run succeeds or fails, override recipients per routing store, and customize the completion email and ZIP.
 keywords:
   - pipeline notifications
   - signed and delivered email
