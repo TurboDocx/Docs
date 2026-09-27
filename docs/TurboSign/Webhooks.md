@@ -715,4 +715,4 @@ If you encounter issues not covered here:
 
 - [Learn about TurboSign](/docs/TurboSign/Setting%20up%20TurboSign)
 - [Explore API Documentation](/docs/API/turbodocx-api-documentation)
-- [View Integration Guides](/docs/Integrations)
+- [View Integration Guides](https://www.turbodocx.com/integrations)
