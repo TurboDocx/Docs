@@ -1,7 +1,7 @@
 ---
 title: Template Troubleshooting
 sidebar_position: 7
-description: Fix common TurboDocx template issues: broken variables, formatting problems, unsupported image formats and placeholder errors, with video walkthroughs.
+description: "Fix common TurboDocx template issues: broken variables, formatting problems, unsupported image formats and placeholder errors, with video walkthroughs."
 keywords:
   - template troubleshooting
   - broken variables

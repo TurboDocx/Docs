@@ -1,7 +1,7 @@
 ---
 title: Conditional (IF/THEN) Fields
 sidebar_position: 4.5
-description: Add IF/THEN logic to TurboSign documents: a controlling checkbox shows or unlocks dependent fields. Set it up in the app or via the API and SDKs.
+description: "Add IF/THEN logic to TurboSign documents: a controlling checkbox shows or unlocks dependent fields. Set it up in the app or via the API and SDKs."
 keywords:
   - turbosign conditional fields
   - if then fields
