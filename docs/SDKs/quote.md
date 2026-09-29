@@ -2934,6 +2934,8 @@ Unlike `duplicateQuote`, the draft this endpoint creates is **not** prefixed wit
 
 ### Price Books (on a Quote) / Price Books on Quotes {#price-books-on-a-quote}
 
+Applying and removing a price book on a quote is documented with the other quote methods: see [applyPriceBook](#applypricebook) and [removePriceBook](#removepricebook).
+
 ### Line Items {#line-items}
 
 <Tabs groupId="language" queryString>
