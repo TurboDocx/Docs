@@ -62,11 +62,11 @@ Subscribe to all 7 TurboSign signature events (`sent`, `viewed`, `recipient_sign
 
 | Language                  | Package         | Install Command               | Links                                                                                                  |
 | :------------------------ | :-------------- | :---------------------------- | :----------------------------------------------------------------------------------------------------- |
-| **JavaScript / TypeScript** | `@turbodocx/sdk` | `npm install @turbodocx/sdk` | [Docs](/docs/SDKs/webhooks-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
-| **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/webhooks-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
-| **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/webhooks-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
-| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk` | [Docs](/docs/SDKs/webhooks-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
-| **Java**                  | `com.turbodocx:turbodocx-sdk` | `mvn` / `gradle` (see [docs](/docs/SDKs/webhooks-java)) | [Docs](/docs/SDKs/webhooks-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk) |
+| **JavaScript / TypeScript** | `@turbodocx/sdk` | `npm install @turbodocx/sdk` | [Docs](/docs/SDKs/webhooks?language=js) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
+| **PHP**                   | `turbodocx/sdk` | `composer require turbodocx/sdk` | [Docs](/docs/SDKs/webhooks?language=php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk) |
+| **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/webhooks?language=python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk` | [Docs](/docs/SDKs/webhooks?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | `mvn` / `gradle` (see [docs](/docs/SDKs/webhooks?language=java)) | [Docs](/docs/SDKs/webhooks?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk) |
 
 For the conceptual overview (delivery retries, payload schema, dashboard configuration), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 
@@ -76,11 +76,11 @@ Generate documents from templates with dynamic variable injection, download sour
 
 | Language                  | Package                    | Install Command                                                      | Links                                                                                                                          |
 | :------------------------ | :------------------------- | :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
-| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/deliverable-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                 |
-| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/deliverable-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                     |
-| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/deliverable-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                       |
-| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/deliverable-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                         |
-| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/deliverable-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/deliverable?language=js) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                 |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/deliverable?language=python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                     |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/deliverable?language=php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                       |
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/deliverable?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                         |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/deliverable?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
 
 ## TurboQuote SDKs
 
@@ -88,11 +88,11 @@ Build sales quotes and proposals programmatically: quotes and line items, a prod
 
 | Language                  | Package                    | Install Command                                                      | Links                                                                                                                          |
 | :------------------------ | :------------------------- | :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
-| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/quote-javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                       |
-| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/quote-python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                           |
-| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/quote-php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                             |
-| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/quote-go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                               |
-| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/quote-java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                           |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/quote?language=js) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)                       |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/quote?language=python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)                           |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/quote?language=php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                             |
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/quote?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                               |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/quote?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                           |
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
@@ -478,7 +478,7 @@ Generate documents from templates with dynamic variable injection, download sour
 | `downloadSourceFile()`      | Download the original DOCX/PPTX source file                |
 | `downloadPDF()`             | Download the PDF version                                   |
 
-[Learn more about Deliverable SDKs →](/docs/SDKs/deliverable-javascript)
+[Learn more about Deliverable SDKs →](/docs/SDKs/deliverable?language=js)
 
 ### TurboQuote: Sales Quoting & CPQ
 
@@ -494,7 +494,7 @@ Build quotes and proposals: line items, a product/bundle catalog, price books, c
 | `createProduct()` / `createBundle()` / `createPriceBook()` | Manage the product catalog and pricing |
 | `createAndSend()`            | Create, add line items, and send in a single call                 |
 
-[Learn more about TurboQuote SDKs →](/docs/SDKs/quote-javascript)
+[Learn more about TurboQuote SDKs →](/docs/SDKs/quote?language=js)
 
 ### TurboWebhooks: Signature Events
 
@@ -510,7 +510,7 @@ Subscribe a per-org endpoint to TurboSign events and verify inbound deliveries w
 | `listWebhookDeliveries()` / `replayWebhookDelivery()` | Inspect and retry past deliveries        |
 | `verifyWebhookSignature()`   | Free function, verify the `X-TurboDocx-Signature` header on a received event |
 
-[Learn more about TurboWebhooks SDKs →](/docs/SDKs/webhooks-javascript)
+[Learn more about TurboWebhooks SDKs →](/docs/SDKs/webhooks?language=js)
 
 ---
 
