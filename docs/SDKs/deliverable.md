@@ -47,27 +47,27 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 <QuickstartSkillNudge command="/turbodocx-sdk deliverable" product="Deliverable" />
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 The official TurboDocx Deliverable SDK for JavaScript and TypeScript applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically. Available on npm as `@turbodocx/sdk`.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The official TurboDocx Deliverable SDK for Python applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with async/await patterns and comprehensive error handling. Available on PyPI as `turbodocx-sdk`.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 The official TurboDocx Deliverable SDK for PHP applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically. Available on Packagist as `turbodocx/sdk`.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 The official TurboDocx Deliverable SDK for Go applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with idiomatic Go patterns, context support, and comprehensive error handling. Available as `github.com/TurboDocx/SDK/packages/go-sdk`.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 The official TurboDocx Deliverable SDK for Java applications. Generate documents from templates with dynamic variable injection, download source files and PDFs, and manage deliverables programmatically with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:turbodocx-sdk`.
 
@@ -77,7 +77,7 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 ## Installation {#installation}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs>
 <TabItem value="npm" label="npm" default>
@@ -104,7 +104,7 @@ pnpm add @turbodocx/sdk
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 <Tabs>
 <TabItem value="pip" label="pip" default>
@@ -131,21 +131,21 @@ pipenv install turbodocx-sdk
 </Tabs>
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```bash
 composer require turbodocx/sdk
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```bash
 go get github.com/TurboDocx/SDK/packages/go-sdk
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 <Tabs>
 <TabItem value="maven" label="Maven" default>
@@ -181,19 +181,19 @@ implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 ## Requirements {#requirements}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 - Node.js 18+ or modern browser
 - TypeScript 4.7+ (optional, for type checking)
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - Python 3.9+
 - `httpx` (installed automatically)
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - PHP 8.1 or higher
 - Composer
@@ -205,12 +205,12 @@ This SDK leverages PHP 8.1+ features including enums, named parameters, readonly
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - Go 1.21+
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 - Java 11+
 - OkHttp 4.x (included)
@@ -224,7 +224,7 @@ This SDK leverages PHP 8.1+ features including enums, named parameters, readonly
 ## Configuration {#configuration}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -279,7 +279,7 @@ Unlike TurboSign, the Deliverable module only requires a credential and `orgId`:
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 from turbodocx_sdk import Deliverable
@@ -298,7 +298,7 @@ Unlike TurboSign, the Deliverable module only requires `api_key` and `org_id`: n
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 <Tabs>
 <TabItem value="manual" label="Manual Configuration" default>
@@ -340,7 +340,7 @@ Unlike TurboSign, the Deliverable module only requires `apiKey` and `orgId`: no 
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 package main
@@ -381,7 +381,7 @@ Use `NewDeliverableClientOnly()` when you only need document generation: it skip
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxClient;
@@ -416,7 +416,7 @@ Use `buildDeliverableClient()` when you only need document generation: it skips 
 ### Environment Variables {#environment-variables}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```bash
 # .env
@@ -425,7 +425,7 @@ TURBODOCX_ORG_ID=your_org_id_here
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```bash
 # .env
@@ -438,7 +438,7 @@ Both `api_key` and `org_id` parameters are **required** for all API requests. To
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```bash
 # .env
@@ -451,7 +451,7 @@ An `apiKey` (or `accessToken` as an alternative) is **required** for all API req
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```bash
 export TURBODOCX_API_KEY=your_api_key_here
@@ -459,7 +459,7 @@ export TURBODOCX_ORG_ID=your_org_id_here
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```bash
 export TURBODOCX_API_KEY=your_api_key_here
@@ -480,7 +480,7 @@ Both `apiKey` and `orgId` parameters are **required** for all API requests. To g
 ### Generate a document from a template {#generate-a-document-from-a-template}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -540,7 +540,7 @@ console.log(JSON.stringify(result, null, 2));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 import asyncio
@@ -572,7 +572,7 @@ asyncio.run(generate_report())
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 <?php
@@ -602,7 +602,7 @@ The above examples omit error handling for brevity. In production, wrap all Deli
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 package main
@@ -647,7 +647,7 @@ func main() {
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxClient;
@@ -697,7 +697,7 @@ public class Main {
 ### Download and manage deliverables {#download-and-manage-deliverables}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -769,7 +769,7 @@ await Deliverable.deleteDeliverable("deliverable-uuid");
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 import asyncio
@@ -814,7 +814,7 @@ asyncio.run(manage_deliverables())
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 <?php
@@ -852,7 +852,7 @@ The above examples omit error handling for brevity. In production, wrap all Deli
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 package main
@@ -932,7 +932,7 @@ func main() {
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxClient;
@@ -1000,7 +1000,7 @@ The Deliverable module supports four variable types for template injection:
 Inject plain text values into template placeholders:
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -1026,7 +1026,7 @@ const variables: DeliverableVariable[] = [
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 variables = [
@@ -1036,7 +1036,7 @@ variables = [
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $variables = [
@@ -1046,7 +1046,7 @@ $variables = [
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 variables := []sdk.DeliverableVariable{
@@ -1056,7 +1056,7 @@ variables := []sdk.DeliverableVariable{
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 DeliverableVariable var = new DeliverableVariable();
@@ -1073,7 +1073,7 @@ var.setMimeType("text");
 Inject rich HTML content with formatting:
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```javascript
 const variables = [
@@ -1086,7 +1086,7 @@ const variables = [
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 variables = [
@@ -1099,7 +1099,7 @@ variables = [
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $variables = [
@@ -1112,7 +1112,7 @@ $variables = [
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 variables := []sdk.DeliverableVariable{
@@ -1125,7 +1125,7 @@ variables := []sdk.DeliverableVariable{
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 DeliverableVariable var = new DeliverableVariable();
@@ -1142,7 +1142,7 @@ var.setMimeType("html");
 Inject images by providing a URL or base64-encoded content:
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```javascript
 const variables = [
@@ -1155,7 +1155,7 @@ const variables = [
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 variables = [
@@ -1168,7 +1168,7 @@ variables = [
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $variables = [
@@ -1181,7 +1181,7 @@ $variables = [
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 variables := []sdk.DeliverableVariable{
@@ -1194,7 +1194,7 @@ variables := []sdk.DeliverableVariable{
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 DeliverableVariable var = new DeliverableVariable();
@@ -1211,7 +1211,7 @@ var.setMimeType("image");
 Inject markdown content that gets converted to formatted text:
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```javascript
 const variables = [
@@ -1228,7 +1228,7 @@ For repeating content (e.g., table rows), use `variableStack` instead of `text` 
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 variables = [
@@ -1245,7 +1245,7 @@ For repeating content (e.g., table rows), use `variableStack` instead of `text` 
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $variables = [
@@ -1262,7 +1262,7 @@ For repeating content (e.g., table rows), use `variableStack` instead of `text` 
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 variables := []sdk.DeliverableVariable{
@@ -1279,7 +1279,7 @@ For repeating content (e.g., table rows), use `VariableStack` instead of `Text` 
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 DeliverableVariable var = new DeliverableVariable();
@@ -1300,7 +1300,7 @@ For repeating content (e.g., table rows), use `setVariableStack()` instead of `s
 ## API Reference {#api-reference}
 
 <Tabs groupId="language" queryString>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 :::note Async snippets
 The snippets below are partial and run inside an `async` function. They assume you have already called `Deliverable.configure(...)` and that `asyncio` and `json` are imported (`import asyncio, json`). For a complete runnable script, wrap the calls in `async def main(): ...` and run with `asyncio.run(main())`, as shown in [Quick Start](#quick-start).
@@ -1312,7 +1312,7 @@ The snippets below are partial and run inside an `async` function. They assume y
 ### Configure {#configure}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Configure the SDK with your API credentials and organization settings.
 
@@ -1354,7 +1354,7 @@ Both `apiKey` and `orgId` parameters are **required** for all API requests. To g
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Configure the SDK with your API credentials and organization settings.
 
@@ -1372,7 +1372,7 @@ All parameters are optional and keyword-only. Either `api_key` or `access_token`
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Configure the SDK with your API credentials and organization settings.
 
@@ -1391,7 +1391,7 @@ Deliverable::configure(DeliverableConfig::fromEnvironment());
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Create a new TurboDocx Deliverable client.
 
@@ -1417,7 +1417,7 @@ Both `APIKey` and `OrgID` parameters are **required** for all API requests. To g
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Create a new Deliverable client using the Builder pattern.
 
@@ -1465,7 +1465,7 @@ DeliverableClient deliverable = new TurboDocxClient.Builder()
 Generate a new document from a template with variable substitution.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -1507,7 +1507,7 @@ console.log(JSON.stringify(result, null, 2));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 result = await Deliverable.generate_deliverable(
@@ -1525,7 +1525,7 @@ print("Result:", json.dumps(result, indent=2))
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $result = Deliverable::generateDeliverable([
@@ -1543,7 +1543,7 @@ echo "Deliverable ID: {$result['results']['deliverable']['id']}\n";
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 result, err := deliverable.GenerateDeliverable(ctx, &sdk.CreateDeliverableRequest{
@@ -1564,7 +1564,7 @@ b, _ := json.MarshalIndent(result, "", "  "); fmt.Println("Result:", string(b))
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 DeliverableVariable var1 = new DeliverableVariable();
@@ -1592,7 +1592,7 @@ System.out.println("Result: " + gson.toJson(result));
 List deliverables with pagination, search, and filtering.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -1626,7 +1626,7 @@ console.log(JSON.stringify(list, null, 2));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 items = await Deliverable.list_deliverables(
@@ -1640,7 +1640,7 @@ print("Result:", json.dumps(items, indent=2))
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $list = Deliverable::listDeliverables([
@@ -1657,7 +1657,7 @@ foreach ($list['results'] as $deliverable) {
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 list, err := deliverable.ListDeliverables(ctx, &sdk.ListDeliverablesOptions{
@@ -1674,7 +1674,7 @@ b, _ := json.MarshalIndent(list, "", "  "); fmt.Println("Result:", string(b))
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 ListDeliverablesRequest request = new ListDeliverablesRequest();
@@ -1696,7 +1696,7 @@ System.out.println("Result: " + gson.toJson(list));
 Retrieve the full details of a single deliverable, including variables and fonts.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -1724,7 +1724,7 @@ console.log(JSON.stringify(details, null, 2));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 details = await Deliverable.get_deliverable_details("deliverable-uuid", show_tags=True)
@@ -1733,7 +1733,7 @@ print("Result:", json.dumps(details, indent=2))
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $details = Deliverable::getDeliverableDetails('deliverable-uuid', showTags: true);
@@ -1744,7 +1744,7 @@ echo "Created: {$details['createdOn']}\n";
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 details, err := deliverable.GetDeliverableDetails(ctx, "deliverable-uuid", &sdk.GetDeliverableOptions{
@@ -1758,7 +1758,7 @@ b, _ := json.MarshalIndent(details, "", "  "); fmt.Println("Result:", string(b))
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 DeliverableRecord details = deliverable.getDeliverableDetails("deliverable-uuid", true);
@@ -1774,7 +1774,7 @@ System.out.println("Result: " + gson.toJson(details));
 Update a deliverable's name, description, or tags.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -1806,7 +1806,7 @@ console.log(JSON.stringify(result, null, 2));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 result = await Deliverable.update_deliverable_info(
@@ -1820,7 +1820,7 @@ print("Result:", json.dumps(result, indent=2))
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $result = Deliverable::updateDeliverableInfo('deliverable-uuid', [
@@ -1833,7 +1833,7 @@ echo "Updated: {$result['deliverableId']}\n";
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 result, err := deliverable.UpdateDeliverableInfo(ctx, "deliverable-uuid", &sdk.UpdateDeliverableRequest{
@@ -1849,7 +1849,7 @@ b, _ := json.MarshalIndent(result, "", "  "); fmt.Println("Result:", string(b))
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 UpdateDeliverableRequest request = new UpdateDeliverableRequest();
@@ -1870,7 +1870,7 @@ System.out.println("Result: " + gson.toJson(result));
 Soft-delete a deliverable.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -1894,7 +1894,7 @@ console.log(JSON.stringify(result, null, 2));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 result = await Deliverable.delete_deliverable("deliverable-uuid")
@@ -1903,7 +1903,7 @@ print("Result:", json.dumps(result, indent=2))
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $result = Deliverable::deleteDeliverable('deliverable-uuid');
@@ -1913,7 +1913,7 @@ echo "Message: {$result['message']}\n";
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 result, err := deliverable.DeleteDeliverable(ctx, "deliverable-uuid")
@@ -1925,7 +1925,7 @@ b, _ := json.MarshalIndent(result, "", "  "); fmt.Println("Result:", string(b))
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 DeleteDeliverableResponse result = deliverable.deleteDeliverable("deliverable-uuid");
@@ -1941,7 +1941,7 @@ System.out.println("Result: " + gson.toJson(result));
 Download the original source file (DOCX or PPTX).
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -1969,7 +1969,7 @@ writeFileSync("report.docx", Buffer.from(buffer));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 source_bytes = await Deliverable.download_source_file("deliverable-uuid")
@@ -1980,7 +1980,7 @@ with open("report.docx", "wb") as f:
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $sourceFile = Deliverable::downloadSourceFile('deliverable-uuid');
@@ -1995,7 +1995,7 @@ echo $sourceFile;
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 sourceData, err := deliverable.DownloadSourceFile(ctx, "deliverable-uuid")
@@ -2011,7 +2011,7 @@ if err != nil {
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 byte[] sourceData = deliverable.downloadSourceFile("deliverable-uuid");
@@ -2028,7 +2028,7 @@ Files.write(Paths.get("report.docx"), sourceData);
 Download the PDF version of a deliverable.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -2056,7 +2056,7 @@ writeFileSync("report.pdf", Buffer.from(buffer));
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 pdf_bytes = await Deliverable.download_pdf("deliverable-uuid")
@@ -2067,7 +2067,7 @@ with open("report.pdf", "wb") as f:
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $pdfFile = Deliverable::downloadPDF('deliverable-uuid');
@@ -2082,7 +2082,7 @@ echo $pdfFile;
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 pdfData, err := deliverable.DownloadPDF(ctx, "deliverable-uuid")
@@ -2098,7 +2098,7 @@ if err != nil {
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 byte[] pdfData = deliverable.downloadPDF("deliverable-uuid");
@@ -2115,27 +2115,27 @@ Files.write(Paths.get("report.pdf"), pdfData);
 ## Error Handling {#error-handling}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 `Deliverable.generateDeliverable()` rejects with `NotFoundError` when `templateId` doesn't match a template in the org, and `ValidationError` when an entry in `variables` is missing a required field. Both extend the base `TurboDocxError` class:
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 `Deliverable.generate_deliverable()` raises `NotFoundError` when `template_id` doesn't match a template in the org, and `ValidationError` for invalid request parameters, most commonly a variable dict missing `text` (required unless it sets `variableStack` or `isDisabled: True`) or specifying an unsupported `mimeType`. Both extend the base `TurboDocxError`:
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 `Deliverable::generateDeliverable()` throws `NotFoundException` when `templateId` doesn't match a template in the org, and `ValidationException` when a variable in the `variables` array is missing a required field:
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 `GenerateDeliverable` returns `NotFoundError` when `TemplateID` doesn't match a template in the org, and `ValidationError` for invalid request parameters, most commonly a `DeliverableVariable` missing `Text` (required unless it sets `VariableStack` or `IsDisabled: true`) or specifying an unsupported `MimeType`. Match on the concrete type with `errors.As`, same as every other Go SDK call:
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 `deliverable.generateDeliverable()` throws `TurboDocxException.NotFoundException` when `templateId` doesn't match a template in the org, and `TurboDocxException.ValidationException` when a variable in the request is missing a required field:
 
@@ -2145,7 +2145,7 @@ Files.write(Paths.get("report.pdf"), pdfData);
 ### Handling Errors {#handling-errors}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -2241,7 +2241,7 @@ try {
 The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status and code mapping) and the `message`/`statusCode`/`code` properties shared by every error are documented once in the [JavaScript / TypeScript SDK's Error Handling reference](./javascript.md#error-handling).
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 import asyncio
@@ -2296,7 +2296,7 @@ asyncio.run(main())
 The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `message`/`status_code`/`code` attributes shared by every error are documented once in the [Python SDK's Error Handling reference](./python.md#error-handling).
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 <?php
@@ -2346,7 +2346,7 @@ try {
 The full typed-exception table (`AuthenticationException`, `AuthorizationException`, `ConflictException`, `RateLimitException`, `NetworkException`, HTTP status mapping) and the `getMessage()`/`statusCode`/`errorCode` properties shared by every exception are documented once in the [PHP SDK's Error Handling reference](./php.md#error-handling).
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 import (
@@ -2391,7 +2391,7 @@ if err != nil {
 The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `Message`/`StatusCode`/`Code` fields on every error are documented once in the [Go SDK's Error Handling reference](./go.md#error-handling).
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxException;
@@ -2433,12 +2433,12 @@ The full typed-exception table (`AuthenticationException`, `AuthorizationExcepti
 ## TypeScript Types / Python Types / PHP Types / Types {#typescript-types}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 The SDK exports TypeScript types for full type safety. Import them directly from the package.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The SDK uses Python type hints with `Dict[str, Any]` for flexible JSON-like structures.
 
@@ -2448,7 +2448,7 @@ The SDK uses Python type hints with `Dict[str, Any]` for flexible JSON-like stru
 ### Importing Types {#importing-types}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 import type {
@@ -2473,7 +2473,7 @@ import type {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 from typing import Dict, List, Any, Optional
@@ -2485,7 +2485,7 @@ from typing import Dict, List, Any, Optional
 ### VariableMimeType {#variablemimetype}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Union type for variable content types:
 
@@ -2494,7 +2494,7 @@ type VariableMimeType = "text" | "html" | "image" | "markdown";
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 String values for variable content types:
 
@@ -2513,7 +2513,7 @@ String values for variable content types:
 ### DeliverableVariable / Variable Array Structure {#deliverablevariable}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Variable configuration for template injection:
 
@@ -2531,7 +2531,7 @@ Variable configuration for template injection:
 \*Required unless `variableStack` is provided or `isDisabled` is true.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Variable configuration for template injection:
 
@@ -2550,7 +2550,7 @@ Variable configuration for template injection:
 \*Required unless `variableStack` is provided or `isDisabled` is true.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Variables are passed as associative arrays with the following keys:
 
@@ -2568,7 +2568,7 @@ Variables are passed as associative arrays with the following keys:
 \*Required unless `variableStack` is provided or `isDisabled` is true.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Variable configuration for template injection:
 
@@ -2590,7 +2590,7 @@ Boolean fields on the deliverable types are the SDK's `FlexBool`, a named `bool`
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Variable configuration for template injection:
 
@@ -2615,7 +2615,7 @@ Variable configuration for template injection:
 ### CreateDeliverableRequest / Generate Deliverable Request {#createdeliverablerequest}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Request configuration for `generateDeliverable`:
 
@@ -2628,7 +2628,7 @@ Request configuration for `generateDeliverable`:
 | `tags`         | `string[]`              | No       | Tag strings to associate                   |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Request configuration for `generate_deliverable`:
 
@@ -2643,7 +2643,7 @@ Request configuration for `generate_deliverable`:
 | `tags`          | `list[str]`  | No       | Tag strings to associate                   |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Request array for `generateDeliverable`:
 
@@ -2656,7 +2656,7 @@ Request array for `generateDeliverable`:
 | `tags`         | `array`  | No       | Tag strings to associate                   |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Request configuration for `GenerateDeliverable`:
 
@@ -2669,7 +2669,7 @@ Request configuration for `GenerateDeliverable`:
 | `Tags`         | `[]string`              | No       | Tag strings to associate                   |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Request configuration for `generateDeliverable`:
 
@@ -2689,7 +2689,7 @@ Request configuration for `generateDeliverable`:
 ### UpdateDeliverableRequest / Update Deliverable Request {#updatedeliverablerequest}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Request configuration for `updateDeliverableInfo`:
 
@@ -2700,7 +2700,7 @@ Request configuration for `updateDeliverableInfo`:
 | `tags`        | `string[]` | No       | Replace all tags (empty array to remove) |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Request configuration for `update_deliverable_info`:
 
@@ -2713,7 +2713,7 @@ Request configuration for `update_deliverable_info`:
 | `tags`        | `list[str]` | No       | Replace all tags (empty list to remove)  |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Request array for `updateDeliverableInfo`:
 
@@ -2724,7 +2724,7 @@ Request array for `updateDeliverableInfo`:
 | `tags`        | `array`  | No       | Replace all tags (empty array to remove) |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Request configuration for `UpdateDeliverableInfo`:
 
@@ -2735,7 +2735,7 @@ Request configuration for `UpdateDeliverableInfo`:
 | `Tags`        | `*[]string` | No       | Replace all tags (`nil` = no change, `&[]string{}` = remove all) |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Request configuration for `updateDeliverableInfo`:
 
@@ -2754,7 +2754,7 @@ Request configuration for `updateDeliverableInfo`:
 ### ListDeliverablesOptions / List Deliverables Options / ListDeliverablesRequest {#listdeliverablesoptions}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Options for `listDeliverables`:
 
@@ -2768,7 +2768,7 @@ Options for `listDeliverables`:
 | `showTags`     | `boolean`  | No       | Include tags in the response         |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Options for `list_deliverables`:
 
@@ -2782,7 +2782,7 @@ Options for `list_deliverables`:
 | `show_tags`     | `bool`  | No       | Include tags in the response         |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Options array for `listDeliverables`:
 
@@ -2794,7 +2794,7 @@ Options array for `listDeliverables`:
 | `showTags`     | `bool`   | No       | Include tags in the response         |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Options for `ListDeliverables`:
 
@@ -2806,7 +2806,7 @@ Options for `ListDeliverables`:
 | `ShowTags`     | `bool`     | No       | Include tags in the response         |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Options for `listDeliverables`:
 
@@ -2825,7 +2825,7 @@ Options for `listDeliverables`:
 ### DeliverableRecord / Deliverable Record {#deliverablerecord}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 The deliverable object returned by both `listDeliverables` and `getDeliverableDetails`. Fields marked _details only_ are populated only by `getDeliverableDetails`:
 
@@ -2852,7 +2852,7 @@ The deliverable object returned by both `listDeliverables` and `getDeliverableDe
 | `tags`               | `Tag[]`                 | Associated tags (when `showTags=true`)               |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The deliverable object returned by `list_deliverables`:
 
@@ -2876,7 +2876,7 @@ The deliverable object returned by `list_deliverables`:
 | `tags`            | `list`   | Associated tags (when `show_tags=True`)|
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 The deliverable record returned by `listDeliverables`:
 
@@ -2898,7 +2898,7 @@ The deliverable record returned by `listDeliverables`:
 | `tags`           | `array`  | Associated tags (when `showTags=true`)|
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 The deliverable object returned by both `ListDeliverables` and `GetDeliverableDetails`:
 
@@ -2923,7 +2923,7 @@ The deliverable object returned by both `ListDeliverables` and `GetDeliverableDe
 | `Tags`               | `[]Tag`                 | Associated tags (when `ShowTags=true`)   |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 The deliverable object returned by both `listDeliverables` and `getDeliverableDetails`. Both methods return the same type.
 
@@ -2954,7 +2954,7 @@ The deliverable object returned by both `listDeliverables` and `getDeliverableDe
 ### DeliverableDetailRecord / Deliverable Detail Record {#deliverabledetailrecord}
 
 <Tabs groupId="language" queryString>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The deliverable object returned by `get_deliverable_details`. Includes all fields from [DeliverableRecord](#deliverablerecord) **except `fileSize`**, plus:
 
@@ -2967,7 +2967,7 @@ The deliverable object returned by `get_deliverable_details`. Includes all field
 | `variables`          | `list[dict]` | Parsed variable objects with values      |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 The deliverable record returned by `getDeliverableDetails`. Includes all fields from [Deliverable Record](#deliverable-record) **except `fileSize`**, plus:
 
@@ -2983,7 +2983,7 @@ The deliverable record returned by `getDeliverableDetails`. Includes all fields 
 ### Tag {#tag}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Tag object included when `showTags` is enabled:
 
@@ -3000,7 +3000,7 @@ Tag object included when `showTags` is enabled:
 | `orgId`     | `string`  | Organization ID                      |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Tag object included when `show_tags` is enabled. Each tag is a `dict` with:
 
@@ -3015,7 +3015,7 @@ Tag object included when `show_tags` is enabled. Each tag is a `dict` with:
 | `orgId`     | `str`  | Organization ID                      |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Tag object included when `showTags` is enabled. Each tag is an associative array with:
 
@@ -3030,7 +3030,7 @@ Tag object included when `showTags` is enabled. Each tag is an associative array
 | `orgId`     | `string` | Organization ID                      |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Tag object included when `ShowTags` is enabled:
 
@@ -3045,7 +3045,7 @@ Tag object included when `ShowTags` is enabled:
 | `OrgID`     | `string` | Organization ID                      |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Tag object included when `showTags` is enabled:
 
@@ -3079,35 +3079,35 @@ For detailed information about advanced configuration and API concepts, see:
 ## Resources {#resources}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 - [npm Package](https://www.npmjs.com/package/@turbodocx/sdk)
 - [API Reference](/docs/API/Deliverable%20API)
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 - [PyPI Package](https://pypi.org/project/turbodocx-sdk/)
 - [API Reference](/docs/API/Deliverable%20API)
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
 - [Packagist Package](https://packagist.org/packages/turbodocx/sdk)
 - [API Reference](/docs/API/Deliverable%20API)
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
 - [API Reference](/docs/API/Deliverable%20API)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
 - [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)

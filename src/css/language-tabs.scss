@@ -1,0 +1,26 @@
+// Language icons on SDK language tabs.
+// TabItems get attributes={{className: 'tab-lang tab-lang--<value>'}}; icons are Devicon v2.16.0 (MIT) in static/img/languages.
+.tabs__item.tab-lang::before {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 0.45em;
+  vertical-align: -0.2em;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+// JS and TS share one tab, so it shows both icons.
+.tabs__item.tab-lang--js::before {
+  width: 2.45em;
+  background-image: url('/img/languages/javascript.svg'), url('/img/languages/typescript.svg');
+  background-position: left center, right center;
+  background-size: 1.15em 1.15em, 1.15em 1.15em;
+}
+.tabs__item.tab-lang--python::before { background-image: url('/img/languages/python.svg'); }
+.tabs__item.tab-lang--php::before { background-image: url('/img/languages/php.svg'); }
+.tabs__item.tab-lang--go::before { background-image: url('/img/languages/go.svg'); }
+.tabs__item.tab-lang--java::before { background-image: url('/img/languages/java.svg'); }

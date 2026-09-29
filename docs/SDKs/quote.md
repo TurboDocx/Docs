@@ -62,7 +62,7 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 <QuickstartSkillNudge command="/turbodocx-sdk turboquote" product="TurboQuote" />
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 The official TurboDocx TurboQuote SDK for Node.js and browser applications. Build quoting and CPQ (configure-price-quote) workflows: create and send quotes, manage line items, maintain a product and bundle catalog, apply price books, and handle the full quote lifecycle — all with zero runtime dependencies and complete TypeScript types. Available on npm as `@turbodocx/sdk` (same package as TurboSign and TurboWebhooks).
 
@@ -73,7 +73,7 @@ TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a life
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The official TurboDocx TurboQuote SDK for Python applications. Build full CPQ (configure, price, quote) workflows: create quotes, add product and bundle line items, apply price books, send proposals to contacts, and download PDF exports — all from async Python 3.9+. Distributed on PyPI as `turbodocx-sdk` (same package as TurboSign, TurboWebhooks, and Deliverable).
 
@@ -84,7 +84,7 @@ TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote 
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 The official TurboDocx TurboQuote SDK for PHP applications. Build full CPQ (configure, price, quote) workflows: create quotes, add product and bundle line items, apply price books, send proposals to contacts, and download PDF exports — all from PHP 8.1+. Available on Packagist as `turbodocx/sdk` (same package as TurboSign, TurboWebhooks, and Deliverable).
 
@@ -95,7 +95,7 @@ TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote 
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 The official TurboDocx TurboQuote SDK for Go applications. Create quotes, attach line items and bundles, send proposals to customers, download PDFs, and manage your full product catalog — products, bundles, price books, companies, contacts, and quote templates — all with idiomatic Go patterns, context support, and typed errors. Available as `github.com/TurboDocx/SDK/packages/go-sdk`.
 
@@ -108,7 +108,7 @@ For the dashboard UI, quote template configuration, and sending behavior, see th
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 The official TurboDocx TurboQuote SDK for Java applications. Create and send sales quotes, manage line items, products, bundles, and price books — all from Java 11+. Distributed as `com.turbodocx:turbodocx-sdk` on Maven Central (same artifact as TurboSign and TurboWebhooks).
 
@@ -124,7 +124,7 @@ TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product 
 ## Installation {#installation}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs>
 <TabItem value="npm" label="npm" default>
@@ -151,7 +151,7 @@ yarn add @turbodocx/sdk
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 <Tabs>
 <TabItem value="pip" label="pip">
@@ -178,14 +178,14 @@ pipenv install turbodocx-sdk
 </Tabs>
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```bash
 composer require turbodocx/sdk
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```bash
 go get github.com/TurboDocx/SDK/packages/go-sdk
@@ -198,7 +198,7 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 <Tabs>
 <TabItem value="maven" label="Maven">
@@ -243,14 +243,14 @@ import com.turbodocx.models.quote.*;
 ## Requirements {#requirements}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 - Node.js 18 or higher (native `fetch`)
 - TypeScript 4.7+ (optional, for type checking — declaration files are included)
 - Zero runtime dependencies — the SDK uses only Node built-ins
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - Python 3.9 or higher
 - `httpx` (installed automatically as a dependency)
@@ -258,7 +258,7 @@ import com.turbodocx.models.quote.*;
 - All SDK methods are `async` — call them from an `async def` (or wrap with `asyncio.run(...)` in synchronous contexts)
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - PHP 8.1 or higher
 - Composer 2.x
@@ -266,14 +266,14 @@ import com.turbodocx.models.quote.*;
 - A TurboDocx API key (`TDX-` prefix) — generate one in **Settings → API Keys**
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - Go 1.21 or higher
 - A TurboDocx API key (`TDX-` prefix)
 - All methods accept a `context.Context` — pass `context.Background()` for one-offs or your request context inside handlers
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 - Java 11 or higher
 - OkHttp 4.x (included transitively)
@@ -286,7 +286,7 @@ import com.turbodocx.models.quote.*;
 ## Configuration {#configuration}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs groupId="js-variant">
 <TabItem value="typescript" label="TypeScript" default>
@@ -324,7 +324,7 @@ The quote's **"Prepared by"** sender comes from your **org quote template** inst
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 import os
@@ -343,7 +343,7 @@ The quote's **"Prepared by"** sender comes from your **org quote template** inst
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 <Tabs>
 <TabItem value="manual" label="Manual Configuration" default>
@@ -384,7 +384,7 @@ The quote's **"Prepared by"** sender comes from your **org quote template** inst
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 import (
@@ -406,7 +406,7 @@ if err != nil {
 The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, every sender-resolving call — `CreateQuote`, `DuplicateQuote`, `SendQuote` / `SendQuoteWithDeliverable`, and `HandleExpiredQuote` — fails with a `ValidationError` (`400 SenderEmailRequired`) when the org's quote template has no sender email set. A companion `400 SenderNameRequired` is returned when no sender **name** resolves. Configure both **Sender Name** and **Sender Email** once (`UpdateTemplate`) and all of them resolve cleanly.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboQuoteClient;
@@ -430,7 +430,7 @@ The quote's **"Prepared by"** sender comes from your **org quote template** inst
 ### Environment Variables {#environment-variables}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_api_key_here
@@ -440,7 +440,7 @@ TURBODOCX_BASE_URL=https://api.turbodocx.com
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_api_key_here
@@ -450,7 +450,7 @@ TURBODOCX_BASE_URL=https://api.turbodocx.com
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_api_key_here
@@ -466,7 +466,7 @@ Both `apiKey` and `orgId` are needed for most API requests. To get your credenti
 ---
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_api_key
@@ -480,7 +480,7 @@ Both `APIKey` and `OrgID` are required. To get your credentials, follow the [Get
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_api_key
@@ -499,7 +499,7 @@ Both `apiKey` and `orgId` are required. To get your credentials, follow the [Get
 ## Quick Start {#quick-start}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 The most common flow: create a quote for a company and contact, add a product line item, then send it.
 
@@ -596,7 +596,7 @@ writeFileSync('quote.pdf', Buffer.from(pdf));
 ### 1. Create a company, quote, and add line items {#1-create-a-company-quote-and-add-line-items}
 
 <Tabs groupId="language" queryString>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboQuoteClient;
@@ -675,7 +675,7 @@ public class QuoteLifecycle {
 ### 2. Create and send in one call {#2-create-and-send-in-one-call}
 
 <Tabs groupId="language" queryString>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 `createAndSend` is a convenience method that creates the quote, adds line items and bundle items, and sends it atomically.
 
@@ -705,7 +705,7 @@ System.out.println("Quote created and sent: " + result.getQuote().getId());
 ### 3. Apply a price book, then send with a deliverable {#3-apply-a-price-book-then-send-with-a-deliverable}
 
 <Tabs groupId="language" queryString>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 // Apply a price book to recalculate line item prices
@@ -731,7 +731,7 @@ System.out.println("Document ID: " + sendResp.getDocumentId());
 ### Create a quote, add line items, send, and download the PDF / Full quote lifecycle: create → add items → send → download PDF / Full lifecycle: create → add items → send → download PDF {#create-a-quote-add-line-items-send-and-download-the-pdf}
 
 <Tabs groupId="language" queryString>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 import asyncio
@@ -797,7 +797,7 @@ asyncio.run(full_quote_lifecycle())
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 <?php
@@ -847,7 +847,7 @@ The above example omits error handling for brevity. In production, wrap all Turb
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 package main
@@ -928,7 +928,7 @@ func main() {
 ### Convenience: createAndSend / Convenience: create, add items, and send in one call / Convenience: CreateAndSend {#convenience-createandsend}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 `createAndSend` combines quote creation, line item addition, and sending into a single call.
 
@@ -951,7 +951,7 @@ console.log(quote.status); // "sent"
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 result = await TurboQuote.create_and_send({
@@ -976,7 +976,7 @@ print(f"Quote sent: {result['quote']['id']}")
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 <?php
@@ -1006,7 +1006,7 @@ echo "Quote sent: {$result->quote->id}\n";
 ---
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 `CreateAndSend` performs the create + add items + send flow in a single call (3-4 sequential API requests under the hood):
 
@@ -1042,29 +1042,29 @@ fmt.Printf("Quote %s sent\n", resp.Quote.QuoteNumber)
 ## Method Reference {#method-reference}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 All methods are static on the `TurboQuote` class. Configure once, then call on the class directly.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 All methods are `@classmethod`s on `TurboQuote`; configure once, then call on the class.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 All methods are static. Configure once with `TurboQuote::configure(...)`, then call on the class directly.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 All methods are instance methods on `*turbodocx.QuoteClient`. Construct once, then reuse across goroutines — the client is safe for concurrent use.
 
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 All methods are instance methods on `com.turbodocx.TurboQuote`. Obtain the instance via `client.turboQuote()` from a constructed `TurboQuoteClient`. All methods throw `IOException` and `TurboDocxException` subclasses.
 
@@ -1082,7 +1082,7 @@ All methods are instance methods on `com.turbodocx.TurboQuote`. Obtain the insta
 #### `listQuotes` / `list_quotes` / ListQuotes {#listquotes}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 List quotes with optional pagination and filters. Returns totals and pipeline stats alongside results.
 
@@ -1102,7 +1102,7 @@ for (const q of results) {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 page = await TurboQuote.list_quotes({
@@ -1118,7 +1118,7 @@ for q in page["results"]:
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Types\Requests\Quote\ListQuotesRequest;
@@ -1136,7 +1136,7 @@ foreach ($page->results as $q) {
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Retrieve a paginated list of quotes with optional filters. Returns `*QuoteListResponse` which includes `Results`, `TotalRecords`, and aggregate `Stats` (pipeline totals, win rate, MRR, etc.).
 
@@ -1167,7 +1167,7 @@ for _, q := range list.Results {
 | `CurrencyCode` | `*string` | Filter by currency |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 QuoteListResponse listQuotes()
@@ -1195,7 +1195,7 @@ list.getResults().forEach(q ->
 #### `createQuote` / `create_quote` / CreateQuote {#createquote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Create a new quote in `draft` status.
 
@@ -1231,7 +1231,7 @@ const subscription = await TurboQuote.createQuote({
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 # Fixed-term quote — termDays is -1 or 0–3650; omit it to get the default of 60.
@@ -1265,7 +1265,7 @@ subscription = await TurboQuote.create_quote({
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Types\Requests\Quote\CreateQuoteRequest;
@@ -1298,7 +1298,7 @@ $subscription = TurboQuote::createQuote(new CreateQuoteRequest(
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 // Fixed-term quote — TermDays is -1 or 0–3650; omit it to get the default of 60.
@@ -1331,7 +1331,7 @@ Required: `Name`, `CompanyID`, `ContactID`. Returns `*Quote`.
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote createQuote(CreateQuoteRequest request)
@@ -1376,7 +1376,7 @@ Quote subscription = tq.createQuote(subReq);
 #### `getQuote` / `get_quote` / GetQuote {#getquote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Fetch a single quote. The returned object includes a `statusInfo` field with transition flags (`canSend`, `canAccept`, `canDecline`, `canVoid`) and a `preparedBy` object — the resolved "Prepared by" identity shown on the quote PDF.
 
@@ -1391,7 +1391,7 @@ console.log(quote.preparedBy?.email);    // may be undefined for an API-created 
 `preparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `creator`** for any customer-facing display — `creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Returns the quote with `statusInfo` and `preparedBy` merged in when present. `preparedBy` is the resolved "Prepared by" identity shown on the quote PDF.
 
@@ -1406,7 +1406,7 @@ print(prepared.get("email"))  # may be absent for an API-created quote — rende
 `preparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `creator`** for any customer-facing display — `creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $quote = TurboQuote::getQuote('quote-uuid');
@@ -1421,7 +1421,7 @@ echo $prepared['email'] ?? '';  // may be absent for an API-created quote — re
 `preparedBy` is the resolved "Prepared by" identity (org template first, then the quote's creator). **Prefer it over `creator`** for any customer-facing display — `creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Fetches a quote by ID. The `StatusInfo` field (merged onto the returned `Quote`) describes what transitions are available: `CanSend`, `CanAccept`, `CanDecline`, `CanVoid`, `IsTerminal`. The `PreparedBy` field carries the resolved "Prepared by" identity shown on the quote PDF.
 
@@ -1438,7 +1438,7 @@ if quote.PreparedBy != nil && quote.PreparedBy.Name != nil {
 `PreparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `Creator`** for any customer-facing display — `Creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote getQuote(String id)
@@ -1466,7 +1466,7 @@ if (quote.getPreparedBy() != null) {
 #### `updateQuote` / `update_quote` / UpdateQuote {#updatequote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Patch any combination of quote fields. Pass `null` to clear nullable fields (`renewalPeriod`, `validUntil`, `taxRate`, `priceBookId`).
 
@@ -1482,7 +1482,7 @@ const updated = await TurboQuote.updateQuote('quote-uuid', {
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 All fields are optional — pass only what changes. Send an explicit `None` to clear a nullable field.
 
@@ -1499,7 +1499,7 @@ updated = await TurboQuote.update_quote("quote-uuid", {
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Types\Requests\Quote\UpdateQuoteRequest;
@@ -1515,7 +1515,7 @@ $quote = TurboQuote::updateQuote('quote-uuid', new UpdateQuoteRequest(
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 PATCH semantics — only provided fields are sent. Use the `Clear*` helpers to explicitly null a field:
 
@@ -1534,7 +1534,7 @@ Available null-clear helpers: `ClearPriceBookID`, `ClearValidUntil`, `ClearTaxRa
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote updateQuote(String id, UpdateQuoteRequest request)
@@ -1562,7 +1562,7 @@ Quote updated = tq.updateQuote(quoteId, req);
 #### `deleteQuote` / `delete_quote` / DeleteQuote {#deletequote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Soft-delete a quote.
 
@@ -1571,7 +1571,7 @@ const { message } = await TurboQuote.deleteQuote('quote-uuid');
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 result = await TurboQuote.delete_quote("quote-uuid")
@@ -1579,7 +1579,7 @@ result = await TurboQuote.delete_quote("quote-uuid")
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $result = TurboQuote::deleteQuote('quote-uuid');
@@ -1587,7 +1587,7 @@ echo $result->message;
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 result, err := qc.DeleteQuote(ctx, "quote-uuid")
@@ -1595,7 +1595,7 @@ result, err := qc.DeleteQuote(ctx, "quote-uuid")
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 SuccessResponse deleteQuote(String id)
@@ -1616,7 +1616,7 @@ System.out.println(resp.getMessage());
 #### `duplicateQuote` / `duplicate_quote` / DuplicateQuote {#duplicatequote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Copy a quote (and its line items) into a new draft.
 
@@ -1627,7 +1627,7 @@ const copy = await TurboQuote.duplicateQuote('quote-uuid');
 The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `updateQuote` before sending if that is not what you want signers to see.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 new_quote = await TurboQuote.duplicate_quote("quote-uuid")
@@ -1637,7 +1637,7 @@ new_quote = await TurboQuote.duplicate_quote("quote-uuid")
 The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `update_quote` before sending if that is not what you want signers to see.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $copy = TurboQuote::duplicateQuote('quote-uuid');
@@ -1647,7 +1647,7 @@ echo "Copy id: {$copy->id}";
 The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `updateQuote` before sending if that is not what you want signers to see.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Creates a new draft quote as a copy of the specified quote.
 
@@ -1658,7 +1658,7 @@ copy, err := qc.DuplicateQuote(ctx, "quote-uuid")
 The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `UpdateQuote` before sending if that is not what you want signers to see.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote duplicateQuote(String id)
@@ -1683,7 +1683,7 @@ The copy is attributed to **whoever ran the duplicate**, not to the original quo
 #### `applyPriceBook` / `apply_price_book` / ApplyPriceBook {#applypricebook}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Apply a price book to all line items on a quote. Returns the updated quote plus counts of how many items were updated vs skipped.
 
@@ -1695,7 +1695,7 @@ const { quote, updatedCount, skippedCount, message } = await TurboQuote.applyPri
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Apply a price book to an existing quote; updates matching line item prices.
 
@@ -1708,7 +1708,7 @@ result = await TurboQuote.apply_price_book("quote-uuid", "pricebook-uuid")
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Apply a price book to a quote, updating matching line item prices.
 
@@ -1721,7 +1721,7 @@ $result = TurboQuote::applyPriceBook('quote-uuid', 'pricebook-uuid');
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Applies a price book to a quote, adjusting line item prices to match book pricing.
 
@@ -1733,7 +1733,7 @@ resp, err := qc.ApplyPriceBook(ctx, "quote-uuid", "pricebook-uuid")
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 ApplyPriceBookResponse applyPriceBook(String quoteId, String priceBookId)
@@ -1754,7 +1754,7 @@ System.out.println("Updated " + resp.getUpdatedCount() + " items.");
 #### `removePriceBook` / `remove_price_book` / RemovePriceBook {#removepricebook}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Detach the price book from a quote (line item prices are not reverted).
 
@@ -1763,7 +1763,7 @@ const quote = await TurboQuote.removePriceBook('quote-uuid');
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 quote = await TurboQuote.remove_price_book("quote-uuid")
@@ -1772,14 +1772,14 @@ quote = await TurboQuote.remove_price_book("quote-uuid")
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $quote = TurboQuote::removePriceBook('quote-uuid');
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Removes the applied price book, reverting line items to catalog prices.
 
@@ -1790,7 +1790,7 @@ quote, err := qc.RemovePriceBook(ctx, "quote-uuid")
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote removePriceBook(String quoteId)
@@ -1810,7 +1810,7 @@ Quote quote = tq.removePriceBook(quoteId);
 #### `downloadQuotePdf` / `download_quote_pdf` / DownloadQuotePdf {#downloadquotepdf}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Download the quote as a PDF. Returns raw bytes as an `ArrayBuffer`.
 
@@ -1822,7 +1822,7 @@ writeFileSync('quote.pdf', Buffer.from(pdf));
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Returns raw PDF bytes.
 
@@ -1835,7 +1835,7 @@ with open("quote.pdf", "wb") as f:
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Returns raw PDF bytes. Save to disk or stream to the browser.
 
@@ -1850,7 +1850,7 @@ echo $pdfBytes;
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Returns the raw PDF bytes. Write directly to a file or stream to a response.
 
@@ -1865,7 +1865,7 @@ os.WriteFile("proposal.pdf", pdfBytes, 0644)
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 byte[] downloadQuotePdf(String id)
@@ -1892,7 +1892,7 @@ Customize the per-org quote number format: prefix, year/month tokens, separator,
 #### `getQuoteNumberConfig` / `get_quote_number_config` / GetQuoteNumberConfig {#getquotenumberconfig}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Fetch the org's current quote numbering format and the current per-period issued floor.
 
@@ -1903,7 +1903,7 @@ console.log(config.currentFloor);    // the current per-period issued floor
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Fetch the org's current quote numbering format and the current per-period issued floor.
 
@@ -1914,7 +1914,7 @@ print(config["currentFloor"])       # the current per-period issued floor
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Fetch the org's current quote numbering format and the current per-period issued floor.
 
@@ -1925,7 +1925,7 @@ echo $config->currentFloor;      // the current per-period issued floor
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Fetches the org's current quote numbering format and the current per-period issued floor.
 
@@ -1939,7 +1939,7 @@ fmt.Println(config.CurrentFloor)    // the current per-period issued floor
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 QuoteNumberConfig getQuoteNumberConfig()
@@ -1961,7 +1961,7 @@ System.out.println(config.getCurrentFloor());        // the current per-period i
 #### `updateQuoteNumberConfig` / `update_quote_number_config` / UpdateQuoteNumberConfig {#updatequotenumberconfig}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Update the numbering format. Pass the full format object; all eight fields are required.
 
@@ -1980,7 +1980,7 @@ console.log(config.format.startNumber);  // 1000
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Update the numbering format. Pass the full format object; all eight fields are required. Keys stay camelCase.
 
@@ -1999,7 +1999,7 @@ print(config["format"]["startNumber"])  # 1000
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Update the numbering format. All eight fields are sent.
 
@@ -2020,7 +2020,7 @@ echo $config->format->startNumber;  // 1000
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Updates the numbering format. Pass the full format; all eight fields are sent.
 
@@ -2042,7 +2042,7 @@ fmt.Println(config.Format.StartNumber)  // 1000
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 QuoteNumberConfig updateQuoteNumberConfig(QuoteNumberFormat format)
@@ -2071,7 +2071,7 @@ System.out.println(config.getFormat().getStartNumber());  // 1000
 #### Field reference, defaults & validation {#field-reference-defaults--validation}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 All eight `format` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
 
@@ -2099,7 +2099,7 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 All eight `format` keys are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
 
@@ -2127,7 +2127,7 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 All eight `QuoteNumberFormat` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
 
@@ -2153,7 +2153,7 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 `currentFloor` (returned by both methods) is read-only — the sequence the next quote will use for the current period — and is never sent on update.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 All eight `QuoteNumberFormat` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
 
@@ -2181,7 +2181,7 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 All eight `QuoteNumberFormat` fields are sent on every update. The API enforces these caps and allowed values — a violation returns `400`:
 
@@ -2216,7 +2216,7 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ### Quote Status Transitions / Quotes — Status Transitions {#quote-status-transitions}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 :::caution Send preconditions
 
@@ -2239,31 +2239,7 @@ handle-expired flow to void it and create a fresh draft.
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
-
-:::caution Send preconditions
-
-Both send methods share the same server-side checks. Each is rejected with **HTTP 400** and a
-specific error `code` before anything is created or emailed:
-
-| Condition | Code |
-| :--- | :--- |
-| Quote is not a draft | `QuoteNotSendable` |
-| No `validUntil` date set | `QuoteValidUntilRequired` |
-| `validUntil` is in the past | `QuoteExpired` |
-| No line items | `QuoteHasNoLineItems` |
-| Contact missing a name or email | `QuoteContactRequired` |
-| Company or contact deleted/deactivated | `QuoteCustomerInactive` |
-| No sender email resolvable (API-key callers) | `SenderEmailRequired` |
-
-A quote with **no line items cannot be sent** — add at least one product, bundle, or custom
-line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use the
-handle-expired flow to void it and create a fresh draft.
-
-:::
-
-</TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 :::caution Send preconditions
 
@@ -2287,7 +2263,7 @@ handle-expired flow to void it and create a fresh draft.
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 :::caution Send preconditions
 
@@ -2311,7 +2287,31 @@ handle-expired flow to void it and create a fresh draft.
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+:::caution Send preconditions
+
+Both send methods share the same server-side checks. Each is rejected with **HTTP 400** and a
+specific error `code` before anything is created or emailed:
+
+| Condition | Code |
+| :--- | :--- |
+| Quote is not a draft | `QuoteNotSendable` |
+| No `validUntil` date set | `QuoteValidUntilRequired` |
+| `validUntil` is in the past | `QuoteExpired` |
+| No line items | `QuoteHasNoLineItems` |
+| Contact missing a name or email | `QuoteContactRequired` |
+| Company or contact deleted/deactivated | `QuoteCustomerInactive` |
+| No sender email resolvable (API-key callers) | `SenderEmailRequired` |
+
+A quote with **no line items cannot be sent** — add at least one product, bundle, or custom
+line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use the
+handle-expired flow to void it and create a fresh draft.
+
+:::
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 :::caution Send preconditions
 
@@ -2342,7 +2342,7 @@ handle-expired flow to void it and create a fresh draft.
 #### `sendQuote` / `send_quote` / SendQuote {#sendquote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Send a draft quote to the contact. Optionally include CC recipients, set a validity deadline, or attach a **reminder & expiration schedule**.
 
@@ -2367,7 +2367,7 @@ For a quote, the signing deadline is **hard-pinned to the quote's `validUntil` d
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 sent = await TurboQuote.send_quote("quote-uuid", {
@@ -2378,7 +2378,7 @@ sent = await TurboQuote.send_quote("quote-uuid", {
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Types\Requests\Quote\SendQuoteRequest;
@@ -2391,7 +2391,7 @@ $result = TurboQuote::sendQuote('quote-uuid', new SendQuoteRequest(
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Moves the quote from `draft` to `sent` and emails the proposal to the contact.
 
@@ -2405,7 +2405,7 @@ sent, err := qc.SendQuote(ctx, "quote-uuid", &turbodocx.SendQuoteRequest{
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 SendQuoteResponse sendQuote(String id)
@@ -2427,7 +2427,7 @@ System.out.println("Status: " + resp.getQuote().getStatus());
 #### `sendQuoteWithDeliverable` / `send_quote_with_deliverable` / SendQuoteWithDeliverable {#sendquotewithdeliverable}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Send a quote paired with a TurboDocx deliverable (e.g., a contract generated from a template). The deliverable is merged before or after the quote PDF. It accepts the **same reminder & expiration schedule** as `sendQuote` (expiry pinned to `validUntil`, per the note above).
 
@@ -2449,7 +2449,7 @@ const { quote, message, documentId } = await TurboQuote.sendQuoteWithDeliverable
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Attach a TurboDocx-generated document to the sent quote.
 
@@ -2462,7 +2462,7 @@ result = await TurboQuote.send_quote_with_deliverable("quote-uuid", {
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Attach a Deliverable document (generated DOCX/PDF) alongside the quote.
 
@@ -2479,7 +2479,7 @@ $result = TurboQuote::sendQuoteWithDeliverable('quote-uuid', new SendQuoteWithDe
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Sends the quote with a TurboDocx-generated document (e.g., a proposal PDF) attached as a signature document.
 
@@ -2493,7 +2493,7 @@ resp, err := qc.SendQuoteWithDeliverable(ctx, "quote-uuid", &turbodocx.SendQuote
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 SendQuoteWithDeliverableResponse sendQuoteWithDeliverable(String id, SendQuoteWithDeliverableRequest request)
@@ -2520,7 +2520,7 @@ System.out.println("Document ID: " + resp.getDocumentId());
 #### Reminders and expiration when sending a quote / Reminders and expiration on quote sends / Reminders and expiration on send / Reminders and expiration on a quote send {#reminders-and-expiration-when-sending-a-quote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Both `send_quote` and `send_quote_with_deliverable` accept the same reminder/expiration schedule
 as TurboSign. Because these are quote request-body fields, the keys are **camelCase** (like
@@ -2549,7 +2549,7 @@ outlive the quote is rejected with `400`. Duration values are `{value, unit}` (`
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Both `sendQuote` and `sendQuoteWithDeliverable` accept the same TurboSign schedule fields as
 `TurboSign::sendSignature` — `remindersEnabled` / `reminderDelay` / `reminderInterval` /
@@ -2579,7 +2579,7 @@ window). The reminder and expiration-warning cadence still applies and **must fi
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Both `SendQuoteRequest` and `SendQuoteWithDeliverableRequest` embed a `SignatureSchedule` — the same eight reminder/expiration override fields used by TurboSign's [`SendSignature`](./go.md#schedule-reminders-and-expiration), with `Duration{Value, Unit}` durations (`Unit` is `"hours"` or `"days"`). This drives the reminder and expiry-warning cadence on the quote's signature request.
 
@@ -2601,7 +2601,7 @@ For a quote, the signing deadline is **hard-pinned to the quote's `ValidUntil`**
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 `sendQuote` and `sendQuoteWithDeliverable` accept the same `SignatureSchedule` as TurboSign (`remindersEnabled` / `reminderDelay` / `reminderInterval` / `maxReminders` and `expirationEnabled` / `expireAfter` / `expirationWarning` / `expirationWarningInterval`), with **one quote-specific difference**: the signing deadline is **hard-pinned to the quote's `validUntil` date**. When `expirationEnabled` is `true` the document expires exactly at `validUntil` — **any `expireAfter` you pass is ignored** — while `expirationEnabled` still toggles whether expiry is enforced at all. The reminder and warning cadence still applies, but every reminder and warning must fall **inside** the `validUntil` window; a cadence that would outlive it is rejected with `400`.
 
@@ -2631,7 +2631,7 @@ Each `Duration` is a `{value, unit}` pair (`unit` is `"hours"` or `"days"`, `val
 #### `declineQuote` / `decline_quote` / DeclineQuote {#declinequote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Mark a quote as declined — either a **sent** quote (typically on behalf of the recipient) or a **draft** whose deal died before it was ever sent.
 
@@ -2647,7 +2647,7 @@ const closedOut = await TurboQuote.declineQuote('draft-quote-uuid', {});
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.
 
@@ -2661,7 +2661,7 @@ closed_out = await TurboQuote.decline_quote("draft-quote-uuid", {})
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.
 
@@ -2677,7 +2677,7 @@ $closedOut = TurboQuote::declineQuote('draft-quote-uuid', new DeclineQuoteReques
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Declines a **sent** quote or a **draft**. `Reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason — a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored — an unset `Reason` is omitted from the request.
 
@@ -2691,7 +2691,7 @@ closedOut, err := qc.DeclineQuote(ctx, "draft-quote-uuid", &turbodocx.DeclineQuo
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote declineQuote(String id, DeclineQuoteRequest request)
@@ -2719,7 +2719,7 @@ Quote closedOut = tq.declineQuote(draftQuoteId, new DeclineQuoteRequest());
 #### `voidQuote` / `void_quote` / VoidQuote {#voidquote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Void a **sent** quote that should no longer be valid; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
@@ -2730,7 +2730,7 @@ const quote = await TurboQuote.voidQuote('quote-uuid', {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
@@ -2741,7 +2741,7 @@ quote = await TurboQuote.void_quote("quote-uuid", {
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
@@ -2754,7 +2754,7 @@ $quote = TurboQuote::voidQuote('quote-uuid', new VoidQuoteRequest(
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
 
@@ -2765,7 +2765,7 @@ quote, err := qc.VoidQuote(ctx, "quote-uuid", &turbodocx.VoidQuoteRequest{
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote voidQuote(String id, VoidQuoteRequest request)
@@ -2788,7 +2788,7 @@ Quote voided = tq.voidQuote(quoteId, req);
 #### `handleExpiredQuote` / `handle_expired_quote` / HandleExpiredQuote {#handleexpiredquote}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Handle a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate draft carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
 
@@ -2813,7 +2813,7 @@ Unlike `duplicateQuote`, the draft this endpoint creates is **not** prefixed wit
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Handles a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
 
@@ -2842,7 +2842,7 @@ Unlike `duplicate_quote`, the draft this endpoint creates is **not** prefixed wi
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Handles a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `action` — and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
 
@@ -2871,7 +2871,7 @@ Unlike `duplicateQuote`, the draft this endpoint creates is **not** prefixed wit
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Handles a `sent` quote that has passed its `validUntil` date. The endpoint **closes out the original quote** — voiding or declining it depending on `Action` — and then **creates a duplicate carrying `NewValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
 
@@ -2894,7 +2894,7 @@ Unlike `DuplicateQuote`, the draft this endpoint creates is **not** prefixed wit
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 Quote handleExpiredQuote(String id, HandleExpiredQuoteRequest request)
@@ -2937,12 +2937,12 @@ Unlike `duplicateQuote`, the draft this endpoint creates is **not** prefixed wit
 ### Line Items {#line-items}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Line items attach products or bundles to a quote, each with a price, quantity, billing frequency, and optional discount.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Line items belong to a quote. Products are added individually; bundles use a separate endpoint.
 
@@ -2954,7 +2954,7 @@ Line items belong to a quote. Products are added individually; bundles use a sep
 #### `listLineItems` / `list_line_items` / ListLineItems {#listlineitems}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 const { results, totalRecords } = await TurboQuote.listLineItems('quote-uuid', {
@@ -2964,7 +2964,7 @@ const { results, totalRecords } = await TurboQuote.listLineItems('quote-uuid', {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 page = await TurboQuote.list_line_items("quote-uuid", {"limit": 50})
@@ -2972,7 +2972,7 @@ page = await TurboQuote.list_line_items("quote-uuid", {"limit": 50})
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Types\Requests\Quote\ListLineItemsRequest;
@@ -2986,7 +2986,7 @@ foreach ($page->results as $item) {
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 lineItemType := "product"
@@ -2998,7 +2998,7 @@ list, err := qc.ListLineItems(ctx, "quote-uuid", &turbodocx.ListLineItemsOptions
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 LineItemListResponse listLineItems(String quoteId)
@@ -3021,7 +3021,7 @@ items.getResults().forEach(i ->
 #### `addLineItems` / `add_line_items` / AddLineItems {#addlineitems}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Add one or more product line items. Pass a single object or an array of up to **50** items.
 
@@ -3052,7 +3052,7 @@ await TurboQuote.addLineItems('quote-uuid', [
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Accepts a single item dict **or** a list of up to **50** items. Returns a list of created `LineItem` dicts.
 
@@ -3082,7 +3082,7 @@ items = await TurboQuote.add_line_items("quote-uuid", [
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Pass a single `AddLineItemRequest` or an array of up to **50** of them.
 
@@ -3114,7 +3114,7 @@ $items = TurboQuote::addLineItems('quote-uuid', [
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Accepts one or more `AddLineItemRequest` values (variadic), up to **50** per call. Returns `[]LineItem`.
 
@@ -3147,7 +3147,7 @@ items, err := qc.AddLineItems(ctx, "quote-uuid",
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 List<LineItem> addLineItems(String quoteId, AddLineItemRequest item)
@@ -3188,7 +3188,7 @@ List<LineItem> added = tq.addLineItems(quoteId, Arrays.asList(item, custom));
 #### `addBundleLineItems` / `add_bundle_line_items` / AddBundleLineItems {#addbundlelineitems}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Add one or more bundle line items.
 
@@ -3202,7 +3202,7 @@ await TurboQuote.addBundleLineItems('quote-uuid', {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 `bundleId` and `bundleName` are both **required**; the server expands the bundle's child products for you. Accepts a single dict or a list of up to **50** items.
 
@@ -3217,7 +3217,7 @@ items = await TurboQuote.add_bundle_line_items("quote-uuid", [
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Pass a single `AddBundleLineItemRequest` or an array of them.
 
@@ -3239,7 +3239,7 @@ $items = TurboQuote::addBundleLineItems('quote-uuid', [
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 items, err := qc.AddBundleLineItems(ctx, "quote-uuid",
@@ -3251,7 +3251,7 @@ items, err := qc.AddBundleLineItems(ctx, "quote-uuid",
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 List<LineItem> addBundleLineItems(String quoteId, AddBundleLineItemRequest item)
@@ -3277,7 +3277,7 @@ List<LineItem> added = tq.addBundleLineItems(quoteId, bundleItem);
 #### `updateLineItem` / `update_line_item` / UpdateLineItem {#updatelineitem}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Update a single line item's price, quantity, discount, or billing frequency.
 
@@ -3290,7 +3290,7 @@ const updated = await TurboQuote.updateLineItem('quote-uuid', 'item-uuid', {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 item = await TurboQuote.update_line_item("quote-uuid", "item-uuid", {
@@ -3300,7 +3300,7 @@ item = await TurboQuote.update_line_item("quote-uuid", "item-uuid", {
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Types\Requests\Quote\UpdateLineItemRequest;
@@ -3312,7 +3312,7 @@ $item = TurboQuote::updateLineItem('quote-uuid', 'item-uuid', new UpdateLineItem
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 PATCH semantics. Use `Clear*` helpers for explicit nulls: `ClearCost`, `ClearCategoryID`, `ClearCategoryName`, `ClearProductSku`, `ClearProductDescription`, `ClearDisplayOrder`.
 
@@ -3324,7 +3324,7 @@ item, err := qc.UpdateLineItem(ctx, "quote-uuid", "item-uuid", &turbodocx.Update
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 LineItem updateLineItem(String quoteId, String itemId, UpdateLineItemRequest request)
@@ -3348,7 +3348,7 @@ LineItem updated = tq.updateLineItem(quoteId, itemId, req);
 #### `removeLineItem` / `remove_line_item` / RemoveLineItem {#removelineitem}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Remove a line item from a quote.
 
@@ -3359,7 +3359,7 @@ const { message } = await TurboQuote.removeLineItem('quote-uuid', 'item-uuid');
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 result = await TurboQuote.remove_line_item("quote-uuid", "item-uuid")
@@ -3369,7 +3369,7 @@ result = await TurboQuote.remove_line_item("quote-uuid", "item-uuid")
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $result = TurboQuote::removeLineItem('quote-uuid', 'item-uuid');
@@ -3377,7 +3377,7 @@ echo $result->message;
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 result, err := qc.RemoveLineItem(ctx, "quote-uuid", "item-uuid")
@@ -3386,7 +3386,7 @@ result, err := qc.RemoveLineItem(ctx, "quote-uuid", "item-uuid")
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 SuccessResponse removeLineItem(String quoteId, String itemId)
@@ -3406,7 +3406,7 @@ tq.removeLineItem(quoteId, itemId);
 ### Products {#products}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Manage your product catalog. Products can include images (uploaded as multipart form data — the SDK detects the MIME type from magic bytes automatically).
 
@@ -3447,7 +3447,7 @@ const images = await TurboQuote.getProductPrimaryImages(['p-uuid-1', 'p-uuid-2']
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -3499,7 +3499,7 @@ images = await TurboQuote.get_product_primary_images(["id-1", "id-2", "id-3"])
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -3537,12 +3537,12 @@ When `CreateProductRequest` or `UpdateProductRequest` includes an `images` key (
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 The product catalog powers line item selection in quotes.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -3607,7 +3607,7 @@ When `CreateProductRequest.getImages()` is non-empty, the SDK automatically swit
 #### ListProducts {#listproducts}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 list, err := qc.ListProducts(ctx, &turbodocx.ListProductsOptions{
@@ -3624,7 +3624,7 @@ list, err := qc.ListProducts(ctx, &turbodocx.ListProductsOptions{
 #### CreateProduct {#createproduct}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 price := 99.99
@@ -3656,7 +3656,7 @@ product, err := qc.CreateProduct(ctx, &turbodocx.CreateProductRequest{
 #### GetProduct / DeleteProduct / DuplicateProduct {#getproduct--deleteproduct--duplicateproduct}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 product, err := qc.GetProduct(ctx, "product-uuid")
@@ -3670,7 +3670,7 @@ copy,    err := qc.DuplicateProduct(ctx, "product-uuid")
 #### UpdateProduct {#updateproduct}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 PATCH semantics with `Clear*` helpers: `ClearCost`, `ClearSku`, `ClearDescription`, `ClearDetailedSpecification`, `ClearInternalNotes`. Supports image uploads via `Images`.
 
@@ -3687,7 +3687,7 @@ product, err := qc.UpdateProduct(ctx, "product-uuid", &turbodocx.UpdateProductRe
 #### GetProductPrimaryImages {#getproductprimaryimages}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Returns a `ProductPrimaryImagesResponse` (`map[string]*ProductImage`) keyed by product ID.
 
@@ -3706,7 +3706,7 @@ if img, ok := images["product-uuid-1"]; ok && img != nil {
 ### Bundles {#bundles}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Bundles group multiple products into a single purchasable unit with optional bundle-level discounts.
 
@@ -3736,7 +3736,7 @@ const bundle = await TurboQuote.createBundle({
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -3773,7 +3773,7 @@ bundle = await TurboQuote.create_bundle({
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -3812,7 +3812,7 @@ $copy = TurboQuote::duplicateBundle($bundle->id);
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Bundles group products into a single sellable unit.
 
@@ -3868,7 +3868,7 @@ list, err := qc.ListBundles(ctx, &turbodocx.ListBundlesOptions{
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -3935,7 +3935,7 @@ Bundle bundle = tq.createBundle(req);
 ### Price Books {#price-books}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Price books let you define alternative pricing tiers. When a price book is applied to a quote, matching product line items are repriced automatically.
 
@@ -3973,7 +3973,7 @@ const { updatedCount, skippedCount } = await TurboQuote.applyPriceBook(
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4008,7 +4008,7 @@ page = await TurboQuote.list_price_book_products("pricebook-uuid", {"limit": 50}
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4035,7 +4035,7 @@ $products = TurboQuote::listPriceBookProducts($pb->id);
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Price books apply per-product discounts or fixed prices to quotes in bulk.
 
@@ -4092,7 +4092,7 @@ products, err := qc.ListPriceBookProducts(ctx, "pricebook-uuid", &turbodocx.List
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4134,7 +4134,7 @@ System.out.println("Products: " + pbProducts.getTotalRecords());
 ### Companies {#companies}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Companies represent the buyer organisations your quotes are addressed to. Each company must have at least one contact.
 
@@ -4165,7 +4165,7 @@ const { results: contacts } = await TurboQuote.listCompanyContacts(company.id);
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4196,7 +4196,7 @@ contacts = await TurboQuote.list_company_contacts(company["id"])
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4222,7 +4222,7 @@ $contacts = TurboQuote::listCompanyContacts($company->id);
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Companies are organizations you send quotes to. Each company must have at least one contact.
 
@@ -4270,7 +4270,7 @@ contacts, err := qc.ListCompanyContacts(ctx, "company-uuid", &turbodocx.Paginati
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4307,7 +4307,7 @@ String contactId = contacts.getResults().get(0).getId();
 ### Contacts {#contacts}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Contacts belong to a company and are the individuals a quote is addressed to.
 
@@ -4336,7 +4336,7 @@ const { results } = await TurboQuote.listContacts({ companyId: 'company-uuid' })
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4361,7 +4361,7 @@ contact = await TurboQuote.create_contact({
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4385,7 +4385,7 @@ $contact = TurboQuote::createContact(new CreateContactRequest(
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Contacts are individuals at a company. A quote is addressed to a specific contact.
 
@@ -4420,7 +4420,7 @@ There is no `GetContact(id)` — the backend has no `GET /v1/contacts/:id` endpo
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4449,7 +4449,7 @@ Contact contact = tq.createContact(req);
 ### Quote Templates {#quote-templates}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Quote templates control the visual presentation of the sent quote (logo, brand colours, disclaimer, terms, sender info). There is one active template per org, accessible via `getTemplate()`. You can also manage named templates.
 
@@ -4495,7 +4495,7 @@ const branded = await TurboQuote.updateTemplate(tmpl.id, {
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4533,7 +4533,7 @@ other = await TurboQuote.get_template_by_id("template-uuid")
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4576,7 +4576,7 @@ $templates = TurboQuote::listTemplates();
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Quote templates control the branding and layout of sent quote emails and the customer-facing quote page (logo, colors, footer text, terms, sender info).
 
@@ -4590,7 +4590,7 @@ The correct flow is **`GetTemplate` → `UpdateTemplate`**.
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4641,7 +4641,7 @@ QuoteTemplateListResponse templates = tq.listTemplates();
 #### GetTemplate {#gettemplate}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Returns the active (default) quote template for the org, creating one from org branding if none exists. Use this for the most common case.
 
@@ -4656,7 +4656,7 @@ fmt.Printf("Primary color: %s\n", tmpl.PrimaryColor)
 #### GetTemplateByID {#gettemplatebyid}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Retrieves a specific template by ID when you have multiple templates.
 
@@ -4670,7 +4670,7 @@ tmpl, err := qc.GetTemplateByID(ctx, "template-uuid")
 #### ListTemplates / UpdateTemplate / DeleteTemplate {#listtemplates--updatetemplate--deletetemplate}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Brand the org's template by fetching it and updating it in place — never by creating one.
 
@@ -4706,7 +4706,7 @@ result, err := qc.DeleteTemplate(ctx, tmpl.ID)
 ### Types (Categories) / Types / Categories {#types-categories}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Types are reusable category/classification values used across products, bundles, price books, and companies (e.g., industry tags, price book types).
 
@@ -4736,7 +4736,7 @@ const { results } = await TurboQuote.listTypes({
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4758,7 +4758,7 @@ await TurboQuote.update_type(quote_type["id"], {"name": "New Logo Business"})
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4783,7 +4783,7 @@ $type = TurboQuote::createType(new CreateQuoteTypeRequest(
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Types are shared category records used by products, bundles, price books, and companies. A single `CategoryType` field distinguishes their role.
 
@@ -4823,7 +4823,7 @@ There is no `GetType(id)` — the backend has no `GET /v1/types/:id` endpoint. U
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Method | Signature | Returns |
 |---|---|---|
@@ -4854,7 +4854,7 @@ There is no `getType(id)` method — the backend has no `GET /v1/types/:id` endp
 ### Bulk Imports {#bulk-imports}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Every create-family entity has a matching `bulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with an array of rows using the **same shape as that entity's single-create request** (e.g. `bulkCreateProducts` takes `CreateProductRequest[]`). Company rows require a `contacts` array with at least one contact; contact rows require a `companyId`.
 
@@ -4905,7 +4905,7 @@ The other five bulk methods follow the exact same pattern:
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Every create-family entity has a matching `bulk_create_*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with a list of row dicts using the **same shape as that entity's single-create request** — keys stay camelCase, even in Python. Company rows require a `contacts` list with at least one contact; contact rows require a `companyId`.
 
@@ -4957,7 +4957,7 @@ The other five bulk methods follow the exact same pattern:
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Every create-family entity has a matching `bulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with an array of the **same typed request objects as that entity's single-create method** (e.g. `bulkCreateProducts` takes an array of `CreateProductRequest`). Company rows require a `contacts` array with at least one contact; contact rows require a `companyId`.
 
@@ -5031,7 +5031,7 @@ The other five bulk methods follow the exact same pattern:
 | `bulkCreateTypes` | `CreateQuoteTypeRequest[]` | `BulkImportResult` |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Every create-family entity has a matching `BulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with a slice of rows using the **same request type as that entity's single-create method** (e.g. `BulkCreateProducts` takes `[]CreateProductRequest`). Company rows require a `Contacts` slice with at least one contact; contact rows require a `CompanyID`.
 
@@ -5114,7 +5114,7 @@ The other five bulk methods follow the exact same pattern — `(ctx, rows)` in, 
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Every create-family entity has a matching `bulkCreate*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with a list of the **same request objects as that entity's single-create method** (e.g. `bulkCreateProducts` takes `List<CreateProductRequest>`). Company rows require a `contacts` list with at least one contact; contact rows require a `companyId`.
 
@@ -5132,7 +5132,7 @@ Requests are capped at **500 rows** — anything above the cap returns a `400`. 
 #### `bulkCreateProducts` {#bulkcreateproducts}
 
 <Tabs groupId="language" queryString>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 BulkImportResult bulkCreateProducts(List<CreateProductRequest> rows)
@@ -5205,7 +5205,7 @@ The other five bulk methods follow the exact same pattern:
 ## Enums and Constants {#enums-and-constants}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 | Type | Values |
 |---|---|
@@ -5230,7 +5230,7 @@ The other five bulk methods follow the exact same pattern:
 ## Null-Clear Semantics (PATCH) {#null-clear-semantics-patch}
 
 <Tabs groupId="language" queryString>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Go's zero value is indistinguishable from "not set" at the JSON level, so `UpdateQuoteRequest` and related PATCH request types use a private `nullFields` map to track fields the caller explicitly wants to set to `null`. Call the `Clear*` method on the request before passing it:
 
@@ -5269,7 +5269,7 @@ Types with `Clear*` helpers:
 #### `create_and_send` / `createAndSend` {#create_and_send}
 
 <Tabs groupId="language" queryString>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Orchestrates multiple API calls: create quote → add product items → add bundle items → send. Returns `{"quote": <sent Quote>}`.
 
@@ -5300,7 +5300,7 @@ print(result["quote"]["id"])
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Creates a quote, optionally adds line items and bundle items, then sends it — all in a single call.
 
@@ -5340,7 +5340,7 @@ echo "Sent quote: {$result->quote->id}\n";
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 CreateAndSendResponse createAndSend(CreateAndSendRequest request)
@@ -5375,7 +5375,7 @@ System.out.println("Quote: " + result.getQuote().getId());
 ## TypeScript Types {#typescript-types}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Key types exported from `@turbodocx/sdk`:
 
@@ -5440,7 +5440,7 @@ import type {
 ### Key Enum Values {#key-enum-values}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 | Type | Values |
 |---|---|
@@ -5463,7 +5463,7 @@ import type {
 ## Error Handling {#error-handling}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 import {
@@ -5508,7 +5508,7 @@ try {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 from turbodocx_sdk import (
@@ -5552,7 +5552,7 @@ except TurboDocxError as e:
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Exceptions\TurboDocxException;
@@ -5594,7 +5594,7 @@ try {
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 import "errors"
@@ -5632,7 +5632,7 @@ if err != nil {
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxException;
@@ -5672,7 +5672,7 @@ try {
 ### Common Error Codes / Error Code Reference / Error Types {#common-error-codes}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 | Status | Class | When |
 |---|---|---|
@@ -5685,7 +5685,7 @@ try {
 ---
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Status | Class | When |
 |---|---|---|
@@ -5699,7 +5699,7 @@ try {
 ---
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Status | Exception | When |
 |---|---|---|
@@ -5713,7 +5713,7 @@ try {
 ---
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 | Status | Type | When |
 |---|---|---|
@@ -5727,7 +5727,7 @@ try {
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Status | Type | When |
 |---|---|---|
@@ -5745,7 +5745,7 @@ try {
 ## Runnable Examples / Runnable End-to-End Examples {#runnable-examples}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Validated end-to-end examples live in the SDK repo:
 
@@ -5764,7 +5764,7 @@ npx tsx examples/turboquote-basic.ts
 ---
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Three fully runnable examples live in the SDK repo:
 
@@ -5780,7 +5780,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 ## See Also {#see-also}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 - [TurboSign JavaScript SDK](/docs/SDKs/javascript) — send documents for e-signature
 - [TurboWebhooks JavaScript SDK](/docs/SDKs/webhooks?language=js) — receive real-time signature events
@@ -5790,7 +5790,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - [TurboQuote JavaScript / TypeScript SDK](/docs/SDKs/quote?language=js) — same API, JS idioms
 - [TurboSign Python SDK](/docs/SDKs/python) — send documents for e-signature
@@ -5801,7 +5801,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - [TurboQuote Python SDK](/docs/SDKs/quote?language=python) — same surface in Python
 - [TurboSign PHP SDK](/docs/SDKs/php) — sending documents for signature from PHP
@@ -5812,7 +5812,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - [TurboQuote JavaScript / TypeScript SDK](/docs/SDKs/quote?language=js) — same API, JS/TS idioms
 - [TurboQuote Python SDK](/docs/SDKs/quote?language=python) — same API, Python idioms
@@ -5823,7 +5823,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 - [TurboQuote JavaScript / TypeScript SDK](/docs/SDKs/quote?language=js) — same API, JS idioms
 - [TurboQuote Python SDK](/docs/SDKs/quote?language=python) — same API, Python idioms

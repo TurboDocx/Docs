@@ -67,27 +67,27 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 <QuickstartSkillNudge command="/turbodocx-sdk turbowebhooks" product="TurboWebhooks" />
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 The official TurboDocx Webhooks SDK for Node.js applications (Express, Fastify, Next.js API routes, AWS Lambda, etc.). Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Node 18+. Available on npm as `@turbodocx/sdk` (same package as TurboSign).
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The official TurboDocx Webhooks SDK for Python applications (Flask, FastAPI, Django, AWS Lambda, etc.). Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Python 3.9+. Distributed on PyPI as `turbodocx-sdk` (same package as TurboSign).
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 The official TurboDocx Webhooks SDK for PHP applications. Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from PHP 8.1+. Available on Packagist as `turbodocx/sdk` (same package as TurboSign).
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 The official TurboDocx Webhooks SDK for Go applications (net/http, Gin, Echo, Chi, AWS Lambda, etc.). Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Go 1.21+. Distributed as `github.com/TurboDocx/SDK/packages/go-sdk` (same module as TurboSign).
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 The official TurboDocx Webhooks SDK for Java applications (Spring Boot, Servlet, Jakarta EE, etc.). Subscribe a single per-organization HTTPS endpoint to TurboDocx signature events, verify inbound signatures with HMAC-SHA256, replay delivery attempts, and rotate secrets — all from Java 11+. Distributed as `com.turbodocx:turbodocx-sdk` on Maven Central (same artifact as TurboSign).
 
@@ -105,7 +105,7 @@ For the full conceptual overview of how webhooks work in TurboSign (delivery ret
 ## Installation {#installation}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs>
 <TabItem value="npm" label="npm">
@@ -132,7 +132,7 @@ yarn add @turbodocx/sdk
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 <Tabs>
 <TabItem value="pip" label="pip">
@@ -159,14 +159,14 @@ pipenv install turbodocx-sdk
 </Tabs>
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```bash
 composer require turbodocx/sdk
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```bash
 go get github.com/TurboDocx/SDK/packages/go-sdk
@@ -179,7 +179,7 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 <Tabs>
 <TabItem value="maven" label="Maven">
@@ -224,35 +224,35 @@ import com.turbodocx.WebhookSignatureVerifier;
 ## Requirements {#requirements}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 - Node.js 18 or higher (native `fetch` + `crypto.timingSafeEqual`)
 - An **administrator** TurboDocx API key (the webhook routes are gated on the administrator role — non-admin keys return HTTP 403)
 - Zero runtime dependencies — the SDK only uses Node built-ins
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - Python 3.9 or higher
 - An **administrator** TurboDocx API key (the webhook routes are gated on the administrator role — non-admin keys return HTTP 403)
 - All SDK methods are `async` — call them from an `async def` (or wrap with `asyncio.run(...)` in synchronous contexts)
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - PHP 8.1 or higher
 - Composer 2.x
 - An **administrator** TurboDocx API key (the webhook routes are gated on the administrator role — non-admin keys return HTTP 403)
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - Go 1.21 or higher
 - An **administrator** TurboDocx API key (the webhook routes are gated on the administrator role — non-admin keys return HTTP 403)
 - All client methods accept a `context.Context` — pass `context.Background()` for one-offs or the request context inside handlers
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 - Java 11 or higher
 - An **administrator** TurboDocx API key (the webhook routes are gated on the administrator role — non-admin keys return HTTP 403)
@@ -264,7 +264,7 @@ import com.turbodocx.WebhookSignatureVerifier;
 ## Configuration {#configuration}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 import { TurboWebhooks } from '@turbodocx/sdk';
@@ -278,7 +278,7 @@ TurboWebhooks.configure({
 `skipSenderValidation: true` is hardcoded inside `TurboWebhooks.configure()` because webhooks don't send email — only TurboSign needs `senderEmail`. If you skip the explicit call, the SDK lazily configures itself from `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID` on first method invocation.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 import os
@@ -293,7 +293,7 @@ TurboWebhooks.configure(
 `skip_sender_validation=True` is hardcoded inside `TurboWebhooks.configure()` because webhooks don't send email — only TurboSign needs `sender_email`. If you skip the explicit call, the SDK lazily configures itself from `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID` on first method invocation.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 <?php
@@ -332,7 +332,7 @@ TurboWebhooks::configure(new HttpClientConfig(
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 import (
@@ -352,7 +352,7 @@ if err != nil {
 `NewWebhooksClientWithConfig` does **not** require `SenderEmail` — webhook routes don't send email, so the sender validation that `NewClientWithConfig` enforces for TurboSign is skipped here. If `APIKey`, `OrgID`, or `BaseURL` are blank, the SDK falls back to `TURBODOCX_API_KEY`, `TURBODOCX_ORG_ID`, and `TURBODOCX_BASE_URL`.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxClient;
@@ -376,7 +376,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 ### Environment Variables {#environment-variables}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_admin_api_key
@@ -392,7 +392,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_admin_api_key
@@ -408,7 +408,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_admin_api_key
@@ -424,7 +424,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_admin_api_key
@@ -440,7 +440,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```bash
 TURBODOCX_API_KEY=your_admin_api_key
@@ -461,7 +461,7 @@ TurboWebhooks endpoints require the **administrator** role on the API key. A val
 ## Webhook Events {#webhook-events}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 TurboSign dispatches **seven** events. Subscribe to any subset — `events` requires at least one.
 
@@ -489,7 +489,7 @@ See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload sche
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 TurboSign dispatches **seven** events. Subscribe to any subset — `events` requires at least one.
 
@@ -517,7 +517,7 @@ See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload sche
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 TurboSign dispatches **seven** events. Subscribe to any subset — `events` requires at least one.
 
@@ -545,7 +545,7 @@ See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload sche
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 TurboSign dispatches **seven** events. Subscribe to any subset — `Events` requires at least one.
 
@@ -573,7 +573,7 @@ See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload sche
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 TurboSign dispatches **seven** events. Subscribe to any subset — the events list requires at least one.
 
@@ -606,7 +606,7 @@ See [TurboSign → Webhooks](/docs/TurboSign/Webhooks) for the full payload sche
 ### Event constants {#event-constants}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 The SDK exports the events as first-class symbols, so a typo is a compile error rather than a webhook that silently never fires.
 
@@ -647,7 +647,7 @@ Nothing was narrowed. `events` still accepts plain strings, so existing code kee
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The SDK exports the events as module-level constants, so a typo is caught at import time (and by your type checker) rather than becoming a webhook that silently never fires.
 
@@ -693,7 +693,7 @@ Nothing was narrowed. `events` still accepts plain strings (`"signature.document
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 The events ship as a native PHP 8.1 **backed enum**, `TurboDocx\Types\Enums\WebhookEvent`. `createWebhook` takes wire strings, so pass `->value` (or one of the helpers below).
 
@@ -733,7 +733,7 @@ Nothing was narrowed. `createWebhook(events: [...])` still takes plain strings, 
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 The SDK exports the events as a typed `turbodocx.WebhookEvent` string type, plus `turbodocx.AllWebhookEvents` (a `[]WebhookEvent` holding all 7 in lifecycle order).
 
@@ -775,7 +775,7 @@ Nothing was narrowed. `Events` is still `[]string`, so existing code that passes
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 The events ship as the `com.turbodocx.WebhookEvent` enum. `createWebhook` takes a `List<String>` of wire strings, so pass `getValue()` (or `allValues()`).
 
@@ -830,7 +830,7 @@ Every delivery posts this envelope:
 ```
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 :::warning Dispatch on `event`, not `eventType`
 
@@ -845,7 +845,7 @@ the stored delivery-history rows those return. Those are not the delivered envel
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 :::warning Dispatch on `event`, not `eventType`
 
@@ -860,7 +860,7 @@ the stored delivery-history rows those return. Those are not the delivered envel
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 :::warning Dispatch on `event`, not `eventType`
 
@@ -875,7 +875,7 @@ the stored delivery-history rows those return. Those are not the delivered envel
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 :::warning Dispatch on `event`, not `eventType`
 
@@ -890,7 +890,7 @@ the stored delivery-history rows those return. Those are not the delivered envel
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 :::warning Dispatch on `event`, not `eventType`
 
@@ -912,7 +912,7 @@ the stored delivery-history rows those return. Those are not the delivered envel
 ### 1. Create the signature webhook {#1-create-the-signature-webhook}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 import {
@@ -963,7 +963,7 @@ TurboDocx rejects non-HTTPS webhook URLs with HTTP 400. For local development, e
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 import asyncio
@@ -1021,7 +1021,7 @@ TurboDocx rejects non-HTTPS webhook URLs with HTTP 400. For local development, e
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 <?php
@@ -1068,7 +1068,7 @@ TurboDocx rejects non-HTTPS webhook URLs with HTTP 400. For local development, e
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 package main
@@ -1136,7 +1136,7 @@ TurboDocx rejects non-HTTPS webhook URLs with HTTP 400. For local development, e
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxClient;
@@ -1195,7 +1195,7 @@ TurboDocx rejects non-HTTPS webhook URLs with HTTP 400. For local development, e
 ### 2. Verify inbound webhook signatures {#2-verify-inbound-webhook-signatures}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 When TurboDocx POSTs to your receiver, every request carries an `X-TurboDocx-Signature` header. Verify it before trusting the payload — the helper enforces a 300-second timestamp tolerance and uses `crypto.timingSafeEqual` for constant-time comparison.
 
@@ -1243,7 +1243,7 @@ The signature contract:
 | Comparison | `crypto.timingSafeEqual` (constant-time) |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 When TurboDocx POSTs to your receiver, every request carries an `X-TurboDocx-Signature` header. Verify it before trusting the payload — the helper enforces a 300-second timestamp tolerance and uses `hmac.compare_digest` for constant-time comparison.
 
@@ -1322,7 +1322,7 @@ The signature contract:
 | Comparison | `hmac.compare_digest` (constant-time) |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 When TurboDocx POSTs to your receiver, every request carries an `X-TurboDocx-Signature` header. Verify it before trusting the payload — the helper enforces a 300-second timestamp tolerance and uses constant-time comparison.
 
@@ -1363,7 +1363,7 @@ The signature contract:
 | Comparison | `hash_equals` (constant-time) |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 When TurboDocx POSTs to your receiver, every request carries an `X-TurboDocx-Signature` header. Verify it before trusting the payload — the helper enforces a 300-second timestamp tolerance and uses `hmac.Equal` for constant-time comparison.
 
@@ -1519,7 +1519,7 @@ The signature contract:
 | Comparison | `hmac.Equal` (constant-time) |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 When TurboDocx POSTs to your receiver, every request carries an `X-TurboDocx-Signature` header. Verify it before trusting the payload — the helper enforces a 300-second timestamp tolerance and uses `MessageDigest.isEqual` for constant-time comparison.
 
@@ -1663,27 +1663,27 @@ The signature contract:
 ## Method Reference {#method-reference}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 All methods are static; configure once, then call on the `TurboWebhooks` class.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 All methods are `@classmethod`s on `TurboWebhooks`; configure once, then call on the class.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 All methods are static; configure once, then call on the `TurboWebhooks` class.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 All methods are instance methods on `*turbodocx.WebhooksClient`. Construct once, then reuse.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 All methods are instance methods on `com.turbodocx.TurboWebhooks`. Construct once via `new TurboDocxClient.Builder()...buildWebhooksClient()` and reuse.
 
@@ -1695,7 +1695,7 @@ All methods are instance methods on `com.turbodocx.TurboWebhooks`. Construct onc
 ### createWebhook / create_webhook / CreateWebhook {#createwebhook}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Subscribe the org to events. Returns `{id, secret}` — the **secret is shown once**.
 
@@ -1723,7 +1723,7 @@ const created = await TurboWebhooks.createWebhook({
 | `AuthorizationError` (403) | API key lacks the administrator role. |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Subscribe the org to events. Returns a dict with `id` and `secret` — the **secret is shown once**.
 
@@ -1757,7 +1757,7 @@ created = await TurboWebhooks.create_webhook(
 | `AuthorizationError` (403) | API key lacks the administrator role. |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Subscribe the org to events. Returns `{id, secret}` — the **secret is shown once**.
 
@@ -1785,7 +1785,7 @@ $created = TurboWebhooks::createWebhook(
 | `AuthorizationException` (403) | API key lacks the administrator role. |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Subscribe the org to events. Returns `*CreateWebhookResponse` with `ID` and `Secret` — the **secret is shown once**.
 
@@ -1812,7 +1812,7 @@ created, err := wh.CreateWebhook(ctx, turbodocx.CreateWebhookRequest{
 | `*AuthorizationError` (403) | API key lacks the administrator role. |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Subscribe the org to events. Returns a `JsonObject` with `id` and `secret` — the **secret is shown once**.
 
@@ -1849,7 +1849,7 @@ The URL list accepts **1 to 10** HTTPS URLs. The events list requires **at least
 ### getWebhook / get_webhook / GetWebhook {#getwebhook}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Get the org's signature webhook plus delivery statistics.
 
@@ -1861,7 +1861,7 @@ const webhook = await TurboWebhooks.getWebhook();
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Get the org's signature webhook plus delivery statistics.
 
@@ -1873,7 +1873,7 @@ webhook = await TurboWebhooks.get_webhook()
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Get the org's signature webhook plus delivery statistics.
 
@@ -1888,7 +1888,7 @@ $webhook = TurboWebhooks::getWebhook();
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Get the org's signature webhook plus delivery statistics. Returns `map[string]interface{}` so new fields surface without an SDK upgrade.
 
@@ -1900,7 +1900,7 @@ webhook, err := wh.GetWebhook(ctx)
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Get the org's signature webhook plus delivery statistics.
 
@@ -1920,7 +1920,7 @@ JsonObject webhook = webhooks.getWebhook();
 ### updateWebhook / update_webhook / UpdateWebhook {#updatewebhook}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Patch one or more fields. All fields are optional — pass only what changes.
 
@@ -1940,7 +1940,7 @@ await TurboWebhooks.updateWebhook({ isActive: false });
 :::
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Patch one or more fields. All fields are keyword-only and optional — pass only what changes.
 
@@ -1960,7 +1960,7 @@ await TurboWebhooks.update_webhook(is_active=False)
 :::
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Patch one or more fields. All parameters are optional — pass only what changes.
 
@@ -1980,7 +1980,7 @@ TurboWebhooks::updateWebhook(isActive: false);
 :::
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Patch one or more fields. Leave any field at its zero value to skip it. Use `turbodocx.BoolPtr(false)` to toggle `IsActive`.
 
@@ -2005,7 +2005,7 @@ updated, err = wh.UpdateWebhook(ctx, turbodocx.UpdateWebhookRequest{
 :::
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Patch one or more fields. Pass `null` for any argument you don't want to change. Renaming is not supported.
 
@@ -2037,35 +2037,35 @@ JsonObject deactivated = webhooks.updateWebhook(null, null, Boolean.FALSE);
 Soft-delete the webhook and its delivery history.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 await TurboWebhooks.deleteWebhook();
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 await TurboWebhooks.delete_webhook()
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 TurboWebhooks::deleteWebhook();
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 _, err := wh.DeleteWebhook(ctx)
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 JsonObject deleted = webhooks.deleteWebhook();
@@ -2081,7 +2081,7 @@ JsonObject deleted = webhooks.deleteWebhook();
 Fire a synthetic delivery to every URL configured on the webhook. Useful for CI smoke tests before flipping a new receiver into production.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 const result = await TurboWebhooks.testWebhook({
@@ -2096,7 +2096,7 @@ for (const err of result.summary.errors) {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 result = await TurboWebhooks.test_webhook(
@@ -2110,7 +2110,7 @@ for err in result["summary"].get("errors", []):
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $result = TurboWebhooks::testWebhook(
@@ -2125,7 +2125,7 @@ foreach ($result['summary']['errors'] as $err) {
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 result, err := wh.TestWebhook(ctx, turbodocx.TestWebhookRequest{
@@ -2149,7 +2149,7 @@ if errs, ok := summary["errors"].([]interface{}); ok {
 `NotifyWebhook` is also exposed for symmetry with the backend surface — it routes through the same handler and returns the same shape. Prefer `TestWebhook` in new code.
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import java.util.LinkedHashMap;
@@ -2179,7 +2179,7 @@ if (summary.has("errors") && summary.get("errors").isJsonArray()) {
 ### notifyWebhook / notify_webhook {#notifywebhook}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Manually send a notification to all URLs configured on the webhook. Routes through the same backend handler as `testWebhook` and returns an identical response shape. Exposed for symmetry with the backend surface; prefer `testWebhook` in new code.
 
@@ -2196,7 +2196,7 @@ for (const err of result.summary.errors) {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Manually send a notification to every URL configured on the webhook. Routes through the same backend handler as `test_webhook` and returns an identical response shape. Exposed for symmetry with the backend surface; prefer `test_webhook` in new code.
 
@@ -2212,7 +2212,7 @@ for err in result["summary"].get("errors", []):
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Send a manual notification. Routes through the same backend handler as `testWebhook` and returns the same shape — the only wire-level difference is the response message string.
 
@@ -2237,7 +2237,7 @@ $result = TurboWebhooks::notifyWebhook(
 Rotate the HMAC secret. The new secret is shown **once**; old signatures fail immediately after rotation.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 const rotated = await TurboWebhooks.regenerateWebhookSecret();
@@ -2246,7 +2246,7 @@ const rotated = await TurboWebhooks.regenerateWebhookSecret();
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 rotated = await TurboWebhooks.regenerate_webhook_secret()
@@ -2255,7 +2255,7 @@ rotated = await TurboWebhooks.regenerate_webhook_secret()
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $rotated = TurboWebhooks::regenerateWebhookSecret();
@@ -2264,7 +2264,7 @@ $rotated = TurboWebhooks::regenerateWebhookSecret();
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 rotated, err := wh.RegenerateWebhookSecret(ctx)
@@ -2273,7 +2273,7 @@ newSecret := rotated["secret"]
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 JsonObject rotated = webhooks.regenerateWebhookSecret();
@@ -2289,7 +2289,7 @@ String newSecret = rotated.get("secret").getAsString();
 ### listWebhookDeliveries / list_webhook_deliveries / ListWebhookDeliveries {#listwebhookdeliveries}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Page through historical delivery attempts with filters.
 
@@ -2306,7 +2306,7 @@ const page = await TurboWebhooks.listWebhookDeliveries({
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Page through historical delivery attempts with filters.
 
@@ -2323,7 +2323,7 @@ page = await TurboWebhooks.list_webhook_deliveries(
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Page through historical delivery attempts with filters.
 
@@ -2340,7 +2340,7 @@ $page = TurboWebhooks::listWebhookDeliveries(
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Page through historical delivery attempts with filters. `Limit`, `Offset`, `IsDelivered`, and `HTTPStatus` are pointers, so leave them nil to skip. `EventType` is a plain `string`; leave it empty to skip.
 
@@ -2359,7 +2359,7 @@ page, err := wh.ListWebhookDeliveries(ctx, turbodocx.ListDeliveriesRequest{
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Page through historical delivery attempts with filters. Pass `null` for any filter to skip it; the no-arg overload skips all filters.
 
@@ -2385,7 +2385,7 @@ JsonObject page = webhooks.listWebhookDeliveries(
 Manually retry a past delivery by ID. Returns a freshly-created delivery row.
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 const replay = await TurboWebhooks.replayWebhookDelivery('delivery-uuid-here');
@@ -2393,7 +2393,7 @@ const replay = await TurboWebhooks.replayWebhookDelivery('delivery-uuid-here');
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 replay = await TurboWebhooks.replay_webhook_delivery("delivery-uuid-here")
@@ -2401,7 +2401,7 @@ replay = await TurboWebhooks.replay_webhook_delivery("delivery-uuid-here")
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 $replay = TurboWebhooks::replayWebhookDelivery('delivery-uuid-here');
@@ -2409,7 +2409,7 @@ $replay = TurboWebhooks::replayWebhookDelivery('delivery-uuid-here');
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 replayed, err := wh.ReplayWebhookDelivery(ctx, "delivery-uuid-here")
@@ -2417,7 +2417,7 @@ replayed, err := wh.ReplayWebhookDelivery(ctx, "delivery-uuid-here")
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 JsonObject replayed = webhooks.replayWebhookDelivery("delivery-uuid-here");
@@ -2432,7 +2432,7 @@ JsonObject replayed = webhooks.replayWebhookDelivery("delivery-uuid-here");
 ### getWebhookStats / get_webhook_stats / GetWebhookStats {#getwebhookstats}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Aggregate delivery stats over a sliding window.
 
@@ -2444,7 +2444,7 @@ const stats = await TurboWebhooks.getWebhookStats({ days: 30 });
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Aggregate delivery stats over a sliding window.
 
@@ -2456,7 +2456,7 @@ stats = await TurboWebhooks.get_webhook_stats(days=30)
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Aggregate delivery stats over a sliding window.
 
@@ -2468,7 +2468,7 @@ $stats = TurboWebhooks::getWebhookStats(days: 30);
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Aggregate delivery stats over a sliding window. Pass `0` for the backend default (30 days).
 
@@ -2480,7 +2480,7 @@ stats, err := wh.GetWebhookStats(ctx, 30)
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Aggregate delivery stats over a sliding window. Pass `null` for the backend default (30 days).
 
@@ -2500,7 +2500,7 @@ JsonObject stats = webhooks.getWebhookStats(30);
 ### verifyWebhookSignature (free function) / verify_webhook_signature (free function) / VerifyWebhookSignature (free function) / WebhookSignatureVerifier.verify (static utility) {#verifywebhooksignature-free-function}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 Verify the `X-TurboDocx-Signature` header on an incoming request. Exported directly from `@turbodocx/sdk` and does **not** require `TurboWebhooks.configure()` — receivers commonly run in a different process (or different deploy) than the management code.
 
@@ -2517,7 +2517,7 @@ const ok = verifyWebhookSignature(
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 Verify the `X-TurboDocx-Signature` header on an incoming request. Exported directly from `turbodocx_sdk` and does **not** require `TurboWebhooks.configure()` — receivers commonly run in a different process (or different deploy) than the management code.
 
@@ -2534,7 +2534,7 @@ ok = verify_webhook_signature(
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Verify the `X-TurboDocx-Signature` header on an incoming request. Lives in the `TurboDocx\Utils` namespace and does **not** require `TurboWebhooks::configure()` — receivers commonly run in a different process than the management code.
 
@@ -2551,7 +2551,7 @@ $ok = verifyWebhookSignature(
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Verify the `X-TurboDocx-Signature` header on an incoming request. Exported directly from the package and does **not** require a `WebhooksClient` — receivers commonly run in a different process (or different deploy) than the management code.
 
@@ -2568,7 +2568,7 @@ ok := turbodocx.VerifyWebhookSignature(
 Pass `&turbodocx.VerifyWebhookSignatureOptions{ToleranceSeconds: 60}` to tighten the window, or `ToleranceSeconds: -1` to disable the timestamp check entirely (NOT recommended in production).
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 Verify the `X-TurboDocx-Signature` header on an incoming request. Exposed as a static method on a final utility class — Java has no free functions, but the helper has no `apiKey` / `orgId` dependency, so it can be called from a receiver that runs in a completely different process (or deploy) than the management code.
 
@@ -2589,7 +2589,7 @@ A `String` body overload is provided for convenience (`verify(String rawBody, ..
 ## Laravel Integration Example {#laravel-integration-example}
 
 <Tabs groupId="language" queryString>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 Set up TurboWebhooks once in a service provider and add a controller for the receiver.
 
@@ -2667,7 +2667,7 @@ Route::post('/webhooks/turbodocx', [WebhookController::class, 'handle']);
 ## Framework Examples {#framework-examples}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 <Tabs>
 <TabItem value="express" label="Express">
@@ -2783,7 +2783,7 @@ app.listen({ port: 3000 });
 </Tabs>
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 <Tabs>
 <TabItem value="flask" label="Flask">
@@ -2934,7 +2934,7 @@ def turbodocx_webhook(request):
 ## Error Handling {#error-handling}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
 import {
@@ -2975,7 +2975,7 @@ try {
 ```
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
 from turbodocx_sdk import (
@@ -3018,7 +3018,7 @@ except TurboDocxError as e:
 ```
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
 use TurboDocx\Exceptions\TurboDocxException;
@@ -3053,7 +3053,7 @@ try {
 ```
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
 import "errors"
@@ -3092,7 +3092,7 @@ if err != nil {
 ```
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
 import com.turbodocx.TurboDocxException;
@@ -3125,7 +3125,7 @@ try {
 ### Common Error Codes {#common-error-codes}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 | Status | Class | When |
 |---|---|---|
@@ -3137,7 +3137,7 @@ try {
 | 429 | `RateLimitError` | Rate limit exceeded — back off |
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 | Status | Class | When |
 |---|---|---|
@@ -3149,7 +3149,7 @@ try {
 | 429 | `RateLimitError` | Rate limit exceeded — back off |
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 | Status | Exception | When |
 |---|---|---|
@@ -3161,7 +3161,7 @@ try {
 | 429 | `RateLimitException` | Rate limit exceeded — back off |
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 | Status | Type | When |
 |---|---|---|
@@ -3173,7 +3173,7 @@ try {
 | 429 | `*RateLimitError` | Rate limit exceeded — back off |
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 | Status | Type | When |
 |---|---|---|
@@ -3192,35 +3192,35 @@ try {
 A complete, validated CRUD walkthrough lives in the SDK repo:
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 **[`packages/js-sdk/examples/turbowebhooks-crud.ts`](https://github.com/TurboDocx/SDK/blob/main/packages/js-sdk/examples/turbowebhooks-crud.ts)**
 
 It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 409) against a live backend. Run with `npx tsx examples/turbowebhooks-crud.ts` after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`. Override `TURBODOCX_RECEIVER_URL` to point at a real receiver (e.g. webhook.site, ngrok).
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 **[`packages/py-sdk/examples/turbowebhooks_crud.py`](https://github.com/TurboDocx/SDK/blob/main/packages/py-sdk/examples/turbowebhooks_crud.py)**
 
 It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 409) against a live backend. Run with `python examples/turbowebhooks_crud.py` after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`. Override `TURBODOCX_RECEIVER_URL` to point at a real receiver (e.g. webhook.site, ngrok).
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 **[`packages/php-sdk/examples/turbowebhooks-crud.php`](https://github.com/TurboDocx/SDK/blob/main/packages/php-sdk/examples/turbowebhooks-crud.php)**
 
 It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 409) against a live backend.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 **[`packages/go-sdk/examples/turbowebhooks_crud.go`](https://github.com/TurboDocx/SDK/blob/main/packages/go-sdk/examples/turbowebhooks_crud.go)**
 
 It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 409) against a live backend. Run with `go run examples/turbowebhooks_crud.go` after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`. Override `TURBODOCX_RECEIVER_URL` to point at a real receiver (e.g. webhook.site, ngrok).
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 **[`packages/java-sdk/examples/TurboWebhooksCrud.java`](https://github.com/TurboDocx/SDK/blob/main/packages/java-sdk/examples/TurboWebhooksCrud.java)**
 
@@ -3232,7 +3232,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 ## Gotchas {#gotchas}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 - **One webhook per org.** Every method targets the fixed-name `signature` webhook. Creating it twice returns `ConflictError` (409). To manage multiple webhooks per org, call the REST API directly.
 - **Save the secret immediately.** `createWebhook` and `regenerateWebhookSecret` return the HMAC secret **once**. There is no endpoint to retrieve it later. If you lose it, rotate.
@@ -3245,7 +3245,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`WEBHOOK_EVENTS` is `readonly`.** It's declared `as const`, so spread it (`events: [...WEBHOOK_EVENTS]`) rather than passing it directly into the mutable `events: WebhookEvent[]` field.
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - **One webhook per org.** Every method targets the fixed-name `signature` webhook. Creating it twice raises `ConflictError` (409). To manage multiple webhooks per org, call the REST API directly.
 - **Save the secret immediately.** `create_webhook` and `regenerate_webhook_secret` return the HMAC secret **once**. There is no endpoint to retrieve it later. If you lose it, rotate.
@@ -3258,7 +3258,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **The event constants are singular, the collection is plural.** `WEBHOOK_EVENT_COMPLETED` (one event) vs `WEBHOOK_EVENTS` (a **tuple** of all 7) — easy to typo. Wrap it with `list(...)` when passing it as `events`.
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - **One webhook per org.** Every method targets the fixed-name `signature` webhook. Creating it twice returns `ConflictException` (409). To manage multiple webhooks per org, call the REST API directly.
 - **Save the secret immediately.** `createWebhook` and `regenerateWebhookSecret` return the HMAC secret **once**. There is no endpoint to retrieve it later. If you lose it, rotate.
@@ -3272,7 +3272,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **Use `WebhookEvent::tryFrom()` in receivers, not `from()`.** `from()` throws a `ValueError` on an event string the enum doesn't know — a new backend event would crash your receiver. `tryFrom()` returns `null` instead.
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - **One webhook per org.** Every method targets the fixed-name `signature` webhook. Creating it twice returns `*ConflictError` (409). To manage multiple webhooks per org, call the REST API directly.
 - **Save the secret immediately.** `CreateWebhook` and `RegenerateWebhookSecret` return the HMAC secret **once**. There is no endpoint to retrieve it later. If you lose it, rotate.
@@ -3285,7 +3285,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - **`signature.document.signed` is partial progress, not completion.** It never fires on the final signature, and a single-signer document never emits it at all. Use `turbodocx.WebhookEventCompleted` to detect a finished document. See [Webhook Events](#webhook-events).
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 - **One webhook per org.** Every method targets the fixed-name `signature` webhook. Creating it twice throws `TurboDocxException.ConflictException` (409). To manage multiple webhooks per org, call the REST API directly.
 - **Save the secret immediately.** `createWebhook` and `regenerateWebhookSecret` return the HMAC secret **once**. There is no endpoint to retrieve it later. If you lose it, rotate.
@@ -3305,7 +3305,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 ## See Also {#see-also}
 
 <Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript">
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php) — same API, PHP idioms
@@ -3315,7 +3315,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 
 </TabItem>
-<TabItem value="python" label="Python">
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
 - [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js) — same API, JS idioms
@@ -3326,7 +3326,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 
 </TabItem>
-<TabItem value="php" label="PHP">
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
 - [TurboSign PHP SDK](/docs/SDKs/php) — sending documents for signature
@@ -3335,7 +3335,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
 
 </TabItem>
-<TabItem value="go" label="Go">
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
 - [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js) — same API, JS idioms
@@ -3346,7 +3346,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
 
 </TabItem>
-<TabItem value="java" label="Java">
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
 - [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js) — same API, JS idioms
