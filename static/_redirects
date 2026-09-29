@@ -1,0 +1,17 @@
+# SDK pages merged into one page per product with language tabs (CR: SDK docs merge).
+# Fragments (#anchor) are preserved by browsers across a 301.
+/docs/SDKs/deliverable-javascript /docs/SDKs/deliverable?language=js 301
+/docs/SDKs/deliverable-python /docs/SDKs/deliverable?language=python 301
+/docs/SDKs/deliverable-php /docs/SDKs/deliverable?language=php 301
+/docs/SDKs/deliverable-go /docs/SDKs/deliverable?language=go 301
+/docs/SDKs/deliverable-java /docs/SDKs/deliverable?language=java 301
+/docs/SDKs/quote-javascript /docs/SDKs/quote?language=js 301
+/docs/SDKs/quote-python /docs/SDKs/quote?language=python 301
+/docs/SDKs/quote-php /docs/SDKs/quote?language=php 301
+/docs/SDKs/quote-go /docs/SDKs/quote?language=go 301
+/docs/SDKs/quote-java /docs/SDKs/quote?language=java 301
+/docs/SDKs/webhooks-javascript /docs/SDKs/webhooks?language=js 301
+/docs/SDKs/webhooks-python /docs/SDKs/webhooks?language=python 301
+/docs/SDKs/webhooks-php /docs/SDKs/webhooks?language=php 301
+/docs/SDKs/webhooks-go /docs/SDKs/webhooks?language=go 301
+/docs/SDKs/webhooks-java /docs/SDKs/webhooks?language=java 301

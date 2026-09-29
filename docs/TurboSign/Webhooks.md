@@ -408,11 +408,11 @@ Each webhook request includes these headers:
 
 Our SDKs include built-in webhook verification. The snippets below show the minimum receiver code; for the full SDK reference (createWebhook, updateWebhook, testWebhook, listWebhookDeliveries, replayWebhookDelivery, rotateSecret, framework integration patterns, and gotchas), see the dedicated TurboWebhooks SDK pages:
 
-- [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks-javascript)
-- [TurboWebhooks Python SDK](/docs/SDKs/webhooks-python)
-- [TurboWebhooks PHP SDK](/docs/SDKs/webhooks-php)
-- [TurboWebhooks Go SDK](/docs/SDKs/webhooks-go)
-- [TurboWebhooks Java SDK](/docs/SDKs/webhooks-java)
+- [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js)
+- [TurboWebhooks Python SDK](/docs/SDKs/webhooks?language=python)
+- [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php)
+- [TurboWebhooks Go SDK](/docs/SDKs/webhooks?language=go)
+- [TurboWebhooks Java SDK](/docs/SDKs/webhooks?language=java)
 
 Here are examples for each language:
 
