@@ -132,9 +132,9 @@ Keep in mind that these are delegated permissions, which means TurboDocx can acc
 
 ![Alt text](/img/sharepoint_and_onedrive/GetSiteName.png)
 
-### Step 4: Login to your TurboDocx Tenant and go to Tenant Settings
+### Step 4: Login to your TurboDocx Tenant and go to Features and integrations
 
-1. As an admin within your TurboDocx tenant, navigate to the settings tab on the left-hand side-nav and click "Tenant Settings" in the top right corner. 
+1. As an admin within your TurboDocx tenant, click your account avatar at the bottom of the left sidebar, click "Settings", then click "Features and integrations" in the Settings menu. 
 
 2. If Hide SharePoint in the UI is selected, unselect this to get the SharePoint configuration button.
 

@@ -20,7 +20,7 @@ This guide walks you through setting up a custom quote number for your organizat
 
 By the end of this guide, you will have:
 
-- ⚙️ **Opened the Quote Settings** for your organization
+- ⚙️ **Opened Quote numbering** in your organization Settings
 - 🔤 **Built a quote number format** with a prefix, year, month, and digit padding
 - 🔢 **Set the starting number** and chosen when the count resets
 - 👀 **Previewed** the next quote number live
@@ -42,13 +42,13 @@ From anywhere in TurboDocx, open the user menu in the top-right of the left side
 
 <br/>
 
-## Step 2: Open the Quote Settings tab
+## Step 2: Open Quote numbering
 
-The Settings page has a row of tabs across the top. The quote number options live on the **Quote Settings** tab.
+The Settings page has a menu down its left side, grouped into sections. The quote number options live on the **Quote numbering** page, under **Quotes**.
 
-**Instruction:** Click the **Quote Settings** tab.
+**Instruction:** In the left menu, click **Quote numbering**.
 
-![Settings tabs with the Quote Settings tab highlighted](/img/quote-numbering/02-quote-settings-tab.png)
+![Settings menu with Quote numbering under Quotes highlighted](/img/quote-numbering/02-quote-numbering-link.png)
 
 <br/>
 
@@ -92,7 +92,7 @@ As you change the format, the **Preview · Next Quote Number** box updates insta
 
 **Instruction:** Read the **Preview** to confirm the next quote number looks the way you want.
 
-![The live preview showing the next quote number Q-2026-07-00001 highlighted](/img/quote-numbering/05-live-preview.png)
+![The live preview showing the next quote number QT-2026-00001 highlighted](/img/quote-numbering/05-live-preview.png)
 
 <br/>
 

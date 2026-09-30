@@ -87,12 +87,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'Integrations/Zapier',
-          label: 'Zapier',
-          className: 'integration-zapier',
-        },
-        {
-          type: 'doc',
           id: 'Integrations/Zoom',
           label: 'Zoom',
           className: 'integration-zoom',

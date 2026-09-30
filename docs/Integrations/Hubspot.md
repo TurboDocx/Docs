@@ -275,36 +275,33 @@ Now we'll connect your shiny new HubSpot app to TurboDocx. This is like introduc
 
 ### Navigate to TurboDocx Settings
 
-1. **Go to your TurboDocx dashboard**
-   - Log in if you haven't already
+1. **Open the account menu**
+   - Click your **account avatar** at the bottom of the left sidebar
 
-![TurboDocx Dashboard](/img/hubspot-integration/settings-link.png)
+![Left sidebar with the account avatar highlighted](/img/hubspot-integration/open-account-menu.png)
 
 <br/>
 
 2. **Click on "Settings"**
-   - Look for the gear icon or "Settings" text
-   - Usually in the top menu or sidebar
+   - It's in the menu that opens above your avatar
 
-![TurboDocx Dashboard](/img/hubspot-integration/settings-link.png)
+![Account menu with the Settings item highlighted](/img/hubspot-integration/settings-link.png)
 
 <br/>
 
-3. **Click on "Organization Settings"**
-   - This might be in a dropdown or separate tab
-   - If you can't find it, try looking for "Integrations" or "Connected Apps"
+3. **Click on "Features and integrations"**
+   - It's in the menu on the left of the Settings page
 
-![Organization Settings](/img/hubspot-integration/org-settings.png)
+![Settings menu with Features and integrations highlighted](/img/hubspot-integration/features-and-integrations.png)
 
 <br/>
 
 ### Configure HubSpot Integration
 
-4. **Find the HubSpot section**
-   - Look for the HubSpot logo or "HubSpot Integration"
-   - It might be in a list with other integrations
+4. **Find the HubSpot card**
+   - Look for the HubSpot logo under the integrations
 
-![HubSpot Section](/img/hubspot-integration/select-configure-hubspot.png)
+![HubSpot card highlighted on the Features and integrations page](/img/hubspot-integration/select-configure-hubspot.png)
 
 <br/>
 

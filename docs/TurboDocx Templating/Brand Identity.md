@@ -36,7 +36,7 @@ If you just want to get up and running quickly, jump to the [Quick Start](#quick
 **Goal**: Get your brand colors and basic styling applied across all documents quickly.
 
 ### Step 1: Access Brand Settings
-1. Go to **Organization Settings** → **Formatting Settings**  
+1. Go to **Settings** → **Branding and formatting** (under **Documents**)  
 2. You'll see the Brand Identity interface with upload, controls, and preview areas
 
 ### Step 2: Upload Your Logo
@@ -93,8 +93,8 @@ Brand Identity configuration includes:
 
 ### Accessing Brand Identity Settings
 
-1. Navigate to your organization settings
-2. Select **Formatting Settings** from the configuration menu
+1. Click your account avatar, then click **Settings**
+2. In the menu on the left, select **Branding and formatting** (under **Documents**)
 3. You'll see the Brand Identity configuration interface with three main areas:
    - Logo upload section (top)
    - Configuration controls (left side)
