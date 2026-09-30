@@ -44,7 +44,7 @@ Under **Default method**, choose how the passcode reaches signers by default:
 The default method is used for every recipient unless you allow senders to change it.
 
 <!-- RECAPTURE: screenshot of the Default method dropdown (open, showing None / Email / SMS) with the field highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) to match the other screenshots. -->
-![The Default method dropdown with None, Email, and SMS options](/img/how-to-configure-otp/otp-01-default-method.png)
+<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Default method dropdown with None, Email, and SMS options](/img/how-to-configure-otp/otp-01-default-method.png) -->
 
 To let senders pick a different channel per recipient, turn on **Let senders choose per recipient**. When it is off, every request uses the default method above; when it is on, senders can change the method for each recipient. This applies to the email channel too, so it is not tied to your SMS plan.
 
@@ -57,7 +57,7 @@ Email passcodes work on every plan and need no setup. If **Email** is your defau
 To let signers verify by text message, turn on **Allow SMS as an alternative to email** under **Text message (SMS)**. Senders can then choose SMS instead of email for a recipient. Each signer verifies by one method, not both, and SMS may incur usage charges.
 
 <!-- RECAPTURE: screenshot of the Text message (SMS) section with the "Allow SMS as an alternative to email" toggle highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-![The Text message SMS section with the Allow SMS as an alternative to email toggle highlighted](/img/how-to-configure-otp/otp-02-allow-sms.png)
+<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Text message SMS section with the Allow SMS as an alternative to email toggle highlighted](/img/how-to-configure-otp/otp-02-allow-sms.png) -->
 
 :::note SMS is plan-gated
 SMS verification is available on **Pro and Enterprise plans**. If your plan does not include it, this section shows an **Upgrade to unlock SMS verification** card instead of the toggle.
@@ -77,12 +77,12 @@ TurboSign sends SMS passcodes through **your own** SMS account, so passcodes are
 4. Click **Save SMS provider**.
 
 <!-- RECAPTURE: screenshot of the SMS provider credential form (Provider = Twilio) with the Save SMS provider button highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-![The SMS provider form with the provider, from number, credential fields, and Save SMS provider button](/img/how-to-configure-otp/otp-03-sms-provider-form.png)
+<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The SMS provider form with the provider, from number, credential fields, and Save SMS provider button](/img/how-to-configure-otp/otp-03-sms-provider-form.png) -->
 
 After you save credentials, click **Verify connection** to confirm your account can send messages (this is a free check and sends no text), then use **Send a test message** to send a real passcode-style text to a number you control and confirm end-to-end delivery.
 
 <!-- RECAPTURE: screenshot of the "Send a test message" area with the Test number field and Send test message button highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-![The Send a test message field with the Send test message button highlighted](/img/how-to-configure-otp/otp-04-sms-test-message.png)
+<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Send a test message field with the Send test message button highlighted](/img/how-to-configure-otp/otp-04-sms-test-message.png) -->
 
 :::caution Use a production provider account
 SMS passcodes use a custom message body, which **trial accounts** (for example a Twilio trial) block. Use a paid, production provider account. Sending to US numbers also requires **A2P 10DLC registration** on your provider account - TurboSign links to your provider's registration flow next to the credential fields.
@@ -102,7 +102,7 @@ Delivery-failure alerts email an admin when a one-time passcode cannot be delive
 - **Specific addresses** - enter the exact addresses that should be alerted (for example `ops@example.com`), one chip per address.
 
 <!-- RECAPTURE: screenshot of the Delivery failure alerts section with the "Send alerts to" selector highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-![The Delivery failure alerts section with the Send alerts to selector highlighted](/img/how-to-configure-otp/otp-05-delivery-failure-alerts.png)
+<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Delivery failure alerts section with the Send alerts to selector highlighted](/img/how-to-configure-otp/otp-05-delivery-failure-alerts.png) -->
 
 ## What the signer sees
 
