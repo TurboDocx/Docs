@@ -215,7 +215,7 @@ User-Agent: TurboDocx API Client
 | ------------------- | -------------- | ------------- | ------------------------------------------ |
 | file                | File           | Conditional\* | PDF, DOCX, or PPTX file to upload          |
 | deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
-| templateId          | String (UUID)  | Conditional\* | Reference to existing template             |
+| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx%20Templating/API%20Templates#pdf-signature-templates)) |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
@@ -234,6 +234,8 @@ User-Agent: TurboDocx API Client
 | expirationWarningInterval | String (JSON) | No       | Gap between warnings once they start       |
 
 \* **File Source**: Must provide exactly ONE of: file, deliverableId, templateId, or fileLink
+
+A PDF template is sent exactly as uploaded. The request's `recipients` and `fields` are what's used — a signature setup saved on the template in the TurboDocx app is not applied to API sends.
 
 :::tip Reminders & expiration are optional
 The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
