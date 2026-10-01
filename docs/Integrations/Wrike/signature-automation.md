@@ -120,6 +120,12 @@ Change the anchor tag to match the placeholder in your template (e.g., `{SalesSi
 The anchor tag you set here **must exactly match** the corresponding variable in your document template. If they don't match, TurboSign won't be able to place the signature field. See [How to Add Signature Anchors](./signature-anchors.md) for how to configure these in your template.
 :::
 
+**Optional: choose the alignment.** Under the anchor tag, **Alignment** sets where the signer's entry sits on the anchor: **Left**, **Center**, or **Right**. Pick **Left** when the anchor follows a label (like "Master's signature:") so every name starts at the same point. If you skip it, the field keeps its standard placement. Checkbox fields don't have this option.
+
+![A signature field mapping card with the Alignment options highlighted](/img/wrike-integration/SigAuto-FieldAlignment.png)
+
+On the last step of the wizard, the field mappings table shows your choice in its **Alignment** column (**Default** when you didn't pick one).
+
 ### Step 10: Map Additional Document Fields (Optional)
 
 Optionally, repeat the process to map more document fields for the signer.
