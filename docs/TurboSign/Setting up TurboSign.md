@@ -271,6 +271,30 @@ The field editor provides several types of fields you can add:
 
 <br/>
 
+### Aligning a Signature Inside Its Field (Optional)
+
+You can choose where the signer's entry sits inside a field: on the **left**, in the **center**, or on the **right**. This keeps signatures lined up with your document, for example starting right after a "Master's signature" label instead of floating in the middle of the line.
+
+1. **Click the field** on the document to select it.
+2. In the panel on the right, find **Alignment** (just under **Recipient**).
+3. **Click Left, Center, or Right.** The field on the document moves its label to show your choice.
+
+![The field settings panel with the Alignment options (Left, Center, Right) highlighted](/img/turbosign/field-alignment/01-alignment-control.png)
+
+The signer sees their signature placed the same way, and the signed PDF matches what they saw.
+
+![The signing page with a typed signature sitting against the right edge of its field](/img/turbosign/field-alignment/02-signer-view-right.png)
+
+:::note Good to know
+- **Every field type has Alignment except Checkbox.** A checkbox always sits in the middle of its box.
+- **If you don't pick an option,** the field keeps its standard placement.
+- **Once you pick an option, there is no "none" button.** Choose **Center** if you want the entry centered.
+- **If a name is too long for the field,** it starts at the left edge and runs past the box. Make the field wider so it fits.
+- The same **Alignment** options appear when you add signature fields on a template's generate page (the **Signatures** tab).
+:::
+
+<br/>
+
 ## Step 7.5: Setting Default Values (Optional)
 
 Want to save your recipients time by pre-filling some information? TurboSign lets you set default values that will automatically appear in fields when recipients open the document. This is especially useful for common information you already know about your signers.

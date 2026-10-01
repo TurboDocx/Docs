@@ -1212,6 +1212,7 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | template.offset        | Object  | No       | Position offset: &#123; x: number, y: number &#125; (default: &#123;x:0, y:0&#125;) |
 | template.caseSensitive | Boolean | No       | Whether anchor search is case-sensitive (default: true)         |
 | template.useRegex      | Boolean | No       | Whether to treat anchor as regex pattern (default: false)       |
+| template.alignment     | String  | No       | Where the signer's entry sits: `"left"`, `"center"` or `"right"`. See [Field Alignment](#field-alignment) |
 
 #### Coordinate-based Properties
 
@@ -1224,6 +1225,7 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | height     | Number | Yes      | Field height in pixels                                             |
 | pageWidth  | Number | No       | Total page width in pixels (optional, for responsive positioning)  |
 | pageHeight | Number | No       | Total page height in pixels (optional, for responsive positioning) |
+| alignment  | String | No       | Where the signer's entry sits: `"left"`, `"center"` or `"right"`. See [Field Alignment](#field-alignment) |
 
 ### Conditional (IF/THEN) Fields {#conditional-if-then-fields}
 
@@ -1416,6 +1418,31 @@ Uses text anchors in your PDF as placeholders. TurboSign searches for these anch
 - **replace**: Removes the anchor text and places the field in its position
 - **before**: Places field before the anchor text (anchor remains visible)
 - **after**: Places field after the anchor text (anchor remains visible)
+
+#### Field Alignment {#field-alignment}
+
+Use `alignment` to choose where the signer's entry (a typed or drawn signature, initials, a date, or any text value) sits inside its field: `"left"`, `"center"` or `"right"`.
+
+- **Anchor fields:** set it on the template as `template.alignment`. With `"placement": "replace"`, it also pins the field to that side of the anchor text: `"left"` starts the field where the anchor starts, `"right"` ends it where the anchor ends.
+- **Coordinate fields:** set it at the top level of the field as `alignment`.
+- **Leave it out (or send `null`)** to keep the standard placement. Existing integrations don't change.
+- Any other value is rejected with a `400` error: `alignment must be one of: left, center, right`.
+- Checkbox fields ignore it.
+
+```json
+{
+  "recipientEmail": "master@shipping.com",
+  "type": "signature",
+  "template": {
+    "anchor": "{MasterSignature}",
+    "placement": "replace",
+    "size": { "width": 180, "height": 40 },
+    "alignment": "left"
+  }
+}
+```
+
+The signing page shows the entry with the same alignment, and the signed PDF matches it.
 
 #### Offset Usage
 
