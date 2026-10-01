@@ -488,7 +488,7 @@ Even the best-laid plans sometimes go awry. Here are solutions to common issues:
 ### "No Records Found" in TurboDocx
 **Solution**: 
 - Make sure you have actual data in your HubSpot account (contacts, deals, companies)
-- Click "Refresh Fields" again in your organization settings
+- Click "Refresh Fields" again in **Settings → Features and integrations**
 - Check that your HubSpot private app has the right permissions
 
 ### "The Agent Doesn't Understand My Instructions"

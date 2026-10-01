@@ -34,7 +34,7 @@ Quote numbering is an organization-wide setting, so you need an **Administrator*
 
 ## Step 1: Open your organization Settings
 
-From anywhere in TurboDocx, open the user menu in the top-right of the left sidebar (your avatar), then select **Settings**.
+From anywhere in TurboDocx, open the user menu from your avatar at the bottom of the left sidebar, then select **Settings**.
 
 **Instruction:** Click your **User Avatar**, then click **Settings**.
 

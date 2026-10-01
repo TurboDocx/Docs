@@ -531,7 +531,7 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 **Solution**:
 
 - Make sure you have actual data in your Salesforce org (accounts, opportunities, contacts)
-- Click "Refresh Fields" again in your organization settings
+- Click "Refresh Fields" again in **Settings → Features and integrations**
 - Check that your Salesforce external client app has the right permissions and policies configured
 
 ### "The Agent Doesn't Understand My Instructions"
