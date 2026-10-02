@@ -155,6 +155,11 @@ const sidebars = {
           label: 'Install with AI Agents',
         },
         {
+          type: 'doc',
+          id: 'SDKs/developer-mode',
+          label: 'Developer Mode',
+        },
+        {
           type: 'category',
           label: 'TurboSign SDKs',
           collapsed: false,
