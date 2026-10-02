@@ -56,7 +56,7 @@ Scroll to the **Signatures** card under **Core Features** and click **Configure 
 
 ## Step 5: Set the signature appearance options
 
-In the **E-Signature Settings** dialog, find the **Signature Appearance** section. Use the two switches to turn each option on or off:
+In the **E-Signature Settings** dialog, find the **Signature Appearance** section. Select or clear each checkbox to turn the option on or off:
 
 - **Show signature outline and label**
 - **Show verification hash**

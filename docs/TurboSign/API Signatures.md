@@ -454,7 +454,7 @@ The request format is **identical** to prepare-for-review. See the "Endpoint 1: 
 | recipients | Array         | Array of recipient objects with generated IDs  |
 | message    | String        | Human-readable success message                 |
 
-⚠️ **Note**: This endpoint returns immediately after creating the document. Email sending happens asynchronously in the background. Use webhooks to receive notification when the document is fully signed.
+⚠️ **Note**: This endpoint returns immediately after creating the document. Email sending happens asynchronously in the background. Use webhooks to receive notification when the document is fully signed. Documents sent with an API key don't email a "fully signed" copy to the sender; signers and CC recipients still get their completion emails.
 
 ### Code Examples
 
