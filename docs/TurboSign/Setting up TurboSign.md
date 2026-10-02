@@ -440,8 +440,8 @@ After clicking "Send Document":
 
 1. **Email notifications** are sent to all recipients
 2. **Recipients receive** a secure link to sign the document
-3. **You get notifications** as each person signs
-4. **Everyone receives** a copy of the fully signed document
+3. **You track progress** on your TurboSign dashboard as each person signs
+4. **Everyone receives** a copy of the fully signed document, including you as the sender
 
 <br/>
 
@@ -459,7 +459,7 @@ After clicking "Send Document":
 **Timeline:**
 - Recipients usually receive emails within minutes
 - Most people sign within 24-48 hours
-- You'll get notifications for each signature
+- You'll get an email with the signed document once everyone has signed
 
 **Tracking:**
 - Monitor progress in your TurboSign dashboard
