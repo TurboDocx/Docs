@@ -40,9 +40,9 @@ For detailed instructions, see [Wrike's official API documentation](https://help
 
 ### Step 1: Open Wrike Integration Configuration
 
-Navigate to the **Integrations** page within TurboDocx. Locate the **Wrike Integration** card and click the **Configure Wrike** button to open the configuration panel.
+Click your account avatar at the bottom of the left sidebar, click **Settings**, then click **Features and integrations** in the Settings menu. Locate the **Wrike Integration** card and click the **Configure Wrike** button to open the configuration panel.
 
-![Open Wrike Integration Configuration](/img/wrike-integration/Step01-OpenWrikeConfig.png)
+![Wrike Integration card with the Configure Wrike button highlighted](/img/wrike-integration/Step01-OpenWrikeConfig.png)
 
 ### Step 2: Enter Your Wrike API Key
 
@@ -52,13 +52,13 @@ See [Wrike's API documentation](https://help.wrike.com/hc/en-us/articles/2104094
 
 In the Wrike Automations connection dialog, locate the **Enter your Wrike API key** text input field. Click inside the field and paste your Wrike API access token.
 
-![Enter Wrike API Key](/img/wrike-integration/Step02-FocusApiKeyInput.png)
+![Wrike Automations dialog with the Wrike API key field highlighted](/img/wrike-integration/Step02-FocusApiKeyInput.png)
 
 ### Step 3: Connect Your Wrike Account
 
 Click the **Connect Wrike** button to validate your API key and establish the connection between Wrike and TurboDocx.
 
-![Connect Wrike Account](/img/wrike-integration/Step03-ConnectWrike.png)
+![Wrike Automations dialog with the Connect Wrike button highlighted](/img/wrike-integration/Step03-ConnectWrike.png)
 
 <br/>
 

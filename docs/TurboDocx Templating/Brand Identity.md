@@ -36,20 +36,20 @@ If you just want to get up and running quickly, jump to the [Quick Start](#quick
 **Goal**: Get your brand colors and basic styling applied across all documents quickly.
 
 ### Step 1: Access Brand Settings
-1. Go to **Organization Settings** → **Formatting Settings**  
+1. Go to **Settings** → **Branding and formatting** (under **Documents**)  
 2. You'll see the Brand Identity interface with upload, controls, and preview areas
 
 ### Step 2: Upload Your Logo
 
-![Logo Upload Interface](/img/brandidentity/LogoUpload.png)
+![Organization Logo upload area highlighted on the Branding and formatting page](/img/brandidentity/LogoUpload.png)
 
-1. Click **Upload Logo** and select your company logo
+1. Click the logo area under **Organization Logo** (or drag your logo file onto it) and select your company logo
 2. Click **Save Changes** - TurboDocx will automatically extract your brand colors
 3. You should see extracted colors appear in the Brand Colors section
 
 ### Step 3: Apply Quick Typography
 
-![Quick Setup Fonts](/img/brandidentity/QuickSetupFonts.png)
+![Quick Setup size presets highlighted](/img/brandidentity/QuickSetupFonts.png)
 
 1. In the **Quick Setup** section, choose a preset size:
    - **Small**: Conservative, formal documents
@@ -93,21 +93,19 @@ Brand Identity configuration includes:
 
 ### Accessing Brand Identity Settings
 
-1. Navigate to your organization settings
-2. Select **Formatting Settings** from the configuration menu
+1. Click your account avatar, then click **Settings**
+2. In the menu on the left, select **Branding and formatting** (under **Documents**)
 3. You'll see the Brand Identity configuration interface with three main areas:
    - Logo upload section (top)
-   - Configuration controls (left side)
-   - Live preview panel (right side)
-
-You can see the upload area and preview panel side-by-side
+   - Configuration controls
+   - Live preview panel (beside the controls on wide screens, below them on smaller ones)
 
 ### Logo Upload & Save
 
-![Logo Upload Interface](/img/brandidentity/LogoUpload.png)
+![Organization Logo upload area highlighted on the Branding and formatting page](/img/brandidentity/LogoUpload.png)
 
 1. **Upload Your Logo**
-   - Click the **Upload Logo** button at the top of the page
+   - Click the logo area under **Organization Logo** at the top of the page (or drag your logo file onto it)
    - Select your logo file (recommended formats: PNG, JPG)
    - Optimal size: 200x200px or larger for best results
    - Logo preview appears in upload area
@@ -188,7 +186,7 @@ For precise control, expand the typography accordions:
 
 #### Headings (H1, H2, H3)
 
-![Heading Configuration Controls](/img/brandidentity/HeadingConfig.png)
+![Headings (1-3) section expanded and highlighted](/img/brandidentity/HeadingConfig.png)
 
 **For each heading level, configure:**
 - **Font Size**: Adjust size in points or pixels
@@ -207,7 +205,7 @@ For precise control, expand the typography accordions:
 
 ## Table Styling Configuration
 
-![Table Styling Configuration](/img/brandidentity/TableSetup.png)
+![Tables section expanded and highlighted, with the table preview](/img/brandidentity/TableSetup.png)
 
 Customize how tables appear in your documents:
 

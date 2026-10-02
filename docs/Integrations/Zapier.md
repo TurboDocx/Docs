@@ -1,5 +1,6 @@
 ---
 title: Zapier Integration
+unlisted: true # hidden while the Zapier integration is rebuilt; URL still works
 sidebar_position: 5
 description: Export TurboDocx documents to 5,000+ apps with Zapier. Connect document generation to any CRM, project management, or cloud storage platform.
 keywords:

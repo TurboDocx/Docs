@@ -129,9 +129,9 @@ TurboSign accepts a `senderEmail` (used as the reply-to address for signature re
 #### How to Get Your Credentials
 
 1. **Login to TurboDocx**: Visit [https://www.turbodocx.com](https://www.turbodocx.com)
-2. **Navigate to Settings**: Access your organization settings
-3. **API Keys Section**: Generate or copy your API access token
-4. **Organization ID**: Copy your organization ID from the same settings page
+2. **Navigate to Settings**: Click your account avatar, then click **Settings**
+3. **API Keys Section**: Open **API keys** (under **Developers**) to generate or copy your API access token
+4. **Organization ID**: Copy your organization ID from the **Features and integrations** page
 
 ![TurboSign API Key](/img/turbosign/api/api-key.png)
 ![TurboSign Organization ID](/img/turbosign/api/org-id.png)

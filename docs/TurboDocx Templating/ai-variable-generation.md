@@ -107,9 +107,9 @@ Before you begin generating AI-powered variables, ensure you have:
 ### Getting Your Credentials
 
 1. **Login to TurboDocx**: Visit [https://www.turbodocx.com](https://www.turbodocx.com)
-2. **Navigate to Settings**: Access your organization settings
-3. **API Keys Section**: Generate or retrieve your API access token
-4. **Organization ID**: Copy your organization ID from the settings
+2. **Navigate to Settings**: Click your account avatar, then click **Settings**
+3. **API Keys Section**: Open **API keys** (under **Developers**) to generate or retrieve your API access token
+4. **Organization ID**: Copy your organization ID from the **Features and integrations** page
 
 <!-- ![API Credentials](/img/turbosign/api/api-key.png) -->
 
