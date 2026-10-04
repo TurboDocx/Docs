@@ -170,7 +170,7 @@ The REST response wraps the result in `data.results` (the SDKs return the inner 
 {
   "data": {
     "results": {
-      "url": "https://app.turbodocx.com/e-signature/sign/{documentId}?sut=...",
+      "url": "https://app.turbodocx.com/e-signature/embed/{documentId}?sut=...",
       "expiresAt": "2026-09-16T15:07:00Z",
       "recipientId": "...",
       "externalId": "your_customer_123",
