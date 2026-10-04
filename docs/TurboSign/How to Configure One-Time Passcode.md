@@ -47,6 +47,10 @@ When you choose **On every signature request**, two more settings appear:
   - **SMS** - the passcode is texted to the signer's mobile number. SMS requires a connected provider and is available on Pro and Enterprise plans (see Steps 4-5). **SMS cannot be selected until you have connected and saved a working provider.**
 - **Let senders change the method per recipient** - off by default, which locks the method: every request uses the method above, and an API or SDK request that sets a different channel for a recipient is rejected with `OtpOverrideNotAllowed`. When it is on, a sender can pick another method, or no verification, for a recipient. This applies to the email channel too, so it is not tied to your SMS plan.
 
+:::tip Passcodes only for signers in your own app
+If only the signers in your own app should verify, keep **Only when requested**. Turn on SMS and connect a provider (Steps 4-5), then have your integration request SMS on each recipient it embeds. Other signature requests, including Pipelines, stay passcode-free. See [Verify only your embedded signers by SMS](./Embedded%20Signing.md#verify-only-your-embedded-signers-by-sms).
+:::
+
 Your integration can check the result with `GET /turbosign/embedded-signing-settings`: `defaultChannel` is `none`, `email`, or `sms`, and `allowChannelOverride` tells it whether a different channel is accepted (see [Embedded Signing and Identity Verification](./Embedded%20Signing.md#the-organization-default)).
 
 <!-- RECAPTURE: screenshot of the Default method dropdown (open, showing None / Email / SMS) with the field highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) to match the other screenshots. -->

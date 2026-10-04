@@ -75,6 +75,25 @@ Automated sends (Pipelines, bulk signature sending, TurboQuote, and the Wrike in
 
 Recipients using `external_idv` or `override` skip the passcode, so the channel default does not apply to them.
 
+### Verify only your embedded signers by SMS
+
+A common setup: your team keeps sending ordinary signature requests (from the TurboDocx app and from Pipelines) with no passcode, while signers in your own app verify by text message. You do not need an SMS default for the whole organization to do this.
+
+1. In **When to verify signers**, keep **Only when requested**.
+2. Turn on **Allow SMS as an alternative to email** and connect your SMS provider (see [How to Configure One-Time Passcode](./How%20to%20Configure%20One-Time%20Passcode.md)).
+3. In your integration, ask for SMS on each recipient you embed:
+
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "phone": "+15551234567",
+  "identityVerification": { "mode": "otp", "channel": "sms" }
+}
+```
+
+Your request does not choose an SMS provider. TurboSign sends the passcode through the provider your organization connected. Pick the channel in your own app (for example, a setting in your app's configuration). Do not copy it from `defaultChannel`: with **Only when requested** that value is `none`, which tells you nothing about the channel you want.
+
 ## The recipient
 
 When you prepare a document, mark a recipient for embedded signing by giving it an `identityVerification` block. The signer's real `email` is always required.
