@@ -46,7 +46,7 @@ With **Only when requested**, verification is set per recipient and a recipient 
 
 Switch to the **Identity & embedding** tab. Two optional switches change how a signer can be verified:
 
-- **Allow external identity verification** lets your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link, instead of TurboSign sending a passcode.
+- **Allow external identity verification** lets your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link, instead of TurboSign sending a passcode. See [External Identity Verification (IdV) for Embedded Signing](./External%20Identity%20Verification.md) for the request shape and provider examples.
 - **Allow identity verification override** lets a sender send a link that **skips** verification. This is for development and testing; every signature completed this way is marked as **not identity-verified** on the certificate and in the audit trail. While it is on, the settings show a persistent banner.
 
 ![The Identity & embedding tab with the Allow external identity verification and Allow identity verification override switches highlighted](/img/how-to-enable-embedded-signing/04-identity-embedding-toggles.png)
@@ -74,4 +74,5 @@ For local development you can add an `http://localhost` (or `http://127.0.0.1`) 
 ## What's next
 
 - [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md) - choose email or SMS delivery, connect an SMS provider, set up delivery-failure alerts, and see what the signer sees.
+- [External Identity Verification (IdV) for Embedded Signing](./External%20Identity%20Verification.md) - assert a signer's identity from your own identity verification provider instead of a passcode.
 - [Embedded Signing and Identity Verification](./Embedded%20Signing.md) - request a signing URL, the three verification modes, and the SDK calls your backend makes.
