@@ -31,9 +31,9 @@ Verification is not tied to embedding: the same per-recipient step-up applies wh
 
 ## Before you start
 
-An organization admin enables embedded signing in the E-Signature settings, on the **Identity & embedding** tab:
+An organization admin enables embedded signing in the E-Signature settings (**Settings** > **Features and integrations** > **Signatures** > **Configure E-Signature** > **Identity Verification**). The first setting is on the **One-time passcode** tab; the rest are on the **Identity & embedding** tab:
 
-- **Enable identity verification** turns on the one-time passcode flow. Under **When to verify signers**, the admin picks **Only when requested** (no passcode unless a sender or a request asks for one) or **On every signature request** (every signer gets a passcode by the chosen method, email or SMS). See [The organization default](#the-organization-default) for how this applies to API and SDK sends.
+- **Enable identity verification** (One-time passcode tab) turns on the one-time passcode flow. Under **When to verify signers**, the admin picks **Only when requested** (no passcode unless a sender or a request asks for one) or **On every signature request** (every signer gets a passcode by the chosen method, email or SMS). See [The organization default](#the-organization-default) for how this applies to API and SDK sends.
 - **Allow external identity verification** lets your integration assert a signer's identity with your own provider.
 - **Allow identity verification override** lets a sender send a link that skips verification. This is intended for development and testing. While it is on, the settings page shows a persistent banner.
 - **Allowed embedding domains** lists the origins allowed to embed the signing page in an iframe. This is **deny by default**: while the list is empty, no site may embed the signing page. Add your app's origin (for example `https://app.yourcompany.com`) before you try to iframe it.
@@ -79,9 +79,10 @@ Recipients using `external_idv` or `override` skip the passcode, so the channel 
 
 A common setup: your team keeps sending ordinary signature requests (from the TurboDocx app and from Pipelines) with no passcode, while signers in your own app verify by text message. You do not need an SMS default for the whole organization to do this.
 
-1. In **When to verify signers**, keep **Only when requested**.
-2. Turn on **Allow SMS as an alternative to email** and connect your SMS provider (see [How to Configure One-Time Passcode](./How%20to%20Configure%20One-Time%20Passcode.md)).
-3. In your integration, ask for SMS on each recipient you embed:
+1. In E-Signature Settings > **Identity Verification**, on the **One-time passcode** tab, turn on **Enable identity verification**.
+2. Under **When to verify signers**, keep **Only when requested** (the default). Signature requests sent from the app and from Pipelines keep signing with no passcode; in the app, each signer's **Identity verification** stays on **No verification** unless a sender changes it.
+3. Under **Text message (SMS)**, turn on **Allow SMS as an alternative to email**, then connect your SMS provider and check the status reads **Connected to Twilio** (or RingCentral). See [How to Configure One-Time Passcode](./How%20to%20Configure%20One-Time%20Passcode.md).
+4. In your integration, ask for SMS on each recipient you embed:
 
 ```json
 {

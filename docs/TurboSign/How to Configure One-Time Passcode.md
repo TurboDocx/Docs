@@ -17,7 +17,7 @@ keywords:
 
 A one-time passcode (OTP) verifies a signer's identity before they can open your document: the signer receives a short code by email or text message and enters it on the signing page. This guide walks through configuring OTP delivery for your organization - requiring a passcode, choosing the default channel, connecting an SMS provider, and setting up delivery-failure alerts.
 
-OTP is configured on the **One-time passcode** tab of the **Identity Verification** section in your E-Signature settings. To reach that tab, first open **E-Signature Settings**, click **Identity Verification**, and stay on the **One-time passcode** tab (see [How to Enable Embedded Signing](./How%20to%20Enable%20Embedded%20Signing.md), Steps 1-2, for how to open these settings).
+OTP is configured on the **One-time passcode** tab of the **Identity Verification** section in your E-Signature settings. To reach that tab, first open **E-Signature Settings**, click **Identity Verification**, and stay on the **One-time passcode** tab (in short: **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature**; see [How to Enable Embedded Signing](./How%20to%20Enable%20Embedded%20Signing.md), Steps 1-2). Changes on this tab save as you make them, except the SMS provider form, which needs **Save SMS provider**.
 
 You need an **admin** account for your organization.
 
@@ -29,7 +29,7 @@ These settings decide **when** signers are verified by default and **which** cha
 
 On the **One-time passcode** tab, turn on **Enable identity verification**. The rest of the passcode settings stay hidden until this is on, so turn it on first.
 
-![The One-time passcode tab with the Require identity verification toggle highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
+![The One-time passcode tab with the Enable identity verification toggle highlighted and Only when requested selected](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
 Turning it on makes passcode verification available. Whether every signer gets a passcode depends on the choice in Step 2.
 
@@ -44,7 +44,7 @@ When you choose **On every signature request**, two more settings appear:
 
 - **Method** - how the passcode reaches signers:
   - **Email** - the passcode is sent to the signer's email address. Email is available on every plan.
-  - **SMS** - the passcode is texted to the signer's mobile number. SMS requires a connected provider and is available on Pro and Enterprise plans (see Steps 4-5). **SMS cannot be selected until you have connected and saved a working provider.**
+  - **SMS** - the passcode is texted to the signer's mobile number. SMS requires a connected provider and is available on Pro and Enterprise plans (see Steps 4-5). **SMS cannot be selected until SMS is turned on and provider credentials are saved (Steps 4-5).** Check that the provider status reads **Connected to Twilio** (or RingCentral) before you rely on it.
 - **Let senders change the method per recipient** - off by default, which locks the method: every request uses the method above, and an API or SDK request that sets a different channel for a recipient is rejected with `OtpOverrideNotAllowed`. When it is on, a sender can pick another method, or no verification, for a recipient. This applies to the email channel too, so it is not tied to your SMS plan.
 
 :::tip Passcodes only for signers in your own app
@@ -53,8 +53,7 @@ If only the signers in your own app should verify, keep **Only when requested**.
 
 Your integration can check the result with `GET /turbosign/embedded-signing-settings`: `defaultChannel` is `none`, `email`, or `sms`, and `allowChannelOverride` tells it whether a different channel is accepted (see [Embedded Signing and Identity Verification](./Embedded%20Signing.md#the-organization-default)).
 
-<!-- RECAPTURE: screenshot of the Default method dropdown (open, showing None / Email / SMS) with the field highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) to match the other screenshots. -->
-<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Default method dropdown with None, Email, and SMS options](/img/how-to-configure-otp/otp-01-default-method.png) -->
+![The When to verify signers options with Only when requested selected and highlighted](/img/how-to-configure-otp/otp-01-when-to-verify.png)
 
 ## Step 3: Use email (the simplest path)
 
@@ -64,11 +63,10 @@ Email passcodes work on every plan and need no setup. If **Email** is your metho
 
 To let signers verify by text message, turn on **Allow SMS as an alternative to email** under **Text message (SMS)**. Senders can then choose SMS instead of email for a recipient. Each signer verifies by one method, not both, and SMS may incur usage charges.
 
-<!-- RECAPTURE: screenshot of the Text message (SMS) section with the "Allow SMS as an alternative to email" toggle highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Text message SMS section with the Allow SMS as an alternative to email toggle highlighted](/img/how-to-configure-otp/otp-02-allow-sms.png) -->
+![The Text message (SMS) section with the Allow SMS as an alternative to email toggle highlighted](/img/how-to-configure-otp/otp-02-allow-sms.png)
 
 :::note SMS is plan-gated
-SMS verification is available on **Pro and Enterprise plans**. If your plan does not include it, this section shows an **Upgrade to unlock SMS verification** card instead of the toggle.
+SMS verification is available on **Pro and Enterprise plans**. If your plan does not include it, the toggle is disabled and an **Upgrade to unlock SMS verification** card appears.
 :::
 
 SMS verification also needs a mobile number for each signer you verify this way. You enter it when you add the recipient to a signature request. The number must include the country code and be one that can exist: a well-formed number that cannot exist is rejected when the request is created (`OtpPhoneInvalid`), not later when the signer asks for a code.
@@ -84,20 +82,27 @@ TurboSign sends SMS passcodes through **your own** SMS account, so passcodes are
    - **RingCentral:** Server URL, Client ID, Client Secret, and JWT.
 4. Click **Save SMS provider**.
 
-<!-- RECAPTURE: screenshot of the SMS provider credential form (Provider = Twilio) with the Save SMS provider button highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The SMS provider form with the provider, from number, credential fields, and Save SMS provider button](/img/how-to-configure-otp/otp-03-sms-provider-form.png) -->
+![The SMS provider form with the provider, from number, credential fields, and Save SMS provider button highlighted](/img/how-to-configure-otp/otp-03-sms-provider-form.png)
 
-After you save credentials, click **Verify connection** to confirm your account can send messages (this is a free check and sends no text), then use **Send a test message** to send a real passcode-style text to a number you control and confirm end-to-end delivery.
+When you click **Save SMS provider**, TurboSign checks the account straight away (free, no text is sent). The status at the top of the box should read **Connected to Twilio**. If it reads **Twilio rejected these credentials**, the alert below the fields gives the provider's reason. Then use **Send a test message** to text a number you control and confirm delivery end to end. **Verify connection** re-runs the check at any time.
 
-<!-- RECAPTURE: screenshot of the "Send a test message" area with the Test number field and Send test message button highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Send a test message field with the Send test message button highlighted](/img/how-to-configure-otp/otp-04-sms-test-message.png) -->
+The status at the top of the box is one of:
+
+- **SMS provider not connected** - no credentials are saved yet.
+- **Twilio credentials saved** - credentials are saved but have not been checked in this session.
+- **Connected to Twilio** - the provider accepted the credentials. This is the state you want.
+- **Twilio rejected these credentials** - fix the credentials and save again.
+
+With RingCentral, the status names RingCentral instead.
+
+![The Send a test message area with the Test number field and Send test message button highlighted](/img/how-to-configure-otp/otp-04-sms-test-message.png)
 
 :::caution Use a production provider account
 SMS passcodes use a custom message body, which **trial accounts** (for example a Twilio trial) block. Use a paid, production provider account. Sending to US numbers also requires **A2P 10DLC registration** on your provider account - TurboSign links to your provider's registration flow next to the credential fields.
 :::
 
-:::note SMS becomes selectable only once it works
-The **SMS** method (Step 2) stays disabled until SMS is turned on, your plan includes it, **and** you have saved working provider credentials. If you later remove the provider credentials while **SMS** is the method, the method switches to **Email**, so signers are still verified on every request through a channel that can deliver.
+:::note When SMS becomes selectable
+The **SMS** method (Step 2) stays disabled until SMS is turned on, your plan includes it, **and** provider credentials are saved. Saving does not prove the credentials work, so check that the status reads **Connected to Twilio** (or RingCentral). If you later remove the provider credentials while **SMS** is the method, the method switches to **Email**, so signers are still verified on every request through a channel that can deliver.
 :::
 
 ## Step 6: Get alerted when a passcode cannot be delivered
@@ -109,8 +114,7 @@ Delivery-failure alerts email an admin when a one-time passcode cannot be delive
 - **All organization admins** - every admin receives the alert.
 - **Specific addresses** - enter the exact addresses that should be alerted (for example `ops@example.com`), one chip per address.
 
-<!-- RECAPTURE: screenshot of the Delivery failure alerts section with the "Send alerts to" selector highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
-<!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Delivery failure alerts section with the Send alerts to selector highlighted](/img/how-to-configure-otp/otp-05-delivery-failure-alerts.png) -->
+![The Delivery failure alerts section with the Send alerts to selector highlighted](/img/how-to-configure-otp/otp-05-delivery-failure-alerts.png)
 
 ## Step 7: Know what happens when a signer keeps entering the wrong code
 
@@ -125,7 +129,6 @@ These alerts go to the sender of the document, not to the admins on the delivery
 
 When a recipient requires a passcode, the signer opens the signing page and is met by the passcode gate before the document loads. They click **Send Code**, receive the one-time code by email (or SMS), enter it, and then continue to the document.
 
-<!-- RECAPTURE: this screenshot was shot in a wider browser window than the other step screenshots (2133x987 vs 1422x676). Reshoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) so it matches the rest of the set. -->
 ![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)
 
 ## What's next

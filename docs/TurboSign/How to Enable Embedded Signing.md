@@ -20,22 +20,21 @@ You need an **admin** account for your organization.
 
 ## Step 1: Open your E-Signature settings
 
-Go to **Settings**, open the **Organization Settings** tab, find the **Signatures** card under **Core Features**, and click **Configure E-Signature**.
+Go to **Settings** and click **Features and integrations** in the left-hand menu. Under **Core Features**, find the **Signatures** card and click **Configure E-Signature**.
 
-![The Organization Settings tab with the Configure E-Signature button highlighted](/img/how-to-enable-embedded-signing/01-configure-esignature.png)
+![The Features and integrations page with the Configure E-Signature button on the Signatures card highlighted](/img/how-to-enable-embedded-signing/01-configure-esignature.png)
 
 ## Step 2: Open the Identity Verification section
 
-In the E-Signature Settings dialog, click **Identity Verification** in the left-hand section list. This section has two tabs: **One-time passcode** and **Identity & embedding**.
+In the E-Signature Settings dialog, click **Identity Verification** in the left-hand section list. This section has two tabs: **One-time passcode** and **Identity & embedding**. Changes in this section save as you make them, except the SMS provider form, which needs **Save SMS provider**.
 
-<!-- RECAPTURE: this screenshot was shot in a wider browser window than the other step screenshots (2133x987 vs 1422x676), so the dialog renders smaller and shifts position between steps. Reshoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) to match 01 and 03-06. -->
 ![The E-Signature Settings dialog with the Identity Verification section highlighted](/img/how-to-enable-embedded-signing/02-identity-verification-tab.png)
 
 ## Step 3: Turn on passcode verification
 
 On the **One-time passcode** tab, turn on **Enable identity verification**. Then, under **When to verify signers**, keep **Only when requested** (a passcode only for recipients that ask for one, for example through the API) or choose **On every signature request** (every signer enters a passcode).
 
-![The One-time passcode tab with Require identity verification highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
+![The One-time passcode tab with the Enable identity verification toggle highlighted and Only when requested selected](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
 Choosing the passcode channel (email or SMS), connecting an SMS provider, and setting up delivery-failure alerts are covered in a dedicated guide: [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md).
 
