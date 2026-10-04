@@ -29,7 +29,7 @@ These settings decide **when** signers are verified by default and **which** cha
 
 On the **One-time passcode** tab, turn on **Enable identity verification**. The rest of the passcode settings stay hidden until this is on, so turn it on first.
 
-![The One-time passcode tab with the Enable identity verification toggle highlighted and Only when requested selected](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
+![The One-time passcode tab with the Enable identity verification toggle and the selected Only when requested option highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
 Turning it on makes passcode verification available. Whether every signer gets a passcode depends on the choice in Step 2.
 
