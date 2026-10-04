@@ -284,8 +284,8 @@ within the same job's `fields` array. See
 Set `required: false` on a field in `documents[].fields` to let the signer leave it blank. The
 same rules as the single-step API apply: `signature` and `initial` fields cannot be optional,
 `required` must be a JSON boolean, and each recipient needs at least one required, editable
-field. A document that breaks a rule fails the batch with `BulkValidationFailed`, and that
-document's entry in `data` carries the specific `code` (`OptionalNotSupported`,
+field. A document that breaks a rule fails the batch with `BulkValidationFailed`, and the
+failing document is listed in the error details with its specific code (`OptionalNotSupported`,
 `InvalidFieldRequired`, or `NoEditableFieldsForRecipient`). See
 [Optional Fields](/docs/TurboSign/API%20Signatures#optional-fields) for details.
 :::
