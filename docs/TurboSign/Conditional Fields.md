@@ -145,6 +145,16 @@ explain"** text field appear.
 
 ```javascript
 const fields = JSON.stringify([
+  // The recipient's signature. Every recipient needs at least one required field.
+  {
+    recipientEmail: "reviewer@acme.com",
+    type: "signature",
+    page: 1,
+    x: 100,
+    y: 600,
+    width: 200,
+    height: 80,
+  },
   // 1) Controlling checkbox — gets a stable fieldKey
   {
     recipientEmail: "reviewer@acme.com",
@@ -192,6 +202,16 @@ until they check **"Override default amount"**.
 
 ```javascript
 const fields = JSON.stringify([
+  // The recipient's signature. Every recipient needs at least one required field.
+  {
+    recipientEmail: "signer@acme.com",
+    type: "signature",
+    page: 1,
+    x: 100,
+    y: 600,
+    width: 200,
+    height: 80,
+  },
   // Controlling checkbox
   {
     recipientEmail: "signer@acme.com",
