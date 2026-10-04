@@ -307,7 +307,7 @@ Every field you place is required by default: the signer can't finish until it's
 
 When the signer opens the document, an empty optional field shows "(Optional)" after its name, for example **Text (Optional)**. The "N of M required" counter only counts required fields, so the signer can submit once those are done.
 
-![The signing page with an empty text field labeled "Text (Optional)"](/img/turbosign/optional-fields/02-signer-optional-label.png)
+![The signing page with an empty text field labeled "Text (Optional)" and the counter reading "0 of 1 required"](/img/turbosign/optional-fields/02-signer-optional-label.png)
 
 :::note Good to know
 - **Signature, Initials, Date, and Checkbox fields don't have a Required setting.** Signatures and initials are always required. Date and checkbox fields are always filled in on the signing page.
