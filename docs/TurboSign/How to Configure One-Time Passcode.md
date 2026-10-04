@@ -22,35 +22,39 @@ OTP is configured on the **One-time passcode** tab of the **Identity Verificatio
 You need an **admin** account for your organization.
 
 :::note What this controls
-These settings set the **default** and the **available** verification channels for your organization. Identity verification is still optional per recipient: a recipient sent without verification signs with no extra step. When you send through the SDK or API, you set verification on each recipient yourself.
+These settings decide **when** signers are verified by default and **which** channels are available. The default applies to signatures created in the app and to documents sent through the API or SDK. Automated sends (Pipelines, bulk signature sending, TurboQuote, and the Wrike integration) are exempt and verify a recipient only when the request asks for it.
 :::
 
-## Step 1: Turn on Require identity verification
+## Step 1: Turn on Enable identity verification
 
-On the **One-time passcode** tab, turn on **Require identity verification**. The rest of the passcode settings stay hidden until this is on, so turn it on first.
+On the **One-time passcode** tab, turn on **Enable identity verification**. The rest of the passcode settings stay hidden until this is on, so turn it on first.
 
 ![The One-time passcode tab with the Require identity verification toggle highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
-Once it is on, signers enter a one-time passcode before they can sign.
+Turning it on makes passcode verification available. Whether every signer gets a passcode depends on the choice in Step 2.
 
-## Step 2: Choose the default method
+## Step 2: Choose when to verify signers
 
-Under **Default method**, choose how the passcode reaches signers by default:
+Under **When to verify signers**, choose one:
 
-- **None** - no passcode is required by default.
-- **Email** - the passcode is sent to the signer's email address. Email is available on every plan.
-- **SMS** - the passcode is texted to the signer's mobile number. SMS requires a connected provider and is available on Pro and Enterprise plans (see Steps 4-5). **SMS cannot be selected until you have connected and saved a working provider.**
+- **Only when requested** (the default) - no passcode by default. A sender can turn it on for a recipient, and a request made through the API or SDK (for example, embedded signing) can ask for it. This option is never locked, so a request can always turn verification on.
+- **On every signature request** - every signer enters a passcode before signing, including on documents sent through the API or SDK.
 
-The default method is used for every recipient unless you allow senders to change it.
+When you choose **On every signature request**, two more settings appear:
+
+- **Method** - how the passcode reaches signers:
+  - **Email** - the passcode is sent to the signer's email address. Email is available on every plan.
+  - **SMS** - the passcode is texted to the signer's mobile number. SMS requires a connected provider and is available on Pro and Enterprise plans (see Steps 4-5). **SMS cannot be selected until you have connected and saved a working provider.**
+- **Let senders change the method per recipient** - off by default, which locks the method: every request uses the method above, and an API or SDK request that sets a different channel for a recipient is rejected with `OtpOverrideNotAllowed`. When it is on, a sender can pick another method, or no verification, for a recipient. This applies to the email channel too, so it is not tied to your SMS plan.
+
+Your integration can check the result with `GET /turbosign/embedded-signing-settings`: `defaultChannel` is `none`, `email`, or `sms`, and `allowChannelOverride` tells it whether a different channel is accepted (see [Embedded Signing and Identity Verification](./Embedded%20Signing.md#the-organization-default)).
 
 <!-- RECAPTURE: screenshot of the Default method dropdown (open, showing None / Email / SMS) with the field highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) to match the other screenshots. -->
 <!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Default method dropdown with None, Email, and SMS options](/img/how-to-configure-otp/otp-01-default-method.png) -->
 
-To let senders pick a different channel per recipient, turn on **Let senders choose per recipient**. When it is off, every request uses the default method above; when it is on, senders can change the method for each recipient. This applies to the email channel too, so it is not tied to your SMS plan.
-
 ## Step 3: Use email (the simplest path)
 
-Email passcodes work on every plan and need no setup. If **Email** is your default method, you are done - signers receive their passcode by email. Continue to [Step 6](#step-6-get-alerted-when-a-passcode-cannot-be-delivered) to set up delivery-failure alerts, or skip to [What the signer sees](#what-the-signer-sees).
+Email passcodes work on every plan and need no setup. If **Email** is your method, you are done - signers receive their passcode by email. Continue to [Step 6](#step-6-get-alerted-when-a-passcode-cannot-be-delivered) to set up delivery-failure alerts, or skip to [What the signer sees](#what-the-signer-sees).
 
 ## Step 4: Allow SMS as an alternative to email
 
@@ -63,7 +67,7 @@ To let signers verify by text message, turn on **Allow SMS as an alternative to 
 SMS verification is available on **Pro and Enterprise plans**. If your plan does not include it, this section shows an **Upgrade to unlock SMS verification** card instead of the toggle.
 :::
 
-SMS verification also needs a mobile number for each signer you verify this way. You enter it when you add the recipient to a signature request.
+SMS verification also needs a mobile number for each signer you verify this way. You enter it when you add the recipient to a signature request. The number must include the country code and be one that can exist: a well-formed number that cannot exist is rejected when the request is created (`OtpPhoneInvalid`), not later when the signer asks for a code.
 
 ## Step 5: Connect your SMS provider
 
@@ -89,7 +93,7 @@ SMS passcodes use a custom message body, which **trial accounts** (for example a
 :::
 
 :::note SMS becomes selectable only once it works
-The **SMS** default method (Step 2) stays disabled until SMS is turned on, your plan includes it, **and** you have saved working provider credentials. If you turn SMS off later, any `SMS` default automatically reverts to **None** so a passcode is never sent through a channel that cannot deliver it.
+The **SMS** method (Step 2) stays disabled until SMS is turned on, your plan includes it, **and** you have saved working provider credentials. If you later remove the provider credentials while **SMS** is the method, the method switches to **Email**, so signers are still verified on every request through a channel that can deliver.
 :::
 
 ## Step 6: Get alerted when a passcode cannot be delivered
@@ -104,9 +108,18 @@ Delivery-failure alerts email an admin when a one-time passcode cannot be delive
 <!-- RECAPTURE: screenshot of the Delivery failure alerts section with the "Send alerts to" selector highlighted. Shoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676). -->
 <!-- TODO(screenshot not yet captured — see RECAPTURE note above): ![The Delivery failure alerts section with the Send alerts to selector highlighted](/img/how-to-configure-otp/otp-05-delivery-failure-alerts.png) -->
 
+## Step 7: Know what happens when a signer keeps entering the wrong code
+
+Each passcode expires after 10 minutes and allows five wrong entries before the signer must request a new one. Wrong entries also add up across new codes:
+
+- At **5 wrong codes**, the document's sender gets a "having trouble verifying" email, so they can check the signer's email address or phone number early.
+- At **20 wrong codes**, the signer is locked out and the sender gets a "locked out" email. The signer cannot request or enter a code until the sender resends the signing request (**Resend Email** in the document's menu, see [Managing Your Signatures](./Managing%20Your%20Signatures.md)). Resending emails the signer a fresh link and clears the lock.
+
+These alerts go to the sender of the document, not to the admins on the delivery-failure list.
+
 ## What the signer sees
 
-When identity verification is on, the signer opens the signing page and is met by the passcode gate before the document loads. They click **Send Code**, receive the one-time code by email (or SMS), enter it, and then continue to the document.
+When a recipient requires a passcode, the signer opens the signing page and is met by the passcode gate before the document loads. They click **Send Code**, receive the one-time code by email (or SMS), enter it, and then continue to the document.
 
 <!-- RECAPTURE: this screenshot was shot in a wider browser window than the other step screenshots (2133x987 vs 1422x676). Reshoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) so it matches the rest of the set. -->
 ![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)

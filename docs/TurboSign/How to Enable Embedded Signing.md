@@ -31,16 +31,16 @@ In the E-Signature Settings dialog, click **Identity Verification** in the left-
 <!-- RECAPTURE: this screenshot was shot in a wider browser window than the other step screenshots (2133x987 vs 1422x676), so the dialog renders smaller and shifts position between steps. Reshoot at 948 CSS px viewport width, DPR 1.5 (output 1422x676) to match 01 and 03-06. -->
 ![The E-Signature Settings dialog with the Identity Verification section highlighted](/img/how-to-enable-embedded-signing/02-identity-verification-tab.png)
 
-## Step 3: Require a passcode
+## Step 3: Turn on passcode verification
 
-On the **One-time passcode** tab, turn on **Require identity verification** so signers enter a passcode before they can sign.
+On the **One-time passcode** tab, turn on **Enable identity verification**. Then, under **When to verify signers**, keep **Only when requested** (a passcode only for recipients that ask for one, for example through the API) or choose **On every signature request** (every signer enters a passcode).
 
 ![The One-time passcode tab with Require identity verification highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
 Choosing the passcode channel (email or SMS), connecting an SMS provider, and setting up delivery-failure alerts are covered in a dedicated guide: [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md).
 
 :::note
-Identity verification is optional and set per recipient. A recipient sent without it signs with no extra step. The channel you pick is the default for signatures created in the app; when you send through the SDK or API, you set verification on each recipient yourself.
+With **Only when requested**, verification is set per recipient and a recipient sent without it signs with no extra step. With **On every signature request**, the method you pick applies to signatures created in the app and to documents sent through the SDK or API. Automated sends such as Pipelines and bulk signature sending are exempt.
 :::
 
 ## Step 4: Allow external identity verification or an override
@@ -59,7 +59,7 @@ Under **Allowed embedding domains**, list the origins that may put the signing p
 ![The Allowed embedding domains input highlighted](/img/how-to-enable-embedded-signing/05-allowed-embedding-domains.png)
 
 :::caution Deny by default
-The list is **empty by default, which means no site can embed the signing page at all** — the iframe stays blank until you add your app's origin. Enter full `https://` origins, one per line (for example `https://app.yourcompany.com`). An empty list is the safest setting; add an origin only when you actually embed.
+The list is **empty by default, which means no site can embed the signing page at all**: the iframe stays blank until you add your app's origin. Enter full `https://` origins, one per line (for example `https://app.yourcompany.com`). An empty list is the safest setting; add an origin only when you actually embed.
 :::
 
 ## Step 6: localhost is for local development only
@@ -75,4 +75,4 @@ For local development you can add an `http://localhost` (or `http://127.0.0.1`) 
 ## What's next
 
 - [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md) - choose email or SMS delivery, connect an SMS provider, set up delivery-failure alerts, and see what the signer sees.
-- [Embedded Signing and Identity Verification](./Embedded%20Signing.md) — request a signing URL, the three verification modes, and the SDK calls your backend makes.
+- [Embedded Signing and Identity Verification](./Embedded%20Signing.md) - request a signing URL, the three verification modes, and the SDK calls your backend makes.
