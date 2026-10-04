@@ -1261,8 +1261,10 @@ Rules:
   `isReadonly` and its `required` is not `false`. A signature field always counts. A recipient
   whose fields are all optional or read-only is rejected with
   `400 NoEditableFieldsForRecipient`.
-- **Date and checkbox fields are always filled on the signing page**, so making them optional has
-  no practical effect.
+- **Date and checkbox fields are always filled on the signing page**, so making them optional does
+  not change what the signer sees. It does change one check: an optional date or checkbox does not
+  count as the recipient's required field, so a recipient whose only other fields are optional is
+  still rejected with `400 NoEditableFieldsForRecipient`.
 - **`defaultValue` is a real value, not hint text.** If you put instructions such as "Explain any
   changes here" in `defaultValue`, that text is submitted and lands on the signed PDF unless the
   signer clears it. Leave `defaultValue` empty on an optional field you want to stay blank.
@@ -1420,7 +1422,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - To pin a specific date instead, set `defaultValue` to that date in `MM/DD/YYYY` format (e.g. `"12/31/2026"`). Omit `defaultValue` (or send `""`) to keep the signing-date behavior
 - `defaultValue` must be a **real calendar date** in `MM/DD/YYYY` — a non-existent date such as `"02/31/2026"` (or any malformed value) is rejected with `400 InvalidDateValue`. There is no `"today"` keyword
 - A date field cannot be `isReadonly` — a pinned date still shows to the signer, it is not locked
-- Always filled on the signing page, so `required: false` has no practical effect
+- Always filled on the signing page, so `required: false` does not change what the signer sees, but an optional date does not count as the recipient's required field
 
 **full_name, first_name, last_name, email**
 
@@ -1440,7 +1442,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - Boolean true/false value
 - Useful for acknowledgments and consent
 - Can have label text next to checkbox
-- Always has a value (checked or unchecked) when the signer finishes, so `required: false` has no practical effect
+- Always has a value (checked or unchecked) when the signer finishes, so `required: false` does not change what the signer sees, but an optional checkbox does not count as the recipient's required field
 
 ## Field Positioning Methods
 
