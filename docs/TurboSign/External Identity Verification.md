@@ -28,6 +28,8 @@ External identity verification (`external_idv`) is for apps that already verify 
 
 This page covers when to use it, how to turn it on, the exact request shape, and worked examples for common identity verification providers. For the rest of embedded signing (sending without emails, return URLs, iframes), see [Embedded Signing and Identity Verification](./Embedded%20Signing.md).
 
+See it working: the External IdV path in the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app) simulates a verification provider end to end.
+
 ## When to use external IdV instead of a passcode
 
 TurboSign can verify an embedded signer in two ways. Pick the one that matches what your app already does.
