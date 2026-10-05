@@ -1,5 +1,6 @@
 ---
 title: External Identity Verification (IdV) for Embedded Signing
+slug: external-identity-verification
 sidebar_position: 5.5
 description: Verify signers with your identity verification provider, such as Persona, Onfido, Jumio, Veriff or Stripe Identity, then assert the result to TurboSign.
 keywords:
@@ -47,8 +48,10 @@ Use external IdV when:
 
 Use a one-time passcode when you don't run your own identity verification. See [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md).
 
-:::note Your responsibility
-With external identity verification, you (the integrator) are responsible for verifying the signer's identity. TurboSign checks the assertion's consistency and records it in the tamper-evident audit trail, but it does not perform or guarantee the verification itself.
+:::warning Your responsibilities
+With external identity verification, your app and your identity verification provider verify the signer, not TurboSign. You are responsible for the accuracy of that verification and for everything you assert.
+
+TurboSign checks the assertion's format, freshness and email match, and records it in the audit trail. It does not contact your provider or independently verify the signer's identity. See [Responsibility and legal considerations](#responsibility-and-legal-considerations).
 :::
 
 ## Step 1: Turn on external identity verification
@@ -384,6 +387,20 @@ These errors come back from sending the document or from `createSigningUrl`. The
 
 A request body that fails the endpoint's schema (for example an unknown key, a `subjectEmail` that isn't an email, or a field over its length limit) is rejected with a 400 validation error before these checks run.
 
+## Responsibility and legal considerations
+
+When you use external identity verification, you take on the identity check that a passcode would otherwise cover.
+
+- **You verify the signer.** Your app and your identity verification provider perform the verification. You are responsible for its accuracy and for what you assert to TurboSign.
+- **TurboSign records, it does not verify.** TurboSign checks the assertion's format, that it is recent enough (`maxAgeMinutes`), that the email matches the recipient and that no other signer on the document used the same `verificationId`. It then records the assertion in the audit trail. TurboSign does not contact your provider, review the underlying evidence, or independently confirm who the signer is.
+- **Keep your own records.** Keep the verification records and evidence from your provider for as long as you may need them. The audit trail stores what you asserted, not the evidence behind it.
+- **Choose a level that fits your use case.** The verification method and assurance level you need depend on the document, your industry and the jurisdictions involved.
+- **Misuse is your responsibility.** Sending an assertion without a real verification behind it, reusing a verification for a different person, or setting `overrideEmailMatching` without confirming the match are your responsibility.
+
+:::note Not legal advice
+This page describes how the feature works. It is not legal advice. Consult your legal counsel about the verification and signature requirements that apply to your documents.
+:::
+
 ## Frequently asked questions
 
 ### Can I use my own identity verification provider with e-signatures?
@@ -400,7 +417,7 @@ Electronic signature laws such as the US ESIGN Act and UETA, and eIDAS in the EU
 
 ### Does TurboSign verify the signer's ID itself?
 
-No. In this mode your provider performs the verification and you are responsible for it. TurboSign checks that the assertion is consistent (provider, email, age, no reuse across signers) and records it.
+No. In this mode your provider performs the verification and you are responsible for it. TurboSign checks that the assertion is consistent (provider, email, age, no reuse across signers) and records it. See [Responsibility and legal considerations](#responsibility-and-legal-considerations).
 
 ### What if the signing link expires before the signer opens it?
 
