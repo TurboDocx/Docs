@@ -280,6 +280,16 @@ within the same job's `fields` array. See
 `show` vs. `unlock` behavior, and the `InvalidConditionalRule` / fail-open rules.
 :::
 
+:::note Optional fields are supported
+Set `required: false` on a field in `documents[].fields` to let the signer leave it blank. The
+same rules as the single-step API apply: `signature` and `initial` fields cannot be optional,
+`required` must be a JSON boolean (`null` counts as not set, so the field stays required), and each recipient needs at least one required, editable
+field. A document that breaks a rule fails the batch with `BulkValidationFailed`, and the
+failing document is listed in the error details with its specific code (`OptionalNotSupported`,
+`InvalidFieldRequired`, or `NoEditableFieldsForRecipient`). See
+[Optional Fields](/docs/TurboSign/API%20Signatures#optional-fields) for details.
+:::
+
 ### Response (Success)
 
 ```json
@@ -623,6 +633,9 @@ Common error codes you may encounter:
 | `BatchNotFound`        | batchId doesn't exist                       | Check batch ID                          |
 | `BatchNotCancellable`  | Batch already completed                     | Cannot cancel completed batches         |
 | `InsufficientCredits`  | Not enough credits for batch                | Add credits to organization             |
+| `OptionalNotSupported` | Per document, inside `BulkValidationFailed`: `required: false` on a signature or initial field | Remove `required` or set it to `true` |
+| `InvalidFieldRequired` | Per document, inside `BulkValidationFailed`: `required` is not a boolean or `null` (e.g. `"false"`) | Send `true` or `false` as a JSON boolean |
+| `NoEditableFieldsForRecipient` | Per document, inside `BulkValidationFailed`: a recipient has only optional or read-only fields | Give the recipient a required, editable field such as a signature |
 
 ---
 

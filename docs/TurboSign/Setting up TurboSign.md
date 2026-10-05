@@ -295,6 +295,30 @@ The signer sees their signature placed the same way, and the signed PDF matches 
 
 <br/>
 
+### Making a Field Optional
+
+Every field you place is required by default: the signer can't finish until it's filled in. To let the signer skip a field, such as an optional "Notes" box, turn off **Required** for that field.
+
+1. **Click the field** on the document to select it.
+2. In the panel on the right, find **Required**.
+3. **Uncheck "Signer must fill this field".** The signer can now leave it blank and still finish.
+
+![The field settings panel with the Required setting and its "Signer must fill this field" checkbox highlighted](/img/turbosign/optional-fields/01-required-setting.png)
+
+When the signer opens the document, an empty optional field keeps its usual label and shows a small **Optional** tag on its top-right corner. The "N of M required" counter only counts required fields, so the signer can submit once those are done. If the signer fills in an optional field and changes their mind, they can open it again and click **Clear field**.
+
+![The signing page with an empty text field carrying an "Optional" tag on its top-right corner and the counter reading "0 of 1 required"](/img/turbosign/optional-fields/02-signer-optional-label.png)
+
+:::note Good to know
+- **Signature, Initials, Date, and Checkbox fields don't have a Required setting.** Signatures and initials are always required. Date and checkbox fields are always filled in on the signing page.
+- **Locked fields don't have a Required setting either.** When you check **Make field read-only** under **Lock Field**, the Required setting disappears: a locked field is pre-filled and the signer can't change it, so it never holds up signing, and signers never see the Optional tag on it.
+- **A blank optional field stays empty** on the signed PDF.
+- **A default value is a real answer, not a hint.** If you type instructions into an optional field's default value, that text ends up on the signed PDF unless the signer clears it. Leave the default value empty if the field should stay blank.
+- **Each recipient needs at least one required field they can fill out**, such as a signature. If a recipient only has optional or read-only fields, the editor shows "Some recipients have no required editable fields" and you can't send until you fix it.
+:::
+
+<br/>
+
 ## Step 7.5: Setting Default Values (Optional)
 
 Want to save your recipients time by pre-filling some information? TurboSign lets you set default values that will automatically appear in fields when recipients open the document. This is especially useful for common information you already know about your signers.
@@ -493,7 +517,7 @@ After clicking "Send Document":
 ## Troubleshooting Common Issues
 
 ### "The Send Button is Disabled"
-**Solution:** Make sure you've placed at least one signature field for each recipient. The Send button appears only when your document is ready.
+**Solution:** Make sure you've placed at least one signature field for each recipient. The Send button appears only when your document is ready. If you see "Some recipients have no required editable fields", give that recipient at least one required field, or turn **Required** back on for one of their fields (see [Making a Field Optional](#making-a-field-optional)).
 
 ### "Recipient Says They Can't Haven't Received the Email"
 **Solution:** Check that you used the correct email address and that the signing link hasn't expired. You can resend the invitation from your dashboard.

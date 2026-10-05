@@ -1196,8 +1196,8 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | --------------- | ------- | -------- | -------------------------------------------------------------- |
 | recipientEmail  | String  | Yes      | Email address of recipient (matches email in recipients array) |
 | type            | String  | Yes      | Field type (see table above)                                   |
-| required        | Boolean | No       | Whether field must be completed (default: true)                |
-| defaultValue    | String  | No       | Pre-filled value for the field (max 600 characters)            |
+| required        | Boolean | No       | Whether the signer must fill the field (default: `true`). Send `false` to let the signer leave it blank and still finish. Must be a JSON boolean, not the string `"false"`; `null` is treated as not set (required). Cannot be `false` on `signature` or `initial` fields. See [Optional Fields](#optional-fields) |
+| defaultValue    | String  | No       | Pre-filled value for the field (max 600 characters). This is a real value that is submitted with the signature, not placeholder hint text |
 | isReadonly      | Boolean | No       | Makes field non-editable (for prefilled values)                |
 | backgroundColor | String  | No       | Custom background color (hex or rgba)                          |
 | metadata        | Object  | No       | Optional field metadata. Carries `fieldKey` (on a controlling checkbox) and/or a `conditional` rule (on a dependent field). See [Conditional (IF/THEN) Fields](#conditional-if-then-fields). |
@@ -1226,6 +1226,72 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | pageWidth  | Number | No       | Total page width in pixels (optional, for responsive positioning)  |
 | pageHeight | Number | No       | Total page height in pixels (optional, for responsive positioning) |
 | alignment  | String | No       | Where the signer's entry sits: `"left"`, `"center"` or `"right"`. See [Field Alignment](#field-alignment) |
+
+### Optional Fields {#optional-fields}
+
+Every field is required by default: the signer cannot finish until it is filled. Set
+`required: false` on a field to make it optional. The signer can then leave it blank and still
+complete the document, and a blank optional field stays empty on the signed PDF.
+
+```javascript
+const fields = JSON.stringify([
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "signature",
+    template: { anchor: "{Signature1}", placement: "replace", size: { width: 200, height: 80 } },
+  },
+  // Optional: the signer may leave this blank
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "text",
+    template: { anchor: "{Notes}", placement: "replace", size: { width: 300, height: 30 } },
+    required: false,
+  },
+]);
+formData.append("fields", fields);
+```
+
+Rules:
+
+- **Signature and initial fields are always required.** Sending `required: false` on a
+  `signature` or `initial` field is rejected with `400 OptionalNotSupported`.
+- **`required` must be a JSON boolean.** Any other value, including the string `"false"`, is
+  rejected with `400 InvalidFieldRequired`. Omitting `required`, or sending `null`, is the same as
+  `true`.
+- **Each recipient needs at least one required, editable field.** A field counts when it is not
+  `isReadonly` and its `required` is not `false`. A signature field always counts. A recipient
+  whose fields are all optional or read-only is rejected with
+  `400 NoEditableFieldsForRecipient`.
+- **Date and checkbox fields are always filled on the signing page**, so making them optional does
+  not change what the signer sees. It does change one check: an optional date or checkbox does not
+  count as the recipient's required field, so a recipient whose only other fields are optional is
+  still rejected with `400 NoEditableFieldsForRecipient`.
+- **`defaultValue` is a real value, not hint text.** If you put instructions such as "Explain any
+  changes here" in `defaultValue`, that text is submitted and lands on the signed PDF unless the
+  signer clears it. Leave `defaultValue` empty on an optional field you want to stay blank.
+- **`isReadonly` and `required: false` can be combined.** A read-only field is pre-filled and the
+  signer can't change it, so it never holds up signing, whether it is required or not. A field
+  that a conditional rule still hides or locks never holds up signing either.
+
+On the signing page, an empty optional field keeps its normal label (for example "Text") and shows
+a small **Optional** tag on its top-right corner. The "N of M required" progress counter leaves
+optional fields out. A locked field never shows the tag: that covers a read-only field and a field
+that a conditional `unlock` rule still holds locked, and the tag appears once the rule unlocks it.
+A locked field shows its lock icon instead when your organization draws locked fields as grey
+boxes (see [Locked Fields Rendering](/docs/TurboSign/How%20to%20Configure%20Signature%20Appearance)). If the
+signer fills in an optional field and changes their mind, they can open it and click **Clear field**.
+
+`required` works the same way on prepare-for-signing, prepare-for-review, and in each
+`documents[].fields` array of the [Bulk API](/docs/TurboSign/API%20Bulk%20Signatures).
+
+:::warning Behavior change for existing integrations
+Earlier, the single-step endpoints accepted `required` but ignored it, so every field was treated
+as required. `required: false` is now honored. If your integration already sends
+`required: false`, those fields become optional for the signer. Requests that send
+`required: false` on a signature or initial field, send a non-boolean `required`, or leave a
+recipient with no required editable field now return `400` (`OptionalNotSupported`,
+`InvalidFieldRequired`, or `NoEditableFieldsForRecipient`).
+:::
 
 ### Conditional (IF/THEN) Fields {#conditional-if-then-fields}
 
@@ -1274,6 +1340,16 @@ box is checked.
 
 ```javascript
 const fields = JSON.stringify([
+  // The recipient's signature. Every recipient needs at least one required field.
+  {
+    recipientEmail: "john.smith@company.com",
+    type: "signature",
+    page: 1,
+    x: 100,
+    y: 600,
+    width: 200,
+    height: 80,
+  },
   // Controlling checkbox — gets a stable fieldKey
   {
     recipientEmail: "john.smith@company.com",
@@ -1345,6 +1421,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - Can be text-based or drawn
 - Cryptographically signed and hashed for legal validity
 - Cannot carry a `defaultValue` — sending one is rejected
+- Always required: `required: false` is rejected with `400 OptionalNotSupported`
 
 **date**
 
@@ -1354,6 +1431,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - To pin a specific date instead, set `defaultValue` to that date in `MM/DD/YYYY` format (e.g. `"12/31/2026"`). Omit `defaultValue` (or send `""`) to keep the signing-date behavior
 - `defaultValue` must be a **real calendar date** in `MM/DD/YYYY` — a non-existent date such as `"02/31/2026"` (or any malformed value) is rejected with `400 InvalidDateValue`. There is no `"today"` keyword
 - A date field cannot be `isReadonly` — a pinned date still shows to the signer, it is not locked
+- Always filled on the signing page, so `required: false` does not change what the signer sees, but an optional date does not count as the recipient's required field
 
 **full_name, first_name, last_name, email**
 
@@ -1365,6 +1443,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 
 - Single-line text input by default
 - Supports defaultValue for prefilled content
+- Set `required: false` to let the signer leave it blank (see [Optional Fields](#optional-fields))
 - Use for titles, company names, custom fields
 
 **checkbox**
@@ -1372,6 +1451,7 @@ dependent field exactly matches the `fieldKey` of an existing checkbox.
 - Boolean true/false value
 - Useful for acknowledgments and consent
 - Can have label text next to checkbox
+- Always has a value (checked or unchecked) when the signer finishes, so `required: false` does not change what the signer sees, but an optional checkbox does not count as the recipient's required field
 
 ## Field Positioning Methods
 
@@ -1767,6 +1847,28 @@ formData.Add(new StringContent(recipients), "recipients");
 [{ recipientEmail: "john.smith@company.com", ... }]  // ✅ Correct
 [{ recipientEmail: "John.Smith@company.com", ... }]  // ❌ Wrong (case mismatch)
 ```
+
+#### Optional Field Errors
+
+**Symptoms**: 400 Bad Request with code `OptionalNotSupported`, `InvalidFieldRequired`, or
+`NoEditableFieldsForRecipient`
+
+| Code                           | Cause                                                                                   | Fix                                                                  |
+| ------------------------------ | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `OptionalNotSupported`         | `required: false` on a `signature` or `initial` field                                    | Remove `required` from that field, or set it to `true`               |
+| `InvalidFieldRequired`         | `required` is not a boolean or `null` (for example the string `"false"`)                 | Send a JSON boolean: `true` or `false`                               |
+| `NoEditableFieldsForRecipient` | A recipient has only optional or read-only fields                                        | Give that recipient at least one required, editable field, such as a signature |
+
+**Example Error Response**:
+
+```json
+{
+  "error": "Field 1: SIGNATURE and INITIAL field types cannot be optional. Field type \"signature\" must be completed by the signer.",
+  "code": "OptionalNotSupported"
+}
+```
+
+See [Optional Fields](#optional-fields) for the full rules.
 
 #### Authentication Failures
 
