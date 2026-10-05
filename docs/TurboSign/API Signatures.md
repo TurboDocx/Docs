@@ -1776,6 +1776,36 @@ formData.Add(new StringContent(recipients), "recipients");
 | `429`       | Too Many Requests     | Implement rate limiting and retry logic       |
 | `500`       | Internal Server Error | Contact support if persistent                 |
 
+### Error Codes for Sending and Updating Recipients {#error-codes-for-sending-and-updating-recipients}
+
+`POST /turbosign/single/prepare-for-review`, `POST /turbosign/single/prepare-for-signing` and `PATCH /turbosign/documents/{id}/update-with-recipients` return signature errors with a specific HTTP status and a machine-readable code. The body includes `error` (human-readable text) and `code` (the machine-readable value). It also repeats them as `message` and `type`, and may include a `data` object with details, so read the fields you need and ignore the rest:
+
+```json
+{
+  "message": "This organization does not allow changing the identity-verification method. Omit otpChannel or set it to 'email'.",
+  "type": "OtpOverrideNotAllowed",
+  "error": "This organization does not allow changing the identity-verification method. Omit otpChannel or set it to 'email'.",
+  "code": "OtpOverrideNotAllowed"
+}
+```
+
+| Status | `code` | Meaning |
+| ------ | ------ | ------- |
+| `400` | Any `code` not listed below, for example `OtpPhoneRequired`, `OtpPhoneInvalid`, `IdentityConfigInvalid`, `DuplicateExternalId` | The request is invalid. Fix the input and retry. |
+| `402` | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
+| `403` | `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed`, `OtpOverrideNotAllowed`, `EmbeddedSigningNotEnabled`, `SmsOtpNotEnabled` | The organization has not turned on the feature or mode the request uses, or has locked the passcode method. |
+| `404` | `DocumentNotFound`, `RecipientNotFound` | The document or recipient does not exist, was deleted, or belongs to another organization. On `update-with-recipients`, a document ID that does not exist returns `404` with only `{ "error": "Document not found" }`. |
+| `409` | `DocumentNotSignable`, `RecipientAlreadySigned`, `RecipientNotInTurn`, `NotSignersTurn`, `SmsProviderNotConfigured`, `RecipientRequiresSingleUseUrl` | The document or recipient is not in a state that allows the request, or the organization has no SMS provider saved. |
+| `410` | `SigningUrlNotRedeemable` | A single-use signing URL was already used or has expired. |
+
+None of these signature errors return a `5xx` status. A `500` from these endpoints means an unexpected server problem, not a problem with your request.
+
+:::note Changed status codes
+`DocumentNotFound` and `RecipientNotFound` used to return `400` from these endpoints. They now return `404`. If your integration checks for `400` to detect a missing document or recipient, check for `404` or read `code` instead.
+:::
+
+For what each identity and passcode code means and how to fix it, see [Embedded Signing errors](./Embedded%20Signing.md#errors).
+
 ### Common Issues
 
 #### JSON String Formatting Errors
