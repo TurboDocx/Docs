@@ -50,10 +50,11 @@ Use external IdV when:
 
 Use a one-time passcode when you don't run your own identity verification. See [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md).
 
+<!-- Legal language: requires counsel review before publishing -->
 :::warning Your responsibilities
-With external identity verification, your app and your identity verification provider verify the signer, not TurboSign. You are responsible for the accuracy of that verification and for everything you assert.
+With external identity verification, your app and your identity verification provider verify the signer. You are responsible for the verification actually happening and for every value you assert being accurate.
 
-TurboSign checks the assertion's format, freshness and email match, and records it in the audit trail. It does not contact your provider or independently verify the signer's identity. See [Responsibility and legal considerations](#responsibility-and-legal-considerations).
+TurboSign records your assertion. It does not contact your provider or independently confirm who the signer is. See [Responsibility and legal considerations](#responsibility-and-legal-considerations).
 :::
 
 ## Step 1: Turn on external identity verification
@@ -212,8 +213,11 @@ const { url } = await TurboSign.createSigningUrl(documentId, {
 
 Only the email comparison is skipped. Every other check still runs, and `subjectEmail` is still required and recorded.
 
+<!-- Legal language: requires counsel review before publishing -->
 :::caution You take responsibility for the match
-With `overrideEmailMatching: true`, TurboSign no longer confirms that the verified identity belongs to the signer of record. The override is kept in the JSON audit trail, but it is not shown on the rendered audit trail PDF.
+`overrideEmailMatching: true` turns off only the email check. You alone are responsible for confirming that the person your provider verified is the intended signer.
+
+Use it only when you have confirmed that link in your own systems, and keep a record of how you confirmed it. The override is recorded in TurboSign's audit record, but it is not shown on the rendered audit trail PDF.
 :::
 
 ## What lands in the audit trail
@@ -391,16 +395,24 @@ A request body that fails the endpoint's schema (for example an unknown key, a `
 
 ## Responsibility and legal considerations
 
-When you use external identity verification, you take on the identity check that a passcode would otherwise cover.
+<!-- Legal language: requires counsel review before publishing -->
 
-- **You verify the signer.** Your app and your identity verification provider perform the verification. You are responsible for its accuracy and for what you assert to TurboSign.
-- **TurboSign records, it does not verify.** TurboSign checks the assertion's format, that it is recent enough (`maxAgeMinutes`), that the email matches the recipient and that no other signer on the document used the same `verificationId`. It then records the assertion in the audit trail. TurboSign does not contact your provider, review the underlying evidence, or independently confirm who the signer is.
-- **Keep your own records.** Keep the verification records and evidence from your provider for as long as you may need them. The audit trail stores what you asserted, not the evidence behind it.
-- **Choose a level that fits your use case.** The verification method and assurance level you need depend on the document, your industry and the jurisdictions involved.
-- **Misuse is your responsibility.** Sending an assertion without a real verification behind it, reusing a verification for a different person, or setting `overrideEmailMatching` without confirming the match are your responsibility.
+**You are responsible for the verification.** You choose the provider, the method, the assurance level and the pass or fail rules. You are responsible for the verification actually happening and for every asserted value being accurate: `provider`, `verificationId`, `verifiedAt`, `subjectEmail`, and any `method`, `assuranceLevel`, `verifiedName` or `evidenceUrl` you send.
+
+**TurboSign records your assertion. It does not verify it.** TurboSign does not contact your provider, review identity documents, or independently confirm that the signer is who the assertion says. It only checks format and consistency, as listed in [What TurboSign checks](#what-turbosign-checks). Passing these checks does not mean a verification happened or was done correctly. The assertion is recorded in the audit trail and on the certificate as information you reported.
+
+**The audit trail is one part of the record.** It shows what your app asserted and what happened in the signing session, not the evidence your provider collected. Keep your verification records alongside it.
+
+**Keep your own evidence.** Retain verification results, reference ids and evidence for as long as your legal, regulatory and contractual obligations require, in a way you can match to the TurboSign document and `verificationId`. If you send `evidenceUrl`, TurboSign stores the link only. You keep the content behind it available and access-controlled.
+
+**Protect the signing URL.** The URL is single-use and issued to your application. Give it only to the person you verified, in their authenticated session, and don't log, store or email it unprotected. Anyone who opens it can act as that signer.
+
+**What counts as enough verification is your decision.** It depends on the document type, your industry and the laws that apply (for example ESIGN, UETA, eIDAS, or rules for your sector). Validity and enforceability depend on your use case and implementation. TurboSign does not decide whether your verification meets any legal, regulatory or contractual requirement.
+
+**Misuse is your responsibility.** This includes an assertion sent without a real verification, with inaccurate information, or with email matching overridden. Only assert after a verification that actually succeeded for the person who will sign.
 
 :::note Not legal advice
-This page describes how the feature works. It is not legal advice. Consult your legal counsel about the verification and signature requirements that apply to your documents.
+This page is general product information, not legal advice. TurboSign is not a law firm. Consult your own counsel about the requirements that apply to your documents.
 :::
 
 ## Frequently asked questions
