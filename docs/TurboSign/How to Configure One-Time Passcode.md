@@ -79,7 +79,7 @@ TurboSign sends SMS passcodes through **your own** SMS account, so passcodes are
 2. Enter the **From number** in international format with the country code, for example `+13055551234`.
 3. Enter your provider credentials:
    - **Twilio:** Account SID and Auth Token.
-   - **RingCentral:** Server URL, Client ID, Client Secret, and JWT.
+   - **RingCentral:** Server URL, Client ID, Client Secret, and JWT. RingCentral needs some setup on its side first, so follow [Set up RingCentral](#set-up-ringcentral) below.
 4. Click **Save SMS provider**.
 
 ![The SMS provider form with the provider, from number, credential fields, and Save SMS provider button highlighted](/img/how-to-configure-otp/otp-03-sms-provider-form.png)
@@ -104,6 +104,68 @@ SMS passcodes use a custom message body, which **trial accounts** (for example a
 :::note When SMS becomes selectable
 The **SMS** method (Step 2) stays disabled until SMS is turned on, your plan includes it, **and** provider credentials are saved. Saving does not prove the credentials work, so check that the status reads **Connected to Twilio** (or RingCentral). If you later remove the provider credentials while **SMS** is the method, the method switches to **Email**, so signers are still verified on every request through a channel that can deliver.
 :::
+
+### Set up RingCentral
+
+With RingCentral, you bring your own RingCentral app and a JWT credential. Do these steps in the [RingCentral Developer Console](https://developers.ringcentral.com/console) first, then enter the details in TurboSign.
+
+#### 1. Create a RingCentral app
+
+1. In the Developer Console, create a **REST API** app.
+2. In the app's **Auth** section, choose the **JWT auth flow**.
+3. Add the **SMS** permission to the app.
+4. Copy the app's **Client ID** and **Client Secret**. You enter both in TurboSign.
+
+#### 2. Create a JWT credential
+
+1. Sign in to the Developer Console as the **RingCentral user who owns the number you will send from**. The JWT acts as this user, and texts are sent from this user's numbers.
+2. Go to **Credentials** and create a **JWT credential**. We recommend restricting it to the Client ID of the app from the previous step.
+3. Choose an expiration date, or none. RingCentral JWTs never expire unless you set a date. If you set one, TurboSign shows it in the form (see [Check when your JWT expires](#check-when-your-jwt-expires)).
+4. Copy the JWT. You enter it in TurboSign.
+
+#### 3. Choose the From number
+
+The **From number** must be:
+
+- In international (E.164) format with the country code, for example `+13055551234`.
+- A number that belongs to the user from the previous step and has the **SmsSender** feature in RingCentral.
+- For US and Canada local numbers, registered to an approved **10DLC (TCR) brand and campaign** before it can send. This applies to developer (sandbox) accounts too, and texts sent from a sandbox account carry a test watermark.
+
+A number that only has the **A2PSmsSender** feature (RingCentral's high-volume SMS API) cannot send through TurboSign.
+
+#### 4. Enter the details in TurboSign
+
+1. In the SMS provider form, choose **RingCentral** as the **Provider**.
+2. Enter the **From number** from the previous step.
+3. Enter the **Server URL** for the environment where you created the app and the JWT:
+   - Production: `https://platform.ringcentral.com`
+   - Sandbox: `https://platform.devtest.ringcentral.com`
+
+   Any other address is rejected when you save.
+4. Enter the **Client ID**, **Client Secret**, and **JWT**.
+5. Click **Save SMS provider**. TurboSign checks the account straight away, without sending a text. The status at the top of the box should read **Connected to RingCentral**.
+6. Use **Send a test message** to text a number you control and confirm delivery.
+
+#### Check when your JWT expires
+
+Each time you open the form, TurboSign shows when the saved JWT expires, under the **JWT** field. The JWT itself is never shown. You see one of these:
+
+- **JWT expires on** *date*, with a small calendar tile showing the date. Texts stop on that date until you save a new JWT.
+- An orange warning, **JWT expires on** *date* **(in** *N* **days)**, when the date is 30 days away or less. Create a new JWT in RingCentral and save it in TurboSign before then.
+- A red **This JWT expired on** *date*. Text messages cannot be sent until you create a new JWT in RingCentral and save it in TurboSign.
+- **No expiration set on this JWT.** It keeps working until it is revoked in RingCentral.
+- **Couldn't read an expiration date from this JWT.** Check it in the RingCentral Developer Console.
+
+When you save a JWT that has an expiration date, the confirmation also tells you, for example **SMS provider saved. Expiration detected on this JWT: JWT expires on** *date*.
+
+![The RingCentral SMS provider form with the JWT expiration date and calendar tile under the JWT field highlighted](/img/how-to-configure-otp/otp-06-ringcentral-jwt-expiry.png)
+
+To replace a JWT, create a new one in the Developer Console, paste it into the **JWT** field, and click **Save SMS provider**. Leave the other secret fields blank to keep their saved values.
+
+#### Troubleshooting RingCentral
+
+- **RingCentral rejects the credentials or reports "RingCentral auth failed".** Check that the **Server URL** matches where the app and JWT were created (sandbox or production), that the app uses the **JWT auth flow**, and that the JWT is allowed for this app's Client ID.
+- **The test message fails with a 403 error or MSG-242.** The From number is missing the **SmsSender** feature, is not on an approved 10DLC campaign, or does not belong to the user who created the JWT. To check a number's features, call `GET /restapi/v1.0/account/~/extension/~/phone-number` with the RingCentral API (this needs the **Read Accounts** permission).
 
 ## Step 6: Get alerted when a passcode cannot be delivered
 
