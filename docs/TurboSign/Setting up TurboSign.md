@@ -305,12 +305,13 @@ Every field you place is required by default: the signer can't finish until it's
 
 ![The field settings panel with the Required setting and its "Signer must fill this field" checkbox highlighted](/img/turbosign/optional-fields/01-required-setting.png)
 
-When the signer opens the document, an empty optional field shows "(Optional)" after its name, for example **Text (Optional)**. The "N of M required" counter only counts required fields, so the signer can submit once those are done.
+When the signer opens the document, an empty optional field keeps its usual label and shows a small **Optional** tag on its top-right corner. The "N of M required" counter only counts required fields, so the signer can submit once those are done. If the signer fills in an optional field and changes their mind, they can open it again and click **Clear field**.
 
-![The signing page with an empty text field labeled "Text (Optional)" and the counter reading "0 of 1 required"](/img/turbosign/optional-fields/02-signer-optional-label.png)
+![The signing page with an empty text field carrying an "Optional" tag on its top-right corner and the counter reading "0 of 1 required"](/img/turbosign/optional-fields/02-signer-optional-label.png)
 
 :::note Good to know
 - **Signature, Initials, Date, and Checkbox fields don't have a Required setting.** Signatures and initials are always required. Date and checkbox fields are always filled in on the signing page.
+- **Locked fields don't have a Required setting either.** When you check **Make field read-only** under **Lock Field**, the Required setting disappears: a locked field is pre-filled and the signer can't change it, so it never holds up signing, and signers never see the Optional tag on it.
 - **A blank optional field stays empty** on the signed PDF.
 - **A default value is a real answer, not a hint.** If you type instructions into an optional field's default value, that text ends up on the signed PDF unless the signer clears it. Leave the default value empty if the field should stay blank.
 - **Each recipient needs at least one required field they can fill out**, such as a signature. If a recipient only has optional or read-only fields, the editor shows "Some recipients have no required editable fields" and you can't send until you fix it.
