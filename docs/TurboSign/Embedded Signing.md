@@ -1,5 +1,6 @@
 ---
 title: Embedded Signing and Identity Verification
+slug: embedded-signing
 sidebar_position: 5
 description: Embed TurboSign in your own app and verify each signer with a one-time passcode, your own identity provider, or an explicit override. Request a short-lived signing URL at the moment a signer is ready.
 keywords:
@@ -28,6 +29,22 @@ Identity verification is optional and set per recipient. A recipient with no ver
 | Override (`override`) | Nobody. An explicit opt-out for development and testing | Recorded on the certificate and in the audit trail |
 
 Verification is not tied to embedding: the same per-recipient step-up applies whether the signer arrives through an embedded URL or an emailed link.
+
+:::tip Let your AI coding agent write the integration
+The [TurboDocx quickstart skill](https://github.com/TurboDocx/quickstart) (`turbodocx-sdk`) installs the [TurboDocx SDK](https://github.com/TurboDocx/SDK) and writes the integration code, including embedded signing, in JavaScript/TypeScript, Python, Go, PHP, Java or Ruby. Install it without any prompts:
+
+```bash
+npx skills add TurboDocx/quickstart --skill turbodocx-sdk -y
+```
+
+Then paste a prompt like this into Claude Code, Cursor, Copilot, Codex or any agent that supports [Agent Skills](https://agentskills.io):
+
+```text
+Add TurboSign embedded signing with SMS verification to my app
+```
+
+More install options: [Install with AI Agents](../SDKs/agent-skills.md).
+:::
 
 ## Before you start
 
@@ -210,6 +227,8 @@ Open `url` for the signer. The signing page handles the rest: for `external_idv`
 If your app already verifies signers with an identity verification provider (for example Persona, Onfido, Jumio, Veriff or Stripe Identity), give the recipient `{ "mode": "external_idv", "provider": "..." }` and pass an `identityAssertion` to `createSigningUrl`. The assertion's four required fields are `provider`, `verificationId`, `verifiedAt` and `subjectEmail`, and you can add `method`, `methodDetail`, `assuranceLevel`, `verifiedName`, `evidenceUrl` and `overrideEmailMatching`. TurboSign checks that the provider and email match the recipient, that the verification is recent and not reused by another signer, records it in the audit trail, and returns a single-use signing URL.
 
 The full guide covers the request shape, every check, the email-match override, what lands in the audit trail, worked examples for common providers, and the errors: [External Identity Verification (IdV) for Embedded Signing](./External%20Identity%20Verification.md).
+
+Your app and your identity verification provider do the verification and are responsible for what you assert. TurboSign records and checks the assertion but does not verify the signer itself. See [Your responsibilities](./External%20Identity%20Verification.md#responsibility-and-legal-considerations).
 
 ## Passcode attempts and lockout
 

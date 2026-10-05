@@ -1,5 +1,6 @@
 ---
 title: How to Enable Embedded Signing
+slug: how-to-enable-embedded-signing
 sidebar_position: 6
 description: Turn on embedded signing and signer identity verification for your organization, choose the passcode channel, allow the origins that may iframe the signing page, and understand the clickjacking and localhost rules.
 keywords:
