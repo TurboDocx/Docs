@@ -43,7 +43,7 @@ Then paste a prompt like this into Claude Code, Cursor, Copilot, Codex or any ag
 Add TurboSign embedded signing with SMS verification to my app
 ```
 
-More install options: [Install with AI Agents](../SDKs/agent-skills.md).
+More install options: [Install with AI Agents](../SDKs/agent-skills.md). To see the result first, run the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app), a Vite + React host app that embeds TurboSign four ways (single signer, external identity verification, sequential kiosk, and the drop-in widget) while the API key stays on its small server.
 :::
 
 ## Before you start
