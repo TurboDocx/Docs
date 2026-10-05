@@ -269,7 +269,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 409 | `DocumentNotSignable`, `RecipientAlreadySigned`, `RecipientNotInTurn`, `NotSignersTurn` | The document or recipient is not in a signable state. |
 | 410 | `SigningUrlNotRedeemable` | A single-use signing URL was already used or has expired. Request a new one. |
 
-A missing document returns `404` with the older `{ "message", "type": "DocumentNotFound" }` body. The signer-facing passcode endpoints that the signing page calls use their own `{ "error", "code" }` body with lowercase codes, for example `locked` with HTTP `423`.
+A missing document returns `404` with `DocumentNotFound`. When you send a document, that error uses the same four-field body as above; other endpoints may return only `message` and `type`. See [Error Codes for Sending and Updating Recipients](./API%20Signatures.md#error-codes-for-sending-and-updating-recipients) for the full list for those endpoints. The signer-facing passcode endpoints that the signing page calls use their own `{ "error", "code" }` body with lowercase codes, for example `locked` with HTTP `423`.
 
 ## Override
 
