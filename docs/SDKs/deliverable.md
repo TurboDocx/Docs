@@ -2238,7 +2238,7 @@ try {
 </TabItem>
 </Tabs>
 
-The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status and code mapping) and the `message`/`statusCode`/`code` properties shared by every error are documented once in the [JavaScript / TypeScript SDK's Error Handling reference](./javascript.md#error-handling).
+The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status and code mapping) and the `message`/`statusCode`/`code` properties shared by every error are documented once in the [JavaScript / TypeScript SDK's Error Handling reference](/docs/SDKs/turbosign?language=js#error-handling).
 
 </TabItem>
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
@@ -2293,7 +2293,7 @@ async def main():
 asyncio.run(main())
 ```
 
-The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `message`/`status_code`/`code` attributes shared by every error are documented once in the [Python SDK's Error Handling reference](./python.md#error-handling).
+The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `message`/`status_code`/`code` attributes shared by every error are documented once in the [Python SDK's Error Handling reference](/docs/SDKs/turbosign?language=python#error-handling).
 
 </TabItem>
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
@@ -2343,7 +2343,7 @@ try {
 }
 ```
 
-The full typed-exception table (`AuthenticationException`, `AuthorizationException`, `ConflictException`, `RateLimitException`, `NetworkException`, HTTP status mapping) and the `getMessage()`/`statusCode`/`errorCode` properties shared by every exception are documented once in the [PHP SDK's Error Handling reference](./php.md#error-handling).
+The full typed-exception table (`AuthenticationException`, `AuthorizationException`, `ConflictException`, `RateLimitException`, `NetworkException`, HTTP status mapping) and the `getMessage()`/`statusCode`/`errorCode` properties shared by every exception are documented once in the [PHP SDK's Error Handling reference](/docs/SDKs/turbosign?language=php#error-handling).
 
 </TabItem>
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
@@ -2388,7 +2388,7 @@ if err != nil {
 }
 ```
 
-The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `Message`/`StatusCode`/`Code` fields on every error are documented once in the [Go SDK's Error Handling reference](./go.md#error-handling).
+The full typed-error table (`AuthenticationError`, `AuthorizationError`, `ConflictError`, `RateLimitError`, `NetworkError`, HTTP status mapping) and the `Message`/`StatusCode`/`Code` fields on every error are documented once in the [Go SDK's Error Handling reference](/docs/SDKs/turbosign?language=go#error-handling).
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
@@ -2419,7 +2419,7 @@ try {
 }
 ```
 
-The full typed-exception table (`AuthenticationException`, `AuthorizationException`, `ConflictException`, `RateLimitException`, `NetworkException`, HTTP status mapping) and the `getMessage()`/`getStatusCode()`/`getCode()` methods shared by every exception are documented once in the [Java SDK's Error Handling reference](./java.md#error-handling).
+The full typed-exception table (`AuthenticationException`, `AuthorizationException`, `ConflictException`, `RateLimitException`, `NetworkException`, HTTP status mapping) and the `getMessage()`/`getStatusCode()`/`getCode()` methods shared by every exception are documented once in the [Java SDK's Error Handling reference](/docs/SDKs/turbosign?language=java#error-handling).
 
 </TabItem>
 </Tabs>

@@ -175,7 +175,7 @@ The TurboDocx integration uses **read-only access** (Inquire level) to retrieve 
 ## Step 2: Configure TurboDocx
 
 1. Log into your TurboDocx dashboard
-2. Go to **Settings → Organization Settings**
+2. Click your account avatar, then go to **Settings → Features and integrations**
 3. Find **ConnectWise PSA Integration** and click **Configure**
 
 ![TurboDocx ConnectWise Configuration Fields](/img/connectwise_integration/TurboDocxFields.png)

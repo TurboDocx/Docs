@@ -90,7 +90,7 @@ Yes! If you trigger from a folder, the AI can access all tasks within that folde
 
 ### How do I edit or delete an automation?
 
-Open the Wrike integration configuration in TurboDocx (Settings > Integrations > Wrike). You can manage all your automations from the configuration panel.
+Open the Wrike integration configuration in TurboDocx (**Settings → Features and integrations**, then **Configure Wrike** on the Wrike Integration card). You can manage all your automations from the configuration panel.
 
 ### Can I create automations for different workflows?
 

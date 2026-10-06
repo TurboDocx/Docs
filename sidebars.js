@@ -87,12 +87,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'Integrations/Zapier',
-          label: 'Zapier',
-          className: 'integration-zapier',
-        },
-        {
-          type: 'doc',
           id: 'Integrations/Zoom',
           label: 'Zoom',
           className: 'integration-zoom',
@@ -155,8 +149,13 @@ const sidebars = {
           label: 'Install with AI Agents',
         },
         {
+          type: 'doc',
+          id: 'SDKs/developer-mode',
+          label: 'Developer Mode',
+        },
+        {
           type: 'category',
-          label: 'TurboSign SDKs',
+          label: 'Install & configure',
           collapsed: false,
           items: [
             {
@@ -185,6 +184,11 @@ const sidebars = {
               label: 'Java',
             },
           ],
+        },
+        {
+          type: 'doc',
+          id: 'SDKs/turbosign',
+          label: 'TurboSign SDK',
         },
         {
           type: 'doc',

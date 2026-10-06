@@ -97,21 +97,21 @@ Your API key is like a password - never share it publicly or include it in email
 
 ## Step 2: Configuring TurboDocx
 
-### 🔧 How to Configure Fireflies in Organization Settings
+### 🔧 How to Configure Fireflies in Settings
 
-1. Go to **Settings**
+1. Click your **account avatar** at the bottom of the left sidebar, then click **Settings**
 
-![Go to Settings](/img/zoom_integration/GoToSettings.png)
-
-<br/>
-
-2. Click on **Organization Settings**
-
-![Go to Organization Settings](/img/zoom_integration/GoToOrganizationSettings.png)
+![Account menu with the Settings item highlighted](/img/zoom_integration/GoToSettings.png)
 
 <br/>
 
-3. Scroll down to the **Fireflies** section
+2. In the menu on the left of the Settings page, click **Features and integrations**
+
+![Settings menu with Features and integrations highlighted](/img/zoom_integration/GoToFeaturesAndIntegrations.png)
+
+<br/>
+
+3. Scroll down to the **Fireflies** card
 4. Click **Configure Fireflies**
 
 ![Click Configure Fireflies](/img/fireflies_integration/configure_fireflies.png)

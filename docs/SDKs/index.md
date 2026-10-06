@@ -50,11 +50,11 @@ Send documents for legally-binding eSignatures with full audit trails.
 
 | Language                  | Package                    | Install Command                                                      | Links                                                                                              |
 | :------------------------ | :------------------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- |
-| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/javascript) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
-| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)     |
-| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)       |
-| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
-| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
+| **JavaScript/TypeScript** | `@turbodocx/sdk`           | `npm install @turbodocx/sdk`                                         | [Docs](/docs/SDKs/turbosign?language=js) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk) |
+| **Python**                | `turbodocx-sdk`            | `pip install turbodocx-sdk`                                          | [Docs](/docs/SDKs/turbosign?language=python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)     |
+| **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/turbosign?language=php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)       |
+| **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/turbosign?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
+| **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/turbosign?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
 
 ## TurboWebhooks SDKs
 
@@ -129,9 +129,9 @@ TurboSign accepts a `senderEmail` (used as the reply-to address for signature re
 #### How to Get Your Credentials
 
 1. **Login to TurboDocx**: Visit [https://www.turbodocx.com](https://www.turbodocx.com)
-2. **Navigate to Settings**: Access your organization settings
-3. **API Keys Section**: Generate or copy your API access token
-4. **Organization ID**: Copy your organization ID from the same settings page
+2. **Navigate to Settings**: Click your account avatar, then click **Settings**
+3. **API Keys Section**: Open **API keys** (under **Developers**) to generate or copy your API access token
+4. **Organization ID**: Copy your organization ID from the **Features and integrations** page
 
 ![TurboSign API Key](/img/turbosign/api/api-key.png)
 ![TurboSign Organization ID](/img/turbosign/api/org-id.png)
@@ -199,7 +199,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.4.0</version>
+    <version>0.7.0</version>
 </dependency>
 ```
 

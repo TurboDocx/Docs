@@ -3309,7 +3309,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php) — same API, PHP idioms
-- [TurboSign JavaScript SDK](/docs/SDKs/javascript) — sending documents for signature
+- [TurboSign JavaScript SDK](/docs/SDKs/turbosign?language=js) — sending documents for signature
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 - [@turbodocx/sdk on npm](https://www.npmjs.com/package/@turbodocx/sdk)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
@@ -3320,7 +3320,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
 - [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js) — same API, JS idioms
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php) — same API, PHP idioms
-- [TurboSign Python SDK](/docs/SDKs/python) — sending documents for signature
+- [TurboSign Python SDK](/docs/SDKs/turbosign?language=python) — sending documents for signature
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 - [turbodocx-sdk on PyPI](https://pypi.org/project/turbodocx-sdk/)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
@@ -3329,7 +3329,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - [TurboSign → Webhooks](/docs/TurboSign/Webhooks) — concepts, dashboard UI, retry behavior
-- [TurboSign PHP SDK](/docs/SDKs/php) — sending documents for signature
+- [TurboSign PHP SDK](/docs/SDKs/turbosign?language=php) — sending documents for signature
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 - [TurboDocx SDK on Packagist](https://packagist.org/packages/turbodocx/sdk)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
@@ -3341,7 +3341,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js) — same API, JS idioms
 - [TurboWebhooks Python SDK](/docs/SDKs/webhooks?language=python) — same API, Python idioms
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php) — same API, PHP idioms
-- [TurboSign Go SDK](/docs/SDKs/go) — sending documents for signature
+- [TurboSign Go SDK](/docs/SDKs/turbosign?language=go) — sending documents for signature
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
 
@@ -3353,7 +3353,7 @@ It exercises every CRUD step plus every error branch (400 / 401 / 403 / 404 / 40
 - [TurboWebhooks Python SDK](/docs/SDKs/webhooks?language=python) — same API, Python idioms
 - [TurboWebhooks Go SDK](/docs/SDKs/webhooks?language=go) — same API, Go idioms
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php) — same API, PHP idioms
-- [TurboSign Java SDK](/docs/SDKs/java) — sending documents for signature
+- [TurboSign Java SDK](/docs/SDKs/turbosign?language=java) — sending documents for signature
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
 

@@ -79,6 +79,37 @@ function scrollToHashTarget(hash) {
   return stop;
 }
 
+// The TurboSign guide used to live on each language page (/docs/SDKs/python) and now lives on
+// /docs/SDKs/turbosign with language tabs; the language pages are short setup pages. An old deep link
+// like /docs/SDKs/python#get-status points at a section that is no longer on the setup page, so once
+// the page has rendered and the anchor is still missing, hop to the same anchor on the TurboSign page
+// with that language's tab selected. Anchors that still exist on the setup page are left alone.
+const MOVED_TURBOSIGN = { javascript: 'js', python: 'python', php: 'php', go: 'go', java: 'java' };
+
+function hopToMovedSection(pathname, hash) {
+  const m = pathname.match(/^\/docs\/SDKs\/(javascript|python|php|go|java)\/?$/);
+  if (!m) return null;
+  let id;
+  try {
+    id = decodeURIComponent(hash.replace(/^#/, ''));
+  } catch {
+    return null; // malformed hash (e.g. #%E0): leave the page alone
+  }
+  if (!id) return null;
+  let tries = 0;
+  let timer;
+  const check = () => {
+    if (document.getElementById(id)) return; // still on this page
+    if (++tries < 10) {
+      timer = setTimeout(check, 75);
+      return;
+    }
+    window.location.replace(`/docs/SDKs/turbosign?language=${MOVED_TURBOSIGN[m[1]]}#${encodeURIComponent(id)}`);
+  };
+  timer = setTimeout(check, 0);
+  return () => clearTimeout(timer);
+}
+
 export default function Root({ children }) {
   const { pathname, hash } = useLocation();
   // null on the very first render so a fresh load that lands on a hash is treated
@@ -95,7 +126,12 @@ export default function Root({ children }) {
     // same page (a TOC click) is Docusaurus's job — don't fight its smooth scroll.
     if (!isFirstRender && !changedPage) return;
 
-    return scrollToHashTarget(hash);
+    const cancelHop = hopToMovedSection(pathname, hash);
+    const cancelScroll = scrollToHashTarget(hash);
+    return () => {
+      if (cancelHop) cancelHop();
+      cancelScroll();
+    };
   }, [pathname, hash]);
 
   return <>{children}</>;

@@ -2581,7 +2581,7 @@ window). The reminder and expiration-warning cadence still applies and **must fi
 </TabItem>
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
-Both `SendQuoteRequest` and `SendQuoteWithDeliverableRequest` embed a `SignatureSchedule` — the same eight reminder/expiration override fields used by TurboSign's [`SendSignature`](./go.md#schedule-reminders-and-expiration), with `Duration{Value, Unit}` durations (`Unit` is `"hours"` or `"days"`). This drives the reminder and expiry-warning cadence on the quote's signature request.
+Both `SendQuoteRequest` and `SendQuoteWithDeliverableRequest` embed a `SignatureSchedule` — the same eight reminder/expiration override fields used by TurboSign's [`SendSignature`](/docs/SDKs/turbosign?language=go#schedule-reminders-and-expiration), with `Duration{Value, Unit}` durations (`Unit` is `"hours"` or `"days"`). This drives the reminder and expiry-warning cadence on the quote's signature request.
 
 ```go
 sent, err := qc.SendQuote(ctx, "quote-uuid", &turbodocx.SendQuoteRequest{
@@ -5784,7 +5784,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
-- [TurboSign JavaScript SDK](/docs/SDKs/javascript) — send documents for e-signature
+- [TurboSign JavaScript SDK](/docs/SDKs/turbosign?language=js) — send documents for e-signature
 - [TurboWebhooks JavaScript SDK](/docs/SDKs/webhooks?language=js) — receive real-time signature events
 - [Deliverable JavaScript SDK](/docs/SDKs/deliverable?language=js) — generate documents from templates
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
@@ -5795,7 +5795,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 - [TurboQuote JavaScript / TypeScript SDK](/docs/SDKs/quote?language=js) — same API, JS idioms
-- [TurboSign Python SDK](/docs/SDKs/python) — send documents for e-signature
+- [TurboSign Python SDK](/docs/SDKs/turbosign?language=python) — send documents for e-signature
 - [TurboWebhooks Python SDK](/docs/SDKs/webhooks?language=python) — receive real-time signature events
 - [Deliverable Python SDK](/docs/SDKs/deliverable?language=python) — generate documents from templates
 - [SDKs Overview](/docs/SDKs) — all SDKs across all languages
@@ -5806,7 +5806,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 - [TurboQuote Python SDK](/docs/SDKs/quote?language=python) — same surface in Python
-- [TurboSign PHP SDK](/docs/SDKs/php) — sending documents for signature from PHP
+- [TurboSign PHP SDK](/docs/SDKs/turbosign?language=php) — sending documents for signature from PHP
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php) — receiving signature events in PHP
 - [Deliverable PHP SDK](/docs/SDKs/deliverable?language=php) — document generation from PHP
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
@@ -5819,7 +5819,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboQuote JavaScript / TypeScript SDK](/docs/SDKs/quote?language=js) — same API, JS/TS idioms
 - [TurboQuote Python SDK](/docs/SDKs/quote?language=python) — same API, Python idioms
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
-- [TurboSign Go SDK](/docs/SDKs/go) — sending documents for e-signature
+- [TurboSign Go SDK](/docs/SDKs/turbosign?language=go) — sending documents for e-signature
 - [Deliverable Go SDK](/docs/SDKs/deliverable?language=go) — generating documents from templates
 - [TurboWebhooks Go SDK](/docs/SDKs/webhooks?language=go) — real-time event delivery
 - [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
@@ -5830,7 +5830,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboQuote JavaScript / TypeScript SDK](/docs/SDKs/quote?language=js) — same API, JS idioms
 - [TurboQuote Python SDK](/docs/SDKs/quote?language=python) — same API, Python idioms
 - [TurboQuote PHP SDK](/docs/SDKs/quote?language=php) — same API, PHP idioms
-- [TurboSign Java SDK](/docs/SDKs/java) — sending documents for e-signature
+- [TurboSign Java SDK](/docs/SDKs/turbosign?language=java) — sending documents for e-signature
 - [TurboWebhooks Java SDK](/docs/SDKs/webhooks?language=java) — receiving signature events
 - [SDKs Overview](/docs/SDKs) — all SDKs across all languages
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)

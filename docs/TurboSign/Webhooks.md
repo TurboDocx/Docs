@@ -56,23 +56,23 @@ TurboSign webhooks provide a robust and secure way to integrate document signatu
 
 ### Setting Up Webhooks
 
-Webhooks can be configured through the TurboSign interface in your organization settings.
+Webhooks can be configured from the E-Signature settings on the **Features and integrations** page of your organization Settings.
 
-1. **Go to the Turbodocx Home Page and click on settings**
-   - click on the settings on the sidemenu
+1. **Open Settings**
+   - Click your avatar at the bottom of the left sidebar, then click **Settings**
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/home-page.png)
+![Account menu open with the Settings item highlighted](/img/webhooks/open-settings.png)
 
-2. **Navigate to Organization Settings**
-   - Select "Organization Settings" from the tabs
+2. **Go to Features and integrations**
+   - In the menu on the left of the Settings page, click **Features and integrations**
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/organization-setting.png)
+![Settings menu with Features and integrations highlighted](/img/webhooks/features-and-integrations-link.png)
 
 3. **Open E-Signature Settings and go to the Webhooks tab**
 
    - Scroll down to the **Core Features** section, find the **Signatures** card, and click **"Configure E-Signature"**
 
-![Organization Settings Core Features section with the Configure E-Signature button on the Signatures card highlighted](/img/webhooks/core-features-section.png)
+![Features and integrations page with the Configure E-Signature button on the Signatures card highlighted](/img/webhooks/core-features-section.png)
 
    - In the **E-Signature Settings** dialog that opens, select the **"Webhooks"** tab
 

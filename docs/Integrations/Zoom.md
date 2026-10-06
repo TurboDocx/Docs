@@ -194,24 +194,24 @@ cloud_recording:read:list_user_recordings
 
 ## Step 2: Configuring TurboDocx
 
-### 🔧 How to Configure Zoom in Organization Settings
+### 🔧 How to Configure Zoom in Settings
 
-1. Go to **Settings**
+1. Click your **account avatar** at the bottom of the left sidebar, then click **Settings**
 
-![Go to Settings](/img/zoom_integration/GoToSettings.png)
-
-<br/>
-
-2. Click on **Organization Settings**
-
-![Go to Organization Settings](/img/zoom_integration/GoToOrganizationSettings.png)
+![Account menu with the Settings item highlighted](/img/zoom_integration/GoToSettings.png)
 
 <br/>
 
-3. Scroll down to the **Zoom** section
+2. In the menu on the left of the Settings page, click **Features and integrations**
+
+![Settings menu with Features and integrations highlighted](/img/zoom_integration/GoToFeaturesAndIntegrations.png)
+
+<br/>
+
+3. Scroll down to the **Zoom** card
 4. Click **Configure Zoom**
 
-![Click Configure Zoom](/img/zoom_integration/ClickConfigureZoom.png)
+![Zoom card with the Configure Zoom button highlighted](/img/zoom_integration/ClickConfigureZoom.png)
 
 <br/>
 

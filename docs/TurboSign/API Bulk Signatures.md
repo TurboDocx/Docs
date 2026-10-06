@@ -108,9 +108,9 @@ Before using the Bulk API, ensure you have:
 ### Getting Your Credentials
 
 1. **Login to TurboDocx**: Visit [https://www.turbodocx.com](https://www.turbodocx.com)
-2. **Navigate to Settings**: Access your organization settings
-3. **API Keys Section**: Generate or retrieve your API access token
-4. **Organization ID**: Copy your organization ID from the settings
+2. **Navigate to Settings**: Click your account avatar, then click **Settings**
+3. **API Keys Section**: Open **API keys** (under **Developers**) to generate or retrieve your API access token
+4. **Organization ID**: Copy your organization ID from the **Features and integrations** page
 
 ![TurboSign API Key](/img/turbosign/api/api-key.png)
 ![TurboSign Organization ID](/img/turbosign/api/org-id.png)
@@ -278,6 +278,16 @@ bulk batches too**. Add a `metadata.fieldKey` to a controlling checkbox and a
 within the same job's `fields` array. See
 [Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields) for the full contract, the
 `show` vs. `unlock` behavior, and the `InvalidConditionalRule` / fail-open rules.
+:::
+
+:::note Optional fields are supported
+Set `required: false` on a field in `documents[].fields` to let the signer leave it blank. The
+same rules as the single-step API apply: `signature` and `initial` fields cannot be optional,
+`required` must be a JSON boolean (`null` counts as not set, so the field stays required), and each recipient needs at least one required, editable
+field. A document that breaks a rule fails the batch with `BulkValidationFailed`, and the
+failing document is listed in the error details with its specific code (`OptionalNotSupported`,
+`InvalidFieldRequired`, or `NoEditableFieldsForRecipient`). See
+[Optional Fields](/docs/TurboSign/API%20Signatures#optional-fields) for details.
 :::
 
 ### Response (Success)
@@ -623,6 +633,9 @@ Common error codes you may encounter:
 | `BatchNotFound`        | batchId doesn't exist                       | Check batch ID                          |
 | `BatchNotCancellable`  | Batch already completed                     | Cannot cancel completed batches         |
 | `InsufficientCredits`  | Not enough credits for batch                | Add credits to organization             |
+| `OptionalNotSupported` | Per document, inside `BulkValidationFailed`: `required: false` on a signature or initial field | Remove `required` or set it to `true` |
+| `InvalidFieldRequired` | Per document, inside `BulkValidationFailed`: `required` is not a boolean or `null` (e.g. `"false"`) | Send `true` or `false` as a JSON boolean |
+| `NoEditableFieldsForRecipient` | Per document, inside `BulkValidationFailed`: a recipient has only optional or read-only fields | Give the recipient a required, editable field such as a signature |
 
 ---
 
