@@ -383,12 +383,23 @@ Show whose turn it is above the signing panel, as in the example. Each signer ve
 
 ## What the signers see
 
-1. The first signer sees "it's your turn", clicks **Send Code**, enters the code from their email, and signs.
-2. Your page shows "Preparing" for a moment, then loads the second signer's turn.
-3. The second signer verifies with their own code and signs.
-4. When the last signer finishes, TurboSign emails the completed document to everyone.
+These screenshots come from the kiosk path of the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app).
 
-![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)
+1. Someone enters both signers in order and clicks **Start signing**.
+
+   ![The kiosk form with two signers and the Start signing button highlighted](/img/embedded-signing/kiosk-01-start.png)
+
+2. The first signer sees it is their turn, clicks **Send Code**, enters the code from **their own** email, accepts the consent, and signs.
+
+   ![The first signer marked signing now, with the Send Code button highlighted](/img/embedded-signing/kiosk-02-first-turn.png)
+
+3. Your page shows "Preparing" for a moment, then loads the second signer's turn. The first signer is marked done.
+
+   ![The second signer marked signing now after the first is done, with the Send Code button highlighted](/img/embedded-signing/kiosk-03-second-turn.png)
+
+4. The second signer verifies with their own code and signs. When the last signer finishes, TurboSign emails the completed document to everyone.
+
+   ![The All signers are done confirmation highlighted](/img/embedded-signing/kiosk-04-done.png)
 
 ## What the completion event contains
 

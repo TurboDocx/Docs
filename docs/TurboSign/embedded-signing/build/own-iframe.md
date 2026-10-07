@@ -109,12 +109,35 @@ The signing page may post with a target origin of `*` when it can't resolve your
 
 ## What the signer sees
 
-1. Your page loads with the TurboSign signing panel inside it, asking the signer to verify their identity.
-2. The signer clicks **Send Code**, and TurboSign emails a six-digit code to the signer's address.
-3. The signer enters the code. The document opens.
-4. The signer fills in the signature and date fields and finishes. Your listener receives `turbosign:completed`.
+These screenshots come from the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app). Your app's page around the signing panel will look different; the panel itself is the same.
 
-![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)
+1. Your signer clicks your own button (here, **Start signing**). Your server creates the document and returns the signing URL, and your page sets it as the iframe's `src`.
+
+   ![The host app form with the Start signing button highlighted](/img/embedded-signing/iframe-01-start.png)
+
+2. Your page shows the TurboSign signing panel. The signer clicks **Send Code**, and TurboSign emails a six-digit code to the signer's address.
+
+   ![The Verify your identity panel inside the host app, with the Send Code button highlighted](/img/embedded-signing/iframe-02-send-code.png)
+
+3. The signer types the code and clicks **Verify And Continue**.
+
+   ![The code entry panel with the Verify And Continue button highlighted](/img/embedded-signing/iframe-03-enter-code.png)
+
+4. The signer ticks **I have read and agree to the TurboSign consent terms** and clicks **Continue**.
+
+   ![The TurboSign Consent panel with the agreement checkbox highlighted](/img/embedded-signing/iframe-04-consent.png)
+
+5. The document opens. The signer clicks the **Signature** field, types or draws a signature, and clicks **Save**. Date fields fill in automatically.
+
+   ![The document with the Signature field highlighted](/img/embedded-signing/iframe-05-document.png)
+
+6. When every required field is done, the signer clicks **Submit Signature**.
+
+   ![The signed document with the Submit Signature button highlighted](/img/embedded-signing/iframe-06-submit.png)
+
+7. The signing page posts `turbosign:completed`. Your listener removes the iframe and shows your own confirmation.
+
+   ![The host app's All set confirmation highlighted after signing](/img/embedded-signing/iframe-07-done.png)
 
 A code expires after 10 minutes, and five wrong entries require a new code. See [Passcode attempts and lockout](../reference.md#passcode-attempts-and-lockout).
 

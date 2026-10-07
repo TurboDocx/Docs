@@ -520,11 +520,31 @@ Open `url` right away: it is single-use and expires in about five minutes. To sh
 
 ## What the signer sees
 
-1. In your app, the signer completes your provider's verification flow (for example an ID scan and a selfie).
-2. Your app shows a "Sign now" button, and your backend mints the URL with the assertion.
-3. The signing page opens **straight to the document**. There is no passcode gate.
-4. The signer signs, and your page receives `turbosign:completed`.
-5. The certificate of completion and the audit trail show "Identity Verified via" your provider, with its reference id.
+These screenshots come from the External IdV path of the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app). It **simulates** the identity verification provider and labels it as simulated; in your app this is your provider's real flow.
+
+1. In your app, the signer starts the verification (here, **Verify identity to sign**).
+
+   ![The External IdV form with the Verify identity to sign button highlighted](/img/embedded-signing/idv-01-start.png)
+
+2. The signer completes your provider's flow, for example a photo ID and a selfie.
+
+   ![The simulated identity check with Photo ID and selfie selected and the Continue button highlighted](/img/embedded-signing/idv-02-simulator.png)
+
+3. Your provider reports the verified identity, and the signer continues to sign.
+
+   ![The simulated Identity verified step with the Continue to sign button highlighted](/img/embedded-signing/idv-03-verified.png)
+
+4. Your backend sends the assertion (provider, verification id, time, email, method) when it mints the signing URL. The signing page opens with **no passcode gate**: only the consent step, then the document.
+
+   ![The simulated assertion sent to TurboSign highlighted, above a signing panel showing consent with no passcode step](/img/embedded-signing/idv-04-assertion.png)
+
+5. The signer clicks the **Signature** field, signs, and clicks **Submit Signature**.
+
+   ![The document inside the host app with the Signature field highlighted](/img/embedded-signing/idv-05-document.png)
+
+6. Your page receives `turbosign:completed`. The certificate of completion and the audit trail show "Identity Verified via" your provider, with its reference id.
+
+   ![The All set confirmation highlighted, noting the external identity verification on the certificate](/img/embedded-signing/idv-06-done.png)
 
 ## What lands in the audit trail
 

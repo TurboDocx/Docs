@@ -123,12 +123,27 @@ The element fails closed. If `origin` is missing, it ignores every message and `
 
 ## What the signer sees
 
-1. Your page shows the TurboSign signing panel, asking the signer to verify their identity.
-2. The signer clicks **Send Code** and receives a six-digit code by email.
-3. The signer enters the code, and the document opens.
-4. The signer signs. The element fires `turbosign:completed`.
+The signing panel inside `turbosign-form` is the same one the other build guides show. These screenshots come from the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app).
 
-![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)
+1. Your page shows the TurboSign signing panel. The signer clicks **Send Code**, and TurboSign emails a six-digit code to the signer's address.
+
+   ![The Verify your identity panel with the Send Code button highlighted](/img/embedded-signing/iframe-02-send-code.png)
+
+2. The signer types the code and clicks **Verify And Continue**.
+
+   ![The code entry panel with the Verify And Continue button highlighted](/img/embedded-signing/iframe-03-enter-code.png)
+
+3. The signer ticks **I have read and agree to the TurboSign consent terms** and clicks **Continue**.
+
+   ![The TurboSign Consent panel with the agreement checkbox highlighted](/img/embedded-signing/iframe-04-consent.png)
+
+4. The document opens. The signer clicks the **Signature** field, types or draws a signature, and clicks **Save**.
+
+   ![The document with the Signature field highlighted](/img/embedded-signing/iframe-05-document.png)
+
+5. The signer clicks **Submit Signature**. The element fires `turbosign:completed`.
+
+   ![The signed document with the Submit Signature button highlighted](/img/embedded-signing/iframe-06-submit.png)
 
 ## What the completion event contains
 
