@@ -18,7 +18,7 @@ TurboDocx connects to your Google Drive account through Google's own file picker
 
 - A Google account with access to the files or folders you want to import from or export to.
 - Google Drive enabled on your TurboDocx plan. If it isn't, clicking an Import or Export to Google Drive option opens an upgrade prompt instead of the file picker.
-- An organization admin hasn't hidden Google Drive from the interface in Tenant Settings.
+- An organization admin hasn't hidden Google Drive from the interface in **Settings → Features and integrations**.
 
 ## Importing a template from Google Drive
 
@@ -51,7 +51,7 @@ If you cancel the picker without selecting a file (or folder, when exporting), T
 Google Drive import and export are gated by your TurboDocx plan. The prompt means your organization's current plan doesn't include the integration.
 
 **An admin can't find the Google Drive option anywhere in the app.**
-Check Tenant Settings. An admin can hide Google Drive from the interface even when it's enabled on the plan, separately from whether the plan includes it.
+Check **Settings → Features and integrations**. An admin can hide Google Drive from the interface even when it's enabled on the plan, separately from whether the plan includes it.
 
 ## FAQ
 

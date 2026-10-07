@@ -61,7 +61,7 @@ Every TurboDocx product is also a REST API. Official SDKs cover JavaScript/TypeS
 ## Connect your other tools
 
 - [Google Drive](./Integrations/Google%20Drive.md) and [OneDrive and SharePoint](./Integrations/OneDrive%20and%20SharePoint.md): import templates from cloud storage and export deliverables back to it.
-- [Salesforce](./Integrations/SalesForce.md), [HubSpot](./Integrations/Hubspot.md), [Zapier](./Integrations/Zapier.md), [Zoom](./Integrations/Zoom.md), and [Wrike](./Integrations/Wrike/index.md): trigger document generation and signature workflows from the tools your team already uses.
+- [Salesforce](./Integrations/SalesForce.md), [HubSpot](./Integrations/Hubspot.md), [Zoom](./Integrations/Zoom.md), and [Wrike](./Integrations/Wrike/index.md): trigger document generation and signature workflows from the tools your team already uses.
 - [TurboDocx Pipelines](./Pipelines/TurboDocx%20Pipelines.md): automate document intake, field extraction, and signing end to end.
 
 ## Configure your organization

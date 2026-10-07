@@ -56,23 +56,23 @@ TurboSign webhooks provide a robust and secure way to integrate document signatu
 
 ### Setting Up Webhooks
 
-Webhooks can be configured through the TurboSign interface in your organization settings.
+Webhooks can be configured from the E-Signature settings on the **Features and integrations** page of your organization Settings.
 
-1. **Go to the Turbodocx Home Page and click on settings**
-   - click on the settings on the sidemenu
+1. **Open Settings**
+   - Click your avatar at the bottom of the left sidebar, then click **Settings**
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/home-page.png)
+![Account menu open with the Settings item highlighted](/img/webhooks/open-settings.png)
 
-2. **Navigate to Organization Settings**
-   - Select "Organization Settings" from the tabs
+2. **Go to Features and integrations**
+   - In the menu on the left of the Settings page, click **Features and integrations**
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/organization-setting.png)
+![Settings menu with Features and integrations highlighted](/img/webhooks/features-and-integrations-link.png)
 
 3. **Open E-Signature Settings and go to the Webhooks tab**
 
    - Scroll down to the **Core Features** section, find the **Signatures** card, and click **"Configure E-Signature"**
 
-![Organization Settings Core Features section with the Configure E-Signature button on the Signatures card highlighted](/img/webhooks/core-features-section.png)
+![Features and integrations page with the Configure E-Signature button on the Signatures card highlighted](/img/webhooks/core-features-section.png)
 
    - In the **E-Signature Settings** dialog that opens, select the **"Webhooks"** tab
 
@@ -408,11 +408,11 @@ Each webhook request includes these headers:
 
 Our SDKs include built-in webhook verification. The snippets below show the minimum receiver code; for the full SDK reference (createWebhook, updateWebhook, testWebhook, listWebhookDeliveries, replayWebhookDelivery, rotateSecret, framework integration patterns, and gotchas), see the dedicated TurboWebhooks SDK pages:
 
-- [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks-javascript)
-- [TurboWebhooks Python SDK](/docs/SDKs/webhooks-python)
-- [TurboWebhooks PHP SDK](/docs/SDKs/webhooks-php)
-- [TurboWebhooks Go SDK](/docs/SDKs/webhooks-go)
-- [TurboWebhooks Java SDK](/docs/SDKs/webhooks-java)
+- [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js)
+- [TurboWebhooks Python SDK](/docs/SDKs/webhooks?language=python)
+- [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php)
+- [TurboWebhooks Go SDK](/docs/SDKs/webhooks?language=go)
+- [TurboWebhooks Java SDK](/docs/SDKs/webhooks?language=java)
 
 Here are examples for each language:
 

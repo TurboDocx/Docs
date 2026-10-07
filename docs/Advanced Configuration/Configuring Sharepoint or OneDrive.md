@@ -114,20 +114,22 @@ Keep in mind that these are delegated permissions, which means TurboDocx can acc
 
 ![Alt text](/img/sharepoint_and_onedrive/GetSiteName.png)
 
-## Step 4: Login to your TurboDocx Tenant and go to Tenant Settings
+## Step 4: Login to your TurboDocx Tenant and go to Features and integrations
 
-1. As an admin within your TurboDocx tenant, navigate to the settings tab on the left-hand side-nav and click "Tenant Settings" in the top right corner. 
+1. As an admin within your TurboDocx tenant, click your account avatar at the bottom of the left sidebar, click "Settings", then click "Features and integrations" in the Settings menu. 
 
-2. If Hide SharePoint in the UI is selected, unselect this to get the SharePoint configuration button.
+2. On the **SharePoint/OneDrive** card, make sure **Hide SharePoint/OneDrive in UI** is turned off.
 
-3. Click "Configure SharePoint"
+3. Click **Configure SharePoint/OneDrive**
 
-![Alt text](/img/sharepoint_and_onedrive/Configure_Sharepoint_button.png)
+![SharePoint/OneDrive card with the Configure SharePoint/OneDrive button highlighted](/img/sharepoint_and_onedrive/Configure_Sharepoint_button.png)
 
 4. Fill out the following fields with the information you have noted from previous steps and click "Save": 
 
 Tenant Name - This is the name of the SharePoint tenant are connecting to. This can be found by looking in the browser bar and it should resemble "TenantName.SharePoint.com"
-Site Name - This is the name of the default site your users will land on when first opening the SharePoint file picker. This is noted from the previous step. 
+Path to List (optional) - The site or document library your users land on when they first open the SharePoint file picker. Use the site name noted in the previous step.
+<br/><br/>
+Path to Folder (optional) - A folder inside that library to open by default. 
 
 <br/><br/>
 
@@ -139,7 +141,7 @@ Site Name - This is the name of the default site your users will land on when fi
 
 <br/><br/>
 
-![Alt text](/img/sharepoint_and_onedrive/SharePoint_Configuration_in_TurboDocx.png)
+![SharePoint and OneDrive settings dialog filled in, with the Save button highlighted](/img/sharepoint_and_onedrive/SharePoint_Configuration_in_TurboDocx.png)
 
 5. Test importing and Exporting templates using the steps noted in the following sections. 
 

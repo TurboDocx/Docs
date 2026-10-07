@@ -145,6 +145,16 @@ explain"** text field appear.
 
 ```javascript
 const fields = JSON.stringify([
+  // The recipient's signature. Every recipient needs at least one required field.
+  {
+    recipientEmail: "reviewer@acme.com",
+    type: "signature",
+    page: 1,
+    x: 100,
+    y: 600,
+    width: 200,
+    height: 80,
+  },
   // 1) Controlling checkbox — gets a stable fieldKey
   {
     recipientEmail: "reviewer@acme.com",
@@ -192,6 +202,16 @@ until they check **"Override default amount"**.
 
 ```javascript
 const fields = JSON.stringify([
+  // The recipient's signature. Every recipient needs at least one required field.
+  {
+    recipientEmail: "signer@acme.com",
+    type: "signature",
+    page: 1,
+    x: 100,
+    y: 600,
+    width: 200,
+    height: 80,
+  },
   // Controlling checkbox
   {
     recipientEmail: "signer@acme.com",
@@ -281,7 +301,10 @@ existing checkbox's `fieldKey`.
 - Keep `fieldKey` values short, stable, and unique within a document (`request_changes`,
   `override_amount`, `consent`).
 - A dependent field that is `required: true` but hidden via `action: "show"` is only enforced
-  once it becomes visible — don't rely on a hidden required field to block completion.
+  once it becomes visible — don't rely on a hidden required field to block completion. The same
+  goes for a field held read-only by `action: "unlock"`: it is only enforced once the box unlocks it.
+- Set `required: false` on a dependent field if the signer may leave it blank even after it
+  appears or unlocks. See [Optional Fields](/docs/TurboSign/API%20Signatures#optional-fields).
 - The controlling checkbox and its dependent fields should generally belong to the **same
   recipient** so the same signer both toggles the box and fills the revealed field.
 

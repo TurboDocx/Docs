@@ -1,0 +1,181 @@
+// SDK language switcher (Tabs with groupId="language"; each TabItem carries tab-lang tab-lang--<value>).
+// The tab row is the header strip of one card that also holds the selected language's content, the way
+// Stripe, Twilio and Mintlify-style docs present code samples. Nested tab groups inside (npm/pip, Flask/
+// FastAPI, JS/TS variants) render as small pills so they read as a sub-choice, not a second language row.
+// Colors come only from Infima variables, so light and dark mode follow the site theme.
+// Icons: Devicon v2.16.0 (MIT) in static/img/languages.
+
+.tabs-container:has(> .tabs > .tab-lang) {
+  --lt-border: var(--ifm-color-emphasis-200);
+  --lt-header: var(--ifm-color-emphasis-100);
+  --lt-muted: var(--ifm-color-emphasis-700);
+  --lt-strong: var(--ifm-font-color-base);
+  --lt-accent: var(--ifm-color-primary);
+  --lt-radius: var(--ifm-code-border-radius);
+
+  margin: 1.25rem 0 1.5rem;
+  border: 1px solid var(--lt-border);
+  border-radius: var(--lt-radius);
+  background: var(--ifm-background-surface-color);
+  overflow: hidden;
+
+  // Header strip
+  > .tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0;
+    margin: 0;
+    padding: 0 0.375rem;
+    background: var(--lt-header);
+    border-bottom: 1px solid var(--lt-border);
+    overflow-x: auto;
+    overflow-y: hidden; // the -1px indicator overlap must not create a vertical scrollbar
+    scrollbar-width: thin;
+  }
+
+  > .tabs > .tabs__item.tab-lang {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0 0 -1px; // the active indicator sits on the strip's bottom border
+    padding: 0.6rem 0.75rem 0.55rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    color: var(--lt-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: color 120ms ease, border-color 120ms ease;
+
+    &:hover {
+      background: transparent;
+      color: var(--lt-strong);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--lt-accent);
+      outline-offset: -3px;
+      border-radius: 4px;
+    }
+
+    &.tabs__item--active,
+    &[aria-selected='true'] {
+      color: var(--lt-strong);
+      font-weight: 600;
+      border-bottom-color: var(--lt-accent);
+    }
+  }
+
+  // Content panel
+  > .margin-top--md {
+    margin-top: 0 !important;
+    padding: 1rem 1.125rem 0.25rem;
+
+    > [role='tabpanel'] > :first-child {
+      margin-top: 0;
+    }
+
+    > [role='tabpanel'] > :last-child {
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  // Nested, non-language tab groups inside a language panel: compact pills.
+  .tabs-container:not(:has(> .tabs > .tab-lang)) {
+    margin: 0 0 0.75rem;
+
+    > .tabs {
+      gap: 0.25rem;
+      margin: 0 0 0.5rem;
+      padding: 0; // tab rows are <ul>s; drop the markdown list indent
+      border: 0;
+    }
+
+    > .tabs > .tabs__item {
+      padding: 0.25rem 0.7rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      color: var(--lt-muted);
+      font-size: 0.8125rem;
+      font-weight: 500;
+
+      &:hover {
+        background: var(--lt-header);
+        color: var(--lt-strong);
+      }
+
+      &.tabs__item--active,
+      &[aria-selected='true'] {
+        border-color: var(--lt-border);
+        background: var(--lt-header);
+        color: var(--lt-strong);
+      }
+    }
+
+    > .margin-top--md {
+      margin-top: 0 !important;
+    }
+  }
+}
+
+// Language icons: muted until that language is the one selected.
+.tabs__item.tab-lang::before {
+  content: '';
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.05em;
+  height: 1.05em;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: grayscale(1);
+  opacity: 0.65;
+  transition: filter 120ms ease, opacity 120ms ease;
+}
+
+.tabs__item.tab-lang:hover::before,
+.tabs__item.tab-lang.tabs__item--active::before,
+.tabs__item.tab-lang[aria-selected='true']::before {
+  filter: none;
+  opacity: 1;
+}
+
+// JS and TS share one tab, so it shows both icons.
+.tabs__item.tab-lang--js::before {
+  width: 2.25em;
+  background-image: url('/img/languages/javascript.svg'), url('/img/languages/typescript.svg');
+  background-position: left center, right center;
+  background-size: 1.05em 1.05em, 1.05em 1.05em;
+}
+.tabs__item.tab-lang--python::before { background-image: url('/img/languages/python.svg'); }
+.tabs__item.tab-lang--php::before { background-image: url('/img/languages/php.svg'); }
+.tabs__item.tab-lang--go::before { background-image: url('/img/languages/go.svg'); }
+.tabs__item.tab-lang--java::before { background-image: url('/img/languages/java.svg'); }
+
+// Small screens: the strip scrolls sideways; hide the scrollbar and fade the edge to show there is more.
+@media (max-width: 600px) {
+  .tabs-container:has(> .tabs > .tab-lang) > .tabs {
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, #000 85%, transparent);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .tabs-container:has(> .tabs > .tab-lang) > .tabs > .tabs__item.tab-lang {
+    padding-inline: 0.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabs__item.tab-lang,
+  .tabs__item.tab-lang::before {
+    transition: none;
+  }
+}

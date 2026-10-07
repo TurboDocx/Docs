@@ -87,12 +87,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'Integrations/Zapier',
-          label: 'Zapier',
-          className: 'integration-zapier',
-        },
-        {
-          type: 'doc',
           id: 'Integrations/Zoom',
           label: 'Zoom',
           className: 'integration-zoom',
@@ -155,8 +149,13 @@ const sidebars = {
           label: 'Install with AI Agents',
         },
         {
+          type: 'doc',
+          id: 'SDKs/developer-mode',
+          label: 'Developer Mode',
+        },
+        {
           type: 'category',
-          label: 'TurboSign SDKs',
+          label: 'Install & configure',
           collapsed: false,
           items: [
             {
@@ -187,100 +186,24 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
-          label: 'Deliverable SDKs',
-          collapsed: false,
-          items: [
-            {
-              type: 'doc',
-              id: 'SDKs/deliverable-javascript',
-              label: 'JavaScript / TypeScript',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/deliverable-python',
-              label: 'Python',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/deliverable-php',
-              label: 'PHP',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/deliverable-go',
-              label: 'Go',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/deliverable-java',
-              label: 'Java',
-            },
-          ],
+          type: 'doc',
+          id: 'SDKs/turbosign',
+          label: 'TurboSign SDK',
         },
         {
-          type: 'category',
-          label: 'TurboWebhooks SDKs',
-          collapsed: false,
-          items: [
-            {
-              type: 'doc',
-              id: 'SDKs/webhooks-javascript',
-              label: 'JavaScript / TypeScript',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/webhooks-python',
-              label: 'Python',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/webhooks-php',
-              label: 'PHP',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/webhooks-go',
-              label: 'Go',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/webhooks-java',
-              label: 'Java',
-            },
-          ],
+          type: 'doc',
+          id: 'SDKs/deliverable',
+          label: 'Deliverable SDK',
         },
         {
-          type: 'category',
-          label: 'TurboQuote SDKs',
-          collapsed: false,
-          items: [
-            {
-              type: 'doc',
-              id: 'SDKs/quote-javascript',
-              label: 'JavaScript / TypeScript',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/quote-python',
-              label: 'Python',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/quote-php',
-              label: 'PHP',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/quote-go',
-              label: 'Go',
-            },
-            {
-              type: 'doc',
-              id: 'SDKs/quote-java',
-              label: 'Java',
-            },
-          ],
+          type: 'doc',
+          id: 'SDKs/webhooks',
+          label: 'TurboWebhooks SDK',
+        },
+        {
+          type: 'doc',
+          id: 'SDKs/quote',
+          label: 'TurboQuote SDK',
         },
       ],
     },

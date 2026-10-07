@@ -277,36 +277,33 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 
 ### Navigate to TurboDocx Settings
 
-1. **Go to your TurboDocx dashboard** 📊
-   - Log in if you haven't already (we'll wait!)
+1. **Open the account menu**
+   - Click your **account avatar** at the bottom of the left sidebar
 
-![TurboDocx Main Dashboard](/img/salesforce-integration/Turbodocx_dashboard.png)
+![Left sidebar with the account avatar highlighted](/img/salesforce-integration/Turbodocx_dashboard.png)
 
 <br/>
 
 2. **Click on "Settings"**
-   - Look for the gear icon or "Settings" text
-   - Usually in the top menu or sidebar
+   - It's in the menu that opens above your avatar
 
-![Settings Menu](/img/salesforce-integration/turbodocx_settings_page.png)
+![Account menu with the Settings item highlighted](/img/salesforce-integration/turbodocx_settings_page.png)
 
 <br/>
 
-3. **Click on "Organization Settings"**
-   - This might be in a dropdown or separate tab
-   - If you can't find it, try looking for "Integrations" or "Connected Apps"
+3. **Click on "Features and integrations"**
+   - It's in the menu on the left of the Settings page
 
-![Organization Settings Page](/img/salesforce-integration/Turbodocx_org_page.png)
+![Settings menu with Features and integrations highlighted](/img/salesforce-integration/features_and_integrations.png)
 
 <br/>
 
 ### Configure Salesforce Integration
 
-4. **Find the Salesforce section**
-   - Look for the Salesforce logo or "Salesforce Integration"
-   - It might be in a list with other integrations
+4. **Find the Salesforce card**
+   - Look for the Salesforce logo under the integrations
 
-![Salesforce Integration Section](/img/salesforce-integration/Salesforce_integration_page.png)
+![Salesforce card highlighted on the Features and integrations page](/img/salesforce-integration/Salesforce_integration_page.png)
 
 <br/>
 
@@ -314,7 +311,7 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
    - A popup or form will appear
    - This is where the magic happens! Time to make these two apps best friends! ✨👯‍♀️
 
-![Configuration Button](/img/salesforce-integration/configure_salesforce_button.png)
+![Salesforce card with the Configure SalesForce button highlighted](/img/salesforce-integration/configure_salesforce_button.png)
 
 ![Configuration Modal](/img/salesforce-integration/configuration_modal.png)
 
@@ -534,7 +531,7 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 **Solution**:
 
 - Make sure you have actual data in your Salesforce org (accounts, opportunities, contacts)
-- Click "Refresh Fields" again in your organization settings
+- Click "Refresh Fields" again in **Settings → Features and integrations**
 - Check that your Salesforce external client app has the right permissions and policies configured
 
 ### "The Agent Doesn't Understand My Instructions"

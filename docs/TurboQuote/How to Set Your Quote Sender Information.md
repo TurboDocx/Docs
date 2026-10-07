@@ -34,7 +34,7 @@ Quote sender information is an organization-wide setting, so you need an **Admin
 
 ## Step 1: Open your organization Settings
 
-From anywhere in TurboDocx, open the user menu in the top-right of the left sidebar (your avatar), then select **Settings**.
+From anywhere in TurboDocx, open the user menu from your avatar at the bottom of the left sidebar, then select **Settings**.
 
 **Instruction:** Click your **User Avatar**, then click **Settings**.
 
@@ -44,29 +44,29 @@ From anywhere in TurboDocx, open the user menu in the top-right of the left side
 
 <br/>
 
-## Step 2: Open the Formatting Settings tab
+## Step 2: Open Branding and formatting
 
-The Settings page has a row of tabs across the top. Sender information lives on the **Formatting Settings** tab.
+The Settings page has a menu down its left side, grouped into sections. Sender information lives on the **Branding and formatting** page, under **Documents**.
 
-**Instruction:** Click the **Formatting Settings** tab.
+**Instruction:** In the left menu, click **Branding and formatting**.
 
-![Settings tabs with the Formatting Settings tab highlighted](/img/quote-sender-settings/03-formatting-settings-tab.png)
+![Settings menu with Branding and formatting under Documents highlighted](/img/quote-sender-settings/03-branding-and-formatting-link.png)
 
 <br/>
 
-## Step 3: Switch to the TurboQuote settings tab
+## Step 3: Switch to the TurboQuote tab
 
-Formatting Settings has its own two tabs — one for TurboDocx documents, one for TurboQuote. Sender information for quotes lives under the TurboQuote tab.
+Branding and formatting has two tabs at the top — one for TurboDocx documents, one for TurboQuote. Sender information for quotes lives under the TurboQuote tab.
 
-**Instruction:** Click the **TurboQuote settings** tab.
+**Instruction:** Click the **TurboQuote** tab.
 
-![TurboQuote settings tab highlighted](/img/quote-sender-settings/04-turboquote-settings-tab.png)
+![The TurboQuote tab highlighted on the Branding and formatting page](/img/quote-sender-settings/04-turboquote-settings-tab.png)
 
 <br/>
 
 ## Step 4: Fill in your Sender Information
 
-Scroll down to the **Sender Information** section. This is exactly what appears as "Prepared by" on your quotes, shown live in the **Quote Preview** on the right.
+Scroll down to the **Sender Information** section. This is exactly what appears as "Prepared by" on your quotes, shown live in the **Quote Preview** — beside the form on wide screens, or further down the page on smaller ones.
 
 - **Sender Name** — the name your customers see (for example, your own name or a team name).
 - **Sender Phone** — an optional contact number.
@@ -90,7 +90,7 @@ The **Save Changes** button for this section becomes active as soon as you make 
 
 ![Save Changes button highlighted under Sender Information](/img/quote-sender-settings/06-save-sender-info.png)
 
-Once saved, the button greys out again and the **Quote Preview** on the right reflects your new Sender Name, Phone, and Email under "Prepared by."
+Once saved, the button greys out again and the **Quote Preview** reflects your new Sender Name, Phone, and Email under "Prepared by."
 
 ![Sender Information saved, reflected in the Prepared by preview](/img/quote-sender-settings/07-saved-confirmation.png)
 

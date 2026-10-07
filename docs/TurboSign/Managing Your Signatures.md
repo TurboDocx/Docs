@@ -69,10 +69,31 @@ Once you've sent your document for signature, your work isn't done! This guide c
 **Good news!** TurboSign automatically sends a copy of the completed document and the user-facing audit trail to all participants via email when the signature process is complete. This means:
 
 - **All signers** get their own copy of the completed document
+- **CC recipients** get a copy too
+- **You, the sender**, get a "Your document is fully signed" email with the signed document, even if you weren't a signer or CC
 - **Email delivery** happens instantly when the last signature is completed
 - **Audit trail** is included for compliance and record-keeping
 
+Nobody gets the same document twice: if you're also a signer or CC on the document, you receive just that one copy.
+
 So while you can always redownload documents from your dashboard, you likely already have the completed document in your email inbox!
+
+:::note When the sender doesn't get a copy
+The sender's copy isn't sent for documents sent through **Bulk Signature Sending** (that would be one email per document), or for documents sent with an **API key** (use [webhooks](./Webhooks.md) to get notified instead).
+:::
+
+#### Turn off the sender's copy
+
+Organization admins can turn the sender's email off for everyone in the organization:
+
+1. Click your **account avatar** at the bottom of the left sidebar, then click **Settings**.
+2. In the menu on the left, click **Features and integrations**.
+3. On the **Signatures** card, click **Configure E-Signature**.
+4. In the **General** section, scroll to **Sender Notifications** and clear **Email the sender when a document is fully signed**.
+
+![E-Signature Settings dialog with the Email the sender when a document is fully signed checkbox highlighted](/img/turbosign/SenderNotificationsSetting.png)
+
+The change saves immediately. Signers and CC recipients still get their copies. The setting is checked when a document is completed, so it also applies to documents that are already out for signature.
 
 <br/>
 

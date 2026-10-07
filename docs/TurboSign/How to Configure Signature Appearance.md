@@ -42,11 +42,11 @@ In the menu that appears, click **Settings**.
 
 ![Account menu with the Settings item highlighted](/img/signature-appearance/02-settings-menu-item.png)
 
-## Step 3: Go to Organization Settings
+## Step 3: Go to Features and integrations
 
-At the top of the Settings page, click the **Organization Settings** tab.
+In the menu on the left of the Settings page, click **Features and integrations**.
 
-![Settings page with the Organization Settings tab highlighted](/img/signature-appearance/03-organization-settings-tab.png)
+![Settings menu with Features and integrations highlighted](/img/signature-appearance/03-features-and-integrations-link.png)
 
 ## Step 4: Open E-Signature settings
 
@@ -56,7 +56,7 @@ Scroll to the **Signatures** card under **Core Features** and click **Configure 
 
 ## Step 5: Set the signature appearance options
 
-In the **E-Signature Settings** dialog, find the **Signature Appearance** section. Use the two switches to turn each option on or off:
+In the **E-Signature Settings** dialog, find the **Signature Appearance** section. Select or clear each checkbox to turn the option on or off:
 
 - **Show signature outline and label**
 - **Show verification hash**
