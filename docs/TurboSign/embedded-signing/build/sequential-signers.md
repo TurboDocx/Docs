@@ -333,7 +333,7 @@ On your page, frame the first signer's `embedUrl`. When `turbosign:completed` ar
 <turbosign-form id="signing" origin="https://app.turbodocx.com" height="720"></turbosign-form>
 
 <script type="module">
-  import "@turbodocx/embed";
+  import "https://cdn.jsdelivr.net/npm/@turbodocx/embed@0.2.1/dist/index.js"; // or import "@turbodocx/embed" with a bundler
 
   const form = document.getElementById("signing");
   const who = document.getElementById("who");

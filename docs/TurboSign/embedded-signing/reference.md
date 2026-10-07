@@ -426,7 +426,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 400 | `InvalidReturnUrl` | `returnUrl` is not an `https` URL. |
 | 400 | `IdentityAssertionRequired`, `IdentityAssertionInvalid`, `IdentityProviderMismatch`, `IdentityEmailMismatch`, `IdentityAssertionStale`, `IdentityAssertionReused` | The `external_idv` assertion is missing or fails a check (see [External identity verification](./identity-verification/external-identity-verification.md#errors)). |
 | 402 | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
-| 403 | (none) | The API key belongs to a **User**. Requesting a signing URL needs an **Administrator** or **Contributor** key. |
+| 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. Requesting a signing URL needs an **Administrator** or **Contributor** key. |
 | 403 | `OtpOverrideNotAllowed` | The organization locked the passcode method and the request set a different channel. Omit the channel or match `defaultChannel`. |
 | 403 | `EmbeddedSigningNotEnabled`, `SmsOtpNotEnabled`, `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed` | The organization has not turned on the feature or mode the request uses. |
 | 404 | `RecipientNotFound` | No recipient on the document matches the selector. |

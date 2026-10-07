@@ -291,7 +291,7 @@ Open it in a new tab, or frame it exactly as in the [build guides](../build/own-
 | 400 | `OverrideNotAcknowledged` | The block is missing `overrideIdentityVerification: true` or a `reason`. | Send both. |
 | 400 | `IdentityModeConflict` | The `identityVerification` block is invalid, for example it mixes fields from two modes. | Send only the override fields. |
 | 410 | `SigningUrlNotRedeemable` | The single-use URL was already opened or expired. | Request a new URL. |
-| 403 | (none) | The API key belongs to a **User**. | Use an **Administrator** or **Contributor** key. |
+| 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. | Use an **Administrator** or **Contributor** key. |
 
 ## What's next
 
