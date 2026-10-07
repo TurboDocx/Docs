@@ -167,7 +167,7 @@ export default function QuickstartSkillNudge({
               href={sampleAppHref}
               target="_blank"
               rel="noopener noreferrer"
-              className={`button button--primary ${styles.sampleAppButton}`}
+              className={styles.sampleAppButton}
             >
               <GitHubIcon /> View on GitHub →
             </a>

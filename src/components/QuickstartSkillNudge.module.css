@@ -295,12 +295,27 @@
   color: var(--ifm-color-emphasis-700);
 }
 
+/* Self-styled CTA: the site restyles Infima's .button globally (gradient text), so it can't be reused here. */
 .sampleAppButton {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   white-space: nowrap;
+  padding: 0.55rem 1.05rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-0);
+  background: var(--ifm-color-primary);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.sampleAppButton:hover {
+  color: var(--ifm-color-emphasis-0);
+  background: var(--ifm-color-primary-dark);
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {
