@@ -284,7 +284,7 @@ url = TurboDocxSdk::TurboSign.create_signing_url(sent["documentId"], external_id
 
 The override URL is **single-use** and expires in about five minutes. Opening it consumes it, so request a fresh one each time.
 
-Open it in a new tab, or frame it exactly as in the [build guides](../embedded-signing/build/own-iframe.md) (your own iframe, the [React widget](../embedded-signing/build/react-widget.md), or the [web component](../embedded-signing/build/web-component.md)). The signing page skips verification: the signer accepts the TurboSign consent terms, then the document opens.
+Open it in a new tab, or frame it exactly as in the build guides: the [React widget](../embedded-signing/build/react-widget.md), [your own iframe](../embedded-signing/build/own-iframe.md), or the [web component](../embedded-signing/build/web-component.md). The signing page skips verification: the signer accepts the TurboSign consent terms, then the document opens.
 
 ## What the signer sees
 

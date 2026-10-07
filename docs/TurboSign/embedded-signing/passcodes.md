@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 
 An admin turns passcodes on in [Email and SMS passcode](../identity-verification/one-time-passcode.md). Your code then asks for a passcode on each embedded signer.
 
-- **Email passcode:** every [build guide](./build/own-iframe.md) uses one: `auth: { emailOtp: true }` in `createEmbeddedSignature`.
+- **Email passcode:** every [build guide](./build/react-widget.md) uses one: `auth: { emailOtp: true }` in `createEmbeddedSignature`.
 - **SMS passcode:** this page.
 - **Which channel applies when you set none,** and how each SDK leaves the channel out: see [The recipient](./reference.md#the-recipient) in the API reference.
 
@@ -179,7 +179,7 @@ embed_url = result["recipients"].first["embedUrl"]
 </TabItem>
 </Tabs>
 
-Frame `embedUrl` exactly as in the [build guides](./build/own-iframe.md). The signer sees the same gate as for email, and the code arrives by text message.
+Frame `embedUrl` exactly as in the [build guides](./build/react-widget.md). The signer sees the same gate as for email, and the code arrives by text message.
 
 If you send with `sendSignature` instead, set `phone` on the recipient and `identityVerification: { "mode": "otp", "channel": "sms" }`.
 

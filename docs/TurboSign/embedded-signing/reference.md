@@ -21,7 +21,7 @@ import CreateEmailOtpSigner from './build/_create-email-otp-signer.mdx';
 
 # Embedded Signing API Reference
 
-Every method and event your integration uses for embedded signing, each laid out the same way: what it does, request, response, example, errors. For a walkthrough, start with a [build guide](./build/own-iframe.md).
+Every method and event your integration uses for embedded signing, each laid out the same way: what it does, request, response, example, errors. For a walkthrough, start with a [build guide](./build/react-widget.md).
 
 | Method or event | Use it to |
 |---|---|

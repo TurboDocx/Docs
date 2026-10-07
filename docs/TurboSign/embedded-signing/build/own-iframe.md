@@ -2,7 +2,7 @@
 title: Embed Signing with Your Own Iframe (Email Passcode)
 slug: /TurboSign/embedded-signing/own-iframe
 sidebar_label: Your own iframe
-sidebar_position: 1
+sidebar_position: 2
 description: Step-by-step guide to embedding TurboSign in your app with a plain iframe and your own postMessage listener, with the signer verified by an email one-time passcode. Server code for JavaScript, Python, PHP, Go, Java and Ruby.
 keywords:
   - embedded signing iframe
@@ -157,6 +157,7 @@ A code expires after 10 minutes, and five wrong entries require a new code. See 
 
 ## What's next
 
-- **Next:** [React widget](./react-widget.md): the same flow without writing the listener.
+- **Next:** [Web component](./web-component.md), a drop-in element for any framework.
+- [React widget](./react-widget.md): the same flow without writing the listener.
 - [Kiosk signing (two signers, one device)](./sequential-signers.md): extend this flow to several signers.
 - [API reference](../reference.md): every field, event and error.

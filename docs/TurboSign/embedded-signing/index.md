@@ -63,8 +63,8 @@ The [Identity verification](../identity-verification/index.md) section compares 
 
 | You want to... | Signer verifies with | Front end | Guide |
 |---|---|---|---|
-| Keep full control of the iframe, in any framework | Email passcode | Your own `iframe` and message listener | [Your own iframe](./build/own-iframe.md) |
 | Write the least code in a React app | Email passcode | The React `TurboSignForm` component | [React widget](./build/react-widget.md) |
+| Keep full control of the iframe, in any framework | Email passcode | Your own `iframe` and message listener | [Your own iframe](./build/own-iframe.md) |
 | Use Vue, Angular, Svelte or plain HTML | Email passcode | The `turbosign-form` web component | [Web component](./build/web-component.md) |
 | Have two or more people sign in order on one device | An email passcode each | Any | [Kiosk signing (two signers, one device)](./build/sequential-signers.md) |
 | Verify signers by text message | SMS passcode | Any | [Passcodes in embedded signing](./passcodes.md#request-an-sms-passcode-from-your-code) |

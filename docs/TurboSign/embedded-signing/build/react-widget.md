@@ -2,7 +2,7 @@
 title: Embed Signing with the React Widget (Email Passcode)
 slug: /TurboSign/embedded-signing/react-widget
 sidebar_label: React widget
-sidebar_position: 2
+sidebar_position: 1
 description: Step-by-step guide to embedding TurboSign in a React app with the TurboSignForm component from @turbodocx/embed, with the signer verified by an email one-time passcode. Server code for JavaScript, Python, PHP, Go, Java and Ruby.
 keywords:
   - turbosign react
@@ -167,6 +167,7 @@ Your app's page around the signing panel will look different; the panel itself i
 
 ## What's next
 
-- **Next:** [Web component](./web-component.md), for the same widget outside React.
+- **Next:** [Your own iframe](./own-iframe.md), to frame the page yourself and write the listener.
+- [Web component](./web-component.md), for the same widget outside React.
 - [Kiosk signing (two signers, one device)](./sequential-signers.md).
 - [API reference](../reference.md): every field, event and error.
