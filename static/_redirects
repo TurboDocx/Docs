@@ -46,3 +46,17 @@
 /docs/SDKs/webhooks-java /docs/SDKs/webhooks?language=java 301
 /docs/SDKs/webhooks-java/ /docs/SDKs/webhooks?language=java 301
 /docs/SDKs/webhooks-java.html /docs/SDKs/webhooks?language=java 301
+
+# Embedded signing pages grouped into one "Embedded signing" category. The surviving pages keep their
+# slugs, so these only catch the old filename-style URLs (one of them is linked from the marketing site).
+/docs/TurboSign/Embedded%20Signing /docs/TurboSign/embedded-signing 301
+/docs/TurboSign/Embedded%20Signing/ /docs/TurboSign/embedded-signing 301
+/docs/TurboSign/How%20to%20Enable%20Embedded%20Signing /docs/TurboSign/how-to-enable-embedded-signing 301
+/docs/TurboSign/How%20to%20Enable%20Embedded%20Signing/ /docs/TurboSign/how-to-enable-embedded-signing 301
+/docs/TurboSign/External%20Identity%20Verification /docs/TurboSign/external-identity-verification 301
+/docs/TurboSign/External%20Identity%20Verification/ /docs/TurboSign/external-identity-verification 301
+/docs/TurboSign/How%20to%20Configure%20One-Time%20Passcode /docs/TurboSign/how-to-configure-one-time-passcode 301
+/docs/TurboSign/How%20to%20Configure%20One-Time%20Passcode/ /docs/TurboSign/how-to-configure-one-time-passcode 301
+# Identity verification became its own category; the sender override guide moved with it.
+/docs/TurboSign/embedded-signing/sender-override /docs/TurboSign/identity-verification/sender-override 301
+/docs/TurboSign/embedded-signing/sender-override/ /docs/TurboSign/identity-verification/sender-override 301

@@ -1,0 +1,91 @@
+.figure {
+  margin: 1.25rem 0 1.75rem;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--ifm-font-family-base);
+}
+
+.node {
+  fill: var(--ifm-background-surface-color);
+  stroke: var(--ifm-color-emphasis-300);
+  stroke-width: 1.5;
+}
+
+.nodeBrand {
+  stroke: var(--ifm-color-primary);
+  stroke-width: 2;
+}
+
+.nodeTitle {
+  fill: var(--ifm-font-color-base);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.nodeSub {
+  fill: var(--ifm-color-emphasis-700);
+  font-size: 17px;
+}
+
+.label {
+  fill: var(--ifm-color-emphasis-800);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 17px;
+}
+
+.flow {
+  stroke: var(--ifm-color-primary);
+  stroke-width: 2.5;
+  stroke-dasharray: 8 6;
+  fill: none;
+  animation: esf-dash 1.2s linear infinite;
+}
+
+.stub {
+  stroke: var(--ifm-color-primary);
+  stroke-width: 2.5;
+  opacity: 0.5;
+}
+
+.labelBg {
+  fill: var(--ifm-background-surface-color);
+  stroke: var(--ifm-color-emphasis-300);
+  stroke-width: 1;
+}
+
+.arrowHead {
+  fill: var(--ifm-color-primary);
+}
+
+.stepDot {
+  fill: var(--ifm-color-primary);
+}
+
+.stepNum {
+  fill: var(--ifm-color-white);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.caption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-700);
+  text-align: center;
+}
+
+@keyframes esf-dash {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow {
+    animation: none;
+  }
+}

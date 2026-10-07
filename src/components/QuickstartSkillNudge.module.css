@@ -239,7 +239,95 @@
   height: 0.95em;
 }
 
+/* ---- optional full-width strip: complete sample app (sampleAppHref) ---- */
+.sampleApp {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+[data-theme='dark'] .sampleApp {
+  border-top-color: var(--ifm-color-emphasis-300);
+}
+
+.sampleAppImg {
+  flex-shrink: 0;
+  width: 240px;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: var(--ifm-global-shadow-lw);
+}
+
+.sampleAppIcon {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--ifm-font-color-base);
+}
+
+.sampleAppBody {
+  flex: 1;
+  min-width: 14rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.sampleAppText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.sampleAppTitle {
+  font-size: 1rem;
+}
+
+.sampleAppSub {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Self-styled CTA: the site restyles Infima's .button globally (gradient text), so it can't be reused here. */
+.sampleAppButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+  padding: 0.55rem 1.05rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-0);
+  background: var(--ifm-color-primary);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.sampleAppButton:hover {
+  color: var(--ifm-color-emphasis-0);
+  background: var(--ifm-color-primary-dark);
+  text-decoration: none;
+}
+
 @media (max-width: 768px) {
+  .sampleApp {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sampleAppImg {
+    width: 100%;
+  }
+
   .wrap {
     grid-template-columns: 1fr;
     gap: 1rem;

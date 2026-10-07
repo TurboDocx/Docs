@@ -61,6 +61,17 @@ p {
   margin-bottom: 1em;
 }
 
+/* Doc pages: restore paragraph spacing. The global `p { margin: 0 !important }` resets in
+   legacy.scss and custom-templates.scss otherwise collapse every gap between paragraphs and
+   before callouts. Class-styled paragraphs (components) keep their own margins. */
+.theme-doc-markdown p:not([class]) {
+  margin: 0 0 var(--ifm-paragraph-margin-bottom) !important;
+}
+
+.theme-doc-markdown p:not([class]):last-child {
+  margin-bottom: 0 !important;
+}
+
 .main-heading {
   font-size: 100px;
 }

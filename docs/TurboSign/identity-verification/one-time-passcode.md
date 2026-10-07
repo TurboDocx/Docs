@@ -1,7 +1,8 @@
 ---
-title: How to Configure One-Time Passcode (OTP)
-slug: how-to-configure-one-time-passcode
-sidebar_position: 6.5
+title: Email and SMS Passcode (One-Time Passcode)
+slug: /TurboSign/how-to-configure-one-time-passcode
+sidebar_label: Email and SMS passcode
+sidebar_position: 2
 description: Configure one-time passcode identity verification for TurboSign - require a passcode, choose email or SMS delivery, connect an SMS provider, and get alerted when a passcode fails to send.
 keywords:
   - one-time passcode
@@ -14,11 +15,16 @@ keywords:
   - signer verification
 ---
 
-# How to Configure One-Time Passcode (OTP)
 
-A one-time passcode (OTP) verifies a signer's identity before they can open your document. The signer receives a short code by email or text message and enters it on the signing page.
+# Email and SMS Passcode
 
-This guide covers requiring a passcode, choosing the default channel, connecting an SMS provider, and setting up delivery-failure alerts.
+A one-time passcode (OTP) verifies a signer's identity before they can open your document. The signer receives a short code by email or text message and enters it on the signing page. It works on signing links TurboSign emails and on signing pages you embed in your own app.
+
+This guide is for admins. It covers requiring a passcode, choosing email or SMS, connecting an SMS provider, setting up delivery-failure alerts, and what the signer sees.
+
+:::tip Using passcodes with embedded signing?
+Requesting a passcode from your code, SMS in each SDK, and verifying only your embedded signers are covered in [Passcodes in embedded signing](../embedded-signing/passcodes.md).
+:::
 
 ## Before you start
 
@@ -28,11 +34,10 @@ This guide covers requiring a passcode, choosing the default channel, connecting
 
 To reach the tab:
 
-1. Go to **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature** to open **E-Signature Settings**.
-2. Click **Identity Verification**.
-3. Stay on the **One-time passcode** tab.
+1. Go to **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature** > **Identity Verification**. (Settings is in the menu under your name at the bottom of the left sidebar.)
+2. Stay on the **One-time passcode** tab.
 
-For screenshots of these first clicks, see [How to Enable Embedded Signing](./How%20to%20Enable%20Embedded%20Signing.md), Steps 1-2.
+For screenshots of these first clicks, see [Set up your organization](../embedded-signing/set-up-your-organization.md), Steps 1-2.
 
 :::note What this controls
 These settings decide **when** signers are verified by default and **which** channels are available.
@@ -62,6 +67,10 @@ The rest of the passcode settings stay hidden until this is on, so turn it on fi
 
 Turning it on makes passcode verification available. Whether every signer gets a passcode depends on the choice in Step 2.
 
+:::note One switch for every verification mode
+**Enable identity verification** also turns on external identity verification, the sender override and embedded signing for your organization.
+:::
+
 ## Step 2: Choose when to verify signers
 
 Under **When to verify signers**, choose one:
@@ -88,25 +97,11 @@ Two more settings appear.
 
 **Let senders change the method per recipient** is off by default.
 
-- **Off** locks the method. Every request uses the method above, and an API or SDK request that sets a different channel for a recipient is rejected with `OtpOverrideNotAllowed`.
+- **Off** locks the method. Every request uses the method above, and a request that asks for a different method for a recipient is rejected.
 - **On** lets a sender pick another method, or no verification, for a recipient.
 
 This setting applies to the email channel too, so it is not tied to your SMS plan.
 
-:::tip Passcodes only for signers in your own app
-If only the signers in your own app should verify, keep **Only when requested**. Turn on SMS and connect a provider (Steps 4-5), then have your integration request SMS on each recipient it embeds.
-
-Other signature requests, including Pipelines, stay passcode-free. See [Verify only your embedded signers by SMS](./Embedded%20Signing.md#verify-only-your-embedded-signers-by-sms).
-:::
-
-### Check the result from your integration
-
-Your integration can read the result with `GET /turbosign/embedded-signing-settings`:
-
-- `defaultChannel` is `none`, `email`, or `sms`.
-- `allowChannelOverride` tells it whether a different channel is accepted.
-
-See [The organization default](./Embedded%20Signing.md#the-organization-default) for details.
 
 ## Step 3: Use email (the simplest path)
 
@@ -286,7 +281,7 @@ Each passcode expires after 10 minutes and allows five wrong entries before the 
 | **5** | The document's sender gets a "having trouble verifying" email, so they can check the signer's email address or phone number early. |
 | **20** | The signer is locked out and the sender gets a "locked out" email. The signer cannot request or enter a code until the sender resends the signing request. |
 
-To clear a lockout, the sender uses **Resend Email** in the document's menu (see [Managing Your Signatures](./Managing%20Your%20Signatures.md)). Resending emails the signer a fresh link and clears the lock.
+To clear a lockout, the sender uses **Resend Email** in the document's menu (see [Managing Your Signatures](../Managing%20Your%20Signatures.md)). Resending emails the signer a fresh link and clears the lock.
 
 :::note
 These alerts go to the sender of the document, not to the admins on the delivery-failure list.
@@ -302,7 +297,18 @@ When a recipient requires a passcode, the signer meets the passcode gate on the 
 
 ![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)
 
+## Troubleshooting
+
+| Problem | What to check |
+|---|---|
+| The signer didn't get the email code | Ask them to check spam, then click **Resend Code** after 30 seconds. If a code cannot be delivered, the admins on the [delivery-failure list](#step-6-get-alerted-when-a-passcode-cannot-be-delivered) get an alert. |
+| The signer didn't get the text message | Check the provider status reads **Connected** ([Provider status](#provider-status)) and that the signer's number includes the country code ([Signer mobile numbers](#signer-mobile-numbers)). |
+| **SMS** can't be selected | Turn on **Allow SMS as an alternative to email** and save your provider first ([Step 4](#step-4-allow-sms-as-an-alternative-to-email) and [Step 5](#step-5-connect-your-sms-provider)). SMS is on Pro and Enterprise plans. |
+| A signer is locked out | They entered 20 wrong codes. The sender clicks **Resend Email** on the document ([Step 7](#step-7-know-what-happens-when-a-signer-keeps-entering-the-wrong-code)). |
+| RingCentral messages stopped | The JWT may have expired. See [Check when your JWT expires](#check-when-your-jwt-expires) and [Troubleshooting RingCentral](#troubleshooting-ringcentral). |
+
 ## What's next
 
-- [How to Enable Embedded Signing](./How%20to%20Enable%20Embedded%20Signing.md): turn on embedded signing, allow the origins that may embed the signing page, and understand the clickjacking and localhost rules.
-- [Embedded Signing and Identity Verification](./Embedded%20Signing.md): request a signing URL, the three verification modes, and the SDK calls your backend makes.
+- **Next:** [External identity verification](./external-identity-verification.md), if your app already verifies users with an identity verification vendor.
+- [Passcodes in embedded signing](../embedded-signing/passcodes.md): request email or SMS passcodes from your code.
+- [Identity verification overview](./index.md): compare the three ways to verify a signer.
