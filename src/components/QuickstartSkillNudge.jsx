@@ -156,20 +156,22 @@ export default function QuickstartSkillNudge({
           ) : (
             <GitHubIcon className={styles.sampleAppIcon} />
           )}
-          <div className={styles.sampleAppText}>
-            <strong className={styles.sampleAppTitle}>Complete embedded signing sample app</strong>
-            <span className={styles.sampleAppSub}>
-              Four working flows: widget, own iframe, external identity verification and kiosk. Clone it and run it locally.
-            </span>
+          <div className={styles.sampleAppBody}>
+            <div className={styles.sampleAppText}>
+              <strong className={styles.sampleAppTitle}>Complete embedded signing sample app</strong>
+              <span className={styles.sampleAppSub}>
+                Four working flows: widget, own iframe, external identity verification and kiosk. Clone it and run it locally.
+              </span>
+            </div>
+            <a
+              href={sampleAppHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`button button--primary ${styles.sampleAppButton}`}
+            >
+              <GitHubIcon /> View on GitHub →
+            </a>
           </div>
-          <a
-            href={sampleAppHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`button button--primary ${styles.sampleAppButton}`}
-          >
-            <GitHubIcon /> View on GitHub →
-          </a>
         </div>
       ) : null}
     </div>
