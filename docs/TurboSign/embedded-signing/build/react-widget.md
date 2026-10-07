@@ -13,6 +13,8 @@ keywords:
   - email passcode signing
 ---
 
+import SampleAppCallout from '../_sample-app-callout.mdx';
+import SetupAndVerify from './_setup-and-verify.mdx';
 import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
 
 # Embed Signing with the React Widget (Email Passcode)
@@ -32,14 +34,9 @@ TurboSign verifies the signer with a six-digit code sent to their email.
 - React 18 or later.
 - A PDF with `{signature1}` and `{date1}` text anchors.
 
-## Step 1: Check your organization's settings (admin, once)
+## Step 1: Check your setup and choose how signers verify
 
-An admin confirms two settings in **Settings** > **Features and integrations** > **Configure E-Signature** > **Identity Verification**. [Set up your organization](../set-up-your-organization.md) shows every click.
-
-1. On the **One-time passcode** tab, **Enable identity verification** is on.
-2. On the **Identity & embedding** tab, your app's origin is under **Allowed embedding domains**.
-
-![The Identity & embedding tab with the Allowed embedding domains input highlighted](/img/how-to-enable-embedded-signing/05-allowed-embedding-domains.png)
+<SetupAndVerify />
 
 ## Step 2: Install the package
 
@@ -101,7 +98,7 @@ export function SignStep({ name, email }: { name: string; email: string }) {
 | Prop | Required | Description |
 |---|---|---|
 | `embedUrl` | Yes | The per-recipient URL from your server. Use it exactly as the SDK returns it. |
-| `origin` | Yes, in practice | The exact TurboSign origin, `https://app.turbodocx.com`. Without it, every message is ignored and `onCompleted` never fires. |
+| `origin` | Yes, in practice | The exact TurboSign origin, `https://app.turbodocx.com`. You can also derive it from the URL you frame: `new URL(embedUrl).origin`. Without it, every message is ignored and `onCompleted` never fires. |
 | `onCompleted` | Yes | Called when the signer finishes. Receives `documentId`, `status`, `event` and `scope`. |
 | `height` | No | A CSS length, or a number of pixels. Defaults to `720px`. |
 | `title` | No | The iframe's accessible name. Defaults to `TurboSign signing`. |
@@ -115,7 +112,9 @@ The widget fails closed. If `origin` is missing, it ignores every message, logs 
 
 ## What the signer sees
 
-These screenshots come from the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app). Your app's page around the signing panel will look different; the panel itself is the same.
+<SampleAppCallout path="Widget" />
+
+Your app's page around the signing panel will look different; the panel itself is the same.
 
 1. Your signer clicks your own button (here, **Start signing**). Your server returns the signing URL, and you render `TurboSignForm` with it.
 
@@ -131,7 +130,7 @@ These screenshots come from the [embedded signing sample app](https://github.com
 
 4. The signer ticks **I have read and agree to the TurboSign consent terms** and clicks **Continue**.
 
-   ![The TurboSign Consent panel with the agreement checkbox highlighted](/img/embedded-signing/iframe-04-consent.png)
+   ![The TurboSign Consent panel with the consent statement highlighted; the checkbox is just to its left, and Continue is below](/img/embedded-signing/iframe-04-consent.png)
 
 5. The document opens. The signer clicks the **Signature** field, types or draws a signature, and clicks **Save**. Date fields fill in automatically.
 
@@ -161,9 +160,10 @@ These screenshots come from the [embedded signing sample app](https://github.com
 | Symptom | Cause | Fix |
 |---|---|---|
 | The widget area is blank | Your origin is not under **Allowed embedding domains**. | Add the exact origin, including the port in development. |
+| Signing finishes but no completion message arrives (often in Firefox) | The signing page posts only to an origin it can identify, and your page or iframe sends no referrer. | Don't use `referrerpolicy="no-referrer"` on the iframe or a `no-referrer` page policy; keep the default `strict-origin-when-cross-origin`. |
 | `onCompleted` never fires, and the console warns about a missing origin | `origin` is empty or wrong. | Set `origin="https://app.turbodocx.com"`. |
 | HTTP `403` when your server creates the URL | The API key belongs to a **User**, or **Enable identity verification** is off (`EmbeddedSigningNotEnabled`). | Use an **Administrator** or **Contributor** key, and ask an admin to check Step 1. |
-| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request by SMS and locked the method. | Ask an admin to let senders change the method, or [request an SMS passcode](../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to let senders change the method, or [request an SMS passcode](../../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
 
 ## What's next
 

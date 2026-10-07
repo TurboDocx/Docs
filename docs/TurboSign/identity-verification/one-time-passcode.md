@@ -1,8 +1,8 @@
 ---
-title: How to Configure One-Time Passcode (OTP)
+title: Email and SMS Passcode (One-Time Passcode)
 slug: /TurboSign/how-to-configure-one-time-passcode
 sidebar_label: Email and SMS passcode
-sidebar_position: 1
+sidebar_position: 2
 description: Configure one-time passcode identity verification for TurboSign - require a passcode, choose email or SMS delivery, connect an SMS provider, and get alerted when a passcode fails to send.
 keywords:
   - one-time passcode
@@ -18,9 +18,9 @@ keywords:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# How to Configure One-Time Passcode (OTP)
+# Email and SMS Passcode
 
-A one-time passcode (OTP) verifies a signer's identity before they can open your document. The signer receives a short code by email or text message and enters it on the signing page.
+A one-time passcode (OTP) verifies a signer's identity before they can open your document. The signer receives a short code by email or text message and enters it on the signing page. It works on signing links TurboSign emails and on signing pages you embed in your own app.
 
 This guide covers requiring a passcode, choosing the default channel, connecting an SMS provider, and setting up delivery-failure alerts.
 
@@ -32,11 +32,10 @@ This guide covers requiring a passcode, choosing the default channel, connecting
 
 To reach the tab:
 
-1. Go to **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature** to open **E-Signature Settings**.
-2. Click **Identity Verification**.
-3. Stay on the **One-time passcode** tab.
+1. Go to **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature** > **Identity Verification**. (Settings is in the menu under your name at the bottom of the left sidebar.)
+2. Stay on the **One-time passcode** tab.
 
-For screenshots of these first clicks, see [How to Enable Embedded Signing](../set-up-your-organization.md), Steps 1-2.
+For screenshots of these first clicks, see [Set up your organization](../embedded-signing/set-up-your-organization.md), Steps 1-2.
 
 :::note What this controls
 These settings decide **when** signers are verified by default and **which** channels are available.
@@ -65,6 +64,10 @@ The rest of the passcode settings stay hidden until this is on, so turn it on fi
 ![The One-time passcode tab with the Enable identity verification toggle and the selected Only when requested option highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
 Turning it on makes passcode verification available. Whether every signer gets a passcode depends on the choice in Step 2.
+
+:::note This is also the embedded signing switch
+Despite its name, **Enable identity verification** turns on embedded signing and every verification mode, including external identity verification and the override. While it is off, every signing URL request fails with `EmbeddedSigningNotEnabled`.
+:::
 
 ## Step 2: Choose when to verify signers
 
@@ -110,7 +113,7 @@ Your integration can read the result with `GET /turbosign/embedded-signing-setti
 - `defaultChannel` is `none`, `email`, or `sms`.
 - `allowChannelOverride` tells it whether a different channel is accepted.
 
-See [The organization default](../reference.md#the-organization-default) for details.
+See [The organization default](../embedded-signing/reference.md#the-organization-default) for details.
 
 ## Step 3: Use email (the simplest path)
 
@@ -290,7 +293,7 @@ Each passcode expires after 10 minutes and allows five wrong entries before the 
 | **5** | The document's sender gets a "having trouble verifying" email, so they can check the signer's email address or phone number early. |
 | **20** | The signer is locked out and the sender gets a "locked out" email. The signer cannot request or enter a code until the sender resends the signing request. |
 
-To clear a lockout, the sender uses **Resend Email** in the document's menu (see [Managing Your Signatures](../../Managing%20Your%20Signatures.md)). Resending emails the signer a fresh link and clears the lock.
+To clear a lockout, the sender uses **Resend Email** in the document's menu (see [Managing Your Signatures](../Managing%20Your%20Signatures.md)). Resending emails the signer a fresh link and clears the lock.
 
 :::note
 These alerts go to the sender of the document, not to the admins on the delivery-failure list.
@@ -298,7 +301,7 @@ These alerts go to the sender of the document, not to the admins on the delivery
 
 ## Request a passcode from your code
 
-Admins turn passcodes on; your integration asks for them on each embedded signer. The [build guides](../build/own-iframe.md) all use an email passcode. This section shows SMS.
+Admins turn passcodes on; your integration asks for them on each embedded signer. The [build guides](../embedded-signing/build/own-iframe.md) all use an email passcode. This section shows SMS.
 
 ### Request an SMS passcode from your code
 
@@ -315,6 +318,7 @@ Then give the recipient an SMS `auth` block instead of `emailOtp`. `createEmbedd
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
+// Continues the setup from "Your own iframe": imports and TurboSign.configure(...).
 const { documentId, recipients } = await TurboSign.createEmbeddedSignature({
   file: await readFile("contract.pdf"),
   fileName: "contract.pdf",
@@ -335,6 +339,7 @@ const embedUrl = recipients[0].embedUrl;
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
+# Inside an async function, after TurboSign.configure(...) as in "Your own iframe". pdf holds the PDF bytes.
 result = await TurboSign.create_embedded_signature(
     file=pdf,
     file_name="contract.pdf",
@@ -355,6 +360,7 @@ embed_url = result["recipients"][0]["embedUrl"]
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
+// Continues the setup from "Your own iframe": TurboSign::configure(...) and the use lines.
 $result = TurboSign::createEmbeddedSignature(new CreateEmbeddedSignatureRequest(
     recipients: [
         new EmbeddedSignatureRecipient(
@@ -375,6 +381,7 @@ $embedUrl = $result->recipients[0]->embedUrl;
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
+// Inside a function that returns error, with client and ctx as in "Your own iframe". pdf holds the PDF bytes.
 result, err := client.TurboSign.CreateEmbeddedSignature(ctx, &turbodocx.CreateEmbeddedSignatureRequest{
 	File:         pdf,
 	FileName:     "contract.pdf",
@@ -393,13 +400,14 @@ result, err := client.TurboSign.CreateEmbeddedSignature(ctx, &turbodocx.CreateEm
 if err != nil {
 	return err
 }
-embedURL := result.Recipients[0].EmbedURL
+fmt.Println(result.Recipients[0].EmbedURL) // frame this URL
 ```
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
+// Inside a method that throws IOException, with client as in "Your own iframe".
 CreateEmbeddedSignatureResponse result = client.turboSign().createEmbeddedSignature(
     new CreateEmbeddedSignatureRequest.Builder()
         .file(Files.readAllBytes(Paths.get("contract.pdf")))
@@ -420,9 +428,10 @@ String embedUrl = result.getRecipients().get(0).getEmbedUrl();
 ```
 
 </TabItem>
-<TabItem value="ruby" label="Ruby">
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
 ```ruby
+# Continues the setup from "Your own iframe": require "turbodocx_sdk" and configure.
 result = TurboDocxSdk::TurboSign.create_embedded_signature(
   file:         StringIO.new(File.binread("contract.pdf")),
   fileName:     "contract.pdf",
@@ -442,17 +451,17 @@ embed_url = result["recipients"].first["embedUrl"]
 </TabItem>
 </Tabs>
 
-Frame `embedUrl` exactly as in the [build guides](../build/own-iframe.md). The signer sees the same gate as for email, and the code arrives by text message.
+Frame `embedUrl` exactly as in the [build guides](../embedded-signing/build/own-iframe.md). The signer sees the same gate as for email, and the code arrives by text message.
 
 If you send with `sendSignature` instead, set `phone` on the recipient and `identityVerification: { "mode": "otp", "channel": "sms" }`.
 
 | Error | Cause |
 |---|---|
-| `PhoneRequiredForSmsOtp` (raised by the SDK) or `OtpPhoneRequired` (400) | The recipient asks for SMS but has no phone number. |
+| `OtpPhoneRequired` (400), or `PhoneRequiredForSmsOtp` from the JS, Python, Go, Java or Ruby SDK before the request is sent | The recipient asks for SMS but has no phone number. The PHP SDK doesn't check first, so PHP callers get `OtpPhoneRequired` from the API. With the `createEmbeddedSignature` SMS shorthand, the phone comes from `phoneNumber`, so this only happens when that is empty. |
 | `OtpPhoneInvalid` (400) | The number is well-formed but cannot exist. |
 | `OtpNotEntitled`, `SmsOtpLimitExceeded` (402) | The plan does not include SMS passcodes, or the SMS allowance is used up. |
 | `SmsOtpNotEnabled` (403) | **Allow SMS as an alternative to email** is off. |
-| `OtpOverrideNotAllowed` (403) | The organization verifies every request by email and locked the method. Ask an admin to turn on **Let senders change the method per recipient**. |
+| `OtpOverrideNotAllowed` (403) | The organization verifies every request and locked the method to a different channel. Ask an admin to turn on **Let senders change the method per recipient**. |
 | `SmsProviderNotConfigured` (409) | No SMS provider is saved for the organization. |
 
 ### Verify only your embedded signers by SMS
@@ -490,6 +499,6 @@ When a recipient requires a passcode, the signer meets the passcode gate on the 
 ## What's next
 
 - **Next:** [External identity verification](./external-identity-verification.md), if your app already verifies users with an identity verification vendor.
-- [Set up your organization](../set-up-your-organization.md): turn on embedded signing, allow the origins that may embed the signing page, and understand the clickjacking and localhost rules.
-- [Build guides](../build/own-iframe.md): frame the signing page in your app.
-- [API reference](../reference.md): the recipient block, the organization default, and every error.
+- [Set up your organization](../embedded-signing/set-up-your-organization.md): turn on embedded signing, allow the origins that may embed the signing page, and understand the clickjacking and localhost rules.
+- [Build guides](../embedded-signing/build/own-iframe.md): frame the signing page in your app.
+- [API reference](../embedded-signing/reference.md): the recipient block, the organization default, and every error.

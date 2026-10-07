@@ -14,6 +14,8 @@ keywords:
   - "@turbodocx/embed"
 ---
 
+import SampleAppCallout from '../_sample-app-callout.mdx';
+import SetupAndVerify from './_setup-and-verify.mdx';
 import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
 
 # Embed Signing with the Web Component (No React)
@@ -32,14 +34,9 @@ The element renders the iframe, checks where each message comes from, and fires 
 - The setup in [Before you start](../index.md#before-you-start): embedded signing on, your origin allowed, and an **Administrator** or **Contributor** API key.
 - A PDF with `{signature1}` and `{date1}` text anchors.
 
-## Step 1: Check your organization's settings (admin, once)
+## Step 1: Check your setup and choose how signers verify
 
-An admin confirms two settings in **Settings** > **Features and integrations** > **Configure E-Signature** > **Identity Verification**. [Set up your organization](../set-up-your-organization.md) shows every click.
-
-1. On the **One-time passcode** tab, **Enable identity verification** is on.
-2. On the **Identity & embedding** tab, your app's origin is under **Allowed embedding domains**.
-
-![The Identity & embedding tab with the Allowed embedding domains input highlighted](/img/how-to-enable-embedded-signing/05-allowed-embedding-domains.png)
+<SetupAndVerify />
 
 ## Step 2: Load the element
 
@@ -106,16 +103,12 @@ Add a route to your server, for example `POST /api/signing-session`. It calls `c
 | Attribute | Required | Description |
 |---|---|---|
 | `embed-url` | Yes | The per-recipient URL from your server. |
-| `origin` | Yes, in practice | The exact TurboSign origin, `https://app.turbodocx.com`. Without it, every message is ignored. |
+| `origin` | Yes, in practice | The exact TurboSign origin, `https://app.turbodocx.com`. You can also derive it from the URL you frame: `new URL(embedUrl).origin`. Without it, every message is ignored. |
 | `height` | No | A CSS length or a number of pixels. Defaults to `720px`. |
 | `title` | No | The iframe's accessible name. Defaults to `TurboSign signing`. |
 | `allow-any-origin` | No | Development only. Accepts messages from any origin. Never ship it. |
 
 The element re-emits `turbosign:completed` as a bubbling `CustomEvent`, so a listener on a parent element works too. It also defines `turbosign:declined` and `turbosign:error`, which the signing page does not send yet.
-
-:::note Using a different tag name
-The element registers as `turbosign-form`. To use another name, import `defineTurboSignForm` from `@turbodocx/embed` and call `defineTurboSignForm("my-tag")`.
-:::
 
 :::warning Don't leave origin empty
 The element fails closed. If `origin` is missing, it ignores every message and `turbosign:completed` never fires. `allow-any-origin` turns that off for local debugging only.
@@ -123,7 +116,9 @@ The element fails closed. If `origin` is missing, it ignores every message and `
 
 ## What the signer sees
 
-The signing panel inside `turbosign-form` is the same one the other build guides show. These screenshots come from the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app).
+<SampleAppCallout path="Single signer" />
+
+The signing panel inside `turbosign-form` is the same one the other build guides show. The screenshots below come from the sample app's **Single signer** tab, because it has no web component tab.
 
 1. Your page shows the TurboSign signing panel. The signer clicks **Send Code**, and TurboSign emails a six-digit code to the signer's address.
 
@@ -135,7 +130,7 @@ The signing panel inside `turbosign-form` is the same one the other build guides
 
 3. The signer ticks **I have read and agree to the TurboSign consent terms** and clicks **Continue**.
 
-   ![The TurboSign Consent panel with the agreement checkbox highlighted](/img/embedded-signing/iframe-04-consent.png)
+   ![The TurboSign Consent panel with the consent statement highlighted; the checkbox is just to its left, and Continue is below](/img/embedded-signing/iframe-04-consent.png)
 
 4. The document opens. The signer clicks the **Signature** field, types or draws a signature, and clicks **Save**.
 
@@ -154,13 +149,14 @@ The signing panel inside `turbosign-form` is the same one the other build guides
 | Symptom | Cause | Fix |
 |---|---|---|
 | The element is blank | Your origin is not under **Allowed embedding domains**. | Add the exact origin, including the port in development. |
+| Signing finishes but no completion message arrives (often in Firefox) | The signing page posts only to an origin it can identify, and your page or iframe sends no referrer. | Don't use `referrerpolicy="no-referrer"` on the iframe or a `no-referrer` page policy; keep the default `strict-origin-when-cross-origin`. |
 | `turbosign:completed` never fires | `origin` is missing or wrong, or the listener is attached to the wrong element. | Set `origin="https://app.turbodocx.com"` and listen on the element (or a parent). |
 | Nothing renders at all | The module never loaded, so the tag is an unknown element. | Check the network tab for the script, and that it is loaded with `type="module"`. |
 | HTTP `403` when your server creates the URL | The API key belongs to a **User**, or **Enable identity verification** is off. | Use an **Administrator** or **Contributor** key, and ask an admin to check Step 1. |
-| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request by SMS and locked the method. | Ask an admin to let senders change the method, or [request an SMS passcode](../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to let senders change the method, or [request an SMS passcode](../../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
 
 ## What's next
 
 - **Next:** [Two signers in order on one device](./sequential-signers.md).
-- [External identity verification](../identity-verification/external-identity-verification.md), to skip the passcode when your identity vendor already verified the signer.
+- [External identity verification](../../identity-verification/external-identity-verification.md), to skip the passcode when your identity vendor already verified the signer.
 - [API reference](../reference.md): every field, event and error.

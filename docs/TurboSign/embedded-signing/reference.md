@@ -32,6 +32,7 @@ Read them before you send a document or request a signing URL, so you know what 
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
+// Continues the setup from "Your own iframe": imports and TurboSign.configure(...).
 const settings = await TurboSign.getEmbeddedSigningSettings();
 if (!settings.enabled) throw new Error("Ask an admin to turn on embedded signing.");
 ```
@@ -40,6 +41,7 @@ if (!settings.enabled) throw new Error("Ask an admin to turn on embedded signing
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
+# Inside an async function, after TurboSign.configure(...) as in "Your own iframe". pdf holds the PDF bytes.
 settings = await TurboSign.get_embedded_signing_settings()
 if not settings["enabled"]:
     raise RuntimeError("Ask an admin to turn on embedded signing.")
@@ -49,6 +51,7 @@ if not settings["enabled"]:
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
+// Continues the setup from "Your own iframe": TurboSign::configure(...) and the use lines.
 $settings = TurboSign::getEmbeddedSigningSettings();
 if (!$settings->enabled) {
     throw new RuntimeException('Ask an admin to turn on embedded signing.');
@@ -59,6 +62,7 @@ if (!$settings->enabled) {
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
+// Continues the client setup from the build guides; needs the "errors" import.
 settings, err := client.TurboSign.GetEmbeddedSigningSettings(ctx)
 if err != nil {
 	return err
@@ -72,6 +76,7 @@ if !settings.Enabled {
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
+// Inside a method that throws IOException, with client as in "Your own iframe".
 EmbeddedSigningSettings settings = client.turboSign().getEmbeddedSigningSettings();
 if (!settings.isEnabled()) {
     throw new IllegalStateException("Ask an admin to turn on embedded signing.");
@@ -79,9 +84,10 @@ if (!settings.isEnabled()) {
 ```
 
 </TabItem>
-<TabItem value="ruby" label="Ruby">
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
 ```ruby
+# Continues the setup from "Your own iframe": require "turbodocx_sdk" and configure.
 settings = TurboDocxSdk::TurboSign.get_embedded_signing_settings
 raise "Ask an admin to turn on embedded signing." unless settings["enabled"]
 ```
@@ -135,7 +141,7 @@ Automated sends (Pipelines, bulk signature sending, TurboQuote, and the Wrike in
 Recipients using `external_idv` or `override` skip the passcode, so the channel default does not apply to them.
 :::
 
-To verify only your embedded signers by text message while everyone else signs without a passcode, see [Verify only your embedded signers by SMS](./identity-verification/one-time-passcode.md#verify-only-your-embedded-signers-by-sms).
+To verify only your embedded signers by text message while everyone else signs without a passcode, see [Verify only your embedded signers by SMS](../identity-verification/one-time-passcode.md#verify-only-your-embedded-signers-by-sms).
 
 ## The recipient
 
@@ -160,14 +166,19 @@ Mark a recipient for embedded signing by giving it an `identityVerification` blo
 
 | Mode | Block |
 |---|---|
-| One-time passcode | `{ "mode": "otp", "channel": "email" \| "sms" }`. Omit `channel` to take the organization default. |
+| One-time passcode | `{ "mode": "otp", "channel": "email" \| "sms" }`. Omit `channel` to take the organization default (email when that default is `none`). |
 | External identity verification | `{ "mode": "external_idv", "provider": "your-idv-vendor", "maxAgeMinutes": 1440 }` |
 | Override | `{ "mode": "override", "overrideIdentityVerification": true, "reason": "Sandbox testing" }` |
 
 Verification is not tied to embedding. The same per-recipient step-up applies whether the signer arrives through an embedded URL or an emailed link.
 
-:::note PHP and the organization default channel
-The PHP SDK's `IdentityVerification::otp()` always sends a channel (it defaults to `email`), so it cannot take the organization default. To take the default from PHP, leave `identityVerification` off the recipient. The other SDKs omit the channel when you don't pass one.
+:::note Taking the organization default channel from an SDK
+- **JS/TS, Python, Go:** leave `channel` out of the `otp` block.
+- **Ruby:** the recipient takes a plain hash; leave `"channel"` out of it.
+- **Java:** pass `null` to `IdentityVerification.otp(...)`. (`otpEmail()` and `otpSms()` always set a channel.)
+- **PHP:** `IdentityVerification::otp()` always sends a channel (it defaults to `email`), so leave `identityVerification` off the recipient instead.
+
+An `otp` block with no channel uses the organization default channel, or email when that default is `none`.
 :::
 
 ## Sending without signing-link emails
@@ -217,7 +228,7 @@ The response has a `documentId` and one entry per recipient, in signing order:
 | `identityVerificationMode` | For a `ready` signer, the mode TurboSign resolved for the URL. For `pending` or `completed`, the mode you requested through `auth` (`null` when you set none, even if the organization default applies). |
 
 :::note What the one-call helper doesn't cover
-The `auth` shorthand only produces passcodes, and its recipients take no `externalId`. For `external_idv` or `override` recipients, or to look recipients up by `externalId`, use `sendSignature` with `sendEmail: false` and then `createSigningUrl`. The [external identity verification](./identity-verification/external-identity-verification.md) and [sender override](./identity-verification/sender-override.md) guides show this.
+The `auth` shorthand only produces passcodes, and its recipients take no `externalId`. For `external_idv` or `override` recipients, or to look recipients up by `externalId`, use `sendSignature` with `sendEmail: false` and then `createSigningUrl`. The [external identity verification](../identity-verification/external-identity-verification.md) and [sender override](../identity-verification/sender-override.md) guides show this.
 :::
 
 ## Requesting a signing URL
@@ -228,6 +239,7 @@ When your signer is ready, call `createSigningUrl`. Request one at the moment th
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
+// Continues the setup from "Your own iframe": imports and TurboSign.configure(...).
 const { url, expiresAt, identityVerificationMode, pendingChecks } =
   await TurboSign.createSigningUrl(documentId, {
     externalId: "your_customer_123", // or recipientId, exactly one
@@ -239,6 +251,7 @@ const { url, expiresAt, identityVerificationMode, pendingChecks } =
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
+# Inside an async function, after TurboSign.configure(...) as in "Your own iframe". pdf holds the PDF bytes.
 link = await TurboSign.create_signing_url(
     document_id,
     external_id="your_customer_123",  # or recipient_id, exactly one
@@ -264,6 +277,7 @@ $url = $link->url;
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
+// Inside a function that returns error, with client and ctx as in "Your own iframe". pdf holds the PDF bytes.
 link, err := client.TurboSign.CreateSigningURL(ctx, documentID, &turbodocx.CreateSigningURLRequest{
 	ExternalID: "your_customer_123", // or RecipientID, exactly one
 	ReturnURL:  "https://app.yourcompany.com/signed",
@@ -271,13 +285,14 @@ link, err := client.TurboSign.CreateSigningURL(ctx, documentID, &turbodocx.Creat
 if err != nil {
 	return err
 }
-url := link.URL
+fmt.Println(link.URL) // open, redirect to, or frame this URL
 ```
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
+// Inside a method that throws IOException, with client as in "Your own iframe".
 CreateSigningUrlResponse link = client.turboSign().createSigningUrl(
     documentId,
     new CreateSigningUrlRequest.Builder()
@@ -288,9 +303,10 @@ String url = link.getUrl();
 ```
 
 </TabItem>
-<TabItem value="ruby" label="Ruby">
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
 ```ruby
+# Continues the setup from "Your own iframe": require "turbodocx_sdk" and configure.
 link = TurboDocxSdk::TurboSign.create_signing_url(
   document_id,
   external_id: "your_customer_123", # or recipient_id:, exactly one
@@ -317,7 +333,7 @@ POST /turbosign/documents/{documentId}/signing-url
 |---|---|
 | `recipientId` or `externalId` | Picks the recipient. Send exactly one. |
 | `returnUrl` | Optional. Where the signer goes after signing. Must be `https`. See [Return URL](#return-url). |
-| `identityAssertion` | Required for `external_idv` recipients. See [External identity verification](./identity-verification/external-identity-verification.md). |
+| `identityAssertion` | Required for `external_idv` recipients. See [External identity verification](../identity-verification/external-identity-verification.md). |
 
 Unknown keys are rejected.
 
@@ -424,7 +440,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 400 | `DuplicateExternalId` | Two recipients on the document share an `externalId`. |
 | 400 | `RecipientSelectorInvalid` | `createSigningUrl` needs exactly one of `recipientId` or `externalId`. |
 | 400 | `InvalidReturnUrl` | `returnUrl` is not an `https` URL. |
-| 400 | `IdentityAssertionRequired`, `IdentityAssertionInvalid`, `IdentityProviderMismatch`, `IdentityEmailMismatch`, `IdentityAssertionStale`, `IdentityAssertionReused` | The `external_idv` assertion is missing or fails a check (see [External identity verification](./identity-verification/external-identity-verification.md#errors)). |
+| 400 | `IdentityAssertionRequired`, `IdentityAssertionInvalid`, `IdentityProviderMismatch`, `IdentityEmailMismatch`, `IdentityAssertionStale`, `IdentityAssertionReused` | The `external_idv` assertion is missing or fails a check (see [External identity verification](../identity-verification/external-identity-verification.md#errors)). |
 | 402 | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. Requesting a signing URL needs an **Administrator** or **Contributor** key. |
 | 403 | `OtpOverrideNotAllowed` | The organization locked the passcode method and the request set a different channel. Omit the channel or match `defaultChannel`. |

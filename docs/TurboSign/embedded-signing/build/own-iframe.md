@@ -13,6 +13,8 @@ keywords:
   - embed e-signature iframe
 ---
 
+import SampleAppCallout from '../_sample-app-callout.mdx';
+import SetupAndVerify from './_setup-and-verify.mdx';
 import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
 
 # Embed Signing with Your Own Iframe (Email Passcode)
@@ -32,18 +34,9 @@ Choose this path when you want full control of the frame, or your framework is n
 - The setup in [Before you start](../index.md#before-you-start): embedded signing on, your origin allowed, and an **Administrator** or **Contributor** API key.
 - A PDF with `{signature1}` and `{date1}` text anchors.
 
-## Step 1: Check your organization's settings (admin, once)
+## Step 1: Check your setup and choose how signers verify
 
-An admin confirms two settings in **Settings** > **Features and integrations** > **Configure E-Signature** > **Identity Verification**. [Set up your organization](../set-up-your-organization.md) shows every click.
-
-1. On the **One-time passcode** tab, **Enable identity verification** is on. Keep **Only when requested** under **When to verify signers**: your code asks for the passcode on each embedded signer, so other signature requests are not affected.
-2. On the **Identity & embedding** tab, your app's full origin (for example `https://app.yourcompany.com`) is under **Allowed embedding domains**.
-
-![The Identity & embedding tab with the Allowed embedding domains input highlighted](/img/how-to-enable-embedded-signing/05-allowed-embedding-domains.png)
-
-:::caution localhost is for development only
-You can add `http://localhost:5173` (or your dev port) to test on your machine. The settings then show a **NOT FOR PRODUCTION USE** warning. Remove every `http://` origin before you go live; production origins must be `https://`.
-:::
+<SetupAndVerify />
 
 ## Step 2: Create the document and signing URL on your server
 
@@ -104,12 +97,14 @@ window.addEventListener("message", async (event) => {
 ```
 
 :::warning Check both origin and source
-The signing page may post with a target origin of `*` when it can't resolve yours, so other frames on your page can see and forge the message. Checking `event.origin` stops other sites; checking `event.source` stops other frames from the same origin. If you'd rather not maintain this, `handleTurboSignMessage` from [`@turbodocx/embed`](https://www.npmjs.com/package/@turbodocx/embed) does both checks for you.
+Any window can post a message to your page. Checking `event.origin` rejects messages from other sites; checking `event.source` rejects messages from other frames, including ones on the TurboSign origin. If you'd rather not maintain this, `handleTurboSignMessage` from [`@turbodocx/embed`](https://www.npmjs.com/package/@turbodocx/embed) does both checks when you pass `expectedOrigin` and `expectedSource: iframe.contentWindow`.
 :::
 
 ## What the signer sees
 
-These screenshots come from the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app). Your app's page around the signing panel will look different; the panel itself is the same.
+<SampleAppCallout path="Single signer" />
+
+Your app's page around the signing panel will look different; the panel itself is the same.
 
 1. Your signer clicks your own button (here, **Start signing**). Your server creates the document and returns the signing URL, and your page sets it as the iframe's `src`.
 
@@ -125,7 +120,7 @@ These screenshots come from the [embedded signing sample app](https://github.com
 
 4. The signer ticks **I have read and agree to the TurboSign consent terms** and clicks **Continue**.
 
-   ![The TurboSign Consent panel with the agreement checkbox highlighted](/img/embedded-signing/iframe-04-consent.png)
+   ![The TurboSign Consent panel with the consent statement highlighted; the checkbox is just to its left, and Continue is below](/img/embedded-signing/iframe-04-consent.png)
 
 5. The document opens. The signer clicks the **Signature** field, types or draws a signature, and clicks **Save**. Date fields fill in automatically.
 
@@ -156,7 +151,8 @@ A code expires after 10 minutes, and five wrong entries require a new code. See 
 | The iframe is blank, and the browser console mentions `frame-ancestors` | Your origin is not under **Allowed embedding domains**. | Add the exact origin, including the port in development. |
 | HTTP `403` when the signing URL is created | The API key belongs to a **User**. | Use an **Administrator** or **Contributor** key. |
 | HTTP `403` `EmbeddedSigningNotEnabled` | **Enable identity verification** is off. | Ask an admin to turn it on (Step 1). |
-| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request by **SMS** and locked the method, but this request asks for email. | Ask an admin to allow changing the method per recipient, or follow the [SMS guide](../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to allow changing the method per recipient, or follow the [SMS guide](../../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+| Signing finishes but no completion message arrives (often in Firefox) | The signing page posts only to an origin it can identify, and your page or iframe sends no referrer. | Don't use `referrerpolicy="no-referrer"` on the iframe or a `no-referrer` page policy; keep the default `strict-origin-when-cross-origin`. |
 | Your listener never fires | The origin check uses the wrong origin, or the message came from a different frame. | Log `event.origin` once and compare it with `TURBOSIGN_ORIGIN`. |
 
 ## What's next

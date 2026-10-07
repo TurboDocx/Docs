@@ -1,9 +1,9 @@
 ---
-title: Embedded Signing and Identity Verification
+title: Embedded Signing
 slug: /TurboSign/embedded-signing
 sidebar_label: Overview
 sidebar_position: 1
-description: Embed TurboSign in your own app and verify each signer with a one-time passcode, your own identity provider, or an explicit override. Request a short-lived signing URL at the moment a signer is ready, then pick a step-by-step guide.
+description: Embed TurboSign in your own app and verify each signer with a one-time passcode, your own identity provider, or an explicit override. Request a signing URL at the moment a signer is ready, then pick a step-by-step guide.
 keywords:
   - embedded signing
   - identity verification
@@ -14,20 +14,22 @@ keywords:
   - external identity verification
   - iframe signing
   - turbosign api
-  - single-use signing url
+  - embedded signing url
   - signer verification
   - embed signing in your app
 ---
 
-# Embedded Signing and Identity Verification
+import SampleAppCallout from './_sample-app-callout.mdx';
 
-Embedded signing takes a signer straight from your own UI to a TurboSign signing page, without signing-link emails. Your backend asks TurboSign for a short-lived signing URL when the signer is ready, and your app opens it in an iframe, a new tab, or a redirect.
+# Embedded Signing
+
+Embedded signing takes a signer straight from your own UI to a TurboSign signing page, without signing-link emails. Your backend asks TurboSign for a signing URL when the signer is ready, and your app opens it in an iframe, a new tab, or a redirect.
 
 **At a glance:**
 
 - **Your signer never leaves your app.** The signing page appears inside your product, and no signing-link email is needed.
 - **Your API key stays on your server.** The browser only ever sees a per-signer URL.
-- **Verification is per recipient and optional.** Use an email or SMS passcode, your own identity verification vendor, or (in development) no verification at all.
+- **Each signer is verified your way.** Use an email or SMS passcode, or your own identity verification vendor. The sender override skips verification while you test.
 - **The signer's real email is the signer of record**, and the verification lands on the certificate of completion and in the audit trail.
 - **You get a completion event** in the browser, and the `completed` webhook on your server.
 
@@ -65,17 +67,17 @@ Browser (your app)  --POST /api/signing-session-->  Your server (holds the API k
    <iframe src=embedUrl>  --postMessage "turbosign:completed"-->  your app
 ```
 
-## Three ways to verify the signer
+## Choose how signers verify
 
-Identity verification is optional and set per recipient. A recipient with no verification signs with no extra step. When you do verify an embedded signer, it happens in one of three ways.
+Every embedded signer needs a verification method, unless you use the sender override while testing. Your app shows the signing page itself and TurboSign emails no link, so a check is what ties the person at the screen to the signer of record.
 
-| Mode | Who verifies the signer | When | Guide |
-|---|---|---|---|
-| One-time passcode (`otp`) | TurboSign, by email or SMS | On the signing page, before the document is shown | [Email and SMS passcode](./identity-verification/one-time-passcode.md) |
-| External identity verification (`external_idv`) | Your identity verification vendor | Your backend asserts the verification when it requests the signing URL | [External identity verification](./identity-verification/external-identity-verification.md) |
-| Override (`override`) | Nobody. An explicit opt-out for development and testing | Recorded on the certificate and in the audit trail | [Sender override for testing](./identity-verification/sender-override.md) |
+| Method | Who verifies the signer | Signing URL |
+|---|---|---|
+| [Email or SMS passcode](../identity-verification/one-time-passcode.md) | TurboSign sends a code before the document opens | Reusable for the life of the document |
+| [External identity verification](../identity-verification/external-identity-verification.md) | Your identity provider; your backend asserts the result | Single-use, expires in about five minutes |
+| [Sender override](../identity-verification/sender-override.md) | Nobody (testing only, marked not identity-verified) | Single-use, expires in about five minutes |
 
-Verification is not tied to embedding: the same per-recipient step-up applies whether the signer arrives through an embedded URL or an emailed link.
+The [Identity verification](../identity-verification/index.md) section compares them in full, including which ones also work for signers you email.
 
 ## Choose your path
 
@@ -85,21 +87,21 @@ Verification is not tied to embedding: the same per-recipient step-up applies wh
 | Write the least code in a React app | Email passcode | The React `TurboSignForm` component | [React widget](./build/react-widget.md) |
 | Use Vue, Angular, Svelte or plain HTML | Email passcode | The `turbosign-form` web component | [Web component](./build/web-component.md) |
 | Have two or more people sign in order on one device | An email passcode each | Any | [Two signers on one device](./build/sequential-signers.md) |
-| Verify signers by text message | SMS passcode | Any | [Email and SMS passcode](./identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code) |
-| Reuse a check your identity vendor already ran | Your identity provider | Any | [External identity verification](./identity-verification/external-identity-verification.md) |
-| Try the flow in development without verification | Nothing (marked not identity-verified) | Any | [Sender override for testing](./identity-verification/sender-override.md) |
+| Verify signers by text message | SMS passcode | Any | [Email and SMS passcode](../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code) |
+| Reuse a check your identity vendor already ran | Your identity provider | Any | [External identity verification](../identity-verification/external-identity-verification.md) |
+| Try the flow in development without verification | Nothing (marked not identity-verified) | Any | [Sender override for testing](../identity-verification/sender-override.md) |
 
 :::tip Not sure? Start with the React widget or the web component
 They check the message origin and surface the completion event for you. Choose your own iframe only when you need full control of the frame.
 :::
 
-To see the result first, run the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app). It is a Vite + React host app that embeds TurboSign four ways (single signer, external identity verification, sequential kiosk, and the drop-in widget) while the API key stays on its small server.
+<SampleAppCallout path="Widget, Single signer, External IdV or Sequential kiosk" />
 
 ## Before you start
 
 You need these in place before any guide works:
 
-1. **An admin has turned on embedded signing.** In **Settings** > **Features and integrations** > **Signatures** > **Configure E-Signature** > **Identity Verification**, the **Enable identity verification** switch is on.
+1. **An admin has turned on embedded signing.** In **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature** > **Identity Verification**, the **Enable identity verification** switch is on. Despite its name, it is the master switch for embedded signing and every verification mode.
 2. **Your app's origin is allowed.** On the **Identity & embedding** tab, your origin (for example `https://app.yourcompany.com`) is under **Allowed embedding domains**.
 3. **You have an API key with the right role:** an **Administrator** or **Contributor** key.
 4. **Your PDF has text anchors** where fields go, for example `{signature1}` and `{date1}`.
@@ -149,7 +151,7 @@ Every error code is in the [API reference](./reference.md#errors).
 
 ## Good practice
 
-- **Never store a signing URL.** Request one when the signer clicks. The single-use URLs expire quickly by design.
+- **Never store a signing URL.** Request one when the signer clicks. Passcode signers get a reusable link that lasts as long as the document; external identity verification and override signers get a single-use link that expires after about five minutes.
 - **Verify the signer in your own app first.** Confirm the logged-in user is the recipient before you request a URL.
 - **Use `externalId`** to reference a signer by your own record (an Airtable row, a CRM contact) instead of storing TurboDocx's recipient id.
 - **Set allowed embedding domains** before you iframe the signing page.

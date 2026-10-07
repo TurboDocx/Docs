@@ -1,0 +1,7 @@
+:::tip Try it end to end
+The [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app) runs this flow on its **{props.path}** tab. To run it:
+
+1. `cp .env.example .env`, then set an **Administrator** or **Contributor** API key, your org ID and a sender email.
+2. `npm install`, then `npm run server` and `npm run dev` in two terminals, and open `http://localhost:5173`.
+3. Add `http://localhost:5173` under **Allowed embedding domains** (development only). The API key stays on the app's small server and never reaches the browser.
+:::

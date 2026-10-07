@@ -23,6 +23,7 @@ keywords:
   - signer identity verification
 ---
 
+import SampleAppCallout from '../embedded-signing/_sample-app-callout.mdx';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -30,9 +31,9 @@ import TabItem from '@theme/TabItem';
 
 External identity verification (`external_idv`) is for apps that already verify their users with an identity verification provider. Your app verifies the signer with that provider (for example a government ID scan plus a selfie). Your backend then tells TurboSign who verified the signer, when, and with which reference id. TurboSign checks that assertion, records it in the tamper-evident audit trail, and gives you a single-use signing URL. The signer goes straight to the document without a TurboSign passcode.
 
-This page covers when to use it, how to turn it on, the exact request shape, and worked examples for common identity verification providers. For the rest of embedded signing (sending without emails, return URLs, iframes), see the [embedded signing overview](../index.md) and the [API reference](../reference.md).
+This page covers when to use it, how to turn it on, the exact request shape, and worked examples for common identity verification providers. For the rest of embedded signing (sending without emails, return URLs, iframes), see the [embedded signing overview](../embedded-signing/index.md) and the [API reference](../embedded-signing/reference.md).
 
-See it working: the External IdV path in the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app) simulates a verification provider end to end.
+<SampleAppCallout path="External IdV" />
 
 ## When to use external IdV instead of a passcode
 
@@ -52,7 +53,7 @@ Use external IdV when:
 - you need stronger evidence than control of an inbox or phone, such as a document check with liveness;
 - you want the provider's reference id and evidence link on the signature's audit trail.
 
-Use a one-time passcode when you don't run your own identity verification. See [How to Configure One-Time Passcode (OTP)](./one-time-passcode.md).
+Use a one-time passcode when you don't run your own identity verification. See [Email and SMS passcode](./one-time-passcode.md).
 
 <!-- Legal language: requires counsel review before publishing -->
 :::warning Your responsibilities
@@ -65,20 +66,19 @@ TurboSign records your assertion. It does not contact your provider or independe
 
 An organization **admin** does this once.
 
-1. Go to **Settings** and click **Features and integrations** in the left-hand menu. On the **Signatures** card, click **Configure E-Signature**.
-2. In the E-Signature Settings dialog, click **Identity Verification** in the left-hand section list.
-3. On the **One-time passcode** tab, turn on **Enable identity verification**. This switch turns on embedded signing for your organization, and TurboSign refuses to issue any signing URL while it is off. Under **When to verify signers**, keep **Only when requested** if you don't want passcodes on other signature requests.
+1. Go to **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature** > **Identity Verification**. (Settings is in the menu under your name at the bottom of the left sidebar.)
+2. On the **One-time passcode** tab, turn on **Enable identity verification**. Despite its name, this is the master switch for embedded signing and every verification mode: while it is off, every signing URL request fails with `EmbeddedSigningNotEnabled`. Under **When to verify signers**, keep **Only when requested** if you don't want passcodes on other signature requests.
 
 ![The One-time passcode tab with the Enable identity verification switch highlighted](/img/external-identity-verification/01-enable-identity-verification.png)
 
-4. Click the **Identity & embedding** tab and turn on **Allow external identity verification**. The description under it reads "Let your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link."
+3. Click the **Identity & embedding** tab and turn on **Allow external identity verification**. The description under it reads "Let your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link."
 
 ![The Identity & embedding tab with the Allow external identity verification switch highlighted](/img/external-identity-verification/02-allow-external-identity-verification.png)
 
-Changes in this section save as you make them. Your integration can confirm the setting with `TurboSign.getEmbeddedSigningSettings()`: `enabled` and `allowExternalIdv` should both be `true`.
+Changes in this section save as you make them; close the dialog when you're done. Your integration can confirm the setting with `TurboSign.getEmbeddedSigningSettings()`: `enabled` and `allowExternalIdv` should both be `true`.
 
 :::tip Embedding in an iframe?
-If you plan to show the signing page inside your app in an iframe, also add your app's origin under **Allowed embedding domains** on the same tab. See [How to Enable Embedded Signing](../set-up-your-organization.md#step-5-allow-the-origins-that-may-embed-the-signing-page).
+If you plan to show the signing page inside your app in an iframe, also add your app's origin under **Allowed embedding domains** on the same tab. See [Set up your organization](../embedded-signing/set-up-your-organization.md#step-5-allow-the-origins-that-may-embed-the-signing-page).
 :::
 
 ## Step 2: Mark the recipient for external IdV
@@ -109,7 +109,7 @@ An `external_idv` block can't carry the override fields (`overrideIdentityVerifi
 
 ## Step 3: Verify the signer with your provider
 
-Run your provider's verification flow in your app as you normally would. Then wait for the **server-side** result.
+Run your provider's verification flow in your app as you normally would. Then wait for the **server-side** result. [External IdV provider mappings](./external-idv-provider-mappings.md) shows how the result from Persona, Stripe Identity, Onfido, Jumio, Veriff, CLEAR or ID.me maps onto the assertion.
 
 :::caution Assert only a confirmed result
 Identity verification providers deliver the final decision asynchronously, usually by webhook. Build the assertion from that webhook, or from a server-side fetch of the verification by its id. Do not assert off the browser's "finished" event: the user finishing the flow is not the same as the provider approving them.
@@ -119,112 +119,7 @@ Identity verification providers deliver the final decision asynchronously, usual
 
 When the signer clicks "Sign now" in your app, your backend calls `createSigningUrl` with an `identityAssertion`.
 
-```typescript
-import { TurboSign } from "@turbodocx/sdk"
-
-const { url, expiresAt } = await TurboSign.createSigningUrl(documentId, {
-  externalId: "your_customer_123",
-  identityAssertion: {
-    provider: "Persona",                 // must equal the recipient's provider
-    verificationId: "inq_ABC123",        // your provider's id for this verification
-    verifiedAt: "2026-09-16T15:02:00Z",  // when the provider verified the signer
-    subjectEmail: "jane@example.com",    // the email the provider verified
-    method: "id_document_liveness",
-    verifiedName: "Jane Doe",
-  },
-  returnUrl: "https://app.yourcompany.com/signed",
-})
-// Redirect the signer to `url`, open it in a new tab, or load it in your iframe.
-```
-
-The REST equivalent is `POST /turbosign/documents/{documentId}/signing-url` with the same body (`externalId` or `recipientId`, `identityAssertion`, optional `returnUrl`). Unknown keys are rejected.
-
-### Required assertion fields
-
-| Field | Description |
-|---|---|
-| `provider` | Must equal the `provider` on the recipient's `identityVerification` block. Up to 200 characters. |
-| `verificationId` | Your provider's reference id for this verification, up to 256 characters. Recorded in the audit trail and used to stop one verification being used by two signers. |
-| `verifiedAt` | ISO 8601 timestamp of when the provider verified the signer. Must be within the recipient's `maxAgeMinutes`, and no more than two minutes in the future (to allow for clock skew). |
-| `subjectEmail` | The email address your provider verified. Must be a valid email and, by default, must equal the recipient's email (case and surrounding spaces are ignored). |
-
-### Optional assertion fields
-
-Each optional field adds evidence to the audit trail.
-
-| Field | Description |
-|---|---|
-| `method` | How your provider verified the signer. One of: `id_document` (a government ID document check), `id_document_liveness` (an ID document plus a selfie or liveness match), `kba` (knowledge-based questions), `database` (checked against an authoritative data source), `sso` (a trusted single sign-on or federated identity), or `other`. |
-| `methodDetail` | A free-text description of the technique, up to 200 characters. **Required when `method` is `other`.** |
-| `assuranceLevel` | A free-text label for the assurance level your provider attests to, up to 40 characters. For example `ial2_aal2` (NIST SP 800-63), `eidas_substantial` or `eidas_high`. Only send a level your provider and your configuration actually meet. |
-| `verifiedName` | The signer's legal name as your provider confirmed it, up to 200 characters. |
-| `evidenceUrl` | A link to the verification record in your provider's dashboard, so an auditor can trace the assertion back to its source. Must be an `https` URL, up to 2048 characters. |
-| `overrideEmailMatching` | `true` skips the email match check. See [When the verified email differs](#when-the-verified-email-differs). Defaults to `false`. |
-
-### What TurboSign checks
-
-Before it issues the URL, TurboSign confirms that:
-
-1. embedded signing (**Enable identity verification**) and **Allow external identity verification** are still on for your organization. The second switch is checked again here, so turning it off stops new URLs for documents already sent;
-2. the recipient is an `external_idv` recipient and an assertion was sent;
-3. `provider` matches the recipient exactly;
-4. `subjectEmail` matches the recipient's email, unless you set `overrideEmailMatching`;
-5. `verifiedAt` is a valid date, not in the future, and not older than `maxAgeMinutes`;
-6. the optional fields are valid (`method` from the list, `methodDetail` present for `other`, `evidenceUrl` is `https`);
-7. no **other** recipient on the same document already used this `verificationId`.
-
-### The response
-
-```json
-{
-  "data": {
-    "results": {
-      "url": "https://app.turbodocx.com/e-signature/embed/{documentId}?sut=...",
-      "expiresAt": "2026-09-16T15:07:00Z",
-      "recipientId": "...",
-      "externalId": "your_customer_123",
-      "identityVerificationMode": "external_idv",
-      "pendingChecks": []
-    }
-  }
-}
-```
-
-The SDKs return the inner `results` object.
-
-- **The URL is single-use.** Opening it consumes it, and it expires about five minutes after you request it. Request it when the signer clicks, and never store it.
-- **Requesting a new URL revokes the previous one.** If the signer's link expired, request a new one with the same assertion. That works as long as `verifiedAt` is still within `maxAgeMinutes`, because the reuse check only looks at other recipients.
-- **`pendingChecks` is always empty** for `external_idv`. The signing page opens the document without a passcode.
-
-### When the verified email differs
-
-Sometimes the signer verified with your provider under one email (say, a personal address) but signs at another (a work address). By default that request fails with `IdentityEmailMismatch`. If you have confirmed in your own app that the verified person is the signer of record, set `overrideEmailMatching: true`:
-
-```typescript
-const { url } = await TurboSign.createSigningUrl(documentId, {
-  recipientId,
-  identityAssertion: {
-    provider: "Persona",
-    verificationId: "inq_ABC123",
-    verifiedAt: "2026-09-16T15:02:00Z",
-    subjectEmail: "jane.personal@example.com",
-    overrideEmailMatching: true,
-  },
-})
-```
-
-Only the email comparison is skipped. Every other check still runs, and `subjectEmail` is still required and recorded.
-
-<!-- Legal language: requires counsel review before publishing -->
-:::caution You take responsibility for the match
-`overrideEmailMatching: true` turns off only the email check. You alone are responsible for confirming that the person your provider verified is the intended signer.
-
-Use it only when you have confirmed that link in your own systems, and keep a record of how you confirmed it. The override is recorded in TurboSign's audit record, but it is not shown on the rendered audit trail PDF.
-:::
-
-## Steps 2 and 4 in your SDK language
-
-The one-call `createEmbeddedSignature` helper only sets up passcodes, so external IdV uses two calls. First send the document with `sendEmail: false` and an `external_idv` recipient (Step 2). Later, when the signer clicks "Sign now" and your provider has approved them, request the signing URL with the assertion (Step 4).
+The one-call `createEmbeddedSignature` helper only sets up passcodes, so external IdV uses two calls: `sendSignature` with an `external_idv` recipient and `sendEmail: false` (Step 2), then `createSigningUrl` with the assertion (this step). Both calls in each SDK language:
 
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
@@ -232,6 +127,7 @@ The one-call `createEmbeddedSignature` helper only sets up passcodes, so externa
 ```typescript
 import { readFile } from "node:fs/promises";
 import { TurboSign } from "@turbodocx/sdk";
+// TurboSign.configure(...) as in "Your own iframe".
 
 // Step 2: send the document, no signing-link email.
 const sent = await TurboSign.sendSignature({
@@ -276,6 +172,7 @@ const { url } = await TurboSign.createSigningUrl(sent.documentId, {
 ```python
 from turbodocx_sdk import TurboSign
 
+# Inside an async function, after TurboSign.configure(...) as in "Your own iframe". pdf holds the PDF bytes.
 # Step 2: send the document, no signing-link email.
 sent = await TurboSign.send_signature(
     file=pdf,
@@ -375,6 +272,7 @@ $url = $link->url;
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
+// Inside a function that returns error, with client and ctx as in "Your own iframe". pdf holds the PDF bytes.
 // Step 2: send the document, no signing-link email.
 sendEmail := false
 sent, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
@@ -421,13 +319,14 @@ link, err := client.TurboSign.CreateSigningURL(ctx, sent.DocumentID, &turbodocx.
 if err != nil {
 	return err
 }
-url := link.URL
+fmt.Println(link.URL) // open, redirect to, or frame this URL
 ```
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
+// Inside a method that throws IOException, with client as in "Your own iframe".
 // Step 2: send the document, no signing-link email.
 SendSignatureResponse sent = client.turboSign().sendSignature(
     new SendSignatureRequest.Builder()
@@ -472,9 +371,10 @@ String url = link.getUrl();
 ```
 
 </TabItem>
-<TabItem value="ruby" label="Ruby">
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
 ```ruby
+# Continues the setup from "Your own iframe": require "turbodocx_sdk" and configure.
 # Step 2: send the document, no signing-link email.
 sent = TurboDocxSdk::TurboSign.send_signature(
   "file"         => StringIO.new(File.binread("contract.pdf")),
@@ -516,11 +416,96 @@ url = link["url"]
 </TabItem>
 </Tabs>
 
-Open `url` right away: it is single-use and expires in about five minutes. To show it inside your app, frame it exactly as in the [build guides](../build/own-iframe.md), or hand it to the [React widget](../build/react-widget.md) or [web component](../build/web-component.md).
+Open `url` right away: it is single-use and expires in about five minutes. To show it inside your app, frame it exactly as in the [build guides](../embedded-signing/build/own-iframe.md), or hand it to the [React widget](../embedded-signing/build/react-widget.md) or [web component](../embedded-signing/build/web-component.md).
+
+The REST equivalent is `POST /turbosign/documents/{documentId}/signing-url` with the same body (`externalId` or `recipientId`, `identityAssertion`, optional `returnUrl`). Unknown keys are rejected.
+
+### Required assertion fields
+
+| Field | Description |
+|---|---|
+| `provider` | Must equal the `provider` on the recipient's `identityVerification` block. Up to 200 characters. |
+| `verificationId` | Your provider's reference id for this verification, up to 256 characters. Recorded in the audit trail and used to stop one verification being used by two signers. |
+| `verifiedAt` | ISO 8601 timestamp of when the provider verified the signer. Must be within the recipient's `maxAgeMinutes`, and no more than two minutes in the future (to allow for clock skew). |
+| `subjectEmail` | The email address your provider verified. Must be a valid email and, by default, must equal the recipient's email (case and surrounding spaces are ignored). |
+
+### Optional assertion fields
+
+Each optional field adds evidence to the audit trail.
+
+| Field | Description |
+|---|---|
+| `method` | How your provider verified the signer. One of: `id_document` (a government ID document check), `id_document_liveness` (an ID document plus a selfie or liveness match), `kba` (knowledge-based questions), `database` (checked against an authoritative data source), `sso` (a trusted single sign-on or federated identity), or `other`. |
+| `methodDetail` | A free-text description of the technique, up to 200 characters. **Required when `method` is `other`.** |
+| `assuranceLevel` | A free-text label for the assurance level your provider attests to, up to 40 characters. For example `ial2_aal2` (NIST SP 800-63), `eidas_substantial` or `eidas_high`. Only send a level your provider and your configuration actually meet. |
+| `verifiedName` | The signer's legal name as your provider confirmed it, up to 200 characters. |
+| `evidenceUrl` | A link to the verification record in your provider's dashboard, so an auditor can trace the assertion back to its source. Must be an `https` URL, up to 2048 characters. |
+| `overrideEmailMatching` | `true` skips the email match check. See [When the verified email differs](#when-the-verified-email-differs). Defaults to `false`. |
+
+### What TurboSign checks
+
+Before it issues the URL, TurboSign confirms that:
+
+1. embedded signing (**Enable identity verification**) and **Allow external identity verification** are still on for your organization. The second switch is checked again here, so turning it off stops new URLs for documents already sent;
+2. the recipient is an `external_idv` recipient and an assertion was sent;
+3. `provider` matches the recipient exactly;
+4. `subjectEmail` matches the recipient's email, unless you set `overrideEmailMatching`;
+5. `verifiedAt` is a valid date, no more than two minutes in the future (to allow for clock skew), and not older than `maxAgeMinutes`;
+6. the optional fields are valid (`method` from the list, `methodDetail` present for `other`, `evidenceUrl` is `https`);
+7. no **other** recipient on the same document already used this `verificationId`.
+
+### The response
+
+```json
+{
+  "data": {
+    "results": {
+      "url": "https://app.turbodocx.com/e-signature/embed/{documentId}?sut=...",
+      "expiresAt": "2026-09-16T15:07:00Z",
+      "recipientId": "...",
+      "externalId": "your_customer_123",
+      "identityVerificationMode": "external_idv",
+      "pendingChecks": []
+    }
+  }
+}
+```
+
+The SDKs return the inner `results` object.
+
+- **The URL is single-use.** Opening it consumes it, and it expires about five minutes after you request it. Request it when the signer clicks, and never store it.
+- **Requesting a new URL revokes the previous one.** If the signer's link expired, request a new one with the same assertion. That works as long as `verifiedAt` is still within `maxAgeMinutes`, because the reuse check only looks at other recipients.
+- **`pendingChecks` is always empty** for `external_idv`. The signing page opens the document without a passcode.
+
+### When the verified email differs
+
+Sometimes the signer verified with your provider under one email (say, a personal address) but signs at another (a work address). By default that request fails with `IdentityEmailMismatch`. If you have confirmed in your own app that the verified person is the signer of record, set `overrideEmailMatching: true`:
+
+```typescript
+const { url } = await TurboSign.createSigningUrl(documentId, {
+  recipientId,
+  identityAssertion: {
+    provider: "Persona",
+    verificationId: "inq_ABC123",
+    verifiedAt: "2026-09-16T15:02:00Z",
+    subjectEmail: "jane.personal@example.com",
+    overrideEmailMatching: true,
+  },
+})
+```
+
+Only the email comparison is skipped. Every other check still runs, and `subjectEmail` is still required and recorded.
+
+<!-- Legal language: requires counsel review before publishing -->
+:::caution You take responsibility for the match
+`overrideEmailMatching: true` turns off only the email check. You alone are responsible for confirming that the person your provider verified is the intended signer.
+
+Use it only when you have confirmed that link in your own systems, and keep a record of how you confirmed it. The override is recorded in TurboSign's audit record, but it is not shown on the rendered audit trail PDF.
+:::
 
 ## What the signer sees
 
-These screenshots come from the External IdV path of the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app). It **simulates** the identity verification provider and labels it as simulated; in your app this is your provider's real flow.
+These screenshots come from the sample app's **External IdV** tab (see the tip at the top of this page). It **simulates** the identity verification provider and labels it as simulated; in your app this is your provider's real flow.
 
 1. In your app, the signer starts the verification (here, **Verify identity to sign**).
 
@@ -560,146 +545,11 @@ For example, with the Persona assertion above, the entry reads "Identity Verifie
 
 ## Provider examples
 
-The examples below show how a verification from some well-known identity verification providers maps onto a TurboSign assertion. They are examples only: TurboSign works with any provider (or your own in-house process), and listing a provider here does not imply a partnership or certification. Check your provider's current documentation for the exact field names in its webhook or API response.
-
-In every case:
-
-- `provider` is any readable name you choose, used identically on the recipient and in the assertion.
-- `verificationId` is your provider's id for the verification.
-- `verifiedAt` is when the provider reached its approved decision.
-- `subjectEmail` is the email you have on file for the verified user.
-- `evidenceUrl` is the `https` link to that record in your provider's dashboard, if you want auditors to be able to open it.
-- `method` should describe what your configuration actually checked. If your flow includes a selfie or liveness step, use `id_document_liveness`; if it checks the ID only, use `id_document`.
-
-### Persona
-
-For example, if you verify signers with Persona, each verification is an **inquiry**, with an id that starts with `inq_`. Persona reports the outcome on the inquiry's status and sends webhook events such as `inquiry.approved`.
-
-| Assertion field | Value |
-|---|---|
-| `provider` | `"Persona"` |
-| `verificationId` | The inquiry id (`inq_...`) |
-| `verifiedAt` | The time the inquiry was approved |
-| `method` | `id_document_liveness` when your inquiry template includes a government ID and a selfie; `id_document` for ID only |
-| `evidenceUrl` | The inquiry's link in your Persona dashboard |
-
-```typescript
-// In your handler for Persona's inquiry.approved webhook, after verifying the webhook signature,
-// store the inquiry id and approval time on the user. Later, when the user clicks "Sign now":
-const { url } = await TurboSign.createSigningUrl(user.documentId, {
-  externalId: user.id,
-  identityAssertion: {
-    provider: "Persona",
-    verificationId: user.personaInquiryId,       // "inq_..."
-    verifiedAt: user.personaApprovedAt,          // ISO 8601
-    subjectEmail: user.email,
-    method: "id_document_liveness",
-    verifiedName: user.verifiedLegalName,
-    evidenceUrl: user.personaInquiryDashboardUrl, // https link to the inquiry
-  },
-  returnUrl: "https://app.yourcompany.com/signed",
-})
-```
-
-### Stripe Identity
-
-For example, if you verify signers with Stripe Identity, each verification is a **VerificationSession**, with an id that starts with `vs_`. Stripe sends the `identity.verification_session.verified` webhook event when every check in the session has passed.
-
-| Assertion field | Value |
-|---|---|
-| `provider` | `"Stripe Identity"` |
-| `verificationId` | The VerificationSession id (`vs_...`) |
-| `verifiedAt` | The time of the `identity.verification_session.verified` event |
-| `method` | `id_document_liveness` when the session requires a matching selfie; `id_document` otherwise |
-| `evidenceUrl` | The session's link in your Stripe Dashboard |
-
-```python
-from turbodocx_sdk import TurboSign
-
-# The recipient was sent with:
-# "identityVerification": {"mode": "external_idv", "provider": "Stripe Identity"}
-
-link = await TurboSign.create_signing_url(
-    document_id,
-    external_id=user_id,
-    identity_assertion={
-        "provider": "Stripe Identity",
-        "verificationId": verification_session_id,  # "vs_..."
-        "verifiedAt": verified_at_iso,               # from the verified event
-        "subjectEmail": user_email,
-        "method": "id_document_liveness",
-        "evidenceUrl": stripe_dashboard_session_url,
-    },
-    return_url="https://app.yourcompany.com/signed",
-)
-signing_url = link["url"]  # single-use, about five minutes
-```
-
-The Python SDK passes `identity_assertion` through as-is, so its keys stay camelCase.
-
-### Onfido (Entrust)
-
-For example, if you verify signers with Onfido (now part of Entrust), the verification is a **workflow run** (or, in older integrations, a **check** made of reports). A workflow run reaches the status `approved`; a check's result is `clear` when every report passes.
-
-| Assertion field | Value |
-|---|---|
-| `provider` | `"Onfido"` |
-| `verificationId` | The workflow run id (or check id) |
-| `verifiedAt` | The time the workflow run was approved, or the check completed as `clear` |
-| `method` | `id_document_liveness` for a document report plus a facial similarity report; `id_document` for a document report only |
-
-### Jumio
-
-For example, if you verify signers with Jumio, each verification is a **workflow execution** (a transaction) on a Jumio account. Jumio posts a callback when the workflow finishes, with a decision such as `PASSED`.
-
-| Assertion field | Value |
-|---|---|
-| `provider` | `"Jumio"` |
-| `verificationId` | The workflow execution id |
-| `verifiedAt` | The time the workflow execution finished with a passing decision |
-| `method` | `id_document_liveness` for an ID plus selfie workflow; `id_document` for an ID-only workflow |
-
-### Veriff
-
-For example, if you verify signers with Veriff, each verification is a **session**. Veriff's decision webhook reports the session's decision, and a successful one has the status `approved`.
-
-| Assertion field | Value |
-|---|---|
-| `provider` | `"Veriff"` |
-| `verificationId` | The Veriff session id |
-| `verifiedAt` | The decision time from the decision webhook |
-| `method` | `id_document_liveness` for a document plus selfie flow; `id_document` for document only |
-
-### CLEAR
-
-For example, if you verify signers with CLEAR (CLEAR Verified), your backend creates a **verification session** and learns the outcome through CLEAR's webhooks or by polling the session.
-
-| Assertion field | Value |
-|---|---|
-| `provider` | `"CLEAR"` |
-| `verificationId` | The CLEAR verification session id |
-| `verifiedAt` | The time the session completed successfully |
-| `method` | The value that matches how CLEAR verified the person in your integration. If none of the fixed values fits, use `other` with a `methodDetail` such as `"CLEAR Verified session"` |
-
-### ID.me
-
-For example, if your signers sign in with ID.me (over OpenID Connect or SAML) as part of your app's login or step-up flow, the verification is that authenticated ID.me login.
-
-| Assertion field | Value |
-|---|---|
-| `provider` | `"ID.me"` |
-| `verificationId` | A unique id for that verification event, for example the id of the login or token exchange your app recorded |
-| `verifiedAt` | The time of that login |
-| `method` | `sso` |
-| `assuranceLevel` | `ial2_aal2` only if your ID.me integration actually requested and received an IAL2/AAL2 verification |
-
-### Your own in-house verification
-
-You don't need a third-party provider. If your team verifies customers itself (for example a branch visit or a video call with an agent), use your own system's name as `provider`, your own case id as `verificationId`, and `method: "other"` with a `methodDetail` that says what was checked.
+How a verification from Persona, Stripe Identity, Onfido, Jumio, Veriff, CLEAR, ID.me or your own in-house process maps onto a TurboSign assertion is on its own page: [External IdV provider mappings](./external-idv-provider-mappings.md).
 
 ## Errors
 
-These errors come back from sending the document or from `createSigningUrl`. They use the same body as the other identity errors (`message`, `type`, `error` and `code`); see [Errors](../reference.md#errors) for the full list.
+These errors come back from sending the document or from `createSigningUrl`. They use the same body as the other identity errors (`message`, `type`, `error` and `code`); see [Errors](../embedded-signing/reference.md#errors) for the full list.
 
 | Status | `code` | When |
 |---|---|---|
@@ -710,7 +560,7 @@ These errors come back from sending the document or from `createSigningUrl`. The
 | 400 | `IdentityProviderMismatch` | The assertion's `provider` doesn't exactly match the recipient's. |
 | 400 | `IdentityEmailMismatch` | `subjectEmail` doesn't match the recipient's email and `overrideEmailMatching` isn't `true`. |
 | 400 | `IdentityAssertionStale` | `verifiedAt` is older than the recipient's `maxAgeMinutes`. Verify the signer again. |
-| 400 | `IdentityAssertionInvalid` | `verifiedAt` is not a valid date or is in the future, `method` is not an allowed value, `methodDetail` is missing for `other`, `evidenceUrl` is not `https`, or `provider` is too long. |
+| 400 | `IdentityAssertionInvalid` | `verifiedAt` is not a valid date or is more than two minutes in the future, `method` is not an allowed value, `methodDetail` is missing for `other`, `evidenceUrl` is not `https`, or `provider` is too long. |
 | 400 | `IdentityAssertionReused` | Another recipient on the same document already used this `verificationId`. |
 | 403 | `ExternalIdvNotAllowed` | **Allow external identity verification** is off for your organization. |
 | 403 | `EmbeddedSigningNotEnabled` | **Enable identity verification** is off for your organization. |
@@ -769,7 +619,8 @@ The assertion is passed to `createSigningUrl`, so external IdV is used with sign
 
 ## What's next
 
-- **Next:** [Sender override for testing](./sender-override.md), to try the flow in development without any verification.
-- [Set up your organization](../set-up-your-organization.md): every setting in the Identity Verification section, including allowed embedding domains.
-- [API reference](../reference.md): sending without emails, return URLs, the other verification modes, and the full error list.
-- [TurboSign Webhooks](../../Webhooks.md): get notified when the document is completed.
+- **Next:** [External IdV provider mappings](./external-idv-provider-mappings.md)
+- [Sender override for testing](./sender-override.md), to try the flow in development without any verification.
+- [Set up your organization](../embedded-signing/set-up-your-organization.md): every setting in the Identity Verification section, including allowed embedding domains.
+- [Embedded signing API reference](../embedded-signing/reference.md): sending without emails, return URLs and the full error list.
+- [TurboSign Webhooks](../Webhooks.md): get notified when the document is completed.

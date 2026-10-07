@@ -1,8 +1,8 @@
 ---
 title: Sender Override for Development and Testing
-slug: /TurboSign/embedded-signing/sender-override
-sidebar_label: Sender override (testing only)
-sidebar_position: 4
+slug: /TurboSign/identity-verification/sender-override
+sidebar_label: Sender override for testing
+sidebar_position: 5
 description: Try TurboSign embedded signing in development without a passcode or an identity provider. Turn on the identity verification override, mark a recipient for override, and request a single-use signing URL. Every such signature is marked as not identity-verified.
 keywords:
   - identity verification override
@@ -15,7 +15,7 @@ keywords:
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Sender Override for Development and Testing
+# Sender Override for Testing
 
 The override lets you try embedded signing end to end without setting up a passcode or an identity provider. The signer goes straight to the document with no verification step.
 
@@ -33,15 +33,16 @@ If your organization needs it in production, an admin can leave it on, but the m
 
 ## Prerequisites
 
-- An **admin** account, to turn the override on.
+- An **admin** account, to change the settings below.
+- **Enable identity verification** turned on (Step 1). This switch turns on embedded signing for every mode, including the override.
 - An **Administrator** or **Contributor** API key for your server.
-- If you will frame the page: your origin under **Allowed embedding domains** (see [Set up your organization](../set-up-your-organization.md#step-5-allow-the-origins-that-may-embed-the-signing-page)).
+- If you will frame the page: your origin under **Allowed embedding domains** (see [Set up your organization](../embedded-signing/set-up-your-organization.md#step-5-allow-the-origins-that-may-embed-the-signing-page)).
 
-## Step 1: Allow the override (admin)
+## Step 1: Turn on embedded signing and allow the override (admin)
 
-1. Go to **Settings** > **Features and integrations**, and click **Configure E-Signature** on the **Signatures** card.
-2. Click **Identity Verification**, then the **Identity & embedding** tab.
-3. Turn on **Allow identity verification override**. The change saves right away, and a banner appears: "Identity verification override is enabled for this organization. Signers can be sent links that skip verification."
+1. Go to **Settings** > **Features and integrations** > **Signatures** card > **Configure E-Signature** > **Identity Verification**. (Settings is in the menu under your name at the bottom of the left sidebar.)
+2. On the **One-time passcode** tab, make sure **Enable identity verification** is on. Without it, every signing URL request fails with `EmbeddedSigningNotEnabled`, even for override recipients.
+3. Click the **Identity & embedding** tab and turn on **Allow identity verification override**. The change saves right away, and a banner appears: "Identity verification override is enabled for this organization. Signers can be sent links that skip verification."
 
 ![The Allow identity verification override switch turned on, with the persistent override banner below it, highlighted](/img/embedded-signing/override-on-banner.png)
 
@@ -55,6 +56,7 @@ The one-call `createEmbeddedSignature` helper only sets up passcodes, so the ove
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
 ```typescript
+// Continues the setup from "Your own iframe": imports and TurboSign.configure(...).
 const sent = await TurboSign.sendSignature({
   file: await readFile("contract.pdf"),
   fileName: "contract.pdf",
@@ -89,6 +91,9 @@ const { url } = await TurboSign.createSigningUrl(sent.documentId, { externalId: 
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 ```python
+from turbodocx_sdk import TurboSign
+
+# Inside an async function, after TurboSign.configure(...) as in "Your own iframe". pdf holds the PDF bytes.
 sent = await TurboSign.send_signature(
     file=pdf,
     file_name="contract.pdf",
@@ -124,6 +129,7 @@ url = link["url"]
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
+// Continues the setup from "Your own iframe": TurboSign::configure(...) and the use lines.
 $sent = TurboSign::sendSignature(new SendSignatureRequest(
     recipients: [
         new Recipient(
@@ -158,6 +164,7 @@ $url = $link->url;
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
+// Inside a function that returns error, with client and ctx as in "Your own iframe". pdf holds the PDF bytes.
 sendEmail := false
 sent, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
 	File:         pdf,
@@ -197,13 +204,14 @@ link, err := client.TurboSign.CreateSigningURL(ctx, sent.DocumentID, &turbodocx.
 if err != nil {
 	return err
 }
-url := link.URL
+fmt.Println(link.URL) // open, redirect to, or frame this URL
 ```
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
+// Inside a method that throws IOException, with client as in "Your own iframe".
 SendSignatureResponse sent = client.turboSign().sendSignature(
     new SendSignatureRequest.Builder()
         .file(Files.readAllBytes(Paths.get("contract.pdf")))
@@ -236,9 +244,10 @@ String url = client.turboSign().createSigningUrl(
 ```
 
 </TabItem>
-<TabItem value="ruby" label="Ruby">
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
 ```ruby
+# Continues the setup from "Your own iframe": require "turbodocx_sdk" and configure.
 sent = TurboDocxSdk::TurboSign.send_signature(
   "file"         => StringIO.new(File.binread("contract.pdf")),
   "documentName" => "Override test",
@@ -275,11 +284,11 @@ url = TurboDocxSdk::TurboSign.create_signing_url(sent["documentId"], external_id
 
 The override URL is **single-use** and expires in about five minutes. Opening it consumes it, so request a fresh one each time.
 
-Open it in a new tab, or frame it exactly as in the [build guides](../build/own-iframe.md) (your own iframe, the [React widget](../build/react-widget.md), or the [web component](../build/web-component.md)). The signing page opens straight to the document, with no passcode.
+Open it in a new tab, or frame it exactly as in the [build guides](../embedded-signing/build/own-iframe.md) (your own iframe, the [React widget](../embedded-signing/build/react-widget.md), or the [web component](../embedded-signing/build/web-component.md)). The signing page skips verification: the signer accepts the TurboSign consent terms, then the document opens.
 
 ## What the signer sees
 
-1. The document opens immediately, with no verification step.
+1. The signing page skips verification. The signer accepts the TurboSign consent terms, and the document opens.
 2. The signer signs, and your page receives `turbosign:completed`.
 3. The certificate of completion and the audit trail mark the signature as **not identity-verified**.
 
@@ -287,6 +296,7 @@ Open it in a new tab, or frame it exactly as in the [build guides](../build/own-
 
 | HTTP | `code` | Cause | Fix |
 |---|---|---|---|
+| 403 | `EmbeddedSigningNotEnabled` | **Enable identity verification** is off. | Turn it on (Step 1). |
 | 403 | `IdentityOverrideNotAllowed` | **Allow identity verification override** is off. | Turn it on (Step 1). |
 | 400 | `OverrideNotAcknowledged` | The block is missing `overrideIdentityVerification: true` or a `reason`. | Send both. |
 | 400 | `IdentityModeConflict` | The `identityVerification` block is invalid, for example it mixes fields from two modes. | Send only the override fields. |
@@ -295,5 +305,5 @@ Open it in a new tab, or frame it exactly as in the [build guides](../build/own-
 
 ## What's next
 
-- **Next:** [API reference](../reference.md), for every field, event and error.
+- **Next:** [API reference](../embedded-signing/reference.md), for every field, event and error.
 - Before going live, switch to a real check: [Email and SMS passcode](./one-time-passcode.md) or [External identity verification](./external-identity-verification.md).

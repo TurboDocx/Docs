@@ -14,6 +14,8 @@ keywords:
   - createSigningUrl
 ---
 
+import SampleAppCallout from '../_sample-app-callout.mdx';
+import SetupAndVerify from './_setup-and-verify.mdx';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -35,14 +37,9 @@ Your server creates one document for everyone. It gets a signing URL for the fir
 - A PDF with an anchor for each signer, for example `{signature1}` and `{signature2}`.
 - A working single-signer flow helps. Start with [your own iframe](./own-iframe.md) or the [React widget](./react-widget.md) if you haven't built one.
 
-## Step 1: Check your organization's settings (admin, once)
+## Step 1: Check your setup and choose how signers verify
 
-An admin confirms two settings in **Settings** > **Features and integrations** > **Configure E-Signature** > **Identity Verification**. [Set up your organization](../set-up-your-organization.md) shows every click.
-
-1. On the **One-time passcode** tab, **Enable identity verification** is on.
-2. On the **Identity & embedding** tab, your app's origin is under **Allowed embedding domains**.
-
-![The One-time passcode tab with the Enable identity verification switch highlighted](/img/external-identity-verification/01-enable-identity-verification.png)
+<SetupAndVerify />
 
 ## Step 2: Create the document for every signer
 
@@ -200,6 +197,8 @@ function mintNext(string $documentId, string $recipientId): string
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 ```go
+// Package setup as in "Your own iframe", plus imports: context, errors, fmt, time.
+// Signer is your own struct with Name and Email fields.
 // Step 2: POST /api/kiosk/start
 func StartKiosk(ctx context.Context, client *turbodocx.Client, pdf []byte, signers []Signer) (*turbodocx.CreateEmbeddedSignatureResponse, error) {
 	recipients := make([]turbodocx.EmbeddedSignatureRecipient, len(signers))
@@ -242,6 +241,8 @@ func MintNext(ctx context.Context, client *turbodocx.Client, documentID, recipie
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 ```java
+// Imports: java.nio.file.*, java.util.*, com.turbodocx.TurboDocxException, com.turbodocx.models.*.
+// client as in "Your own iframe"; Signer is your own record with name() and email().
 // Step 2: POST /api/kiosk/start
 public CreateEmbeddedSignatureResponse startKiosk(List<Signer> signers) throws Exception {
     List<EmbeddedSignatureRecipient> recipients = new ArrayList<>();
@@ -280,7 +281,7 @@ public String mintNext(String documentId, String recipientId) throws Exception {
 ```
 
 </TabItem>
-<TabItem value="ruby" label="Ruby">
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
 ```ruby
 # Step 2: POST /api/kiosk/start
@@ -383,7 +384,9 @@ Show whose turn it is above the signing panel, as in the example. Each signer ve
 
 ## What the signers see
 
-These screenshots come from the kiosk path of the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app).
+<SampleAppCallout path="Sequential kiosk" />
+
+
 
 1. Someone enters both signers in order and clicks **Start signing**.
 
@@ -419,5 +422,5 @@ For the **whole document**, don't rely on the last browser event. Check the docu
 
 ## What's next
 
-- **Next:** [Email and SMS passcode](../identity-verification/one-time-passcode.md), to choose how signers verify.
+- **Next:** [Email and SMS passcode](../../identity-verification/one-time-passcode.md), to choose how signers verify.
 - [API reference](../reference.md#createembeddedsignature-one-call): the `ready`, `pending` and `completed` statuses in detail.
