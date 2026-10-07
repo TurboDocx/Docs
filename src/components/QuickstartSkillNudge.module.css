@@ -36,6 +36,11 @@
   border-color: var(--ifm-color-emphasis-300);
 }
 
+/* Single-column variant (used by SampleAppNudge) so long commands have room. */
+.stacked {
+  grid-template-columns: 1fr;
+}
+
 /* ---- left: pitch ---- */
 .badge {
   display: inline-flex;

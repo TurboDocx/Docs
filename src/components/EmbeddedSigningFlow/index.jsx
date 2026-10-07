@@ -14,14 +14,14 @@ const NODES = [
   { x: 762, title: 'TurboDocx', sub: 'TurboSign API' },
 ];
 const W = 186;
-const TOP = 120;
-const H = 84;
+const TOP = 130;
+const H = 96;
 
 function Step({ x, y, n }) {
   return (
     <g>
-      <circle className={styles.stepDot} cx={x} cy={y} r="11" />
-      <text className={styles.stepNum} x={x} y={y + 4} textAnchor="middle">{n}</text>
+      <circle className={styles.stepDot} cx={x} cy={y} r="14" />
+      <text className={styles.stepNum} x={x} y={y + 6} textAnchor="middle">{n}</text>
     </g>
   );
 }
@@ -32,7 +32,7 @@ function Arrow({ from, to, y, label, step, edge }) {
   const x2 = cx(to);
   const mid = (x1 + x2) / 2;
   const y0 = edge === 'top' ? TOP : TOP + H;
-  const labelWidth = label.length * 7.6;
+  const labelWidth = label.length * 10.3;
   return (
     <g>
       <line className={styles.stub} x1={x1} y1={y0} x2={x1} y2={y} />
@@ -41,9 +41,9 @@ function Arrow({ from, to, y, label, step, edge }) {
         points={`${x1},${y} ${x2},${y} ${x2},${y0 + (edge === 'top' ? -2 : 2)}`}
         markerEnd="url(#esf-arrow)"
       />
-      <rect className={styles.labelBg} x={mid - labelWidth / 2 - (step ? 22 : 6)} y={y - 11} width={labelWidth + (step ? 34 : 12)} height="22" rx="11" />
-      {step ? <Step x={mid - labelWidth / 2 - 8} y={y} n={step} /> : null}
-      <text className={styles.label} x={mid + (step ? 8 : 0)} y={y + 4} textAnchor="middle">{label}</text>
+      <rect className={styles.labelBg} x={mid - labelWidth / 2 - (step ? 30 : 8)} y={y - 15} width={labelWidth + (step ? 44 : 16)} height="30" rx="15" />
+      {step ? <Step x={mid - labelWidth / 2 - 12} y={y} n={step} /> : null}
+      <text className={styles.label} x={mid + (step ? 10 : 0)} y={y + 6} textAnchor="middle">{label}</text>
     </g>
   );
 }
@@ -57,7 +57,7 @@ export default function EmbeddedSigningFlow() {
     <figure className={styles.figure}>
       <svg
         className={styles.svg}
-        viewBox="0 40 960 290"
+        viewBox="0 30 960 316"
         role="img"
         aria-labelledby="esf-title esf-desc"
       >
@@ -78,14 +78,14 @@ export default function EmbeddedSigningFlow() {
         {NODES.map((n, i) => (
           <g key={n.title}>
             <rect className={`${styles.node} ${i === 3 ? styles.nodeBrand : ''}`} x={n.x} y={TOP} width={W} height={H} rx="12" />
-            <text className={styles.nodeTitle} x={n.x + W / 2} y={TOP + 38} textAnchor="middle">{n.title}</text>
-            <text className={styles.nodeSub} x={n.x + W / 2} y={TOP + 60} textAnchor="middle">{n.sub}</text>
+            <text className={styles.nodeTitle} x={n.x + W / 2} y={TOP + 44} textAnchor="middle">{n.title}</text>
+            <text className={styles.nodeSub} x={n.x + W / 2} y={TOP + 72} textAnchor="middle">{n.sub}</text>
           </g>
         ))}
 
         {/* Step 1: app -> server -> TurboDocx (above the boxes) */}
         <Arrow from={1} to={2} y={TOP - 40} edge="top" label="POST /api/signing-session" step="1" />
-        <Arrow from={2} to={3} y={TOP - 78} edge="top" label="create document + URL" />
+        <Arrow from={2} to={3} y={TOP - 84} edge="top" label="create document + URL" />
 
         {/* Step 2: embedUrl back to the app (below), then into the iframe (above) */}
         <Arrow from={3} to={2} y={TOP + H + 40} edge="bottom" label="embedUrl" />
@@ -93,10 +93,14 @@ export default function EmbeddedSigningFlow() {
         <Arrow from={1} to={0} y={TOP - 40} edge="top" label="iframe src" />
 
         {/* Step 3: the signing page verifies the signer and collects the signature */}
-        <Step x={NODES[0].x + 20} y={TOP + 20} n="3" />
+        <g>
+          <rect className={styles.labelBg} x={NODES[0].x + W / 2 - 92} y={TOP - 99} width="184" height="30" rx="15" />
+          <Step x={NODES[0].x + W / 2 - 74} y={TOP - 84} n="3" />
+          <text className={styles.label} x={NODES[0].x + W / 2 + 12} y={TOP - 78} textAnchor="middle">verify + sign</text>
+        </g>
 
         {/* Step 4: completion message back to the app */}
-        <Arrow from={0} to={1} y={TOP + H + 78} edge="bottom" label="turbosign:completed" step="4" />
+        <Arrow from={0} to={1} y={TOP + H + 84} edge="bottom" label="turbosign:completed" step="4" />
       </svg>
       <figcaption className={styles.caption}>
         Your API key stays on your server. The browser only ever sees a per-signer signing URL.

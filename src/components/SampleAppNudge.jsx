@@ -16,7 +16,7 @@ const REPO_URL = 'https://github.com/TurboDocx/SDK/tree/main/examples/embedded-w
 const STEPS = [
   { cmd: 'git clone https://github.com/TurboDocx/SDK' },
   { cmd: 'cd SDK/examples/embedded-web-app' },
-  { cmd: 'cp .env.example .env', note: '# set an Admin or Contributor key, org ID, sender' },
+  { cmd: 'cp .env.example .env', note: '# set an Administrator or Contributor API key, your org ID and a sender email' },
   { cmd: 'npm install' },
   { cmd: 'npm run server', note: '# terminal 1: the key-holding backend' },
   { cmd: 'npm run dev', note: '# terminal 2: then open http://localhost:5173' },
@@ -24,7 +24,7 @@ const STEPS = [
 
 export default function SampleAppNudge({ path = 'Widget' }) {
   return (
-    <div className={styles.wrap}>
+    <div className={`${styles.wrap} ${styles.stacked}`}>
       <div className={styles.pitch}>
         <span className={styles.badge}>
           <GitHubIcon /> Example on GitHub

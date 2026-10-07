@@ -22,19 +22,19 @@
 
 .nodeTitle {
   fill: var(--ifm-font-color-base);
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
 }
 
 .nodeSub {
   fill: var(--ifm-color-emphasis-700);
-  font-size: 13px;
+  font-size: 17px;
 }
 
 .label {
   fill: var(--ifm-color-emphasis-800);
   font-family: var(--ifm-font-family-monospace);
-  font-size: 12.5px;
+  font-size: 17px;
 }
 
 .flow {
@@ -52,7 +52,7 @@
 }
 
 .labelBg {
-  fill: var(--ifm-background-color);
+  fill: var(--ifm-background-surface-color);
   stroke: var(--ifm-color-emphasis-300);
   stroke-width: 1;
 }
@@ -66,8 +66,8 @@
 }
 
 .stepNum {
-  fill: var(--ifm-background-color);
-  font-size: 12px;
+  fill: var(--ifm-color-white);
+  font-size: 16px;
   font-weight: 700;
 }
 
