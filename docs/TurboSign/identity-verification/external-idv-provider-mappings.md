@@ -3,7 +3,7 @@ title: External IdV Provider Mappings
 slug: /TurboSign/external-idv-provider-mappings
 sidebar_label: Provider mappings
 sidebar_position: 4
-description: How a verification from Persona, Stripe Identity, Onfido, Jumio, Veriff, CLEAR, ID.me or an in-house process maps onto a TurboSign external identity verification assertion.
+description: How a verification from Persona, Stripe Identity, Onfido, Jumio, Veriff, CLEAR, ID.me, Incode or an in-house manual review maps onto a TurboSign external identity verification assertion.
 keywords:
   - persona e-signature
   - stripe identity e-signature
@@ -12,6 +12,8 @@ keywords:
   - veriff e-signature
   - clear verified
   - id.me
+  - incode e-signature
+  - manual identity review e-signature
   - identityAssertion mapping
 ---
 
@@ -152,9 +154,68 @@ For example, if your signers sign in with ID.me (over OpenID Connect or SAML) as
 | `method` | `sso` |
 | `assuranceLevel` | `ial2_aal2` only if your ID.me integration actually requested and received an IAL2/AAL2 verification |
 
-## Your own in-house verification
+## Incode
 
-You don't need a third-party provider. If your team verifies customers itself (for example a branch visit or a video call with an agent), use your own system's name as `provider`, your own case id as `verificationId`, and `method: "other"` with a `methodDetail` that says what was checked.
+For example, if you verify signers with Incode (Incode Omni), each verification is an **onboarding session**, identified by its **interview id** (`interviewId`, also called the session id). When the user finishes, Incode sends the Onboarding Status webhook with the `ONBOARDING_FINISHED` event. Your backend then fetches the session's scores (`/omni/get/score`) and treats the session as passed only when the overall status (`overall.status`) is `OK`. `WARN` and `FAIL` are not a pass.
+
+| Assertion field | Value |
+|---|---|
+| `provider` | `"Incode"` |
+| `verificationId` | The session's `interviewId` |
+| `verifiedAt` | The time your backend confirmed `overall.status` is `OK` (Incode's score response doesn't document a decision timestamp, so record your own) |
+| `subjectEmail` | The email you have on file for the user. Incode's scores and ID data don't necessarily include an email; check your Incode configuration |
+| `verifiedName` | Optional: `name.fullName` from the session's OCR data (Fetch OCR Data) |
+| `method` | `id_document_liveness` when your Incode flow includes a selfie or face match; `id_document` for ID only |
+
+```typescript
+// Incode docs: Fetch scores (developer.incode.com/integrate-by-platform/fetch-scores/),
+// Fetch OCR data (developer.incode.com/docs/fetch-extracted-ocr), Onboarding Status webhook (ONBOARDING_FINISHED).
+// After ONBOARDING_FINISHED, your backend fetched the scores and saw overall.status === "OK":
+const { url } = await TurboSign.createSigningUrl(user.documentId, {
+  externalId: user.id,
+  identityAssertion: {
+    provider: "Incode",
+    verificationId: user.incodeInterviewId,
+    verifiedAt: user.incodeApprovedAt,   // when you confirmed overall.status "OK"
+    subjectEmail: user.email,
+    method: "id_document_liveness",
+    verifiedName: user.incodeFullName,   // name.fullName from the OCR data, optional
+  },
+})
+```
+
+## In-house or manual review
+
+You don't need a third-party provider. Many teams verify customers themselves: an operations reviewer approves the customer in your own portal or back office, for example after checking an ID document, a branch visit or a KYC call. Then your app hands off to TurboSign.
+
+| Assertion field | Value |
+|---|---|
+| `provider` | Your own system's name, for example `"internal-review"`. Use the same string on the recipient (`identityVerification.provider`) |
+| `verificationId` | Your approval or case record id |
+| `verifiedAt` | When the reviewer approved the customer |
+| `subjectEmail` | The customer's email on file |
+| `method` | The value that matches what the reviewer checked: `id_document`, `id_document_liveness`, `kba`, `database`, `sso`, or `other`. For a manual review that fits none of them, use `other` with a `methodDetail` such as `"Manual ID review by operations"`; `methodDetail` is required when `method` is `other` |
+| `verifiedName` | Optional: the legal name the reviewer confirmed |
+| `evidenceUrl` | Optional: an `https` link to the approval record in your back office |
+
+```typescript
+const { url } = await TurboSign.createSigningUrl(customer.documentId, {
+  externalId: customer.id,
+  identityAssertion: {
+    provider: "internal-review",
+    verificationId: approval.caseId,
+    verifiedAt: approval.approvedAt,   // ISO 8601
+    subjectEmail: customer.email,
+    method: "other",
+    methodDetail: "Manual ID review by operations",
+    evidenceUrl: approval.recordUrl,   // optional, https only
+  },
+})
+```
+
+- **Approval age:** the approval must be newer than the recipient's `maxAgeMinutes` (5 to 10080 minutes, default 1440, so 24 hours) and no more than two minutes in the future. If a reviewer approved days ago, set a longer `maxAgeMinutes` on the recipient or re-confirm the customer.
+- **Keep the approval record.** The audit trail points to your `provider` and `verificationId`, so retain that record for as long as you keep the signed documents.
+- **Low-code:** from an automation tool, call `POST /turbosign/documents/{documentId}/signing-url` in an HTTP step on the server side, with an **Administrator** or **Contributor** API key. Never call it from the browser.
 
 ## Next
 

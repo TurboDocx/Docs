@@ -109,7 +109,7 @@ An `external_idv` block can't carry the override fields (`overrideIdentityVerifi
 
 ## Step 3: Verify the signer with your provider
 
-Run your provider's verification flow in your app as you normally would. Then wait for the **server-side** result. [External IdV provider mappings](./external-idv-provider-mappings.md) shows how the result from Persona, Stripe Identity, Onfido, Jumio, Veriff, CLEAR or ID.me maps onto the assertion.
+Run your provider's verification flow in your app as you normally would. Then wait for the **server-side** result. [External IdV provider mappings](./external-idv-provider-mappings.md) shows how the result from Persona, Stripe Identity, Onfido, Jumio, Veriff, CLEAR, ID.me, Incode or your own manual review maps onto the assertion.
 
 :::caution Assert only a confirmed result
 Identity verification providers deliver the final decision asynchronously, usually by webhook. Build the assertion from that webhook, or from a server-side fetch of the verification by its id. Do not assert off the browser's "finished" event: the user finishing the flow is not the same as the provider approving them.
@@ -595,7 +595,7 @@ This page is general product information, not legal advice. TurboSign is not a l
 
 ### Can I use my own identity verification provider with e-signatures?
 
-Yes. With external identity verification, TurboSign accepts the result from any identity verification provider you already use, such as Persona, Onfido, Jumio, Veriff, Stripe Identity, CLEAR or ID.me, or from your own in-house process. Your backend sends the provider name, its reference id, the verification time and the verified email when it requests the signing URL.
+Yes. With external identity verification, TurboSign accepts the result from any identity verification provider you already use, such as Persona, Onfido, Jumio, Veriff, Stripe Identity, CLEAR, ID.me or Incode, or from your own in-house process. Your backend sends the provider name, its reference id, the verification time and the verified email when it requests the signing URL.
 
 ### Does the signer have to verify twice?
 
