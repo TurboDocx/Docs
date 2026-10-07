@@ -24,7 +24,7 @@ import EmbeddedSigningFlow from '@site/src/components/EmbeddedSigningFlow';
 
 # Embedded Signing
 
-<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" sampleAppImage="/img/embedded-signing/sample-app-thumb.png" />
 
 Embedded signing takes a signer straight from your own UI to a TurboSign signing page, without signing-link emails. Your backend asks TurboSign for a signing URL when the signer is ready, and your app opens it in an iframe, a new tab, or a redirect.
 

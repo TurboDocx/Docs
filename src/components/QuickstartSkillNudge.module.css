@@ -243,6 +243,7 @@
 .sampleApp {
   grid-column: 1 / -1;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
   padding-top: 1rem;
@@ -251,6 +252,15 @@
 
 [data-theme='dark'] .sampleApp {
   border-top-color: var(--ifm-color-emphasis-300);
+}
+
+.sampleAppImg {
+  flex-shrink: 0;
+  width: 240px;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: var(--ifm-global-shadow-lw);
 }
 
 .sampleAppIcon {
@@ -265,7 +275,7 @@
   flex-direction: column;
   gap: 0.15rem;
   flex: 1;
-  min-width: 0;
+  min-width: 14rem;
 }
 
 .sampleAppTitle {
@@ -280,6 +290,9 @@
 
 .sampleAppButton {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   white-space: nowrap;
 }
 
@@ -287,6 +300,10 @@
   .sampleApp {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .sampleAppImg {
+    width: 100%;
   }
 
   .wrap {

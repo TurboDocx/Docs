@@ -14,7 +14,8 @@ import styles from './QuickstartSkillNudge.module.css';
  * Props:
  *   command  — slash command displayed inside the agent (e.g. "/turbodocx-sdk turbowebhooks")
  *   product  — short product name used in the body copy ("TurboWebhooks", "TurboSign", …)
- *   sampleAppHref: optional link to a complete runnable sample app, shown as a secondary link
+ *   sampleAppHref: optional link to a complete runnable sample app, shown as a full-width strip
+ *   sampleAppImage: optional screenshot of that sample app (560x420), shown in the strip
  */
 
 const INSTALL_CMD = 'npx skills add TurboDocx/quickstart';
@@ -54,6 +55,7 @@ export default function QuickstartSkillNudge({
   command = '/turbodocx-sdk',
   product = 'TurboDocx',
   sampleAppHref,
+  sampleAppImage,
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -142,7 +144,18 @@ export default function QuickstartSkillNudge({
 
       {sampleAppHref ? (
         <div className={styles.sampleApp}>
-          <GitHubIcon className={styles.sampleAppIcon} />
+          {sampleAppImage ? (
+            <img
+              src={sampleAppImage}
+              alt="TurboDocx embedded signing sample app showing the signing panel inside a host web page"
+              width="560"
+              height="420"
+              loading="lazy"
+              className={styles.sampleAppImg}
+            />
+          ) : (
+            <GitHubIcon className={styles.sampleAppIcon} />
+          )}
           <div className={styles.sampleAppText}>
             <strong className={styles.sampleAppTitle}>Complete embedded signing sample app</strong>
             <span className={styles.sampleAppSub}>
@@ -155,7 +168,7 @@ export default function QuickstartSkillNudge({
             rel="noopener noreferrer"
             className={`button button--primary ${styles.sampleAppButton}`}
           >
-            View on GitHub →
+            <GitHubIcon /> View on GitHub →
           </a>
         </div>
       ) : null}

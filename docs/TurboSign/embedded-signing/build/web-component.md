@@ -20,7 +20,7 @@ import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
 
 # Embed Signing with the Web Component (No React)
 
-<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" sampleAppImage="/img/embedded-signing/sample-app-thumb.png" />
 
 In this guide you drop the `turbosign-form` custom element into any page. It works in Vue, Angular, Svelte, server-rendered templates, or plain HTML, with no React and no build step required.
 

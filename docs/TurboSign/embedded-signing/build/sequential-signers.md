@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 
 # Kiosk Signing (Two Signers, One Device)
 
-<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" sampleAppImage="/img/embedded-signing/sample-app-thumb.png" />
 
 Use this when several people sign one document, in order, on the same screen. Think of a car dealership, a clinic front desk, or a tablet at a counter.
 

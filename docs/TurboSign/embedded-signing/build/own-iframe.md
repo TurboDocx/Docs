@@ -19,7 +19,7 @@ import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
 
 # Embed Signing with Your Own Iframe (Email Passcode)
 
-<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" sampleAppImage="/img/embedded-signing/sample-app-thumb.png" />
 
 In this guide your app frames the TurboSign signing page in a plain `iframe` and listens for the completion message itself. TurboSign verifies the signer with a six-digit code sent to their email.
 

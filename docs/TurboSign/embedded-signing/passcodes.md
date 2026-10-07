@@ -17,7 +17,7 @@ import TabItem from '@theme/TabItem';
 
 # Passcodes in Embedded Signing
 
-<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" sampleAppImage="/img/embedded-signing/sample-app-thumb.png" />
 
 An admin turns passcodes on in [Email and SMS passcode](../identity-verification/one-time-passcode.md). Your code then asks for a passcode on each embedded signer.
 

@@ -29,7 +29,7 @@ import TabItem from '@theme/TabItem';
 
 # External Identity Verification (IdV) for Embedded Signing
 
-<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" sampleAppImage="/img/embedded-signing/sample-app-thumb.png" />
 
 External identity verification (`external_idv`) is for apps that already verify their users with an identity verification provider. Your app verifies the signer with that provider (for example a government ID scan plus a selfie). Your backend then tells TurboSign who verified the signer, when, and with which reference id. TurboSign checks that assertion, records it in the tamper-evident audit trail, and gives you a single-use signing URL. The signer goes straight to the document without a TurboSign passcode.
 

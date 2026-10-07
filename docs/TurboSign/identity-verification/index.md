@@ -18,7 +18,7 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Identity Verification
 
-<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" sampleAppImage="/img/embedded-signing/sample-app-thumb.png" />
 
 Identity verification makes a signer prove who they are before the document opens. You set it per recipient, and an admin can set a default for the whole organization.
 
