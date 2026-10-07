@@ -15,14 +15,16 @@ keywords:
   - signer verification
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # Email and SMS Passcode
 
 A one-time passcode (OTP) verifies a signer's identity before they can open your document. The signer receives a short code by email or text message and enters it on the signing page. It works on signing links TurboSign emails and on signing pages you embed in your own app.
 
-This guide covers requiring a passcode, choosing the default channel, connecting an SMS provider, and setting up delivery-failure alerts.
+This guide is for admins. It covers requiring a passcode, choosing email or SMS, connecting an SMS provider, setting up delivery-failure alerts, and what the signer sees.
+
+:::tip Using passcodes with embedded signing?
+Requesting a passcode from your code, SMS in each SDK, and verifying only your embedded signers are covered in [Passcodes in embedded signing](../embedded-signing/passcodes.md).
+:::
 
 ## Before you start
 
@@ -65,8 +67,8 @@ The rest of the passcode settings stay hidden until this is on, so turn it on fi
 
 Turning it on makes passcode verification available. Whether every signer gets a passcode depends on the choice in Step 2.
 
-:::note This is also the embedded signing switch
-Despite its name, **Enable identity verification** turns on embedded signing and every verification mode, including external identity verification and the override. While it is off, every signing URL request fails with `EmbeddedSigningNotEnabled`.
+:::note One switch for every verification mode
+**Enable identity verification** also turns on external identity verification, the sender override and embedded signing for your organization.
 :::
 
 ## Step 2: Choose when to verify signers
@@ -95,25 +97,11 @@ Two more settings appear.
 
 **Let senders change the method per recipient** is off by default.
 
-- **Off** locks the method. Every request uses the method above, and an API or SDK request that sets a different channel for a recipient is rejected with `OtpOverrideNotAllowed`.
+- **Off** locks the method. Every request uses the method above, and a request that asks for a different method for a recipient is rejected.
 - **On** lets a sender pick another method, or no verification, for a recipient.
 
 This setting applies to the email channel too, so it is not tied to your SMS plan.
 
-:::tip Passcodes only for signers in your own app
-If only the signers in your own app should verify, keep **Only when requested**. Turn on SMS and connect a provider (Steps 4-5), then have your integration request SMS on each recipient it embeds.
-
-Other signature requests, including Pipelines, stay passcode-free. See [Verify only your embedded signers by SMS](#verify-only-your-embedded-signers-by-sms).
-:::
-
-### Check the result from your integration
-
-Your integration can read the result with `GET /turbosign/embedded-signing-settings`:
-
-- `defaultChannel` is `none`, `email`, or `sms`.
-- `allowChannelOverride` tells it whether a different channel is accepted.
-
-See [The organization default](../embedded-signing/reference.md#the-organization-default) for details.
 
 ## Step 3: Use email (the simplest path)
 
@@ -299,193 +287,6 @@ To clear a lockout, the sender uses **Resend Email** in the document's menu (see
 These alerts go to the sender of the document, not to the admins on the delivery-failure list.
 :::
 
-## Request a passcode from your code
-
-Admins turn passcodes on; your integration asks for them on each embedded signer. The [build guides](../embedded-signing/build/own-iframe.md) all use an email passcode. This section shows SMS.
-
-### Request an SMS passcode from your code
-
-Before you start, check these:
-
-1. Your plan includes SMS passcodes (**Pro** or **Enterprise**).
-2. An admin turned on **Allow SMS as an alternative to email** ([Step 4](#step-4-allow-sms-as-an-alternative-to-email)).
-3. An admin connected an SMS provider, and its status reads **Connected** ([Step 5](#step-5-connect-your-sms-provider)). Your request does not choose a provider; TurboSign uses the one your organization connected.
-4. You have the signer's mobile number in international format, for example `+15551234567`.
-
-Then give the recipient an SMS `auth` block instead of `emailOtp`. `createEmbeddedSignature` sets the recipient's phone from it.
-
-<Tabs groupId="language" queryString>
-<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
-
-```typescript
-// Continues the setup from "Your own iframe": imports and TurboSign.configure(...).
-const { documentId, recipients } = await TurboSign.createEmbeddedSignature({
-  file: await readFile("contract.pdf"),
-  fileName: "contract.pdf",
-  documentName: "Service Agreement",
-  recipients: [
-    {
-      name: "Jane Doe",
-      email: "jane@example.com",
-      auth: { sms: { phoneNumber: "+15551234567" } }, // text the passcode
-      fields: { signature: "{signature1}", date: "{date1}" },
-    },
-  ],
-});
-const embedUrl = recipients[0].embedUrl;
-```
-
-</TabItem>
-<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
-
-```python
-# Inside an async function, after TurboSign.configure(...) as in "Your own iframe". pdf holds the PDF bytes.
-result = await TurboSign.create_embedded_signature(
-    file=pdf,
-    file_name="contract.pdf",
-    document_name="Service Agreement",
-    recipients=[
-        {
-            "name": "Jane Doe",
-            "email": "jane@example.com",
-            "auth": {"sms": {"phone_number": "+15551234567"}},  # text the passcode
-            "fields": {"signature": "{signature1}", "date": "{date1}"},
-        }
-    ],
-)
-embed_url = result["recipients"][0]["embedUrl"]
-```
-
-</TabItem>
-<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
-
-```php
-// Continues the setup from "Your own iframe": TurboSign::configure(...) and the use lines.
-$result = TurboSign::createEmbeddedSignature(new CreateEmbeddedSignatureRequest(
-    recipients: [
-        new EmbeddedSignatureRecipient(
-            name: 'Jane Doe',
-            email: 'jane@example.com',
-            auth: new EmbeddedRecipientAuth(smsPhoneNumber: '+15551234567'), // text the passcode
-            fields: new EmbeddedRecipientFields(signature: '{signature1}', date: '{date1}'),
-        ),
-    ],
-    file: file_get_contents(__DIR__ . '/contract.pdf'),
-    fileName: 'contract.pdf',
-    documentName: 'Service Agreement',
-));
-$embedUrl = $result->recipients[0]->embedUrl;
-```
-
-</TabItem>
-<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
-
-```go
-// Inside a function that returns error, with client and ctx as in "Your own iframe". pdf holds the PDF bytes.
-result, err := client.TurboSign.CreateEmbeddedSignature(ctx, &turbodocx.CreateEmbeddedSignatureRequest{
-	File:         pdf,
-	FileName:     "contract.pdf",
-	DocumentName: "Service Agreement",
-	Recipients: []turbodocx.EmbeddedSignatureRecipient{
-		{
-			Name:  "Jane Doe",
-			Email: "jane@example.com",
-			Auth: &turbodocx.EmbeddedRecipientAuth{ // text the passcode
-				SMS: &turbodocx.EmbeddedRecipientSMS{PhoneNumber: "+15551234567"},
-			},
-			Fields: &turbodocx.EmbeddedRecipientFields{Signature: "{signature1}", Date: "{date1}"},
-		},
-	},
-})
-if err != nil {
-	return err
-}
-fmt.Println(result.Recipients[0].EmbedURL) // frame this URL
-```
-
-</TabItem>
-<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
-
-```java
-// Inside a method that throws IOException, with client as in "Your own iframe".
-CreateEmbeddedSignatureResponse result = client.turboSign().createEmbeddedSignature(
-    new CreateEmbeddedSignatureRequest.Builder()
-        .file(Files.readAllBytes(Paths.get("contract.pdf")))
-        .fileName("contract.pdf")
-        .documentName("Service Agreement")
-        .recipients(List.of(
-            new EmbeddedSignatureRecipient.Builder()
-                .name("Jane Doe")
-                .email("jane@example.com")
-                .auth(EmbeddedRecipientAuth.sms("+15551234567")) // text the passcode
-                .fields(new EmbeddedRecipientFields.Builder()
-                    .signature("{signature1}")
-                    .date("{date1}")
-                    .build())
-                .build()))
-        .build());
-String embedUrl = result.getRecipients().get(0).getEmbedUrl();
-```
-
-</TabItem>
-<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
-
-```ruby
-# Continues the setup from "Your own iframe": require "turbodocx_sdk" and configure.
-result = TurboDocxSdk::TurboSign.create_embedded_signature(
-  file:         StringIO.new(File.binread("contract.pdf")),
-  fileName:     "contract.pdf",
-  documentName: "Service Agreement",
-  recipients:   [
-    {
-      name:   "Jane Doe",
-      email:  "jane@example.com",
-      auth:   { sms: { phoneNumber: "+15551234567" } }, # text the passcode
-      fields: { signature: "{signature1}", date: "{date1}" }
-    }
-  ]
-)
-embed_url = result["recipients"].first["embedUrl"]
-```
-
-</TabItem>
-</Tabs>
-
-Frame `embedUrl` exactly as in the [build guides](../embedded-signing/build/own-iframe.md). The signer sees the same gate as for email, and the code arrives by text message.
-
-If you send with `sendSignature` instead, set `phone` on the recipient and `identityVerification: { "mode": "otp", "channel": "sms" }`.
-
-| Error | Cause |
-|---|---|
-| `OtpPhoneRequired` (400), or `PhoneRequiredForSmsOtp` from the JS, Python, Go, Java or Ruby SDK before the request is sent | The recipient asks for SMS but has no phone number. The PHP SDK doesn't check first, so PHP callers get `OtpPhoneRequired` from the API. With the `createEmbeddedSignature` SMS shorthand, the phone comes from `phoneNumber`, so this only happens when that is empty. |
-| `OtpPhoneInvalid` (400) | The number is well-formed but cannot exist. |
-| `OtpNotEntitled`, `SmsOtpLimitExceeded` (402) | The plan does not include SMS passcodes, or the SMS allowance is used up. |
-| `SmsOtpNotEnabled` (403) | **Allow SMS as an alternative to email** is off. |
-| `OtpOverrideNotAllowed` (403) | The organization verifies every request and locked the method to a different channel. Ask an admin to turn on **Let senders change the method per recipient**. |
-| `SmsProviderNotConfigured` (409) | No SMS provider is saved for the organization. |
-
-### Verify only your embedded signers by SMS
-
-A common setup: your team keeps sending ordinary signature requests (from the TurboDocx app and from Pipelines) with no passcode, while signers in your own app verify by text message. You do not need an SMS default for the whole organization to do this.
-
-1. On the **One-time passcode** tab, turn on **Enable identity verification**.
-2. Under **When to verify signers**, keep **Only when requested** (the default). Signature requests sent from the app and from Pipelines keep signing with no passcode; in the app, each signer's **Identity verification** stays on **No verification** unless a sender changes it.
-3. Under **Text message (SMS)**, turn on **Allow SMS as an alternative to email**, then connect your SMS provider and check the status reads **Connected to Twilio** (or RingCentral).
-4. In your integration, ask for SMS on each recipient you embed, as in the code above. With `sendSignature`, the recipient looks like this:
-
-```json
-{
-  "name": "Jane Doe",
-  "email": "jane@example.com",
-  "phone": "+15551234567",
-  "identityVerification": { "mode": "otp", "channel": "sms" }
-}
-```
-
-:::tip Pick the channel in your app, not from defaultChannel
-Choose SMS in your own app's configuration. Do not copy it from `defaultChannel`: with **Only when requested** that value is `none`, which tells you nothing about the channel you want.
-:::
-
 ## What the signer sees
 
 When a recipient requires a passcode, the signer meets the passcode gate on the signing page before the document loads.
@@ -496,9 +297,18 @@ When a recipient requires a passcode, the signer meets the passcode gate on the 
 
 ![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)
 
+## Troubleshooting
+
+| Problem | What to check |
+|---|---|
+| The signer didn't get the email code | Ask them to check spam, then click **Resend Code** after 30 seconds. If a code cannot be delivered, the admins on the [delivery-failure list](#step-6-get-alerted-when-a-passcode-cannot-be-delivered) get an alert. |
+| The signer didn't get the text message | Check the provider status reads **Connected** ([Provider status](#provider-status)) and that the signer's number includes the country code ([Signer mobile numbers](#signer-mobile-numbers)). |
+| **SMS** can't be selected | Turn on **Allow SMS as an alternative to email** and save your provider first ([Step 4](#step-4-allow-sms-as-an-alternative-to-email) and [Step 5](#step-5-connect-your-sms-provider)). SMS is on Pro and Enterprise plans. |
+| A signer is locked out | They entered 20 wrong codes. The sender clicks **Resend Email** on the document ([Step 7](#step-7-know-what-happens-when-a-signer-keeps-entering-the-wrong-code)). |
+| RingCentral messages stopped | The JWT may have expired. See [Check when your JWT expires](#check-when-your-jwt-expires) and [Troubleshooting RingCentral](#troubleshooting-ringcentral). |
+
 ## What's next
 
 - **Next:** [External identity verification](./external-identity-verification.md), if your app already verifies users with an identity verification vendor.
-- [Set up your organization](../embedded-signing/set-up-your-organization.md): turn on embedded signing, allow the origins that may embed the signing page, and understand the clickjacking and localhost rules.
-- [Build guides](../embedded-signing/build/own-iframe.md): frame the signing page in your app.
-- [API reference](../embedded-signing/reference.md): the recipient block, the organization default, and every error.
+- [Passcodes in embedded signing](../embedded-signing/passcodes.md): request email or SMS passcodes from your code.
+- [Identity verification overview](./index.md): compare the three ways to verify a signer.

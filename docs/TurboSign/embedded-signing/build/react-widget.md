@@ -28,6 +28,8 @@ TurboSign verifies the signer with a six-digit code sent to their email.
 - A server route that creates the document and returns a signing URL.
 - A React component that shows the signing page and reacts when the signer finishes.
 
+<SampleAppCallout path="Widget" />
+
 ## Prerequisites
 
 - The setup in [Before you start](../index.md#before-you-start): embedded signing on, your origin allowed, and an **Administrator** or **Contributor** API key.
@@ -112,8 +114,6 @@ The widget fails closed. If `origin` is missing, it ignores every message, logs 
 
 ## What the signer sees
 
-<SampleAppCallout path="Widget" />
-
 Your app's page around the signing panel will look different; the panel itself is the same.
 
 1. Your signer clicks your own button (here, **Start signing**). Your server returns the signing URL, and you render `TurboSignForm` with it.
@@ -163,10 +163,10 @@ Your app's page around the signing panel will look different; the panel itself i
 | Signing finishes but no completion message arrives (often in Firefox) | The signing page posts only to an origin it can identify, and your page or iframe sends no referrer. | Don't use `referrerpolicy="no-referrer"` on the iframe or a `no-referrer` page policy; keep the default `strict-origin-when-cross-origin`. |
 | `onCompleted` never fires, and the console warns about a missing origin | `origin` is empty or wrong. | Set `origin="https://app.turbodocx.com"`. |
 | HTTP `403` when your server creates the URL | The API key belongs to a **User**, or **Enable identity verification** is off (`EmbeddedSigningNotEnabled`). | Use an **Administrator** or **Contributor** key, and ask an admin to check Step 1. |
-| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to let senders change the method, or [request an SMS passcode](../../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to let senders change the method, or [request an SMS passcode](../passcodes.md#request-an-sms-passcode-from-your-code). |
 
 ## What's next
 
 - **Next:** [Web component](./web-component.md), for the same widget outside React.
-- [Two signers in order on one device](./sequential-signers.md).
+- [Kiosk signing (two signers, one device)](./sequential-signers.md).
 - [API reference](../reference.md): every field, event and error.

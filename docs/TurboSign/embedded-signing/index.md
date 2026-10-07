@@ -19,6 +19,7 @@ keywords:
   - embed signing in your app
 ---
 
+import EmbeddedSigningFlow from '@site/src/components/EmbeddedSigningFlow';
 import SampleAppCallout from './_sample-app-callout.mdx';
 
 # Embedded Signing
@@ -53,19 +54,12 @@ More install options: [Install with AI Agents](../../SDKs/agent-skills.md).
 
 Every embedded signing integration makes the same four moves:
 
-1. **Your server creates the document** and asks TurboSign for a signing URL for one signer.
-2. **Your browser code shows that URL**, usually in an iframe.
+1. **Your app asks your server for a signing session.** Your server creates the document and asks TurboDocx for a signing URL for one signer.
+2. **The signing URL comes back to your app**, which shows it, usually in an iframe.
 3. **The signing page verifies the signer** and collects the signature.
 4. **The signing page tells your app it finished** with a `turbosign:completed` message, and your server confirms the result.
 
-```text
-Browser (your app)  --POST /api/signing-session-->  Your server (holds the API key)  -->  TurboDocx
-        ^                                                    |
-        |                     embedUrl                       |
-        +----------------------------------------------------+
-        |
-   <iframe src=embedUrl>  --postMessage "turbosign:completed"-->  your app
-```
+<EmbeddedSigningFlow />
 
 ## Choose how signers verify
 
@@ -86,8 +80,8 @@ The [Identity verification](../identity-verification/index.md) section compares 
 | Keep full control of the iframe, in any framework | Email passcode | Your own `iframe` and message listener | [Your own iframe](./build/own-iframe.md) |
 | Write the least code in a React app | Email passcode | The React `TurboSignForm` component | [React widget](./build/react-widget.md) |
 | Use Vue, Angular, Svelte or plain HTML | Email passcode | The `turbosign-form` web component | [Web component](./build/web-component.md) |
-| Have two or more people sign in order on one device | An email passcode each | Any | [Two signers on one device](./build/sequential-signers.md) |
-| Verify signers by text message | SMS passcode | Any | [Email and SMS passcode](../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code) |
+| Have two or more people sign in order on one device | An email passcode each | Any | [Kiosk signing (two signers, one device)](./build/sequential-signers.md) |
+| Verify signers by text message | SMS passcode | Any | [Passcodes in embedded signing](./passcodes.md#request-an-sms-passcode-from-your-code) |
 | Reuse a check your identity vendor already ran | Your identity provider | Any | [External identity verification](../identity-verification/external-identity-verification.md) |
 | Try the flow in development without verification | Nothing (marked not identity-verified) | Any | [Sender override for testing](../identity-verification/sender-override.md) |
 

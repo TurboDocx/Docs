@@ -1,7 +1,7 @@
 ---
-title: Two Signers in Order on One Device (Kiosk Signing)
+title: Kiosk Signing (Two Signers, One Device)
 slug: /TurboSign/embedded-signing/sequential-signers
-sidebar_label: Two signers on one device
+sidebar_label: Kiosk signing (two signers, one device)
 sidebar_position: 4
 description: Step-by-step guide to in-person, same-device signing with TurboSign. Create one document for several signers in order, then mint each signer's embedded signing URL just in time when it is their turn. Code for JavaScript, Python, PHP, Go, Java and Ruby.
 keywords:
@@ -19,7 +19,7 @@ import SetupAndVerify from './_setup-and-verify.mdx';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Two Signers in Order on One Device (Kiosk Signing)
+# Kiosk Signing (Two Signers, One Device)
 
 Use this when several people sign one document, in order, on the same screen. Think of a car dealership, a clinic front desk, or a tablet at a counter.
 
@@ -30,6 +30,8 @@ Your server creates one document for everyone. It gets a signing URL for the fir
 - A server route that creates the document for all signers in order.
 - A second server route that mints the next signer's URL, with a short retry.
 - A page that frames each signer in turn and moves on when one finishes.
+
+<SampleAppCallout path="Sequential kiosk" />
 
 ## Prerequisites
 
@@ -383,10 +385,6 @@ Show whose turn it is above the signing panel, as in the example. Each signer ve
 :::
 
 ## What the signers see
-
-<SampleAppCallout path="Sequential kiosk" />
-
-
 
 1. Someone enters both signers in order and clicks **Start signing**.
 

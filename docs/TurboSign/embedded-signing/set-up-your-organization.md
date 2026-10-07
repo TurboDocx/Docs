@@ -79,7 +79,7 @@ For local development you can add an `http://localhost` (or `http://127.0.0.1`) 
 
 ## What's next
 
-- **Next:** pick a build guide. [Your own iframe](./build/own-iframe.md), the [React widget](./build/react-widget.md), the [web component](./build/web-component.md), or [two signers on one device](./build/sequential-signers.md).
+- **Next:** pick a build guide. [Your own iframe](./build/own-iframe.md), the [React widget](./build/react-widget.md), the [web component](./build/web-component.md), or [kiosk signing (two signers, one device)](./build/sequential-signers.md).
 - [Email and SMS passcode](../identity-verification/one-time-passcode.md): choose email or SMS delivery, connect an SMS provider, set up delivery-failure alerts, and see what the signer sees.
 - [External identity verification](../identity-verification/external-identity-verification.md): assert a signer's identity from your own identity verification provider instead of a passcode.
 - [Sender override for testing](../identity-verification/sender-override.md): try the flow without verification in development.

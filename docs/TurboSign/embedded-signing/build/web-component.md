@@ -29,6 +29,8 @@ The element renders the iframe, checks where each message comes from, and fires 
 - A server route that creates the document and returns a signing URL.
 - A page with the `turbosign-form` element and an event listener.
 
+<SampleAppCallout path="Single signer" />
+
 ## Prerequisites
 
 - The setup in [Before you start](../index.md#before-you-start): embedded signing on, your origin allowed, and an **Administrator** or **Contributor** API key.
@@ -116,8 +118,6 @@ The element fails closed. If `origin` is missing, it ignores every message and `
 
 ## What the signer sees
 
-<SampleAppCallout path="Single signer" />
-
 The signing panel inside `turbosign-form` is the same one the other build guides show. The screenshots below come from the sample app's **Single signer** tab, because it has no web component tab.
 
 1. Your page shows the TurboSign signing panel. The signer clicks **Send Code**, and TurboSign emails a six-digit code to the signer's address.
@@ -153,10 +153,10 @@ The signing panel inside `turbosign-form` is the same one the other build guides
 | `turbosign:completed` never fires | `origin` is missing or wrong, or the listener is attached to the wrong element. | Set `origin="https://app.turbodocx.com"` and listen on the element (or a parent). |
 | Nothing renders at all | The module never loaded, so the tag is an unknown element. | Check the network tab for the script, and that it is loaded with `type="module"`. |
 | HTTP `403` when your server creates the URL | The API key belongs to a **User**, or **Enable identity verification** is off. | Use an **Administrator** or **Contributor** key, and ask an admin to check Step 1. |
-| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to let senders change the method, or [request an SMS passcode](../../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to let senders change the method, or [request an SMS passcode](../passcodes.md#request-an-sms-passcode-from-your-code). |
 
 ## What's next
 
-- **Next:** [Two signers in order on one device](./sequential-signers.md).
+- **Next:** [Kiosk signing (two signers, one device)](./sequential-signers.md).
 - [External identity verification](../../identity-verification/external-identity-verification.md), to skip the passcode when your identity vendor already verified the signer.
 - [API reference](../reference.md): every field, event and error.

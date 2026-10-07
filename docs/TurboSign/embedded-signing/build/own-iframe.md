@@ -29,6 +29,8 @@ Choose this path when you want full control of the frame, or your framework is n
 - A page that shows the signing page in an iframe.
 - A message listener that reacts when the signer finishes, and checks where the message came from.
 
+<SampleAppCallout path="Single signer" />
+
 ## Prerequisites
 
 - The setup in [Before you start](../index.md#before-you-start): embedded signing on, your origin allowed, and an **Administrator** or **Contributor** API key.
@@ -102,8 +104,6 @@ Any window can post a message to your page. Checking `event.origin` rejects mess
 
 ## What the signer sees
 
-<SampleAppCallout path="Single signer" />
-
 Your app's page around the signing panel will look different; the panel itself is the same.
 
 1. Your signer clicks your own button (here, **Start signing**). Your server creates the document and returns the signing URL, and your page sets it as the iframe's `src`.
@@ -151,12 +151,12 @@ A code expires after 10 minutes, and five wrong entries require a new code. See 
 | The iframe is blank, and the browser console mentions `frame-ancestors` | Your origin is not under **Allowed embedding domains**. | Add the exact origin, including the port in development. |
 | HTTP `403` when the signing URL is created | The API key belongs to a **User**. | Use an **Administrator** or **Contributor** key. |
 | HTTP `403` `EmbeddedSigningNotEnabled` | **Enable identity verification** is off. | Ask an admin to turn it on (Step 1). |
-| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to allow changing the method per recipient, or follow the [SMS guide](../../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request and locked the method to a different channel. | Ask an admin to allow changing the method per recipient, or follow the [SMS guide](../passcodes.md#request-an-sms-passcode-from-your-code). |
 | Signing finishes but no completion message arrives (often in Firefox) | The signing page posts only to an origin it can identify, and your page or iframe sends no referrer. | Don't use `referrerpolicy="no-referrer"` on the iframe or a `no-referrer` page policy; keep the default `strict-origin-when-cross-origin`. |
 | Your listener never fires | The origin check uses the wrong origin, or the message came from a different frame. | Log `event.origin` once and compare it with `TURBOSIGN_ORIGIN`. |
 
 ## What's next
 
 - **Next:** [React widget](./react-widget.md): the same flow without writing the listener.
-- [Two signers in order on one device](./sequential-signers.md): extend this flow to several signers.
+- [Kiosk signing (two signers, one device)](./sequential-signers.md): extend this flow to several signers.
 - [API reference](../reference.md): every field, event and error.
