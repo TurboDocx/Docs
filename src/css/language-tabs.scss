@@ -156,6 +156,7 @@
 .tabs__item.tab-lang--php::before { background-image: url('/img/languages/php.svg'); }
 .tabs__item.tab-lang--go::before { background-image: url('/img/languages/go.svg'); }
 .tabs__item.tab-lang--java::before { background-image: url('/img/languages/java.svg'); }
+.tabs__item.tab-lang--ruby::before { background-image: url('/img/languages/ruby.svg'); }
 
 // Small screens: the strip scrolls sideways; hide the scrollbar and fade the edge to show there is more.
 @media (max-width: 600px) {
