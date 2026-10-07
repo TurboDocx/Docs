@@ -239,7 +239,56 @@
   height: 0.95em;
 }
 
+/* ---- optional full-width strip: complete sample app (sampleAppHref) ---- */
+.sampleApp {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+[data-theme='dark'] .sampleApp {
+  border-top-color: var(--ifm-color-emphasis-300);
+}
+
+.sampleAppIcon {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--ifm-font-color-base);
+}
+
+.sampleAppText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.sampleAppTitle {
+  font-size: 1rem;
+}
+
+.sampleAppSub {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.sampleAppButton {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 @media (max-width: 768px) {
+  .sampleApp {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .wrap {
     grid-template-columns: 1fr;
     gap: 1rem;
