@@ -14,12 +14,14 @@ keywords:
   - createSigningUrl
 ---
 
-import SampleAppCallout from '../_sample-app-callout.mdx';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 import SetupAndVerify from './_setup-and-verify.mdx';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Kiosk Signing (Two Signers, One Device)
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
 
 Use this when several people sign one document, in order, on the same screen. Think of a car dealership, a clinic front desk, or a tablet at a counter.
 
@@ -30,8 +32,6 @@ Your server creates one document for everyone. It gets a signing URL for the fir
 - A server route that creates the document for all signers in order.
 - A second server route that mints the next signer's URL, with a short retry.
 - A page that frames each signer in turn and moves on when one finishes.
-
-<SampleAppCallout path="Sequential kiosk" />
 
 ## Prerequisites
 

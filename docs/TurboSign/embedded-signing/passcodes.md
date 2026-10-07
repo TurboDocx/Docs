@@ -11,10 +11,13 @@ keywords:
   - one-time passcode api
 ---
 
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Passcodes in Embedded Signing
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
 
 An admin turns passcodes on in [Email and SMS passcode](../identity-verification/one-time-passcode.md). Your code then asks for a passcode on each embedded signer.
 

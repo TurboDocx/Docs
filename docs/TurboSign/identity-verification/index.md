@@ -14,9 +14,11 @@ keywords:
   - verify signer before signing
 ---
 
-import SampleAppCallout from '../embedded-signing/_sample-app-callout.mdx';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 # Identity Verification
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
 
 Identity verification makes a signer prove who they are before the document opens. You set it per recipient, and an admin can set a default for the whole organization.
 
@@ -61,8 +63,6 @@ When your app shows the signing page, TurboSign doesn't email the signer a link,
 :::caution A recipient with no verification is unprotected
 If you leave verification off a recipient (and your organization verifies only when requested), TurboSign still issues a signing URL, and whoever opens it can sign. Use a passcode or external identity verification in production.
 :::
-
-<SampleAppCallout path="External IdV" />
 
 ## Before you start
 

@@ -13,11 +13,13 @@ keywords:
   - embed e-signature iframe
 ---
 
-import SampleAppCallout from '../_sample-app-callout.mdx';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 import SetupAndVerify from './_setup-and-verify.mdx';
 import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
 
 # Embed Signing with Your Own Iframe (Email Passcode)
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
 
 In this guide your app frames the TurboSign signing page in a plain `iframe` and listens for the completion message itself. TurboSign verifies the signer with a six-digit code sent to their email.
 
@@ -28,8 +30,6 @@ Choose this path when you want full control of the frame, or your framework is n
 - A server route that creates the document and returns a signing URL.
 - A page that shows the signing page in an iframe.
 - A message listener that reacts when the signer finishes, and checks where the message came from.
-
-<SampleAppCallout path="Single signer" />
 
 ## Prerequisites
 

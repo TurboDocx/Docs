@@ -13,11 +13,13 @@ keywords:
   - email passcode signing
 ---
 
-import SampleAppCallout from '../_sample-app-callout.mdx';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 import SetupAndVerify from './_setup-and-verify.mdx';
 import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
 
 # Embed Signing with the React Widget (Email Passcode)
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
 
 In this guide your React app drops in the `TurboSignForm` component from `@turbodocx/embed`. The component renders the iframe, checks where each message comes from, and calls your `onCompleted` callback when the signer finishes.
 
@@ -27,8 +29,6 @@ TurboSign verifies the signer with a six-digit code sent to their email.
 
 - A server route that creates the document and returns a signing URL.
 - A React component that shows the signing page and reacts when the signer finishes.
-
-<SampleAppCallout path="Widget" />
 
 ## Prerequisites
 

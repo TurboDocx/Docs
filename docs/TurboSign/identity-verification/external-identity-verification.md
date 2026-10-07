@@ -23,17 +23,17 @@ keywords:
   - signer identity verification
 ---
 
-import SampleAppCallout from '../embedded-signing/_sample-app-callout.mdx';
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # External Identity Verification (IdV) for Embedded Signing
 
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
+
 External identity verification (`external_idv`) is for apps that already verify their users with an identity verification provider. Your app verifies the signer with that provider (for example a government ID scan plus a selfie). Your backend then tells TurboSign who verified the signer, when, and with which reference id. TurboSign checks that assertion, records it in the tamper-evident audit trail, and gives you a single-use signing URL. The signer goes straight to the document without a TurboSign passcode.
 
 This page covers when to use it, how to turn it on, the exact request shape, and worked examples for common identity verification providers. For the rest of embedded signing (sending without emails, return URLs, iframes), see the [embedded signing overview](../embedded-signing/index.md) and the [API reference](../embedded-signing/reference.md).
-
-<SampleAppCallout path="External IdV" />
 
 ## When to use external IdV instead of a passcode
 
@@ -505,7 +505,7 @@ Use it only when you have confirmed that link in your own systems, and keep a re
 
 ## What the signer sees
 
-These screenshots come from the sample app's **External IdV** tab (see the tip at the top of this page). It **simulates** the identity verification provider and labels it as simulated; in your app this is your provider's real flow.
+These screenshots come from the sample app's **External IdV** tab (linked from the box at the top of this page). It **simulates** the identity verification provider and labels it as simulated; in your app this is your provider's real flow.
 
 1. In your app, the signer starts the verification (here, **Verify identity to sign**).
 

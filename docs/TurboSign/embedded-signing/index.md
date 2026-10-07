@@ -19,10 +19,12 @@ keywords:
   - embed signing in your app
 ---
 
+import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 import EmbeddedSigningFlow from '@site/src/components/EmbeddedSigningFlow';
-import SampleAppCallout from './_sample-app-callout.mdx';
 
 # Embedded Signing
+
+<QuickstartSkillNudge command="/turbodocx-sdk turbosign" product="TurboSign" sampleAppHref="https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app" />
 
 Embedded signing takes a signer straight from your own UI to a TurboSign signing page, without signing-link emails. Your backend asks TurboSign for a signing URL when the signer is ready, and your app opens it in an iframe, a new tab, or a redirect.
 
@@ -33,22 +35,6 @@ Embedded signing takes a signer straight from your own UI to a TurboSign signing
 - **Each signer is verified your way.** Use an email or SMS passcode, or your own identity verification vendor. The sender override skips verification while you test.
 - **The signer's real email is the signer of record**, and the verification lands on the certificate of completion and in the audit trail.
 - **You get a completion event** in the browser, and the `completed` webhook on your server.
-
-:::tip Let your AI coding agent write the integration
-The [TurboDocx quickstart skill](https://github.com/TurboDocx/quickstart) (`turbodocx-sdk`) installs the [TurboDocx SDK](https://github.com/TurboDocx/SDK) and writes the integration code, including embedded signing, in JavaScript/TypeScript, Python, Go, PHP, Java or Ruby. Install it without any prompts:
-
-```bash
-npx skills add TurboDocx/quickstart --skill turbodocx-sdk -y
-```
-
-Then paste a prompt like this into Claude Code, Cursor, Copilot, Codex or any agent that supports [Agent Skills](https://agentskills.io):
-
-```text
-Add TurboSign embedded signing with SMS verification to my app
-```
-
-More install options: [Install with AI Agents](../../SDKs/agent-skills.md).
-:::
 
 ## How it works
 
@@ -88,8 +74,6 @@ The [Identity verification](../identity-verification/index.md) section compares 
 :::tip Not sure? Start with the React widget or the web component
 They check the message origin and surface the completion event for you. Choose your own iframe only when you need full control of the frame.
 :::
-
-<SampleAppCallout path="Widget, Single signer, External IdV or Sequential kiosk" />
 
 ## Before you start
 

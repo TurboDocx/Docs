@@ -14,6 +14,7 @@ import styles from './QuickstartSkillNudge.module.css';
  * Props:
  *   command  — slash command displayed inside the agent (e.g. "/turbodocx-sdk turbowebhooks")
  *   product  — short product name used in the body copy ("TurboWebhooks", "TurboSign", …)
+ *   sampleAppHref: optional link to a complete runnable sample app, shown as a secondary link
  */
 
 const INSTALL_CMD = 'npx skills add TurboDocx/quickstart';
@@ -28,7 +29,7 @@ function BoltIcon() {
   );
 }
 
-export function GitHubIcon() {
+function GitHubIcon() {
   return (
     <svg className={styles.ghIcon} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.18-.02-2.14-3.2.7-3.88-1.36-3.88-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.74 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.18a10.97 10.97 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.58.23 2.75.11 3.04.73.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.4-5.25 5.69.41.36.78 1.07.78 2.16 0 1.56-.01 2.81-.01 3.19 0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z" />
@@ -52,6 +53,7 @@ function CopyIcon({ copied }) {
 export default function QuickstartSkillNudge({
   command = '/turbodocx-sdk',
   product = 'TurboDocx',
+  sampleAppHref,
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -102,6 +104,12 @@ export default function QuickstartSkillNudge({
           <a href="/docs/SDKs/agent-skills" className={styles.github}>
             <span>Full install guide →</span>
           </a>
+          {sampleAppHref ? (
+            <a href={sampleAppHref} target="_blank" rel="noopener noreferrer" className={styles.github}>
+              <GitHubIcon />
+              <span>Or run the complete embedded signing sample app</span>
+            </a>
+          ) : null}
         </div>
       </div>
 
