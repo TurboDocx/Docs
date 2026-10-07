@@ -1,0 +1,149 @@
+---
+title: Embed Signing with the React Widget (Email Passcode)
+slug: /TurboSign/embedded-signing/react-widget
+sidebar_label: React widget
+sidebar_position: 2
+description: Step-by-step guide to embedding TurboSign in a React app with the TurboSignForm component from @turbodocx/embed, with the signer verified by an email one-time passcode. Server code for JavaScript, Python, PHP, Go, Java and Ruby.
+keywords:
+  - turbosign react
+  - TurboSignForm
+  - "@turbodocx/embed"
+  - react e-signature component
+  - embedded signing react
+  - email passcode signing
+---
+
+import CreateEmailOtpSigner from './_create-email-otp-signer.mdx';
+
+# Embed Signing with the React Widget (Email Passcode)
+
+In this guide your React app drops in the `TurboSignForm` component from `@turbodocx/embed`. The component renders the iframe, checks where each message comes from, and calls your `onCompleted` callback when the signer finishes.
+
+TurboSign verifies the signer with a six-digit code sent to their email.
+
+**What you'll build:**
+
+- A server route that creates the document and returns a signing URL.
+- A React component that shows the signing page and reacts when the signer finishes.
+
+## Prerequisites
+
+- The setup in [Before you start](../index.md#before-you-start): embedded signing on, your origin allowed, and an **Administrator** or **Contributor** API key.
+- React 18 or later.
+- A PDF with `{signature1}` and `{date1}` text anchors.
+
+## Step 1: Check your organization's settings (admin, once)
+
+An admin confirms two settings in **Settings** > **Features and integrations** > **Configure E-Signature** > **Identity Verification**. [Set up your organization](../set-up-your-organization.md) shows every click.
+
+1. On the **One-time passcode** tab, **Enable identity verification** is on.
+2. On the **Identity & embedding** tab, your app's origin is under **Allowed embedding domains**.
+
+![The Identity & embedding tab with the Allowed embedding domains input highlighted](/img/how-to-enable-embedded-signing/05-allowed-embedding-domains.png)
+
+## Step 2: Install the package
+
+```bash
+npm install @turbodocx/embed
+```
+
+React is a peer dependency and is never bundled. The React component lives at the `@turbodocx/embed/react` subpath, so the package root never imports React.
+
+## Step 3: Create the document and signing URL on your server
+
+Add a route to your server, for example `POST /api/signing-session`. It calls `createEmbeddedSignature` and returns the signer's `embedUrl`. Your API key never reaches the browser.
+
+<CreateEmailOtpSigner />
+
+## Step 4: Render the widget
+
+Fetch the URL from your server and pass it to `TurboSignForm`. Set `origin` to the TurboSign origin so the component accepts messages only from the signing page.
+
+```tsx
+import { useState } from "react";
+import { TurboSignForm } from "@turbodocx/embed/react";
+
+export function SignStep({ name, email }: { name: string; email: string }) {
+  const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+  const [signed, setSigned] = useState(false);
+
+  async function start() {
+    const res = await fetch("/api/signing-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email }),
+    });
+    const data = await res.json();
+    setEmbedUrl(data.embedUrl);
+  }
+
+  if (signed) return <p>All set. Your agreement is signed.</p>;
+  if (!embedUrl) return <button onClick={start}>Sign now</button>;
+
+  return (
+    <TurboSignForm
+      embedUrl={embedUrl}
+      origin="https://app.turbodocx.com"
+      height={720}
+      title="Sign your agreement"
+      onCompleted={({ documentId, event }) => {
+        // event is "signing_complete", or "already_signed" when the signer reopened a finished link.
+        // Confirm on your server (status or `completed` webhook) before you mark the deal as signed.
+        setSigned(true);
+      }}
+    />
+  );
+}
+```
+
+### Props
+
+| Prop | Required | Description |
+|---|---|---|
+| `embedUrl` | Yes | The per-recipient URL from your server. Use it exactly as the SDK returns it. |
+| `origin` | Yes, in practice | The exact TurboSign origin, `https://app.turbodocx.com`. Without it, every message is ignored and `onCompleted` never fires. |
+| `onCompleted` | Yes | Called when the signer finishes. Receives `documentId`, `status`, `event` and `scope`. |
+| `height` | No | A CSS length, or a number of pixels. Defaults to `720px`. |
+| `title` | No | The iframe's accessible name. Defaults to `TurboSign signing`. |
+| `className`, `style` | No | Styling for the iframe. |
+| `onDeclined`, `onError` | No | Reserved. The signing page does not send these events yet. |
+| `allowAnyOrigin` | No | Development only. Accepts messages from any origin. Never ship it. |
+
+:::warning Don't leave origin empty
+The widget fails closed. If `origin` is missing, it ignores every message, logs a one-time warning in the console, and `onCompleted` never fires. `allowAnyOrigin` turns that off for local debugging, but then any frame on your page could fake a completion.
+:::
+
+## What the signer sees
+
+1. Your page shows the TurboSign signing panel, asking the signer to verify their identity.
+2. The signer clicks **Send Code** and receives a six-digit code by email.
+3. The signer enters the code, and the document opens.
+4. The signer signs. The widget calls `onCompleted`, and your app shows its own confirmation.
+
+![The signer's Verify your identity gate with the Send Code button highlighted](/img/how-to-configure-otp/signer-otp-gate.png)
+
+## What the completion event contains
+
+`onCompleted` receives the fields of the `turbosign:completed` message:
+
+| Field | Value |
+|---|---|
+| `documentId` | The document's id. |
+| `status` | `completed`. |
+| `event` | `signing_complete`, or `already_signed` when the signer reopened a link they had already completed. |
+| `scope` | `recipient`. This signer finished; others on the document may still be pending. |
+
+## Common errors
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| The widget area is blank | Your origin is not under **Allowed embedding domains**. | Add the exact origin, including the port in development. |
+| `onCompleted` never fires, and the console warns about a missing origin | `origin` is empty or wrong. | Set `origin="https://app.turbodocx.com"`. |
+| HTTP `403` when your server creates the URL | The API key belongs to a **User**, or **Enable identity verification** is off (`EmbeddedSigningNotEnabled`). | Use an **Administrator** or **Contributor** key, and ask an admin to check Step 1. |
+| HTTP `403` `OtpOverrideNotAllowed` | Your organization verifies every request by SMS and locked the method. | Ask an admin to let senders change the method, or [request an SMS passcode](../identity-verification/one-time-passcode.md#request-an-sms-passcode-from-your-code). |
+
+## What's next
+
+- **Next:** [Web component](./web-component.md), for the same widget outside React.
+- [Two signers in order on one device](./sequential-signers.md).
+- [API reference](../reference.md): every field, event and error.

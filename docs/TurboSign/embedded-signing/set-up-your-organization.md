@@ -1,7 +1,8 @@
 ---
 title: How to Enable Embedded Signing
-slug: how-to-enable-embedded-signing
-sidebar_position: 6
+slug: /TurboSign/how-to-enable-embedded-signing
+sidebar_label: Set up your organization
+sidebar_position: 2
 description: Turn on embedded signing and signer identity verification for your organization, choose the passcode channel, allow the origins that may iframe the signing page, and understand the clickjacking and localhost rules.
 keywords:
   - enable embedded signing
@@ -15,7 +16,7 @@ keywords:
 
 # How to Enable Embedded Signing
 
-Embedded signing lets your application take a signer straight to a TurboSign signing page instead of sending signing-link emails, and verify each signer with a one-time passcode. Before your integration can request signing URLs (see [Embedded Signing and Identity Verification](./Embedded%20Signing.md)), an organization admin turns the feature on in your E-Signature settings. This guide walks through every setting.
+Embedded signing lets your application take a signer straight to a TurboSign signing page instead of sending signing-link emails, and verify each signer with a one-time passcode. Before your integration can request signing URLs (see the [overview](./index.md)), an organization admin turns the feature on in your E-Signature settings. This guide walks through every setting.
 
 You need an **admin** account for your organization.
 
@@ -37,7 +38,7 @@ On the **One-time passcode** tab, turn on **Enable identity verification**. Then
 
 ![The One-time passcode tab with the Enable identity verification toggle and the selected Only when requested option highlighted](/img/how-to-enable-embedded-signing/03-identity-verification-settings.png)
 
-Choosing the passcode channel (email or SMS), connecting an SMS provider, and setting up delivery-failure alerts are covered in a dedicated guide: [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md).
+Choosing the passcode channel (email or SMS), connecting an SMS provider, and setting up delivery-failure alerts are covered in a dedicated guide: [How to Configure One-Time Passcode (OTP)](./identity-verification/one-time-passcode.md).
 
 :::note
 With **Only when requested**, verification is set per recipient and a recipient sent without it signs with no extra step. With **On every signature request**, the method you pick applies to signatures created in the app and to documents sent through the SDK or API. Automated sends such as Pipelines and bulk signature sending are exempt.
@@ -47,7 +48,7 @@ With **Only when requested**, verification is set per recipient and a recipient 
 
 Switch to the **Identity & embedding** tab. Two optional switches change how a signer can be verified:
 
-- **Allow external identity verification** lets your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link, instead of TurboSign sending a passcode. See [External Identity Verification (IdV) for Embedded Signing](./External%20Identity%20Verification.md) for the request shape and provider examples.
+- **Allow external identity verification** lets your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link, instead of TurboSign sending a passcode. See [External Identity Verification (IdV) for Embedded Signing](./identity-verification/external-identity-verification.md) for the request shape and provider examples.
 - **Allow identity verification override** lets a sender send a link that **skips** verification. This is for development and testing; every signature completed this way is marked as **not identity-verified** on the certificate and in the audit trail. While it is on, the settings show a persistent banner.
 
 ![The Identity & embedding tab with the Allow external identity verification and Allow identity verification override switches highlighted](/img/how-to-enable-embedded-signing/04-identity-embedding-toggles.png)
@@ -74,6 +75,8 @@ For local development you can add an `http://localhost` (or `http://127.0.0.1`) 
 
 ## What's next
 
-- [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md) - choose email or SMS delivery, connect an SMS provider, set up delivery-failure alerts, and see what the signer sees.
-- [External Identity Verification (IdV) for Embedded Signing](./External%20Identity%20Verification.md) - assert a signer's identity from your own identity verification provider instead of a passcode.
-- [Embedded Signing and Identity Verification](./Embedded%20Signing.md) - request a signing URL, the three verification modes, and the SDK calls your backend makes.
+- **Next:** pick a build guide. [Your own iframe](./build/own-iframe.md), the [React widget](./build/react-widget.md), the [web component](./build/web-component.md), or [two signers on one device](./build/sequential-signers.md).
+- [Email and SMS passcode](./identity-verification/one-time-passcode.md): choose email or SMS delivery, connect an SMS provider, set up delivery-failure alerts, and see what the signer sees.
+- [External identity verification](./identity-verification/external-identity-verification.md): assert a signer's identity from your own identity verification provider instead of a passcode.
+- [Sender override for testing](./identity-verification/sender-override.md): try the flow without verification in development.
+- [API reference](./reference.md): every request field, event and error.

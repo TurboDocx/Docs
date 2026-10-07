@@ -1,7 +1,8 @@
 ---
 title: External Identity Verification (IdV) for Embedded Signing
-slug: external-identity-verification
-sidebar_position: 5.5
+slug: /TurboSign/external-identity-verification
+sidebar_label: External identity verification
+sidebar_position: 3
 description: Verify signers with your identity verification provider, such as Persona, Onfido, Jumio, Veriff or Stripe Identity, then assert the result to TurboSign.
 keywords:
   - external identity verification
@@ -22,11 +23,14 @@ keywords:
   - signer identity verification
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # External Identity Verification (IdV) for Embedded Signing
 
 External identity verification (`external_idv`) is for apps that already verify their users with an identity verification provider. Your app verifies the signer with that provider (for example a government ID scan plus a selfie). Your backend then tells TurboSign who verified the signer, when, and with which reference id. TurboSign checks that assertion, records it in the tamper-evident audit trail, and gives you a single-use signing URL. The signer goes straight to the document without a TurboSign passcode.
 
-This page covers when to use it, how to turn it on, the exact request shape, and worked examples for common identity verification providers. For the rest of embedded signing (sending without emails, return URLs, iframes), see [Embedded Signing and Identity Verification](./Embedded%20Signing.md).
+This page covers when to use it, how to turn it on, the exact request shape, and worked examples for common identity verification providers. For the rest of embedded signing (sending without emails, return URLs, iframes), see the [embedded signing overview](../index.md) and the [API reference](../reference.md).
 
 See it working: the External IdV path in the [embedded signing sample app](https://github.com/TurboDocx/SDK/tree/main/examples/embedded-web-app) simulates a verification provider end to end.
 
@@ -48,7 +52,7 @@ Use external IdV when:
 - you need stronger evidence than control of an inbox or phone, such as a document check with liveness;
 - you want the provider's reference id and evidence link on the signature's audit trail.
 
-Use a one-time passcode when you don't run your own identity verification. See [How to Configure One-Time Passcode (OTP)](./How%20to%20Configure%20One-Time%20Passcode.md).
+Use a one-time passcode when you don't run your own identity verification. See [How to Configure One-Time Passcode (OTP)](./one-time-passcode.md).
 
 <!-- Legal language: requires counsel review before publishing -->
 :::warning Your responsibilities
@@ -65,18 +69,16 @@ An organization **admin** does this once.
 2. In the E-Signature Settings dialog, click **Identity Verification** in the left-hand section list.
 3. On the **One-time passcode** tab, turn on **Enable identity verification**. This switch turns on embedded signing for your organization, and TurboSign refuses to issue any signing URL while it is off. Under **When to verify signers**, keep **Only when requested** if you don't want passcodes on other signature requests.
 
-<!-- RECAPTURE: One-time passcode tab with the Enable identity verification switch on. Red box target: the "Enable identity verification" switch. Capture at 948 CSS px width, DPR 1.5. Save as static/img/external-identity-verification/01-enable-identity-verification.png -->
-<!-- ![The One-time passcode tab with the Enable identity verification switch highlighted](/img/external-identity-verification/01-enable-identity-verification.png) -->
+![The One-time passcode tab with the Enable identity verification switch highlighted](/img/external-identity-verification/01-enable-identity-verification.png)
 
 4. Click the **Identity & embedding** tab and turn on **Allow external identity verification**. The description under it reads "Let your identity verification vendor verify a signer. Your integration asserts the verification when it requests the signing link."
 
-<!-- RECAPTURE: Identity & embedding tab with Allow external identity verification turned on. Red box target: the "Allow external identity verification" switch only (not the override switch below it). Capture at 948 CSS px width, DPR 1.5. Save as static/img/external-identity-verification/02-allow-external-identity-verification.png -->
-<!-- ![The Identity & embedding tab with the Allow external identity verification switch highlighted](/img/external-identity-verification/02-allow-external-identity-verification.png) -->
+![The Identity & embedding tab with the Allow external identity verification switch highlighted](/img/external-identity-verification/02-allow-external-identity-verification.png)
 
 Changes in this section save as you make them. Your integration can confirm the setting with `TurboSign.getEmbeddedSigningSettings()`: `enabled` and `allowExternalIdv` should both be `true`.
 
 :::tip Embedding in an iframe?
-If you plan to show the signing page inside your app in an iframe, also add your app's origin under **Allowed embedding domains** on the same tab. See [How to Enable Embedded Signing](./How%20to%20Enable%20Embedded%20Signing.md#step-5-allow-the-origins-that-may-embed-the-signing-page).
+If you plan to show the signing page inside your app in an iframe, also add your app's origin under **Allowed embedding domains** on the same tab. See [How to Enable Embedded Signing](../set-up-your-organization.md#step-5-allow-the-origins-that-may-embed-the-signing-page).
 :::
 
 ## Step 2: Mark the recipient for external IdV
@@ -219,6 +221,310 @@ Only the email comparison is skipped. Every other check still runs, and `subject
 
 Use it only when you have confirmed that link in your own systems, and keep a record of how you confirmed it. The override is recorded in TurboSign's audit record, but it is not shown on the rendered audit trail PDF.
 :::
+
+## Steps 2 and 4 in your SDK language
+
+The one-call `createEmbeddedSignature` helper only sets up passcodes, so external IdV uses two calls. First send the document with `sendEmail: false` and an `external_idv` recipient (Step 2). Later, when the signer clicks "Sign now" and your provider has approved them, request the signing URL with the assertion (Step 4).
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+import { readFile } from "node:fs/promises";
+import { TurboSign } from "@turbodocx/sdk";
+
+// Step 2: send the document, no signing-link email.
+const sent = await TurboSign.sendSignature({
+  file: await readFile("contract.pdf"),
+  fileName: "contract.pdf",
+  documentName: "Account Agreement",
+  sendEmail: false,
+  recipients: [
+    {
+      name: "Jane Doe",
+      email: "jane@example.com",
+      signingOrder: 1,
+      externalId: "your_customer_123",
+      identityVerification: { mode: "external_idv", provider: "Persona" },
+    },
+  ],
+  fields: [
+    {
+      type: "signature",
+      recipientEmail: "jane@example.com",
+      template: { anchor: "{signature1}", placement: "replace", size: { width: 100, height: 30 } },
+    },
+  ],
+});
+
+// Step 4: after your provider approves the signer, mint a single-use URL.
+const { url } = await TurboSign.createSigningUrl(sent.documentId, {
+  externalId: "your_customer_123",
+  identityAssertion: {
+    provider: "Persona",
+    verificationId: "inq_ABC123",
+    verifiedAt: "2026-09-16T15:02:00Z",
+    subjectEmail: "jane@example.com",
+    method: "id_document_liveness",
+  },
+});
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+from turbodocx_sdk import TurboSign
+
+# Step 2: send the document, no signing-link email.
+sent = await TurboSign.send_signature(
+    file=pdf,
+    file_name="contract.pdf",
+    document_name="Account Agreement",
+    send_email=False,
+    recipients=[
+        {
+            "name": "Jane Doe",
+            "email": "jane@example.com",
+            "signingOrder": 1,
+            "externalId": "your_customer_123",
+            "identityVerification": {"mode": "external_idv", "provider": "Persona"},
+        }
+    ],
+    fields=[
+        {
+            "type": "signature",
+            "recipientEmail": "jane@example.com",
+            "template": {"anchor": "{signature1}", "placement": "replace", "size": {"width": 100, "height": 30}},
+        }
+    ],
+)
+
+# Step 4: after your provider approves the signer, mint a single-use URL.
+link = await TurboSign.create_signing_url(
+    sent["documentId"],
+    external_id="your_customer_123",
+    identity_assertion={  # camelCase keys, as sent to the API
+        "provider": "Persona",
+        "verificationId": "inq_ABC123",
+        "verifiedAt": "2026-09-16T15:02:00Z",
+        "subjectEmail": "jane@example.com",
+        "method": "id_document_liveness",
+    },
+)
+url = link["url"]
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+use TurboDocx\TurboSign;
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\TemplateConfig;
+use TurboDocx\Types\FieldPlacement;
+use TurboDocx\Types\IdentityVerification;
+use TurboDocx\Types\IdentityAssertion;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+use TurboDocx\Types\Requests\CreateSigningUrlRequest;
+
+// Step 2: send the document, no signing-link email.
+$sent = TurboSign::sendSignature(new SendSignatureRequest(
+    recipients: [
+        new Recipient(
+            name: 'Jane Doe',
+            email: 'jane@example.com',
+            signingOrder: 1,
+            externalId: 'your_customer_123',
+            identityVerification: IdentityVerification::externalIdv('Persona'),
+        ),
+    ],
+    fields: [
+        new Field(
+            type: SignatureFieldType::SIGNATURE,
+            recipientEmail: 'jane@example.com',
+            template: new TemplateConfig(
+                anchor: '{signature1}',
+                placement: FieldPlacement::REPLACE,
+                size: ['width' => 100, 'height' => 30]
+            )
+        ),
+    ],
+    file: file_get_contents(__DIR__ . '/contract.pdf'),
+    documentName: 'Account Agreement',
+    sendEmail: false
+));
+
+// Step 4: after your provider approves the signer, mint a single-use URL.
+$link = TurboSign::createSigningUrl($sent->documentId, new CreateSigningUrlRequest(
+    externalId: 'your_customer_123',
+    identityAssertion: new IdentityAssertion(
+        provider: 'Persona',
+        verificationId: 'inq_ABC123',
+        verifiedAt: '2026-09-16T15:02:00Z',
+        subjectEmail: 'jane@example.com',
+        method: 'id_document_liveness',
+    ),
+));
+$url = $link->url;
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+// Step 2: send the document, no signing-link email.
+sendEmail := false
+sent, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
+	File:         pdf,
+	FileName:     "contract.pdf",
+	DocumentName: "Account Agreement",
+	SendEmail:    &sendEmail,
+	Recipients: []turbodocx.Recipient{
+		{
+			Name:                 "Jane Doe",
+			Email:                "jane@example.com",
+			SigningOrder:         1,
+			ExternalID:           "your_customer_123",
+			IdentityVerification: &turbodocx.IdentityVerification{Mode: "external_idv", Provider: "Persona"},
+		},
+	},
+	Fields: []turbodocx.Field{
+		{
+			Type:           "signature",
+			RecipientEmail: "jane@example.com",
+			Template: &turbodocx.TemplateAnchor{
+				Anchor:    "{signature1}",
+				Placement: "replace",
+				Size:      &turbodocx.Size{Width: 100, Height: 30},
+			},
+		},
+	},
+})
+if err != nil {
+	return err
+}
+
+// Step 4: after your provider approves the signer, mint a single-use URL.
+link, err := client.TurboSign.CreateSigningURL(ctx, sent.DocumentID, &turbodocx.CreateSigningURLRequest{
+	ExternalID: "your_customer_123",
+	IdentityAssertion: &turbodocx.IdentityAssertion{
+		Provider:       "Persona",
+		VerificationID: "inq_ABC123",
+		VerifiedAt:     "2026-09-16T15:02:00Z",
+		SubjectEmail:   "jane@example.com",
+		Method:         "id_document_liveness",
+	},
+})
+if err != nil {
+	return err
+}
+url := link.URL
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+// Step 2: send the document, no signing-link email.
+SendSignatureResponse sent = client.turboSign().sendSignature(
+    new SendSignatureRequest.Builder()
+        .file(Files.readAllBytes(Paths.get("contract.pdf")))
+        .fileName("contract.pdf")
+        .documentName("Account Agreement")
+        .sendEmail(false)
+        .recipients(List.of(
+            new Recipient.Builder()
+                .name("Jane Doe")
+                .email("jane@example.com")
+                .signingOrder(1)
+                .externalId("your_customer_123")
+                .identityVerification(IdentityVerification.externalIdv("Persona"))
+                .build()))
+        .fields(List.of(
+            new Field.Builder()
+                .type("signature")
+                .recipientEmail("jane@example.com")
+                .template(new Field.TemplateAnchor.Builder()
+                    .anchor("{signature1}")
+                    .placement("replace")
+                    .size(new Field.Size(100, 30))
+                    .build())
+                .build()))
+        .build());
+
+// Step 4: after your provider approves the signer, mint a single-use URL.
+CreateSigningUrlResponse link = client.turboSign().createSigningUrl(
+    sent.getDocumentId(),
+    new CreateSigningUrlRequest.Builder()
+        .externalId("your_customer_123")
+        .identityAssertion(new IdentityAssertion.Builder()
+            .provider("Persona")
+            .verificationId("inq_ABC123")
+            .verifiedAt("2026-09-16T15:02:00Z")
+            .subjectEmail("jane@example.com")
+            .method("id_document_liveness")
+            .build())
+        .build());
+String url = link.getUrl();
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```ruby
+# Step 2: send the document, no signing-link email.
+sent = TurboDocxSdk::TurboSign.send_signature(
+  "file"         => StringIO.new(File.binread("contract.pdf")),
+  "documentName" => "Account Agreement",
+  "sendEmail"    => false,
+  "recipients"   => [
+    {
+      "name"                 => "Jane Doe",
+      "email"                => "jane@example.com",
+      "signingOrder"         => 1,
+      "externalId"           => "your_customer_123",
+      "identityVerification" => { "mode" => "external_idv", "provider" => "Persona" }
+    }
+  ],
+  "fields" => [
+    {
+      "type"           => "signature",
+      "recipientEmail" => "jane@example.com",
+      "template"       => { "anchor" => "{signature1}", "placement" => "replace", "size" => { "width" => 100, "height" => 30 } }
+    }
+  ]
+)
+
+# Step 4: after your provider approves the signer, mint a single-use URL.
+link = TurboDocxSdk::TurboSign.create_signing_url(
+  sent["documentId"],
+  external_id: "your_customer_123",
+  identity_assertion: {
+    "provider"       => "Persona",
+    "verificationId" => "inq_ABC123",
+    "verifiedAt"     => "2026-09-16T15:02:00Z",
+    "subjectEmail"   => "jane@example.com",
+    "method"         => "id_document_liveness"
+  }
+)
+url = link["url"]
+```
+
+</TabItem>
+</Tabs>
+
+Open `url` right away: it is single-use and expires in about five minutes. To show it inside your app, frame it exactly as in the [build guides](../build/own-iframe.md), or hand it to the [React widget](../build/react-widget.md) or [web component](../build/web-component.md).
+
+## What the signer sees
+
+1. In your app, the signer completes your provider's verification flow (for example an ID scan and a selfie).
+2. Your app shows a "Sign now" button, and your backend mints the URL with the assertion.
+3. The signing page opens **straight to the document**. There is no passcode gate.
+4. The signer signs, and your page receives `turbosign:completed`.
+5. The certificate of completion and the audit trail show "Identity Verified via" your provider, with its reference id.
 
 ## What lands in the audit trail
 
@@ -373,7 +679,7 @@ You don't need a third-party provider. If your team verifies customers itself (f
 
 ## Errors
 
-These errors come back from sending the document or from `createSigningUrl`. They use the same body as the other identity errors (`message`, `type`, `error` and `code`); see [Errors](./Embedded%20Signing.md#errors) for the full list.
+These errors come back from sending the document or from `createSigningUrl`. They use the same body as the other identity errors (`message`, `type`, `error` and `code`); see [Errors](../reference.md#errors) for the full list.
 
 | Status | `code` | When |
 |---|---|---|
@@ -439,10 +745,11 @@ Request a new one. A new request revokes the old link and returns a fresh single
 
 ### Can I use external IdV with documents sent by email?
 
-The assertion is passed to `createSigningUrl`, so external IdV is used with signing URLs your app requests and opens for the signer. For signers who arrive from a signing-link email, use a [one-time passcode](./How%20to%20Configure%20One-Time%20Passcode.md).
+The assertion is passed to `createSigningUrl`, so external IdV is used with signing URLs your app requests and opens for the signer. For signers who arrive from a signing-link email, use a [one-time passcode](./one-time-passcode.md).
 
 ## What's next
 
-- [Embedded Signing and Identity Verification](./Embedded%20Signing.md): sending without emails, return URLs, the other verification modes, and the full error list.
-- [How to Enable Embedded Signing](./How%20to%20Enable%20Embedded%20Signing.md): every setting in the Identity Verification section, including allowed embedding domains.
-- [TurboSign Webhooks](./Webhooks.md): get notified when the document is completed.
+- **Next:** [Sender override for testing](./sender-override.md), to try the flow in development without any verification.
+- [Set up your organization](../set-up-your-organization.md): every setting in the Identity Verification section, including allowed embedding domains.
+- [API reference](../reference.md): sending without emails, return URLs, the other verification modes, and the full error list.
+- [TurboSign Webhooks](../../Webhooks.md): get notified when the document is completed.

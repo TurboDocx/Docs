@@ -1,0 +1,264 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+import { readFile } from "node:fs/promises";
+import { TurboSign } from "@turbodocx/sdk";
+
+TurboSign.configure({
+  apiKey: process.env.TURBODOCX_API_KEY!, // an Administrator or Contributor key
+  orgId: process.env.TURBODOCX_ORG_ID!,
+  senderEmail: "contracts@yourcompany.com",
+  senderName: "Your Company",
+});
+
+// Call this from your POST /api/signing-session route.
+export async function startSigning({ name, email }: { name: string; email: string }) {
+  const { documentId, recipients } = await TurboSign.createEmbeddedSignature({
+    file: await readFile("contract.pdf"),
+    fileName: "contract.pdf",
+    documentName: `Service Agreement - ${name}`,
+    recipients: [
+      {
+        name,
+        email,
+        auth: { emailOtp: true }, // email passcode before the document opens
+        fields: { signature: "{signature1}", date: "{date1}" },
+      },
+    ],
+  });
+
+  const signer = recipients[0];
+  if (!signer.embedUrl) throw new Error(`Cannot start signing: recipient is ${signer.status}`);
+  return { documentId, embedUrl: signer.embedUrl };
+}
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+import os
+from turbodocx_sdk import TurboSign
+
+TurboSign.configure(
+    api_key=os.environ["TURBODOCX_API_KEY"],  # an Administrator or Contributor key
+    org_id=os.environ["TURBODOCX_ORG_ID"],
+    sender_email="contracts@yourcompany.com",
+    sender_name="Your Company",
+)
+
+# Call this from your POST /api/signing-session route (for example a FastAPI handler).
+async def start_signing(name: str, email: str) -> dict:
+    with open("contract.pdf", "rb") as f:
+        pdf = f.read()
+
+    result = await TurboSign.create_embedded_signature(
+        file=pdf,
+        file_name="contract.pdf",
+        document_name=f"Service Agreement - {name}",
+        recipients=[
+            {
+                "name": name,
+                "email": email,
+                "auth": {"email_otp": True},  # email passcode before the document opens
+                "fields": {"signature": "{signature1}", "date": "{date1}"},
+            }
+        ],
+    )
+
+    signer = result["recipients"][0]
+    if not signer["embedUrl"]:
+        raise RuntimeError(f"Cannot start signing: recipient is {signer['status']}")
+    return {"documentId": result["documentId"], "embedUrl": signer["embedUrl"]}
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+<?php
+
+use TurboDocx\TurboSign;
+use TurboDocx\Config\HttpClientConfig;
+use TurboDocx\Types\Requests\CreateEmbeddedSignatureRequest;
+use TurboDocx\Types\Requests\EmbeddedSignatureRecipient;
+use TurboDocx\Types\Requests\EmbeddedRecipientAuth;
+use TurboDocx\Types\Requests\EmbeddedRecipientFields;
+
+TurboSign::configure(new HttpClientConfig(
+    apiKey: getenv('TURBODOCX_API_KEY'), // an Administrator or Contributor key
+    orgId: getenv('TURBODOCX_ORG_ID'),
+    senderEmail: 'contracts@yourcompany.com',
+    senderName: 'Your Company'
+));
+
+// Call this from your POST /api/signing-session route.
+function startSigning(string $name, string $email): array
+{
+    $result = TurboSign::createEmbeddedSignature(new CreateEmbeddedSignatureRequest(
+        recipients: [
+            new EmbeddedSignatureRecipient(
+                name: $name,
+                email: $email,
+                auth: new EmbeddedRecipientAuth(emailOtp: true), // email passcode before the document opens
+                fields: new EmbeddedRecipientFields(signature: '{signature1}', date: '{date1}'),
+            ),
+        ],
+        file: file_get_contents(__DIR__ . '/contract.pdf'),
+        fileName: 'contract.pdf',
+        documentName: "Service Agreement - {$name}",
+    ));
+
+    $signer = $result->recipients[0];
+    if ($signer->embedUrl === null) {
+        throw new RuntimeException("Cannot start signing: recipient is {$signer->status}");
+    }
+    return ['documentId' => $result->documentId, 'embedUrl' => $signer->embedUrl];
+}
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+package signing
+
+import (
+	"context"
+	"fmt"
+	"os"
+
+	turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
+)
+
+func newClient() (*turbodocx.Client, error) {
+	return turbodocx.NewClientWithConfig(turbodocx.ClientConfig{
+		APIKey:      os.Getenv("TURBODOCX_API_KEY"), // an Administrator or Contributor key
+		OrgID:       os.Getenv("TURBODOCX_ORG_ID"),
+		SenderEmail: "contracts@yourcompany.com",
+		SenderName:  "Your Company",
+	})
+}
+
+// StartSigning is called from your POST /api/signing-session handler.
+func StartSigning(ctx context.Context, client *turbodocx.Client, name, email string) (documentID, embedURL string, err error) {
+	pdf, err := os.ReadFile("contract.pdf")
+	if err != nil {
+		return "", "", err
+	}
+
+	result, err := client.TurboSign.CreateEmbeddedSignature(ctx, &turbodocx.CreateEmbeddedSignatureRequest{
+		File:         pdf,
+		FileName:     "contract.pdf",
+		DocumentName: "Service Agreement - " + name,
+		Recipients: []turbodocx.EmbeddedSignatureRecipient{
+			{
+				Name:   name,
+				Email:  email,
+				Auth:   &turbodocx.EmbeddedRecipientAuth{EmailOTP: true}, // email passcode before the document opens
+				Fields: &turbodocx.EmbeddedRecipientFields{Signature: "{signature1}", Date: "{date1}"},
+			},
+		},
+	})
+	if err != nil {
+		return "", "", err
+	}
+
+	signer := result.Recipients[0]
+	if signer.EmbedURL == "" { // Go uses an empty string, not nil, when no URL was minted
+		return "", "", fmt.Errorf("cannot start signing: recipient is %s", signer.Status)
+	}
+	return result.DocumentID, signer.EmbedURL, nil
+}
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+import com.turbodocx.TurboDocxClient;
+import com.turbodocx.models.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class SigningService {
+    private final TurboDocxClient client = new TurboDocxClient.Builder()
+        .apiKey(System.getenv("TURBODOCX_API_KEY")) // an Administrator or Contributor key
+        .orgId(System.getenv("TURBODOCX_ORG_ID"))
+        .senderEmail("contracts@yourcompany.com")
+        .senderName("Your Company")
+        .build();
+
+    // Call this from your POST /api/signing-session route.
+    public EmbeddedSignatureRecipientResult startSigning(String name, String email) throws Exception {
+        CreateEmbeddedSignatureResponse result = client.turboSign().createEmbeddedSignature(
+            new CreateEmbeddedSignatureRequest.Builder()
+                .file(Files.readAllBytes(Paths.get("contract.pdf")))
+                .fileName("contract.pdf")
+                .documentName("Service Agreement - " + name)
+                .recipients(List.of(
+                    new EmbeddedSignatureRecipient.Builder()
+                        .name(name)
+                        .email(email)
+                        .auth(EmbeddedRecipientAuth.emailOtp()) // email passcode before the document opens
+                        .fields(new EmbeddedRecipientFields.Builder()
+                            .signature("{signature1}")
+                            .date("{date1}")
+                            .build())
+                        .build()))
+                .build());
+
+        EmbeddedSignatureRecipientResult signer = result.getRecipients().get(0);
+        if (signer.getEmbedUrl() == null) {
+            throw new IllegalStateException("Cannot start signing: recipient is " + signer.getStatus());
+        }
+        // Return result.getDocumentId() and signer.getEmbedUrl() to the browser.
+        return signer;
+    }
+}
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```ruby
+require "stringio"
+require "turbodocx_sdk"
+
+TurboDocxSdk::TurboSign.configure(
+  api_key:      ENV.fetch("TURBODOCX_API_KEY"), # an Administrator or Contributor key
+  org_id:       ENV.fetch("TURBODOCX_ORG_ID"),
+  sender_email: "contracts@yourcompany.com",
+  sender_name:  "Your Company"
+)
+
+# Call this from your POST /api/signing-session route.
+def start_signing(name, email)
+  result = TurboDocxSdk::TurboSign.create_embedded_signature(
+    file:         StringIO.new(File.binread("contract.pdf")),
+    fileName:     "contract.pdf",
+    documentName: "Service Agreement - #{name}",
+    recipients:   [
+      {
+        name:   name,
+        email:  email,
+        auth:   { emailOtp: true }, # email passcode before the document opens
+        fields: { signature: "{signature1}", date: "{date1}" }
+      }
+    ]
+  )
+
+  signer = result["recipients"].first
+  raise "Cannot start signing: recipient is #{signer['status']}" if signer["embedUrl"].nil?
+
+  { "documentId" => result["documentId"], "embedUrl" => signer["embedUrl"] }
+end
+```
+
+</TabItem>
+</Tabs>
