@@ -95,5 +95,5 @@ Once saved, the button greys out again and the **Quote Preview** reflects your n
 ![Sender Information saved, reflected in the Prepared by preview](/img/quote-sender-settings/07-saved-confirmation.png)
 
 :::tip That's it
-Every quote — created in the app, through the API, an SDK, or n8n — now shows this Sender Information as "Prepared by." See [Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity) for exactly how that resolution works and what happens for API-created quotes.
+Every quote — created in the app, through the API, an SDK, or n8n — now shows this Sender Information as "Prepared by." See [Prepared By & Sender Identity](/docs/TurboQuote/Prepared-By-and-Sender-Identity) for exactly how that resolution works and what happens for API-created quotes.
 :::

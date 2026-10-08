@@ -2665,7 +2665,7 @@ Durations are `{ value, unit }` objects: `unit` is `"hours"` or `"days"`, and `v
 | `expirationWarning` | `Duration` | 3 days | How far **before** expiry warnings start. `0` = never warn |
 | `expirationWarningInterval` | `Duration` | 1 day | Gap between warnings once they start |
 
-Reminders and expiry warnings run as **two independent clocks**, so a signer keeps getting reminders even after warnings begin; the two are coordinated so a reminder and a warning never land on the same tick. The API rejects a cadence that can't fit its window (for example a reminder interval that outlives `expireAfter`) with `400 InvalidSignatureSchedule`. See the [API validation rules](/docs/TurboSign/API%20Signatures#reminders--expiration) for the full list.
+Reminders and expiry warnings run as **two independent clocks**, so a signer keeps getting reminders even after warnings begin; the two are coordinated so a reminder and a warning never land on the same tick. The API rejects a cadence that can't fit its window (for example a reminder interval that outlives `expireAfter`) with `400 InvalidSignatureSchedule`. See the [API validation rules](/docs/TurboSign/API-Signatures#reminders--expiration) for the full list.
 
 </TabItem>
 </Tabs>
@@ -3556,7 +3556,7 @@ new Field(
 Use `action: 'unlock'` to keep a field visible but read-only until the box is checked. A
 malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
 `controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
-[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields).
 
 ---
 
@@ -4437,7 +4437,7 @@ const fields: Field[] = [
 
 A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
 `controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
-[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields).
 
 **Template Configuration:**
 
@@ -4519,7 +4519,7 @@ fields = [
 
 A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
 `controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
-[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields).
 
 **Template Configuration:**
 
@@ -4637,7 +4637,7 @@ fields := []turbodocx.Field{
 
 A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
 `ControllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
-[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields).
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields).
 
 </TabItem>
 </Tabs>
@@ -4834,10 +4834,10 @@ For detailed information about advanced configuration and API concepts, see:
 
 ### Core API References {#core-api-references}
 
-- **[Request Body Reference](/docs/TurboSign/API%20Signatures#request-body-multipartform-data)** - Complete request body parameters, file sources, and multipart/form-data structure
-- **[Recipients Reference](/docs/TurboSign/API%20Signatures#recipients-reference)** - Recipient properties, signing order, metadata, and configuration options
-- **[Field Types Reference](/docs/TurboSign/API%20Signatures#field-types-reference)** - All available field types (signature, date, text, checkbox, etc.) with properties and behaviors
-- **[Field Positioning Methods](/docs/TurboSign/API%20Signatures#field-positioning-methods)** - Template-based vs coordinate-based positioning, anchor configuration, and best practices
+- **[Request Body Reference](/docs/TurboSign/API-Signatures#request-body-multipartform-data)** - Complete request body parameters, file sources, and multipart/form-data structure
+- **[Recipients Reference](/docs/TurboSign/API-Signatures#recipients-reference)** - Recipient properties, signing order, metadata, and configuration options
+- **[Field Types Reference](/docs/TurboSign/API-Signatures#field-types-reference)** - All available field types (signature, date, text, checkbox, etc.) with properties and behaviors
+- **[Field Positioning Methods](/docs/TurboSign/API-Signatures#field-positioning-methods)** - Template-based vs coordinate-based positioning, anchor configuration, and best practices
 
 ---
 
@@ -4848,7 +4848,7 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 - [npm Package](https://www.npmjs.com/package/@turbodocx/sdk)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 
 </TabItem>
@@ -4856,7 +4856,7 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 - [PyPI Package](https://pypi.org/project/turbodocx-sdk/)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 
 </TabItem>
@@ -4864,14 +4864,14 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
 - [Packagist Package](https://packagist.org/packages/turbodocx/sdk)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 
 </TabItem>
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 
 </TabItem>
@@ -4879,7 +4879,7 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
 - [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 
 </TabItem>

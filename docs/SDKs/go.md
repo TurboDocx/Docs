@@ -93,5 +93,5 @@ Each product guide opens on the Go tab:
 ## Resources
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

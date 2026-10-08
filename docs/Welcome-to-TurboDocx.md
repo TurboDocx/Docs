@@ -31,47 +31,47 @@ This page is a map of the documentation. Pick the path that matches what you're 
 
 TurboDocx Templating turns an existing Word or PowerPoint file into a reusable template with variables, then fills it in to produce a finished document.
 
-- [How to Create a Template](./TurboDocx%20Templating/How%20to%20Create%20a%20Template.md): turn an existing document into a reusable template.
-- [How to Create a Document Template](./TurboDocx%20Templating/How%20to%20Create%20a%20Document%20Template.md) and [How to Create a Presentation Template](./TurboDocx%20Templating/How%20to%20Create%20a%20Presentation%20Template.md): format-specific walkthroughs for Word and PowerPoint.
-- [How to Create a Deliverable](./TurboDocx%20Templating/How%20to%20Create%20a%20Deliverable.md): generate a finished document from a template.
-- [Advanced Templating](./Advanced%20Configuration/Advanced%20Templating.md): loops, conditionals, and expressions for complex templates.
+- [How to Create a Template](./TurboDocx-Templating/How-to-Create-a-Template.md): turn an existing document into a reusable template.
+- [How to Create a Document Template](./TurboDocx-Templating/How-to-Create-a-Document-Template.md) and [How to Create a Presentation Template](./TurboDocx-Templating/How-to-Create-a-Presentation-Template.md): format-specific walkthroughs for Word and PowerPoint.
+- [How to Create a Deliverable](./TurboDocx-Templating/How-to-Create-a-Deliverable.md): generate a finished document from a template.
+- [Advanced Templating](./Advanced-Configuration/Advanced-Templating.md): loops, conditionals, and expressions for complex templates.
 
 ## Get documents signed
 
 TurboSign sends documents for e-signature, tracks who has signed, and keeps the completed audit trail.
 
-- [Setting up TurboSign](./TurboSign/Setting%20up%20TurboSign.md): send your first document for signature.
-- [Managing Your Signatures](./TurboSign/Managing%20Your%20Signatures.md): resend, remind, void, and download signed documents.
-- [API Signatures](./TurboSign/API%20Signatures.md): send and track signature requests from your own code.
+- [Setting up TurboSign](./TurboSign/Setting-up-TurboSign.md): send your first document for signature.
+- [Managing Your Signatures](./TurboSign/Managing-Your-Signatures.md): resend, remind, void, and download signed documents.
+- [API Signatures](./TurboSign/API-Signatures.md): send and track signature requests from your own code.
 
 ## Build and send quotes
 
 TurboQuote builds sales quotes and proposals from a product catalog, price books, and line items.
 
-- [Creating a New Quote](./TurboQuote/Creating%20a%20New%20Quote.md): build your first quote.
-- [Adding a New Product](./TurboQuote/Adding%20a%20New%20Product.md) and [Bulk Importing from a Spreadsheet](./TurboQuote/Bulk%20Importing%20from%20a%20Spreadsheet.md): populate your product catalog.
+- [Creating a New Quote](./TurboQuote/Creating-a-New-Quote.md): build your first quote.
+- [Adding a New Product](./TurboQuote/Adding-a-New-Product.md) and [Bulk Importing from a Spreadsheet](./TurboQuote/Bulk-Importing-from-a-Spreadsheet.md): populate your product catalog.
 
 ## Build on the API and SDKs
 
 Every TurboDocx product is also a REST API. Official SDKs cover JavaScript/TypeScript, Python, PHP, Go, Java, and Ruby, so most teams never call the raw API by hand.
 
 - [SDKs Overview](./SDKs/index.md): pick your language, install the client library, and find your API key.
-- [Deliverable API](./API/Deliverable%20API.md): the document-generation endpoints behind the Deliverable SDKs.
+- [Deliverable API](./API/Deliverable-API.md): the document-generation endpoints behind the Deliverable SDKs.
 
 ## Connect your other tools
 
-- [Google Drive](./Integrations/Google%20Drive.md) and [OneDrive and SharePoint](./Integrations/OneDrive%20and%20SharePoint.md): import templates from cloud storage and export deliverables back to it.
+- [Google Drive](./Integrations/Google-Drive.md) and [OneDrive and SharePoint](./Integrations/OneDrive-and-SharePoint.md): import templates from cloud storage and export deliverables back to it.
 - [Salesforce](./Integrations/SalesForce.md), [HubSpot](./Integrations/Hubspot.md), [Zoom](./Integrations/Zoom.md), and [Wrike](./Integrations/Wrike/index.md): trigger document generation and signature workflows from the tools your team already uses.
-- [TurboDocx Pipelines](./Pipelines/TurboDocx%20Pipelines.md): automate document intake, field extraction, and signing end to end.
+- [TurboDocx Pipelines](./Pipelines/TurboDocx-Pipelines.md): automate document intake, field extraction, and signing end to end.
 
 ## Configure your organization
 
-- [Single Sign-On (SSO)](./Advanced%20Configuration/Single-Sign%20On.md): let your organization authenticate through your own identity provider.
-- [SCIM Provisioning](./Advanced%20Configuration/SCIM%20Provisioning.md): automate user account creation, updates, and deactivation from your identity provider.
+- [Single Sign-On (SSO)](./Advanced-Configuration/Single-Sign-On.md): let your organization authenticate through your own identity provider.
+- [SCIM Provisioning](./Advanced-Configuration/SCIM-Provisioning.md): automate user account creation, updates, and deactivation from your identity provider.
 
 ## Troubleshooting
 
-If a document, template, or integration isn't behaving as expected, check that specific product's page first, most end with their own troubleshooting section, for example [Template Troubleshooting](./TurboDocx%20Templating/Template%20Troubleshooting.md). If you can't find an answer there, contact TurboDocx support with the organization name and a description of what you tried.
+If a document, template, or integration isn't behaving as expected, check that specific product's page first, most end with their own troubleshooting section, for example [Template Troubleshooting](./TurboDocx-Templating/Template-Troubleshooting.md). If you can't find an answer there, contact TurboDocx support with the organization name and a description of what you tried.
 
 ## Frequently asked questions
 

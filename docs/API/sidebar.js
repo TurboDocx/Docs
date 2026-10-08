@@ -5,7 +5,7 @@ module.exports = [
     label: "Deliverables",
     collapsed: false,
     items: [
-      { type: "doc", id: "API/Deliverable API", label: "Deliverable API" }
+      { type: "doc", id: "API/Deliverable-API", label: "Deliverable API" }
     ]
   },
   {

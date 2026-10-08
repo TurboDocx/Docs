@@ -281,7 +281,7 @@ Each passcode expires after 10 minutes and allows five wrong entries before the 
 | **5** | The document's sender gets a "having trouble verifying" email, so they can check the signer's email address or phone number early. |
 | **20** | The signer is locked out and the sender gets a "locked out" email. The signer cannot request or enter a code until the sender resends the signing request. |
 
-To clear a lockout, the sender uses **Resend Email** in the document's menu (see [Managing Your Signatures](../Managing%20Your%20Signatures.md)). Resending emails the signer a fresh link and clears the lock.
+To clear a lockout, the sender uses **Resend Email** in the document's menu (see [Managing Your Signatures](../Managing-Your-Signatures.md)). Resending emails the signer a fresh link and clears the lock.
 
 :::note
 These alerts go to the sender of the document, not to the admins on the delivery-failure list.

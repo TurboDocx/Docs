@@ -628,13 +628,13 @@ const generatedContent = await Promise.all(
 
 ### Advanced AI Features to Explore
 
-📖 **[Template Generation API →](/docs/TurboDocx%20Templating/API%20Templates)**
+📖 **[Template Generation API →](/docs/TurboDocx-Templating/API-Templates)**
 📖 **[Webhook Integration →](/docs/TurboSign/Webhooks)**
 📖 **[API Authentication →](/docs/API/turbodocx-api-documentation)**
 
 ### Related Documentation
 
-- [Variable Types and Formatting](/docs/API/Deliverable%20API#variable-object-structure)
+- [Variable Types and Formatting](/docs/API/Deliverable-API#variable-object-structure)
 
 ## Support
 

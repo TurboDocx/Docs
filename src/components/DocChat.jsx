@@ -126,7 +126,7 @@ function ChatBox({ messages, onSendMessage }) {
         let camelSourceName = capitalizeFirstLetterOfEachWord(filename);
         let markdownPath = `(/${messageObject?.path
           .split(".md")[0]
-          .replace(/\s/g, "%20")})`;
+          .replace(/\s/g, "-")})`; // doc URLs use dashes; older index paths with spaces map to the same URL
         let existingMessage = messages.find(function (message) {
           return message.text.includes(markdownPath);
         });
