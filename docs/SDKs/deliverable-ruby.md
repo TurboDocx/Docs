@@ -522,9 +522,9 @@ For detailed information about advanced configuration and API concepts, see:
 
 ### Core API References
 
-- **[TurboDocx Templating](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Template)** - How to create and configure document templates
-- **[Variable Reference](/docs/API/Deliverable%20API#variable-object-structure)** - Complete guide to variable types, formatting, and advanced injection options
-- **[API Reference](/docs/API/Deliverable%20API)** - Full REST API documentation for Deliverable endpoints
+- **[TurboDocx Templating](/docs/TurboDocx-Templating/How-to-Create-a-Template)** - How to create and configure document templates
+- **[Variable Reference](/docs/API/Deliverable-API#variable-object-structure)** - Complete guide to variable types, formatting, and advanced injection options
+- **[API Reference](/docs/API/Deliverable-API)** - Full REST API documentation for Deliverable endpoints
 
 ---
 
@@ -532,4 +532,4 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)
 - [RubyGems Package](https://rubygems.org/gems/turbodocx-sdk)
-- [API Reference](/docs/API/Deliverable%20API)
+- [API Reference](/docs/API/Deliverable-API)

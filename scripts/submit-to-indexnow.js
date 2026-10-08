@@ -92,7 +92,7 @@ async function generateUrlList() {
     console.log('📝 Generating default URL list...');
     const commonPaths = [
       '/',
-      '/docs/Welcome%20to%20TurboDocx',
+      '/docs',
       '/docs/category/turbodocx-templating',
       '/docs/category/integrations',
       '/docs/category/turbosign',

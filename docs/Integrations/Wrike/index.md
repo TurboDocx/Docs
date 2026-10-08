@@ -47,7 +47,7 @@ You'll need:
 
 - Admin access to your Wrike workspace
 - Admin access to your TurboDocx organization
-- A template ready in TurboDocx (see [How to Create a Template](../../TurboDocx%20Templating/How%20to%20Create%20a%20Template.md))
+- A template ready in TurboDocx (see [How to Create a Template](../../TurboDocx-Templating/How-to-Create-a-Template.md))
 - About 5 minutes
 
 <br/>

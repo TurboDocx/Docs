@@ -13,7 +13,7 @@ keywords:
 
 # SCIM User Provisioning
 
-TurboDocx supports SCIM 2.0 user provisioning, so your identity provider can automatically create, update, and deactivate TurboDocx accounts within your organization as employees join, change roles, or leave. SCIM manages accounts; pair it with [Single Sign-On](./Single-Sign%20On.md) if you also want your identity provider to handle authentication.
+TurboDocx supports SCIM 2.0 user provisioning, so your identity provider can automatically create, update, and deactivate TurboDocx accounts within your organization as employees join, change roles, or leave. SCIM manages accounts; pair it with [Single Sign-On](./Single-Sign-On.md) if you also want your identity provider to handle authentication.
 
 ## Prerequisites
 
@@ -49,7 +49,7 @@ Confirm your identity provider is configured to actually deprovision (not just u
 ## FAQ
 
 **Does SCIM also let users sign in?**
-No. SCIM only manages accounts, creation, updates, and deactivation. For sign-in, set up [Single Sign-On](./Single-Sign%20On.md) separately.
+No. SCIM only manages accounts, creation, updates, and deactivation. For sign-in, set up [Single Sign-On](./Single-Sign-On.md) separately.
 
 **Which identity providers work with TurboDocx's SCIM support?**
 Any identity provider that implements the SCIM 2.0 User schema can connect. TurboDocx's implementation has been tested against Microsoft Entra ID.

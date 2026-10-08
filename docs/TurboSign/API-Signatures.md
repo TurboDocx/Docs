@@ -267,7 +267,7 @@ audit trail); if no name can be resolved at all the API returns `400 SenderNameR
 
 TurboQuote works differently: quotes have **no `senderEmail` request field** — the sender is
 resolved from the org quote template. See
-[Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
+[Prepared By & Sender Identity](/docs/TurboQuote/Prepared-By-and-Sender-Identity).
 :::
 
 ### Recipients JSON Format
@@ -1278,11 +1278,11 @@ a small **Optional** tag on its top-right corner. The "N of M required" progress
 optional fields out. A locked field never shows the tag: that covers a read-only field and a field
 that a conditional `unlock` rule still holds locked, and the tag appears once the rule unlocks it.
 A locked field shows its lock icon instead when your organization draws locked fields as grey
-boxes (see [Locked Fields Rendering](/docs/TurboSign/How%20to%20Configure%20Signature%20Appearance)). If the
+boxes (see [Locked Fields Rendering](/docs/TurboSign/How-to-Configure-Signature-Appearance)). If the
 signer fills in an optional field and changes their mind, they can open it and click **Clear field**.
 
 `required` works the same way on prepare-for-signing, prepare-for-review, and in each
-`documents[].fields` array of the [Bulk API](/docs/TurboSign/API%20Bulk%20Signatures).
+`documents[].fields` array of the [Bulk API](/docs/TurboSign/API-Bulk-Signatures).
 
 :::warning Behavior change for existing integrations
 Earlier, the single-step endpoints accepted `required` but ignored it, so every field was treated
@@ -1299,7 +1299,7 @@ Any field can carry an optional `metadata` object. It is used to build **conditi
 (IF/THEN) relationships** between fields: a **controlling checkbox** decides whether one or
 more **dependent fields** are shown or unlocked. This works with both the
 **prepare-for-signing** and **prepare-for-review** single-step routes (and with the
-[Bulk API](/docs/TurboSign/API%20Bulk%20Signatures), which uses the same field format).
+[Bulk API](/docs/TurboSign/API-Bulk-Signatures), which uses the same field format).
 
 The relationship has two halves:
 
@@ -1970,7 +1970,7 @@ Now that you've integrated the single-step signing flow, the next step is settin
 
 ### Related Documentation
 
-- [TurboSign Setup Guide](/docs/TurboSign/Setting%20up%20TurboSign)
+- [TurboSign Setup Guide](/docs/TurboSign/Setting-up-TurboSign)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
 

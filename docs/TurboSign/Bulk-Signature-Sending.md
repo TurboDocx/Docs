@@ -405,8 +405,8 @@ The dashboard shows all your batches with:
 
 Now that you know how to send bulk signatures from the UI, explore these related features:
 
-- **[How to Get a Document Signed](/docs/TurboSign/Setting%20up%20TurboSign)** — the single-document signing flow for one-off requests
-- **[TurboSign Bulk API Integration](/docs/TurboSign/API%20Bulk%20Signatures)** — send bulk signatures programmatically via API
+- **[How to Get a Document Signed](/docs/TurboSign/Setting-up-TurboSign)** — the single-document signing flow for one-off requests
+- **[TurboSign Bulk API Integration](/docs/TurboSign/API-Bulk-Signatures)** — send bulk signatures programmatically via API
 - **[Webhooks](/docs/TurboSign/Webhooks)** — get real-time notifications when documents are signed
-- **[Managing Your Signatures](/docs/TurboSign/Managing%20Your%20Signatures)** — track, resend, void, and download signed documents
+- **[Managing Your Signatures](/docs/TurboSign/Managing-Your-Signatures)** — track, resend, void, and download signed documents
 

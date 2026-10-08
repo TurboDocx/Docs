@@ -106,5 +106,5 @@ Each product guide opens on the Python tab:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk)
 - [PyPI Package](https://pypi.org/project/turbodocx-sdk/)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

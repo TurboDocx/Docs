@@ -123,5 +123,5 @@ Each product guide opens on the JavaScript / TypeScript tab:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 - [npm Package](https://www.npmjs.com/package/@turbodocx/sdk)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

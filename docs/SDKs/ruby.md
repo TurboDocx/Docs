@@ -691,10 +691,10 @@ For detailed information about advanced configuration and API concepts, see:
 
 ### Core API References
 
-- **[Request Body Reference](/docs/TurboSign/API%20Signatures#request-body-multipartform-data)** - Complete request body parameters, file sources, and multipart/form-data structure
-- **[Recipients Reference](/docs/TurboSign/API%20Signatures#recipients-reference)** - Recipient properties, signing order, metadata, and configuration options
-- **[Field Types Reference](/docs/TurboSign/API%20Signatures#field-types-reference)** - All available field types (signature, date, text, checkbox, etc.) with properties and behaviors
-- **[Field Positioning Methods](/docs/TurboSign/API%20Signatures#field-positioning-methods)** - Template-based vs coordinate-based positioning, anchor configuration, and best practices
+- **[Request Body Reference](/docs/TurboSign/API-Signatures#request-body-multipartform-data)** - Complete request body parameters, file sources, and multipart/form-data structure
+- **[Recipients Reference](/docs/TurboSign/API-Signatures#recipients-reference)** - Recipient properties, signing order, metadata, and configuration options
+- **[Field Types Reference](/docs/TurboSign/API-Signatures#field-types-reference)** - All available field types (signature, date, text, checkbox, etc.) with properties and behaviors
+- **[Field Positioning Methods](/docs/TurboSign/API-Signatures#field-positioning-methods)** - Template-based vs coordinate-based positioning, anchor configuration, and best practices
 
 ---
 
@@ -702,5 +702,5 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)
 - [RubyGems Package](https://rubygems.org/gems/turbodocx-sdk)
-- [API Reference](/docs/TurboSign/API%20Signatures)
+- [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)

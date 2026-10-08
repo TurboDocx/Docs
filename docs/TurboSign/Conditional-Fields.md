@@ -96,8 +96,8 @@ person ticking the box is the same person who fills in the revealed field.
 
 Conditional logic is expressed entirely through the optional `metadata` object on a field, so it
 works anywhere fields are accepted — the single-step
-[Prepare for Signing and Prepare for Review](/docs/TurboSign/API%20Signatures) routes and the
-[Bulk API](/docs/TurboSign/API%20Bulk%20Signatures).
+[Prepare for Signing and Prepare for Review](/docs/TurboSign/API-Signatures) routes and the
+[Bulk API](/docs/TurboSign/API-Bulk-Signatures).
 
 ### How it works
 
@@ -304,7 +304,7 @@ existing checkbox's `fieldKey`.
   once it becomes visible — don't rely on a hidden required field to block completion. The same
   goes for a field held read-only by `action: "unlock"`: it is only enforced once the box unlocks it.
 - Set `required: false` on a dependent field if the signer may leave it blank even after it
-  appears or unlocks. See [Optional Fields](/docs/TurboSign/API%20Signatures#optional-fields).
+  appears or unlocks. See [Optional Fields](/docs/TurboSign/API-Signatures#optional-fields).
 - The controlling checkbox and its dependent fields should generally belong to the **same
   recipient** so the same signer both toggles the box and fills the revealed field.
 
@@ -322,5 +322,5 @@ The app's rule builder and the API `metadata.conditional` object are the same th
 
 ## Related
 
-- **[TurboSign API Integration](/docs/TurboSign/API%20Signatures#conditional-if-then-fields)** — the full field reference, including the `metadata` object.
-- **[Bulk API Integration](/docs/TurboSign/API%20Bulk%20Signatures)** — conditional metadata works in bulk batches too.
+- **[TurboSign API Integration](/docs/TurboSign/API-Signatures#conditional-if-then-fields)** — the full field reference, including the `metadata` object.
+- **[Bulk API Integration](/docs/TurboSign/API-Bulk-Signatures)** — conditional metadata works in bulk batches too.
