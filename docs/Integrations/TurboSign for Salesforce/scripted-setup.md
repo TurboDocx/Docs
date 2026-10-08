@@ -30,34 +30,34 @@ sf org login web --alias myorg
 
 Salesforce stores principal parameters through the Connect REST API (`/named-credentials/credential`). They can't be deployed as metadata, which is by design: secrets never live in source control.
 
-Keep the key out of your shell history by reading it from a file you delete afterwards:
+Type the key at a silent prompt so it never appears on screen or in your shell history:
 
 ```bash
-# Put the key and org id in files that only you can read
-umask 077
-printf '%s' 'YOUR_TURBODOCX_API_KEY' > ./turbodocx_api_key.txt
-printf '%s' 'YOUR_TURBODOCX_ORG_ID'  > ./turbodocx_org_id.txt
+# Prompt for the values (the key is not echoed)
+read -rsp 'TurboDocx API key: ' TDX_KEY; echo
+read -rp  'TurboDocx Organization ID: ' TDX_ORG
 
-# Build the request body
-cat > ./credential.json <<EOF
+# Write the request body to a file only you can read
+umask 077
+cat > ./credential.json <<JSON
 {
   "externalCredential": "TurboDocx_API",
   "principalName": "TurboDocxPrincipal",
   "principalType": "NamedPrincipal",
   "authenticationProtocol": "Custom",
   "credentials": {
-    "ApiKey": { "value": "$(cat ./turbodocx_api_key.txt)", "encrypted": true },
-    "OrgId":  { "value": "$(cat ./turbodocx_org_id.txt)",  "encrypted": true }
+    "ApiKey": { "value": "$TDX_KEY", "encrypted": true },
+    "OrgId":  { "value": "$TDX_ORG", "encrypted": true }
   }
 }
-EOF
+JSON
 
-# First time: POST creates the parameters. To rotate later, use --method PUT.
+# First time: POST creates the parameters. To rotate the key later, run the same command with --method PUT.
 sf api request rest "/services/data/v62.0/named-credentials/credential" \
   --method POST --body @credential.json --target-org myorg
 
 # Clean up
-rm -f ./credential.json ./turbodocx_api_key.txt ./turbodocx_org_id.txt
+rm -f ./credential.json; unset TDX_KEY TDX_ORG
 ```
 
 Check that both parameters exist. Salesforce returns the names but never the values:

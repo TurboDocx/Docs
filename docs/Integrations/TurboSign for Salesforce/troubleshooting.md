@@ -33,7 +33,7 @@ The user who clicked (or the user a Flow runs as) doesn't have access to the Tur
 
 **Fix:** Assign the **TurboSign User** permission set (or **TurboSign Admin** for admins) to that user.
 
-## "Required value {SomeToken} is empty on this record"
+## "Required value `{SomeToken}` is empty on this record"
 
 A data token marked **Required** has no value on this record and no default.
 
