@@ -97,7 +97,7 @@ The package has two permission sets. Both include access to the TurboDocx creden
 | **TurboSign User** | Reps who send documents |
 
 1. In **Setup**, type `Permission Sets` in **Quick Find** and click **Permission Sets**.
-2. Click **TurboSign User**, then **Manage Assignments**.
+2. The list can be long. Click the letter **T** above the list, then click **TurboSign User**, then **Manage Assignments**.
 
    ![TurboSign User permission set with Manage Assignments highlighted](/img/turbosign-salesforce/12-manage-assignments.png)
 
@@ -203,7 +203,15 @@ If your template has signature lines for roles you don't use (a guarantor, for e
 
 ### Name the document
 
-Under **Document Name**, build a name from text, fields, and today's date. For example: **Text** `Lease`, a separator, **Insert field** for the resident's name, a separator, and **Date**. The **Preview** line shows the result.
+Under **Document Name**, build the name each document gets, for example `Lease - Jane Resident - October 7, 2026`:
+
+1. Click **Clear** to remove the template name.
+2. Click **Text** and type `Lease - ` (with the spaces).
+3. Click **Insert field** and pick the resident's name field.
+4. Click **Text** and type ` - `.
+5. Click **Date**.
+
+The **Preview** line shows the result. The **Separator** menu adds a single character with no spaces, so use **Text** when you want spacing.
 
 ### Move the record forward when everyone signs (optional)
 
@@ -230,7 +238,7 @@ Under **Document Name**, build a name from text, fields, and today's date. For e
 
 ## Step 6: Put the Send button and status panel on the page
 
-1. **Send for Signature button:** in **Setup**, open **Object Manager**, then **Opportunity**, then **Page Layouts**. Open your layout, select **Mobile & Lightning Actions**, drag **Send for Signature** into the actions area, and click **Save**.
+1. **Send for Signature button:** in **Setup**, open **Object Manager**, then **Opportunity**, then **Page Layouts**. Open your layout, select **Mobile & Lightning Actions** in the palette at the top, drag **Send for Signature** into the **Salesforce Mobile and Lightning Experience Actions** section, and click **Save**. If that section says it uses predefined actions, click the **override the predefined actions** link inside it first.
 2. **TurboSign Signatures panel:** open any Opportunity, click the gear icon, then **Edit Page**. Drag the **TurboSign Signatures** component onto the page, click **Save**, and activate the page if Salesforce asks.
 
    ![Gear menu with Edit Page highlighted](/img/turbosign-salesforce/47-edit-page.png)
