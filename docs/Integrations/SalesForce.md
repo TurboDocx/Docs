@@ -29,6 +29,10 @@ keywords:
 
 Say goodbye to copy-pasting customer information! TurboDocx's Salesforce integration automatically pulls your real CRM data to create personalized documents, proposals, and presentations. No more "John Doe" placeholder text — use actual account names, opportunities, and details.
 
+:::tip Sending documents for e-signature from Salesforce?
+[TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce) adds a **Send for Signature** button to your records and saves the signed PDF back automatically. It uses the connection you set up on this page.
+:::
+
 ## What You Can Create
 
 - **📊 Sales Proposals**: Use real opportunity data to create compelling, personalized proposals
