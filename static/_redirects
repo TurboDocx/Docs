@@ -64,8 +64,6 @@
 # Doc URLs switched from spaces (%20) to dashes (CR: kebab doc URLs).
 /docs/API/Deliverable%20API /docs/API/Deliverable-API 301
 /docs/API/Deliverable%20API/ /docs/API/Deliverable-API 301
-/docs/Advanced%20Configuration/Advanced%20Templating /docs/Advanced-Configuration/Advanced-Templating 301
-/docs/Advanced%20Configuration/Advanced%20Templating/ /docs/Advanced-Configuration/Advanced-Templating 301
 /docs/Advanced%20Configuration/Configuring%20Sharepoint%20or%20OneDrive /docs/Advanced-Configuration/Configuring-Sharepoint-or-OneDrive 301
 /docs/Advanced%20Configuration/Configuring%20Sharepoint%20or%20OneDrive/ /docs/Advanced-Configuration/Configuring-Sharepoint-or-OneDrive 301
 /docs/Advanced%20Configuration/SCIM%20Provisioning /docs/Advanced-Configuration/SCIM-Provisioning 301
