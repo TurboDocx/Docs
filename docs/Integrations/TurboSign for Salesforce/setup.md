@@ -28,6 +28,7 @@ Have these ready:
 - **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys** for the key and **Features and integrations** for the Organization ID. See [Getting your credentials](/docs/TurboSign/API%20Signatures#getting-your-credentials).
 - **A TurboDocx template** with a text token wherever someone signs or initials, for example `{resident_sig}` and `{resident_initial}`.
 - **System Administrator** access to your Salesforce org.
+- **A supported Salesforce edition**, such as Enterprise, Unlimited, Performance, or Developer Edition. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
 - **The TurboSign for Salesforce package installed** in your org. Your TurboDocx account team sends you the install link.
 
 ## Step 1: Store your API key and Organization ID
