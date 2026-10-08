@@ -284,5 +284,5 @@ Import your **products first**, then reference them by SKU in your bundle and pr
 
 ## Related
 
-- [Adding a New Product](./Adding%20a%20New%20Product.md)
-- [Creating a New Quote](./Creating%20a%20New%20Quote.md)
+- [Adding a New Product](./Adding-a-New-Product.md)
+- [Creating a New Quote](./Creating-a-New-Quote.md)

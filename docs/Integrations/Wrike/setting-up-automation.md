@@ -20,7 +20,7 @@ This guide walks you through connecting your Wrike account to TurboDocx and crea
 Before starting, make sure you have:
 
 - A **Wrike API access token** (see [Get Your Wrike Access Token](#get-your-wrike-access-token) below)
-- A **template** in TurboDocx ready for document generation (see [How to Create a Template](../../TurboDocx%20Templating/How%20to%20Create%20a%20Template.md))
+- A **template** in TurboDocx ready for document generation (see [How to Create a Template](../../TurboDocx-Templating/How-to-Create-a-Template.md))
 - The **Wrike folder permalink** for the folder you want to monitor
 
 <br/>

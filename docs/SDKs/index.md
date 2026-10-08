@@ -114,7 +114,7 @@ Before you begin, you'll need two things from your TurboDocx account:
 :::note senderEmail for TurboSign
 TurboSign accepts a `senderEmail` (used as the reply-to address for signature request emails). The **JS/TS SDK enforces it client-side**: `TurboSign.configure()` throws a `ValidationError` (generic `VALIDATION_ERROR` code, not an API error code) if no `senderEmail` is supplied in configuration or via the `TURBODOCX_SENDER_EMAIL` environment variable; this check runs once at configure time, not per request. Other SDKs may differ; check each SDK's README. The **backend API itself does not require `senderEmail`** for TurboSign or TurboQuote; a request or org template with no sender falls back to a generic TurboDocx no-reply address and name and is never rejected. Deliverable and TurboWebhooks do not use `senderEmail` at all.
 
-**TurboQuote:** there is **no `senderEmail` field on a quote request**. A sender is resolved from your organization's **quote template** (Quote Settings) when set; if none is configured, the quote falls back to a generic TurboDocx sender rather than failing. See [Prepared By & Sender Identity](/docs/TurboQuote/Prepared%20By%20and%20Sender%20Identity).
+**TurboQuote:** there is **no `senderEmail` field on a quote request**. A sender is resolved from your organization's **quote template** (Quote Settings) when set; if none is configured, the quote falls back to a generic TurboDocx sender rather than failing. See [Prepared By & Sender Identity](/docs/TurboQuote/Prepared-By-and-Sender-Identity).
 :::
 
 #### Which credentials does each product need?
@@ -462,7 +462,7 @@ Send documents for legally-binding eSignatures with full audit trails.
 | `resend()`                    | Resend signature request emails                         |
 | `getAuditTrail()`             | Get complete audit trail with all events and timestamps |
 
-[Learn more about TurboSign →](/docs/TurboSign/Setting%20up%20TurboSign)
+[Learn more about TurboSign →](/docs/TurboSign/Setting-up-TurboSign)
 
 ### Deliverable: Document Generation
 
@@ -524,11 +524,11 @@ TurboSign supports two methods for placing signature fields on your documents:
 | **Template-Based**   | Documents where content may shift, using text anchors like `{SIGNATURE}` |
 
 :::info Field Positioning Reference
-For detailed information about both positioning methods, including anchor configuration, placement options, and best practices, see the **[Field Positioning Methods](/docs/TurboSign/API%20Signatures#field-positioning-methods)** guide.
+For detailed information about both positioning methods, including anchor configuration, placement options, and best practices, see the **[Field Positioning Methods](/docs/TurboSign/API-Signatures#field-positioning-methods)** guide.
 :::
 
 :::info Complete Field Types Reference
-For a comprehensive list of all available field types (signature, initials, text, date, checkbox, full_name, email, title, company) and their detailed usage, see the [Field Types section in the API Signatures guide](/docs/TurboSign/API%20Signatures#field-types-reference).
+For a comprehensive list of all available field types (signature, initials, text, date, checkbox, full_name, email, title, company) and their detailed usage, see the [Field Types section in the API Signatures guide](/docs/TurboSign/API-Signatures#field-types-reference).
 :::
 
 ---
@@ -775,7 +775,7 @@ HTTP.
       </div>
       <div className="card__footer" style={{padding: '0 1.5rem 1.5rem', border: 'none'}}>
         <a
-          href="/docs/TurboSign/API%20Signatures"
+          href="/docs/TurboSign/API-Signatures"
           style={{
             display: 'block',
             width: '100%',

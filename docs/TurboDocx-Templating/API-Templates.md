@@ -852,12 +852,12 @@ Content-Length: 287456
 
 Now that you've mastered the basics, consider exploring these advanced capabilities:
 
-📖 **[AI-Powered Content Generation →](/docs/TurboDocx%20Templating/ai-variable-generation)**
+📖 **[AI-Powered Content Generation →](/docs/TurboDocx-Templating/ai-variable-generation)**
 📖 **[Webhook Integration for Status Updates →](/docs/TurboSign/Webhooks)**
 
 ### Related Documentation
 
-- [Variable Types and Formatting](/docs/API/Deliverable%20API#variable-object-structure)
+- [Variable Types and Formatting](/docs/API/Deliverable-API#variable-object-structure)
 - [API Authentication](/docs/API/turbodocx-api-documentation)
 
 ## Support

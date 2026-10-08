@@ -268,7 +268,7 @@ The `documents` parameter must be a JSON string containing an array of document 
 | documentDescription | String | No       | Override batch-level description for this job               |
 
 :::tip Field Types
-All field types from the single-step API are supported: `signature`, `initial`, `date`, `full_name`, `first_name`, `last_name`, `title`, `company`, `email`, `text`, `checkbox`. See the [single-step API documentation](/docs/TurboSign/API%20Signatures) for details.
+All field types from the single-step API are supported: `signature`, `initial`, `date`, `full_name`, `first_name`, `last_name`, `title`, `company`, `email`, `text`, `checkbox`. See the [single-step API documentation](/docs/TurboSign/API-Signatures) for details.
 :::
 
 :::note Conditional (IF/THEN) fields are supported
@@ -276,7 +276,7 @@ Bulk documents use the same field format as the single-step API, so **conditiona
 bulk batches too**. Add a `metadata.fieldKey` to a controlling checkbox and a
 `metadata.conditional` rule (`controllingFieldKey`, `operator`, `action`) to each dependent field
 within the same job's `fields` array. See
-[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional%20Fields) for the full contract, the
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields) for the full contract, the
 `show` vs. `unlock` behavior, and the `InvalidConditionalRule` / fail-open rules.
 :::
 
@@ -287,7 +287,7 @@ same rules as the single-step API apply: `signature` and `initial` fields cannot
 field. A document that breaks a rule fails the batch with `BulkValidationFailed`, and the
 failing document is listed in the error details with its specific code (`OptionalNotSupported`,
 `InvalidFieldRequired`, or `NoEditableFieldsForRecipient`). See
-[Optional Fields](/docs/TurboSign/API%20Signatures#optional-fields) for details.
+[Optional Fields](/docs/TurboSign/API-Signatures#optional-fields) for details.
 :::
 
 ### Response (Success)
@@ -732,7 +732,7 @@ If you exceed rate limits, you'll receive a `429 Too Many Requests` response. Im
 Now that you understand the Bulk API, you might want to:
 
 - **Set up webhooks**: Get real-time notifications for batch and job status changes. See [Webhooks documentation](/docs/TurboSign/Webhooks)
-- **Explore single-step API**: For individual document sending. See [Single-Step API documentation](/docs/TurboSign/API%20Signatures)
+- **Explore single-step API**: For individual document sending. See [Single-Step API documentation](/docs/TurboSign/API-Signatures)
 - **Review field types**: Learn about all available signature field types
 - **Integrate with your app**: Build bulk sending into your application workflow
 

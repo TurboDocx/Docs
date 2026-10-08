@@ -74,7 +74,7 @@ Brand Identity configuration includes:
 - **Real-time Preview**: See changes instantly as you configure
 
 :::info Key Difference
-**Brand Identity** sets organization-wide styling standards, while **[Working with Fonts](./Working%20with%20Fonts.md)** covers embedding specific desktop fonts in individual templates.
+**Brand Identity** sets organization-wide styling standards, while **[Working with Fonts](./Working-with-Fonts.md)** covers embedding specific desktop fonts in individual templates.
 :::
 
 ## Detailed Configuration (Optional)
@@ -272,13 +272,13 @@ Now that your Brand Identity is configured, here's how to put it to work:
 
 ### Immediate Next Steps
 1. **Test with existing templates** - Generate a document from an existing template to see your branding applied
-2. **Create your first branded template** - Follow our [How to Create a Template](./How%20to%20Create%20a%20Template.md) guide
+2. **Create your first branded template** - Follow our [How to Create a Template](./How-to-Create-a-Template.md) guide
 3. **Set up team access** - Ensure team members have appropriate permissions to use templates
 
 ### Building Your Document Workflow
 - **Templates**: Your brand settings automatically apply to all new and existing templates  
 - **Deliverables**: Every generated document will use your brand identity consistently
-- **Knowledge Base**: Combine with [knowledge base entries](./How%20to%20Create%20a%20Knowledgebase%20Entry.md) for fully automated, branded documents
+- **Knowledge Base**: Combine with [knowledge base entries](./How-to-Create-a-Knowledgebase-Entry.md) for fully automated, branded documents
 
 ### Integration Opportunities
 - **Salesforce Integration**: Branded proposals generated directly from CRM data
@@ -330,7 +330,7 @@ Start with 2-3 core templates (proposal, report, letter) to see immediate value,
 
 **Font Conflicts:**
 - TurboDocx by default uses the font found in the template
-- For custom fonts, use [Working with Fonts](./Working%20with%20Fonts.md) embedding
+- For custom fonts, use [Working with Fonts](./Working-with-Fonts.md) embedding
 
 ## Getting Help
 
@@ -341,7 +341,7 @@ If you encounter issues with Brand Identity configuration:
 3. **Test with Sample Documents**: Generate test documents to verify settings
 4. **Contact Support**: Provide specific details about configuration issues and document types
 
-For technical font embedding questions, refer to [Working with Fonts](./Working%20with%20Fonts.md).
+For technical font embedding questions, refer to [Working with Fonts](./Working-with-Fonts.md).
 
 :::info Next Steps
 After configuring your Brand Identity, create new templates or update existing ones to see your branding applied consistently across all generated documents.

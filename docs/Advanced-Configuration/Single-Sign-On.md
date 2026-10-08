@@ -56,4 +56,4 @@ Once SSO is configured, your organization's members sign in through your identit
 SSO is included with the TurboDocx Enterprise plan.
 
 **Can I combine SSO with automated user provisioning?**
-Yes. Pair SSO with [SCIM Provisioning](./SCIM%20Provisioning.md) so accounts are created, updated, and deactivated automatically as your identity provider changes, on top of SSO handling how those users sign in.
+Yes. Pair SSO with [SCIM Provisioning](./SCIM-Provisioning.md) so accounts are created, updated, and deactivated automatically as your identity provider changes, on top of SSO handling how those users sign in.
