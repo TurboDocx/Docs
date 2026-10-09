@@ -114,7 +114,8 @@ sf org assign permset --name TurboSign_User \
 # Admins who build document setups
 sf org assign permset --name TurboSign_Admin --on-behalf-of admin@yourcompany.com --target-org myorg
 
-# The same in a sandbox called "uat": the usernames carry the sandbox suffix
+# The same in a sandbox called "uat" (log in first: sf org login web --instance-url https://test.salesforce.com --alias myuat)
+# The usernames carry the sandbox suffix
 sf org assign permset --name TurboSign_User --on-behalf-of rep1@yourcompany.com.uat --target-org myuat
 ```
 
@@ -123,7 +124,8 @@ sf org assign permset --name TurboSign_User --on-behalf-of rep1@yourcompany.com.
 This anonymous Apex makes one read-only call to TurboDocx with the stored credentials and prints the HTTP status. It changes nothing in either system.
 
 ```bash
-cat > ./check_turbodocx.apex <<'EOF'
+CHECK=$(mktemp -t check_turbodocx.XXXXXX.apex)
+cat > "$CHECK" <<'EOF'
 HttpRequest req = new HttpRequest();
 req.setEndpoint('callout:TurboDocx_API/template-item?page=1&limit=1');
 req.setMethod('GET');
@@ -137,7 +139,8 @@ try {
     System.debug(LoggingLevel.ERROR, 'TURBODOCX ERROR=' + e.getMessage());
 }
 EOF
-sf apex run --file ./check_turbodocx.apex --target-org myorg | grep -E 'USER_DEBUG|Error'
+sf apex run --file "$CHECK" --target-org myorg | grep -E 'USER_DEBUG|Error'
+rm -f "$CHECK"
 ```
 
 The command prints one log line. It starts with a timestamp and `USER_DEBUG`, and ends with the result:

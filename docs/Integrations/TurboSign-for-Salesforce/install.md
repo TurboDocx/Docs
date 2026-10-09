@@ -112,7 +112,7 @@ You need:
    cd turbosign-salesforce
    ```
 
-   To deploy a specific release, check out its tag, for example `git checkout v1.0.0`. Releases are listed on the [releases page](https://github.com/TurboDocx/turbosign-salesforce/releases).
+   To deploy a specific release, check out its tag (for example `git checkout v1.1.0`). Use 1.1.0 or later: earlier tags do not include the example setup the tests need or saving signed files back. Releases are listed on the [releases page](https://github.com/TurboDocx/turbosign-salesforce/releases).
 
 2. Log in to the org and give it an alias. These examples use `myorg`:
 

@@ -75,7 +75,7 @@ If you see a message telling you to check before sending again, don't click **Se
 
 Each signer gets an email with a link. Signers sign in order, so the second signer's email arrives after the first signer finishes.
 
-1. If your organization requires identity verification, the signer clicks **Send Code** and gets a six-digit code by email. See [one-time passcodes](/docs/TurboSign/how-to-configure-one-time-passcode).
+1. If your organization requires identity verification, the signer clicks **Send Code** and gets a six-digit code by email or text message, depending on your settings. See [one-time passcodes](/docs/TurboSign/how-to-configure-one-time-passcode).
 
    ![Verify your identity screen with the Send Code button highlighted](/img/turbosign-salesforce/50-signer-send-code.png)
 
