@@ -564,7 +564,7 @@ Your data security is important to us (and should be to you too!):
 ### How Your Data is Protected
 
 - **Secure Authentication**: We use OAuth 2.0 (fancy industry-standard security)
-- **Limited Permissions**: TurboDocx reads the fields you map. If you use [TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce), it also adds signed files to records and can update the one field you choose under **On Completion**
+- **Scoped Access**: The connection uses your Salesforce user's API access, so it can only reach what that user can reach. In practice TurboDocx reads the fields you map. If you use [TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce), it also adds signed files to records and can update the one field you choose under **On Completion**
 - **Encrypted Transmission**: All data transfers are encrypted (like sending a letter in a locked box)
 
 ### Best Practices

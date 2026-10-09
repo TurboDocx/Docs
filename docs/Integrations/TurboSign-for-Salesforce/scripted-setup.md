@@ -36,7 +36,7 @@ sf project generate --name turbosign-config
 cd turbosign-config
 ```
 
-This creates a `turbosign-config` folder with an `sfdx-project.json` file and an empty `force-app/main/default` folder. Keep the folder in source control if you want to deploy the same setup to several orgs.
+This creates a `turbosign-config` folder with an `sfdx-project.json` file and a `force-app/main/default` folder with Salesforce's standard starter files. Keep the folder in source control if you want to deploy the same setup to several orgs.
 
 ## Store the API key and Organization ID
 
