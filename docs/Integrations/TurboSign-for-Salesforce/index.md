@@ -39,7 +39,7 @@ Your TurboDocx API key never sits in a Salesforce field. It is stored encrypted 
 ## What you need
 
 - A Salesforce org where you are a System Administrator, on an edition that can run it. See [Which Salesforce orgs can use it](#which-salesforce-orgs-can-use-it).
-- A TurboDocx account with TurboSign, plus an **API key** and your **Organization ID**. See [Getting your credentials](/docs/TurboSign/API%20Signatures#getting-your-credentials).
+- A TurboDocx account with TurboSign, plus an **API key** and your **Organization ID**. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
 - A TurboDocx template. Every spot where someone signs must already be in the template as a text token, for example `{resident_sig}`.
 - The [Salesforce integration](/docs/Integrations/SalesForce) connected in TurboDocx. TurboDocx uses that connection to save the signed PDF back to the record.
 
@@ -66,7 +66,7 @@ Professional and Group editions block custom Apex unless it ships in a managed p
 
 | Method | Who can do it | Upgrades and removal |
 |---|---|---|
-| **Install link** (coming soon) | Any Salesforce admin in your org, by clicking a link | A new version installs over the old one. Uninstall in one click. |
+| **Install link** (your TurboDocx account team sends it) | Any Salesforce admin in your org, by clicking the link | A new version installs over the old one. Uninstall in one click. |
 | **Deploy from source** with the Salesforce CLI | A developer, using `sf project deploy start` | Manual. Deploying to production runs your org's Apex tests, which must reach 75% code coverage. |
 
 The method doesn't change which orgs can run TurboSign for Salesforce. It changes whether your own admin can install it, or whether someone has to deploy it for you. Either way, the person installing needs permission to install packages, which the **System Administrator** profile has.
