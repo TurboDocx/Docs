@@ -81,7 +81,7 @@ a field to change its settings, such as whether the signer must fill it in or th
 with. See [Adjust each field's settings](./Signature-Setups-on-Templates.md#step-4-adjust-each-fields-settings).
 
 :::tip Name, message and reminders
-Click **⋮ → Document Settings** to open **Signature Settings**. There you can set the **Document
+Click **⋮ → Signature Settings**. There you can set the **Document
 Name** signers see, the **Signature Email Description** (the message in their email), and
 **Reminders & expiration**. These are saved with the setup too.
 :::

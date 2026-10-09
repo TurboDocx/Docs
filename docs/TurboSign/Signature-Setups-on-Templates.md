@@ -41,7 +41,7 @@ Go to **Templates** and click your template. Its generate page opens. Where you 
 the template:
 
 - **The template has variables to fill in:** you see the **Template Variables** tab with a
-  **Signatures** tab next to it. Click **Signatures**. When you're done, **Generate and Sign**
+  **Signatures** tab next to it. Click **Signatures**. When you're done, **Generate And Sign**
   creates the document and then sends it for signature.
 - **The template has no variables** (every PDF template, and any Word or PowerPoint template
   without `{variables}`): the page opens on **Prepare & Sign**. Nothing needs to be generated, so
@@ -52,7 +52,7 @@ the template:
 1. Click **Add Recipient**.
 2. Enter the signer's **Name** and **Email**. Leave **Recipient Type** on **Needs to Sign**.
    To add someone who only gets a copy of the signed document, choose **Receives a Copy** instead.
-3. If you sign the document yourself, click **Include me** to fill in your own name and email.
+3. If you sign the document yourself, click **Include Me** to fill in your own name and email.
 4. If your organization uses identity verification, choose how this signer proves who they are:
    **No verification**, **Email one-time passcode**, or **SMS one-time passcode** (enter their
    mobile number too). SMS needs a plan that includes it. See
@@ -111,12 +111,15 @@ signer, and all three show the same company.
 When one field needs something different, give that field its own value:
 
 1. Click the field.
-2. Turn on **Use a different value for this field**.
-3. Type the value in **Value for this field**. It starts with the signer's value.
+2. Tick **Use a different value for this field**.
+3. Type the value in the field's **Default Value for …** box. It starts with the signer's value,
+   and it now changes only this field. The note under the box says so: *Only this field.*
+
+![Company field settings with Use a different value for this field ticked and its own value, Acme Holdings Inc., in the Default Value for Company box, highlighted](/img/turbosign/field-own-value/01-use-different-value.png)
 
 That field now keeps its own value. Changing the signer's value no longer changes it, and it
-keeps its value if you assign it to another signer. Turn the switch off to make the field follow
-the signer's value again.
+keeps its value if you assign it to another signer. Untick **Use a different value for this
+field** to make the field follow the signer's value again.
 
 **Text fields** always have their own value, in **Default Value for This Field**.
 
@@ -124,15 +127,14 @@ the signer's value again.
 
 :::note Setups and drafts saved before this switch existed
 If a saved setup or draft already had a field whose value differed from its signer's, that field
-opens with **Use a different value for this field** turned on, so it keeps exactly the value it
+opens with **Use a different value for this field** ticked, so it keeps exactly the value it
 had.
 :::
 
 ## Step 5: Set the email and reminders
 
-Click the **⋮** button in the top right corner, then **Document Settings**. The window that opens
-is called **Document Settings** for a Word or PowerPoint template and **Signature Settings** for a
-PDF template.
+Click the **⋮** button in the top right corner, then **Document Settings** (for a Word or
+PowerPoint template) or **Signature Settings** (for a PDF template).
 
 - **Deliverable Name** / **Document Name:** the name of the document. For a PDF template this is
   the name signers see, and it's saved with the setup.
@@ -148,6 +150,8 @@ signer.
 
 1. Click the **⋮** button in the top right corner.
 2. Click **Save signature setup to template**.
+
+![Menu on a Word template's generate page with Save signature setup to template highlighted](/img/signature_setups_on_templates/01_save_setup_word_template.png)
 
 You'll see **Signature setup saved to this template. It will be reused next time you send it for
 signing.**
@@ -165,7 +169,7 @@ for that send: the saved setup stays the same until someone saves again.
 
 From then on, every time anyone opens the template's generate page, the signers, fields, CC
 recipients, message and reminder settings are already filled in. Check them, fill in the
-template's variables if it has any, and click **Generate and Sign** or **Get It Signed**.
+template's variables if it has any, and click **Generate And Sign** or **Get It Signed**.
 
 You can also start from **TurboSign**:
 
@@ -187,6 +191,8 @@ Template** on the generate page, or open the template's menu in the **Templates*
   the left column. A green dot on **Signature setup** means the template has one.
 - **PDF templates:** the setup is shown right away, since there are no variables.
 
+![Template page showing the Signature setup with its signers, the Delete Setup and Edit Setup buttons highlighted, and the saved fields drawn on the PDF preview](/img/signature_setups_on_templates/02_setup_on_template_page.png)
+
 The page shows:
 
 - **Signers:** in signing order, with each signer's verification method and number of fields.
@@ -198,21 +204,25 @@ The page shows:
 - **Reminders & expiration:** **Organization defaults**, or **Changed for this template** with a
   summary.
 
+![Field cards grouped by signer, with a Company field card tagged Own value and showing its default value highlighted](/img/signature_setups_on_templates/03_field_cards_own_value.png)
+
 The saved fields are drawn on the document preview. Hover over a field card to highlight that
 field and scroll the preview to it.
 
 ## Change or remove the setup
 
-- **Change it:** on the template's page, click **Edit setup**. The generate page opens on its
+- **Change it:** on the template's page, click **Edit Setup**. The generate page opens on its
   **Signatures** (or **Prepare & Sign**) tab with the setup loaded. Make your changes, then click
   **⋮ → Save signature setup to template**.
-- **Remove it:** on the template's page, click **Delete setup** and confirm, or click
+- **Remove it:** on the template's page, click **Delete Setup** and confirm, or click
   **⋮ → Delete signature setup from template** on the generate page. Documents you already sent
   aren't affected. New sends start with no signers or fields.
 - **No setup yet?** The template's page shows **No signature setup yet**. Click
-  **Set up on the generate page** to create one.
+  **Set Up On The Generate Page** to create one.
 
-**Edit setup**, **Delete setup** and **Set up on the generate page** are shown to Administrators
+![Signature setup view of a Word template with no saved setup, showing No signature setup yet and the Set Up On The Generate Page button highlighted](/img/signature_setups_on_templates/04_no_setup_yet.png)
+
+**Edit Setup**, **Delete Setup** and **Set Up On The Generate Page** are shown to Administrators
 and Contributors only.
 
 ## Save a setup from TurboSign

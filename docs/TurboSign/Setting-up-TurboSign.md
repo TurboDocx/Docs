@@ -393,7 +393,7 @@ If you have already placed a field on the document, you don't need to hunt for t
 2. The right panel opens with a **"Default Value for [field type]"** box.
 3. **Type the value.** It saves as you type.
 
-![Field properties panel showing the Default Value box for a Full name field](/img/turbosign/SetDefaultValueOnField.png)
+![Company field settings with the Default Value for Company box and its note, Applies to every Company field for Jane Smith, highlighted](/img/turbosign/SetDefaultValueOnField.png)
 
 The panel tells you the scope right underneath the box — *"Applies to every [field type] field for [recipient]"* — because this is the **same** value the accordion holds. Change it here and every field of that type for that recipient changes too.
 
@@ -402,12 +402,14 @@ The panel tells you the scope right underneath the box — *"Applies to every [f
 Sometimes one field needs a different value from the rest, for example a second **Company** field for a parent company. To set it for that field only:
 
 1. **Click the field** on the document.
-2. **Turn on "Use a different value for this field".**
-3. **Type the value** in **Value for this field**. It starts with the recipient's value.
+2. **Tick "Use a different value for this field".**
+3. **Type the value** in the field's **Default Value for …** box. It starts with the recipient's value, and it now changes only this field. The note under the box says so: *Only this field.*
 
-That field now keeps its own value: changing the recipient's value no longer changes it, and it keeps its value if you assign it to another recipient. Turn the switch off to make the field follow the recipient's value again.
+![Company field settings with "Use a different value for this field" ticked and its own value, Acme Holdings Inc., in the Default Value for Company box, highlighted](/img/turbosign/field-own-value/01-use-different-value.png)
 
-If you open a document or saved setup where a field already had a value different from its recipient's, that field opens with the switch turned on, so its value stays exactly as it was.
+That field now keeps its own value: changing the recipient's value no longer changes it, and it keeps its value if you assign it to another recipient. Untick **"Use a different value for this field"** to make the field follow the recipient's value again.
+
+If you open a document or saved setup where a field already had a value different from its recipient's, that field opens with **"Use a different value for this field"** ticked, so its value stays exactly as it was.
 
 :::note Text fields work differently
 A **Text** field's default is its own — each Text field keeps a separate value, since a free-text box usually means something different in each spot. Its panel says **"Default Value for This Field"** rather than naming a recipient.
@@ -423,7 +425,7 @@ If the document needs a **specific** date instead (an effective date, a policy s
 2. In the right panel, under **Date Value**, choose **"Use a fixed date"**.
 3. **Pick the date.** It starts on today's date so you have something valid to adjust.
 
-![Date field panel with "Use a fixed date" selected and a date chosen](/img/turbosign/SetDateFieldValue.png)
+![Date field settings with the Date Value section highlighted, "Use a fixed date" selected and a date chosen](/img/turbosign/SetDateFieldValue.png)
 
 Choose **"Use the signing date"** to go back to the automatic behavior. The panel states which mode you're in underneath the control, so there's no guessing.
 
