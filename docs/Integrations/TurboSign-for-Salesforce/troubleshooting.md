@@ -66,6 +66,7 @@ TurboDocx saves the files through the Salesforce connection to the org you sent 
 TurboDocx retries a save after a temporary Salesforce error or an expired session, and a file that was already saved isn't saved twice. The outcome of each save is recorded in TurboDocx. The signing still completes, but the files can't be saved when:
 
 - no connection matches the org you sent from, for example because TurboDocx is connected to production and you sent from a sandbox,
+- the package is older than 1.1.0, which does not send the org ID (update the package),
 - the External Client App is missing the **openid** scope, so TurboDocx can't tell which org the connection belongs to,
 - the connection was revoked, for example after a password reset, or the TurboDocx user who made it was deactivated,
 - the connected Salesforce user can't see or edit the record, or
