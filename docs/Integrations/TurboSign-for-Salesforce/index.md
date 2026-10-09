@@ -34,7 +34,7 @@ Your TurboDocx API key never sits in a Salesforce field. It is stored encrypted 
 | Install the package in your Salesforce org | [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install) |
 | Set everything up in Salesforce Setup, click by click | [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup) |
 | Send a document and see what signers experience | [Send a document for signature](/docs/Integrations/turbosign-for-salesforce/send-and-sign) |
-| Script the setup with the Salesforce CLI | [Scripted setup for admins](/docs/Integrations/turbosign-for-salesforce/scripted-setup) |
+| Configure it from the Salesforce CLI after installing | [Scripted setup for admins](/docs/Integrations/turbosign-for-salesforce/scripted-setup) |
 | Fix an error message | [Troubleshooting](/docs/Integrations/turbosign-for-salesforce/troubleshooting) |
 
 ## What you need
@@ -42,7 +42,7 @@ Your TurboDocx API key never sits in a Salesforce field. It is stored encrypted 
 - A Salesforce org where you are a System Administrator, on an edition that can run it. See [Which Salesforce orgs can use it](#which-salesforce-orgs-can-use-it).
 - A TurboDocx account with TurboSign, plus an **API key** and your **Organization ID**. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
 - A TurboDocx template. Every spot where someone signs must already be in the template as a text token, for example `{sig}`.
-- The [Salesforce integration](/docs/Integrations/SalesForce) connected in TurboDocx. TurboDocx uses that connection to save the signed PDF back to the record.
+- The [Salesforce integration](/docs/Integrations/SalesForce) connected in TurboDocx. Saving signed files back to Salesforce depends on TurboDocx's Salesforce write-back feature, which is part of TurboDocx and uses that connection to save the signed PDF to the record.
 
 ## Which Salesforce orgs can use it
 
@@ -56,7 +56,7 @@ TurboSign for Salesforce includes custom Apex code, so it needs an edition that 
 | Unlimited | Yes |
 | Performance | Yes |
 | Developer Edition | Yes |
-| Sandboxes of the editions above | Yes |
+| Sandboxes of the editions above | Yes, for sending and signing. Saving signed files back to a sandbox isn't supported yet. |
 | Professional | No |
 | Group | No |
 | Starter, Pro Suite, Essentials | Not supported |
@@ -70,4 +70,4 @@ Professional and Group editions block custom Apex unless it ships in a managed p
 | **[One-click install link](/docs/Integrations/turbosign-for-salesforce/install-links)** | Any Salesforce admin in your org, by clicking the link | A new version installs over the old one. Uninstall in one click. |
 | **[Deploy from source](/docs/Integrations/turbosign-for-salesforce/install#deploy-from-source-with-the-salesforce-cli)** with the Salesforce CLI | A developer, using `sf project deploy start` | Manual. Deploying to production runs your org's Apex tests, which must reach 75% code coverage. |
 
-Step-by-step instructions for both are in [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install). The method doesn't change which orgs can run TurboSign for Salesforce. It changes whether your own admin can install it, or whether someone has to deploy it for you. Either way, the person installing needs permission to install packages, which the **System Administrator** profile has.
+There are two ways to install, and step-by-step instructions for both are in [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install). The method doesn't change which orgs can run TurboSign for Salesforce. It changes whether your own admin can install it, or whether someone has to deploy it for you. Either way, the person installing needs permission to install packages, which the **System Administrator** profile has.

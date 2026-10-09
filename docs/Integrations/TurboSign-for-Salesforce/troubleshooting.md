@@ -49,7 +49,7 @@ A required signer's email field is empty.
 
 The connection dropped after TurboDocx may already have sent the document.
 
-**Fix:** Before you click **Send** again, click **Refresh** in the **TurboSign Signatures** panel, or ask the signer whether they got an email. If the document went out, don't send it again. If you don't see the panel, ask your admin to add it.
+**Fix:** Before you click **Send** again, click **Refresh** in the **TurboSign Signatures** panel, or ask the signer whether they got an email. If the document went out, don't send it again, so the signers don't get two copies. If you don't see the panel, ask your admin to add it.
 
 ## A signing token shows as plain text in the signed document
 
@@ -59,9 +59,21 @@ A token in the template, such as `{guarantor_sig}`, isn't listed in the document
 
 ## The signed PDF never appears on the record
 
-TurboDocx saves the signed files through the Salesforce connection in your TurboDocx settings. If that connection expired or was revoked (for example after a password reset), the signing still completes, but the files can't be saved.
+TurboDocx saves the signed files only after every signer has signed, and it can take a minute after the last signature. A declined, voided, or expired document saves nothing.
 
-**Fix:** In TurboDocx, open **Settings**, then **Features and integrations**, and reconnect Salesforce. See [Salesforce Integration](/docs/Integrations/SalesForce).
+TurboDocx saves the files through the Salesforce connection in your TurboDocx settings. The signing still completes, but the files can't be saved when:
+
+- the connection expired or was revoked, for example after a password reset,
+- the connected Salesforce user can't see or edit the record,
+- the record was deleted,
+- the file is larger than about 35 MB, or
+- TurboDocx is connected to a different Salesforce org than the one you sent from, or you sent from a sandbox (saving to a sandbox isn't supported yet).
+
+**Fix:** In TurboDocx, open **Settings**, then **Features and integrations**, and reconnect Salesforce with a user who can edit the record, in the same org the package is installed in. See [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
+
+If the files arrived but the stage didn't change, check that the **On Completion** value is allowed for the record's record type, and that no validation rule blocks the change.
+
+A failed save is not retried automatically. After you fix the cause, contact TurboDocx support to resend the signed files.
 
 ## The Send for Signature button is missing
 

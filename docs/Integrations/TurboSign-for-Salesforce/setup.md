@@ -102,7 +102,7 @@ To change the URL:
 4. Click **Save**.
 
 :::caution Re-check the URL after every upgrade
-Installing a newer version of the package puts the packaged URL back on **TurboDocx API**. If you changed it, check it again after each upgrade.
+Installing a newer version of the package, or deploying it again from source, puts the packaged URL back on **TurboDocx API**. If you changed it, check it again after each upgrade or deploy.
 :::
 
 ## Step 3: Give people access
@@ -134,9 +134,16 @@ Requests run as whoever triggers them. If a Flow, a data load, or an integration
 
 ## Step 4: Connect Salesforce in TurboDocx
 
-TurboDocx saves the signed PDF back to Salesforce through the Salesforce connection in your TurboDocx settings. If you already use the TurboDocx Salesforce integration, skip this step.
+TurboDocx saves the signed PDF back to Salesforce through the Salesforce connection in your TurboDocx settings. If you don't have that connection yet, follow [Salesforce Integration, Steps 1 to 3](/docs/Integrations/SalesForce) to create the External Client App in Salesforce and connect it in TurboDocx. If you already use the TurboDocx Salesforce integration, check that it meets everything below.
 
-Follow [Salesforce Integration, Steps 1 to 3](/docs/Integrations/SalesForce) to create the External Client App in Salesforce and connect it in TurboDocx.
+- **Connect the same Salesforce org the package is installed in.** TurboDocx saves the files to the org it's connected to.
+- **Connect with the right Salesforce user.** That user must be able to create files and edit the records you send from, including the field you pick under **On Completion**. A dedicated integration user works best, so the connection doesn't break when a person leaves or changes their password.
+- **Connect one Salesforce org per TurboDocx organization.** If several people in your TurboDocx organization connect Salesforce, TurboDocx uses the most recently used connection.
+- **Check the app's scopes and refresh token policy.** The connection needs the **API** scope and the **refresh token** (offline access) scope, and a refresh token policy of **Refresh token is valid until revoked**. See [Configure API Settings](/docs/Integrations/SalesForce#configure-api-settings) and [Edit Policies](/docs/Integrations/SalesForce#edit-policies).
+
+:::note Sandboxes
+Sending and signing work from a sandbox, but saving signed files back to a sandbox isn't supported yet.
+:::
 
 ## Step 5: Build a document setup
 

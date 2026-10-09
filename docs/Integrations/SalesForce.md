@@ -268,7 +268,7 @@ After creating the app, you need to adjust its access policies and retrieve the 
 <br/>
 
 :::warning Handle With Care 🔐
-These consumer keys are like VIP backstage passes to your Salesforce show — they let TurboDocx read only the data you've approved, but you definitely don't want random people crashing your party! 🎉
+These consumer keys are like VIP backstage passes to your Salesforce show. They let TurboDocx access only the data you've approved, but you definitely don't want random people crashing your party! 🎉
 
 Keep them private, and if they ever get shared by accident, no worries — you can always generate fresh ones right here. It's like getting a new set of keys! 🔑
 :::
@@ -560,7 +560,7 @@ Your data security is important to us (and should be to you too!):
 ### How Your Data is Protected
 
 - **Secure Authentication**: We use OAuth 2.0 (fancy industry-standard security)
-- **Limited Permissions**: TurboDocx only gets permission to read your data, not change it
+- **Limited Permissions**: TurboDocx reads the fields you map. If you use [TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce), it also adds signed files to records and can update the one field you choose under **On Completion**
 - **Encrypted Transmission**: All data transfers are encrypted (like sending a letter in a locked box)
 
 ### Best Practices

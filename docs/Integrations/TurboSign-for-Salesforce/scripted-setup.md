@@ -27,6 +27,17 @@ This page is for admins and developers who prefer scripts over clicking through 
 sf org login web --alias myorg
 ```
 
+## Create a Salesforce DX project
+
+The `sf project retrieve` and `sf project deploy` commands below only work inside a Salesforce DX project folder. Create one for your TurboSign configuration and work from inside it for the rest of this page:
+
+```bash
+sf project generate --name turbosign-config
+cd turbosign-config
+```
+
+This creates a `turbosign-config` folder with an `sfdx-project.json` file and an empty `force-app/main/default` folder. Keep the folder in source control if you want to deploy the same setup to several orgs.
+
 ## Store the API key and Organization ID
 
 Salesforce stores principal parameters through the Connect REST API (`/named-credentials/credential`). They can't be deployed as metadata, which is by design: secrets never live in source control.
@@ -87,11 +98,7 @@ sf project retrieve start --metadata NamedCredential:TurboDocx_API --target-org 
 sf project deploy start --metadata NamedCredential:TurboDocx_API --target-org myorg
 ```
 
-Deploying the Named Credential does not touch the parameters you stored above.
-
-:::caution Upgrades reset a custom URL
-Installing a newer package version puts the packaged URL back on **TurboDocx_API**. If you changed it, deploy your Named Credential again after every upgrade, or check it in Setup.
-:::
+Deploying the Named Credential does not touch the parameters you stored above. A package upgrade puts the packaged URL back, so deploy your Named Credential again after each upgrade. See [Step 2 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-2-check-where-salesforce-sends-requests).
 
 ## Assign permission sets
 
@@ -157,7 +164,11 @@ One setup is made of four record types:
 
 `Config__c` holds the setup's API name (its DeveloperName) on its own, for example `Service_Agreement`, not `TurboSign_Config.Service_Agreement`. `Recipient_Role_Label__c` on a signing spot must match a signer's `Role_Label__c`.
 
-The sample below is a complete setup for a Service Agreement sent from an Opportunity. It has two data tokens, one signer, and two signing spots for that signer. The template holds `{sig}` and `{date}` as plain text, and the send fills them in, the same as a setup built in **TurboSign Setup**. The record names and labels follow the same rules the builder uses (see [Start from the builder](#start-from-the-builder)), so you can open the deployed setup in **TurboSign Setup**, save it, and get the same records back. Put the files under `force-app/main/default/customMetadata/` and replace `REPLACE_WITH_YOUR_TEMPLATE_ID` with your TurboDocx template's ID.
+The sample below is a complete setup for a Service Agreement sent from an Opportunity. It has two data tokens, one signer, and two signing spots for that signer. The template holds `{sig}` and `{date}` as plain text, and the send fills them in, the same as a setup built in **TurboSign Setup**. The record names and labels follow the same rules the builder uses (see [Start from the builder](#start-from-the-builder)), so you can open the deployed setup in **TurboSign Setup**, save it, and get the same records back. Put the files in a `customMetadata` folder in your project, and replace `REPLACE_WITH_YOUR_TEMPLATE_ID` with your TurboDocx template's ID. A new project doesn't have that folder yet, so create it first:
+
+```bash
+mkdir -p force-app/main/default/customMetadata
+```
 
 `{EffectiveDate}` comes from the Opportunity's **Close Date**. A date mapping needs nothing special: point `Source_Field_Path__c` at the date field and keep `Mime_Type__c` as `text`. With no `Date_Format__c` on the setup, the date is written in the sending user's Salesforce locale, for example `10/9/2026` for English (United States). To fix the style for everyone, add `Date_Format__c` to the setup record, for example `MMMM d, yyyy` for `October 9, 2026`.
 
@@ -270,7 +281,18 @@ sf project deploy start --source-dir force-app/main/default/customMetadata --tar
 
 The fastest way to get correct records is to build a setup once in **TurboSign Setup**, then retrieve it. Two things about the builder matter when you retrieve:
 
-- **How it names records.** The setup record's name is the **Config API Name**, for example `Service_Agreement`. Every other record is named `<Config API Name>_<token or signer role>`, with each character that isn't a letter or number turned into `_` and leading or trailing `_` dropped. So `{ClientName}` becomes `Service_Agreement_ClientName` and `{sig}` becomes `Service_Agreement_sig`. Names are cut at 40 characters, and `_1`, `_2` is added when two would collide. Signers you add in the builder get roles such as `signer_1`, so their records are named like `Service_Agreement_signer_1`.
+- **How it names records.** The setup record's name is the **Config API Name**, for example `Service_Agreement`. Every other record is named `<Config API Name>_<token or signer role>`, where the token or role is cleaned up like this:
+  1. Every character that isn't a letter or number becomes `_`, and runs of `_` (including underscores already in the token) collapse into one.
+  2. A `_` at the start or end is dropped.
+  3. If the result doesn't start with a letter, `X_` is put in front.
+
+  So `{ClientName}` becomes `Service_Agreement_ClientName`, `{Client Name}` becomes `Service_Agreement_Client_Name`, `{sig}` becomes `Service_Agreement_sig`, and `{2nd_sig}` becomes `Service_Agreement_X_2nd_sig`.
+
+  The full name is cut at 40 characters, and a `_` left at the end by the cut is dropped. So `{Primary Contact Mailing Address}` becomes `Service_Agreement_Primary_Contact_Mailin`.
+
+  If two records in the same setup would get the same name, the first keeps it and the next ones get `_1`, `_2`, and so on (shortened further if needed to stay within 40 characters). The builder names data tokens first, then signers, then signing spots. So `{Client Name}` and `{Client_Name}` in the same setup become `Service_Agreement_Client_Name` and `Service_Agreement_Client_Name_1`.
+
+  Signers you add in the builder get roles such as `signer_1`, so their records are named like `Service_Agreement_signer_1`. The numbers aren't always consecutive, so read the names from the org instead of guessing them.
 - **It never deletes.** When you remove a row and save, the builder sets that record's **Active** to false instead of deleting it. **Deactivate** does the same to the whole setup. Inactive records stay in the org and are ignored by sends.
 
 So list the exact names first, and keep only the active ones:

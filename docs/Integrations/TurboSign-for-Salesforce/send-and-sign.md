@@ -40,6 +40,10 @@ Under **Signers**, check each person's name and email. You can correct these too
 
 ## Step 3: Check the document
 
+:::note
+Requires TurboSign for Salesforce 1.1.0 or later.
+:::
+
 Click the **Document** tab to see the document as it will go out, with any corrections you made. TurboSign renders it the first time you open the tab, which can take a minute or two. Nothing is sent yet.
 
 ![Review screen with the Document tab highlighted](/img/turbosign-salesforce/44a-document-tab.png)
@@ -65,9 +69,7 @@ Click **Send**.
 
 You see **Sent for signature** only after TurboDocx has accepted the document and emailed the first signer. If something is wrong, you see the reason instead, for example `Required value {MonthlyRent} is empty on this record`. Fix the record (or ask your admin) and send again.
 
-:::caution If you see "Check before sending again"
-This means the connection dropped after TurboDocx may already have sent the document. Before you click **Send** again, click **Refresh** in the **TurboSign Signatures** panel, or ask the signer whether they got an email, so the signers don't get two copies.
-:::
+If you see a message telling you to check before sending again, don't click **Send** yet. See [what to do](/docs/Integrations/turbosign-for-salesforce/troubleshooting#check-before-sending-again).
 
 ## What signers see
 
@@ -99,7 +101,9 @@ Each signer gets an email with a link. Signers sign in order, so the second sign
 
 ## Where the signed copy goes
 
-When the last signer submits, TurboDocx saves two files to the record:
+TurboDocx saves files only after every signer has signed and the document is sealed. Saving can take a minute after the last signature. A declined, voided, or expired document saves nothing to the record.
+
+When the document is complete, TurboDocx saves two files to the record:
 
 - the signed PDF, named like the document, and
 - the **Audit Trail** PDF, which records who signed, when, and from where.

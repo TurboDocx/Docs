@@ -14,19 +14,22 @@ keywords:
 
 # Install TurboSign for Salesforce
 
-There are three ways to get TurboSign for Salesforce into your org. Most admins use the one-click install link.
+There are two ways to install TurboSign for Salesforce in your org. Most admins use the one-click install link.
 
 | Method | Best for | Who does it |
 |---|---|---|
 | [One-click install link](#install-with-a-one-click-link) | Most orgs | A Salesforce admin, in the browser |
 | [Deploy from source](#deploy-from-source-with-the-salesforce-cli) | Teams that review and deploy code themselves | A developer, with the Salesforce CLI |
-| [Scripted setup](#scripted-setup) | Setting up several orgs the same way after installing | An admin or developer, with the Salesforce CLI |
+
+After either one, you configure the app in Salesforce Setup. To configure it after installing from the Salesforce CLI instead, see [Scripted setup for admins](/docs/Integrations/turbosign-for-salesforce/scripted-setup).
+
+Saving signed files back to your Salesforce records depends on TurboDocx's Salesforce write-back feature, which is part of TurboDocx. You turn it on by connecting Salesforce in TurboDocx, in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
 
 ## Before you install
 
 - **You need the System Administrator profile** (or a user with permission to install packages) in the org.
 - **Your org must run custom Apex.** Enterprise, Unlimited, Performance, and Developer Edition orgs work, and so do their sandboxes. Professional and Group editions don't. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
-- **Try a sandbox first** if you have one. Install, set up, and send a test document there before production.
+- **Try a sandbox first** if you have one. Install, set up, and send a test document there before production. Sending and signing work from a sandbox, but saving the signed files back to a sandbox record isn't supported yet, so check that part in production.
 
 ## Install with a one-click link
 
@@ -75,9 +78,7 @@ The package is installed but not connected yet. Nobody can send until you finish
 
 You install a newer version over the old one. You don't uninstall first. You can't install an older version over a newer one.
 
-:::caution Re-check the Named Credential URL after every upgrade
-An upgrade puts the packaged URL back on the **TurboDocx API** Named Credential. If you changed it, set it again. See [Step 2 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-2-check-where-salesforce-sends-requests).
-:::
+An upgrade puts the packaged URL back on the **TurboDocx API** Named Credential, so if you changed it, set it again. See [Step 2 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-2-check-where-salesforce-sends-requests).
 
 After an upgrade, open **TurboSign Setup**. If your templates load in **TurboDocx Template**, the connection still works.
 
@@ -146,8 +147,8 @@ sf project deploy validate --source-dir force-app --source-dir unpackaged \
 
 Then follow the same [steps as after an install](#right-after-installing). The **Example Agreement** setup shows up in the document list on Opportunities. To hide it from reps, open **TurboSign Setup**, pick **Example Agreement** in **Edit an existing configuration**, and click **Deactivate**. Each later deploy from source switches it back on, because the tests need it, so deactivate it again after each deploy.
 
-To upgrade, pull the newer release and deploy again. Like a package upgrade, a deploy puts the source URL back on the **TurboDocx API** Named Credential, so check it afterwards. To remove a source deploy, your developer deletes the components with a destructive deploy. There is no one-click uninstall.
+To upgrade, pull the newer release and deploy again. Like a package upgrade, a deploy puts the source URL back on the **TurboDocx API** Named Credential, so [check it](/docs/Integrations/turbosign-for-salesforce/setup#step-2-check-where-salesforce-sends-requests) afterwards. To remove a source deploy, your developer deletes the components with a destructive deploy. There is no one-click uninstall.
 
-## Scripted setup
+## Configure from the command line
 
 After the app is installed, you can do the setup from the Salesforce CLI instead of clicking through Setup: store the credentials, assign permission sets, check the connection, and deploy document setups as metadata. This is useful when you set up several orgs (sandboxes, staging, production) the same way. See [Scripted setup for admins](/docs/Integrations/turbosign-for-salesforce/scripted-setup).
