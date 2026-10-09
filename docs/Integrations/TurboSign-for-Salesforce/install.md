@@ -36,22 +36,22 @@ The install link installs TurboSign for Salesforce as an unlocked package. It ta
 2. Log in to the org as a System Administrator, if Salesforce asks.
 3. Check that the install page shows **TurboSign for Salesforce** and the version you expect.
 
-   <!-- Screenshot: install-01-install-page.png, Salesforce package install page with the package name and version highlighted -->
+   ![Package install page with the app name and version number highlighted](/img/turbosign-salesforce/install-01-install-page.png)
 
 4. Select **Install for Admins Only**.
 
-   <!-- Screenshot: install-02-admins-only.png, install options with Install for Admins Only highlighted -->
+   ![Install options with Install for Admins Only highlighted](/img/turbosign-salesforce/install-02-admins-only.png)
 
    This gives the package's access only to admins for now. You give your reps access with the TurboSign permission sets in the next part, which is all they need.
 
 5. If the page asks you to confirm that you're installing a non-Salesforce application, check the box.
 6. Click **Install**.
 
-   <!-- Screenshot: install-03-install-button.png, Install button highlighted -->
+   ![Install button highlighted](/img/turbosign-salesforce/install-03-install-button.png)
 
-7. Wait for **Installation Complete**, then click **Done**. If Salesforce says the install is taking a while, you can leave the page. Salesforce emails you when it finishes.
+7. Wait for the install to finish, then click **Done**. If Salesforce says **This app is taking a long time to install**, click **Done**. The install keeps running, and Salesforce emails you when it finishes.
 
-   <!-- Screenshot: install-04-success.png, Installation Complete message with the Done button highlighted -->
+   ![Install page saying the app is taking a long time to install, with the Done button highlighted](/img/turbosign-salesforce/install-04-success.png)
 
 To confirm the install, open **Setup**, type `Installed Packages` in **Quick Find**, and click **Installed Packages**. **TurboSign for Salesforce** is in the list. See [Check which version is installed](/docs/Integrations/turbosign-for-salesforce/install-links#check-which-version-is-installed).
 

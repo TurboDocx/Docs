@@ -71,7 +71,7 @@ The package includes an External Credential called **TurboDocx API**. You add yo
 
 After you save, the **TurboDocxPrincipal** row shows **2** under **Authentication Parameters**. An **Authentication Status** of **Unknown** is normal for this kind of credential. Salesforce doesn't test it until the first request. The template list in [Step 5](#step-5-build-a-document-setup) is your first real check.
 
-<!-- Screenshot: 09-principal-saved.png, TurboDocxPrincipal row with Authentication Parameters 2 and Authentication Status Unknown highlighted -->
+![TurboDocxPrincipal row with Authentication Parameters 2 and Authentication Status Unknown highlighted](/img/turbosign-salesforce/09-principal-saved.png)
 
 :::caution Use these exact names
 The package looks for parameters named `ApiKey` and `OrgId`. If either is missing or spelled differently, every send fails with **Field TurboDocx_API.ApiKey does not exist** (or `OrgId`).
@@ -86,7 +86,7 @@ The **TurboDocx API** Named Credential holds the TurboDocx address. It is set to
 1. On the same External Credential page, scroll to **Related Named Credentials**.
 2. Read the **URL** in the **TurboDocx API** row. It should be `https://api.turbodocx.com`, or the address your TurboDocx team gave you. If it is, go on to Step 3.
 
-<!-- Screenshot: 09b-related-named-credential-url.png, Related Named Credentials list with the TurboDocx API URL highlighted -->
+![Related Named Credentials list with the TurboDocx API URL highlighted](/img/turbosign-salesforce/09b-related-named-credential-url.png)
 
 To change the URL:
 
@@ -221,8 +221,6 @@ The builder already lists every token in the template, including signing tokens 
 
 1. On the signing token's row, open **Kind**.
 
-   <!-- Screenshot to recapture: 31-add-token.png should show the Kind menu open on the existing sig token row -->
-
    ![Kind menu open on an existing token row](/img/turbosign-salesforce/31-add-token.png)
 
 2. Pick what goes there: **Signature**, **Initial**, **Date**, **Text**, and so on.
@@ -294,7 +292,7 @@ Opportunity record pages show their buttons in one of two ways. To find out whic
 
 If the properties pane on the right lists actions with an **Add Action** button, the page uses **Dynamic Actions**. If it offers **Upgrade Now** instead, the page still takes its buttons from the page layout, so use **page layout actions**.
 
-<!-- Screenshot: 48-highlights-panel-actions.png, Lightning App Builder with the Highlights Panel selected and its actions list highlighted -->
+![Lightning App Builder with the Highlights Panel selected and the Upgrade Now button highlighted](/img/turbosign-salesforce/48-highlights-panel-actions.png)
 
 **If the page uses Dynamic Actions**, stay in the Lightning App Builder:
 
@@ -304,7 +302,7 @@ If the properties pane on the right lists actions with an **Add Action** button,
 4. Click **Save**.
 5. If Salesforce asks, click **Activate** and assign the page.
 
-<!-- Screenshot: 49-add-action-send-for-signature.png, Add Action dialog with Send for Signature highlighted -->
+![Add Action dialog with Send for Signature highlighted](/img/turbosign-salesforce/49-add-action-send-for-signature.png)
 
 **If the page uses page layout actions:**
 

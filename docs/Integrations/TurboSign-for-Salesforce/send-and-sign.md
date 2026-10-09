@@ -24,7 +24,7 @@ This guide shows a rep how to send a document from an Opportunity, what each sig
 
 3. Under **Document**, pick the document you want to send.
 
-   ![Document list with a lease highlighted](/img/turbosign-salesforce/41-choose-document.png)
+   ![Document list with Service Agreement highlighted](/img/turbosign-salesforce/41-choose-document.png)
 
 4. Click **Review**. TurboSign fills the document from the record. This can take a few seconds for long documents.
 

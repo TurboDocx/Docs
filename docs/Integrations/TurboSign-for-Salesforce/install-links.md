@@ -41,6 +41,6 @@ Each new version is listed with its own install links on the [TurboSign for Sale
 
 1. Open **Setup**.
 2. In **Quick Find**, type `Installed Packages`, then click **Installed Packages**.
-3. Find **TurboSign for Salesforce** in the list. The **Version Number** column shows the version you have. Version 1.0.0 shows a number that starts with `1.0.0`.
+3. Find **TurboSign for Salesforce** in the list. The **Version Number** column shows the version you have. Version 1.0.0 shows as **1.0**.
 
-<!-- Screenshot: install-05-installed-packages.png, Installed Packages list with the TurboSign for Salesforce row and its Version Number highlighted -->
+![Installed Packages list with TurboSign for Salesforce and its Version Number highlighted](/img/turbosign-salesforce/install-05-installed-packages.png)
