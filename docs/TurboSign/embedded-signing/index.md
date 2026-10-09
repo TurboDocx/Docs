@@ -122,7 +122,7 @@ The [API reference](./reference.md) has every request and response field.
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. Use an **Administrator** or **Contributor** key. |
 | 403 | `EmbeddedSigningNotEnabled` | Ask an admin to turn on **Enable identity verification**. |
 | 403 | `OtpOverrideNotAllowed` | Your organization locked the passcode method. Omit the channel, or ask an admin to let senders change it. |
-| 409 | `RecipientNotInTurn`, `NotSignersTurn` | An earlier signer has not finished. Mint this signer's URL when it is their turn. |
+| 409 | `RecipientNotInTurn` | An earlier signer has not finished. Mint this signer's URL when it is their turn. |
 | 410 | `SigningUrlNotRedeemable` | A single-use URL was used or expired. Request a new one. |
 
 Every error code is in the [API reference](./reference.md#errors).
