@@ -42,7 +42,16 @@ Under **Signers**, check each person's name and email. You can correct these too
 
 Click the **Document** tab to see the document exactly as it will go out, with any corrections you made. It takes a few seconds to render. Nothing is sent yet.
 
+![Review screen with the Document tab highlighted](/img/turbosign-salesforce/44a-document-tab.png)
+
+The document opens right in the window, where you can scroll, zoom, and print it.
+
+![Document tab showing the filled-in Service Agreement](/img/turbosign-salesforce/44b-document-preview.png)
+
 - If you change a value after it renders, the tab shows **Your edits aren't in this preview yet**. Click **Update preview** to see the new version.
+
+  ![Document tab with the Update preview button highlighted](/img/turbosign-salesforce/44c-update-preview.png)
+
 - To view it full size, click **Open in a new tab**.
 - In the Salesforce mobile app, the tab asks you to open the record on a computer instead. You can still send from your phone.
 
