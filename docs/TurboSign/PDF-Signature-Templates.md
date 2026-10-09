@@ -19,7 +19,7 @@ after that, the signers and fields are already in place.
 
 A PDF template is **for signatures only**. It has no `{variables}` and can't be used to generate
 a document. To fill in text automatically, use a Word or PowerPoint template instead — see
-[How to Create a Template](/docs/TurboDocx%20Templating/How%20to%20Create%20a%20Template).
+[How to Create a Template](/docs/TurboDocx-Templating/How-to-Create-a-Template).
 
 ## Step 1: Upload your PDF
 
@@ -90,7 +90,7 @@ Anyone who can send documents can still use the saved setup.
 
 ![Template reopened with the saved signer already listed, highlighted](/img/pdf_signature_templates/12_setup_prefilled.png)
 
-To finish sending, follow [How to Get a Document Signed with TurboSign](/docs/TurboSign/Setting%20up%20TurboSign).
+To finish sending, follow [How to Get a Document Signed with TurboSign](/docs/TurboSign/Setting-up-TurboSign).
 
 ## Change or remove the saved setup
 
@@ -103,5 +103,5 @@ To finish sending, follow [How to Get a Document Signed with TurboSign](/docs/Tu
 
 ## Related
 
-- [How to Get a Document Signed with TurboSign](/docs/TurboSign/Setting%20up%20TurboSign)
-- [PDF signature templates in the API](/docs/TurboDocx%20Templating/API%20Templates#pdf-signature-templates)
+- [How to Get a Document Signed with TurboSign](/docs/TurboSign/Setting-up-TurboSign)
+- [PDF signature templates in the API](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)

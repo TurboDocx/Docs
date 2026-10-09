@@ -86,7 +86,7 @@ As soon as the upload finishes, TurboDocx creates the template, shows **Template
 :::
 
 :::note Uploading a PDF
-You can also upload a **PDF**. A PDF becomes a signature-only template: it has no variables and opens on **Prepare & Sign**, where you add signers and place signature fields. See [How to Use a PDF as a Signature Template](/docs/TurboSign/PDF%20Signature%20Templates).
+You can also upload a **PDF**. A PDF becomes a signature-only template: it has no variables and opens on **Prepare & Sign**, where you add signers and place signature fields. See [How to Use a PDF as a Signature Template](/docs/TurboSign/PDF-Signature-Templates).
 :::
 
 <br/><br/><br/>

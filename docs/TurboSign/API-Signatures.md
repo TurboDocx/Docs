@@ -215,7 +215,7 @@ User-Agent: TurboDocx API Client
 | ------------------- | -------------- | ------------- | ------------------------------------------ |
 | file                | File           | Conditional\* | PDF, DOCX, or PPTX file to upload          |
 | deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
-| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx%20Templating/API%20Templates#pdf-signature-templates)) |
+| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)) |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
