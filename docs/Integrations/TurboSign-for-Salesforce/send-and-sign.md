@@ -1,7 +1,7 @@
 ---
 title: Send a document for signature from Salesforce
 slug: /Integrations/turbosign-for-salesforce/send-and-sign
-sidebar_position: 3
+sidebar_position: 5
 description: How a sales rep sends a TurboDocx document for e-signature from a Salesforce Opportunity, what signers see, and where the signed PDF lands.
 keywords:
   - send for signature salesforce
@@ -26,7 +26,7 @@ This guide shows a rep how to send a document from an Opportunity, what each sig
 
    ![Document list with a lease highlighted](/img/turbosign-salesforce/41-choose-document.png)
 
-4. Click **Review**. TurboSign fills the document from the record and checks that every signing spot is in place. This can take a few seconds for long documents.
+4. Click **Review**. TurboSign fills the document from the record. This can take a few seconds for long documents.
 
    ![Send dialog with the Review button highlighted](/img/turbosign-salesforce/42-review.png)
 
@@ -40,7 +40,7 @@ Under **Signers**, check each person's name and email. You can correct these too
 
 ## Step 3: Check the document
 
-Click the **Document** tab to see the document exactly as it will go out, with any corrections you made. It takes a few seconds to render. Nothing is sent yet.
+Click the **Document** tab to see the document as it will go out, with any corrections you made. TurboSign renders it the first time you open the tab, which can take a minute or two. Nothing is sent yet.
 
 ![Review screen with the Document tab highlighted](/img/turbosign-salesforce/44a-document-tab.png)
 
@@ -48,7 +48,9 @@ The document opens right in the window, where you can scroll, zoom, and print it
 
 ![Document tab showing the filled-in Service Agreement](/img/turbosign-salesforce/44b-document-preview.png)
 
-- If you change a value after it renders, the tab shows **Your edits aren't in this preview yet**. Click **Update preview** to see the new version.
+- Signing fields of any kind (signature, initials, date, text, and so on) still show as their tokens, such as `{sig}` or `{date}`. Each signer gets a box in that spot when the document goes out.
+- The render also checks the signing spots. **Details** lists every spot, and after the render it says **All signature spots found in the document**. If a spot is missing, it names the token and the signer instead. Ask your admin to fix the template or the setup before you send.
+- If you change a value after it renders, the tab shows **Your edits aren't in this preview yet**. Click **Update preview** to see the new version. **Send** always uses your latest values, even if you didn't update the preview.
 
   ![Document tab with the Update preview button highlighted](/img/turbosign-salesforce/44c-update-preview.png)
 
@@ -64,7 +66,7 @@ Click **Send**.
 You see **Sent for signature** only after TurboDocx has accepted the document and emailed the first signer. If something is wrong, you see the reason instead, for example `Required value {MonthlyRent} is empty on this record`. Fix the record (or ask your admin) and send again.
 
 :::caution If you see "Check before sending again"
-This means the connection dropped after TurboDocx may already have sent the document. Before you click **Send** again, check your email or the **TurboSign Signatures** panel so the signers don't get two copies.
+This means the connection dropped after TurboDocx may already have sent the document. Before you click **Send** again, click **Refresh** in the **TurboSign Signatures** panel, or ask the signer whether they got an email, so the signers don't get two copies.
 :::
 
 ## What signers see
@@ -110,7 +112,7 @@ If your admin turned on **On Completion**, the record also moves forward, for ex
 
 ## Follow up on a sent document
 
-In the **TurboSign Signatures** panel on the record you can:
+The **TurboSign Signatures** panel on the record lists the documents sent from it. If you don't see the panel, ask your admin to add it. In the panel you can:
 
 - click **Refresh** to pull the latest status and see how many people have signed,
 - click **Remind** to email signers who haven't signed yet, or

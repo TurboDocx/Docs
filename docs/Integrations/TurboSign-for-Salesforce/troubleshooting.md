@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting TurboSign for Salesforce
 slug: /Integrations/turbosign-for-salesforce/troubleshooting
-sidebar_position: 5
+sidebar_position: 7
 description: Fixes for common TurboSign for Salesforce errors, from missing credentials to empty required values and signed documents that don't appear on the record.
 keywords:
   - turbosign salesforce error
@@ -49,7 +49,7 @@ A required signer's email field is empty.
 
 The connection dropped after TurboDocx may already have sent the document.
 
-**Fix:** Before you send again, check the signers' email and the **TurboSign Signatures** panel (click **Refresh**). If the document went out, don't send it again.
+**Fix:** Before you click **Send** again, click **Refresh** in the **TurboSign Signatures** panel, or ask the signer whether they got an email. If the document went out, don't send it again. If you don't see the panel, ask your admin to add it.
 
 ## A signing token shows as plain text in the signed document
 
@@ -63,11 +63,22 @@ TurboDocx saves the signed files through the Salesforce connection in your Turbo
 
 **Fix:** In TurboDocx, open **Settings**, then **Features and integrations**, and reconnect Salesforce. See [Salesforce Integration](/docs/Integrations/SalesForce).
 
-## The Send for Signature button or the signatures panel is missing
+## The Send for Signature button is missing
 
-They aren't on the page layout yet.
+The button hasn't been added to the Opportunity page your reps see. Where it goes depends on the page:
 
-**Fix:** Follow [Step 6 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-6-put-the-send-button-and-status-panel-on-the-page).
+- **Pages that use Dynamic Actions:** add **Send for Signature** to the **Highlights Panel** actions in the Lightning App Builder. Adding it to the page layout does nothing on these pages.
+- **Pages that use page layout actions:** add it to the **Salesforce Mobile and Lightning Experience Actions** section of every page layout your reps use.
+
+Also check that the rep has the **TurboSign User** permission set.
+
+**Fix:** Follow [Add the Send for Signature button](/docs/Integrations/turbosign-for-salesforce/setup#add-the-send-for-signature-button).
+
+## The TurboSign Signatures panel is missing
+
+The panel is optional, so it only appears after an admin adds it to the Opportunity page.
+
+**Fix:** Ask your admin to follow [Add the TurboSign Signatures panel](/docs/Integrations/turbosign-for-salesforce/setup#add-the-turbosign-signatures-panel-optional).
 
 ## Sends from a Flow don't go out
 

@@ -1,7 +1,7 @@
 ---
 title: Scripted setup for TurboSign for Salesforce
 slug: /Integrations/turbosign-for-salesforce/scripted-setup
-sidebar_position: 4
+sidebar_position: 6
 description: Set up TurboSign for Salesforce from the Salesforce CLI. Store the API key and Organization ID, assign permission sets, verify the connection, and deploy document setups as metadata.
 keywords:
   - turbosign salesforce cli
@@ -20,7 +20,7 @@ This page is for admins and developers who prefer scripts over clicking through 
 
 - Install the [Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli) (`sf`).
 - Make sure `node` is on your PATH (check with `node --version`). The credential step below uses [Node.js](https://nodejs.org) to build its request body.
-- Install the TurboSign for Salesforce package in the target org.
+- Install the TurboSign for Salesforce package in the target org. See [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install).
 - Log in to the org and give it an alias. These examples use `myorg`:
 
 ```bash
@@ -31,19 +31,25 @@ sf org login web --alias myorg
 
 Salesforce stores principal parameters through the Connect REST API (`/named-credentials/credential`). They can't be deployed as metadata, which is by design: secrets never live in source control.
 
-Type the key at a silent prompt so it never appears on screen or in your shell history:
+Type the key at a silent prompt so it never appears on screen or in your shell history. The script sends it straight to Salesforce without saving it anywhere:
 
 ```bash
-# Prompt for the values (the key is not echoed). Works in bash and zsh.
-printf 'TurboDocx API key: '; stty -echo; read -r TDX_KEY; stty echo; echo
-printf 'TurboDocx Organization ID: '; read -r TDX_ORG
+# Runs in a subshell, so the values and traps never stay in your shell.
+(
+  trap 'stty echo 2>/dev/null' EXIT    # always turn typing echo back on
+  trap 'exit 130' INT TERM             # Ctrl-C stops here; nothing is sent
 
-# Write the request body to a file only you can read. Node.js builds the
-# JSON, so quotes and backslashes in the values are escaped correctly.
-( umask 077
+  # Prompt for the values (the key is not echoed). Works in bash and zsh.
+  printf 'TurboDocx API key: '; stty -echo; read -r TDX_KEY; stty echo; echo
+  printf 'TurboDocx Organization ID: '; read -r TDX_ORG
+
+  # Node.js builds the JSON (so quotes and backslashes are escaped) and pipes it
+  # straight to the Salesforce CLI. "--body -" reads the body from that pipe,
+  # so the key is never written to a file or shown on a command line.
+  # First time: POST creates the parameters. To rotate the key later, use --method PUT.
   TDX_KEY="$TDX_KEY" TDX_ORG="$TDX_ORG" node -e '
     const { TDX_KEY, TDX_ORG } = process.env;
-    console.log(JSON.stringify({
+    process.stdout.write(JSON.stringify({
       externalCredential: "TurboDocx_API",
       principalName: "TurboDocxPrincipal",
       principalType: "NamedPrincipal",
@@ -52,15 +58,13 @@ printf 'TurboDocx Organization ID: '; read -r TDX_ORG
         ApiKey: { value: TDX_KEY, encrypted: true },
         OrgId: { value: TDX_ORG, encrypted: true }
       }
-    }, null, 2));' > ./credential.json )
-
-# First time: POST creates the parameters. To rotate the key later, run the same command with --method PUT.
-sf api request rest "/services/data/v62.0/named-credentials/credential" \
-  --method POST --body @credential.json --target-org myorg
-
-# Clean up
-rm -f ./credential.json; unset TDX_KEY TDX_ORG
+    }));' |
+    sf api request rest "/services/data/v62.0/named-credentials/credential" \
+      --method POST --body - --target-org myorg
+)
 ```
+
+If you press Ctrl-C at a prompt, the script stops, turns typing echo back on, and sends nothing. If `sf` reports an error, nothing was saved, so fix the cause (for example log in again) and run the script again.
 
 Check that both parameters exist. Salesforce returns the names but never the values:
 
@@ -85,7 +89,13 @@ sf project deploy start --metadata NamedCredential:TurboDocx_API --target-org my
 
 Deploying the Named Credential does not touch the parameters you stored above.
 
+:::caution Upgrades reset a custom URL
+Installing a newer package version puts the packaged URL back on **TurboDocx_API**. If you changed it, deploy your Named Credential again after every upgrade, or check it in Setup.
+:::
+
 ## Assign permission sets
+
+`--on-behalf-of` takes Salesforce **usernames**, not email addresses. They often look alike, but in a sandbox the username usually ends with the sandbox name, for example `rep1@yourcompany.com.uat`. Find a user's username in **Setup**, **Users**.
 
 ```bash
 # Reps (and any integration or automation user that sends, reminds, or voids)
@@ -94,6 +104,9 @@ sf org assign permset --name TurboSign_User \
 
 # Admins who build document setups
 sf org assign permset --name TurboSign_Admin --on-behalf-of admin@yourcompany.com --target-org myorg
+
+# The same in a sandbox called "uat": the usernames carry the sandbox suffix
+sf org assign permset --name TurboSign_User --on-behalf-of rep1@yourcompany.com.uat --target-org myuat
 ```
 
 ## Verify the connection
@@ -144,7 +157,9 @@ One setup is made of four record types:
 
 `Config__c` holds the setup's API name (its DeveloperName) on its own, for example `Service_Agreement`, not `TurboSign_Config.Service_Agreement`. `Recipient_Role_Label__c` on a signing spot must match a signer's `Role_Label__c`.
 
-The sample below is a complete setup for a Service Agreement sent from an Opportunity. It has two data tokens, one signer, and two signing spots for that signer. The template holds `{sig}` and `{date}` as plain text, and the send fills them in, the same as a setup built in **TurboSign Setup**. Put the files under `force-app/main/default/customMetadata/` and replace `YOUR_TEMPLATE_ID` with your TurboDocx template's ID.
+The sample below is a complete setup for a Service Agreement sent from an Opportunity. It has two data tokens, one signer, and two signing spots for that signer. The template holds `{sig}` and `{date}` as plain text, and the send fills them in, the same as a setup built in **TurboSign Setup**. The record names and labels follow the same rules the builder uses (see [Start from the builder](#start-from-the-builder)), so you can open the deployed setup in **TurboSign Setup**, save it, and get the same records back. Put the files under `force-app/main/default/customMetadata/` and replace `REPLACE_WITH_YOUR_TEMPLATE_ID` with your TurboDocx template's ID.
+
+`{EffectiveDate}` comes from the Opportunity's **Close Date**. A date mapping needs nothing special: point `Source_Field_Path__c` at the date field and keep `Mime_Type__c` as `text`. With no `Date_Format__c` on the setup, the date is written in the sending user's Salesforce locale, for example `10/9/2026` for English (United States). To fix the style for everyone, add `Date_Format__c` to the setup record, for example `MMMM d, yyyy` for `October 9, 2026`.
 
 The sample sends to the Opportunity's owner, so you can test the full flow on yourself. For real sends, point the signer's name and email paths at a field that leads to the customer, for example a custom Contact lookup on Opportunity, as `Contact__r.Name` and `Contact__r.Email`.
 
@@ -157,7 +172,7 @@ The sample sends to the Opportunity's owner, so you can test the full flow on yo
     <protected>false</protected>
     <values><field>Source_SObject__c</field><value xsi:type="xsd:string">Opportunity</value></values>
     <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
-    <values><field>Deliverable_Template_Id__c</field><value xsi:type="xsd:string">YOUR_TEMPLATE_ID</value></values>
+    <values><field>Deliverable_Template_Id__c</field><value xsi:type="xsd:string">REPLACE_WITH_YOUR_TEMPLATE_ID</value></values>
     <values><field>Document_Name_Template__c</field><value xsi:type="xsd:string">Service Agreement</value></values>
 </CustomMetadata>
 ```
@@ -167,11 +182,13 @@ The sample sends to the Opportunity's owner, so you can test the full flow on yo
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>Client Name</label>
+    <label>{ClientName}</label>
     <protected>false</protected>
     <values><field>Config__c</field><value xsi:type="xsd:string">Service_Agreement</value></values>
+    <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
     <values><field>Placeholder__c</field><value xsi:type="xsd:string">{ClientName}</value></values>
     <values><field>Source_Field_Path__c</field><value xsi:type="xsd:string">Account.Name</value></values>
+    <values><field>Required__c</field><value xsi:type="xsd:boolean">true</value></values>
     <values><field>Mime_Type__c</field><value xsi:type="xsd:string">text</value></values>
 </CustomMetadata>
 ```
@@ -181,11 +198,13 @@ The sample sends to the Opportunity's owner, so you can test the full flow on yo
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>Effective Date</label>
+    <label>{EffectiveDate}</label>
     <protected>false</protected>
     <values><field>Config__c</field><value xsi:type="xsd:string">Service_Agreement</value></values>
+    <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
     <values><field>Placeholder__c</field><value xsi:type="xsd:string">{EffectiveDate}</value></values>
-    <values><field>Default_Value__c</field><value xsi:type="xsd:string">January 1, 2027</value></values>
+    <values><field>Source_Field_Path__c</field><value xsi:type="xsd:string">CloseDate</value></values>
+    <values><field>Required__c</field><value xsi:type="xsd:boolean">true</value></values>
     <values><field>Mime_Type__c</field><value xsi:type="xsd:string">text</value></values>
 </CustomMetadata>
 ```
@@ -198,6 +217,7 @@ The sample sends to the Opportunity's owner, so you can test the full flow on yo
     <label>Signer</label>
     <protected>false</protected>
     <values><field>Config__c</field><value xsi:type="xsd:string">Service_Agreement</value></values>
+    <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
     <values><field>Role_Label__c</field><value xsi:type="xsd:string">Signer</value></values>
     <values><field>Name_Field_Path__c</field><value xsi:type="xsd:string">Owner.Name</value></values>
     <values><field>Email_Field_Path__c</field><value xsi:type="xsd:string">Owner.Email</value></values>
@@ -206,14 +226,15 @@ The sample sends to the Opportunity's owner, so you can test the full flow on yo
 </CustomMetadata>
 ```
 
-```xml title="TurboSign_Field_Rule.Service_Agreement_SignerSig.md-meta.xml"
+```xml title="TurboSign_Field_Rule.Service_Agreement_sig.md-meta.xml"
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>Signer Signature</label>
+    <label>{sig}</label>
     <protected>false</protected>
     <values><field>Config__c</field><value xsi:type="xsd:string">Service_Agreement</value></values>
+    <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
     <values><field>Anchor__c</field><value xsi:type="xsd:string">{sig}</value></values>
     <values><field>Field_Type__c</field><value xsi:type="xsd:string">signature</value></values>
     <values><field>Recipient_Role_Label__c</field><value xsi:type="xsd:string">Signer</value></values>
@@ -222,14 +243,15 @@ The sample sends to the Opportunity's owner, so you can test the full flow on yo
 </CustomMetadata>
 ```
 
-```xml title="TurboSign_Field_Rule.Service_Agreement_SignerDate.md-meta.xml"
+```xml title="TurboSign_Field_Rule.Service_Agreement_date.md-meta.xml"
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <label>Signer Date</label>
+    <label>{date}</label>
     <protected>false</protected>
     <values><field>Config__c</field><value xsi:type="xsd:string">Service_Agreement</value></values>
+    <values><field>Active__c</field><value xsi:type="xsd:boolean">true</value></values>
     <values><field>Anchor__c</field><value xsi:type="xsd:string">{date}</value></values>
     <values><field>Field_Type__c</field><value xsi:type="xsd:string">date</value></values>
     <values><field>Recipient_Role_Label__c</field><value xsi:type="xsd:string">Signer</value></values>
@@ -244,11 +266,33 @@ Deploy them:
 sf project deploy start --source-dir force-app/main/default/customMetadata --target-org myorg
 ```
 
-:::tip Start from the builder
-The fastest way to get correct records is to build a setup once in **TurboSign Setup**, then retrieve it:
-`sf project retrieve start --metadata "CustomMetadata:TurboSign_Config.Service_Agreement" --target-org myorg`
-(repeat for the mapping, recipient, and field records, or retrieve `CustomMetadata` by name pattern from your IDE).
-:::
+### Start from the builder
+
+The fastest way to get correct records is to build a setup once in **TurboSign Setup**, then retrieve it. Two things about the builder matter when you retrieve:
+
+- **How it names records.** The setup record's name is the **Config API Name**, for example `Service_Agreement`. Every other record is named `<Config API Name>_<token or signer role>`, with each character that isn't a letter or number turned into `_` and leading or trailing `_` dropped. So `{ClientName}` becomes `Service_Agreement_ClientName` and `{sig}` becomes `Service_Agreement_sig`. Names are cut at 40 characters, and `_1`, `_2` is added when two would collide. Signers you add in the builder get roles such as `signer_1`, so their records are named like `Service_Agreement_signer_1`.
+- **It never deletes.** When you remove a row and save, the builder sets that record's **Active** to false instead of deleting it. **Deactivate** does the same to the whole setup. Inactive records stay in the org and are ignored by sends.
+
+So list the exact names first, and keep only the active ones:
+
+```bash
+for type in TurboSign_Variable_Mapping__mdt TurboSign_Recipient_Rule__mdt TurboSign_Field_Rule__mdt; do
+  sf data query --target-org myorg --query \
+    "SELECT DeveloperName, Active__c FROM $type WHERE Config__r.DeveloperName = 'Service_Agreement'"
+done
+```
+
+Then retrieve the setup and each active record by its exact name. Don't use a wildcard such as `Service_Agreement_*`: it also matches another setup whose name starts the same way, such as `Service_Agreement_V2`, and it brings back the inactive rows.
+
+```bash
+sf project retrieve start --target-org myorg \
+  --metadata "CustomMetadata:TurboSign_Config.Service_Agreement" \
+  --metadata "CustomMetadata:TurboSign_Variable_Mapping.Service_Agreement_ClientName" \
+  --metadata "CustomMetadata:TurboSign_Field_Rule.Service_Agreement_sig"
+# ...one --metadata line for every active record the query listed
+```
+
+If you deploy retrieved files to another org, leave out any file whose `Active__c` is `false`.
 
 ## Send from a Flow
 
