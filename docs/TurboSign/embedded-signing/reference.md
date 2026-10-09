@@ -244,7 +244,7 @@ url = link["url"]
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. |
 | 403 | `EmbeddedSigningNotEnabled`, `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed` | The organization has not turned on what the recipient uses. |
 | 404 | `RecipientNotFound` | No recipient matches the selector. |
-| 409 | `RecipientNotInTurn`, `NotSignersTurn`, `RecipientAlreadySigned`, `DocumentNotSignable` | Not this signer's turn, already signed, or the document can't be signed. |
+| 409 | `RecipientNotInTurn`, `RecipientAlreadySigned`, `DocumentNotSignable` | Not this signer's turn, already signed, or the document can't be signed. |
 | 410 | `SigningUrlNotRedeemable` | A single-use URL was opened already or expired. Request a new one. |
 
 :::caution Deprecated: GET signing-link
@@ -532,7 +532,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 404 | `RecipientNotFound` | No recipient on the document matches the selector. |
 | 409 | `SmsProviderNotConfigured` | The recipient resolves to SMS but the organization has no SMS provider saved. |
 | 409 | `RecipientRequiresSingleUseUrl` | The deprecated `signing-link` endpoint was called for an `external_idv` or `override` recipient. Use `createSigningUrl`. |
-| 409 | `DocumentNotSignable`, `RecipientAlreadySigned`, `RecipientNotInTurn`, `NotSignersTurn` | The document or recipient is not in a signable state. |
+| 409 | `DocumentNotSignable`, `RecipientAlreadySigned`, `RecipientNotInTurn` | The document or recipient is not in a signable state. |
 | 410 | `SigningUrlNotRedeemable` | A single-use signing URL was already used or has expired. Request a new one. |
 | 423 | `locked` | The signer entered 20 wrong codes. See [Passcode attempts and lockout](#passcode-attempts-and-lockout). |
 
