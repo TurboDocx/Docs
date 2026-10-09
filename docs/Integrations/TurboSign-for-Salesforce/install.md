@@ -29,7 +29,7 @@ Saving signed files back to your Salesforce records depends on TurboDocx's Sales
 
 - **You need the System Administrator profile** (or a user with permission to install packages) in the org.
 - **Your org must run custom Apex.** Enterprise, Unlimited, Performance, and Developer Edition orgs work, and so do their sandboxes. Professional and Group editions don't. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
-- **Try a sandbox first** if you have one. Install, set up, and send a test document there before production. To see the signed files saved back to the sandbox record, connect that sandbox in TurboDocx, as described in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
+- **Try a sandbox first** if you have one. Install, set up, and send a test document there before production. To see the signed files saved back to the sandbox record, install version 1.1.0 or later and connect that sandbox in TurboDocx, as described in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
 
 ## Install with a one-click link
 
@@ -60,13 +60,14 @@ To confirm the install, open **Setup**, type `Installed Packages` in **Quick Fin
 
 ### Right after installing
 
-The package is installed but not connected yet. Nobody can send until you finish these steps in [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup):
+The package is installed but not connected yet. Finish these steps in [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup):
 
 1. [Store your API key and Organization ID](/docs/Integrations/turbosign-for-salesforce/setup#step-1-store-your-api-key-and-organization-id) in the **TurboDocx API** External Credential.
 2. [Check the Named Credential URL](/docs/Integrations/turbosign-for-salesforce/setup#step-2-check-where-salesforce-sends-requests).
 3. [Assign the permission sets](/docs/Integrations/turbosign-for-salesforce/setup#step-3-give-people-access): **TurboSign Admin** to admins, **TurboSign User** to reps and to any automation user.
-4. [Build a document setup](/docs/Integrations/turbosign-for-salesforce/setup#step-5-build-a-document-setup).
-5. [Add the Send for Signature button](/docs/Integrations/turbosign-for-salesforce/setup#add-the-send-for-signature-button) to your Opportunity pages.
+4. [Connect Salesforce in TurboDocx](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx) so signed files are saved back to your records (version 1.1.0 or later). The connection needs the **api**, **refresh_token**, and **openid** scopes.
+5. [Build a document setup](/docs/Integrations/turbosign-for-salesforce/setup#step-5-build-a-document-setup).
+6. [Add the Send for Signature button](/docs/Integrations/turbosign-for-salesforce/setup#add-the-send-for-signature-button) to your Opportunity pages.
 
 ### Upgrade to a newer version
 

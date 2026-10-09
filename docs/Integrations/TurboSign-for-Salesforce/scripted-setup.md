@@ -75,6 +75,8 @@ Type the key at a silent prompt so it never appears on screen or in your shell h
 )
 ```
 
+If the `ApiKey` and `OrgId` parameters already exist, for example because you added them in the Setup UI, POST fails. Use the PUT form instead: run the same script with `--method PUT` in place of `--method POST`, the same as when you rotate the key.
+
 If you press Ctrl-C at a prompt, the script stops, turns typing echo back on, and sends nothing. If `sf` reports an error, nothing was saved, so fix the cause (for example log in again) and run the script again.
 
 Check that both parameters exist. Salesforce returns the names but never the values:
@@ -315,6 +317,39 @@ sf project retrieve start --target-org myorg \
 ```
 
 If you deploy retrieved files to another org, leave out any file whose `Active__c` is `false`.
+
+### Bring back a deactivated setup
+
+**Deactivate** switches off the setup and every record in it, and **TurboSign Setup** can't switch them back on. The reliable way to bring a setup back is to build it again in the builder. From the CLI, you can switch the records back on instead. Here the list and retrieve steps include the inactive rows, so this is the one case where you don't keep only the active ones.
+
+1. Find the setup's exact name among the switched-off setups:
+
+   ```bash
+   sf data query --target-org myorg --query \
+     "SELECT DeveloperName, MasterLabel FROM TurboSign_Config__mdt WHERE Active__c = false"
+   ```
+
+2. List every record of that setup, including the inactive ones, with the same loop as above (it doesn't filter on `Active__c`).
+3. Retrieve the setup and the records you want back by their exact names. Don't use a wildcard. A record you removed in the builder before the setup was deactivated is inactive too, so leave out the ones you don't want back.
+
+   ```bash
+   sf project retrieve start --target-org myorg \
+     --metadata "CustomMetadata:TurboSign_Config.Service_Agreement" \
+     --metadata "CustomMetadata:TurboSign_Variable_Mapping.Service_Agreement_ClientName" \
+     --metadata "CustomMetadata:TurboSign_Field_Rule.Service_Agreement_sig"
+   # ...one --metadata line for every record you want back
+   ```
+
+4. In each retrieved file, change the `Active__c` value from `false` to `true`.
+5. Deploy the files you changed:
+
+   ```bash
+   sf project deploy start --target-org myorg --source-dir force-app/main/default/customMetadata
+   ```
+
+   If that folder holds files for other setups, deploy only this setup's files with one `--metadata` line each instead.
+
+The setup shows up again in **Edit an existing configuration** and in the document list reps see.
 
 ## Send from a Flow
 

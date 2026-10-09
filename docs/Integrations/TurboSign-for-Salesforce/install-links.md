@@ -26,7 +26,7 @@ These links install the TurboSign for Salesforce package that TurboDocx publishe
 The two links install the same package. Production and Developer Edition orgs sign in at `login.salesforce.com`, and sandboxes sign in at `test.salesforce.com`, so each link opens the right login page.
 
 :::tip Install in a sandbox first
-If you have a sandbox, install there first, finish the [setup](/docs/Integrations/turbosign-for-salesforce/setup), and send a test document before you install in production. To have the signed PDF saved back to the sandbox record, connect that sandbox in TurboDocx, as described in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
+If you have a sandbox, install there first, finish the [setup](/docs/Integrations/turbosign-for-salesforce/setup), and send a test document before you install in production. To have the signed PDF saved back to the sandbox record, install version 1.1.0 or later and connect that sandbox in TurboDocx, as described in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
 :::
 
 :::note Logged in to a different org?
@@ -44,3 +44,5 @@ Newer versions add features, and each one is listed with its own install links a
 3. Find **TurboSign for Salesforce** in the list. The **Version Number** column shows the version you have. Version 1.0.0 shows as **1.0**.
 
 ![Installed Packages list with TurboSign for Salesforce and its Version Number highlighted](/img/turbosign-salesforce/install-05-installed-packages.png)
+
+Version 1.0 sends documents and collects signatures, but does not save signed files back to your Salesforce records. Saving signed files back, and the **Document** tab on the review screen, need version 1.1.0 or later. Newer versions are listed on the [releases page](https://github.com/TurboDocx/turbosign-salesforce/releases).

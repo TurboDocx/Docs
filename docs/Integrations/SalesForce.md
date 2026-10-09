@@ -321,6 +321,10 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 
 <br/>
 
+:::note Connect a sandbox
+The dialog has an **Environment** list, set to **Production** by default. To connect a Salesforce sandbox, choose **Sandbox** there before you save, so the connection signs in at `test.salesforce.com`. If your sandbox uses a My Domain login, click **Use Custom Domain** on the Salesforce login page and enter it.
+:::
+
 6. **Enter your Consumer Key and Consumer Secret**
    - Copy the Consumer Key from your Salesforce connected app page and paste it here
    - Copy the Consumer Secret from your Salesforce connected app page and paste it in the Consumer Secret field

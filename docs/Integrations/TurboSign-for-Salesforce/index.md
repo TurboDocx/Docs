@@ -32,6 +32,7 @@ Your TurboDocx API key never sits in a Salesforce field. It is stored encrypted 
 | If you want to… | Read |
 |---|---|
 | Install the package in your Salesforce org | [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install) |
+| Find the install link for your org type, or check your installed version | [One-click install links](/docs/Integrations/turbosign-for-salesforce/install-links) |
 | Set everything up in Salesforce Setup, click by click | [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup) |
 | Send a document and see what signers experience | [Send a document for signature](/docs/Integrations/turbosign-for-salesforce/send-and-sign) |
 | Configure it from the Salesforce CLI after installing | [Scripted setup for admins](/docs/Integrations/turbosign-for-salesforce/scripted-setup) |

@@ -143,7 +143,7 @@ TurboDocx saves the signed PDF back to Salesforce through the Salesforce connect
 - **Reconnecting is safe.** Your current connection keeps working until the new one succeeds.
 
 :::note Sandboxes
-Saving signed files back to a sandbox works. Connect that sandbox in TurboDocx: in the Salesforce settings, choose **Sandbox** as the environment, so the connection signs in at `test.salesforce.com`. If your sandbox uses a My Domain login, click **Use Custom Domain** on that page and enter it.
+Saving signed files back to a sandbox works. Connect that sandbox in TurboDocx: in the Salesforce settings dialog, choose **Sandbox** in the **Environment** list, so the connection signs in at `test.salesforce.com`. If your sandbox uses a My Domain login, click **Use Custom Domain** on the Salesforce login page and enter it.
 :::
 
 ## Step 5: Build a document setup
@@ -286,7 +286,11 @@ When you remove a token or a signer and save, the builder switches that row off 
 
 To start a new setup from an existing one, load it and click **Duplicate**. Type a **New API name for the copy**, then click **Create copy**.
 
-To stop reps from using a setup, load it and click **Deactivate**, then click **Deactivate** again to confirm. The setup disappears from the document list reps see and from **Edit an existing configuration**. Its records stay in your org, switched off. To bring it back, an admin redeploys its records with **Active** set to true (see [Scripted setup](/docs/Integrations/turbosign-for-salesforce/scripted-setup#deploy-document-setups-as-metadata)).
+To stop reps from using a setup, load it and click **Deactivate**, then click **Deactivate** again to confirm. The setup disappears from the document list reps see and from **Edit an existing configuration**. Its records stay in your org, switched off, and **TurboSign Setup** can't switch them back on.
+
+If you may need the setup again, click **Duplicate** before you deactivate it. The copy is active, so reps see it in the document list too. This works best when you're replacing a setup with a changed copy.
+
+To bring back a setup you already deactivated, the reliable way is to build it again in **TurboSign Setup**. You can reuse its API name: saving overwrites the switched-off records, and rows you don't add again stay off. Admins who use the Salesforce CLI can instead switch its records back on, as described in [Bring back a deactivated setup](/docs/Integrations/turbosign-for-salesforce/scripted-setup#bring-back-a-deactivated-setup).
 
 ## Step 6: Put the Send button and status panel on the page
 
