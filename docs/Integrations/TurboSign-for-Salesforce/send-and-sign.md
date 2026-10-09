@@ -32,13 +32,21 @@ This guide shows a rep how to send a document from an Opportunity, what each sig
 
 ## Step 2: Check the values and signers
 
-The review screen lists every value going into the document, with where it came from. You can correct any value here. Your change only affects this send, not the record.
+The review screen opens on the **Details** tab. It lists every value going into the document, with where it came from. You can correct any value here. Your change only affects this send, not the record.
 
 Under **Signers**, check each person's name and email. You can correct these too.
 
 ![Review screen with the Signers section highlighted](/img/turbosign-salesforce/43-review-signers.png)
 
-## Step 3: Send
+## Step 3: Check the document
+
+Click the **Document** tab to see the document exactly as it will go out, with any corrections you made. It takes a few seconds to render. Nothing is sent yet.
+
+- If you change a value after it renders, the tab shows **Your edits aren't in this preview yet**. Click **Update preview** to see the new version.
+- To view it full size, click **Open in a new tab**.
+- In the Salesforce mobile app, the tab asks you to open the record on a computer instead. You can still send from your phone.
+
+## Step 4: Send
 
 Click **Send**.
 

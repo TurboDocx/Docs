@@ -21,7 +21,7 @@ TurboSign for Salesforce lets your team send a TurboDocx document for e-signatur
 ## How it works
 
 1. An admin builds a **document setup** once: which TurboDocx template to use, which Salesforce fields fill it, who signs, and where each person signs.
-2. A sales rep opens a record, clicks **Send for Signature**, reviews the filled-in values, and clicks **Send**.
+2. A sales rep opens a record, clicks **Send for Signature**, reviews the filled-in values and the finished document, and clicks **Send**.
 3. Each signer gets an email, verifies their identity if your organization requires it, and signs in the browser.
 4. When the last signer finishes, TurboDocx writes the signed PDF and the audit trail to the record's files and updates the stage you chose.
 
