@@ -49,7 +49,11 @@ Every embedded signing integration makes the same four moves:
 
 ## Choose how signers verify
 
-Every embedded signer needs a verification method, unless you use the sender override while testing. Your app shows the signing page itself and TurboSign emails no link, so a check is what ties the person at the screen to the signer of record.
+Give every embedded signer a verification method. Your app shows the signing page itself and TurboSign emails no link, so a check is what ties the person at the screen to the signer of record.
+
+:::caution TurboSign does not enforce this
+If you set no verification on a signer and your organization verifies only when requested, TurboSign still issues a reusable signing link, and anyone holding it can sign. If your organization verifies on every signature request, the signer gets your organization's default method instead. See [A recipient with no verification is unprotected](../identity-verification/index.md#signers-in-your-own-app-embedded-signing).
+:::
 
 | Method | Who verifies the signer | Signing URL |
 |---|---|---|
