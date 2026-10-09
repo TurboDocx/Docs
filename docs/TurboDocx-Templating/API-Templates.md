@@ -862,8 +862,7 @@ You can also upload a **.pdf** to `POST /template/upload-and-create`. A PDF temp
 ```json
 {
   "message": "PDF templates can only be used to collect signatures, not to generate documents.",
-  "error": "SignatureOnlyTemplate",
-  "data": { "templateId": "<template id>" }
+  "error": "SignatureOnlyTemplate"
 }
 ```
 
