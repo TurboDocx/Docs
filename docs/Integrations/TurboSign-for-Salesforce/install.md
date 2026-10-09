@@ -130,7 +130,7 @@ You need:
    sf project deploy start --source-dir force-app --source-dir unpackaged --target-org myorg
    ```
 
-4. Run the Apex tests. `RunLocalTests` runs every Apex test in your org, not only the app's:
+4. Run the Apex tests. `RunLocalTests` runs every Apex test in your org except tests from installed managed packages, so it runs more than just this app's tests:
 
    ```bash
    sf apex run test --test-level RunLocalTests --code-coverage \
