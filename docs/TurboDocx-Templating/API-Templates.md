@@ -851,13 +851,19 @@ Content-Length: 287456
 You can also upload a **.pdf** to `POST /template/upload-and-create`. A PDF template is **signature-only**: it has no placeholder variables and is used to collect signatures, not to generate documents.
 
 - **Upload**: same request as Path A. The response has an empty `variables` array — there is nothing to extract from a PDF.
-- **Send for signature**: pass the template's ID as `templateId` to the [TurboSign API](/docs/TurboSign/API-Signatures). The PDF is sent exactly as uploaded.
+- **Preparation on upload**: the PDF is processed the same way as a PDF uploaded for signature before it is stored:
+  - A password-protected PDF is refused with `400` and `"type": "PasswordProtectedPDF"`.
+  - A damaged PDF is repaired where possible. One that can't be read is refused with `400` and `"type": "PDFFormatError"`.
+  - Fillable form fields are flattened, so any values in them become part of the page.
+- **Download**: **Download File** on the template's page in the app returns this stored PDF.
+- **Send for signature**: pass the template's ID as `templateId` to the [TurboSign API](/docs/TurboSign/API-Signatures). The stored PDF is sent, with the `recipients` and `fields` from your request. A signature setup saved on the template in the TurboDocx app is not applied to API sends.
 - **Generate a document**: not supported. `POST /v1/deliverable` with a PDF template returns `400`:
 
 ```json
 {
+  "message": "PDF templates can only be used to collect signatures, not to generate documents.",
   "error": "SignatureOnlyTemplate",
-  "message": "PDF templates can only be used to collect signatures, not to generate documents."
+  "data": { "templateId": "<template id>" }
 }
 ```
 
