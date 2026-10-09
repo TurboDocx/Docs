@@ -17,7 +17,7 @@ custom_edit_url: null
 
   # Upload Template with Optional Default Values
 
-The Upload Template endpoint adds a new DOCX or PPTX template to your TurboDocx workspace in a single multipart request. Alongside the file, you can define the template's variables (the placeholders TurboDocx fills at generation time), give each one a default value, and attach tags. This lets you provision templates programmatically instead of uploading them by hand in the UI, which is how most developers onboard templates at scale.
+The Upload Template endpoint adds a new DOCX or PPTX template to your TurboDocx workspace in a single multipart request. You can also upload a PDF as a signature-only template (no variables; used to collect signatures, not to generate documents) — see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates). Alongside the file, you can define the template's variables (the placeholders TurboDocx fills at generation time), give each one a default value, and attach tags. This lets you provision templates programmatically instead of uploading them by hand in the UI, which is how most developers onboard templates at scale.
 
 ## When to use it
 
@@ -27,7 +27,7 @@ Use this endpoint to let your users bring their own templates, to migrate a libr
 
 | Field | Type | Required | Description |
 | ----- | ---- | :------: | ----------- |
-| `templateFile` | file (binary) | Yes | The DOCX or PPTX file to upload. |
+| `templateFile` | file (binary) | Yes | The DOCX, PPTX or PDF file to upload. A PDF becomes a signature-only template with no variables. |
 | `name` | string | Yes | Display name for the template, for example `SOW Template`. |
 | `variables` | JSON string | Yes | Array of placeholder definitions with optional default values. Send `[]` if the template has none. |
 | `description` | string | No | Human-readable description. |

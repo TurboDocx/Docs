@@ -44,7 +44,7 @@ The Template Generation API offers **two flexible paths** to document creation, 
 
 ### **Path A: Upload New Template**
 
-1. **Upload & Create** - Upload your .docx/.pptx template and extract variables automatically
+1. **Upload & Create** - Upload your .docx/.pptx template and extract variables automatically (or a .pdf to use purely for signatures — see [PDF signature templates](#pdf-signature-templates))
 2. **Generate Document** - Fill variables and create your deliverable
 
 ### **Path B: Select Existing Template**
@@ -148,7 +148,7 @@ Before you begin your journey into template automation nirvana, ensure you have:
 
 - **API Access Token**: Bearer token for authentication
 - **Organization ID**: Your organization identifier
-- **Template Files**: .docx or .pptx files with placeholder variables (for uploads)
+- **Template Files**: .docx or .pptx files with placeholder variables (for uploads), or a .pdf for a signature-only template
 
 ### Getting Your Credentials
 
@@ -198,7 +198,7 @@ User-Agent: TurboDocx API Client
 
 ```javascript
 {
-  "templateFile": [DOCX_OR_PPTX_FILE_BINARY],
+  "templateFile": [DOCX_PPTX_OR_PDF_FILE_BINARY],
   "name": "Employee Contract Template",
   "description": "Standard employee contract with variable placeholders",
   "variables": "[]", // Optional: Pre-defined variables (usually extracted automatically)
@@ -791,7 +791,7 @@ Content-Length: 287456
 
 **Solutions**:
 
-- Verify file is .docx or .pptx format
+- Verify file is .docx, .pptx or .pdf format
 - Check file size is under the maximum limit (typically 25MB)
 - Ensure file is not corrupted or password-protected
 - Verify network connection and try again
@@ -842,9 +842,29 @@ Content-Length: 287456
 
 1. **Test with simple templates**: Start with basic templates before adding complexity
 2. **Validate JSON payloads**: Use JSON validators before sending requests
-3. **Check file encoding**: Ensure .docx/.pptx files are not corrupted
+3. **Check file encoding**: Ensure .docx/.pptx/.pdf files are not corrupted
 4. **Monitor API quotas**: Track usage to avoid rate limiting
 5. **Use development endpoints**: Test with development environment first
+
+## PDF signature templates
+
+You can also upload a **.pdf** to `POST /template/upload-and-create`. A PDF template is **signature-only**: it has no placeholder variables and is used to collect signatures, not to generate documents.
+
+- **Upload**: same request as Path A. The response has an empty `variables` array — there is nothing to extract from a PDF.
+- **Preparation on upload**: the PDF is processed the same way as a PDF uploaded for signature before it is stored:
+  - A password-protected PDF is refused with `400` and `"type": "PasswordProtectedPDF"`.
+  - A damaged PDF is repaired where possible. One that can't be read is refused with `400` and `"type": "PDFFormatError"`.
+  - Fillable form fields are flattened, so any values in them become part of the page.
+- **Download**: **Download File** on the template's page in the app returns this stored PDF.
+- **Send for signature**: pass the template's ID as `templateId` to the [TurboSign API](/docs/TurboSign/API-Signatures). The stored PDF is sent, with the `recipients` and `fields` from your request. A signature setup saved on the template in the TurboDocx app is not applied to API sends.
+- **Generate a document**: not supported. `POST /v1/deliverable` with a PDF template returns `400`:
+
+```json
+{
+  "message": "PDF templates can only be used to collect signatures, not to generate documents.",
+  "error": "SignatureOnlyTemplate"
+}
+```
 
 ## Next Steps
 
