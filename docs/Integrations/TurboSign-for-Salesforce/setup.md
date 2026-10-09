@@ -136,13 +136,14 @@ Requests run as whoever triggers them. If a Flow, a data load, or an integration
 
 TurboDocx saves the signed PDF back to Salesforce through the Salesforce connection in your TurboDocx settings. If you don't have that connection yet, follow [Salesforce Integration, Steps 1 to 3](/docs/Integrations/SalesForce) to create the External Client App in Salesforce and connect it in TurboDocx. If you already use the TurboDocx Salesforce integration, check that it meets everything below.
 
-- **Connect the same Salesforce org the package is installed in.** TurboDocx saves the files to the org it's connected to.
+- **Connect the same Salesforce org the package is installed in.** The package sends its Salesforce org ID with each document. When the document is signed, TurboDocx saves the files through the connection to that same org. Only active connections of active TurboDocx users count. If no connection matches the org, nothing is saved, and TurboDocx records the failure.
 - **Connect with the right Salesforce user.** That user must be able to create files and edit the records you send from, including the field you pick under **On Completion**. A dedicated integration user works best, so the connection doesn't break when a person leaves or changes their password.
-- **Connect one Salesforce org per TurboDocx organization.** If several people in your TurboDocx organization connect Salesforce, TurboDocx uses the most recently used connection.
-- **Check the app's scopes and refresh token policy.** The connection needs the **API** scope and the **refresh token** (offline access) scope, and a refresh token policy of **Refresh token is valid until revoked**. See [Configure API Settings](/docs/Integrations/SalesForce#configure-api-settings) and [Edit Policies](/docs/Integrations/SalesForce#edit-policies).
+- **You can connect more than one Salesforce org.** For example, connect both a sandbox and production. Each send uses the connection to the org it was sent from.
+- **Check the app's scopes and refresh token policy.** The connection needs the **api** scope, the **refresh_token** (offline access) scope, and the **openid** scope, because TurboDocx checks which Salesforce org each connection belongs to. It also needs a refresh token policy of **Refresh token is valid until revoked**. See [Configure API Settings](/docs/Integrations/SalesForce#configure-api-settings) and [Edit Policies](/docs/Integrations/SalesForce#edit-policies). If you added **openid** to an existing app, reconnect Salesforce in TurboDocx.
+- **Reconnecting is safe.** Your current connection keeps working until the new one succeeds.
 
 :::note Sandboxes
-Sending and signing work from a sandbox, but saving signed files back to a sandbox isn't supported yet.
+Saving signed files back to a sandbox works. Connect that sandbox in TurboDocx: in the Salesforce settings, choose **Sandbox** as the environment, so the connection signs in at `test.salesforce.com`. If your sandbox uses a My Domain login, click **Use Custom Domain** on that page and enter it.
 :::
 
 ## Step 5: Build a document setup

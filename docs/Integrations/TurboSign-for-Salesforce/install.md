@@ -29,7 +29,7 @@ Saving signed files back to your Salesforce records depends on TurboDocx's Sales
 
 - **You need the System Administrator profile** (or a user with permission to install packages) in the org.
 - **Your org must run custom Apex.** Enterprise, Unlimited, Performance, and Developer Edition orgs work, and so do their sandboxes. Professional and Group editions don't. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
-- **Try a sandbox first** if you have one. Install, set up, and send a test document there before production. Sending and signing work from a sandbox, but saving the signed files back to a sandbox record isn't supported yet, so check that part in production.
+- **Try a sandbox first** if you have one. Install, set up, and send a test document there before production. To see the signed files saved back to the sandbox record, connect that sandbox in TurboDocx, as described in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
 
 ## Install with a one-click link
 

@@ -121,3 +121,7 @@ The **TurboSign Signatures** panel on the record lists the documents sent from i
 - click **Refresh** to pull the latest status and see how many people have signed,
 - click **Remind** to email signers who haven't signed yet, or
 - click **Void** to cancel the document. Void can't be undone.
+
+:::tip React to declined or voided documents
+Nothing is saved to the record when a document is declined or voided. To act on those outcomes today, ask your admin to build a Flow on the **TurboSign Envelope** record's **Status** field. The status updates when a rep clicks **Refresh** in the **TurboSign Signatures** panel.
+:::

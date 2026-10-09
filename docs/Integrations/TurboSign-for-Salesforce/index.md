@@ -56,7 +56,7 @@ TurboSign for Salesforce includes custom Apex code, so it needs an edition that 
 | Unlimited | Yes |
 | Performance | Yes |
 | Developer Edition | Yes |
-| Sandboxes of the editions above | Yes, for sending and signing. Saving signed files back to a sandbox isn't supported yet. |
+| Sandboxes of the editions above | Yes |
 | Professional | No |
 | Group | No |
 | Starter, Pro Suite, Essentials | Not supported |
