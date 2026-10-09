@@ -64,7 +64,7 @@ This entire process takes less than 5 minutes once you get the hang of it. We'll
 To use TurboSign effectively, you'll need:
 
 - Access to TurboDocx
-- A document ready for signing (PDF, Word, or existing TurboDocx deliverable)
+- A document ready for signing (PDF, Word, PowerPoint, an existing TurboDocx deliverable, or a template)
 - Email addresses for all recipients who need to sign
 - About 60 seconds of your time ⏰
 
@@ -96,7 +96,7 @@ In the **top right corner** of the TurboSign interface, you'll see a **"New Sign
 
 ## Step 3: Upload or Select a Document
 
-Time to choose your document! TurboSign gives you two convenient options:
+Time to choose your document! TurboSign gives you three convenient options:
 
 <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem'}}>
 <div>
@@ -107,7 +107,9 @@ Time to choose your document! TurboSign gives you two convenient options:
 **Supported formats:**
 - PDF files (.pdf)
 - Word documents (.docx)
-- Other common document formats
+- PowerPoint presentations (.pptx)
+
+Word and PowerPoint files are converted to PDF for signing.
 
 </div>
 <div>
@@ -117,6 +119,10 @@ Time to choose your document! TurboSign gives you two convenient options:
 
 </div>
 </div>
+
+### Option C: Start from a Template
+
+Under **Or Start with an Existing Document**, click the **Templates** tab and pick a template. If the template has a saved signature setup, the request opens with it already filled in: the signers, their fields, CC recipients, the email message, and reminder and expiration settings. For a PDF template, the document is also named with the saved document name. See [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md).
 
 ![Document upload and selection interface](/img/turbosign/SelectOrUploadDocument.png)
 
@@ -232,14 +238,17 @@ The field editor provides several types of fields you can add:
 
 **Essential Fields:**
 - **Signature** - The actual signature field
-- **Name** - Typed name field
 - **Date** - Date when signed
 - **Initials** - For initialing pages or sections
+
+**Signer Details:**
+- **Full name**, **First Name**, **Last Name** - The signer's name
+- **Title** and **Company** - The signer's job title and organization
+- **Email Address** - The signer's email
 
 **Additional Fields:**
 - **Text** - For additional information
 - **Checkbox** - For confirmations or agreements
-- **Dropdown** - For selecting from options
 
 ![Field editor with available field types on the left](/img/turbosign/FieldEditorDragAndDrop.png)
 
@@ -386,7 +395,19 @@ If you have already placed a field on the document, you don't need to hunt for t
 
 ![Field properties panel showing the Default Value box for a Full name field](/img/turbosign/SetDefaultValueOnField.png)
 
-The panel tells you the scope right underneath the box — *"Applies to every [field type] field for [recipient]"* — because this is the **same** value the accordion holds, not a per-field override. Change it here and every field of that type for that recipient changes too.
+The panel tells you the scope right underneath the box — *"Applies to every [field type] field for [recipient]"* — because this is the **same** value the accordion holds. Change it here and every field of that type for that recipient changes too.
+
+#### Giving one field its own value
+
+Sometimes one field needs a different value from the rest, for example a second **Company** field for a parent company. To set it for that field only:
+
+1. **Click the field** on the document.
+2. **Turn on "Use a different value for this field".**
+3. **Type the value** in **Value for this field**. It starts with the recipient's value.
+
+That field now keeps its own value: changing the recipient's value no longer changes it, and it keeps its value if you assign it to another recipient. Turn the switch off to make the field follow the recipient's value again.
+
+If you open a document or saved setup where a field already had a value different from its recipient's, that field opens with the switch turned on, so its value stays exactly as it was.
 
 :::note Text fields work differently
 A **Text** field's default is its own — each Text field keeps a separate value, since a free-text box usually means something different in each spot. Its panel says **"Default Value for This Field"** rather than naming a recipient.
@@ -447,6 +468,17 @@ Now when Sarah receives the document, these fields will be pre-filled with this 
 :::tip Time-Saving Tip
 If you send the same type of document to the same people regularly, setting default values can cut signing time in half! Recipients can review and submit much faster when common fields are already filled.
 :::
+
+<br/>
+
+## Save This Setup to a Template (Optional)
+
+If you'll send this document again, save the recipients and fields to a template so the next request starts with them in place:
+
+1. Click the **⋮** button next to **Send Document**.
+2. Click **Save signature setup to template**.
+
+If the request started from a template, the setup is saved to that template. Otherwise, choose the template to save it to. Only **Administrators** and **Contributors** see this option. See [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md).
 
 <br/>
 
@@ -531,7 +563,7 @@ After clicking "Send Document":
 
 Now that you know how to send documents for signature, you might want to explore:
 
-- **Creating signature templates** for frequently used documents
+- **[Saving a signature setup on a template](./Signature-Setups-on-Templates.md)** for documents you send often
 - **Setting up automated workflows** for recurring signature processes
 - **Integrating TurboSign** with your existing document workflows
 - **Managing completed documents** and signatures

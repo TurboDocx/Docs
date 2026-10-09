@@ -119,6 +119,10 @@ Once you've completed filling out the variables in your Deliverable, click the "
 
 ![This is the image for BUTTON with the text: Generate Deliverable and then clicked](/img/how_to_create_a_deliverable/step_29.png)
 
+:::tip Need it signed too?
+Open the **Signatures** tab next to **Template Variables**, add your signers and place their signature fields. The button then reads **Generate and Sign**: it creates the deliverable and sends it for signature in one go. To reuse those signers and fields next time, save them to the template. See [How to Save a Signature Setup on a Template](/docs/TurboSign/Signature-Setups-on-Templates).
+:::
+
 <br/><br/>
 
 ## Step 4: Export Deliverable
