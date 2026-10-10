@@ -4,6 +4,8 @@ sidebar_position: 1.5
 description: Upload a PDF as a TurboSign template, add signers and signature fields once, and save that setup so every future send starts ready to sign.
 keywords:
   - pdf signature template
+  - signer roles
+  - send template from api
   - reusable signature template
   - save signature setup
   - turbosign pdf template
@@ -55,15 +57,23 @@ TurboDocx prepares the PDF the same way as a PDF you upload for signature:
 
 ![Prepare & Sign tab with the Add Recipient button highlighted](/img/pdf_signature_templates/03_add_recipient.png)
 
-2. Enter the signer's **Name** and **Email**, then click **Add**. In the same window you can
-   choose the signer's identity verification, or set **Recipient Type** to **Receives a Copy**
-   for someone who only gets a copy.
+2. In **Role**, name the part this signer plays, for example **Client** or **Countersigner**.
+   The **API key** shown under it is the name your code uses for this signer (see
+   [Send the template from your code](#send-the-template-from-your-code)).
+3. Choose who signs:
+   - If a different person signs each time (for example, each new client), tick **Fill in name
+     and email when sending**. Name and email become optional: anything you type there is for
+     this send only and is never saved on the template.
+   - If the same person always signs (for example, someone on your team), leave it unticked and
+     enter their **Name** and **Email**.
+4. Click **Add**. In the same window you can choose the signer's identity verification, or set
+   **Recipient Type** to **Receives a Copy** for someone who only gets a copy.
 
-![Add Recipient dialog with a name and email filled in and the Add button highlighted](/img/pdf_signature_templates/04_recipient_details.png)
+![Add Recipient dialog with the role Client and Fill in name and email when sending highlighted](/img/pdf_signature_templates/04_recipient_details.png)
 
 :::tip
-Add a recipient for everyone who signs this document every time. You can still change the name
-and email before each send.
+Add a recipient for everyone who signs this document every time. A signer saved with a name and
+email can still be changed before each send.
 :::
 
 ## Step 3: Place the signature fields
@@ -124,6 +134,32 @@ save it again.
 You can also start from TurboSign: click **New Signature**, pick the template on the **Templates**
 tab under **Or Start with an Existing Document**, and click **Continue**. The request opens with
 the saved setup filled in.
+
+## Send the template from your code
+
+Once the setup is saved, you can send the template from your own app with the TurboDocx SDK or
+API, without placing any fields in code. Each recipient names a role, and the fields you placed
+for that role come with it.
+
+1. Open the template's page (click **⋮ → Edit Template**, or click the template in **Templates**).
+2. Under **Use via API**, copy the **Template ID** and the sample for your language. Each signer's
+   role key (for example `client`) is shown next to them as **role: client**.
+
+![Template page with the Use via API panel highlighted, showing the template ID and a JavaScript sample](/img/pdf_signature_templates/14_use_via_api.png)
+
+```ts
+await TurboSign.sendSignature({
+  templateId: "your-template-id",
+  recipients: [{ role: "client", name: "Jane Doe", email: "jane@example.com" }],
+})
+```
+
+- Pass a recipient for every role marked **Filled in when sending**.
+- A role saved with a name and email can be left out: that saved signer is used. Pass it to send
+  to someone else this time.
+- Signers sign in the order shown on the template.
+
+For every parameter and error, see the [TurboSign API reference](./API-Signatures.md).
 
 ## Change or remove the saved setup
 
