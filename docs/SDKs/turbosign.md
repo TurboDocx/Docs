@@ -1964,6 +1964,158 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 </TabItem>
 </Tabs>
 
+### Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
+
+Upload a PDF as a template in TurboDocx, add its signers as roles (for example "Client" and "Countersigner"), drag their fields onto the page and save the signature setup. Then send it by naming each recipient's role. The fields saved for that role come with it, so fields can be left out, and a recipient with a role needs no signing order. A role you leave out uses the signer saved on the template. Role keys are shown under **Use via API** on the template page, or listed with [Get template signature setup](#get-template-signature-setup). Request-body keys stay camelCase in every language.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+// The role keys come from the template
+const { roles } = await TurboSign.getTemplateSignatureSetup("your-template-id");
+// [{ key: "client", hasSavedSigner: false, ... }, { key: "countersigner", hasSavedSigner: true, ... }]
+
+const result = await TurboSign.sendSignature({
+  templateId: "your-template-id",
+  recipients: [
+    { role: "client", name: "Jane Doe", email: "jane@client.com" },
+    // "countersigner" left out: the signer saved on the template is used
+  ],
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+// The role keys come from the template
+const { roles } = await TurboSign.getTemplateSignatureSetup("your-template-id");
+// [{ key: "client", hasSavedSigner: false, ... }, { key: "countersigner", hasSavedSigner: true, ... }]
+
+const result = await TurboSign.sendSignature({
+  templateId: "your-template-id",
+  recipients: [
+    { role: "client", name: "Jane Doe", email: "jane@client.com" },
+    // "countersigner" left out: the signer saved on the template is used
+  ],
+});
+```
+
+</TabItem>
+</Tabs>
+
+`role` works the same way on `createSignatureReviewLink` and `createEmbeddedSignature`.
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+# The role keys come from the template
+setup = await TurboSign.get_template_signature_setup("your-template-id")
+# setup["roles"] -> [{"key": "client", "hasSavedSigner": False, ...},
+#                    {"key": "countersigner", "hasSavedSigner": True, ...}]
+
+result = await TurboSign.send_signature(
+    template_id="your-template-id",
+    recipients=[
+        {"role": "client", "name": "Jane Doe", "email": "jane@client.com"},
+        # "countersigner" left out: the signer saved on the template is used
+    ],
+)
+```
+
+`role` works the same way on `create_signature_review_link()` and `create_embedded_signature()`.
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+<?php
+
+use TurboDocx\TurboSign;
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+
+// The role keys come from the template
+$setup = TurboSign::getTemplateSignatureSetup('your-template-id');
+foreach ($setup->roles as $role) {
+    echo "{$role->key} (order {$role->order}, saved signer: " . ($role->hasSavedSigner ? 'yes' : 'no') . ")\n";
+}
+
+$result = TurboSign::sendSignature(
+    new SendSignatureRequest(
+        templateId: 'your-template-id',
+        recipients: [
+            new Recipient(name: 'Jane Doe', email: 'jane@client.com', role: 'client'),
+            // 'countersigner' left out: the signer saved on the template is used
+        ],
+    )
+);
+```
+
+`role` works the same way on `createSignatureReviewLink()` (`Recipient`) and `createEmbeddedSignature()` (`EmbeddedSignatureRecipient`). Recipients without a `role` still need a `signingOrder`.
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+// The role keys come from the template
+setup, err := client.TurboSign.GetTemplateSignatureSetup(ctx, "your-template-id")
+if err != nil {
+    log.Fatal(err)
+}
+for _, role := range setup.Roles {
+    fmt.Printf("%s (order %d, saved signer: %t)\n", role.Key, role.Order, role.HasSavedSigner)
+}
+
+result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
+    TemplateID: "your-template-id",
+    Recipients: []turbodocx.Recipient{
+        {Role: "client", Name: "Jane Doe", Email: "jane@client.com"},
+        // "countersigner" left out: the signer saved on the template is used
+    },
+})
+```
+
+`Role` works the same way on `CreateSignatureReviewLink` and on `EmbeddedSignatureRecipient` for `CreateEmbeddedSignature`.
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+// The role keys come from the template
+TemplateSignatureSetup setup = client.turboSign().getTemplateSignatureSetup("your-template-id");
+for (TemplateSignatureRole role : setup.getRoles()) {
+    System.out.println(role.getKey() + " saved signer: " + role.hasSavedSigner());
+}
+
+SendSignatureResponse result = client.turboSign().sendSignature(
+    new SendSignatureRequest.Builder()
+        .templateId("your-template-id")
+        .recipients(Arrays.asList(
+            Recipient.withRole("client", "Jane Doe", "jane@client.com")
+            // "countersigner" left out: the signer saved on the template is used
+        ))
+        .build()
+);
+```
+
+Use `new Recipient.Builder().role("client").name(...).email(...)` when you also need a phone or external id. `role` works the same way on `createSignatureReviewLink` and, through `new EmbeddedSignatureRecipient.Builder().role(...)`, on `createEmbeddedSignature`.
+
+</TabItem>
+</Tabs>
+
+- Roles sign in the order saved on the template; recipients without a role sign after them.
+- A role left out uses the template's saved signer. If it has none, the API returns a 400 (`SignerRoleUnfilled`) naming the role.
+- An unknown role returns a 400 (`UnknownSignerRole`) whose message lists the template's roles. The SDKs raise their validation error with that code.
+- Any fields you pass are added to the template's (for example an extra witness signature).
+
+See [Sending with signer roles](/docs/TurboSign/API-Signatures#sending-with-signer-roles) in the API reference for every rule and error.
+
 ---
 
 ## API Reference {#api-reference}
@@ -3371,6 +3523,99 @@ System.out.println("Result: " + gson.toJson(auditTrail));
 </TabItem>
 </Tabs>
 
+### Get template signature setup {#get-template-signature-setup}
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const setup = await TurboSign.getTemplateSignatureSetup("template-uuid");
+
+setup.roles.forEach((role) => console.log(role.key, role.hasSavedSigner));
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+const setup = await TurboSign.getTemplateSignatureSetup("template-uuid");
+
+setup.roles.forEach((role) => console.log(role.key, role.hasSavedSigner));
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+
+```python
+setup = await TurboSign.get_template_signature_setup("template-uuid")
+
+for role in setup["roles"]:
+    print(role["key"], role["hasSavedSigner"])
+```
+
+---
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+
+```php
+$setup = TurboSign::getTemplateSignatureSetup('template-uuid');
+
+foreach ($setup->roles as $role) {
+    echo "{$role->key}: " . ($role->hasSavedSigner ? 'saved signer' : 'slot') . "\n";
+}
+```
+
+---
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` carries `Key` (the value for `Recipient.Role`), `Label`, `Order`, `HasSavedSigner`, `FieldCount`, and `DefaultName` / `DefaultEmail` when it has a saved signer.
+
+```go
+setup, err := client.TurboSign.GetTemplateSignatureSetup(ctx, "template-uuid")
+if err != nil {
+    log.Fatal(err)
+}
+
+for _, role := range setup.Roles {
+    fmt.Printf("%s saved signer: %t\n", role.Key, role.HasSavedSigner)
+}
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` exposes `getKey()` (the value for a recipient's role), `getLabel()`, `getOrder()`, `hasSavedSigner()`, `getFieldCount()`, and `getDefaultName()` / `getDefaultEmail()` when it has a saved signer.
+
+```java
+TemplateSignatureSetup setup = client.turboSign().getTemplateSignatureSetup("template-uuid");
+
+for (TemplateSignatureRole role : setup.getRoles()) {
+    System.out.println(role.getKey() + " saved signer: " + role.hasSavedSigner());
+}
+```
+
+</TabItem>
+</Tabs>
+
+A template that doesn't exist in your organization, or has no saved signature setup, returns a 404 (`SignatureSetupNotFound`). Calls `GET /turbosign/templates/{templateId}/signature-setup`; see [Get Template Signature Setup](/docs/TurboSign/API-Signatures#endpoint-8-get-template-signature-setup).
+
 ## Field Types {#field-types}
 
 <Tabs groupId="language" queryString>
@@ -4327,7 +4572,8 @@ Recipient configuration for signature requests:
 | -------------- | -------- | -------- | ------------------------- |
 | `name`         | `string` | Yes      | Recipient's full name     |
 | `email`        | `string` | Yes      | Recipient's email address |
-| `signingOrder` | `number` | Yes      | Signing order (1-indexed) |
+| `signingOrder` | `number` | Conditional | Signing order (1-indexed). Not needed when `role` is set |
+| `role`         | `string` | No       | Template signer role to fill (for example `"client"`). Requires `templateId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 </TabItem>
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
@@ -4340,7 +4586,8 @@ Recipient configuration for signature requests:
 | -------------- | ----- | -------- | ------------------------- |
 | `name`         | `str` | Yes      | Recipient's full name     |
 | `email`        | `str` | Yes      | Recipient's email address |
-| `signingOrder` | `int` | Yes      | Signing order (1-indexed) |
+| `signingOrder` | `int` | Conditional | Signing order (1-indexed). Not needed when `role` is set |
+| `role`         | `str` | No       | Template signer role to fill (for example `"client"`). Requires `template_id`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 ```python
 recipient: Dict[str, Any] = {
@@ -4357,7 +4604,8 @@ recipient: Dict[str, Any] = {
 | -------------- | -------- | -------- | ------------------------------------------------- |
 | `Name`         | `string` | Yes      | Recipient's full name                             |
 | `Email`        | `string` | Yes      | Recipient's email address                         |
-| `SigningOrder` | `int`    | Yes      | Order in which recipient should sign (1, 2, 3...) |
+| `SigningOrder` | `int`    | Conditional | Order in which recipient should sign (1, 2, 3...). Not needed when `Role` is set |
+| `Role`         | `string` | No       | Template signer role to fill (for example `"client"`). Requires `TemplateID`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
@@ -4366,7 +4614,8 @@ recipient: Dict[str, Any] = {
 | -------------- | -------- | -------- | ------------------------------------------------- |
 | `name`         | `String` | Yes      | Recipient's full name                             |
 | `email`        | `String` | Yes      | Recipient's email address                         |
-| `signingOrder` | `int`    | Yes      | Order in which recipient should sign (1, 2, 3...) |
+| `signingOrder` | `int`    | Conditional | Order in which recipient should sign (1, 2, 3...). Not needed when `role` is set |
+| `role`         | `String` | No       | Template signer role to fill (for example `"client"`), set with `Recipient.withRole(...)` or the builder. Requires `templateId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 </TabItem>
 </Tabs>
@@ -4687,7 +4936,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | Parameter              | Type         | Required    | Description                    |
 | ---------------------- | ------------ | ----------- | ------------------------------ |
 | `recipients`           | `List[Dict]` | Yes         | Recipients who will sign       |
-| `fields`               | `List[Dict]` | Yes         | Signature fields configuration |
+| `fields`               | `List[Dict]` | Conditional | Signature fields configuration. Optional when a recipient has a `role` |
 | `file`                 | `bytes`      | Conditional | PDF file content as bytes      |
 | `file_name`            | `str`        | No          | Original filename (used with `file` bytes) |
 | `file_link`            | `str`        | Conditional | URL to document file           |
@@ -4733,7 +4982,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `DeliverableID`       | `string`      | Conditional | TurboDocx deliverable ID |
 | `TemplateID`          | `string`      | Conditional | TurboDocx template ID    |
 | `Recipients`          | `[]Recipient` | Yes         | List of recipients       |
-| `Fields`              | `[]Field`     | Yes         | List of fields           |
+| `Fields`              | `[]Field`     | Conditional | List of fields. Optional when a recipient has a `Role` |
 | `DocumentName`        | `string`      | No          | Document display name    |
 | `DocumentDescription` | `string`      | No          | Document description     |
 | `SenderName`          | `string`      | No          | Sender's name            |
@@ -4758,7 +5007,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `deliverableId`       | `String`          | Conditional | TurboDocx deliverable ID |
 | `templateId`          | `String`          | Conditional | TurboDocx template ID    |
 | `recipients`          | `List<Recipient>` | Yes         | List of recipients       |
-| `fields`              | `List<Field>`     | Yes         | List of fields           |
+| `fields`              | `List<Field>`     | Conditional | List of fields. Optional when a recipient has a role |
 | `documentName`        | `String`          | No          | Document display name    |
 | `documentDescription` | `String`          | No          | Document description     |
 | `senderName`          | `String`          | No          | Sender's name            |
@@ -4790,7 +5039,7 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | `deliverableId`       | `string`      | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `string`      | Conditional | TurboDocx template ID          |
 | `recipients`          | `Recipient[]` | Yes         | Recipients who will sign       |
-| `fields`              | `Field[]`     | Yes         | Signature fields configuration |
+| `fields`              | `Field[]`     | Conditional | Signature fields configuration. Optional when a recipient has a `role` |
 | `documentName`        | `string`      | No          | Document name                  |
 | `documentDescription` | `string`      | No          | Document description           |
 | `senderName`          | `string`      | No          | Sender name, falls back to `senderName` in the SDK config, then your API key's name |
