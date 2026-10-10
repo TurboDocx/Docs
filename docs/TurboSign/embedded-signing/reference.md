@@ -40,7 +40,7 @@ Creates the document, adds each signer, and returns a signing URL for whoever si
 
 | Field | Required | Description |
 |---|---|---|
-| `recipients` | Yes | The signers, in order. Each takes `name`, `email`, optional `phone`, optional `signingOrder` (defaults to position plus one), optional `auth` and optional `fields`. |
+| `recipients` | Yes | The signers, in order. Each takes `name`, `email`, optional `phone`, optional `signingOrder` (defaults to position plus one), optional `auth`, optional `fields` and optional `role`. `role` fills a signer role saved on a `templateId` and brings that role's saved fields; pass every role, because a role left out goes to the template's saved signer, who gets no URL from this call. See [Sending with signer roles](/docs/TurboSign/API-Signatures#sending-with-signer-roles). |
 | `file`, `fileName`, `fileLink`, `templateId`, `deliverableId` | One source | The document to sign. |
 | `documentName`, `documentDescription` | No | Shown to the signer. |
 | `senderName`, `senderEmail`, `ccEmails` | No | Override the configured sender, add CC addresses. |
