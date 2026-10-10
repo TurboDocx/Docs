@@ -25,7 +25,8 @@ Every credential and access step below can also be scripted. See [Scripted setup
 
 Have these ready:
 
-- **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys** for the key and **Features and integrations** for the Organization ID. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
+- **A TurboDocx account.** If you are signing up now, TurboDocx asks you to verify your email before it creates your workspace. Click the link in the verification email, then continue.
+- **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys** for the key and **Features and integrations** for the Organization ID. When you create the key, the **User** access level is enough for TurboSign for Salesforce. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
 - **A TurboDocx template** with a text token wherever someone signs or dates, for example `{sig}` and `{date}`.
 - **System Administrator** access to your Salesforce org.
 - **A supported Salesforce edition**, such as Enterprise, Unlimited, Performance, or Developer Edition. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
@@ -125,8 +126,9 @@ The package has two permission sets. Both include access to the TurboDocx creden
 
    ![Current Assignments page with Add Assignment highlighted](/img/turbosign-salesforce/13-add-assignment.png)
 
-6. Select your reps, then click **Assign**.
-7. Repeat for **TurboSign Admin** with your admins.
+6. If the list of users is empty, open **Select a List View** and pick a view, for example **Recently Viewed** or **All Users**.
+7. Select your reps, then click **Assign**.
+8. Repeat for **TurboSign Admin** with your admins.
 
 :::note Automations need access too
 Requests run as whoever triggers them. If a Flow, a data load, or an integration user sends, reminds, or voids envelopes, assign **TurboSign User** to that user as well.
@@ -134,12 +136,20 @@ Requests run as whoever triggers them. If a Flow, a data load, or an integration
 
 ## Step 4: Connect Salesforce in TurboDocx
 
-TurboDocx saves the signed PDF back to Salesforce through the Salesforce connection in your TurboDocx settings. If you don't have that connection yet, follow [Salesforce Integration, Steps 1 to 3](/docs/Integrations/SalesForce) to create the External Client App in Salesforce and connect it in TurboDocx. If you already use the TurboDocx Salesforce integration, check that it meets everything below.
+TurboDocx saves the signed PDF back to Salesforce through the Salesforce connection in your TurboDocx settings.
+
+:::note Which TurboDocx plans include it
+The Salesforce integration is included on the TurboDocx **Pro** and **Enterprise** plans. Sending documents for signature from Salesforce works without it. You need it to save the signed files and the signing status back to Salesforce.
+:::
+
+If you don't have that connection yet, follow [Salesforce Integration, Steps 1 to 3](/docs/Integrations/SalesForce) to create the External Client App in Salesforce and connect it in TurboDocx. If you already use the TurboDocx Salesforce integration, check that it meets everything below.
 
 - **Connect the same Salesforce org the package is installed in.** The package sends its Salesforce org ID with each document. When the document is signed, TurboDocx saves the files through the connection to that same org. Only active connections of active TurboDocx users count. If no connection matches the org, nothing is saved, and TurboDocx records the failure. Saving signed files back needs TurboSign for Salesforce 1.1.0 or later, which sends the org ID. Earlier versions still send and sign, but the signed files are not saved back.
 - **Connect with the right Salesforce user.** That user must be able to create files and edit the records you send from, including the field you pick under **On Completion**. A dedicated integration user works best, so the connection doesn't break when a person leaves or changes their password.
 - **You can connect more than one Salesforce org.** For example, connect both a sandbox and production. Each send uses the connection to the org it was sent from.
-- **Check the app's scopes and refresh token policy.** The connection needs the **api** scope, the **refresh_token** (offline access) scope, and the **openid** scope, because TurboDocx checks which Salesforce org each connection belongs to. It also needs a refresh token policy of **Refresh token is valid until revoked**. See [Configure API Settings](/docs/Integrations/SalesForce#configure-api-settings) and [Edit Policies](/docs/Integrations/SalesForce#edit-policies). If you added **openid** to an existing app, reconnect Salesforce in TurboDocx.
+- **Check the app's scopes.** The connection needs the **api** scope, the **refresh_token** (offline access) scope, and the **openid** scope, because TurboDocx checks which Salesforce org each connection belongs to. See [Configure API Settings](/docs/Integrations/SalesForce#configure-api-settings). If you added **openid** to an existing app, reconnect Salesforce in TurboDocx.
+- **Leave the refresh token policy as Salesforce sets it.** New External Client Apps expire a refresh token that isn't used for 30 days, and the **Refresh token is valid until revoked** option no longer exists. TurboDocx keeps the connection active automatically. See [Edit Policies](/docs/Integrations/SalesForce#edit-policies).
+- **If the connection stops working**, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in **Settings > Features and integrations** and emails your organization's admins.
 - **Reconnecting is safe.** Your current connection keeps working until the new one succeeds.
 
 :::note Sandboxes
@@ -158,8 +168,8 @@ A **document setup** tells TurboSign which template to use, which Salesforce fie
 
    ![TurboSign Configuration Builder with New configuration highlighted](/img/turbosign-salesforce/21-new-configuration.png)
 
-2. Type the **Label** first, for example `Service Agreement`. Reps pick setups by this label.
-3. Check **Config API Name**. It fills in from the Label, for example `Service_Agreement`. You can change it before you save, using letters, numbers, and underscores only.
+2. Type the **Label** first, for example `Service Agreement`. The **Label** box is to the right of **Config API Name**. Reps pick setups by this label.
+3. Check **Config API Name**, the box on the left. It fills in from the Label, for example `Service_Agreement`. You can change it before you save, using letters, numbers, and underscores only.
 
    ![Config API Name field highlighted](/img/turbosign-salesforce/22-config-name.png)
 
@@ -173,9 +183,9 @@ A **document setup** tells TurboSign which template to use, which Salesforce fie
 Under **Document Name**, build the name each document gets, for example `Service Agreement - Acme Corp - October 9, 2026`:
 
 1. Click **Clear** to remove the template name.
-2. Click **Text** and type `Service Agreement - ` (with the spaces).
-3. Click **Insert field** and pick the account name field.
-4. Click **Text** and type ` - `.
+2. Click **Text**, click the new text box, and type `Service Agreement - ` (with the spaces).
+3. Click **Insert field** and pick **Account Account Name (Name)**. The list is long, and this entry is far down.
+4. Click **Text**, click the new text box, and type ` - `.
 5. Click **Date**.
 
 The **Preview** line shows the result. The **Separator** menu adds a single character with no spaces, so use **Text** when you want spacing.
@@ -262,6 +272,10 @@ When every signing token is set, click **Check anchors against template**. Every
 
    ![To value list with Closed Won highlighted](/img/turbosign-salesforce/36-on-completion-value.png)
 
+:::note Closing an Opportunity can change its Close Date
+When an Opportunity moves to a Closed stage, such as **Closed Won**, Salesforce can also set its **Close Date** to the day it closed. This is standard Salesforce behavior, not something TurboSign changes.
+:::
+
 ### Test and save
 
 1. Under **Test with a record**, search for a real record and pick it.
@@ -312,7 +326,7 @@ If the properties pane on the right lists actions with an **Add Action** button,
 2. Search for `Send for Signature` and select it.
 3. Click **Done**.
 4. Click **Save**.
-5. If Salesforce asks, click **Activate** and assign the page.
+5. If Salesforce asks, activate the page as described in [Activate the page](#activate-the-page).
 
 ![Add Action dialog with Send for Signature highlighted](/img/turbosign-salesforce/49-add-action-send-for-signature.png)
 
@@ -321,7 +335,7 @@ If the properties pane on the right lists actions with an **Add Action** button,
 1. In **Setup**, open **Object Manager**.
 2. Click **Opportunity**.
 3. Click **Page Layouts**.
-4. Click the layout your reps use.
+4. Click the layout your reps use. To find out which one that is, click **Page Layout Assignment** on the same page. It lists the layout each profile uses. In a new org, the **System Administrator** profile uses **Opportunity Layout**.
 5. In the palette at the top, click **Mobile & Lightning Actions**.
 6. If the **Salesforce Mobile and Lightning Experience Actions** section says it uses predefined actions, click the **override the predefined actions** link inside it.
 7. Drag **Send for Signature** into the **Salesforce Mobile and Lightning Experience Actions** section.
@@ -340,6 +354,17 @@ The panel shows each sent document's status on the record and lets reps refresh,
 
 3. Drag the **TurboSign Signatures** component from the **Components** list onto the page.
 4. Click **Save**.
-5. If Salesforce asks, click **Activate** and assign the page.
+5. If Salesforce asks, activate the page as described below.
+
+### Activate the page
+
+The first time you save a Lightning page, Salesforce asks you to activate it. Until you do, reps don't see your changes.
+
+1. Click **Activate**.
+2. Click **Assign as Org Default**.
+3. Choose **Desktop and phone**.
+4. Click **Next**, then **Save**.
+
+If reps use the standard **Sales** app and the button or panel still doesn't show, activate the page again and also assign it as the **App Default** for that app.
 
 You're done. Next, [send your first document](/docs/Integrations/turbosign-for-salesforce/send-and-sign).

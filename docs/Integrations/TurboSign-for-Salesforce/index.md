@@ -43,7 +43,7 @@ Your TurboDocx API key never sits in a Salesforce field. It is stored encrypted 
 - A Salesforce org where you are a System Administrator, on an edition that can run it. See [Which Salesforce orgs can use it](#which-salesforce-orgs-can-use-it).
 - A TurboDocx account with TurboSign, plus an **API key** and your **Organization ID**. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
 - A TurboDocx template. Every spot where someone signs must already be in the template as a text token, for example `{sig}`.
-- The [Salesforce integration](/docs/Integrations/SalesForce) connected in TurboDocx. Saving signed files back to Salesforce depends on TurboDocx's Salesforce write-back feature, which is part of TurboDocx and uses that connection to save the signed PDF to the record.
+- The [Salesforce integration](/docs/Integrations/SalesForce) connected in TurboDocx. Saving signed files back to Salesforce depends on TurboDocx's Salesforce write-back feature, which is part of TurboDocx and uses that connection to save the signed PDF to the record. The Salesforce integration is included on the TurboDocx **Pro** and **Enterprise** plans. Sending for signature works without it.
 
 ## Which Salesforce orgs can use it
 

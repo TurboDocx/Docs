@@ -52,6 +52,7 @@ Don't worry! We've made this guide so detailed that any team member can follow i
 
 To use the Salesforce integration, you'll need:
 
+- A TurboDocx **Pro** or **Enterprise** plan, which include the Salesforce integration
 - A Salesforce account with Connected App creation permissions (any edition works!)
 - System Administrator access to create a Salesforce connected app
 - About 15 minutes and a cup of coffee ☕
@@ -111,9 +112,9 @@ Time to get VIP access to your Salesforce data! 🎭 This step guides you throug
 
 ### Create a New External Client App
 
-6. **Click "New External Client App"**
-   - On the App Manager screen, look for the "New External Client App" button
-   - Click this button (not "New Lightning App")
+6. **Click "New App", then "New External Client App"**
+   - On the App Manager screen, click the **New App** dropdown
+   - Choose **New External Client App** from the list (not "New Lightning App")
 
 ![App Manager Screen with New External Client App Button](/img/salesforce-integration/New_External_Client_App_Button.png)
 
@@ -141,6 +142,7 @@ Choose an app name you'll remember six months from now. "App123" might seem clev
    - Proceed to the "API Settings" section
    - **Enable OAuth Settings**: Check this box
    - **Callback URL**: Enter `https://api.turbodocx.com/oauth/salesforce/callback` as the callback URL
+   - Salesforce only accepts callback URLs that start with `https://`. An `http://` address is rejected
 
 ![API Settings with OAuth Enabled](/img/salesforce-integration/OAuth_Enabled.png)
 
@@ -170,8 +172,13 @@ You'll be adding several different permissions. It's like checking off a grocery
 <br/>
 
 11. **Configure Security**
-    - In the "Security" section under OAuth settings, make sure only the following checkbox is ticked:
+    - In the "Security" section under OAuth settings, tick the following checkbox:
       - **Issue JSON Web Token (JWT)-based access tokens for named users**
+    - New External Client Apps also have these options switched on and greyed out, so you can't change them. Leave them as they are. TurboDocx works with all of them:
+      - **Require PKCE for Supported Authorization Flows**
+      - **Enable Refresh Token Rotation**
+      - **Limit Idle Refresh Token TTL to 30 Days**
+    - Leave the other checkboxes in this section unticked
 
 ![Security Settings](/img/salesforce-integration/Security_Section.png)
 
@@ -219,10 +226,16 @@ After creating the app, you need to adjust its access policies and retrieve the 
    - In the "Edit" view, locate the OAuth policies and configure the following settings:
       - **Permitted Users**: Select **"All users may self-authorize"**
       - **Named User JWT-Based Access Token Settings**: Select **30 minutes** for token timeout
-      - **Refresh Token Policy**: Select **"Refresh token is valid until revoked"**
+      - **Refresh Token Policy**: Leave **"Expire refresh token if not used for specific time"** selected, with the 30-day limit Salesforce sets
       - **IP Relaxation**: Select **"Relax IP restrictions"**
 
 ![OAuth Policies Configuration](/img/salesforce-integration/OAuth_policies.png)
+
+:::note The 30-day refresh token limit
+New External Client Apps no longer offer **"Refresh token is valid until revoked"**. A refresh token expires if it isn't used for 30 days. You don't need to do anything about this: TurboDocx keeps the connection active automatically.
+
+If the connection ever stops working, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in **Settings > Features and integrations** and emails your organization's admins. Reconnecting is safe.
+:::
 
 <br/>
 
@@ -326,8 +339,9 @@ The dialog has an **Environment** list, set to **Production** by default. To con
 :::
 
 6. **Enter your Consumer Key and Consumer Secret**
-   - Copy the Consumer Key from your Salesforce connected app page and paste it here
-   - Copy the Consumer Secret from your Salesforce connected app page and paste it in the Consumer Secret field
+   - The dialog labels these fields **Client ID** and **Client Secret**
+   - Paste the **Consumer Key** from your Salesforce app into **Client ID**
+   - Paste the **Consumer Secret** from your Salesforce app into **Client Secret**
 
 ![Key Entry Form](/img/salesforce-integration/key_and_secret_entered.png)
 
@@ -511,7 +525,7 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 **Solution**:
 
 - Make sure you're in App Manager (Platform Tools > Apps > App Manager)
-- Look for "New External Client App" button, not "New Lightning App"
+- Click the **New App** dropdown, then choose **New External Client App** (not "New Lightning App")
 - If you don't see this option, you might need System Administrator permissions
 - Some Salesforce orgs might have different permission requirements
 
@@ -533,6 +547,14 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 - Verify you selected: OpenID, API, Web, and Refresh token scopes
 - Make sure you're a System Administrator in your Salesforce org
 - Verify the external client app is enabled and policies are configured correctly
+
+### "Reconnect Salesforce" Message in TurboDocx
+
+**Solution**:
+
+- This means TurboDocx can no longer use the connection, for example because a Salesforce admin revoked it or the connected user can no longer log in
+- Open **Settings > Features and integrations** in TurboDocx and connect Salesforce again
+- Reconnecting is safe
 
 ### "No Records Found" in TurboDocx
 
