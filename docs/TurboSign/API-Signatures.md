@@ -375,7 +375,7 @@ How a role send behaves:
 - **Role keys** are matched case-insensitively. `role` requires `templateId`.
 - **Fields come from the template.** The fields saved for each role are placed for the signer who fills it, so `fields` can be left out. Any `fields` you do pass are added to the template's (for example an extra witness signature).
 - **Roles you leave out** use the template's saved signer. A role with no saved signer must be filled, or the request fails with `SignerRoleUnfilled`.
-- **Signing order** follows the template's role order, then any recipients without a role (renumbered from 1 after the roles). A recipient with a `role` needs no `signingOrder`.
+- **Signing order** follows the template's role order, then any recipients without a role in their own `signingOrder`. The final order is renumbered so it runs 1, 2, 3 and so on. A recipient with a `role` needs no `signingOrder`.
 - **Template defaults fill the gaps.** The template's saved CC emails, document description, document name and reminder and expiration settings apply to anything the request leaves out. Values in the request always win.
 - **Identity verification.** A role's saved verification choice applies unless the recipient sets its own `identityVerification`. A role saved with SMS verification needs the recipient's `phone`. See [the recipient](/docs/TurboSign/embedded-signing/reference#the-recipient) in the embedded signing reference for those fields.
 - **Replacing a saved signer.** When you fill a role that had a saved signer, the saved person's values on name and email fields become your recipient's, and title and company values are dropped so the new signer fills them in.
