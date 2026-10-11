@@ -64,7 +64,7 @@ The package includes an External Credential called **TurboDocx API**. You add yo
 8. In **Name**, type `ApiKey` exactly as shown (the capital letters matter). In **Value**, paste your TurboDocx API key.
 9. Click **Add** again. In **Name**, type `OrgId`. In **Value**, paste your Organization ID.
 
-   ![A parameter Name field highlighted in the Edit Principal dialog](/img/turbosign-salesforce/07-parameter-name-apikey.png)
+   ![Edit Principal dialog with the OrgId parameter Name field highlighted](/img/turbosign-salesforce/07-parameter-name-apikey.png)
 
 10. Click **Save**.
 
