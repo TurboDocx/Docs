@@ -356,7 +356,7 @@ The dialog has an **Environment** list, set to **Production** by default. To con
 ### Establish the OAuth Flow for Salesforce
 
 8. **Click "Connect to Salesforce"**
-   - This button appears after you save your configuration
+   - Save your configuration first (step 7), then click this button
    - You'll be redirected to Salesforce to authorize the connection
 
 ![Connection Button](/img/salesforce-integration/connect_to_salesforce_button.png)

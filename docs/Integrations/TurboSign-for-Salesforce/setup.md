@@ -285,7 +285,7 @@ When an Opportunity moves to a Closed stage, such as **Closed Won**, Salesforce 
 
    ![Preview table with resolved values](/img/turbosign-salesforce/38-preview-values.png)
 
-3. Click **Save Configuration**. A message confirms that the setup is live.
+3. Click **Save Configuration**. A message may confirm that the setup is live. Either way, the setup now appears in the **Edit an existing configuration** list, which is how you can confirm it saved.
 
    ![Save Configuration button highlighted](/img/turbosign-salesforce/39-save-configuration.png)
 
