@@ -51,6 +51,12 @@ The connection dropped after TurboDocx may already have sent the document.
 
 **Fix:** Before you click **Send** again, click **Refresh** in the **TurboSign Signatures** panel, or ask the signer whether they got an email. If the document went out, don't send it again, so the signers don't get two copies. If you don't see the panel, ask your admin to add it.
 
+## The Document tab says the plan's deliverable limit was reached
+
+Each preview creates a short-lived document that counts toward your TurboDocx plan's deliverable limit while it renders. TurboSign removes it right after. Sending also creates a document. Once the limit is reached, TurboDocx refuses both previews and sends.
+
+**Fix:** Wait for your next billing period, or upgrade your TurboDocx plan. Then open the **Document** tab or click **Send** again.
+
 ## A signing token shows as plain text in the signed document
 
 A token in the template, such as `{guarantor_sig}`, isn't listed in the document setup.

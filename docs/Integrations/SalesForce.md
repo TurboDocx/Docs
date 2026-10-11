@@ -143,6 +143,7 @@ Choose an app name you'll remember six months from now. "App123" might seem clev
    - **Enable OAuth Settings**: Check this box
    - **Callback URL**: Enter `https://api.turbodocx.com/oauth/salesforce/callback` as the callback URL
    - Salesforce only accepts callback URLs that start with `https://`. An `http://` address is rejected
+   - Changes to an External Client App, such as the callback URL or its policies, can take several minutes (up to about 10) to apply. Until then, signing in to a sandbox or scratch org through `test.salesforce.com` may return `redirect_uri_mismatch`. If it does, wait a few minutes, or sign in through your org's My Domain login URL
 
 ![API Settings with OAuth Enabled](/img/salesforce-integration/OAuth_Enabled.png)
 
@@ -546,6 +547,14 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 - Verify you selected: OpenID, API, Web, and Refresh token scopes
 - Make sure you're a System Administrator in your Salesforce org
 - Verify the external client app is enabled and policies are configured correctly
+
+### "redirect_uri_mismatch" Error
+
+**Solution**:
+
+- Check that the callback URL in your Salesforce external client app is exactly `https://api.turbodocx.com/oauth/salesforce/callback`
+- Changes to an external client app, such as the callback URL or its policies, can take several minutes (up to about 10) to apply. During that time, signing in to a sandbox or scratch org through `test.salesforce.com` may return this error
+- Wait a few minutes and try again, or sign in through your org's My Domain login URL instead
 
 ### "Reconnect Salesforce" Message in TurboDocx
 

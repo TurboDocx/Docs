@@ -48,9 +48,9 @@ Click the **Document** tab to see the document as it will go out, with any corre
 
 ![Review screen with the Document tab highlighted](/img/turbosign-salesforce/44a-document-tab.png)
 
-The document opens right in the window, where you can scroll, zoom, and print it.
+The document opens right in the window. Scroll through it to check every page. Your browser's PDF controls, if it shows them, let you zoom or print.
 
-![Document tab showing the filled-in Service Agreement](/img/turbosign-salesforce/44b-document-preview.png)
+![Document tab with the PDF preview of the filled-in Service Agreement highlighted](/img/turbosign-salesforce/44b-document-preview.png)
 
 - Signing fields of any kind (signature, initials, date, text, and so on) still show as their tokens, such as `{sig}` or `{date}`. Each signer gets a box in that spot when the document goes out.
 - The render also checks the signing spots. **Details** lists every spot, and after the render it says **All signature spots found in the document**. If a spot is missing, it names the token and the signer instead. Ask your admin to fix the template or the setup before you send.
