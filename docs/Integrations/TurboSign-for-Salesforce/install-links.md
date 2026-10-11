@@ -35,7 +35,7 @@ The link opens in whichever org your browser is already logged in to. If that's 
 
 ## Newer versions
 
-Newer versions add features, and each one is listed with its own install links and what it adds on the [TurboSign for Salesforce releases page](https://github.com/TurboDocx/turbosign-salesforce/releases). To upgrade, open the newer version's link in the org that already has the package. See [Upgrade to a newer version](/docs/Integrations/turbosign-for-salesforce/install#upgrade-to-a-newer-version).
+Newer versions add features, and each one is listed with its own install links and what it adds on the [TurboSign for Salesforce releases page](https://github.com/TurboDocx/turbodocx-salesforce/releases). To upgrade, open the newer version's link in the org that already has the package. See [Upgrade to a newer version](/docs/Integrations/turbosign-for-salesforce/install#upgrade-to-a-newer-version).
 
 ## Check which version is installed
 
@@ -45,4 +45,4 @@ Newer versions add features, and each one is listed with its own install links a
 
 ![Installed Packages list with TurboSign for Salesforce and its Version Number highlighted](/img/turbosign-salesforce/install-05-installed-packages.png)
 
-Version 1.0 sends documents and collects signatures, but does not save signed files back to your Salesforce records. Saving signed files back, and the **Document** tab on the review screen, need version 1.1.0 or later. Newer versions are listed on the [releases page](https://github.com/TurboDocx/turbosign-salesforce/releases).
+Version 1.0 sends documents and collects signatures, but does not save signed files back to your Salesforce records. Saving signed files back, and the **Document** tab on the review screen, need version 1.1.0 or later. Newer versions are listed on the [releases page](https://github.com/TurboDocx/turbodocx-salesforce/releases).
