@@ -225,16 +225,16 @@ After creating the app, you need to adjust its access policies and retrieve the 
 3. **Adjust OAuth Policies**
    - In the "Edit" view, locate the OAuth policies and configure the following settings:
       - **Permitted Users**: Select **"All users may self-authorize"**
-      - **Named User JWT-Based Access Token Settings**: Select **30 minutes** for token timeout
+      - **Named User JWT-Based Access Token Settings**: Select **"Set app-specific token timeout"**, then select **30 Minutes**
       - **Refresh Token Policy**: Leave **"Expire refresh token if not used for specific time"** selected, with the 30-day limit Salesforce sets
-      - **IP Relaxation**: Select **"Relax IP restrictions"**
+      - **IP Relaxation**: Select exactly **"Relax IP restrictions"**, not the similar **"Relax IP restrictions for activated devices"**
 
 ![OAuth Policies Configuration](/img/salesforce-integration/OAuth_policies.png)
 
 :::note The 30-day refresh token limit
 New External Client Apps no longer offer **"Refresh token is valid until revoked"**. A refresh token expires if it isn't used for 30 days. You don't need to do anything about this: TurboDocx keeps the connection active automatically.
 
-If the connection ever stops working, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in **Settings > Features and integrations** and emails your organization's admins. Reconnecting is safe.
+If the connection ever stops working, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in the Salesforce settings dialog and emails your organization's admins. To see the message, open **Settings > Features and integrations** and click **Configure SalesForce** on the Salesforce card. Reconnecting is safe.
 :::
 
 <br/>
@@ -339,9 +339,8 @@ The dialog has an **Environment** list, set to **Production** by default. To con
 :::
 
 6. **Enter your Consumer Key and Consumer Secret**
-   - The dialog labels these fields **Client ID** and **Client Secret**
-   - Paste the **Consumer Key** from your Salesforce app into **Client ID**
-   - Paste the **Consumer Secret** from your Salesforce app into **Client Secret**
+   - Paste the **Consumer Key** from your Salesforce app into **Consumer Key (Client ID)**
+   - Paste the **Consumer Secret** from your Salesforce app into **Consumer Secret (Client Secret)**
 
 ![Key Entry Form](/img/salesforce-integration/key_and_secret_entered.png)
 
@@ -553,7 +552,8 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 **Solution**:
 
 - This means TurboDocx can no longer use the connection, for example because a Salesforce admin revoked it or the connected user can no longer log in
-- Open **Settings > Features and integrations** in TurboDocx and connect Salesforce again
+- TurboDocx shows this message in the Salesforce settings dialog, not on the Salesforce card itself, and also emails your organization's admins
+- Open **Settings > Features and integrations** in TurboDocx, click **Configure SalesForce** on the Salesforce card, and connect Salesforce again
 - Reconnecting is safe
 
 ### "No Records Found" in TurboDocx

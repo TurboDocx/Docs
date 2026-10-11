@@ -26,7 +26,7 @@ Every credential and access step below can also be scripted. See [Scripted setup
 Have these ready:
 
 - **A TurboDocx account.** If you are signing up now, TurboDocx asks you to verify your email before it creates your workspace. Click the link in the verification email, then continue.
-- **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys** for the key and **Features and integrations** for the Organization ID. When you create the key, the **User** access level is enough for TurboSign for Salesforce. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
+- **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys**. That page shows both the key and the Organization ID. The Organization ID is also on **Features and integrations**. When you create the key, the **User** access level is enough for TurboSign for Salesforce. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
 - **A TurboDocx template** with a text token wherever someone signs or dates, for example `{sig}` and `{date}`.
 - **System Administrator** access to your Salesforce org.
 - **A supported Salesforce edition**, such as Enterprise, Unlimited, Performance, or Developer Edition. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
@@ -126,8 +126,8 @@ The package has two permission sets. Both include access to the TurboDocx creden
 
    ![Current Assignments page with Add Assignment highlighted](/img/turbosign-salesforce/13-add-assignment.png)
 
-6. If the list of users is empty, open **Select a List View** and pick a view, for example **Recently Viewed** or **All Users**.
-7. Select your reps, then click **Assign**.
+6. If the list of users is empty, open **Select a List View** and pick **Recently Viewed**. A new org may have only that view. If your org has **All Users**, you can pick it instead.
+7. Select your reps, then click **Next**. On the next page, leave **No expiration date** selected and click **Assign**.
 8. Repeat for **TurboSign Admin** with your admins.
 
 :::note Automations need access too
@@ -149,7 +149,7 @@ If you don't have that connection yet, follow [Salesforce Integration, Steps 1 t
 - **You can connect more than one Salesforce org.** For example, connect both a sandbox and production. Each send uses the connection to the org it was sent from.
 - **Check the app's scopes.** The connection needs the **api** scope, the **refresh_token** (offline access) scope, and the **openid** scope, because TurboDocx checks which Salesforce org each connection belongs to. See [Configure API Settings](/docs/Integrations/SalesForce#configure-api-settings). If you added **openid** to an existing app, reconnect Salesforce in TurboDocx.
 - **Leave the refresh token policy as Salesforce sets it.** New External Client Apps expire a refresh token that isn't used for 30 days, and the **Refresh token is valid until revoked** option no longer exists. TurboDocx keeps the connection active automatically. See [Edit Policies](/docs/Integrations/SalesForce#edit-policies).
-- **If the connection stops working**, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in **Settings > Features and integrations** and emails your organization's admins.
+- **If the connection stops working**, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in the Salesforce settings dialog and emails your organization's admins. To see the message, open **Settings > Features and integrations** and click **Configure SalesForce** on the Salesforce card.
 - **Reconnecting is safe.** Your current connection keeps working until the new one succeeds.
 
 :::note Sandboxes

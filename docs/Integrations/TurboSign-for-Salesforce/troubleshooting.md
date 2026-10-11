@@ -69,7 +69,7 @@ TurboDocx retries a save after a temporary Salesforce error or an expired sessio
 - no connection matches the org you sent from, for example because TurboDocx is connected to production and you sent from a sandbox,
 - the package is older than 1.1.0, which does not send the org ID (update the package),
 - the External Client App is missing the **openid** scope, so TurboDocx can't tell which org the connection belongs to,
-- the connection was revoked, for example by a Salesforce admin or after a password reset, or the TurboDocx user who made it was deactivated (TurboDocx then shows a **Reconnect Salesforce** message in **Settings**, then **Features and integrations**, and emails your organization's admins),
+- the connection was revoked, for example by a Salesforce admin or after a password reset, or the TurboDocx user who made it was deactivated (TurboDocx then emails your organization's admins and shows a **Reconnect Salesforce** message when you open **Configure SalesForce** on the Salesforce card in **Settings**, then **Features and integrations**),
 - the connected Salesforce user can't see or edit the record, or
 - the record was deleted.
 
