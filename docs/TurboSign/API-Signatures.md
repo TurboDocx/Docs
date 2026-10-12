@@ -357,9 +357,31 @@ formData.append("fields", fields);
 
 ### Sending with signer roles {#sending-with-signer-roles}
 
-A PDF template in TurboDocx can carry a saved signature setup: signer **roles** (for example "Client" and "Countersigner") with fields placed on the PDF for each role. Each role has a stable **key** (for example `client`), shown under **Use via API** on the template page and returned by [Get Template Signature Setup](#endpoint-8-get-template-signature-setup). A role is either a **slot** with no saved signer, filled in each time you send, or it has a **saved signer** (a name and email used when you leave the role out). Roles saved before keys existed answer to `signer_1`, `signer_2` and so on, by signing order.
+A PDF template in TurboDocx can carry a saved signature setup: signer **roles** (for example "Client" and "Countersigner") with fields placed on the PDF for each role. Each role has a stable **key** (for example `client`), shown under **Use via API** on the template page (turn on **Dev Mode** to see it) and returned by [Get Template Signature Setup](#endpoint-8-get-template-signature-setup). A role is either a **slot** with no saved signer, filled in each time you send, or it has a **saved signer** (a name and email used when you leave the role out). Roles saved before keys existed answer to `signer_1`, `signer_2` and so on, by signing order.
 
 Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word or PowerPoint template, generate a deliverable and send it with `deliverableId`.
+
+#### How role keys are made {#how-role-keys-are-made}
+
+The key is made from the role name in TurboDocx: lowercase, with spaces and symbols turned into underscores.
+
+| Role name       | Key               |
+| --------------- | ----------------- |
+| Client          | `client`          |
+| Account Manager | `account_manager` |
+| Counter-signer  | `counter_signer`  |
+| Signer 1        | `signer_1`        |
+
+- A role left with the default name ("Signer 1", "Signer 2") has the key `signer_1`, `signer_2`, following its position.
+- If two roles would make the same key, the second gets a number, such as `client_2`. TurboDocx does not allow two roles with the same name, so this is rare.
+- Once a template is saved, a role's key never changes, even if you rename the role later.
+- Keys are matched ignoring case.
+
+To find the keys, turn on **Dev Mode** in TurboDocx. The template page then shows a **Use via API** panel, and the **Code** button on the send page shows **Send this template by role**. Both give ready-to-paste code with your template ID, organization ID and role keys. You can also call [Get Template Signature Setup](#endpoint-8-get-template-signature-setup).
+
+:::tip Use the key, not the display name
+Pass the key (`signer_1`), not the name shown in the app (`Signer 1`). A display name fails with `UnknownSignerRole`, and the error lists the valid keys: `Unknown role "Signer 1". This template's roles are: signer_1, signer_2`.
+:::
 
 To send such a template, pass its `templateId` and give each recipient a `role`:
 
@@ -1188,7 +1210,7 @@ User-Agent: TurboDocx API Client
 ### Usage Notes
 
 - Works with an API key or a user token, and for any organization role that can view templates.
-- The same role keys are shown in the app under **Use via API** on the template page.
+- The same role keys are shown in the app under **Use via API** on the template page when **Dev Mode** is on.
 - Roles saved before keys existed are returned with keys `signer_1`, `signer_2` and so on.
 
 ## Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
@@ -1196,7 +1218,7 @@ User-Agent: TurboDocx API Client
 When the signers and fields are already set up on a template in TurboDocx, an integration only needs to say who fills each role.
 
 1. In TurboDocx, upload the PDF as a template, add a role for each signer (for example "Client" and "Countersigner"), drag each role's fields onto the page and save the signature setup. Give a role a saved signer if the same person always signs it.
-2. Look up the role keys with [Get Template Signature Setup](#endpoint-8-get-template-signature-setup), or copy them from **Use via API** on the template page.
+2. Look up the role keys with [Get Template Signature Setup](#endpoint-8-get-template-signature-setup), or copy them from **Use via API** on the template page (shown with **Dev Mode** on).
 3. Send with [Prepare for Signing](#endpoint-2-prepare-for-signing) (or [Prepare for Review](#endpoint-1-prepare-for-review)), passing `templateId` and one recipient per role you want to fill. Leave out `fields` and `signingOrder`:
 
 ```bash
