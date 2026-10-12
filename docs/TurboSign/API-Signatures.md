@@ -222,7 +222,7 @@ User-Agent: TurboDocx API Client
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
 | recipients          | String (JSON)  | **Yes**       | JSON string array of recipient objects     |
-| fields              | String (JSON)  | Conditional\*\* | JSON string array of field objects. Optional when a recipient has a `role` |
+| fields              | String (JSON)  | Conditional\*\* | JSON string array of field objects. Must not be empty. Optional only when a recipient has a `role` |
 | senderName          | String         | No            | Name of sender (max 255 chars). Defaults to your API key's name. |
 | senderEmail         | String (email) | **Yes**       | Reply-to address on the signature email and the sender recorded in the audit trail |
 | ccEmails            | String (JSON)  | No            | JSON string array of CC email addresses    |
@@ -237,7 +237,7 @@ User-Agent: TurboDocx API Client
 
 \* **File Source**: Must provide exactly ONE of: file, deliverableId, templateId, or fileLink
 
-\*\* **Fields**: Required, unless at least one recipient names a template signer `role`. See [Sending with signer roles](#sending-with-signer-roles).
+\*\* **Fields**: Required and must not be empty, unless at least one recipient names a template signer `role`. Omitting `fields`, or sending `[]`, without a role returns `400 FieldsRequired`. See [Sending with signer roles](#sending-with-signer-roles).
 
 :::tip Reminders & expiration are optional
 The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
@@ -359,7 +359,7 @@ formData.append("fields", fields);
 
 A PDF template in TurboDocx can carry a saved signature setup: signer **roles** (for example "Client" and "Countersigner") with fields placed on the PDF for each role. Each role has a stable **key** (for example `client`), shown under **Use via API** on the template page (turn on **Dev Mode** to see it) and returned by [Get Template Signature Setup](#endpoint-8-get-template-signature-setup). A role is either a **slot** with no saved signer, filled in each time you send, or it has a **saved signer** (a name and email used when you leave the role out). Roles saved before keys existed answer to `signer_1`, `signer_2` and so on, by signing order.
 
-Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word or PowerPoint template, generate a deliverable and send it with `deliverableId`.
+Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word template, generate a deliverable and send it with `deliverableId`. PowerPoint templates can't be sent for signature at all; see [Document and field errors](#document-and-field-errors).
 
 #### How role keys are made {#how-role-keys-are-made}
 
@@ -419,7 +419,34 @@ These return `400` with a body of the form `{ "message": "...", "type": "..." }`
 | `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address                 |
 | `OtpPhoneRequired`         |                                                                                     | A role requires SMS verification and the recipient has no `phone` |
 | `FieldsRequired`           |                                                                                     | `fields` was omitted and no recipient names a role           |
-| `TemplateRolesNeedPdfTemplate` |                                                                                | Roles were sent for a Word or PowerPoint template            |
+| `TemplateRolesNeedPdfTemplate` |                                                                                | Roles were sent for a Word template                          |
+
+#### Document and field errors {#document-and-field-errors}
+
+These also return `400` with a body of the form `{ "message": "...", "type": "..." }` (the signature setup endpoints return `{ "error": "...", "code": "..." }` instead):
+
+| `type`                                | Example `message`                                                                                   | Cause                                                                                              |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `SignatureNotSupportedForPresentation` | `PowerPoint templates can't be sent for signature. Use a Word or PDF template.`                     | The `templateId` or `deliverableId` you sent points to a PowerPoint (`.pptx`) file                 |
+| `FieldsRequired`                      | `fields is required. Leave it out only when sending a templateId whose recipients name a role (recipients[].role).` | `fields` was omitted or empty and no recipient names a role |
+| `FieldPageOutOfRange`                 | `A field is placed on page 5, but the document has 3 pages.`                                        | A coordinate-based field has a `page` the document doesn't have                                    |
+| `SignatureSetupTemplateMismatch`      |                                                                                                     | A signature setup placed on an uploaded PDF was saved onto a template that isn't a PDF template     |
+| `SignatureSetupPageOutOfRange`        | `A field is placed on page 5, but this PDF has 3 pages.`                                            | A signature setup saved onto a PDF template has a field past the PDF's last page                   |
+
+:::warning PowerPoint templates and deliverables can't be sent for signature
+PowerPoint is still supported for generating documents, but a template or deliverable made from a `.pptx` file is rejected with `400 SignatureNotSupportedForPresentation` wherever it is the source of a signature request. That covers single-step sends and review links with `templateId` or `deliverableId`, creating a document from a template or deliverable, bulk sends, and saving or deleting a template's signature setup.
+
+To migrate, convert the presentation to a Word or PDF template and send that instead.
+:::
+
+#### Locked templates and permissions
+
+- Saving or deleting a template's signature setup returns `423` while someone is editing the template in TurboDocx. Retry once they have finished.
+- Get Template Signature Setup requires the administrator, contributor or user role. A viewer is refused.
+
+#### Editing a draft's signers
+
+When you change a draft's signers with `PATCH /turbosign/documents/{documentId}/update-with-recipients`, the recipients you send replace the draft's current signers. A recipient with an `id` is updated in place; a recipient without an `id` is added as a new signer; a current signer you leave out is removed, along with that signer's fields. This also applies to a draft created from a template, so sending recipients without `id` replaces the signers the template saved. The draft must still be in `DRAFT` status, otherwise the request returns `409`.
 
 ### Response
 
@@ -1209,7 +1236,7 @@ User-Agent: TurboDocx API Client
 
 ### Usage Notes
 
-- Works with an API key or a user token, and for any organization role that can view templates.
+- Works with an API key or a user token. The caller needs the administrator, contributor or user role; the viewer role is refused, because the response lists saved signer emails.
 - The same role keys are shown in the app under **Use via API** on the template page when **Dev Mode** is on.
 - Roles saved before keys existed are returned with keys `signer_1`, `signer_2` and so on.
 
