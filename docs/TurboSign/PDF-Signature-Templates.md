@@ -172,8 +172,10 @@ fields in code. Each recipient names a role, and the fields you placed for that 
 <!-- TODO screenshot: template page with Dev Mode on and the Use via API panel open, showing the template ID and a code sample with role keys -->
 
 Each role has a **key** made from its name: **Client** becomes `client` and **Account Manager**
-becomes `account_manager`. A key never changes once the template is saved, even if you rename
-the role. Use the key in your code, not the name shown in the app.
+becomes `account_manager`. Once the template is saved, the key of a role you named never
+changes, even if you rename it. A role left as **Signer 1** or **Signer 2** uses `signer_1` or
+`signer_2`, which follow its position, so name the role if your code depends on it. Use the key in
+your code, not the name shown in the app.
 
 ```ts
 await TurboSign.sendSignature({
