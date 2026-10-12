@@ -21,11 +21,9 @@ Every time you send it after that, you only say who is signing this time.
 
 A PDF template is **for signatures only**. It has no `{variables}` and can't be used to generate
 a document. To fill in text automatically, use a Word or PowerPoint template instead. See
-[How to Create a Template](/docs/TurboDocx-Templating/How-to-Create-a-Template). Word templates
-can save a signature setup too: see
-[How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md). PowerPoint
-templates can't be sent for signature. To get a presentation signed, use a Word or PDF
-template instead.
+[How to Create a Template](/docs/TurboDocx-Templating/How-to-Create-a-Template). Word and
+PowerPoint templates can save a signature setup too: see
+[How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md).
 
 ## Step 1: Upload your PDF
 
@@ -220,8 +218,6 @@ For how keys are made, every parameter and every error, see
 
 - **A PDF template can't generate a document.** It has no variables, so there is nothing to fill
   in. It's always sent for signature as it is.
-- **PowerPoint templates can't be sent for signature.** They have no **Signatures** tab. Use a
-  Word or PDF template for anything that needs a signature.
 - **Only some people can change a template.** Only **Administrators** and **Contributors** can
   edit a template's roles and fields. Anyone who can send documents can send it.
 
