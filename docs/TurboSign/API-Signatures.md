@@ -372,9 +372,9 @@ The key is made from the role name in TurboDocx: lowercase, with spaces and symb
 | Counter-signer  | `counter_signer`  |
 | Signer 1        | `signer_1`        |
 
-- A role left with the default name ("Signer 1", "Signer 2") has the key `signer_1`, `signer_2`, following its position.
+- A role left with the default name ("Signer 1", "Signer 2") has the key `signer_1`, `signer_2`. These keys follow the role's position, so they renumber if roles are reordered, added or removed. Give a role its own name if your code depends on it.
 - If two roles would make the same key, the second gets a number, such as `client_2`. TurboDocx does not allow two roles with the same name, so this is rare.
-- Once a template is saved, a role's key never changes, even if you rename the role later.
+- Once a template is saved, the key of a role you named never changes, even if you rename the role later.
 - Keys are matched ignoring case.
 
 To find the keys, turn on **Dev Mode** in TurboDocx. The template page then shows a **Use via API** panel, and the **Code** button on the send page shows **Send this template by role**. Both give ready-to-paste code with your template ID, organization ID and role keys. You can also call [Get Template Signature Setup](#endpoint-8-get-template-signature-setup).
