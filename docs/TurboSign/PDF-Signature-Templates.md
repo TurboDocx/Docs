@@ -84,7 +84,7 @@ After it is sent, TurboDocx asks **Sending this again?**
   **Signer 2**, and so on. Nobody is kept on the template, so you choose the people each time.
 - **Not Now** leaves the PDF as it is.
 
-After you save, TurboDocx shows **<Template name> is ready to reuse**, with **Send It**,
+After you save, TurboDocx shows that your template **is ready to reuse**, with **Send It**,
 **Edit Roles** and **Back to Templates**.
 
 ![Template ready page listing the roles with Send It, Edit Roles and Back to Templates](/img/pdf_signature_templates/19_template_ready.png)
