@@ -53,6 +53,8 @@ The connection dropped after TurboDocx may already have sent the document.
 
 **Fix:** Before you click **Send** again, click **Refresh** in the **TurboSign Signatures** panel, or ask the signer whether they got an email. If the document went out, don't send it again, so the signers don't get two copies. If you don't see the panel, ask your admin to add it.
 
+In version 1.1.0, if Salesforce can't save the send's record after TurboDocx accepted the document (for example, because your org is over its storage limit), you may see **Send failed** instead, even though the signers got the email. If a send fails right after a long wait, ask the signer before you send again, and ask your admin to check your org's storage.
+
 ## "You have approached the limit of Deliverables for your plan"
 
 Each preview creates a short-lived document that counts toward your TurboDocx plan's deliverable limit while it renders. TurboSign removes it right after. Sending also creates a document. Once the limit is reached, TurboDocx refuses both previews and sends.
