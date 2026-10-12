@@ -37,6 +37,8 @@ The user who clicked (or the user a Flow runs as) doesn't have access to the Tur
 
 A data token marked **Required** has no value on this record and no default.
 
+In version 1.1.0 the message leaves out the token's name and reads **Required value is empty on this record**. The full message, with the token, is in the newest **TurboSign Log** record, which your admin can look up.
+
 **Fix:** Fill in the field on the record and send again. If the value only applies sometimes, ask your admin to uncheck **Required** for that token in **TurboSign Setup**, so the spot is left blank instead.
 
 ## "Signer 2 has no email on this record"
@@ -83,7 +85,7 @@ TurboDocx retries a save after a temporary Salesforce error or an expired sessio
 
 If the files arrived but the stage didn't change, check that the **On Completion** value is allowed for the record's record type, and that no validation rule blocks the change.
 
-A save that still fails after the retries is not re-sent automatically later. After you fix the cause, contact TurboDocx support to resend the signed files.
+When a save fails, TurboDocx tries it again every hour for about a day. So if you reconnect Salesforce (or fix the cause) within that time, the files arrive on their own. After that, contact TurboDocx support to resend the signed files.
 
 ## The Send for Signature button is missing
 

@@ -38,8 +38,12 @@ The two links install the same package. Production and Developer Edition orgs si
 If you have a sandbox, install there first, finish the [setup](/docs/Integrations/turbosign-for-salesforce/setup), and send a test document before you install in production. To have the signed PDF saved back to the sandbox record, connect that sandbox in TurboDocx, as described in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
 :::
 
+:::tip Already logged in to your org?
+The links go through `login.salesforce.com` (or `test.salesforce.com`), which may ask you to log in again even when you're already signed in to your org. To skip that, replace the start of the link with your org's My Domain address, the one in your browser's address bar when you're in Salesforce. For example: `https://yourcompany.my.salesforce.com/packaging/installPackage.apexp?p0=04tbm000000o8LlAAI`.
+:::
+
 :::note Logged in to a different org?
-The link opens in whichever org your browser is already logged in to. If that's the wrong one, log out first, or open the link in a private browser window.
+The link opens in whichever org you log in to. If your browser is signed in to the wrong one, log out first, or open the link in a private browser window.
 :::
 
 ## Newer versions

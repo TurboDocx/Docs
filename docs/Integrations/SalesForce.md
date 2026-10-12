@@ -53,7 +53,7 @@ Don't worry! We've made this guide so detailed that any team member can follow i
 To use the Salesforce integration, you'll need:
 
 - A TurboDocx **Pro** or **Enterprise** plan, which include the Salesforce integration
-- A Salesforce account with Connected App creation permissions (any edition works!)
+- A Salesforce account with permission to create External Client Apps (any edition works!)
 - System Administrator access to create a Salesforce connected app
 - About 15 minutes and a cup of coffee ☕
 - This guide (which you're already reading — you're ahead of the game!)
@@ -199,7 +199,7 @@ Look at you go! You've successfully created your Salesforce External Client App.
 
 <br/>
 
-## Step 2: Configure Connected App Policies and Retrieve Credentials
+## Step 2: Configure External Client App Policies and Retrieve Credentials
 
 After creating the app, you need to adjust its access policies and retrieve the necessary credentials for TurboDocx.
 
@@ -225,7 +225,7 @@ After creating the app, you need to adjust its access policies and retrieve the 
 
 3. **Adjust OAuth Policies**
    - In the "Edit" view, locate the OAuth policies and configure the following settings:
-      - **Permitted Users**: Select **"All users may self-authorize"**
+      - **Permitted Users**: Select **"All users can self-authorize"**
       - **Named User JWT-Based Access Token Settings**: Select **"Set app-specific token timeout"**, then select **30 Minutes**
       - **Refresh Token Policy**: Leave **"Expire refresh token if not used for specific time"** selected, with the 30-day limit Salesforce sets
       - **IP Relaxation**: Select exactly **"Relax IP restrictions"**, not the similar **"Relax IP restrictions for activated devices"**
@@ -259,7 +259,7 @@ If the connection ever stops working, for example because a Salesforce admin rev
 
 6. **Navigate to the OAuth Settings part under the settings section**
    - You will now see a button of **Consumer Key and Secret**
-   - Click on this button
+   - Click on this button. Salesforce opens a new browser tab for the next two steps
 
 ![Consumer Key and Secret Button](/img/salesforce-integration/Consumer_key_and_secret_button.png)
 

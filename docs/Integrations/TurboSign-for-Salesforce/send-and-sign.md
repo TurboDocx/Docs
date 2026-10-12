@@ -18,7 +18,7 @@ This guide shows a rep how to send a document from an Opportunity, what each sig
 ## Step 1: Start the send
 
 1. Open the Opportunity.
-2. Click **Send for Signature** at the top right.
+2. Click **Send for Signature** at the top right. If you don't see it there, click the **▼** menu next to the other buttons and pick it from the list.
 
    ![Opportunity page with the Send for Signature button highlighted](/img/turbosign-salesforce/40-send-for-signature.png)
 
@@ -52,7 +52,7 @@ The document opens right in the window. Scroll through it to check every page. Y
 
 ![Document tab with the PDF preview of the filled-in Service Agreement highlighted](/img/turbosign-salesforce/44b-document-preview.png)
 
-- Signing fields of any kind (signature, initials, date, text, and so on) still show as their tokens, such as `{sig}` or `{date}`. Each signer gets a box in that spot when the document goes out.
+- Signing spots of any kind (signature, initials, date, text, and so on) look blank in the preview. Each signer gets a box in that spot when the document goes out.
 - The render also checks the signing spots. **Details** lists every spot, and after the render it says **All signature spots found in the document**. If a spot is missing, it names the token and the signer instead. Ask your admin to fix the template or the setup before you send.
 - If you change a value after it renders, the tab shows **Your edits aren't in this preview yet**. Click **Update preview** to see the new version. **Send** always uses your latest values, even if you didn't update the preview.
 
@@ -120,7 +120,7 @@ The **TurboSign Signatures** panel on the record lists the documents sent from i
 
 - click **Refresh** to pull the latest status and see how many people have signed,
 - click **Remind** to email signers who haven't signed yet, or
-- click **Void** to cancel the document. Void can't be undone.
+- click **Void** to cancel the document. Type a **Reason**, then click **Void request**. Void can't be undone.
 
 :::tip React to declined or voided documents
 Nothing is saved to the record when a document is declined or voided. To act on those outcomes today, ask your admin to build a Flow on the **TurboSign Envelope** record's **Status** field. The status updates when a rep clicks **Refresh** in the **TurboSign Signatures** panel.

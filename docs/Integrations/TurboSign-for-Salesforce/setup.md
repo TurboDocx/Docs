@@ -26,7 +26,7 @@ Every credential and access step below can also be scripted. See [Scripted setup
 Have these ready:
 
 - **A TurboDocx account.** If you are signing up now, TurboDocx asks you to verify your email before it creates your workspace. Click the link in the verification email, then continue.
-- **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys**. That page shows both the key and the Organization ID. The Organization ID is also on **Features and integrations**. When you create the key, the **User** access level is enough for TurboSign for Salesforce. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
+- **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys**. That page shows the Organization ID. Create a key there and copy it right away: TurboDocx shows the key only once, when you create it. The Organization ID is also on **Features and integrations**. When you create the key, the **User** access level is enough for TurboSign for Salesforce. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
 - **A TurboDocx template** with a text token wherever someone signs or dates, for example `{sig}` and `{date}`.
 - **System Administrator** access to your Salesforce org.
 - **A supported Salesforce edition**, such as Enterprise, Unlimited, Performance, or Developer Edition. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
@@ -78,7 +78,7 @@ After you save, the **TurboDocxPrincipal** row shows **2** under **Authenticatio
 The package looks for parameters named `ApiKey` and `OrgId`. If either is missing or spelled differently, every send fails with **Field TurboDocx_API.ApiKey does not exist** (or `OrgId`).
 :::
 
-To change the key later, edit the `ApiKey` value the same way. Nothing else needs to change.
+To change the key later, edit the `ApiKey` value the same way. Nothing else needs to change. Change only the **Value**: if you change a parameter's **Name** in **Edit Principal**, Salesforce clears its value, so you have to paste it again.
 
 ## Step 2: Check where Salesforce sends requests
 
@@ -188,7 +188,7 @@ Under **Document Name**, build the name each document gets, for example `Service
 4. Click **Text**, click the new text box, and type ` - `.
 5. Click **Date**.
 
-The **Preview** line shows the result. The **Separator** menu adds a single character with no spaces, so use **Text** when you want spacing.
+The **Preview** line shows the result. Until you pick a record under [Test with a record](#test-and-save), it shows placeholders, for example `Service Agreement - [Account.Name] - (today's date)`. The **Separator** menu adds a single character with no spaces, so use **Text** when you want spacing.
 
 **Date Format** is optional. It sets how dates look in the document and in its name, using a pattern such as `MMMM d, yyyy` (for `October 9, 2026`). Leave it blank to use the default: dates from the record follow the sending user's Salesforce locale, and the date in the name looks like `October 9, 2026`.
 
@@ -338,7 +338,7 @@ If the properties pane on the right lists actions with an **Add Action** button,
 4. Click the layout your reps use. To find out which one that is, click **Page Layout Assignment** on the same page. It lists the layout each profile uses. In a new org, the **System Administrator** profile uses **Opportunity Layout**.
 5. In the palette at the top, click **Mobile & Lightning Actions**.
 6. If the **Salesforce Mobile and Lightning Experience Actions** section says it uses predefined actions, click the **override the predefined actions** link inside it.
-7. Drag **Send for Signature** into the **Salesforce Mobile and Lightning Experience Actions** section.
+7. Drag **Send for Signature** into the **Salesforce Mobile and Lightning Experience Actions** section, and drop it at the **start** of the list. The record page shows only the first few actions as buttons and puts the rest in a **▼** menu, so an action dropped at the end is easy to miss.
 8. Click **Save**.
 
 Repeat for every page or layout your reps use.
