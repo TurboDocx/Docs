@@ -359,7 +359,7 @@ formData.append("fields", fields);
 
 A PDF template in TurboDocx can carry a saved signature setup: signer **roles** (for example "Client" and "Countersigner") with fields placed on the PDF for each role. Each role has a stable **key** (for example `client`), shown under **Use via API** on the template page (turn on **Dev Mode** to see it) and returned by [Get Template Signature Setup](#endpoint-8-get-template-signature-setup). A role is either a **slot** with no saved signer, filled in each time you send, or it has a **saved signer** (a name and email used when you leave the role out). Roles saved before keys existed answer to `signer_1`, `signer_2` and so on, by signing order.
 
-Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word template, generate a deliverable and send it with `deliverableId`. PowerPoint templates can't be sent for signature at all; see [Document and field errors](#document-and-field-errors).
+Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word or PowerPoint template, generate a deliverable and send it with `deliverableId`.
 
 #### How role keys are made {#how-role-keys-are-made}
 
@@ -419,7 +419,7 @@ These return `400` with a body of the form `{ "message": "...", "type": "..." }`
 | `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address                 |
 | `OtpPhoneRequired`         |                                                                                     | A role requires SMS verification and the recipient has no `phone` |
 | `FieldsRequired`           |                                                                                     | `fields` was omitted and no recipient names a role           |
-| `TemplateRolesNeedPdfTemplate` |                                                                                | Roles were sent for a Word template                          |
+| `TemplateRolesNeedPdfTemplate` |                                                                                | Roles were sent for a Word or PowerPoint template            |
 
 #### Document and field errors {#document-and-field-errors}
 
@@ -427,17 +427,10 @@ These also return `400` with a body of the form `{ "message": "...", "type": "..
 
 | `type`                                | Example `message`                                                                                   | Cause                                                                                              |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `SignatureNotSupportedForPresentation` | `PowerPoint templates can't be sent for signature. Use a Word or PDF template.`                     | The `templateId` or `deliverableId` you sent points to a PowerPoint (`.pptx`) file                 |
 | `FieldsRequired`                      | `fields is required. Leave it out only when sending a templateId whose recipients name a role (recipients[].role).` | `fields` was omitted or empty and no recipient names a role |
 | `FieldPageOutOfRange`                 | `A field is placed on page 5, but the document has 3 pages.`                                        | A coordinate-based field has a `page` the document doesn't have                                    |
 | `SignatureSetupTemplateMismatch`      |                                                                                                     | A signature setup placed on an uploaded PDF was saved onto a template that isn't a PDF template     |
 | `SignatureSetupPageOutOfRange`        | `A field is placed on page 5, but this PDF has 3 pages.`                                            | A signature setup saved onto a PDF template has a field past the PDF's last page                   |
-
-:::warning PowerPoint templates and deliverables can't be sent for signature
-PowerPoint is still supported for generating documents, but a template or deliverable made from a `.pptx` file is rejected with `400 SignatureNotSupportedForPresentation` wherever it is the source of a signature request. That covers single-step sends and review links with `templateId` or `deliverableId`, creating a document from a template or deliverable, bulk sends, and saving or deleting a template's signature setup.
-
-To migrate, convert the presentation to a Word or PDF template and send that instead.
-:::
 
 #### Locked templates and permissions
 
