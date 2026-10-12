@@ -1,7 +1,7 @@
 ---
 title: How to Use a PDF as a Signature Template
 sidebar_position: 1.5
-description: Upload a PDF as a TurboSign template, add signers and signature fields once, and save that setup so every future send starts ready to sign.
+description: Upload a PDF to TurboSign, send it once or set it up with roles like Client and Countersigner, and reuse it so every future send starts ready to sign.
 keywords:
   - pdf signature template
   - signer roles
@@ -15,12 +15,12 @@ keywords:
 
 # How to Use a PDF as a Signature Template
 
-Have a PDF you send for signature again and again, like an NDA? Upload it once as a template,
-place the signers and signature fields, and save that setup. Every time you open the template
-after that, the signers and fields are already in place.
+Have a PDF you send for signature again and again, like an NDA? Upload it once, set up the
+**roles** that sign it (for example **Client** and **Countersigner**) and where each one signs.
+Every time you send it after that, you only say who is signing this time.
 
 A PDF template is **for signatures only**. It has no `{variables}` and can't be used to generate
-a document. To fill in text automatically, use a Word or PowerPoint template instead — see
+a document. To fill in text automatically, use a Word or PowerPoint template instead. See
 [How to Create a Template](/docs/TurboDocx-Templating/How-to-Create-a-Template). Word and
 PowerPoint templates can save a signature setup too: see
 [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md).
@@ -35,8 +35,8 @@ PowerPoint templates can save a signature setup too: see
 
 ![Create Template page with the Upload Template card highlighted](/img/pdf_signature_templates/02_upload_template.png)
 
-TurboDocx creates the template and opens it on the **Prepare & Sign** tab. In the **Templates**
-list, a PDF template has a red pen icon.
+TurboDocx creates the template and asks **What is this for?** In the **Templates** list, a PDF
+template has a red pen icon.
 
 :::note What happens to your PDF on upload
 TurboDocx prepares the PDF the same way as a PDF you upload for signature:
@@ -51,101 +51,123 @@ TurboDocx prepares the PDF the same way as a PDF you upload for signature:
 **Download File** on the template's page gives you this PDF.
 :::
 
-## Step 2: Add a signer
+## Step 2: Choose what this is for
 
-1. Click **Add Recipient**.
+After you upload a PDF, TurboDocx asks **What is this for?**
 
-![Prepare & Sign tab with the Add Recipient button highlighted](/img/pdf_signature_templates/03_add_recipient.png)
+![What is this for? with the Send it now and Set it up to reuse choices](/img/pdf_signature_templates/15_what_is_this_for.png)
 
-2. In **Role**, name the part this signer plays, for example **Client** or **Countersigner**.
-   The **API key** shown under it is the name your code uses for this signer (see
-   [Send the template from your code](#send-the-template-from-your-code)).
-3. Choose who signs:
-   - If a different person signs each time (for example, each new client), tick **Fill in name
-     and email when sending**. Name and email become optional: anything you type there is for
-     this send only and is never saved on the template.
-   - If the same person always signs (for example, someone on your team), leave it unticked and
-     enter their **Name** and **Email**.
-4. Click **Add**. In the same window you can choose the signer's identity verification, or set
-   **Recipient Type** to **Receives a Copy** for someone who only gets a copy.
+- **Send it now** (**Add Signers**): you know who signs this time. Go to [Send it now](#send-it-now).
+- **Set it up to reuse** (**Set Up Roles**): you will send this PDF again and again. Go to
+  [Set it up to reuse](#set-it-up-to-reuse).
 
-![Add Recipient dialog with the role Client and Fill in name and email when sending highlighted](/img/pdf_signature_templates/04_recipient_details.png)
+You don't have to decide for good. You can turn a one-time send into a reusable template after
+it is sent. A template that already has roles skips this question.
 
-:::tip
-Add a recipient for everyone who signs this document every time. A signer saved with a name and
-email can still be changed before each send.
+## Send it now {#send-it-now}
+
+1. Click **Add Recipient**. Choose the **Recipient Type**, then enter the **Name** and **Email**.
+   Click **Include Me** to add yourself.
+
+![Add Recipient dialog with Recipient Type, Name and Email](/img/pdf_signature_templates/16_add_recipient.png)
+
+2. Place the signature fields for each signer on the PDF.
+3. Click **Get It Signed**.
+
+After it is sent, TurboDocx asks **Sending this again?**
+
+![Sent confirmation with Save As Reusable Template and Not Now](/img/pdf_signature_templates/17_save_as_template.png)
+
+- **Save As Reusable Template** keeps the fields and turns each signer into a role: **Signer 1**,
+  **Signer 2**, and so on. Nobody is kept on the template, so you choose the people each time.
+- **Not Now** leaves the PDF as it is.
+
+After you save, TurboDocx shows **<Template name> is ready to reuse**, with **Send It**,
+**Edit Roles** and **Back to Templates**.
+
+![Template ready page listing the roles with Send It, Edit Roles and Back to Templates](/img/pdf_signature_templates/19_template_ready.png)
+
+## Set it up to reuse {#set-it-up-to-reuse}
+
+Click **Set Up Roles**. TurboDocx opens a **Roles** editor.
+
+![Roles editor with a Client role and a Countersigner role](/img/pdf_signature_templates/18_roles_editor.png)
+
+1. Each role has a **Role name**. It starts as **Signer 1**, **Signer 2**. Rename it to say what
+   the signer is, for example **Client**.
+2. Under **Who signs?**, choose:
+   - **Someone new each send** (the default): you enter the name and email every time you send.
+   - **Me**: it is always you.
+   - **A specific person...**: enter their **Name** and **Email**. This person is used every
+     time, unless you change them for one send.
+3. Click **+ Add Role** for each other kind of signer. Roles sign in the order shown.
+4. Under **Select a role to assign fields**, pick a role, then drag **Signature**, **Date** and
+   the other fields onto the PDF where that role signs. Click a field to change its settings. See
+   [Adjust each field's settings](./Signature-Setups-on-Templates.md#step-4-adjust-each-fields-settings).
+
+<!-- TODO screenshot: field palette under "Select a role to assign fields" with a role chosen and a Signature field placed on the PDF -->
+
+5. Click **Save Template** in the header. TurboDocx saves it and shows the template ready page.
+
+:::note Role names
+Two roles can't have the same name. TurboDocx ignores capital letters and punctuation when it
+compares them, so **Client** and **client.** count as the same name. A role name can't be empty.
 :::
-
-## Step 3: Place the signature fields
-
-1. With the signer selected, drag **Signature** from the field list onto the PDF.
-
-![Field list for the selected signer with the Signature field highlighted](/img/pdf_signature_templates/05_signature_field.png)
-
-2. Drop it where the signer should sign. Drag it again to move it, or use its **×** to remove it.
-
-![A Signature field placed on the signature line of the PDF, highlighted](/img/pdf_signature_templates/06_field_placed.png)
-
-Add any other fields the signer needs the same way (Date, Initials, Full name, and so on). Click
-a field to change its settings, such as whether the signer must fill it in or the value it starts
-with. See [Adjust each field's settings](./Signature-Setups-on-Templates.md#step-4-adjust-each-fields-settings).
 
 :::tip Name, message and reminders
 Click **⋮ → Signature Settings**. There you can set the **Document
 Name** signers see, the **Signature Email Description** (the message in their email), and
-**Reminders & expiration**. These are saved with the setup too.
+**Reminders & expiration**. These are saved with the template too.
 :::
 
-## Step 4: Save the setup to the template
-
-1. Click the **⋮** button in the top right corner.
-
-![Top right of the page with the three-dot menu button highlighted](/img/pdf_signature_templates/07_more_menu.png)
-
-2. Click **Save signature setup to template**.
-
-![Menu open with Save signature setup to template highlighted](/img/pdf_signature_templates/08_save_setup.png)
-
-A message confirms the setup was saved. The setup includes the signers, every field and its
-settings, CC recipients, the document name, the email message, and any reminder or expiration
-settings you changed.
-
-![Confirmation message: Signature setup saved to this template](/img/pdf_signature_templates/09_setup_saved.png)
-
-:::note
-Only **Administrators** and **Contributors** can save or delete a template's signature setup.
-Anyone who can send documents can still use the saved setup.
-:::
-
-## Step 5: Reuse it next time
+## Send a template that has roles
 
 1. Go to **Templates** and click your PDF template.
 
 ![Templates list filtered to the Mutual NDA template, with its tile highlighted](/img/pdf_signature_templates/11_open_template.png)
 
-2. The signers and fields you saved are already in place. Review them and change anything you
-   need for this send, then click **Get It Signed** and **Confirm**.
+2. Under **Who's signing this time?**, you see each role.
+   - For a role filled in each send, enter the **Name** and **Email**.
+   - A role that always goes to the same person shows that person. Click **Change for this
+     send** to use someone else this time only.
 
-![Template reopened with the saved signer already listed, highlighted](/img/pdf_signature_templates/12_setup_prefilled.png)
+![Who's signing this time with one role waiting for a name and email](/img/pdf_signature_templates/20_whos_signing.png)
 
-Changes you make while sending apply only to that send. The saved setup stays the same until you
-save it again.
+3. Click **Get It Signed**.
+
+Changes you make while sending apply only to that send. The template stays the same.
 
 You can also start from TurboSign: click **New Signature**, pick the template on the **Templates**
-tab under **Or Start with an Existing Document**, and click **Continue**. The request opens with
-the saved setup filled in.
+tab under **Or Start with an Existing Document**, and click **Continue**.
 
-## Send the template from your code
+## Change a template's roles or fields
 
-Once the setup is saved, you can send the template from your own app with the TurboDocx SDK or
-API, without placing any fields in code. Each recipient names a role, and the fields you placed
-for that role come with it.
+1. Click **Edit Roles**. You find it on **Who's signing this time?**, on the template ready page,
+   and as **Edit setup** on the template's details page.
+2. TurboDocx opens **Template Editing Mode**. Change the roles and move or add fields.
 
-1. Open the template's page (click **⋮ → Edit Template**, or click the template in **Templates**).
-2. Under **Use via API**, copy the **Template ID** and the sample for your language. Each signer's
-   role key (for example `client`) is shown next to them as **role: client**.
+![Template Editing Mode banner with Cancel and Done in the header](/img/pdf_signature_templates/21_editing_mode.png)
 
-![Template page with the Use via API panel highlighted, showing the template ID and a JavaScript sample](/img/pdf_signature_templates/14_use_via_api.png)
+3. Click **Done** to save, or **Cancel** to throw your changes away. **Template saved** appears
+   next to the template name.
+
+Changes apply to every future send. Documents you already sent aren't affected.
+
+## Use it from code (Dev Mode) {#use-it-from-code}
+
+You can send the template from your own app with the TurboDocx SDK or API, without placing any
+fields in code. Each recipient names a role, and the fields you placed for that role come with it.
+
+1. Turn on **Dev Mode** in TurboDocx.
+2. Open the template's page. The **Use via API** panel shows ready-to-paste code with your
+   template ID, organization ID and role keys.
+3. On the send page, the **Code** button shows **Send this template by role**.
+
+<!-- TODO screenshot: template page with Dev Mode on and the Use via API panel open, showing the template ID and a code sample with role keys -->
+
+Each role has a **key** made from its name: **Client** becomes `client` and **Account Manager**
+becomes `account_manager`. A key never changes once the template is saved, even if you rename
+the role. Use the key in your code, not the name shown in the app.
 
 ```ts
 await TurboSign.sendSignature({
@@ -154,33 +176,15 @@ await TurboSign.sendSignature({
 })
 ```
 
-- Pass a recipient for every role marked **Filled in when sending**.
-- A role saved with a name and email can be left out: that saved signer is used. Pass it to send
-  to someone else this time.
-- Signers sign in the order shown on the template.
-
-For every parameter and error, see the [TurboSign API reference](./API-Signatures.md).
-
-## Change or remove the saved setup
-
-- **To change it:** open the template, adjust the signers or fields, and click
-  **⋮ → Save signature setup to template** again. The new setup replaces the old one.
-- **To remove it:** click **⋮ → Delete signature setup from template**, then confirm.
-  The template goes back to having no signers or fields. Documents you already sent aren't
-  affected.
-
-![Menu open with Delete signature setup from template highlighted](/img/pdf_signature_templates/10_delete_setup.png)
-
-To review the saved setup without changing it, click **⋮ → Edit Template**. The template's page
-lists the signers, every field and its settings, the email, and reminders, and draws the fields on
-the PDF. See [See the setup on the template's page](./Signature-Setups-on-Templates.md#see-the-setup-on-the-templates-page).
+For how keys are made, every parameter and every error, see
+[Sending with signer roles](./API-Signatures.md#how-role-keys-are-made) in the TurboSign API reference.
 
 ## Good to know
 
 - **A PDF template can't generate a document.** It has no variables, so there is nothing to fill
   in. It's always sent for signature as it is.
-- **The setup is used in the TurboDocx app only.** Sending the template through the
-  [TurboSign API](./API-Signatures.md) uses the recipients and fields in the API request.
+- **Only some people can change a template.** Only **Administrators** and **Contributors** can
+  edit a template's roles and fields. Anyone who can send documents can send it.
 
 ## Related
 
