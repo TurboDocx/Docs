@@ -153,6 +153,12 @@ tab under **Or Start with an Existing Document**, and click **Continue**.
 
 Changes apply to every future send. Documents you already sent aren't affected.
 
+### Remove a template's roles and fields
+
+On the template's details page, click **Delete Setup**, then confirm. The template goes back to
+having no roles or fields, and opening it starts again from **What is this for?**. Documents
+you already sent aren't affected.
+
 ## Use it from code (Dev Mode) {#use-it-from-code}
 
 You can send the template from your own app with the TurboDocx SDK or API, without placing any
