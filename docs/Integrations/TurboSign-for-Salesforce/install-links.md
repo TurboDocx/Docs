@@ -16,7 +16,16 @@ keywords:
 
 These links install the TurboSign for Salesforce package that TurboDocx publishes. Pick the link for the kind of org you're installing into, then follow [Install with a one-click link](/docs/Integrations/turbosign-for-salesforce/install#install-with-a-one-click-link).
 
-## Version 1.1.0 (latest)
+## Version 1.1.1 (latest)
+
+| Install into | Link |
+|---|---|
+| Production or Developer Edition org | [Install in production or Developer Edition](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tbm000000oqUrAAI) |
+| Sandbox | [Install in a sandbox](https://test.salesforce.com/packaging/installPackage.apexp?p0=04tbm000000oqUrAAI) |
+
+Version 1.1.1 fixes how messages, previews and the builder show values. It installs over 1.1.0 and 1.0.0.
+
+## Version 1.1.0
 
 | Install into | Link |
 |---|---|
@@ -54,7 +63,7 @@ Newer versions add features, and each one is listed with its own install links a
 
 1. Open **Setup**.
 2. In **Quick Find**, type `Installed Packages`, then click **Installed Packages**.
-3. Find **TurboSign for Salesforce** in the list. The **Version Number** column shows the version you have. Version 1.1.0 shows as **1.1**, and version 1.0.0 as **1.0**.
+3. Find **TurboSign for Salesforce** in the list. The **Version Number** column shows the version you have. Versions 1.1.0 and 1.1.1 show as **1.1**, and version 1.0.0 as **1.0**.
 
 ![Installed Packages list with TurboSign for Salesforce and its Version Number highlighted](/img/turbosign-salesforce/install-05-installed-packages.png)
 
