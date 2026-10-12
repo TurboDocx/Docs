@@ -2,7 +2,7 @@
 title: How to Save a Signature Setup on a Template
 sidebar_label: Signature Setups on Templates
 sidebar_position: 1.6
-description: Set up signers, signature fields, CC, the email message and reminders once on a Word, PowerPoint or PDF template, save it, and reuse it every time the template is sent for signature.
+description: Set up signers, signature fields, CC, the email message and reminders once on a Word or PDF template, save it, and reuse it every time the template is sent for signature.
 keywords:
   - signature setup
   - save signature setup to template
@@ -22,7 +22,9 @@ If you send the same template for signature again and again, you don't have to a
 and place the fields every time. Set them up once on the template, save that **signature setup**,
 and every new send from the template starts with everything already in place.
 
-This works for **Word**, **PowerPoint** and **PDF** templates.
+This works for **Word** and **PDF** templates. **PowerPoint** templates can't be sent for
+signature, so they have no **Signatures** tab and no signature setup. To get a presentation
+signed, use a Word or PDF template instead.
 
 ## What a signature setup includes
 
@@ -33,7 +35,7 @@ This works for **Word**, **PowerPoint** and **PDF** templates.
 | **CC recipients** | Everyone added as **Receives a Copy**. |
 | **Email message** | The **Signature Email Description** signers see in their email. |
 | **Reminders & expiration** | Only the settings you changed for this template. Anything you left alone keeps following your organization's settings, even if those change later. |
-| **Document name** | PDF templates only. For a Word or PowerPoint template, the name belongs to the document you generate, so it isn't saved. |
+| **Document name** | PDF templates only. For a Word template, the name belongs to the document you generate, so it isn't saved. |
 
 ## Step 1: Open the template
 
@@ -43,7 +45,7 @@ the template:
 - **The template has variables to fill in:** you see the **Template Variables** tab with a
   **Signatures** tab next to it. Click **Signatures**. When you're done, **Generate And Sign**
   creates the document and then sends it for signature.
-- **The template has no variables** (every PDF template, and any Word or PowerPoint template
+- **The template has no variables** (every PDF template, and any Word template
   without `{variables}`): the page opens on **Prepare & Sign**. Nothing needs to be generated, so
   **Get It Signed** sends the template's document for signature straight away.
 
@@ -133,8 +135,8 @@ had.
 
 ## Step 5: Set the email and reminders
 
-Click the **⋮** button in the top right corner, then **Document Settings** (for a Word or
-PowerPoint template) or **Signature Settings** (for a PDF template).
+Click the **⋮** button in the top right corner, then **Document Settings** (for a Word
+template) or **Signature Settings** (for a PDF template).
 
 - **Deliverable Name** / **Document Name:** the name of the document. For a PDF template this is
   the name signers see, and it's saved with the setup.
@@ -143,7 +145,7 @@ PowerPoint template) or **Signature Settings** (for a PDF template).
   when the signing link stops working. These start from your organization's e-signature
   settings. Change them here to apply them to this template only.
 
-For a Word or PowerPoint template, the email and reminder settings appear once you've added a
+For a Word template, the email and reminder settings appear once you've added a
 signer.
 
 ## Step 6: Save the setup to the template
@@ -187,7 +189,7 @@ The template's own page shows its saved setup without changing it. To open it, c
 Template** on the generate page, or open the template's menu in the **Templates** list and choose
 **Edit Template & Preferences**.
 
-- **Word and PowerPoint templates:** use the **Variables | Signature setup** switch at the top of
+- **Word templates:** use the **Variables | Signature setup** switch at the top of
   the left column. A green dot on **Signature setup** means the template has one.
 - **PDF templates:** the setup is shown right away, since there are no variables.
 
@@ -250,8 +252,10 @@ template instead.
 
 ## Good to know
 
-- **A saved setup is used only in the TurboDocx app.** Requests sent through the
-  [TurboSign API](./API-Signatures.md) use the recipients and fields in the request.
+- **A saved setup is used in the TurboDocx app.** Requests sent through the
+  [TurboSign API](./API-Signatures.md) use the recipients and fields in the request. The one
+  exception is a PDF template with signer roles, which the API can send by role. See
+  [Use it from code](./PDF-Signature-Templates.md#use-it-from-code).
 
 ## Related
 
