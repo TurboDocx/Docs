@@ -68,7 +68,7 @@ Webhooks can be configured from the E-Signature settings on the **Features and i
 
 ![Settings menu with Features and integrations highlighted](/img/webhooks/features-and-integrations-link.png)
 
-3. **Open E-Signature Settings and go to the Webhooks tab**
+3. **Open E-Signature Settings and select Webhooks**
 
    - Scroll down to the **Core Features** section, find the **Signatures** card, and click **"Configure E-Signature"**
 
@@ -101,7 +101,7 @@ Webhooks can be configured from the E-Signature settings on the **Features and i
    - Your webhook secret key will be displayed (only shown once for new configurations)
    - **Important**: Copy and securely store your webhook secret - it won't be shown again
 
-![E-Signature Settings Webhooks tab with the Save Configuration button highlighted](/img/webhooks/dill-signature-webhook-config.png)
+![E-Signature Settings Webhooks section with the Save Configuration button highlighted](/img/webhooks/dill-signature-webhook-config.png)
 ![Webhook secret key displayed after saving the configuration](/img/webhooks/copy-webhook-secret.png)
 
 ### Managing Webhook Configuration
@@ -113,8 +113,8 @@ The Delivery History tab shows all webhook delivery attempts with detailed infor
 - **Event Type**: The type of event that triggered the webhook
 - **HTTP Status**: Response status code from your endpoint
 - **Attempts**: Number of delivery attempts made
-- **Timestamps**: When the webhook was created and last updated
-- **Actions**: View details or replay failed deliveries
+- **Timestamps**: When each delivery was created and last updated
+- **Actions**: View details or replay any delivery
 
 ![Delivery History tab listing a webhook delivery with its event type, HTTP status, attempts, and the view and replay actions highlighted](/img/webhooks/delivery-history.png)
 
@@ -394,7 +394,7 @@ Each webhook request includes these headers:
 | `X-TurboDocx-Signature`   | HMAC signature for verification (format: `sha256=<hex>`) |
 | `X-TurboDocx-Timestamp`   | Unix timestamp when the webhook was sent                 |
 | `X-TurboDocx-Event`       | The event type that triggered this webhook               |
-| `X-TurboDocx-Delivery-Id` | Unique ID for this delivery attempt. A retry gets a new one, so dedupe on the payload's `event_id` instead |
+| `X-TurboDocx-Delivery-Id` | Unique ID for this delivery attempt. A retry gets a new one, so dedupe on the payload's `event_id` instead. It is not the delivery `id` shown in Delivery History or returned by the API (use that `id` to replay) |
 
 ### Try it Now
 
@@ -628,7 +628,7 @@ When a webhook delivery fails:
 
 1. **Automatic Retries**: The system will automatically retry failed deliveries
 2. **Delivery History**: All attempts are logged in the delivery history
-3. **Manual Replay**: You can manually replay failed deliveries from the UI
+3. **Manual Replay**: You can manually replay any delivery from the UI
 4. **Error Details**: Response status codes and error messages are captured
 
 <!-- TODO: Add screenshot of delivery details dialog -->
@@ -654,7 +654,7 @@ You can test your webhook configuration before going live:
 4. **Check the Delivery History** to verify successful delivery
 5. **Verify your endpoint** received and processed the webhook correctly
 
-To send a sample event without signing a document, call `testWebhook` from the [TurboWebhooks SDK](/docs/SDKs#turbowebhooks-sdks). It is delivered, signed and retried like a real event, and appears in the Delivery History.
+To send a sample event without signing a document, call `testWebhook` from the [TurboWebhooks SDK](/docs/SDKs#turbowebhooks-sdks). It is delivered, signed and retried like a real event, and appears in the Delivery History. Its payload is sample data, not a real document: the IDs are placeholders, `event_id` starts with `evt_test_`, and a few `data` fields differ from real events, so don't look the document up or rely on exact field names from a test event. If your endpoint fails, the call returns only after all 3 attempts, about 6 minutes.
 
 ### Development Tools
 
@@ -738,8 +738,8 @@ If you encounter issues not covered here:
 
 ```json
 {
-  "id": "webhook_abc123",
-  "orgId": "org_xyz789",
+  "id": "6f1c2d3e-4b5a-4c7d-8e9f-0a1b2c3d4e5f",
+  "orgId": "9a8b7c6d-5e4f-4a3b-9c2d-1e0f9a8b7c6d",
   "name": "signature",
   "urls": [
     "https://api.example.com/webhooks/turbosign",
@@ -756,24 +756,34 @@ If you encounter issues not covered here:
   ],
   "secretExists": true,
   "maskedSecret": "whs***f6a",
-  "isActive": true,
+  "isActive": 1,
+  "metadata": null,
+  "createdBy": "3c2b1a0f-9e8d-4c7b-a6f5-e4d3c2b1a0f9",
   "createdOn": "2024-01-15T09:00:00.000Z",
-  "updatedOn": "2024-01-15T09:00:00.000Z"
+  "updatedOn": "2024-01-15T09:00:00.000Z",
+  "deliveryStats": {
+    "totalDeliveries": 4,
+    "successfulDeliveries": 3,
+    "failedDeliveries": 1,
+    "pendingRetries": 0
+  }
 }
 ```
+
+Fetching a single webhook also returns `availableEvents`, the list of events you can subscribe to. Boolean flags such as `isActive` and the delivery's `isDelivered` come back as `1` / `0`, so check them as truthy values rather than comparing with `true`.
 
 ### Delivery Object
 
 ```json
 {
-  "id": "delivery_def456",
+  "id": "0ebddb5e-7c1a-4f2b-9d3e-5a6b7c8d9e0f",
   "eventType": "signature.document.completed",
   "url": "https://api.example.com/webhooks/turbosign",
   "httpStatus": 200,
   "responseBody": "{\"received\":true}",
   "attemptCount": 1,
   "maxAttempts": 3,
-  "isDelivered": true,
+  "isDelivered": 1,
   "deliveredAt": "2024-01-15T10:30:05.000Z",
   "nextRetryAt": null,
   "errorMessage": null,
