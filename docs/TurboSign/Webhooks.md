@@ -37,7 +37,7 @@ keywords:
 
 Webhooks enable your application to receive real-time notifications when important events occur in TurboSign. Instead of polling for changes, webhooks push event data to your specified endpoints immediately across the whole signature lifecycle — when a document is sent, viewed, signed by each recipient, completed, voided, or fails to finalize.
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/webhook-schema.png)
+![Diagram comparing webhooks, which push new data to your app, with APIs, which your app has to ask for data](/img/webhooks/webhook-schema.png)
 
 ## Overview
 
@@ -74,7 +74,7 @@ Webhooks can be configured from the E-Signature settings on the **Features and i
 
 ![Features and integrations page with the Configure E-Signature button on the Signatures card highlighted](/img/webhooks/core-features-section.png)
 
-   - In the **E-Signature Settings** dialog that opens, select the **"Webhooks"** tab
+   - In the **E-Signature Settings** dialog that opens, select **Webhooks** in the left menu
 
 4. **Add Webhook URLs**
    - Enter your webhook endpoint URL(s)
@@ -82,7 +82,7 @@ Webhooks can be configured from the E-Signature settings on the **Features and i
    - Each URL will receive all subscribed events
    - Every URL must use HTTPS (plain `http://` is rejected, even for testing). To receive webhooks on your machine, expose your local server through an HTTPS tunnel such as ngrok or Cloudflare Tunnel
 
-![E-Signature Settings Webhooks tab showing the Webhook URLs field and the Add Another URL button](/img/webhooks/signature-webhook-config.png)
+![E-Signature Settings Webhooks section showing the Webhook URLs field and the Add Another URL button](/img/webhooks/signature-webhook-config.png)
 
 5. **Select Events to Subscribe**
    - Choose which events should trigger webhooks:
@@ -116,7 +116,7 @@ The Delivery History tab shows all webhook delivery attempts with detailed infor
 - **Timestamps**: When the webhook was created and last updated
 - **Actions**: View details or replay failed deliveries
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/delivery-history.png)
+![Delivery History tab listing a webhook delivery with its event type, HTTP status, attempts, and the view and replay actions highlighted](/img/webhooks/delivery-history.png)
 
 #### Webhook Secret Management
 
@@ -127,7 +127,7 @@ Your webhook secret is used to verify that webhooks are genuinely from TurboDocx
 - **Regeneration**: You can regenerate the secret at any time if compromised
 - **Display**: After initial viewing, only a masked version (first 3 + \*\*\* + last 3 characters) is shown
 
-![Get It Signed button on TurboDocx homepage](/img/webhooks/regenerate-secret.png)
+![Webhook Secret Key field showing the masked secret, with the regenerate button highlighted](/img/webhooks/regenerate-secret.png)
 
 ## Webhook Events
 
@@ -406,7 +406,7 @@ Each webhook request includes these headers:
 
 ### SDK Verification Examples
 
-Our SDKs include built-in webhook verification. The snippets below show the minimum receiver code; for the full SDK reference (createWebhook, updateWebhook, testWebhook, listWebhookDeliveries, replayWebhookDelivery, rotateSecret, framework integration patterns, and gotchas), see the dedicated TurboWebhooks SDK pages:
+Our SDKs include built-in webhook verification. The snippets below show the minimum receiver code; for the full SDK reference (createWebhook, updateWebhook, testWebhook, listWebhookDeliveries, replayWebhookDelivery, regenerateWebhookSecret, framework integration patterns, and gotchas), see the dedicated TurboWebhooks SDK pages:
 
 - [TurboWebhooks JavaScript / TypeScript SDK](/docs/SDKs/webhooks?language=js)
 - [TurboWebhooks Python SDK](/docs/SDKs/webhooks?language=python)
@@ -499,6 +499,7 @@ package main
 import (
     "encoding/json"
     "io"
+    "log"
     "net/http"
     "os"
 
@@ -530,6 +531,11 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
     }
     // Process event.Event, event.EventID, event.Data...
     w.WriteHeader(http.StatusOK)
+}
+
+func main() {
+    http.HandleFunc("/webhook", webhookHandler)
+    log.Fatal(http.ListenAndServe(":8080", nil))
 }
 ```
 
@@ -564,7 +570,9 @@ public class WebhookController {
 </TabItem>
 <TabItem value="ruby" label="Ruby">
 
+:::note Ruby
 The `turbodocx-sdk` gem is not on RubyGems yet; until it is, install it from the [TurboDocx SDK repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk).
+:::
 
 ```ruby
 require "json"
@@ -600,7 +608,7 @@ end
 3. **Store secrets securely**: Keep webhook secrets in environment variables or secure vaults
 4. **Implement timestamp validation**: Reject webhooks with timestamps older than 5 minutes
 5. **Use timing-safe comparison**: Prevent timing attacks when comparing signatures
-6. **Handle retries idempotently**: Dedupe on the payload's `event_id`, which stays the same across retries (`X-TurboDocx-Delivery-Id` changes on every attempt)
+6. **Handle retries idempotently**: Dedupe on the payload's `event_id`, which stays the same across retries (`X-TurboDocx-Delivery-Id` changes on every attempt). A manual replay resends the same payload, so it keeps the same `event_id` too: if you want a replay to be processed again, clear that event's record first
 7. **Respond quickly**: Return 200 OK immediately and process webhooks asynchronously
 8. **Log failures**: Keep logs of signature verification failures for security monitoring
 
@@ -645,6 +653,8 @@ You can test your webhook configuration before going live:
 3. **Create a test signature document** and complete the signing process
 4. **Check the Delivery History** to verify successful delivery
 5. **Verify your endpoint** received and processed the webhook correctly
+
+To send a sample event without signing a document, call `testWebhook` from the [TurboWebhooks SDK](/docs/SDKs#turbowebhooks-sdks). It is delivered, signed and retried like a real event, and appears in the Delivery History.
 
 ### Development Tools
 
@@ -757,18 +767,23 @@ If you encounter issues not covered here:
 ```json
 {
   "id": "delivery_def456",
-  "webhookId": "webhook_abc123",
   "eventType": "signature.document.completed",
   "url": "https://api.example.com/webhooks/turbosign",
   "httpStatus": 200,
+  "responseBody": "{\"received\":true}",
   "attemptCount": 1,
   "maxAttempts": 3,
   "isDelivered": true,
   "deliveredAt": "2024-01-15T10:30:05.000Z",
+  "nextRetryAt": null,
+  "errorMessage": null,
+  "status": "delivered",
   "createdOn": "2024-01-15T10:30:00.000Z",
   "updatedOn": "2024-01-15T10:30:05.000Z"
 }
 ```
+
+`status` is one of `delivered`, `retrying`, `failed` (all attempts used) or `pending`.
 
 
 ---
