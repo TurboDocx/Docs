@@ -199,7 +199,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.0</version>
 </dependency>
 ```
 
@@ -329,9 +329,9 @@ use TurboDocx\Types\Requests\SendSignatureRequest;
 
 // Configure with your API key
 TurboSign::configure(new HttpClientConfig(
-    apiKey: getenv('TURBODOCX_API_KEY'),
-    orgId: getenv('TURBODOCX_ORG_ID'),
-    senderEmail: getenv('TURBODOCX_SENDER_EMAIL')
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,
+    senderEmail: getenv('TURBODOCX_SENDER_EMAIL') ?: null
 ));
 
 // Send a document for signature

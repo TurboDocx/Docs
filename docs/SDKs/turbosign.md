@@ -160,7 +160,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.0</version>
 </dependency>
 ```
 
@@ -168,14 +168,14 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.7.0")
+implementation("com.turbodocx:turbodocx-sdk:0.8.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.8.0'
 ```
 
 </TabItem>
@@ -308,10 +308,10 @@ use TurboDocx\Config\HttpClientConfig;
 
 // Configure with all options
 TurboSign::configure(new HttpClientConfig(
-    apiKey: getenv('TURBODOCX_API_KEY'),           // Required: Your TurboDocx API key
-    orgId: getenv('TURBODOCX_ORG_ID'),             // Required: Your organization ID
-    senderEmail: getenv('TURBODOCX_SENDER_EMAIL'), // Required: Reply-to email for signature requests
-    senderName: getenv('TURBODOCX_SENDER_NAME'),   // Optional: Sender name (strongly recommended)
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,           // Required: Your TurboDocx API key
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,             // Required: Your organization ID
+    senderEmail: getenv('TURBODOCX_SENDER_EMAIL') ?: null, // Required: Reply-to email for signature requests
+    senderName: getenv('TURBODOCX_SENDER_NAME') ?: null,   // Optional: Sender name (strongly recommended)
     baseUrl: 'https://api.turbodocx.com'          // Optional: Custom API endpoint
 ));
 ```
@@ -474,6 +474,8 @@ Creating a client per request leaks OkHttp threads until they are closed. Prefer
 # .env
 TURBODOCX_API_KEY=your_api_key_here
 TURBODOCX_ORG_ID=your_org_id_here
+TURBODOCX_SENDER_EMAIL=you@company.com   # Required for TurboSign
+TURBODOCX_SENDER_NAME=Your Company Name  # Optional (strongly recommended)
 ```
 
 </TabItem>
@@ -2447,7 +2449,7 @@ System.out.println("Result: " + gson.toJson(result));
 
 ### Send without emails and sign in your app {#send-without-emails}
 
-Set `sendEmail` to `false` to create the signature request without emailing the signers their links. The document still goes out for signing, and passcode and completed-copy emails are still sent. Then call `createSigningUrl` for a signer when they are ready to sign in your app. Each URL is single-use, so mint it at that moment and don't store it.
+Set `sendEmail` to `false` to create the signature request without emailing the signers their links. The document still goes out for signing, and passcode and completed-copy emails are still sent. Then call `createSigningUrl` for a signer when they are ready to sign in your app. For a signer with an email/SMS passcode or no verification (as here), the URL is their reusable signing link for the life of the document, so treat it like a password and don't log it. `external_idv` and `override` signers get a single-use URL that expires in about five minutes; mint those at the moment of signing.
 
 :::info Prerequisite
 Embedded signing must be turned on for your organization: in the E-Signature settings, turn on **Enable identity verification** (see [Set up your organization](/docs/TurboSign/how-to-enable-embedded-signing)). While it is off, `createSigningUrl` fails with `EmbeddedSigningNotEnabled`.
@@ -2465,7 +2467,7 @@ const result = await TurboSign.sendSignature({
   sendEmail: false, // no signing-link emails; you hand out the link
 });
 
-// When the signer is ready, mint their single-use signing URL
+// When the signer is ready, mint their signing URL
 const link = await TurboSign.createSigningUrl(result.documentId, {
   recipientId: result.recipients![0].id,
 });
@@ -2484,7 +2486,7 @@ result = await TurboSign.send_signature(
     send_email=False,  # no signing-link emails; you hand out the link
 )
 
-# When the signer is ready, mint their single-use signing URL
+# When the signer is ready, mint their signing URL
 link = await TurboSign.create_signing_url(
     result["documentId"],
     recipient_id=result["recipients"][0]["id"],
@@ -2522,7 +2524,7 @@ $result = TurboSign::sendSignature(
     )
 );
 
-// When the signer is ready, mint their single-use signing URL
+// When the signer is ready, mint their signing URL
 $link = TurboSign::createSigningUrl(
     $result->documentId,
     new CreateSigningUrlRequest(recipientId: $result->recipients[0]['id'])
@@ -2550,7 +2552,7 @@ if err != nil {
     log.Fatal(err)
 }
 
-// When the signer is ready, mint their single-use signing URL
+// When the signer is ready, mint their signing URL
 link, err := client.TurboSign.CreateSigningURL(ctx, result.DocumentID, &turbodocx.CreateSigningURLRequest{
     RecipientID: result.Recipients[0].ID,
 })
@@ -2578,7 +2580,7 @@ SendSignatureResponse result = client.turboSign().sendSignature(
         .build()
 );
 
-// When the signer is ready, mint their single-use signing URL
+// When the signer is ready, mint their signing URL
 CreateSigningUrlResponse link = client.turboSign().createSigningUrl(
     result.getDocumentId(),
     new CreateSigningUrlRequest.Builder()

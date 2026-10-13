@@ -57,10 +57,10 @@ use TurboDocx\Config\HttpClientConfig;
 
 // Configure with all options
 TurboSign::configure(new HttpClientConfig(
-    apiKey: getenv('TURBODOCX_API_KEY'),           // Required: Your TurboDocx API key
-    orgId: getenv('TURBODOCX_ORG_ID'),             // Required: Your organization ID
-    senderEmail: getenv('TURBODOCX_SENDER_EMAIL'), // Required: Reply-to email for signature requests
-    senderName: getenv('TURBODOCX_SENDER_NAME'),   // Optional: Sender name (strongly recommended)
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,           // Required: Your TurboDocx API key
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,             // Required: Your organization ID
+    senderEmail: getenv('TURBODOCX_SENDER_EMAIL') ?: null, // Required: Reply-to email for signature requests
+    senderName: getenv('TURBODOCX_SENDER_NAME') ?: null,   // Optional: Sender name (strongly recommended)
     baseUrl: 'https://api.turbodocx.com'          // Optional: Custom API endpoint
 ));
 ```

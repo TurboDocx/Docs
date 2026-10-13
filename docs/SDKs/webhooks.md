@@ -188,7 +188,7 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.0</version>
 </dependency>
 ```
 
@@ -196,14 +196,14 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.8.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.7.0")
+implementation("com.turbodocx:turbodocx-sdk:0.8.0")
 ```
 
 </TabItem>
@@ -300,8 +300,8 @@ TurboWebhooks.configure(
 use TurboDocx\TurboWebhooks;
 
 TurboWebhooks::configureFromCredentials(
-    apiKey: getenv('TURBODOCX_API_KEY'),
-    orgId: getenv('TURBODOCX_ORG_ID'),
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,
 );
 ```
 
@@ -321,8 +321,8 @@ If you need to build the config yourself, pass `skipSenderValidation: true` — 
 use TurboDocx\Config\HttpClientConfig;
 
 TurboWebhooks::configure(new HttpClientConfig(
-    apiKey: getenv('TURBODOCX_API_KEY'),
-    orgId: getenv('TURBODOCX_ORG_ID'),
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,
     skipSenderValidation: true,  // webhooks don't send email
 ));
 ```
@@ -1033,8 +1033,8 @@ use TurboDocx\Exceptions\ValidationException;
 use TurboDocx\Types\Enums\WebhookEvent;
 
 TurboWebhooks::configureFromCredentials(
-    apiKey: getenv('TURBODOCX_API_KEY'),
-    orgId: getenv('TURBODOCX_ORG_ID'),
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,
 );
 
 try {
