@@ -51,8 +51,8 @@ use TurboDocx\Types\Enums\OrgUserRole;
 
 // 1. Configure
 TurboPartner::configure(new PartnerClientConfig(
-    partnerApiKey: $_ENV['TURBODOCX_PARTNER_API_KEY'],
-    partnerId: $_ENV['TURBODOCX_PARTNER_ID'],
+    partnerApiKey: getenv('TURBODOCX_PARTNER_API_KEY'),
+    partnerId: getenv('TURBODOCX_PARTNER_ID'),
 ));
 
 // 2. Create an organization with entitlements
@@ -114,8 +114,8 @@ use TurboDocx\Config\PartnerClientConfig;
 
 // Configure with your partner credentials
 TurboPartner::configure(new PartnerClientConfig(
-    partnerApiKey: $_ENV['TURBODOCX_PARTNER_API_KEY'],  // Required: Must start with TDXP-
-    partnerId: $_ENV['TURBODOCX_PARTNER_ID'],           // Required: Your partner UUID
+    partnerApiKey: getenv('TURBODOCX_PARTNER_API_KEY'),  // Required: Must start with TDXP-
+    partnerId: getenv('TURBODOCX_PARTNER_ID'),           // Required: Your partner UUID
 ));
 ```
 

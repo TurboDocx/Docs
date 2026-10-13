@@ -106,6 +106,8 @@ Authenticate using `apiKey`. API keys are recommended for server-side applicatio
 # .env
 TURBODOCX_API_KEY=your_api_key_here
 TURBODOCX_ORG_ID=your_org_id_here
+TURBODOCX_SENDER_EMAIL=you@company.com   # Required for TurboSign
+TURBODOCX_SENDER_NAME=Your Company Name  # Optional (strongly recommended)
 ```
 
 ---

@@ -39,7 +39,7 @@ composer require turbodocx/sdk
 - ext-fileinfo
 
 :::tip Modern PHP Features
-This SDK leverages PHP 8.1+ features including enums, named parameters, readonly classes, and match expressions for a superior developer experience.
+This SDK leverages PHP 8.1+ features including enums, named parameters, readonly properties, and match expressions for a superior developer experience.
 :::
 
 ---
@@ -57,10 +57,10 @@ use TurboDocx\Config\HttpClientConfig;
 
 // Configure with all options
 TurboSign::configure(new HttpClientConfig(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],           // Required: Your TurboDocx API key
-    orgId: $_ENV['TURBODOCX_ORG_ID'],             // Required: Your organization ID
-    senderEmail: $_ENV['TURBODOCX_SENDER_EMAIL'], // Required: Reply-to email for signature requests
-    senderName: $_ENV['TURBODOCX_SENDER_NAME'],   // Optional: Sender name (strongly recommended)
+    apiKey: getenv('TURBODOCX_API_KEY'),           // Required: Your TurboDocx API key
+    orgId: getenv('TURBODOCX_ORG_ID'),             // Required: Your organization ID
+    senderEmail: getenv('TURBODOCX_SENDER_EMAIL'), // Required: Reply-to email for signature requests
+    senderName: getenv('TURBODOCX_SENDER_NAME'),   // Optional: Sender name (strongly recommended)
     baseUrl: 'https://api.turbodocx.com'          // Optional: Custom API endpoint
 ));
 ```
