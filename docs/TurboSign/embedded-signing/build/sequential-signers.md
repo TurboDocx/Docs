@@ -324,7 +324,7 @@ end
 </Tabs>
 
 :::warning Mint just in time, never ahead
-Don't try to pre-mint every signer's URL. TurboSign enforces the order: a later signer's URL can't be created until it is genuinely their turn.
+Don't try to pre-mint every signer's URL. TurboSign enforces the order: it won't issue a later signer's URL until it is their turn, and it refuses an out-of-turn signature even with a valid link.
 :::
 
 ## Step 4: Frame each signer in turn
