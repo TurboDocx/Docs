@@ -564,6 +564,8 @@ public class WebhookController {
 </TabItem>
 <TabItem value="ruby" label="Ruby">
 
+The `turbodocx-sdk` gem is not on RubyGems yet; until it is, install it from the [TurboDocx SDK repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk).
+
 ```ruby
 require "json"
 require "sinatra"
@@ -607,7 +609,7 @@ end
 ### Delivery Behavior
 
 - **Timeout**: Each delivery attempt has a 10-second timeout
-- **Success Criteria**: Only HTTP 2xx status codes are considered successful
+- **Success Criteria**: Only HTTP 2xx status codes are considered successful; redirects (3xx) are not followed and count as a failure
 - **Retry Logic**: Failed deliveries are automatically retried up to 2 more times (3 attempts in total)
 - **Retry Schedule**: Exponential backoff: the 2nd attempt about 1 minute after the 1st, the 3rd about 5 minutes after the 2nd
 - **Delivery Order**: Webhooks are delivered to all configured URLs in parallel
@@ -687,7 +689,7 @@ For local development, consider using:
 
 - Ensure you're using the raw request body (not parsed JSON)
 - Verify the webhook secret matches exactly
-- Check that header names are lowercase in your code
+- Check that you read the `X-TurboDocx-Signature` and `X-TurboDocx-Timestamp` headers by name; header names are case-insensitive, so match your framework's lookup (Express lowercases them, Go's `Header.Get` and Spring accept any case)
 - Confirm timestamp validation isn't too strict
 
 #### Timeouts
