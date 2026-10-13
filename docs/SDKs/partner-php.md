@@ -96,7 +96,7 @@ composer require turbodocx/sdk
 - ext-curl
 
 :::tip Modern PHP Features
-This SDK leverages PHP 8.1+ features including enums, named parameters, readonly classes, and match expressions for a superior developer experience.
+This SDK leverages PHP 8.1+ features including enums, named parameters, readonly properties, and match expressions for a superior developer experience.
 :::
 
 ---
