@@ -57,7 +57,7 @@ Return the `documentId` and the list (with each `recipientId`) to your page.
 
 ## Step 3: Mint the next signer's URL when it is their turn
 
-When a signer finishes, the signing page sends `turbosign:completed` right away, but TurboSign advances the turn a moment later. A mint fired immediately can get HTTP `409` with `RecipientNotInTurn` or `NotSignersTurn`. Retry those two codes a few times with a short delay; treat every other error as real.
+When a signer finishes, the signing page sends `turbosign:completed` right away, but TurboSign advances the turn a moment later. A mint fired immediately can get HTTP `409` with `RecipientNotInTurn`. Retry that code a few times with a short delay; treat every other error as real.
 
 Both server calls, Step 2 and Step 3, in each SDK language:
 
@@ -87,15 +87,13 @@ export async function startKiosk(signers: Array<{ name: string; email: string }>
 }
 
 // Step 3: POST /api/kiosk/next
-const TURN_RACE = new Set(["RecipientNotInTurn", "NotSignersTurn"]);
-
 export async function mintNext(documentId: string, recipientId: string): Promise<string> {
   for (let attempt = 0; ; attempt++) {
     try {
       const { url } = await TurboSign.createSigningUrl(documentId, { recipientId });
       return url;
     } catch (err: any) {
-      if (!TURN_RACE.has(err?.code) || attempt >= 5) throw err;
+      if (err?.code !== "RecipientNotInTurn" || attempt >= 5) throw err;
       await new Promise((r) => setTimeout(r, 1500));
     }
   }
@@ -130,15 +128,13 @@ async def start_kiosk(signers: list[dict]) -> dict:
     )  # {"documentId": ..., "recipients": [...]}, first one "ready"
 
 # Step 3: POST /api/kiosk/next
-TURN_RACE = {"RecipientNotInTurn", "NotSignersTurn"}
-
 async def mint_next(document_id: str, recipient_id: str) -> str:
     for attempt in range(6):
         try:
             link = await TurboSign.create_signing_url(document_id, recipient_id=recipient_id)
             return link["url"]
         except ConflictError as err:
-            if err.code not in TURN_RACE or attempt == 5:
+            if err.code != "RecipientNotInTurn" or attempt == 5:
                 raise
             await asyncio.sleep(1.5)
 ```
@@ -185,7 +181,7 @@ function mintNext(string $documentId, string $recipientId): string
             $link = TurboSign::createSigningUrl($documentId, new CreateSigningUrlRequest(recipientId: $recipientId));
             return $link->url;
         } catch (ConflictException $e) {
-            $race = in_array($e->errorCode, ['RecipientNotInTurn', 'NotSignersTurn'], true);
+            $race = $e->errorCode === 'RecipientNotInTurn';
             if (!$race || $attempt >= 5) {
                 throw $e;
             }
@@ -230,7 +226,7 @@ func MintNext(ctx context.Context, client *turbodocx.Client, documentID, recipie
 			return link.URL, nil
 		}
 		var conflict *turbodocx.ConflictError
-		race := errors.As(err, &conflict) && (conflict.Code == "RecipientNotInTurn" || conflict.Code == "NotSignersTurn")
+		race := errors.As(err, &conflict) && conflict.Code == "RecipientNotInTurn"
 		if !race || attempt >= 5 {
 			return "", err
 		}
@@ -274,7 +270,7 @@ public String mintNext(String documentId, String recipientId) throws Exception {
             return client.turboSign().createSigningUrl(documentId,
                 new CreateSigningUrlRequest.Builder().recipientId(recipientId).build()).getUrl();
         } catch (TurboDocxException.ConflictException e) {
-            boolean race = "RecipientNotInTurn".equals(e.getCode()) || "NotSignersTurn".equals(e.getCode());
+            boolean race = "RecipientNotInTurn".equals(e.getCode());
             if (!race || attempt >= 5) throw e;
             Thread.sleep(1500);
         }
@@ -305,14 +301,12 @@ def start_kiosk(signers)
 end
 
 # Step 3: POST /api/kiosk/next
-TURN_RACE = %w[RecipientNotInTurn NotSignersTurn].freeze
-
 def mint_next(document_id, recipient_id)
   attempts = 0
   begin
     TurboDocxSdk::TurboSign.create_signing_url(document_id, recipient_id: recipient_id)["url"]
   rescue TurboDocxSdk::ConflictError => e
-    raise unless TURN_RACE.include?(e.code) && (attempts += 1) <= 5
+    raise unless e.code == "RecipientNotInTurn" && (attempts += 1) <= 5
 
     sleep 1.5
     retry
@@ -412,7 +406,7 @@ For the **whole document**, don't rely on the last browser event. Check the docu
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| HTTP `409` `RecipientNotInTurn` or `NotSignersTurn` right after a signer finishes | TurboSign has not advanced the turn yet. | Retry for a few seconds, as in Step 3. |
+| HTTP `409` `RecipientNotInTurn` right after a signer finishes | TurboSign has not advanced the turn yet. | Retry for a few seconds, as in Step 3. |
 | HTTP `409` `RecipientNotInTurn` that never clears | An earlier signer has not actually signed. | Frame the earlier signer again. |
 | HTTP `409` `RecipientAlreadySigned` | That signer already signed. | Skip to the next one. |
 | The second signer's panel is blank | Same as any blank frame: your origin is not allowed. | Add your origin under **Allowed embedding domains**. |
