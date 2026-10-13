@@ -46,7 +46,7 @@ TurboSign webhooks provide a robust and secure way to integrate document signatu
 ### Key Features
 
 - **Real-time Notifications**: Receive instant updates when documents are signed or voided
-- **Multiple URLs**: Configure up to 5 webhook URLs per configuration
+- **Multiple URLs**: Configure up to 10 webhook URLs per configuration
 - **Secure Authentication**: HMAC-SHA256 signature verification ensures webhook authenticity
 - **Reliable Delivery**: Automatic retry logic with up to 3 attempts per webhook
 - **Delivery History**: Track and replay webhook deliveries with detailed logs
@@ -78,9 +78,9 @@ Webhooks can be configured from the E-Signature settings on the **Features and i
 
 4. **Add Webhook URLs**
    - Enter your webhook endpoint URL(s)
-   - You can add up to 5 different URLs
+   - You can add up to 10 different URLs
    - Each URL will receive all subscribed events
-   - URLs must use HTTPS for production environments
+   - Every URL must use HTTPS (plain `http://` is rejected, even for testing). To receive webhooks on your machine, expose your local server through an HTTPS tunnel such as ngrok or Cloudflare Tunnel
 
 ![E-Signature Settings Webhooks tab showing the Webhook URLs field and the Add Another URL button](/img/webhooks/signature-webhook-config.png)
 
@@ -394,7 +394,7 @@ Each webhook request includes these headers:
 | `X-TurboDocx-Signature`   | HMAC signature for verification (format: `sha256=<hex>`) |
 | `X-TurboDocx-Timestamp`   | Unix timestamp when the webhook was sent                 |
 | `X-TurboDocx-Event`       | The event type that triggered this webhook               |
-| `X-TurboDocx-Delivery-Id` | Unique ID for this delivery attempt (for idempotency)    |
+| `X-TurboDocx-Delivery-Id` | Unique ID for this delivery attempt. A retry gets a new one, so dedupe on the payload's `event_id` instead |
 
 ### Try it Now
 
@@ -423,25 +423,22 @@ import TabItem from '@theme/TabItem';
 <TabItem value="js" label="JavaScript" default>
 
 ```typescript
-import { verifyWebhookSignature } from '@turbodocx/sdk';
 import express from 'express';
+import { verifyWebhookSignature } from '@turbodocx/sdk';
 
 const app = express();
 
+// Use express.raw: the signature is computed over the raw bytes.
 app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  const isValid = verifyWebhookSignature({
-    signature: req.headers['x-turbodocx-signature'],
-    timestamp: req.headers['x-turbodocx-timestamp'],
-    body: req.body,
-    secret: process.env.TURBODOCX_WEBHOOK_SECRET
-  });
+  const signature = req.header('x-turbodocx-signature') ?? '';
+  const timestamp = req.header('x-turbodocx-timestamp') ?? '';
 
-  if (!isValid) {
+  if (!verifyWebhookSignature(req.body, signature, timestamp, process.env.TURBODOCX_WEBHOOK_SECRET!)) {
     return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  const event = JSON.parse(req.body.toString());
-  // Process event...
+  const event = JSON.parse(req.body.toString('utf8'));
+  // Process event.event, event.event_id, event.data...
   res.status(200).json({ received: true });
 });
 ```
@@ -450,80 +447,143 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
 <TabItem value="python" label="Python">
 
 ```python
-from turbodocx import verify_webhook_signature
-from fastapi import FastAPI, Request, HTTPException
+import json
+import os
+
+from fastapi import FastAPI, HTTPException, Request
+from turbodocx_sdk import verify_webhook_signature
 
 app = FastAPI()
 
 @app.post("/webhook")
 async def handle_webhook(request: Request):
-    body = await request.body()
+    raw_body = await request.body()  # raw bytes: the signature is computed over them
+    signature = request.headers.get("x-turbodocx-signature", "")
+    timestamp = request.headers.get("x-turbodocx-timestamp", "")
 
-    is_valid = verify_webhook_signature(
-        signature=request.headers.get("x-turbodocx-signature"),
-        timestamp=request.headers.get("x-turbodocx-timestamp"),
-        body=body,
-        secret=os.environ["TURBODOCX_WEBHOOK_SECRET"]
-    )
-
-    if not is_valid:
+    if not verify_webhook_signature(raw_body, signature, timestamp, os.environ["TURBODOCX_WEBHOOK_SECRET"]):
         raise HTTPException(status_code=401, detail="Invalid signature")
 
-    event = json.loads(body)
-    # Process event...
+    event = json.loads(raw_body)
+    # Process event["event"], event["event_id"], event["data"]...
     return {"received": True}
+```
+
+</TabItem>
+<TabItem value="php" label="PHP">
+
+```php
+<?php
+use function TurboDocx\Utils\verifyWebhookSignature;
+
+$rawBody   = file_get_contents('php://input'); // raw bytes: do not json_decode first
+$signature = $_SERVER['HTTP_X_TURBODOCX_SIGNATURE'] ?? '';
+$timestamp = $_SERVER['HTTP_X_TURBODOCX_TIMESTAMP'] ?? '';
+
+if (!verifyWebhookSignature($rawBody, $signature, $timestamp, getenv('TURBODOCX_WEBHOOK_SECRET'))) {
+    http_response_code(401);
+    exit;
+}
+
+$event = json_decode($rawBody, true);
+// Process $event['event'], $event['event_id'], $event['data']...
+http_response_code(200);
 ```
 
 </TabItem>
 <TabItem value="go" label="Go">
 
 ```go
+package main
+
+import (
+    "encoding/json"
+    "io"
+    "net/http"
+    "os"
+
+    turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
+)
+
 func webhookHandler(w http.ResponseWriter, r *http.Request) {
-    body, _ := io.ReadAll(r.Body)
+    rawBody, err := io.ReadAll(r.Body) // raw bytes: the signature is computed over them
+    if err != nil {
+        http.Error(w, "read failed", http.StatusBadRequest)
+        return
+    }
 
-    isValid := sdk.VerifyWebhookSignature(
-        r.Header.Get("X-TurboDocx-Signature"),
-        r.Header.Get("X-TurboDocx-Timestamp"),
-        body,
-        os.Getenv("TURBODOCX_WEBHOOK_SECRET"),
-    )
-
-    if !isValid {
+    signature := r.Header.Get("X-TurboDocx-Signature")
+    timestamp := r.Header.Get("X-TurboDocx-Timestamp")
+    if !turbodocx.VerifyWebhookSignature(rawBody, signature, timestamp, os.Getenv("TURBODOCX_WEBHOOK_SECRET"), nil) {
         http.Error(w, "Invalid signature", http.StatusUnauthorized)
         return
     }
 
-    var event sdk.WebhookEvent
-    json.Unmarshal(body, &event)
-    // Process event...
+    var event struct {
+        Event   string          `json:"event"`
+        EventID string          `json:"event_id"`
+        Data    json.RawMessage `json:"data"`
+    }
+    if err := json.Unmarshal(rawBody, &event); err != nil {
+        http.Error(w, "bad payload", http.StatusBadRequest)
+        return
+    }
+    // Process event.Event, event.EventID, event.Data...
     w.WriteHeader(http.StatusOK)
 }
 ```
 
 </TabItem>
-<TabItem value="dotnet" label=".NET">
+<TabItem value="java" label="Java">
 
-```csharp
-[HttpPost]
-public async Task<IActionResult> HandleWebhook()
-{
-    using var reader = new StreamReader(Request.Body);
-    var body = await reader.ReadToEndAsync();
+```java
+import com.turbodocx.WebhookSignatureVerifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    var isValid = WebhookVerifier.VerifySignature(
-        Request.Headers["X-TurboDocx-Signature"],
-        Request.Headers["X-TurboDocx-Timestamp"],
-        body,
-        _configuration["TurboDocx:WebhookSecret"]
-    );
+@RestController
+public class WebhookController {
 
-    if (!isValid)
-        return Unauthorized("Invalid signature");
+    // Bind the body to byte[]: the signature is computed over the raw bytes.
+    @PostMapping(value = "/webhook", consumes = "application/json")
+    public ResponseEntity<Void> handleWebhook(
+            @RequestBody byte[] rawBody,
+            @RequestHeader("X-TurboDocx-Signature") String signature,
+            @RequestHeader("X-TurboDocx-Timestamp") String timestamp) {
 
-    var webhookEvent = JsonSerializer.Deserialize<WebhookEvent>(body);
-    // Process event...
-    return Ok(new { Received = true });
+        if (!WebhookSignatureVerifier.verify(rawBody, signature, timestamp, System.getenv("TURBODOCX_WEBHOOK_SECRET"))) {
+            return ResponseEntity.status(401).build();
+        }
+
+        // Parse rawBody as JSON and process "event", "event_id", "data"...
+        return ResponseEntity.ok().build();
+    }
 }
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```ruby
+require "json"
+require "sinatra"
+require "turbodocx_sdk"
+
+post "/webhook" do
+  raw_body = request.body.read # raw bytes: the signature is computed over them
+
+  valid = TurboDocxSdk.verify_webhook_signature(
+    payload: raw_body,
+    signature_header: request.env["HTTP_X_TURBODOCX_SIGNATURE"].to_s,
+    timestamp_header: request.env["HTTP_X_TURBODOCX_TIMESTAMP"].to_s,
+    secret: ENV.fetch("TURBODOCX_WEBHOOK_SECRET")
+  )
+  halt 401, "Invalid signature" unless valid
+
+  event = JSON.parse(raw_body)
+  # Process event["event"], event["event_id"], event["data"]...
+  status 200
+end
 ```
 
 </TabItem>
@@ -534,11 +594,11 @@ public async Task<IActionResult> HandleWebhook()
 ### Security Best Practices
 
 1. **Always verify signatures**: Never process webhooks without verifying the signature
-2. **Use HTTPS**: Always use HTTPS endpoints in production
+2. **Use HTTPS**: Webhook URLs must be HTTPS; TurboDocx rejects `http://` URLs, so use an HTTPS tunnel when testing locally
 3. **Store secrets securely**: Keep webhook secrets in environment variables or secure vaults
 4. **Implement timestamp validation**: Reject webhooks with timestamps older than 5 minutes
 5. **Use timing-safe comparison**: Prevent timing attacks when comparing signatures
-6. **Handle retries idempotently**: Use the `X-TurboDocx-Delivery-Id` to prevent duplicate processing
+6. **Handle retries idempotently**: Dedupe on the payload's `event_id`, which stays the same across retries (`X-TurboDocx-Delivery-Id` changes on every attempt)
 7. **Respond quickly**: Return 200 OK immediately and process webhooks asynchronously
 8. **Log failures**: Keep logs of signature verification failures for security monitoring
 
@@ -548,8 +608,8 @@ public async Task<IActionResult> HandleWebhook()
 
 - **Timeout**: Each delivery attempt has a 10-second timeout
 - **Success Criteria**: Only HTTP 2xx status codes are considered successful
-- **Retry Logic**: Failed deliveries are automatically retried up to 3 times
-- **Retry Schedule**: Exponential backoff between retry attempts
+- **Retry Logic**: Failed deliveries are automatically retried up to 2 more times (3 attempts in total)
+- **Retry Schedule**: Exponential backoff: the 2nd attempt about 1 minute after the 1st, the 3rd about 5 minutes after the 2nd
 - **Delivery Order**: Webhooks are delivered to all configured URLs in parallel
 
 ### Handling Failures
@@ -647,7 +707,7 @@ For local development, consider using:
 
 **Solutions**:
 
-- Implement idempotency using `X-TurboDocx-Delivery-Id`
+- Implement idempotency using the payload's `event_id` (the same on every retry; `X-TurboDocx-Delivery-Id` is new on each attempt)
 - Store processed event IDs temporarily
 - Use database constraints to prevent duplicates
 
