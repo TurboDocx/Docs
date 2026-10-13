@@ -207,7 +207,7 @@ implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 - ext-fileinfo
 
 :::tip Modern PHP Features
-This SDK leverages PHP 8.1+ features including enums, named parameters, readonly classes, and match expressions for a superior developer experience.
+This SDK leverages PHP 8.1+ features including enums, named parameters, readonly properties, and match expressions for a superior developer experience.
 :::
 
 </TabItem>
@@ -308,10 +308,10 @@ use TurboDocx\Config\HttpClientConfig;
 
 // Configure with all options
 TurboSign::configure(new HttpClientConfig(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],           // Required: Your TurboDocx API key
-    orgId: $_ENV['TURBODOCX_ORG_ID'],             // Required: Your organization ID
-    senderEmail: $_ENV['TURBODOCX_SENDER_EMAIL'], // Required: Reply-to email for signature requests
-    senderName: $_ENV['TURBODOCX_SENDER_NAME'],   // Optional: Sender name (strongly recommended)
+    apiKey: getenv('TURBODOCX_API_KEY'),           // Required: Your TurboDocx API key
+    orgId: getenv('TURBODOCX_ORG_ID'),             // Required: Your organization ID
+    senderEmail: getenv('TURBODOCX_SENDER_EMAIL'), // Required: Reply-to email for signature requests
+    senderName: getenv('TURBODOCX_SENDER_NAME'),   // Optional: Sender name (strongly recommended)
     baseUrl: 'https://api.turbodocx.com'          // Optional: Custom API endpoint
 ));
 ```
@@ -2445,6 +2445,154 @@ System.out.println("Result: " + gson.toJson(result));
 </TabItem>
 </Tabs>
 
+### Send without emails and sign in your app {#send-without-emails}
+
+Set `sendEmail` to `false` to create the signature request without emailing the signers their links. The document still goes out for signing, and passcode and completed-copy emails are still sent. Then call `createSigningUrl` for a signer when they are ready to sign in your app. Each URL is single-use, so mint it at that moment and don't store it.
+
+:::info Prerequisite
+Embedded signing must be turned on for your organization: in the E-Signature settings, turn on **Enable identity verification** (see [Set up your organization](/docs/TurboSign/how-to-enable-embedded-signing)). While it is off, `createSigningUrl` fails with `EmbeddedSigningNotEnabled`.
+:::
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const result = await TurboSign.sendSignature({
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+  documentName: "Service Agreement",
+  recipients: [{ name: "Recipient Name", email: "recipient@example.com", signingOrder: 1 }],
+  fields: [{ type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "recipient@example.com" }],
+  sendEmail: false, // no signing-link emails; you hand out the link
+});
+
+// When the signer is ready, mint their single-use signing URL
+const link = await TurboSign.createSigningUrl(result.documentId, {
+  recipientId: result.recipients![0].id,
+});
+console.log(link.url); // open in a new tab or redirect to it
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+result = await TurboSign.send_signature(
+    recipients=[{"name": "Recipient Name", "email": "recipient@example.com", "signingOrder": 1}],
+    fields=[{"type": "signature", "page": 1, "x": 100, "y": 500, "width": 200, "height": 50, "recipientEmail": "recipient@example.com"}],
+    file_link="https://www.turbodocx.com/examples/turbodocx.pdf",
+    document_name="Service Agreement",
+    send_email=False,  # no signing-link emails; you hand out the link
+)
+
+# When the signer is ready, mint their single-use signing URL
+link = await TurboSign.create_signing_url(
+    result["documentId"],
+    recipient_id=result["recipients"][0]["id"],
+)
+print(link["url"])  # open in a new tab or redirect to it
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+use TurboDocx\Types\Requests\CreateSigningUrlRequest;
+
+$result = TurboSign::sendSignature(
+    new SendSignatureRequest(
+        recipients: [new Recipient('Recipient Name', 'recipient@example.com', 1)],
+        fields: [
+            new Field(
+                type: SignatureFieldType::SIGNATURE,
+                recipientEmail: 'recipient@example.com',
+                page: 1,
+                x: 100,
+                y: 500,
+                width: 200,
+                height: 50
+            )
+        ],
+        fileLink: 'https://www.turbodocx.com/examples/turbodocx.pdf',
+        documentName: 'Service Agreement',
+        sendEmail: false // no signing-link emails; you hand out the link
+    )
+);
+
+// When the signer is ready, mint their single-use signing URL
+$link = TurboSign::createSigningUrl(
+    $result->documentId,
+    new CreateSigningUrlRequest(recipientId: $result->recipients[0]['id'])
+);
+echo $link->url; // open in a new tab or redirect to it
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+sendEmail := false // no signing-link emails; you hand out the link
+result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
+    FileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
+    DocumentName: "Service Agreement",
+    Recipients: []turbodocx.Recipient{
+        {Name: "Recipient Name", Email: "recipient@example.com", SigningOrder: 1},
+    },
+    Fields: []turbodocx.Field{
+        {Type: "signature", Page: 1, X: 100, Y: 500, Width: 200, Height: 50, RecipientEmail: "recipient@example.com"},
+    },
+    SendEmail: &sendEmail,
+})
+if err != nil {
+    log.Fatal(err)
+}
+
+// When the signer is ready, mint their single-use signing URL
+link, err := client.TurboSign.CreateSigningURL(ctx, result.DocumentID, &turbodocx.CreateSigningURLRequest{
+    RecipientID: result.Recipients[0].ID,
+})
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println(link.URL) // open in a new tab or redirect to it
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+SendSignatureResponse result = client.turboSign().sendSignature(
+    new SendSignatureRequest.Builder()
+        .fileLink("https://www.turbodocx.com/examples/turbodocx.pdf")
+        .documentName("Service Agreement")
+        .recipients(Arrays.asList(
+            new Recipient("Recipient Name", "recipient@example.com", 1)
+        ))
+        .fields(Arrays.asList(
+            new Field("signature", 1, 100, 500, 200, 50, "recipient@example.com")
+        ))
+        .sendEmail(false) // no signing-link emails; you hand out the link
+        .build()
+);
+
+// When the signer is ready, mint their single-use signing URL
+CreateSigningUrlResponse link = client.turboSign().createSigningUrl(
+    result.getDocumentId(),
+    new CreateSigningUrlRequest.Builder()
+        .recipientId(result.getRecipients().get(0).getId())
+        .build()
+);
+System.out.println(link.getUrl()); // open in a new tab or redirect to it
+```
+
+</TabItem>
+</Tabs>
+
+To frame the signing page inside your app instead of opening it, and for identity verification options, see [Embedded Signing](/docs/TurboSign/embedded-signing).
+
 ### Reminders and expiration {#reminders-and-expiration}
 
 <Tabs groupId="language" queryString>
@@ -4154,19 +4302,22 @@ enum ConditionalAction: string {
 </TabItem>
 </Tabs>
 
-### Readonly Classes {#readonly-classes}
+### Typed Classes {#readonly-classes}
 
 <Tabs groupId="language" queryString>
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
-The SDK uses readonly classes with typed properties:
+The SDK uses final classes with typed, constructor-promoted properties:
 
 ```php
 final class Recipient {
     public function __construct(
         public string $name,
         public string $email,
-        public int $signingOrder
+        public int $signingOrder,
+        public ?string $phone = null,                                // E.164; required for SMS passcodes
+        public ?string $externalId = null,                           // Your own key, unique in the document
+        public ?IdentityVerification $identityVerification = null
     ) {}
 }
 
@@ -4183,7 +4334,7 @@ final class Field {
         public ?string $defaultValue = null,           // checkbox: 'true'/'false'; date: a fixed MM/DD/YYYY (omit to auto-fill the signing date)
         public bool $isMultiline = false,
         public bool $isReadonly = false,
-        public bool $required = false,
+        public ?bool $required = null,                 // null (default) = required; false = optional for the signer
         public ?string $backgroundColor = null,
         public ?FieldMetadata $metadata = null   // Conditional (IF/THEN) metadata
     ) {}

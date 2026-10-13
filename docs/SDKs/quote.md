@@ -354,8 +354,8 @@ use TurboDocx\TurboQuote;
 use TurboDocx\Config\QuoteClientConfig;
 
 TurboQuote::configure(new QuoteClientConfig(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],   // optional, but required for most endpoints
+    apiKey: getenv('TURBODOCX_API_KEY'),
+    orgId: getenv('TURBODOCX_ORG_ID'),   // optional, but required for most endpoints
 ));
 ```
 

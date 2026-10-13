@@ -300,8 +300,8 @@ TurboWebhooks.configure(
 use TurboDocx\TurboWebhooks;
 
 TurboWebhooks::configureFromCredentials(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],
+    apiKey: getenv('TURBODOCX_API_KEY'),
+    orgId: getenv('TURBODOCX_ORG_ID'),
 );
 ```
 
@@ -321,8 +321,8 @@ If you need to build the config yourself, pass `skipSenderValidation: true` — 
 use TurboDocx\Config\HttpClientConfig;
 
 TurboWebhooks::configure(new HttpClientConfig(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],
+    apiKey: getenv('TURBODOCX_API_KEY'),
+    orgId: getenv('TURBODOCX_ORG_ID'),
     skipSenderValidation: true,  // webhooks don't send email
 ));
 ```
@@ -1033,8 +1033,8 @@ use TurboDocx\Exceptions\ValidationException;
 use TurboDocx\Types\Enums\WebhookEvent;
 
 TurboWebhooks::configureFromCredentials(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],
+    apiKey: getenv('TURBODOCX_API_KEY'),
+    orgId: getenv('TURBODOCX_ORG_ID'),
 );
 
 try {
@@ -1334,7 +1334,7 @@ use function TurboDocx\Utils\verifyWebhookSignature;
 $rawBody         = file_get_contents('php://input');               // raw bytes — do NOT json_decode first
 $signatureHeader = $_SERVER['HTTP_X_TURBODOCX_SIGNATURE'] ?? '';
 $timestampHeader = $_SERVER['HTTP_X_TURBODOCX_TIMESTAMP'] ?? '';
-$secret          = $_ENV['TURBODOCX_WEBHOOK_SECRET'];
+$secret          = getenv('TURBODOCX_WEBHOOK_SECRET');
 
 if (!verifyWebhookSignature($rawBody, $signatureHeader, $timestampHeader, $secret)) {
     http_response_code(401);

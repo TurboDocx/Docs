@@ -311,8 +311,8 @@ use TurboDocx\Config\DeliverableConfig;
 
 // Configure with all options
 Deliverable::configure(new DeliverableConfig(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],   // Required: Your TurboDocx API key
-    orgId: $_ENV['TURBODOCX_ORG_ID'],     // Required: Your organization ID
+    apiKey: getenv('TURBODOCX_API_KEY'),   // Required: Your TurboDocx API key
+    orgId: getenv('TURBODOCX_ORG_ID'),     // Required: Your organization ID
     baseUrl: 'https://api.turbodocx.com'  // Optional: Custom API endpoint
 ));
 ```
