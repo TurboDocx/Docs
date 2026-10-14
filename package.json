@@ -37,7 +37,7 @@
     "@tabler/icons-react": "^2.46.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tanstack/react-table": "^8.10.7",
-    "@tiptap/core": "^2.0.0-beta.205",
+    "@tiptap/core": "^3.30.5",
     "@tiptap/extension-code-block-lowlight": "^2.0.3",
     "@tiptap/extension-color": "^2.0.0-beta.212",
     "@tiptap/extension-image": "^2.0.0-beta.202",
