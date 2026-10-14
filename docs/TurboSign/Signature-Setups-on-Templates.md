@@ -250,8 +250,10 @@ template instead.
 
 ## Good to know
 
-- **A saved setup is used only in the TurboDocx app.** Requests sent through the
-  [TurboSign API](./API-Signatures.md) use the recipients and fields in the request.
+- **A saved setup is used in the TurboDocx app.** Requests sent through the
+  [TurboSign API](./API-Signatures.md) use the recipients and fields in the request. The one
+  exception is a PDF template with signer roles, which the API can send by role. See
+  [Use it from code](./PDF-Signature-Templates.md#use-it-from-code).
 
 ## Related
 
