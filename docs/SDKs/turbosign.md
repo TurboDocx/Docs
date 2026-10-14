@@ -2498,6 +2498,7 @@ print(link["url"])  # open in a new tab or redirect to it
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
+use TurboDocx\TurboSign;
 use TurboDocx\Types\Recipient;
 use TurboDocx\Types\Field;
 use TurboDocx\Types\SignatureFieldType;
