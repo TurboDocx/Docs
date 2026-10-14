@@ -188,7 +188,7 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.7.0</version>
+    <version>0.8.0</version>
 </dependency>
 ```
 
@@ -196,14 +196,14 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.8.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.7.0")
+implementation("com.turbodocx:turbodocx-sdk:0.8.0")
 ```
 
 </TabItem>
@@ -300,8 +300,8 @@ TurboWebhooks.configure(
 use TurboDocx\TurboWebhooks;
 
 TurboWebhooks::configureFromCredentials(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],
+    apiKey: getenv('TURBODOCX_API_KEY') ?: '',  // string params: '' makes an unset variable a clear auth error
+    orgId: getenv('TURBODOCX_ORG_ID') ?: '',
 );
 ```
 
@@ -321,8 +321,8 @@ If you need to build the config yourself, pass `skipSenderValidation: true` — 
 use TurboDocx\Config\HttpClientConfig;
 
 TurboWebhooks::configure(new HttpClientConfig(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,
     skipSenderValidation: true,  // webhooks don't send email
 ));
 ```
@@ -1033,8 +1033,8 @@ use TurboDocx\Exceptions\ValidationException;
 use TurboDocx\Types\Enums\WebhookEvent;
 
 TurboWebhooks::configureFromCredentials(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],
+    apiKey: getenv('TURBODOCX_API_KEY') ?: '',  // string params: '' makes an unset variable a clear auth error
+    orgId: getenv('TURBODOCX_ORG_ID') ?: '',
 );
 
 try {
@@ -1334,7 +1334,7 @@ use function TurboDocx\Utils\verifyWebhookSignature;
 $rawBody         = file_get_contents('php://input');               // raw bytes — do NOT json_decode first
 $signatureHeader = $_SERVER['HTTP_X_TURBODOCX_SIGNATURE'] ?? '';
 $timestampHeader = $_SERVER['HTTP_X_TURBODOCX_TIMESTAMP'] ?? '';
-$secret          = $_ENV['TURBODOCX_WEBHOOK_SECRET'];
+$secret          = getenv('TURBODOCX_WEBHOOK_SECRET') ?: '';
 
 if (!verifyWebhookSignature($rawBody, $signatureHeader, $timestampHeader, $secret)) {
     http_response_code(401);
