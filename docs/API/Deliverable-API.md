@@ -267,7 +267,7 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 | Field         | Type   | Required | Description                                |
 | ------------- | ------ | -------- | ------------------------------------------ |
 | `name`        | String | **Yes**  | Deliverable name (3–255 characters)        |
-| `templateId`  | String | **Yes**  | Template ID to generate from               |
+| `templateId`  | String | **Yes**  | Template ID to generate from. A PDF (signature-only) template returns `400 SignatureOnlyTemplate` |
 | `variables`   | Array  | **Yes**  | Array of variable objects for substitution |
 | `description` | String | No       | Description (up to 65,535 characters)      |
 | `tags`        | Array  | No       | Array of tag strings to associate          |
@@ -759,7 +759,7 @@ When `showTags=true` is passed, tag arrays contain full tag objects with the fol
 | Status | Description           | Common Cause                                       |
 | ------ | --------------------- | -------------------------------------------------- |
 | `200`  | Success               | Request completed successfully                     |
-| `400`  | Bad Request           | Validation error — check required fields and types |
+| `400`  | Bad Request           | Validation error — check required fields and types; or `SignatureOnlyTemplate` (the template is a PDF, which can't generate documents) |
 | `401`  | Unauthorized          | Invalid or missing Bearer token                    |
 | `403`  | Forbidden             | Missing role permission or invalid org ID          |
 | `404`  | Not Found             | Deliverable or template ID does not exist          |

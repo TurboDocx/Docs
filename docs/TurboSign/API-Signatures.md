@@ -215,7 +215,7 @@ User-Agent: TurboDocx API Client
 | ------------------- | -------------- | ------------- | ------------------------------------------ |
 | file                | File           | Conditional\* | PDF, DOCX, or PPTX file to upload          |
 | deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
-| templateId          | String (UUID)  | Conditional\* | Reference to existing template             |
+| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)) |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
@@ -234,6 +234,8 @@ User-Agent: TurboDocx API Client
 | expirationWarningInterval | String (JSON) | No       | Gap between warnings once they start       |
 
 \* **File Source**: Must provide exactly ONE of: file, deliverableId, templateId, or fileLink
+
+A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are what's used — a signature setup saved on the template in the TurboDocx app is not applied to API sends.
 
 :::tip Reminders & expiration are optional
 The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
@@ -1197,10 +1199,10 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 | recipientEmail  | String  | Yes      | Email address of recipient (matches email in recipients array) |
 | type            | String  | Yes      | Field type (see table above)                                   |
 | required        | Boolean | No       | Whether the signer must fill the field (default: `true`). Send `false` to let the signer leave it blank and still finish. Must be a JSON boolean, not the string `"false"`; `null` is treated as not set (required). Cannot be `false` on `signature` or `initial` fields. See [Optional Fields](#optional-fields) |
-| defaultValue    | String  | No       | Pre-filled value for the field (max 600 characters). This is a real value that is submitted with the signature, not placeholder hint text |
+| defaultValue    | String  | No       | Pre-filled value for the field (max 600 characters). This is a real value that is submitted with the signature, not placeholder hint text. Stored per field, so two fields of the same type for one recipient can start with different values. Not allowed on `signature` or `initial` fields. A `checkbox` takes `"true"` or `"false"`; a `date` takes a fixed date in `MM/DD/YYYY` (omit it to use the signing date) |
 | isReadonly      | Boolean | No       | Makes field non-editable (for prefilled values)                |
 | backgroundColor | String  | No       | Custom background color (hex or rgba)                          |
-| metadata        | Object  | No       | Optional field metadata. Carries `fieldKey` (on a controlling checkbox) and/or a `conditional` rule (on a dependent field). See [Conditional (IF/THEN) Fields](#conditional-if-then-fields). |
+| metadata        | Object  | No       | Optional field metadata. Carries `fieldKey` (on a controlling checkbox) and/or a `conditional` rule (on a dependent field). See [Conditional (IF/THEN) Fields](#conditional-if-then-fields). Other keys are kept with the field as sent. The TurboDocx app adds `useOwnDefaultValue: true` to a name, email, title or company field that keeps its own `defaultValue` instead of following its recipient's value for that field type. It is an editor hint only: every field is signed with its own `defaultValue` either way. |
 
 #### Template-based Properties
 

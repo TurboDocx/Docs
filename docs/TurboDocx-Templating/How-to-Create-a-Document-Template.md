@@ -100,33 +100,32 @@ Now that we've created our first template, let's upload it to TurboDocx.<br/><br
 
 ![TurboDocx Templates tab with New Template button highlighted](/img/how_to_create_a_template/newtemp.png)
 
-2. As you can see, there are multiple ways to upload a Document. For this example, we will click on the "Upload Template" area then choose the document you just saved in the last step or drag and drop your that document into the area.
+2. Click the **Upload Template** card, then choose the document you saved in the last step (or drag and drop it onto the card).
 
-![Template upload dialog with drag-and-drop area and upload options](/img/how_to_create_a_template/step_1.png)
+![Create Template page with the Upload Template card highlighted](/img/how_to_create_a_template/step_1.png)
 
 <br/><br/><br/>
 
-## Step 3: Preview Template
+## Step 3: Your template is created
 
-On the next screen, you will see a preview of your template.<br/><br/><br/>
+As soon as the upload finishes, TurboDocx creates the template, shows **Template has been created successfully!**, and a few seconds later opens it so you can generate your first document.<br/><br/>
 
-1. Check to make sure all the variables you wanted are listed under the variables column.
-- (Optional) - On this page, you can also create default entries for your template that you can change later when you are creating the deliverable.
-
-![Template preview screen showing detected variables and Create Template button](/img/how_to_create_a_template/step_3.png)
-
-2. Once you've checked to make sure all your variable are set, go ahead and click the "Create Template" button on the bottom right corner (you may need to scroll)
-<br/><br/>
+- The variables TurboDocx found in your `{brackets}` are listed on that page as fields to fill in.
+- You can add default values for your variables later, from the template's details page.
 
 :::tip
 
 - Tags can be very useful to help find certain templates, and Knowledgebase entries. Don't forget to utilize them! You can also always come back and add them in the future.
-- If your variables are not showing up, go back to step one and check if you're using the right brackets, and that there are no spaces in your variable name.
+- If a variable is missing, go back to step one and check that it's in `{brackets}` with no spaces in the name, then upload the file again.
 
+:::
+
+:::note Uploading a PDF
+You can also upload a **PDF**. A PDF becomes a signature-only template: it has no variables and opens on **Prepare & Sign**, where you add signers and place signature fields. See [How to Use a PDF as a Signature Template](/docs/TurboSign/PDF-Signature-Templates).
 :::
 
 <br/><br/><br/>
 
 ## Finished
 
-Congratulations on uploading your first document template. You should be able to see it on the template tab once you go back to the main page.
+Congratulations on uploading your first document template. It's open and ready to use, and you'll also find it in the **Templates** list.
