@@ -29,7 +29,7 @@ Have these ready:
 - **Your TurboDocx API key and Organization ID.** In TurboDocx, open **Settings**, then **API keys**. That page shows the Organization ID. Create a key there and copy it right away: TurboDocx shows the key only once, when you create it. The Organization ID is also on **Features and integrations**. When you create the key, the **User** access level is enough for TurboSign for Salesforce. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
 - **A TurboDocx template** with a text token wherever someone signs or dates, for example `{sig}` and `{date}`.
 - **System Administrator** access to your Salesforce org.
-- **A supported Salesforce edition**, such as Enterprise, Unlimited, Performance, or Developer Edition. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
+- **A supported Salesforce edition**, such as Enterprise, Unlimited, Performance, or Developer Edition. See [Which Salesforce orgs can use it](/docs/Integrations/SalesForce#which-salesforce-orgs-can-use-it).
 - **The TurboSign for Salesforce package installed** in your org. See [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install).
 
 ## Step 1: Store your API key and Organization ID
@@ -136,25 +136,10 @@ Requests run as whoever triggers them. If a Flow, a data load, or an integration
 
 ## Step 4: Connect Salesforce in TurboDocx
 
-TurboDocx saves the signed PDF back to Salesforce through the Salesforce connection in your TurboDocx settings.
+TurboDocx saves the signed PDF back to Salesforce through the Salesforce connection in your TurboDocx settings. Sending documents for signature from Salesforce works without it. You need it to save the signed files and the signing status back to Salesforce. The Salesforce integration is included on the TurboDocx **Pro** and **Enterprise** plans.
 
-:::note Which TurboDocx plans include it
-The Salesforce integration is included on the TurboDocx **Pro** and **Enterprise** plans. Sending documents for signature from Salesforce works without it. You need it to save the signed files and the signing status back to Salesforce.
-:::
-
-If you don't have that connection yet, follow [Salesforce Integration, Steps 1 to 3](/docs/Integrations/SalesForce) to create the External Client App in Salesforce and connect it in TurboDocx. If you already use the TurboDocx Salesforce integration, check that it meets everything below.
-
-- **Connect the same Salesforce org the package is installed in.** The package sends its Salesforce org ID with each document. When the document is signed, TurboDocx saves the files through the connection to that same org. Only active connections of active TurboDocx users count. If no connection matches the org, nothing is saved, and TurboDocx records the failure. Saving signed files back needs TurboSign for Salesforce 1.1.0 or later, which sends the org ID. Earlier versions still send and sign, but the signed files are not saved back.
-- **Connect with the right Salesforce user.** That user must be able to create files and edit the records you send from, including the field you pick under **On Completion**. A dedicated integration user works best, so the connection doesn't break when a person leaves or changes their password.
-- **You can connect more than one Salesforce org.** For example, connect both a sandbox and production. Each send uses the connection to the org it was sent from.
-- **Check the app's scopes.** The connection needs the **api** scope, the **refresh_token** (offline access) scope, and the **openid** scope, because TurboDocx checks which Salesforce org each connection belongs to. See [Configure API Settings](/docs/Integrations/SalesForce#configure-api-settings). If you added **openid** to an existing app, reconnect Salesforce in TurboDocx.
-- **Leave the refresh token policy as Salesforce sets it.** New External Client Apps expire a refresh token that isn't used for 30 days, and the **Refresh token is valid until revoked** option no longer exists. TurboDocx keeps the connection active automatically. See [Edit Policies](/docs/Integrations/SalesForce#edit-policies).
-- **If the connection stops working**, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in the Salesforce settings dialog and emails your organization's admins. To see the message, open **Settings > Features and integrations** and click **Configure SalesForce** on the Salesforce card.
-- **Reconnecting is safe.** Your current connection keeps working until the new one succeeds.
-
-:::note Sandboxes
-Saving signed files back to a sandbox works. Connect that sandbox in TurboDocx: in the Salesforce settings dialog, choose **Sandbox** in the **Environment** list, so the connection signs in at `test.salesforce.com`. If your sandbox uses a My Domain login, click **Use Custom Domain** on the Salesforce login page and enter it.
-:::
+- **If you don't have that connection yet**, follow [Steps 1 to 3 of the Salesforce Integration guide](/docs/Integrations/SalesForce#step-1-create-a-private-salesforce-external-client-app) to create the External Client App in Salesforce and connect it in TurboDocx. To save signed files back to a sandbox, connect that sandbox, as described in [Connect a sandbox](/docs/Integrations/SalesForce#configure-salesforce-integration).
+- **Then check it, or check the connection you already have**, against [Check the connection for TurboSign for Salesforce](/docs/Integrations/SalesForce#check-the-connection-for-turbosign-for-salesforce): the same org the package is installed in, a Salesforce user who can edit the records, the **api**, **refresh_token**, and **openid** scopes, and TurboSign for Salesforce 1.1.0 or later.
 
 ## Step 5: Build a document setup
 

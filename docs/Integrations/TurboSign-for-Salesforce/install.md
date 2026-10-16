@@ -28,7 +28,7 @@ Saving signed files back to your Salesforce records depends on TurboDocx's Sales
 ## Before you install
 
 - **You need the System Administrator profile** (or a user with permission to install packages) in the org.
-- **Your org must run custom Apex.** Enterprise, Unlimited, Performance, and Developer Edition orgs work, and so do their sandboxes. Professional and Group editions don't. See [Which Salesforce orgs can use it](/docs/Integrations/turbosign-for-salesforce#which-salesforce-orgs-can-use-it).
+- **Your org must run custom Apex.** Enterprise, Unlimited, Performance, and Developer Edition orgs work, and so do their sandboxes. Professional and Group editions don't. See [Which Salesforce orgs can use it](/docs/Integrations/SalesForce#which-salesforce-orgs-can-use-it).
 - **No org to try it in?** A free [Salesforce Developer Edition](https://developer.salesforce.com/signup) org works.
 - **Try a sandbox first** if you have one. Install, set up, and send a test document there before production. To see the signed files saved back to the sandbox record, install version 1.1.0 or later and connect that sandbox in TurboDocx, as described in [Step 4 of the setup guide](/docs/Integrations/turbosign-for-salesforce/setup#step-4-connect-salesforce-in-turbodocx).
 
@@ -37,7 +37,7 @@ Saving signed files back to your Salesforce records depends on TurboDocx's Sales
 The install link installs TurboSign for Salesforce as an unlocked package. It takes a few minutes.
 
 1. Open [One-click install links](/docs/Integrations/turbosign-for-salesforce/install-links) and click the link for your org: production or Developer Edition, or sandbox.
-2. Log in to the org as a System Administrator, if Salesforce asks. If it asks even though you're already signed in, you can [use your My Domain address in the link](/docs/Integrations/turbosign-for-salesforce/install-links#version-110-latest) instead.
+2. Log in to the org as a System Administrator, if Salesforce asks. If it asks even though you're already signed in, you can [use your My Domain address in the link](/docs/Integrations/turbosign-for-salesforce/install-links#version-111-latest) instead.
 3. Check that the install page shows **TurboSign for Salesforce** and the version you expect.
 
    ![Package install page with the app name and version number highlighted](/img/turbosign-salesforce/install-01-install-page.png)
