@@ -47,6 +47,12 @@
 /docs/SDKs/webhooks-java/ /docs/SDKs/webhooks?language=java 301
 /docs/SDKs/webhooks-java.html /docs/SDKs/webhooks?language=java 301
 
+# The TurboSign for Salesforce overview was merged into the Salesforce Integration page (CR #231).
+# Only the overview moved: the TurboSign for Salesforce guides below it keep their /turbosign-for-salesforce/... URLs, so these are exact matches, not a splat.
+/docs/Integrations/turbosign-for-salesforce /docs/Integrations/SalesForce#send-for-signature-with-turbosign-for-salesforce 301
+/docs/Integrations/turbosign-for-salesforce/ /docs/Integrations/SalesForce#send-for-signature-with-turbosign-for-salesforce 301
+/docs/Integrations/turbosign-for-salesforce.html /docs/Integrations/SalesForce#send-for-signature-with-turbosign-for-salesforce 301
+
 # Embedded signing pages grouped into one "Embedded signing" category. The surviving pages keep their
 # slugs, so these only catch the old filename-style URLs (one of them is linked from the marketing site).
 /docs/TurboSign/Embedded%20Signing /docs/TurboSign/embedded-signing 301
