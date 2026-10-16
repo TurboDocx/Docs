@@ -336,10 +336,14 @@ If the properties pane on the right lists actions with an **Add Action** button,
 2. Click **Opportunity**.
 3. Click **Page Layouts**.
 4. Click the layout your reps use. To find out which one that is, click **Page Layout Assignment** on the same page. It lists the layout each profile uses. In a new org, the **System Administrator** profile uses **Opportunity Layout**.
+   ![Opportunity Page Layouts list with Opportunity Layout and the Page Layout Assignment button highlighted](/img/turbosign-salesforce/49a-page-layouts.png)
 5. In the palette at the top, click **Mobile & Lightning Actions**.
+   ![Page layout editor with the Mobile & Lightning Actions palette category highlighted](/img/turbosign-salesforce/49b-mobile-lightning-actions.png)
 6. If the **Salesforce Mobile and Lightning Experience Actions** section says it uses predefined actions, click the **override the predefined actions** link inside it.
 7. Drag **Send for Signature** into the **Salesforce Mobile and Lightning Experience Actions** section, and drop it at the **start** of the list. The record page shows only the first few actions as buttons and puts the rest in a **▼** menu, so an action dropped at the end is easy to miss.
+   ![Salesforce Mobile and Lightning Experience Actions section with Send for Signature highlighted as the first action](/img/turbosign-salesforce/49c-send-for-signature-first.png)
 8. Click **Save**.
+   ![Page layout editor toolbar with the Save button highlighted](/img/turbosign-salesforce/49d-save-layout.png)
 
 Repeat for every page or layout your reps use.
 
