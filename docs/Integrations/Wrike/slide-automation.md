@@ -91,6 +91,20 @@ Find the **Slide Automation** panel and turn its switch on.
 
 Turning this on reveals the settings in the rest of this guide. Leave it off and the automation generates a normal document, ignoring any slide roles you marked.
 
+### Step 5a: Decide what happens when a table outgrows its slide
+
+A summary table can end up with more rows than fit on one slide — you have more projects than the table was drawn for. **Continue long tables on extra slides** decides what happens then. It is **on by default**, which means the rows that don't fit continue on new slides instead of being dropped.
+
+![The Continue long tables on extra slides toggle highlighted, switched on](/img/wrike_slide_automation/11_continue_long_tables.png)
+
+Leave it on and TurboDocx adds as many slides as the rows need. Each new slide is a copy of the summary slide carrying the next batch of rows, and it keeps the table's columns, widths and cell colours. The heading above a table — "Delivered", "In Flight" — is printed once, where that table starts, so a continued table reads as the same table rather than a new section.
+
+Turn it off and each table shows only the rows that fit on its own slide; the rest are left out of the deck.
+
+:::tip
+The deck grows only as much as it needs to. If every project already fits, no extra slides are added and the deck looks exactly as it did before.
+:::
+
 <br/>
 
 ## Part 3: Choose which projects appear
@@ -172,6 +186,60 @@ Your automation is live. The next time a project moves into the trigger status, 
 
 <br/>
 
+## Part 6: Colour and hide shapes on the slide (optional)
+
+Parts 4 and 5 cover tables. A slide often carries other marked-up pieces too — a status banner in the
+corner, a "delay drivers" note — and those are configured from the **template** rather than the
+automation wizard.
+
+Mark a shape in PowerPoint by giving it a name or alt-text wrapped in braces, such as
+`{risk_banner}`. Then open the template's **Details** page, where **Tagged Shapes** lists everything
+the deck carries.
+
+### Step 12: Open a tagged shape
+
+Click the three-dot menu beside a shape and choose **Colours & visibility**.
+
+### Step 13: Say what the shape does
+
+Pick one:
+
+- **Changes colour** — the shape stays on every slide and takes its colour from a Wrike field. A
+  banner that turns red when a project is blocked and green when it is on track.
+- **Appears and disappears** — the shape is dropped from a project's slide unless the field says
+  otherwise. A warning note that only shows on the projects that have something to warn about.
+- **Both** — a shape that does each, keyed on its own field.
+
+Only the settings for your choice are shown.
+
+For **Changes colour**, pick the field, then add a colour for each value. Each rule shows a preview
+of the banner it produces, so you can see the result rather than reading hex codes. **A rule with no
+values is the catch-all** — it covers every value the other rules don't name, which is how you set a
+default colour.
+
+For **Appears and disappears**, pick the field and either list the values that show the shape, or
+switch on **Whenever the field has any value** for a note that appears whenever there is something
+to say.
+
+Leaving a shape unconfigured is fine: it simply appears on every slide, exactly as the template
+draws it.
+
+### Step 14: Colour one cell of a table by a value
+
+A tagged **table** on the Details page also offers **Cell colour**, which paints a single column
+rather than a whole row.
+
+It asks two things, because they are usually different fields:
+
+1. **Decide by** — the Wrike field whose value chooses the colour.
+2. **Paint this column** — the column that actually changes.
+
+That separation is the point. A gate table might show each gate's name, its challenges and its
+mitigations, with no status column anywhere — yet the gate's *status* is what should turn its
+**name** cell green. The column list comes from the table in your deck, so you pick a real column.
+
+<br/>
+
 ## Troubleshooting
 
 **The deck was not generated, and Wrike shows a comment about the inclusion field.**
@@ -180,8 +248,21 @@ The Checkbox field chosen in Step 6 no longer works — it may have been deleted
 **Some projects are missing from the summary.**
 Their Wrike status isn't listed in any of your tables. Add it to the right table's **Statuses** in Step 8.
 
+**Rows are missing from the end of a summary table.**
+The table ran out of room on its slide and **Continue long tables on extra slides** (Step 5a) is switched off, so the rows that didn't fit were left out. Switch it on to carry them onto extra slides.
+
 **A summary table stayed empty.**
 The **Table tag** doesn't match the table on the slide. Check the table's alt-text (or shape name) in PowerPoint and make it match the tag exactly.
+
+**A tagged banner is a block of colour with no words in it.**
+The variable behind it lost its Wrike field mapping — most often because the template was edited and
+re-uploaded. Open the template's Details page and check the placeholder is still mapped to a Wrike
+field, then re-map it if not.
+
+**A tagged shape never changes colour.**
+Its rule lists values the chosen field never reports. Reopen **Colours & visibility** and check the
+values match what the field actually contains — if you changed the field after writing the rules, the
+old values no longer apply.
 
 **The looping slide didn't repeat.**
 Check the slide is still marked as a **Looping slide** in Part 1, and that **Slide Automation** is switched on in Step 5.
