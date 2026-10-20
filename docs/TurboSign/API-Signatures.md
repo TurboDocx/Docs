@@ -36,6 +36,8 @@ keywords:
   - resend signature
   - signer roles
   - template signature setup
+  - update signature setup settings
+  - delete signature setup
 ---
 
 import ScriptLoader from '@site/src/components/ScriptLoader';
@@ -1279,6 +1281,146 @@ User-Agent: TurboDocx API Client
 - Works with an API key or a user token. The caller needs the administrator, contributor or user role; the viewer role is refused, because the response lists saved signer emails.
 - The same role keys are shown in the app under **Use via API** on the template page when **Dev Mode** is on.
 - Roles saved before keys existed are returned with keys `signer_1`, `signer_2` and so on.
+
+## Endpoint 9: Update Template Signature Settings {#endpoint-9-update-template-signature-settings}
+
+Change the settings of a template's saved signature setup: CC recipients, the email message, reminders and expiration, and the document name. The signer roles, their keys and the fields are never changed, so integrations that send the template by role keep working. This is what **Edit** next to **Email to signers** or **Reminders & expiration** does on the template's page in TurboDocx (see [Change or remove the setup](./Signature-Setups-on-Templates.md#change-or-remove-the-setup)).
+
+### Endpoint
+
+```http
+PATCH https://api.turbodocx.com/turbosign/templates/{templateId}/signature-setup/settings
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+Content-Type: application/json
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| templateId | String (UUID) | Yes      | The unique identifier of the template |
+
+### Request Body (JSON)
+
+Send at least one of these. A setting you leave out keeps its saved value.
+
+| Field               | Type   | Description                                                                                                         |
+| ------------------- | ------ | ------------------------------------------------------------------------------------------------------------------- |
+| ccEmails            | Array  | CC email addresses copied on every document sent from the template. Up to 15, no duplicates. Replaces the saved list; `[]` clears it |
+| documentDescription | String | The message in the signature email (max 1000 chars). `""` clears it                                                 |
+| scheduleOverrides   | Object | Reminder and expiration settings for this template, using the same eight fields as the [schedule fields](#endpoint-1-prepare-for-review) at send time (no `expiresAt`). Replaces the saved overrides; `{}` follows your organization's defaults |
+| documentName        | String | The name documents are sent under (max 255 chars). PDF signature templates only; ignored for a Word or PowerPoint template. `""` uses the template's name |
+
+Any other key, such as `roles` or `fields`, is rejected with `400`.
+
+```bash
+curl -X PATCH https://api.turbodocx.com/turbosign/templates/TEMPLATE_ID/signature-setup/settings \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ccEmails": ["legal@acme.com"],
+    "documentDescription": "Please review and sign the attached agreement.",
+    "scheduleOverrides": {
+      "remindersEnabled": true,
+      "reminderDelay": { "value": 3, "unit": "days" }
+    }
+  }'
+```
+
+### Response
+
+```json
+{
+  "data": {
+    "templateId": "TEMPLATE_ID",
+    "setup": {
+      "roles": [ ... ],
+      "fields": [ ... ],
+      "ccEmails": ["legal@acme.com"],
+      "documentDescription": "Please review and sign the attached agreement.",
+      "scheduleOverrides": {
+        "remindersEnabled": true,
+        "reminderDelay": { "value": 3, "unit": "days" }
+      },
+      "savedOn": "2026-10-20T14:30:00.000Z"
+    }
+  }
+}
+```
+
+`data.setup` is the template's whole saved signature setup after the change, including its unchanged roles and fields.
+
+### Error Responses
+
+Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." }`, where `type` and `code` hold the same value.
+
+| Status | `type`                   | Cause                                                                                   |
+| ------ | ------------------------ | --------------------------------------------------------------------------------------- |
+| 400    |                          | No setting was sent (`Send at least one of ccEmails, documentDescription, scheduleOverrides, documentName`), an unknown key was sent, or a value is invalid |
+| 400    | `CcMatchesSigner`        | A CC address is also a saved signer on the template                                     |
+| 404    | `SignatureSetupNotFound` | The template has no saved signature setup                                                |
+| 404    | `TemplateNotFound`       | The template doesn't exist in your organization                                         |
+| 423    |                          | Someone is editing the template in TurboDocx. Retry once they have finished             |
+
+### Usage Notes
+
+- Requires the administrator or contributor role.
+- Your organization's own reminder and expiration settings are never changed. `scheduleOverrides` only applies to documents sent from this template.
+
+## Endpoint 10: Delete Template Signature Setup {#endpoint-10-delete-template-signature-setup}
+
+Remove a template's saved signature setup: its signer roles, fields, CC recipients, message, reminders and document name. Documents already sent are not affected. New sends from the template start with no signers or fields, and a role send fails with `TemplateHasNoSignerRoles`.
+
+### Endpoint
+
+```http
+DELETE https://api.turbodocx.com/turbosign/templates/{templateId}/save-signature-setup
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| templateId | String (UUID) | Yes      | The unique identifier of the template |
+
+### Response
+
+```json
+{
+  "data": {
+    "templateId": "TEMPLATE_ID"
+  }
+}
+```
+
+### Error Responses
+
+| Status | Body                                                         | Cause                                                               |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| 404    | `{ "error": "Template not found", "code": "TemplateNotFound" }` | The template doesn't exist in your organization                     |
+| 423    | `{ "error": "Resource is locked", ... }`                      | Someone is editing the template in TurboDocx. Retry once they have finished |
+
+### Usage Notes
+
+- Requires the administrator or contributor role.
+- Deleting a template that has no saved setup also returns `200`.
+- To change only the settings and keep the roles and fields, use [Update Template Signature Settings](#endpoint-9-update-template-signature-settings) instead.
 
 ## Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
 
