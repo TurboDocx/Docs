@@ -413,6 +413,7 @@ Our SDKs include built-in webhook verification. The snippets below show the mini
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php)
 - [TurboWebhooks Go SDK](/docs/SDKs/webhooks?language=go)
 - [TurboWebhooks Java SDK](/docs/SDKs/webhooks?language=java)
+- [TurboWebhooks Ruby SDK](/docs/SDKs/webhooks?language=ruby)
 
 Here are examples for each language:
 
@@ -498,6 +499,34 @@ func webhookHandler(w http.ResponseWriter, r *http.Request) {
     // Process event...
     w.WriteHeader(http.StatusOK)
 }
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```ruby
+require "sinatra"
+require "json"
+require "turbodocx_sdk"
+
+post "/webhook" do
+  request.body.rewind
+  body = request.body.read
+
+  valid = TurboDocxSdk.verify_webhook_signature(
+    payload:          body,
+    signature_header: request.env["HTTP_X_TURBODOCX_SIGNATURE"],
+    timestamp_header: request.env["HTTP_X_TURBODOCX_TIMESTAMP"],
+    secret:           ENV["TURBODOCX_WEBHOOK_SECRET"]
+  )
+
+  halt 401, "Invalid signature" unless valid
+
+  event = JSON.parse(body)
+  # Process event...
+  content_type :json
+  { received: true }.to_json
+end
 ```
 
 </TabItem>

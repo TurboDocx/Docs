@@ -1,7 +1,5 @@
 ---
-# Hidden from the published site: the turbodocx-sdk gem is not on RubyGems yet.
-# Remove `draft: true` when the gem is published (TurboDocx/SDK issue).
-draft: true
+unlisted: true
 title: TurboPartner Ruby SDK
 sidebar_position: 13
 sidebar_label: "TurboPartner: Ruby"
@@ -924,6 +922,6 @@ It creates an organization with entitlements, adds a user, mints an org API key,
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)
 - [RubyGems Package](https://rubygems.org/gems/turbodocx-sdk)
-- [TurboSign Ruby SDK](/docs/SDKs/ruby) — For digital signature operations
-- [TurboQuote Ruby SDK](/docs/SDKs/quote-ruby) — For quotes and proposals
-- [SDKs Overview](/docs/SDKs/) — All TurboDocx SDKs
+- [TurboSign Ruby SDK](/docs/SDKs/turbosign?language=ruby): for digital signature operations
+- [TurboQuote Ruby SDK](/docs/SDKs/quote?language=ruby): for quotes and proposals
+- [SDKs Overview](/docs/SDKs/): all TurboDocx SDKs

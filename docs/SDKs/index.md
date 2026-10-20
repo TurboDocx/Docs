@@ -2,7 +2,7 @@
 title: SDKs Overview
 sidebar_position: 1
 sidebar_label: Overview
-description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, and Java. Get started with document generation, deliverables, digital signatures, and quoting.
+description: Official TurboDocx SDKs for JavaScript, Python, PHP, Go, Java, and Ruby. Get started with document generation, deliverables, digital signatures, and quoting.
 keywords:
   - turbodocx sdk
   - turbosign sdk
@@ -11,6 +11,7 @@ keywords:
   - php sdk
   - go sdk
   - java sdk
+  - ruby sdk
   - document api
   - esignature sdk
   - api client library
@@ -55,6 +56,7 @@ Send documents for legally-binding eSignatures with full audit trails.
 | **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/turbosign?language=php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)       |
 | **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/turbosign?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)         |
 | **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/turbosign?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)     |
+| **Ruby**                  | `turbodocx-sdk`            | `gem install turbodocx-sdk`                                          | [Docs](/docs/SDKs/turbosign?language=ruby) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk) |
 
 ## TurboWebhooks SDKs
 
@@ -67,6 +69,7 @@ Subscribe to all 7 TurboSign signature events (`sent`, `viewed`, `recipient_sign
 | **Python**                | `turbodocx-sdk` | `pip install turbodocx-sdk` | [Docs](/docs/SDKs/webhooks?language=python) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/py-sdk) |
 | **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk` | [Docs](/docs/SDKs/webhooks?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk) |
 | **Java**                  | `com.turbodocx:turbodocx-sdk` | `mvn` / `gradle` (see [docs](/docs/SDKs/webhooks?language=java)) | [Docs](/docs/SDKs/webhooks?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk) |
+| **Ruby**                  | `turbodocx-sdk`            | `gem install turbodocx-sdk`                                          | [Docs](/docs/SDKs/webhooks?language=ruby) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk) |
 
 For the conceptual overview (delivery retries, payload schema, dashboard configuration), see [TurboSign → Webhooks](/docs/TurboSign/Webhooks).
 
@@ -81,6 +84,7 @@ Generate documents from templates with dynamic variable injection, download sour
 | **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/deliverable?language=php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                       |
 | **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/deliverable?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                         |
 | **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/deliverable?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
+| **Ruby**                  | `turbodocx-sdk`            | `gem install turbodocx-sdk`                                          | [Docs](/docs/SDKs/deliverable?language=ruby) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk) |
 
 ## TurboQuote SDKs
 
@@ -93,6 +97,7 @@ Build sales quotes and proposals programmatically: quotes and line items, a prod
 | **PHP**                   | `turbodocx/sdk`            | `composer require turbodocx/sdk`                                     | [Docs](/docs/SDKs/quote?language=php) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)                             |
 | **Go**                    | `github.com/TurboDocx/SDK/packages/go-sdk` | `go get github.com/TurboDocx/SDK/packages/go-sdk`                                    | [Docs](/docs/SDKs/quote?language=go) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/go-sdk)                               |
 | **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/quote?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                           |
+| **Ruby**                  | `turbodocx-sdk`            | `gem install turbodocx-sdk`                                          | [Docs](/docs/SDKs/quote?language=ruby) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk) |
 
 :::tip Low-code or No-code?
 Check out our [n8n community node](https://www.npmjs.com/package/@turbodocx/n8n-nodes-turbodocx) for workflow automation, or get [TurboDocx Writer](https://appsource.microsoft.com/en-us/product/office/WA200007397) for Microsoft Word.
@@ -201,6 +206,15 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
     <artifactId>turbodocx-sdk</artifactId>
     <version>0.7.0</version>
 </dependency>
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```bash
+gem install turbodocx-sdk
+# or
+bundle add turbodocx-sdk
 ```
 
 </TabItem>
@@ -439,6 +453,33 @@ public class Main {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```ruby
+require "turbodocx_sdk"
+
+# Configure with your API key
+TurboDocxSdk::TurboSign.configure(
+  api_key:      ENV["TURBODOCX_API_KEY"],
+  org_id:       ENV["TURBODOCX_ORG_ID"],
+  sender_email: ENV["TURBODOCX_SENDER_EMAIL"] # required for TurboSign
+)
+
+# Send a document for signature
+result = TurboDocxSdk::TurboSign.send_signature(
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 }
+  ],
+  fields: [
+    { type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "john@example.com" }
+  ]
+)
+
+puts "Document sent! ID: #{result['documentId']}"
+```
+
+</TabItem>
 </Tabs>
 
 ---
@@ -660,6 +701,25 @@ try {
     System.err.println("Error " + e.getCode() + ": " + e.getMessage());
     System.err.println("Status code: " + e.getStatusCode());
 }
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby">
+
+```ruby
+begin
+  result = TurboDocxSdk::TurboSign.send_signature(request)
+rescue TurboDocxSdk::AuthenticationError => e
+  puts "Invalid API key: #{e.message}"
+rescue TurboDocxSdk::ValidationError => e
+  puts "Validation error: #{e.message}"
+  puts "Error code: #{e.code}"
+rescue TurboDocxSdk::RateLimitError => e
+  puts "Rate limited: #{e.message}"
+rescue TurboDocxSdk::TurboDocxError => e
+  puts "Error #{e.code}: #{e.message}"
+  puts "Status code: #{e.status_code}"
+end
 ```
 
 </TabItem>

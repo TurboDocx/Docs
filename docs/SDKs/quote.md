@@ -2,7 +2,7 @@
 title: TurboQuote SDK
 sidebar_position: 16
 sidebar_label: TurboQuote
-description: 'TurboQuote SDK for JavaScript, TypeScript, Python, PHP, Go and Java: create quotes, add line items, apply price books, send and download PDFs.'
+description: 'TurboQuote SDK for JavaScript, TypeScript, Python, PHP, Go, Java and Ruby: create quotes, add line items, apply price books, send and download PDFs.'
 keywords:
 - turboquote javascript
 - turboquote typescript
@@ -51,6 +51,12 @@ keywords:
 - gradle turboquote
 - line items java
 - pricebook java
+- turboquote ruby
+- quote sdk ruby
+- cpq ruby
+- turbodocx quote ruby
+- gem turbodocx
+- price book ruby
 ---
 
 import Tabs from '@theme/Tabs';
@@ -116,6 +122,17 @@ The official TurboDocx TurboQuote SDK for Java applications. Create and send sal
 
 :::info What is TurboQuote?
 TurboQuote is TurboDocx's CPQ (Configure, Price, Quote) module. Build a product catalog, assemble quotes with line items, apply price book discounts, and send branded proposals to contacts — with optional TurboSign e-signature delivery via `sendQuoteWithDeliverable`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. The client config takes no `senderEmail`; the quote's **"Prepared by"** sender comes from your org quote template (see the note below `createQuote`).
+:::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The official TurboDocx TurboQuote SDK for Ruby applications. Build full CPQ (configure, price, quote) workflows: create quotes, add product and bundle line items, apply price books, send proposals to contacts, and download PDF exports, all from plain Ruby 2.7+. Distributed on RubyGems as `turbodocx-sdk` (same gem as TurboSign, TurboWebhooks, and Deliverable).
+
+<br />
+
+:::info What is TurboQuote?
+TurboQuote is TurboDocx's quoting and proposal engine. It covers the full quote lifecycle (draft, send, accept, decline, void) with a product catalog, bundle groupings, price books, company and contact CRM, and customizable quote templates. A draft can also be marked declined directly, for a deal that dies before the quote is ever sent. Quotes can be sent with an attached Deliverable document through `send_quote_with_deliverable` for a branded proposal experience.
 :::
 
 </TabItem>
@@ -238,6 +255,25 @@ import com.turbodocx.models.quote.*;
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```bash
+gem install turbodocx-sdk
+```
+
+Or add it to your `Gemfile` and run `bundle install`:
+
+```ruby
+gem "turbodocx-sdk"
+```
+
+Then require it:
+
+```ruby
+require "turbodocx_sdk"
+```
+
+</TabItem>
 </Tabs>
 
 ## Requirements {#requirements}
@@ -279,6 +315,14 @@ import com.turbodocx.models.quote.*;
 - OkHttp 4.x (included transitively)
 - Gson 2.x (included transitively)
 - A TurboDocx API key (`TDX-` prefix) — no administrator role required
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+- Ruby 2.7 or higher
+- No runtime dependencies (the gem uses the standard library's `net/http`)
+- A TurboDocx API key (`TDX-` prefix), generated in **Settings → API Keys**
+- All SDK methods are synchronous, so no async wrapper is needed
 
 </TabItem>
 </Tabs>
@@ -425,6 +469,29 @@ TurboQuote tq = client.turboQuote();
 The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, every sender-resolving call — `createQuote`, `duplicateQuote`, `sendQuote` / `sendQuoteWithDeliverable`, and `handleExpiredQuote` — fails with a `ValidationException` (`400 SenderEmailRequired`) when the org's quote template has no sender email set. A companion `400 SenderNameRequired` is returned when no sender **name** resolves. Configure both **Sender Name** and **Sender Email** once (`updateTemplate`) and all of them resolve cleanly.
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "turbodocx_sdk"
+
+TurboDocxSdk::TurboQuote.configure(
+  api_key: ENV["TURBODOCX_API_KEY"],
+  org_id:  ENV["TURBODOCX_ORG_ID"],  # optional, auto-reads the env var
+  # access_token: "your-oauth-token",  # optional, OAuth token instead of api_key
+)
+```
+
+:::tip No sender email on the client, but set one on your quote template
+`TurboQuote.configure` does **not** take `sender_email` or `sender_name`, because quotes are not signature emails. Only a credential is required (`api_key` or `access_token`); `org_id` falls back to `TURBODOCX_ORG_ID`. If you skip the explicit call, the SDK lazily configures itself from `TURBODOCX_API_KEY`, `TURBODOCX_ORG_ID` and `TURBODOCX_BASE_URL` on first use.
+
+The quote's **"Prepared by"** sender comes from your **org quote template** instead. Because an API key has no mailbox of its own, if the org's quote template has no sender email set, `create_quote`, `duplicate_quote`, `send_quote` / `send_quote_with_deliverable`, and `handle_expired_quote` still succeed: they fall back to a generic TurboDocx sender (`no-reply@turbodocx.com`) rather than rejecting the call. Configure both **Sender Name** and **Sender Email** once (`template = TurboDocxSdk::TurboQuote.get_template` then `TurboDocxSdk::TurboQuote.update_template(template["id"], "senderEmail" => ..., "senderName" => ...)`) so quotes show your own sender identity instead of the generic fallback.
+:::
+
+:::note camelCase request keys
+Method names are snake_case, but the keys **inside** every request hash (`companyId`, `validUntil`, `unitPrice`, and so on) are **camelCase**. The SDK forwards them to the API verbatim and does not convert snake_case hash keys.
+:::
+
+</TabItem>
 </Tabs>
 
 ### Environment Variables {#environment-variables}
@@ -491,6 +558,20 @@ TURBODOCX_BASE_URL=https://api.turbodocx.com
 
 :::caution API Credentials Required
 Both `apiKey` and `orgId` are required. To get your credentials, follow the [Get Your Credentials](/docs/SDKs#1-get-your-credentials) steps from the SDKs main page.
+:::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```bash
+TURBODOCX_API_KEY=your_api_key
+TURBODOCX_ORG_ID=your_org_id
+# optional, defaults to https://api.turbodocx.com
+TURBODOCX_BASE_URL=https://api.turbodocx.com
+```
+
+:::caution API Credentials Required
+Both `api_key` and `org_id` are needed for most API requests. To get your credentials, follow the [Get Your Credentials](/docs/SDKs#1-get-your-credentials) steps from the SDKs main page.
 :::
 
 </TabItem>
@@ -591,6 +672,47 @@ writeFileSync('quote.pdf', Buffer.from(pdf));
 </Tabs>
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The most common flow: create a quote for a company and contact, add a product line item, send it, then download the PDF.
+
+```ruby
+require "turbodocx_sdk"
+
+TurboDocxSdk::TurboQuote.configure(
+  api_key: ENV["TURBODOCX_API_KEY"],
+  org_id:  ENV["TURBODOCX_ORG_ID"]
+)
+
+# 1. Create a draft quote
+quote = TurboDocxSdk::TurboQuote.create_quote(
+  "name"      => "Acme Corp: Enterprise Plan",
+  "companyId" => "company-uuid",
+  "contactId" => "contact-uuid",
+  "currency"  => "USD",
+  "termDays"  => 30
+)
+
+# 2. Add a product line item
+TurboDocxSdk::TurboQuote.add_line_items(quote["id"],
+  "productId"        => "product-uuid",
+  "productName"      => "Enterprise Licence",
+  "unitPrice"        => 1200,
+  "billingFrequency" => "annual",
+  "quantity"         => 5
+)
+
+# 3. Send the quote
+sent = TurboDocxSdk::TurboQuote.send_quote(quote["id"], "validUntil" => "2026-07-31")
+puts sent["message"]            # "Quote sent successfully"
+puts sent["quote"]["status"]    # "sent"
+
+# 4. Download the PDF
+pdf = TurboDocxSdk::TurboQuote.download_quote_pdf(quote["id"])
+File.binwrite("quote.pdf", pdf)
+```
+
+</TabItem>
 </Tabs>
 
 ### 1. Create a company, quote, and add line items {#1-create-a-company-quote-and-add-line-items}
@@ -670,6 +792,59 @@ public class QuoteLifecycle {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "turbodocx_sdk"
+
+TurboDocxSdk::TurboQuote.configure(
+  api_key: ENV["TURBODOCX_API_KEY"],
+  org_id:  ENV["TURBODOCX_ORG_ID"]
+)
+
+# Step 1: Create a company with an initial contact
+company = TurboDocxSdk::TurboQuote.create_company(
+  "name"     => "Acme Corp",
+  "contacts" => [{ "name" => "Alice Buyer", "email" => "alice@example.com" }]
+)
+contacts   = TurboDocxSdk::TurboQuote.list_company_contacts(company["id"])
+contact_id = contacts["results"][0]["id"]
+
+# Step 2: Create a quote
+quote = TurboDocxSdk::TurboQuote.create_quote(
+  "name"      => "Q1 Software License",
+  "companyId" => company["id"],
+  "contactId" => contact_id,
+  "termDays"  => 30,
+  "currency"  => TurboDocxSdk::Currency::USD
+)
+puts "Quote: #{quote['id']} status=#{quote['status']}"
+
+# Step 3: Add a line item.
+# productId, productName, unitPrice and billingFrequency are all required.
+# productId may be nil (custom line item), but the key must always be present.
+line_items = TurboDocxSdk::TurboQuote.add_line_items(quote["id"],
+  "productId"        => "product-uuid",
+  "productName"      => "Enterprise Software License",
+  "unitPrice"        => 1200.00,
+  "quantity"         => 3,
+  "billingFrequency" => TurboDocxSdk::BillingFrequency::ANNUAL,
+  "discountType"     => TurboDocxSdk::DiscountType::PERCENT,
+  "discountPercent"  => 10
+)
+puts "Added #{line_items.length} line item(s)"
+
+# Step 4: Send the quote
+sent = TurboDocxSdk::TurboQuote.send_quote(quote["id"], "validUntil" => "2026-09-30")
+puts "Sent. Status: #{sent['quote']['status']}"
+
+# Step 5: Download the PDF
+pdf = TurboDocxSdk::TurboQuote.download_quote_pdf(quote["id"])
+File.binwrite("quote.pdf", pdf)
+puts "PDF saved (#{pdf.bytesize} bytes)"
+```
+
+</TabItem>
 </Tabs>
 
 ### 2. Create and send in one call {#2-create-and-send-in-one-call}
@@ -700,6 +875,30 @@ System.out.println("Quote created and sent: " + result.getQuote().getId());
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+`create_and_send` is a convenience method that creates the quote, adds line items and bundle items, and sends it in one call (several API requests run in sequence under the hood).
+
+```ruby
+result = TurboDocxSdk::TurboQuote.create_and_send(
+  "name"      => "Partner Proposal",
+  "companyId" => company_id,
+  "contactId" => contact_id,
+  "items"     => [
+    {
+      "productId"        => "product-uuid",  # required key, nil for a custom line item
+      "productName"      => "Starter Plan",
+      "unitPrice"        => 499.00,
+      "quantity"         => 1,
+      "billingFrequency" => "monthly"        # required
+    }
+  ],
+  "send" => { "validUntil" => "2026-09-30" }  # send options, such as ccEmails and validUntil
+)
+puts "Quote created and sent: #{result['quote']['id']}"
+```
+
+</TabItem>
 </Tabs>
 
 ### 3. Apply a price book, then send with a deliverable {#3-apply-a-price-book-then-send-with-a-deliverable}
@@ -720,6 +919,22 @@ sendReq.setMergePosition("end");
 
 SendQuoteWithDeliverableResponse sendResp = tq.sendQuoteWithDeliverable(quoteId, sendReq);
 System.out.println("Document ID: " + sendResp.getDocumentId());
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+# Apply a price book to recalculate line item prices
+applied = TurboDocxSdk::TurboQuote.apply_price_book(quote_id, price_book_id)
+puts "Updated: #{applied['updatedCount']}, Skipped: #{applied['skippedCount']}"
+
+# Send with a TurboDocx deliverable attached
+sent = TurboDocxSdk::TurboQuote.send_quote_with_deliverable(quote_id,
+  "deliverableId" => "your-deliverable-id",
+  "mergePosition" => "end"
+)
+puts "Document ID: #{sent['documentId']}"
 ```
 
 </TabItem>
@@ -921,6 +1136,68 @@ func main() {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "turbodocx_sdk"
+
+TurboDocxSdk::TurboQuote.configure(
+  api_key: ENV["TURBODOCX_API_KEY"],
+  org_id:  ENV["TURBODOCX_ORG_ID"]
+)
+
+# 1. Create a draft quote
+quote = TurboDocxSdk::TurboQuote.create_quote(
+  "name"       => "Acme Corp: Annual Plan Q3",
+  "companyId"  => "company-uuid",
+  "contactId"  => "contact-uuid",
+  "validUntil" => "2026-09-30",
+  "currency"   => "USD"
+)
+quote_id = quote["id"]
+puts "Created quote #{quote_id}"
+
+# 2. Add product line items
+items = TurboDocxSdk::TurboQuote.add_line_items(quote_id, [
+  {
+    "productId"        => "product-uuid-1",
+    "productName"      => "Platform License",
+    "quantity"         => 5,
+    "unitPrice"        => "199.00",
+    "billingFrequency" => "annual"
+  },
+  {
+    "productId"        => "product-uuid-2",
+    "productName"      => "Onboarding Package",
+    "quantity"         => 1,
+    "unitPrice"        => "499.00",
+    "billingFrequency" => "one-time"
+  }
+])
+puts "Added #{items.length} line items"
+
+# 3. Apply a price book (optional)
+result = TurboDocxSdk::TurboQuote.apply_price_book(quote_id, "pricebook-uuid")
+puts "Price book applied: #{result['updatedCount']} items updated"
+
+# 4. Send the quote
+sent = TurboDocxSdk::TurboQuote.send_quote(quote_id,
+  "ccEmails"   => ["manager@acme.com"],
+  "validUntil" => "2026-09-30"
+)
+puts "Sent: #{sent['message']}"
+
+# 5. Download the PDF
+pdf_bytes = TurboDocxSdk::TurboQuote.download_quote_pdf(quote_id)
+File.binwrite("acme-quote.pdf", pdf_bytes)
+puts "PDF saved (#{pdf_bytes.bytesize} bytes)"
+```
+
+:::caution Always Handle Errors
+The above example omits error handling for brevity. In production, wrap TurboQuote calls in `begin` / `rescue` blocks. See [Error Handling](#error-handling) for complete patterns.
+:::
+
+</TabItem>
 </Tabs>
 
 <a id="convenience-create-add-items-and-send-in-one-call"></a>
@@ -1037,6 +1314,29 @@ fmt.Printf("Quote %s sent\n", resp.Quote.QuoteNumber)
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+result = TurboDocxSdk::TurboQuote.create_and_send(
+  "name"      => "Acme Corp: Quick Proposal",
+  "companyId" => "company-uuid",
+  "contactId" => "contact-uuid",
+  "currency"  => "USD",
+  "items" => [
+    { "productId" => "product-uuid-1", "productName" => "Platform License", "quantity" => 3, "unitPrice" => "299.00", "billingFrequency" => "monthly" }
+  ],
+  "bundleItems" => [
+    { "bundleId" => "bundle-uuid-1", "bundleName" => "Starter Pack", "quantity" => 1 }
+  ],
+  "send" => {
+    "ccEmails"   => ["cc@example.com"],
+    "validUntil" => "2026-09-30"
+  }
+)
+puts "Quote sent: #{result['quote']['id']}"
+```
+
+</TabItem>
 </Tabs>
 
 ## Method Reference {#method-reference}
@@ -1067,6 +1367,13 @@ All methods are instance methods on `*turbodocx.QuoteClient`. Construct once, th
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 All methods are instance methods on `com.turbodocx.TurboQuote`. Obtain the instance via `client.turboQuote()` from a constructed `TurboQuoteClient`. All methods throw `IOException` and `TurboDocxException` subclasses.
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+All methods are class-level on `TurboDocxSdk::TurboQuote`; configure once, then call on the class. Responses are plain Ruby `Hash`es with string keys, and request hashes use camelCase keys.
 
 ---
 
@@ -1186,6 +1493,25 @@ System.out.println("Total: " + list.getTotalRecords());
 list.getResults().forEach(q ->
     System.out.println(q.getId() + " " + q.getStatus()));
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+page = TurboDocxSdk::TurboQuote.list_quotes(
+  "limit"    => 20,
+  "offset"   => 0,
+  "query"    => "acme",
+  "statuses" => ["draft", "sent"]  # repeated-key filter
+)
+# page["results"], page["totalRecords"], page["stats"]
+
+page["results"].each do |q|
+  puts "#{q['name']}: #{q['status']}"
+end
+```
+
+Other filters: `companyId`, `contactId`, and `currency`.
 
 </TabItem>
 </Tabs>
@@ -1369,6 +1695,40 @@ Quote subscription = tq.createQuote(subReq);
 :::
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+# Fixed-term quote: termDays is -1 or 0 to 3650; omit it to get the default of 60.
+quote = TurboDocxSdk::TurboQuote.create_quote(
+  "name"       => "Q3 Proposal",
+  "companyId"  => "company-uuid",   # required
+  "contactId"  => "contact-uuid",   # required
+  "currency"   => "USD",
+  "termDays"   => 30,               # fixed term, so do NOT send renewalPeriod with this
+  "validUntil" => "2026-09-30",
+  "notes"      => "Includes implementation services",
+  "taxRate"    => "8.5"
+)
+# returns the quote Hash
+
+# Auto-renewal quote: termDays -1 REQUIRES renewalPeriod.
+subscription = TurboDocxSdk::TurboQuote.create_quote(
+  "name"          => "Annual Subscription",
+  "companyId"     => "company-uuid",
+  "contactId"     => "contact-uuid",
+  "currency"      => "USD",
+  "termDays"      => -1,            # -1 = auto-renewal
+  "renewalPeriod" => "annually"     # "weekly" | "monthly" | "quarterly" | "annually"
+)
+```
+
+:::caution `termDays` and `renewalPeriod` are coupled
+`termDays` defaults to **60** when omitted. Valid values are `-1` (auto-renewal) or `0` to `3650` (`0` = one-time).
+
+`renewalPeriod` is **required** when `termDays` is `-1`, and must be **`nil` or absent** for every other `termDays` value. Sending it alongside a fixed term returns a `400`. The same rule applies on `update_quote`.
+:::
+
+</TabItem>
 </Tabs>
 
 <a id="get_quote"></a>
@@ -1457,6 +1817,21 @@ if (quote.getPreparedBy() != null) {
 ```
 
 `preparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `getCreator()`** for any customer-facing display — the creator may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only** — it is not present on create, duplicate, or list responses.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Returns the quote with `statusInfo` and `preparedBy` merged in when present. `preparedBy` is the resolved "Prepared by" identity shown on the quote PDF.
+
+```ruby
+quote = TurboDocxSdk::TurboQuote.get_quote("quote-uuid")
+# quote["status"], quote["grandTotal"], quote["statusInfo"]
+prepared = quote["preparedBy"] || {}
+puts prepared["name"]   # e.g. "Acme Billing Integration" or the template sender
+puts prepared["email"]  # may be nil for an API-created quote, so render a placeholder
+```
+
+`preparedBy` is resolved server-side (org template first, then the quote's creator). **Prefer it over `creator`** for any customer-facing display, because `creator` may be the internal API service account. For an API-created quote the resolved name is the **API key's name** (never a generic "API Service User"), and the email comes from the org quote template. `preparedBy` is returned by the **single-quote fetch only**; it is not present on create, duplicate, or list responses.
 
 </TabItem>
 </Tabs>
@@ -1555,6 +1930,23 @@ Quote updated = tq.updateQuote(quoteId, req);
 :::
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+All fields are optional, so pass only what changes. Send an explicit `nil` to clear a nullable field.
+
+```ruby
+updated = TurboDocxSdk::TurboQuote.update_quote("quote-uuid",
+  "name"       => "Q3 Proposal (Revised)",
+  "validUntil" => "2026-10-15",
+  "taxRate"    => nil  # clears the field
+)
+```
+
+:::info `name` is trimmed, and renaming is draft-only
+`name` is trimmed on both `create_quote` and `update_quote` (`"  Acme  "` is stored as `"Acme"`), and a name that is empty once trimmed returns a `400`. A quote can only be renamed while it is a **draft**; on any other status the update is rejected with `Cannot update quote that is not in draft status` (`templateId` is the only field exempt from that rule). Rename before you send, because **sending snapshots the quote's current name onto the TurboSign document**. That is the name signers see in the request email and on the signed PDF.
+:::
+
+</TabItem>
 </Tabs>
 
 <a id="delete_quote"></a>
@@ -1606,6 +1998,14 @@ Delete a quote.
 ```java
 SuccessResponse resp = tq.deleteQuote(quoteId);
 System.out.println(resp.getMessage());
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+result = TurboDocxSdk::TurboQuote.delete_quote("quote-uuid")
+# result["message"]
 ```
 
 </TabItem>
@@ -1672,6 +2072,18 @@ System.out.println("New quote: " + copy.getId());
 ```
 
 The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `updateQuote` before sending if that is not what you want signers to see.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+new_quote = TurboDocxSdk::TurboQuote.duplicate_quote("quote-uuid")
+# returns the new quote in draft status
+```
+
+The copy is named **`Copy of <original name>`**, truncated to the name column's 255-character limit. Rename it with `update_quote` before sending if that is not what you want signers to see.
+
+The copy is attributed to **whoever ran the duplicate**, not to the original quote's creator. Duplicating with an API key produces a quote whose "Prepared by" resolves through that API key and your org quote template.
 
 </TabItem>
 </Tabs>
@@ -1747,6 +2159,19 @@ System.out.println("Updated " + resp.getUpdatedCount() + " items.");
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Apply a price book to an existing quote; updates matching line item prices.
+
+```ruby
+result = TurboDocxSdk::TurboQuote.apply_price_book("quote-uuid", "pricebook-uuid")
+# result["quote"]         the updated quote
+# result["updatedCount"]  Integer, items that were re-priced
+# result["skippedCount"]  Integer, items that had no price book match
+# result["message"]
+```
+
+</TabItem>
 </Tabs>
 
 <a id="remove_price_book"></a>
@@ -1800,6 +2225,13 @@ Remove the applied price book from a quote, restoring original line item pricing
 
 ```java
 Quote quote = tq.removePriceBook(quoteId);
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+quote = TurboDocxSdk::TurboQuote.remove_price_book("quote-uuid")
 ```
 
 </TabItem>
@@ -1881,6 +2313,18 @@ Files.write(Paths.get("quote.pdf"), pdf);
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Returns the raw PDF bytes as a binary `String`.
+
+```ruby
+pdf_bytes = TurboDocxSdk::TurboQuote.download_quote_pdf("quote-uuid")
+File.binwrite("quote.pdf", pdf_bytes)
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 ### Quote Numbering Configuration {#quote-numbering-configuration}
@@ -1951,6 +2395,17 @@ Fetch the org's current quote numbering format and the current per-period issued
 QuoteNumberConfig config = tq.getQuoteNumberConfig();
 System.out.println(config.getFormat().getPrefix());  // e.g. "Q-"
 System.out.println(config.getCurrentFloor());        // the current per-period issued floor
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Fetch the org's current quote numbering format and the current per-period issued floor.
+
+```ruby
+config = TurboDocxSdk::TurboQuote.get_quote_number_config
+puts config["format"]["prefix"]   # e.g. "Q-"
+puts config["currentFloor"]       # the current per-period issued floor
 ```
 
 </TabItem>
@@ -2064,6 +2519,27 @@ format.setResetCadence(QuoteNumberResetCadence.NEVER); // NEVER | YEARLY | MONTH
 QuoteNumberConfig config = tq.updateQuoteNumberConfig(format);
 System.out.println(config.getFormat().getStartNumber());  // 1000
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Update the numbering format. Pass the full format hash; all eight fields are required. Keys stay camelCase.
+
+```ruby
+config = TurboDocxSdk::TurboQuote.update_quote_number_config(
+  "prefix"       => "INV",
+  "yearToken"    => "none",     # "none" | "two" | "four"
+  "monthToken"   => "off",      # "off" | "two"
+  "separator"    => "-",
+  "padWidth"     => 4,          # 0 to 12
+  "suffix"       => "",
+  "startNumber"  => 1000,       # >= 0
+  "resetCadence" => "never"     # "never" | "yearly" | "monthly"
+)
+puts config["format"]["startNumber"]  # 1000
+```
+
+The SDK also exposes constants for the enum values: `TurboDocxSdk::QuoteNumberYearToken`, `TurboDocxSdk::QuoteNumberMonthToken`, and `TurboDocxSdk::QuoteNumberResetCadence`.
 
 </TabItem>
 </Tabs>
@@ -2209,6 +2685,34 @@ Beyond the per-field caps, the API rejects self-inconsistent formats with a `400
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+All eight `format` keys are sent on every update. The API enforces these caps and allowed values; a violation returns `400`:
+
+| Field | Type | Allowed / range | Default |
+|-------|------|-----------------|---------|
+| `prefix` | string | ≤ 12 characters | `"Q"` |
+| `yearToken` | enum | `none` \| `two` \| `four` | `four` |
+| `monthToken` | enum | `off` \| `two` | `off` |
+| `separator` | string | ≤ 4 characters | `"-"` |
+| `padWidth` | integer | `0` to `12` (`0` = no padding) | `5` |
+| `suffix` | string | ≤ 12 characters | `""` |
+| `startNumber` | integer | `0` to `1000000000` | `1` |
+| `resetCadence` | enum | `never` \| `yearly` \| `monthly` | `yearly` |
+
+An org that has never configured numbering uses the **default format** above, which renders like `Q-2026-00001`.
+
+Beyond the per-field caps, the API rejects self-inconsistent formats with a `400`:
+
+- `resetCadence: "yearly"` requires a year token (`yearToken` other than `none`), otherwise numbers repeat across years.
+- `resetCadence: "monthly"` requires **both** a year token and a month token (`monthToken: "two"`).
+- The rendered quote number must be ≤ 256 characters.
+
+`currentFloor` (returned by both methods) is read-only. It is the sequence the next quote will use for the current period, and it is never sent on update.
+
+---
+
+</TabItem>
 </Tabs>
 
 <a id="quotes--status-transitions"></a>
@@ -2335,6 +2839,29 @@ handle-expired flow to void it and create a fresh draft.
 :::
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+:::caution Send preconditions
+
+Both send methods share the same server-side checks. Each is rejected with **HTTP 400** (raised as `TurboDocxSdk::ValidationError`) and a
+specific error `code` before anything is created or emailed:
+
+| Condition | Code |
+| :--- | :--- |
+| Quote is not a draft | `QuoteNotSendable` |
+| No `validUntil` date set | `QuoteValidUntilRequired` |
+| `validUntil` is in the past | `QuoteExpired` |
+| No line items | `QuoteHasNoLineItems` |
+| Contact missing a name or email | `QuoteContactRequired` |
+| Company or contact deleted/deactivated | `QuoteCustomerInactive` |
+
+A quote with **no line items cannot be sent**, so add at least one product, bundle, or custom
+line item first. Likewise an **expired quote is rejected**; update `validUntil`, or use
+`handle_expired_quote` to close it out and create a fresh draft.
+
+:::
+
+</TabItem>
 </Tabs>
 
 <a id="send_quote"></a>
@@ -2417,6 +2944,17 @@ Send a quote to the contact. Returns `{quote, message}`. Pass `SendQuoteRequest`
 ```java
 SendQuoteResponse resp = tq.sendQuote(quoteId);
 System.out.println("Status: " + resp.getQuote().getStatus());
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+sent = TurboDocxSdk::TurboQuote.send_quote("quote-uuid",
+  "ccEmails"   => ["manager@example.com"],
+  "validUntil" => "2026-09-30"
+)
+# sent["quote"], sent["message"]
 ```
 
 </TabItem>
@@ -2508,6 +3046,19 @@ req.setMergePosition("end"); // "start" | "end"
 
 SendQuoteWithDeliverableResponse resp = tq.sendQuoteWithDeliverable(quoteId, req);
 System.out.println("Document ID: " + resp.getDocumentId());
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Attach a TurboDocx-generated document to the sent quote.
+
+```ruby
+result = TurboDocxSdk::TurboQuote.send_quote_with_deliverable("quote-uuid",
+  "deliverableId" => "deliverable-uuid",
+  "ccEmails"      => ["manager@example.com"]
+)
+# result["quote"], result["message"], result["documentId"]
 ```
 
 </TabItem>
@@ -2624,6 +3175,36 @@ tq.sendQuoteWithDeliverable(quoteId, scheduledReq);
 Each `Duration` is a `{value, unit}` pair (`unit` is `"hours"` or `"days"`, `value` a whole number from 1 up to 999 days / 23976 hours).
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Both `send_quote` and `send_quote_with_deliverable` accept the same reminder/expiration schedule
+as TurboSign. Because these are quote request-body fields, the keys are **camelCase** (like
+`ccEmails` / `validUntil` above), even though the method names are snake_case. Each duration is a
+plain `{ "value" => ..., "unit" => ... }` hash, sent flat on the JSON body:
+
+```ruby
+sent = TurboDocxSdk::TurboQuote.send_quote("quote-uuid",
+  "validUntil"                => "2026-09-30",
+  "remindersEnabled"          => true,
+  "reminderDelay"             => { "value" => 3, "unit" => "days" },  # "days" or "hours"
+  "reminderInterval"          => { "value" => 3, "unit" => "days" },
+  "maxReminders"              => 5,                                   # -1 unlimited, 0 none, max 50
+  "expirationEnabled"         => true,
+  "expirationWarning"         => { "value" => 1, "unit" => "days" },  # 0 = never warn
+  "expirationWarningInterval" => { "value" => 1, "unit" => "days" }
+)
+```
+
+:::warning Quote expiry is pinned to `validUntil`
+For a quote, the signing deadline is **hard-pinned to the quote's `validUntil` date**. Any
+`expireAfter` you pass is **ignored**. `expirationEnabled` still toggles expiry on or off, but
+when on, the document expires exactly at `validUntil`. The reminder and expiration-warning
+cadence still applies and **must fit inside the `validUntil` window**; a cadence that would
+outlive the quote is rejected with `400`. Duration values are `{value, unit}` (`"days"` or
+`"hours"`), min `1`, max **999 days / 23976 hours**.
+:::
+
+</TabItem>
 </Tabs>
 
 <a id="decline_quote"></a>
@@ -2712,6 +3293,20 @@ Quote closedOut = tq.declineQuote(draftQuoteId, new DeclineQuoteRequest());
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Declines a **sent** quote or a **draft**. `reason` (max 190 characters) is required once a quote has been sent. A draft is declined **without** a reason: a draft never reached the customer, and because the reason is stored on the linked signature document, a draft has nowhere to keep one, so anything passed is ignored.
+
+```ruby
+quote = TurboDocxSdk::TurboQuote.decline_quote("quote-uuid",
+  "reason" => "Customer selected a competitor"
+)
+
+# A draft is declined with no reason; one passed here would not be recorded.
+closed_out = TurboDocxSdk::TurboQuote.decline_quote("draft-quote-uuid", {})
+```
+
+</TabItem>
 </Tabs>
 
 <a id="void_quote"></a>
@@ -2778,6 +3373,17 @@ VoidQuoteRequest req = new VoidQuoteRequest();
 req.setReason("Replaced by new proposal");
 
 Quote voided = tq.voidQuote(quoteId, req);
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Voids a **sent** quote; a **draft cannot be voided**, since voiding an unsent quote is meaningless.
+
+```ruby
+quote = TurboDocxSdk::TurboQuote.void_quote("quote-uuid",
+  "reason" => "Terms expired before acceptance"
+)
 ```
 
 </TabItem>
@@ -2928,6 +3534,35 @@ Unlike `duplicateQuote`, the draft this endpoint creates is **not** prefixed wit
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Handles a quote that has passed its `validUntil` date. The endpoint **closes out the original quote** (voiding or declining it, depending on `action`) and then **creates a duplicate carrying `newValidUntil`** as its new validity date. The returned quote is the new duplicate; the original stays terminal.
+
+`action` (`"void"`, `"decline"` or `"renew"`) and `newValidUntil` (ISO date) are **required**. `reason` (max 190 characters) is required for `"void"` and `"decline"`, and optional for `"renew"`, since a renewal closes nothing out. Use `"renew"` when the quote's signature request has already expired on its own; use `"void"` or `"decline"` when the quote is merely past its `validUntil` and you are closing it yourself. The SDK forwards the hash verbatim, so the API's validation is what applies.
+
+```ruby
+quote = TurboDocxSdk::TurboQuote.handle_expired_quote("quote-uuid",
+  "action"        => "void",          # required: "void", "decline" or "renew"
+  "reason"        => "Quote expired", # required for void/decline, optional for renew
+  "newValidUntil" => "2026-12-31"     # required: ISO date carried onto the duplicate
+)
+```
+
+:::warning There is no `extend` or `resend` action
+`action` accepts **only** `"void"`, `"decline"` and `"renew"`. `"extend"` and `"resend"` do not exist in the API and return a `400`. Extending is what the endpoint already does: pass `newValidUntil` and it lands on the duplicate it creates.
+:::
+
+:::info The replacement draft keeps the original name
+Unlike `duplicate_quote`, the draft this endpoint creates is **not** prefixed with `Copy of `. Re-issuing the same deal keeps the original quote's name, so repeated renewals cannot compound into `Copy of Copy of …`. That matters because the next send snapshots the name onto the TurboSign document.
+:::
+
+:::note Terminal statuses
+`accepted`, `declined`, and `voided` are **terminal**: a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote["statusInfo"]` before attempting a transition, and use `duplicate_quote` when you need to revive a closed-out quote.
+:::
+
+---
+
+</TabItem>
 </Tabs>
 
 <a id="price-books-on-quotes"></a>
@@ -2947,6 +3582,11 @@ Line items attach products or bundles to a quote, each with a price, quantity, b
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
 Line items belong to a quote. Products are added individually; bundles use a separate endpoint.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Line items attach products or bundles to a quote, each with a price, quantity, billing frequency, and optional discount. Product items go through `add_line_items` and bundles through `add_bundle_line_items`.
 
 </TabItem>
 </Tabs>
@@ -3014,6 +3654,16 @@ LineItemListResponse items = tq.listLineItems(quoteId);
 items.getResults().forEach(i ->
     System.out.println(i.getProductName() + " x" + i.getQuantity()));
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+page = TurboDocxSdk::TurboQuote.list_line_items("quote-uuid", "limit" => 50)
+# page["results"], page["totalRecords"]
+```
+
+Other filters: `offset`, `lineItemType`, `billingFrequency`, and `parentLineItemId`.
 
 </TabItem>
 </Tabs>
@@ -3183,6 +3833,37 @@ List<LineItem> added = tq.addLineItems(quoteId, Arrays.asList(item, custom));
 :::
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Accepts a single item hash **or** an array of up to **50** items. Returns an array of the created line item hashes.
+
+`productId`, `productName`, `unitPrice`, and `billingFrequency` are all **required** on every row. `productId` is special: the key must be **present**, but its value may be `nil` for a custom (freeform) line item. Omitting the key entirely returns a `400`. `quantity` is optional and defaults to `1`.
+
+```ruby
+items = TurboDocxSdk::TurboQuote.add_line_items("quote-uuid", [
+  {
+    "productId"        => "product-uuid",   # required key, nil for a custom line item
+    "productName"      => "Platform License",
+    "quantity"         => 2,
+    "unitPrice"        => "199.00",
+    "billingFrequency" => "annual",
+    "discountType"     => "percent",        # "percent" (default) or "amount"
+    "discountPercent"  => 10
+  },
+  {
+    "productId"        => nil,              # custom (freeform) line item, key still required
+    "productName"      => "Implementation Credit",
+    "unitPrice"        => "-250.00",
+    "billingFrequency" => "one-time"
+  }
+])
+```
+
+:::note Array caps
+`add_line_items` accepts a single hash **or** an array of 1 to **50** items. A reorder request accepts up to **200** items. Exceeding either cap returns a `400`.
+:::
+
+</TabItem>
 </Tabs>
 
 <a id="add_bundle_line_items"></a>
@@ -3272,6 +3953,21 @@ List<LineItem> added = tq.addBundleLineItems(quoteId, bundleItem);
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+`bundleId` and `bundleName` are both **required**; the server expands the bundle's child products for you, so do not send them. Accepts a single hash or an array of up to **50** items.
+
+```ruby
+items = TurboDocxSdk::TurboQuote.add_bundle_line_items("quote-uuid", [
+  {
+    "bundleId"   => "bundle-uuid",
+    "bundleName" => "Starter Bundle",   # required
+    "quantity"   => 1
+  }
+])
+```
+
+</TabItem>
 </Tabs>
 
 <a id="update_line_item"></a>
@@ -3343,6 +4039,18 @@ LineItem updated = tq.updateLineItem(quoteId, itemId, req);
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+item = TurboDocxSdk::TurboQuote.update_line_item("quote-uuid", "item-uuid",
+  "quantity"  => 5,
+  "unitPrice" => "179.00"
+)
+```
+
+Pass `"displayOrder" => nil` to clear a line item's sort order.
+
+</TabItem>
 </Tabs>
 
 <a id="remove_line_item"></a>
@@ -3398,6 +4106,16 @@ Remove a line item from a quote.
 
 ```java
 tq.removeLineItem(quoteId, itemId);
+```
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+result = TurboDocxSdk::TurboQuote.remove_line_item("quote-uuid", "item-uuid")
+# result["message"]
 ```
 
 ---
@@ -3604,6 +4322,57 @@ When `CreateProductRequest.getImages()` is non-empty, the SDK automatically swit
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Method | Signature | Returns |
+|---|---|---|
+| `list_products` | `(options = nil)` | paginated list |
+| `create_product` | `(request)` | product `Hash` |
+| `get_product` | `(id)` | product `Hash` |
+| `update_product` | `(id, request)` | product `Hash` |
+| `delete_product` | `(id)` | `{"message" => ...}` |
+| `duplicate_product` | `(id)` | product `Hash` |
+| `get_product_primary_images` | `(product_ids)` | `{id => image or nil}` |
+
+:::caution `categoryId` is required on create
+`create_product` **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`categoryType` `"product_category"`), so resolve or create it first with `list_types` / `create_type`. It is optional on `update_product`, so you only need to pass it when creating.
+:::
+
+```ruby
+# Resolve the product category first; create_product needs its UUID.
+page = TurboDocxSdk::TurboQuote.list_types("categoryType" => "product_category")
+category = page["results"].find { |t| t["name"] == "Software" }
+category ||= TurboDocxSdk::TurboQuote.create_type(
+  "name"         => "Software",
+  "categoryType" => "product_category"
+)
+
+# Create a product with images (multipart upload is used automatically)
+product = TurboDocxSdk::TurboQuote.create_product(
+  "name"             => "Enterprise License",
+  "categoryId"       => category["id"],   # required
+  "listPrice"        => "499.00",
+  "cost"             => "200.00",
+  "billingFrequency" => "annual",
+  "showInCatalog"    => true,
+  "images"           => ["/path/to/product-photo.png"]  # file path(s) or IO objects
+)
+
+# List products with filters
+page = TurboDocxSdk::TurboQuote.list_products(
+  "limit"         => 20,
+  "query"         => "enterprise",
+  "showInCatalog" => true
+)
+
+# Bulk fetch primary images for a set of product IDs
+images = TurboDocxSdk::TurboQuote.get_product_primary_images(["id-1", "id-2", "id-3"])
+# images["id-1"] is the image Hash, or nil
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 #### ListProducts {#listproducts}
@@ -3619,6 +4388,16 @@ list, err := qc.ListProducts(ctx, &turbodocx.ListProductsOptions{
 // list.TotalProducts  int
 // list.CatalogValue   float64
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+page = TurboDocxSdk::TurboQuote.list_products("query" => "license")
+# page["results"]
+```
+
+Other filters: `limit`, `offset`, `categoryIds`, `billingFrequency`, `currency`, and `showInCatalog`.
 
 </TabItem>
 </Tabs>
@@ -3653,6 +4432,30 @@ product, err := qc.CreateProduct(ctx, &turbodocx.CreateProductRequest{
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+product = TurboDocxSdk::TurboQuote.create_product(
+  "name"             => "Starter License",
+  "listPrice"        => 99.99,
+  "billingFrequency" => "monthly",
+  "categoryId"       => "category-uuid"
+)
+```
+
+For products with images, add an `"images"` array of file paths or IO objects. The SDK then switches to a multipart upload and detects each image type from its bytes:
+
+```ruby
+product = TurboDocxSdk::TurboQuote.create_product(
+  "name"             => "Starter License",
+  "listPrice"        => 99.99,
+  "billingFrequency" => "monthly",
+  "categoryId"       => "category-uuid",
+  "images"           => ["/path/to/logo.png"]
+)
+```
+
+</TabItem>
 </Tabs>
 
 #### GetProduct / DeleteProduct / DuplicateProduct {#getproduct--deleteproduct--duplicateproduct}
@@ -3664,6 +4467,15 @@ product, err := qc.CreateProduct(ctx, &turbodocx.CreateProductRequest{
 product, err := qc.GetProduct(ctx, "product-uuid")
 result,  err := qc.DeleteProduct(ctx, "product-uuid")
 copy,    err := qc.DuplicateProduct(ctx, "product-uuid")
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+product = TurboDocxSdk::TurboQuote.get_product("product-uuid")
+result  = TurboDocxSdk::TurboQuote.delete_product("product-uuid")
+copy    = TurboDocxSdk::TurboQuote.duplicate_product("product-uuid")
 ```
 
 </TabItem>
@@ -3684,6 +4496,18 @@ product, err := qc.UpdateProduct(ctx, "product-uuid", &turbodocx.UpdateProductRe
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+PATCH semantics: pass only the keys you want to change, and an explicit `nil` to clear a nullable field such as `cost` or `sku`. `update_product` also accepts `"images"` for uploads.
+
+```ruby
+product = TurboDocxSdk::TurboQuote.update_product("product-uuid",
+  "listPrice" => 109.99,
+  "cost"      => nil  # clears the field
+)
+```
+
+</TabItem>
 </Tabs>
 
 #### GetProductPrimaryImages {#getproductprimaryimages}
@@ -3698,6 +4522,19 @@ images, err := qc.GetProductPrimaryImages(ctx, []string{"product-uuid-1", "produ
 if img, ok := images["product-uuid-1"]; ok && img != nil {
     fmt.Println(img.FileName)
 }
+```
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Returns a `Hash` keyed by product ID, with each value an image `Hash` or `nil`.
+
+```ruby
+images = TurboDocxSdk::TurboQuote.get_product_primary_images(["product-uuid-1", "product-uuid-2"])
+image = images["product-uuid-1"]
+puts image.inspect unless image.nil?
 ```
 
 ---
@@ -3932,6 +4769,45 @@ Bundle bundle = tq.createBundle(req);
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Method | Signature | Returns |
+|---|---|---|
+| `list_bundles` | `(options = nil)` | paginated list |
+| `create_bundle` | `(request)` | bundle `Hash` |
+| `get_bundle` | `(id)` | bundle `Hash` |
+| `update_bundle` | `(id, request)` | bundle `Hash` |
+| `delete_bundle` | `(id)` | `{"message" => ...}` |
+| `duplicate_bundle` | `(id)` | bundle `Hash` |
+
+`categoryId` (a `bundle_category` type) is **required** on create. Each entry in `items` **requires** `productId`, `unitPrice`, and `billingFrequency`; `quantity` is optional and defaults to `1`.
+
+```ruby
+bundle = TurboDocxSdk::TurboQuote.create_bundle(
+  "name"       => "Starter Pack",
+  "categoryId" => "bundle-category-uuid",  # required
+  "items" => [
+    {
+      "productId"        => "product-uuid-1",
+      "unitPrice"        => "199.00",
+      "billingFrequency" => "monthly",
+      "quantity"         => 1
+    },
+    {
+      "productId"        => "product-uuid-2",
+      "unitPrice"        => "49.00",
+      "billingFrequency" => "monthly",
+      "quantity"         => 2
+    }
+  ],
+  "bundleDiscountType"    => "percent",  # "percent" reads bundleDiscountPercent
+  "bundleDiscountPercent" => 5           # "amount" reads bundleDiscountAmount
+)
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 ### Price Books {#price-books}
@@ -4131,6 +5007,40 @@ System.out.println("Products: " + pbProducts.getTotalRecords());
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Method | Signature | Returns |
+|---|---|---|
+| `list_price_books` | `(options = nil)` | paginated list |
+| `create_price_book` | `(request)` | price book `Hash` |
+| `get_price_book` | `(id)` | price book `Hash` |
+| `update_price_book` | `(id, request)` | price book `Hash` |
+| `delete_price_book` | `(id)` | `{"message" => ...}` |
+| `duplicate_price_book` | `(id)` | price book `Hash` |
+| `list_price_book_products` | `(id, options = nil)` | paginated list |
+
+```ruby
+# name, priceBookTypeId, and validFrom are REQUIRED.
+# discountPercent is optional; the SDK sends 0 when it is missing or nil.
+# priceBookTypeId comes from a create_type with categoryType "pricebook_type".
+pricebook = TurboDocxSdk::TurboQuote.create_price_book(
+  "name"            => "Partner Tier A",
+  "priceBookTypeId" => "pricebook-type-uuid",
+  "validFrom"       => "2026-01-01",
+  "discountPercent" => 15,
+  "productPricing"  => [
+    { "productId" => "product-uuid-1", "discountType" => "percent", "discountPercent" => 25 },
+    { "productId" => "product-uuid-2", "discountType" => "amount",  "discountAmount" => 50 }
+  ]
+)
+
+# List products attached to a price book
+page = TurboDocxSdk::TurboQuote.list_price_book_products("pricebook-uuid", "limit" => 50)
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 ### Companies {#companies}
@@ -4304,6 +5214,40 @@ String contactId = contacts.getResults().get(0).getId();
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Method | Signature | Returns |
+|---|---|---|
+| `list_companies` | `(options = nil)` | paginated list |
+| `create_company` | `(request)` | company `Hash` |
+| `get_company` | `(id)` | company `Hash` |
+| `update_company` | `(id, request)` | company `Hash` |
+| `delete_company` | `(id)` | `{"message" => ...}` |
+| `list_company_contacts` | `(company_id, options = nil)` | paginated list |
+
+```ruby
+company = TurboDocxSdk::TurboQuote.create_company(
+  "name"    => "Acme Corporation",
+  "phone"   => "+1-555-0100",
+  "city"    => "San Francisco",
+  "state"   => "CA",
+  "country" => "US",
+  "contacts" => [  # at least one contact required; each needs name + email
+    {
+      "name"  => "Jane Doe",
+      "email" => "jane@acme.com",
+      "title" => "VP of Engineering"
+    }
+  ]
+)
+
+# List contacts for a company
+contacts = TurboDocxSdk::TurboQuote.list_company_contacts(company["id"])
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 ### Contacts {#contacts}
@@ -4441,6 +5385,30 @@ req.setName("Bob Partner");
 req.setEmail("bob@partner.example.com");
 
 Contact contact = tq.createContact(req);
+```
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Method | Signature | Returns |
+|---|---|---|
+| `list_contacts` | `(options = nil)` | paginated list |
+| `create_contact` | `(request)` | contact `Hash` |
+| `update_contact` | `(id, request)` | contact `Hash` |
+| `delete_contact` | `(id)` | `{"message" => ...}` |
+
+:::note No `get_contact` by design
+The backend has no `GET /v1/contacts/:id` endpoint. Fetch individual contacts via `list_company_contacts` or `list_contacts` with a query filter.
+:::
+
+```ruby
+contact = TurboDocxSdk::TurboQuote.create_contact(
+  "name"      => "John Smith",
+  "email"     => "john@acme.com",
+  "companyId" => "company-uuid"
+)
 ```
 
 ---
@@ -4638,6 +5606,44 @@ QuoteTemplateListResponse templates = tq.listTemplates();
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Method | Signature | Returns |
+|---|---|---|
+| `list_templates` | `(options = nil)` | paginated list |
+| `get_template` | `()` | the org's template `Hash` (auto-created if none exists) |
+| `get_template_by_id` | `(id)` | template `Hash` |
+| `create_template` | `(request)` | template `Hash` (`400` if one already exists) |
+| `update_template` | `(id, request)` | template `Hash` |
+| `delete_template` | `(id)` | `{"message" => ...}`, resets to org branding defaults |
+
+:::warning Templates are auto-provisioned, so use `get_template` then `update_template`
+`get_template` **self-heals**: if the org has no template, the API creates one from your org branding and returns it. Every established org therefore already has a template, which means:
+
+- `create_template` returns **400 `TEMPLATE_ALREADY_EXISTS`** and is effectively unreachable. Do not build a get-then-create flow.
+- `delete_template` is really "reset to org branding defaults". It soft-deletes, and the next `get_template` regenerates a fresh one.
+
+The correct flow is **`get_template`, then `update_template`**.
+:::
+
+```ruby
+# 1. Get the org's quote template (created from org branding on first read)
+template = TurboDocxSdk::TurboQuote.get_template
+
+# 2. Brand it by updating the template you just fetched
+branded = TurboDocxSdk::TurboQuote.update_template(template["id"],
+  "logoUrl"      => "https://cdn.example.com/logo.png",
+  "primaryColor" => "#0057b8",
+  "senderName"   => "TurboDocx Sales"
+)
+
+# Fetch a specific named template by ID
+other = TurboDocxSdk::TurboQuote.get_template_by_id("template-uuid")
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 #### GetTemplate {#gettemplate}
@@ -4653,6 +5659,16 @@ fmt.Printf("Primary color: %s\n", tmpl.PrimaryColor)
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Returns the active (default) quote template for the org, creating one from org branding if none exists. Use this for the most common case.
+
+```ruby
+template = TurboDocxSdk::TurboQuote.get_template
+puts "Primary color: #{template['primaryColor']}"
+```
+
+</TabItem>
 </Tabs>
 
 #### GetTemplateByID {#gettemplatebyid}
@@ -4664,6 +5680,15 @@ Retrieves a specific template by ID when you have multiple templates.
 
 ```go
 tmpl, err := qc.GetTemplateByID(ctx, "template-uuid")
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Retrieves a specific template by ID when you have multiple templates.
+
+```ruby
+template = TurboDocxSdk::TurboQuote.get_template_by_id("template-uuid")
 ```
 
 </TabItem>
@@ -4697,6 +5722,32 @@ result, err := qc.DeleteTemplate(ctx, tmpl.ID)
 ```
 
 `UpdateQuoteTemplateRequest` has `Clear*` helpers: `ClearLogoURL`, `ClearDisclaimer`, `ClearTermsAndConditions`, `ClearClosingMessage`, `ClearSenderName`, `ClearSenderPhone`, `ClearContactEmail`.
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Brand the org's template by fetching it and updating it in place, never by creating one.
+
+```ruby
+page = TurboDocxSdk::TurboQuote.list_templates("limit" => 5)
+
+# Get the auto-provisioned template, then update it.
+template = TurboDocxSdk::TurboQuote.get_template
+
+template = TurboDocxSdk::TurboQuote.update_template(template["id"],
+  "logoUrl"      => "https://cdn.example.com/logo.png",
+  "primaryColor" => "#0066CC",
+  "senderName"   => "Sales Team"
+)
+
+# delete_template resets the org back to its branding defaults;
+# the next get_template call regenerates a fresh template.
+result = TurboDocxSdk::TurboQuote.delete_template(template["id"])
+```
+
+To clear a nullable template field (for example `logoUrl` or `senderName`), pass it as `nil` to `update_template`.
 
 ---
 
@@ -4847,6 +5898,38 @@ QuoteType type = tq.createType(req);
 :::note No `getType`
 There is no `getType(id)` method — the backend has no `GET /v1/types/:id` endpoint by design. Use `listTypes` to retrieve all types.
 :::
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Method | Signature | Returns |
+|---|---|---|
+| `list_types` | `(options = nil)` | paginated list |
+| `create_type` | `(request)` | type `Hash` |
+| `update_type` | `(id, request)` | type `Hash` |
+| `delete_type` | `(id)` | `{"message" => ...}` |
+
+:::note No `get_type` by design
+The backend has no `GET /v1/types/:id` endpoint. Use `list_types` to retrieve individual type records.
+:::
+
+`categoryType` is required on create and cannot be changed afterwards. It is one of `product_category`, `pricebook_type`, `company_industry`, or `bundle_category` (see `TurboDocxSdk::CategoryType`).
+
+```ruby
+quote_type = TurboDocxSdk::TurboQuote.create_type(
+  "name"         => "Software",
+  "categoryType" => TurboDocxSdk::CategoryType::PRODUCT_CATEGORY
+)
+
+TurboDocxSdk::TurboQuote.update_type(quote_type["id"], "name" => "Software and Services")
+
+page = TurboDocxSdk::TurboQuote.list_types(
+  "categoryType" => "company_industry",
+  "includeUsage" => true
+)
+```
 
 ---
 
@@ -5129,6 +6212,57 @@ Rows process sequentially with **partial success** — a failed row does not thr
 Requests are capped at **500 rows** — anything above the cap returns a `400`. Available to admin and contributor API keys.
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Every create-family entity has a matching `bulk_create_*` method for seeding a catalog or migrating CRM data in one call. Each method sends `POST {resource}/bulk` with an array of row hashes using the **same shape as that entity's single-create request** (keys stay camelCase); the SDK wraps them in the `{ "rows" => [...] }` envelope for you. Company rows require a `contacts` array with at least one contact; contact rows require a `companyId`.
+
+Rows process sequentially with **partial success**: a failed row does not raise and does not roll back earlier rows. Every bulk method returns the same report `Hash`:
+
+- `imported`: count of rows created
+- `failed`: array of `{"row" => ..., "reason" => ...}` for rows that did not import; `row` is the **1-indexed** position in your request array
+- `adjusted`: array of `{"row" => ..., "reason" => ...}` for rows that imported *with* a server-side adjustment (e.g. a bundle item whose product wasn't found was dropped)
+
+Requests are capped at **500 rows**; anything above the cap fails the whole request with a `400` (`TurboDocxSdk::ValidationError`). Available to administrator and contributor API keys. The SDK does no client-side row validation.
+
+:::caution Product rows require a real `categoryId`
+Every `bulk_create_products` row **requires** `name`, `categoryId`, `listPrice`, and `billingFrequency`. `categoryId` must be the **UUID** of an existing type (`categoryType` `"product_category"`). There is no `categoryName` key on the bulk row schema, and the API rejects unknown keys, so passing one returns a `400`. Resolve or create the category first with `list_types` / `create_type`, then pass its `"id"`.
+:::
+
+```ruby
+# 1. Resolve the product category first; bulk rows need its UUID, not its name.
+page = TurboDocxSdk::TurboQuote.list_types("categoryType" => "product_category")
+category = page["results"].find { |t| t["name"] == "Software" }
+category ||= TurboDocxSdk::TurboQuote.create_type(
+  "name"         => "Software",
+  "categoryType" => "product_category"
+)
+
+# 2. Import, passing the resolved UUID on every row.
+result = TurboDocxSdk::TurboQuote.bulk_create_products([
+  { "name" => "Enterprise License", "categoryId" => category["id"], "listPrice" => "499.00", "billingFrequency" => "annual" },
+  { "name" => "Onboarding Package", "categoryId" => category["id"], "listPrice" => "999.00", "billingFrequency" => "one-time" }
+])
+
+puts "Imported #{result['imported']} of 2 rows"
+result["failed"].each do |failure|
+  puts "Row #{failure['row']} failed: #{failure['reason']}"
+end
+result["adjusted"].each do |adjustment|
+  puts "Row #{adjustment['row']} imported with adjustment: #{adjustment['reason']}"
+end
+```
+
+The other five bulk methods follow the exact same pattern:
+
+| Method | Rows |
+|---|---|
+| `bulk_create_price_books` | array of `create_price_book` hashes |
+| `bulk_create_bundles` | array of `create_bundle` hashes |
+| `bulk_create_companies` | array of `create_company` hashes, each with `contacts` (min. 1) |
+| `bulk_create_contacts` | array of `create_contact` hashes, each with `companyId` |
+| `bulk_create_types` | array of `create_type` hashes |
+
+</TabItem>
 </Tabs>
 
 #### `bulkCreateProducts` {#bulkcreateproducts}
@@ -5202,6 +6336,31 @@ The other five bulk methods follow the exact same pattern:
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+TurboDocxSdk::TurboQuote.bulk_create_products(rows)  # rows: Array of create_product hashes
+```
+
+Ruby uses the same call shown under [Bulk Imports](#bulk-imports) above. The other bulk methods (`bulk_create_price_books`, `bulk_create_bundles`, `bulk_create_companies`, `bulk_create_contacts`, `bulk_create_types`) take an array of rows in the matching single-create shape:
+
+```ruby
+# Companies need at least one contact per row; contacts need a companyId per row
+TurboDocxSdk::TurboQuote.bulk_create_companies([
+  {
+    "name"     => "Acme Corporation",
+    "contacts" => [{ "name" => "Jane Doe", "email" => "jane@acme.com" }]
+  }
+])
+
+TurboDocxSdk::TurboQuote.bulk_create_contacts([
+  { "name" => "John Smith", "email" => "john@acme.com", "companyId" => "company-uuid" }
+])
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 ## Enums and Constants {#enums-and-constants}
@@ -5222,6 +6381,31 @@ The other five bulk methods follow the exact same pattern:
 
 :::note Terminal statuses
 `accepted`, `declined`, and `voided` are **terminal** — a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote.StatusInfo.IsTerminal` (and the `Can*` flags) before attempting a transition, and use `DuplicateQuote` when you need to revive a closed-out quote.
+:::
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The gem exposes each enum as a module of string constants under `TurboDocxSdk`, each with an `ALL` array of its values:
+
+| Module | Values |
+|---|---|
+| `QuoteStatus` | `draft`, `pending_approval`, `sent`, `accepted`, `declined`, `voided` |
+| `BillingFrequency` | `monthly`, `quarterly`, `annual`, `one-time` |
+| `LineItemType` | `product`, `bundle` |
+| `RenewalPeriod` | `weekly`, `monthly`, `quarterly`, `annually` |
+| `Currency` | `USD`, `EUR`, `GBP`, `CAD`, `INR`, `AUD` |
+| `CategoryType` | `product_category`, `pricebook_type`, `company_industry`, `bundle_category` |
+| `BundleItemStatus` | `active`, `product_deleted`, `product_unavailable`, `currency_mismatch` |
+| `DiscountType` | `percent`, `amount` |
+| `QuoteNumberYearToken` | `none`, `two`, `four` |
+| `QuoteNumberMonthToken` | `off`, `two` |
+| `QuoteNumberResetCadence` | `never`, `yearly`, `monthly` |
+
+:::note Terminal statuses
+`accepted`, `declined`, and `voided` are **terminal**: a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote["statusInfo"]` before attempting a transition, and use `duplicate_quote` when you need to revive a closed-out quote.
 :::
 
 ---
@@ -5256,6 +6440,23 @@ Types with `Clear*` helpers:
 | `UpdateCompanyRequest` | `Phone`, `City`, `State`, `Country`, `IndustryID` |
 | `UpdateContactRequest` | `Email`, `Phone`, `Title` |
 | `UpdateQuoteTemplateRequest` | `LogoURL`, `Disclaimer`, `TermsAndConditions`, `ClosingMessage`, `SenderName`, `SenderPhone`, `ContactEmail` |
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Ruby needs no helpers here. The request hash is serialized as-is, so a key you set to `nil` is sent as JSON `null` (clearing that field), and a key you leave out is omitted from the payload entirely:
+
+```ruby
+quote = TurboDocxSdk::TurboQuote.update_quote("quote-uuid",
+  "taxRate"       => nil,  # sends "taxRate": null (removes tax from the quote)
+  "renewalPeriod" => nil   # sends "renewalPeriod": null
+  # name left out, so it is not sent
+)
+```
+
+The same applies to every `update_*` method. Clearable fields include `priceBookId`, `validUntil`, `taxRate` and `renewalPeriod` on a quote, `cost` and `sku` on a product, `validTo` on a price book, and `logoUrl` or `senderName` on a quote template.
 
 ---
 
@@ -5372,6 +6573,37 @@ System.out.println("Quote: " + result.getQuote().getId());
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Orchestrates multiple API calls: create quote, add product items, add bundle items, then send. Returns `{ "quote" => <sent quote> }`. The SDK does not modify the hash you pass in.
+
+```ruby
+result = TurboDocxSdk::TurboQuote.create_and_send(
+  # create_quote fields
+  "name"      => "Year-End Renewal",
+  "companyId" => "company-uuid",
+  "contactId" => "contact-uuid",
+  "currency"  => "USD",
+  # optional line items added before send
+  "items" => [
+    { "productId" => "product-uuid-1", "productName" => "Platform License", "quantity" => 10, "unitPrice" => "99.00", "billingFrequency" => "monthly" }
+  ],
+  # optional bundle items added before send
+  "bundleItems" => [
+    { "bundleId" => "bundle-uuid-1", "bundleName" => "Starter Pack", "quantity" => 1 }
+  ],
+  # send options (ccEmails, validUntil)
+  "send" => {
+    "ccEmails"   => ["finance@example.com"],
+    "validUntil" => "2026-12-31"
+  }
+)
+puts result["quote"]["id"]
+```
+
+---
+
+</TabItem>
 </Tabs>
 
 ## TypeScript Types {#typescript-types}
@@ -5437,6 +6669,11 @@ import type {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The Ruby gem ships no type definitions. Every method returns a plain `Hash` with string keys that mirror the API's camelCase field names (for example `quote["grandTotal"]`, `page["totalRecords"]`), and list methods return a `Hash` with `"results"` plus totals. `download_quote_pdf` returns a binary `String`. Boolean and decimal fields are normalized by the SDK before they reach you.
+
+</TabItem>
 </Tabs>
 
 ### Key Enum Values {#key-enum-values}
@@ -5456,6 +6693,25 @@ import type {
 :::note Terminal statuses
 `accepted`, `declined`, and `voided` are **terminal** — a quote in one of these states cannot be transitioned out of it, and any further status call returns a `400`. Check `quote.statusInfo` (`canSend`, `canAccept`, `canDecline`, `canVoid`) before attempting a transition, and `duplicateQuote` when you need to revive a closed-out quote.
 :::
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Use the gem's constants instead of hard-coding string literals:
+
+```ruby
+TurboDocxSdk::QuoteStatus::DRAFT              # "draft"
+TurboDocxSdk::QuoteStatus::SENT               # "sent"
+TurboDocxSdk::BillingFrequency::MONTHLY       # "monthly"
+TurboDocxSdk::BillingFrequency::ONE_TIME      # "one-time"
+TurboDocxSdk::DiscountType::PERCENT           # "percent"
+TurboDocxSdk::Currency::USD                   # "USD"
+TurboDocxSdk::RenewalPeriod::ANNUALLY         # "annually"
+TurboDocxSdk::CategoryType::PRICEBOOK_TYPE    # "pricebook_type"
+TurboDocxSdk::QuoteStatus::ALL                # every quote status
+```
 
 ---
 
@@ -5666,6 +6922,42 @@ try {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "turbodocx_sdk"
+
+begin
+  quote = TurboDocxSdk::TurboQuote.create_quote(
+    "name"      => "Q3 Proposal",
+    "companyId" => "company-uuid",
+    "contactId" => "contact-uuid"
+  )
+rescue TurboDocxSdk::ValidationError => e
+  # 400: missing required fields, invalid enum value, etc.
+  puts "Validation failed: #{e.message} (#{e.code})"
+rescue TurboDocxSdk::AuthenticationError
+  # 401: bad or revoked API key
+rescue TurboDocxSdk::AuthorizationError
+  # 403: key valid but lacks permission for this org/action
+rescue TurboDocxSdk::NotFoundError => e
+  # 404: company, contact, or product not found
+  puts "Not found: #{e.message}"
+rescue TurboDocxSdk::ConflictError
+  # 409: conflicts with the current resource state
+rescue TurboDocxSdk::RateLimitError
+  # 429: back off and retry
+rescue TurboDocxSdk::NetworkError
+  # request never reached the server (DNS, refused, timeout)
+rescue TurboDocxSdk::TurboDocxError => e
+  # catch-all for any other SDK error (raw 5xx, etc.)
+  puts "Error #{e.status_code}: #{e.message}"
+end
+```
+
+Every error exposes `status_code` and `code`. `code` is always populated: it carries the API's specific code (such as `QuoteHasNoLineItems`) when there is one, and otherwise a class default such as `VALIDATION_ERROR` or `NOT_FOUND`.
+
+</TabItem>
 </Tabs>
 
 <a id="error-code-reference"></a>
@@ -5740,6 +7032,21 @@ try {
 | 429 | `TurboDocxException.RateLimitException` | Rate limit exceeded — back off and retry |
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Status | Class | When |
+|---|---|---|
+| 400 | `TurboDocxSdk::ValidationError` | Invalid fields, missing required keys, bad enum value |
+| 401 | `TurboDocxSdk::AuthenticationError` | Missing or invalid API key |
+| 403 | `TurboDocxSdk::AuthorizationError` | Valid key without permission for this operation |
+| 404 | `TurboDocxSdk::NotFoundError` | Quote, product, company, or other resource not found |
+| 409 | `TurboDocxSdk::ConflictError` | Conflicts with existing resource state |
+| 429 | `TurboDocxSdk::RateLimitError` | Rate limit exceeded, so back off |
+| none | `TurboDocxSdk::NetworkError` | The request never reached the server |
+
+All of them inherit from `TurboDocxSdk::TurboDocxError`.
+
+</TabItem>
 </Tabs>
 
 <a id="runnable-end-to-end-examples"></a>
@@ -5777,6 +7084,23 @@ Three fully runnable examples live in the SDK repo:
 Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Three runnable examples live in the SDK repo:
+
+- **[`turboquote_basic.rb`](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turboquote_basic.rb)**: full quote lifecycle (create a company and contact, create a quote, add line items, download the PDF, send, clean up).
+- **[`turboquote_products.rb`](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turboquote_products.rb)**: product and bundle catalog management.
+- **[`turboquote_pricebooks.rb`](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turboquote_pricebooks.rb)**: price book CRUD, `apply_price_book`, and optional `send_quote_with_deliverable` (set the `DELIVERABLE_ID` env var).
+
+Run any example with:
+
+```bash
+export TURBODOCX_API_KEY=your_key
+export TURBODOCX_ORG_ID=your_org_id
+ruby examples/turboquote_basic.rb
+```
+
+</TabItem>
 </Tabs>
 
 ## See Also {#see-also}
@@ -5787,7 +7111,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboSign JavaScript SDK](/docs/SDKs/turbosign?language=js) — send documents for e-signature
 - [TurboWebhooks JavaScript SDK](/docs/SDKs/webhooks?language=js) — receive real-time signature events
 - [Deliverable JavaScript SDK](/docs/SDKs/deliverable?language=js) — generate documents from templates
-- [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
+- [SDKs Overview](/docs/SDKs) — all SDKs across all seven languages
 - [@turbodocx/sdk on npm](https://www.npmjs.com/package/@turbodocx/sdk)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/js-sdk)
 
@@ -5809,7 +7133,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboSign PHP SDK](/docs/SDKs/turbosign?language=php) — sending documents for signature from PHP
 - [TurboWebhooks PHP SDK](/docs/SDKs/webhooks?language=php) — receiving signature events in PHP
 - [Deliverable PHP SDK](/docs/SDKs/deliverable?language=php) — document generation from PHP
-- [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
+- [SDKs Overview](/docs/SDKs) — all SDKs across all seven languages
 - [TurboDocx SDK on Packagist](https://packagist.org/packages/turbodocx/sdk)
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/php-sdk)
 
@@ -5822,7 +7146,7 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboSign Go SDK](/docs/SDKs/turbosign?language=go) — sending documents for e-signature
 - [Deliverable Go SDK](/docs/SDKs/deliverable?language=go) — generating documents from templates
 - [TurboWebhooks Go SDK](/docs/SDKs/webhooks?language=go) — real-time event delivery
-- [SDKs Overview](/docs/SDKs) — all SDKs across all six languages
+- [SDKs Overview](/docs/SDKs) — all SDKs across all seven languages
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
@@ -5834,6 +7158,18 @@ Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 - [TurboWebhooks Java SDK](/docs/SDKs/webhooks?language=java) — receiving signature events
 - [SDKs Overview](/docs/SDKs) — all SDKs across all languages
 - [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+- [TurboQuote JavaScript / TypeScript SDK](/docs/SDKs/quote?language=js): same API, JS idioms
+- [TurboQuote Python SDK](/docs/SDKs/quote?language=python): same API, Python idioms
+- [TurboSign Ruby SDK](/docs/SDKs/turbosign?language=ruby): send documents for e-signature
+- [TurboWebhooks Ruby SDK](/docs/SDKs/webhooks?language=ruby): receive real-time signature events
+- [Deliverable Ruby SDK](/docs/SDKs/deliverable?language=ruby): generate documents from templates
+- [SDKs Overview](/docs/SDKs): all SDKs across all seven languages
+- [turbodocx-sdk on RubyGems](https://rubygems.org/gems/turbodocx-sdk)
+- [TurboDocx SDK on GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)
 
 </TabItem>
 </Tabs>
