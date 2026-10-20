@@ -27,6 +27,7 @@ By the end of this guide, you will have:
 - 📦 **Added products, bundles and a custom item**, with quantities and discounts
 - 👀 **Previewed** the quote as your customer will see it
 - ✉️ **Sent it** with reminders, ready for signature
+- ✅ **Know what happens next**, from Sent to Accepted
 
 :::tip Quick Start Promise
 A quote takes a few minutes, and everything saves as you go. You can stop at any point and pick it up again from the Quotes page. 🚀
@@ -131,6 +132,20 @@ The **Quote total** shows the total, how much of it recurs and for how long, and
 
 ![The Quote total with one-time and yearly lines, and the overall margin](/img/turboquote/new-quote/11-quote-total.png)
 
+### Change the price book
+
+Every new quote starts with your organization's **default** price book, shown under **Price book** in the header. To price this quote with a different book, for example partner or nonprofit pricing:
+
+**Instruction:**
+
+1. Click **Price book** in the header.
+2. Pick the book you want. Each book shows its discount and the dates it is valid. Only books that are offered on quotes appear.
+3. Click **Apply price book**.
+
+Every catalog product on the quote is repriced from the new book, and any discount you set on those lines is reset. Bundles and custom items keep their prices. If a book changes after you applied it, the dialog says so; click **Apply again** to pick up the new prices. To stop using a price book, click **Remove price book**: the quote keeps its current prices.
+
+See [Managing Price Books](./Managing-Price-Books.md) to set up the books themselves.
+
 <br/>
 
 ## Step 5: Add a Custom Item (Optional)
@@ -215,13 +230,30 @@ These settings apply to this quote only. To change your team's defaults, go to *
 
 <br/>
 
+## What Happens After You Send
+
+Sending a quote creates a **TurboSign** signature request with the quote attached and emails it to the recipient. From there:
+
+1. **The quote moves to Sent.** You'll find it on the **Sent** tab of the Quotes page. It can no longer be edited or renamed.
+2. **The customer reviews and signs.** The email links to the quote, where the recipient reads it and signs to accept it. Any reminders you set go out on schedule until they sign or the quote's **Valid until** date passes.
+3. **Signing accepts the quote.** As soon as the signature is complete, the quote moves to **Accepted** and counts towards your **Won**, **Monthly recurring** and **Win rate** cards. CC'd people get a copy of the signed quote.
+
+If things don't go to plan:
+
+- **The customer says no.** Choose **Mark as declined** from the quote's **⋮** menu.
+- **You need to withdraw it.** Choose **Void quote**. Voiding the signature request in TurboSign voids the quote too.
+- **The Valid until date passes first.** The quote moves to the **Expired** tab. Choose **Renew** to close it and make a new draft. See [Managing Your Quotes](./Managing-Your-Quotes.md#renewing-an-expired-quote).
+
+<br/>
+
 ## Summary
 
 You've created and sent a quote in TurboQuote! Here's a recap:
 
 1. Started a quote with **New quote** and picked the **contact** who signs it
 2. Set the **quote details**: name, currency, quote type, term, valid-until date and tax
-3. Added **products**, **bundles** and a **custom item**, with quantities and discounts
+3. Added **products**, **bundles** and a **custom item**, with quantities, discounts and the right **price book**
 4. **Previewed** the quote and **sent** it with reminders
 
 Track it from the [Quotes page](./Managing-Your-Quotes.md): it moves to **Sent**, then to **Accepted** once your customer signs.
+

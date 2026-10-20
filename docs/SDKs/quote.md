@@ -1208,7 +1208,7 @@ The quote list also takes these filters. Multi-value filters take one value or a
 
 | Filter | Values | Notes |
 |---|---|---|
-| `statuses` | `draft`, `pending_approval`, `sent`, `accepted`, `declined`, `voided`, **`expired`** | `expired` = a draft or sent quote past its Valid until day (UTC), or whose signature expired. It's a filter value, not a stored status. |
+| `statuses` | `draft`, `sent`, `accepted`, `declined`, `voided`, **`expired`** | `expired` = a draft or sent quote past its Valid until day (UTC), or whose signature expired. It's a filter value, not a stored status. |
 | `companyId` / `companyIds` | One company, or several | Merged by the API |
 | `currency` / `currencies` | One currency, or several | Merged by the API |
 | `createdBy` | User IDs | From `listQuoteCreators` |
@@ -1231,7 +1231,7 @@ const page = await TurboQuote.listQuotes({
   sortDirection: 'asc',
   summaryCurrency: 'USD',
 });
-// page.statusCounts → { all, draft, pending_approval, sent, accepted, declined, voided, expired }
+// page.statusCounts → { all, draft, sent, accepted, declined, voided, expired }
 // page.summary      → { openPipeline, winRate, monthlyRecurring, ... } in USD
 for (const q of page.results) {
   console.log(q.quoteNumber, q.isExpired, q.lineItemCount);
@@ -4765,7 +4765,7 @@ String contactId = contacts.getResults().get(0).getId();
 
 #### Company email and `getCompanyOpenQuotes` {#getcompanyopenquotes}
 
-Companies have an optional `email` (the company's own address) on create, update and bulk import; it's returned on every company. A company can't be deleted while it has open quotes — draft, pending approval or sent (409 `CompanyHasOpenQuotes`); accepted, declined and voided quotes don't block it. `getCompanyOpenQuotes` returns those quotes (`{ results, totalRecords }`, the newest 50) so you can check before deleting. `listCompanyContacts` returns `company.contactCount`, the company's active contacts whatever the search.
+Companies have an optional `email` (the company's own address) on create, update and bulk import; it's returned on every company. A company can't be deleted while it has open quotes — draft or sent (409 `CompanyHasOpenQuotes`); accepted, declined and voided quotes don't block it. `getCompanyOpenQuotes` returns those quotes (`{ results, totalRecords }`, the newest 50) so you can check before deleting. `listCompanyContacts` returns `company.contactCount`, the company's active contacts whatever the search.
 
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
@@ -6305,7 +6305,7 @@ Every typed error carries the API's `code` (`err.code`, `e.code`, `$e->errorCode
 |---|---|---|
 | 409 | `CANNOT_DELETE_SENT_QUOTE` | Deleting a sent quote. Void it instead. |
 | 409 | `CANNOT_DELETE_ACCEPTED_QUOTE` | Deleting an accepted quote. It's kept for your records. |
-| 409 | `CompanyHasOpenQuotes` | Deleting a company that has open quotes (draft, pending approval or sent). See `getCompanyOpenQuotes`. |
+| 409 | `CompanyHasOpenQuotes` | Deleting a company that has open quotes (draft or sent). See `getCompanyOpenQuotes`. |
 | 409 | `ContactHasOpenQuotes` | Deleting a contact who is on open quotes. See `getContactOpenQuotes`. |
 | 409 | `LastContact` | Deleting a company's only contact. |
 | 400 | `PriceBookIsDefault` | Deleting the organization's default price book. |

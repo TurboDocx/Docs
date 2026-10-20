@@ -929,7 +929,7 @@ Quote list filters (one value or an array):
 
 | Filter | Values | Notes |
 |---|---|---|
-| `statuses` | `draft`, `pending_approval`, `sent`, `accepted`, `declined`, `voided`, **`expired`** | `expired` = a draft or sent quote past its Valid until day (UTC), or whose signature expired. It's a filter value, not a stored status. |
+| `statuses` | `draft`, `sent`, `accepted`, `declined`, `voided`, **`expired`** | `expired` = a draft or sent quote past its Valid until day (UTC), or whose signature expired. It's a filter value, not a stored status. |
 | `companyId` / `companyIds` | One company, or several | Merged by the API |
 | `currency` / `currencies` | One currency, or several | Merged by the API |
 | `createdBy` | User IDs | From `listQuoteCreators` |
@@ -976,7 +976,7 @@ by_item = TurboDocxSdk::TurboQuote.get_quote_line_item_images(quote["id"]) # { l
 
 **Deletes the API refuses.** `delete_quote` on a **sent** quote is a 409 `ConflictError` with code
 `CANNOT_DELETE_SENT_QUOTE` — void it instead; an accepted quote is a 409 `CANNOT_DELETE_ACCEPTED_QUOTE`.
-`delete_company` is a 409 `CompanyHasOpenQuotes` while the company has open quotes (draft, pending approval or
+`delete_company` is a 409 `CompanyHasOpenQuotes` while the company has open quotes (draft or
 sent), and `delete_contact` is a 409 `LastContact` (the company's only contact) or `ContactHasOpenQuotes`.
 `delete_price_book` on the org's default price book is a 400 `ValidationError` `PriceBookIsDefault`. Branch on
 `e.code`; `get_company_open_quotes` / `get_contact_open_quotes` list the open quotes that block a delete.
@@ -1053,7 +1053,7 @@ Every typed error carries the API's `code` (`err.code`, `e.code`, `$e->errorCode
 |---|---|---|
 | 409 | `CANNOT_DELETE_SENT_QUOTE` | Deleting a sent quote. Void it instead. |
 | 409 | `CANNOT_DELETE_ACCEPTED_QUOTE` | Deleting an accepted quote. It's kept for your records. |
-| 409 | `CompanyHasOpenQuotes` | Deleting a company that has open quotes (draft, pending approval or sent). See `getCompanyOpenQuotes`. |
+| 409 | `CompanyHasOpenQuotes` | Deleting a company that has open quotes (draft or sent). See `getCompanyOpenQuotes`. |
 | 409 | `ContactHasOpenQuotes` | Deleting a contact who is on open quotes. See `getContactOpenQuotes`. |
 | 409 | `LastContact` | Deleting a company's only contact. |
 | 400 | `PriceBookIsDefault` | Deleting the organization's default price book. |
