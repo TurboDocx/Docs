@@ -70,12 +70,59 @@ function docPages(out) {
     .filter((p) => !p.redirect);
 }
 
-// Make root-relative links and images absolute so a twin read on its own
-// (or inside llms-full.txt) still resolves them. Code fences are left alone.
-function absolutize(body) {
+// Docusaurus writes each doc's source file and permalink to .docusaurus/ during
+// the build; twins keep the source's relative links (./Other.md), so this map is
+// what turns them back into page URLs.
+function docSources() {
+  const bySource = new Map();
+  const byPermalink = new Map();
+  for (const f of walk('.docusaurus/docusaurus-plugin-content-docs')) {
+    if (!f.endsWith('.json')) continue;
+    let doc;
+    try {
+      doc = JSON.parse(fs.readFileSync(f, 'utf8'));
+    } catch {
+      continue;
+    }
+    if (typeof doc?.source !== 'string' || typeof doc?.permalink !== 'string') continue;
+    const source = doc.source.replace(/^@site\//, '');
+    bySource.set(source, doc.permalink);
+    byPermalink.set(doc.permalink, source);
+  }
+  return { bySource, byPermalink };
+}
+
+// Outside code fences: point doc links at their twins (or the page when there
+// is no twin), make root-relative links and images absolute, and unlink
+// relative links to pages that are not built (drafts). A body H1 after the
+// title H1 becomes ## so each twin has exactly one H1.
+function rewriteBody(body, page, ctx) {
+  const source = ctx.docs.byPermalink.get(`/${page.route}`);
+  const target = (pathname) => {
+    const route = pathname.replace(/^\/+|\/+$/g, '');
+    return ctx.twinRoutes.has(route) ? `${SITE}/${route}.md` : `${SITE}/${route}`;
+  };
+  const link = (text, href) => {
+    const [, p, rest = ''] = href.match(/^([^#?]*)(.*)$/);
+    if (href.startsWith(`${SITE}/`)) return `[${text}](${target(p.slice(SITE.length))}${rest})`;
+    if (href.startsWith('/') && !href.startsWith('//')) return `[${text}](${target(p)}${rest})`;
+    if (/^[a-z][a-z0-9+.-]*:|^#|^\/\//i.test(href) || !/\.mdx?$/.test(p)) return `[${text}](${href})`;
+    const permalink = source && ctx.docs.bySource.get(path.posix.join(path.posix.dirname(source), p));
+    if (permalink) return `[${text}](${target(permalink)}${rest})`;
+    ctx.unresolved.push(`${page.mdUrl}: ${href}`);
+    return text;
+  };
+  let h1Seen = 0;
   return body
-    .split(/(^```[\s\S]*?^```)/m)
-    .map((part, i) => (i % 2 ? part : part.replace(/\]\(\/(?!\/)/g, `](${SITE}/`)))
+    .split(/(^[ \t]*```[\s\S]*?^[ \t]*```)/m)
+    .map((part, i) => {
+      if (i % 2) return part;
+      return part
+        .replace(/(!?)\[([^\]]*)\]\(([^)\s]+)\)/g, (m, bang, text, href) =>
+          bang ? `![${text}](${href.replace(/^\/(?!\/)/, `${SITE}/`)})` : link(text, href),
+        )
+        .replace(/^# /gm, (h) => (h1Seen++ ? '## ' : h));
+    })
     .join('');
 }
 
@@ -109,6 +156,14 @@ function llmsLinks(out) {
 function run(out, write) {
   const pages = docPages(out);
   const byMd = new Map(pages.map((p) => [p.md, p]));
+  const ctx = {
+    docs: write ? docSources() : null,
+    twinRoutes: new Set(pages.filter((p) => !p.noindex && fs.existsSync(p.md)).map((p) => p.route)),
+    unresolved: [],
+  };
+  if (write && ctx.docs.bySource.size === 0) {
+    fail('.docusaurus', 'no doc metadata found; run this right after `docusaurus build`');
+  }
   let twins = 0;
 
   for (const p of pages) {
@@ -124,7 +179,7 @@ function run(out, write) {
     twins++;
 
     if (write) {
-      const body = absolutize(stripFrontmatter(fs.readFileSync(p.md, 'utf8')).trim());
+      const body = rewriteBody(stripFrontmatter(fs.readFileSync(p.md, 'utf8')).trim(), p, ctx);
       fs.writeFileSync(p.md, `---\n${frontmatter(p, body)}\n---\n\n${body}\n`);
       if (!p.html.includes('type="text/markdown"')) {
         p.html = p.html.replace('</head>', `<link rel="alternate" type="text/markdown" href="${p.mdUrl}"></head>`);
@@ -172,6 +227,7 @@ function run(out, write) {
     fs.writeFileSync(path.join(out, 'llms-full.txt'), `${[head, ...bodies].join('\n\n---\n\n')}\n`);
   }
 
+  for (const u of ctx.unresolved) console.log(`::warning::unlinked ${u} (target page is not built, e.g. a draft)`);
   console.log(
     `agent-markdown: ${pages.length} doc pages, ${twins} twins, ${pages.filter((p) => p.noindex).length} noindex, ${links.length} llms.txt links`,
   );
