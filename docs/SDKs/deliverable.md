@@ -2142,6 +2142,8 @@ Files.write(Paths.get("report.pdf"), pdfData);
 </TabItem>
 </Tabs>
 
+A `templateId` that points to a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates) can't generate a document. The API answers `400` with the code `SignatureOnlyTemplate` and the message `PDF templates can only be used to collect signatures, not to generate documents.`, which the SDK raises as its validation error (`ValidationError` or `ValidationException`). Send a PDF template for signature with [TurboSign](/docs/SDKs/turbosign) instead.
+
 ### Handling Errors {#handling-errors}
 
 <Tabs groupId="language" queryString>
