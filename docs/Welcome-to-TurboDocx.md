@@ -35,7 +35,6 @@ TurboDocx Templating turns an existing Word or PowerPoint file into a reusable t
 - [How to Create a Template](./TurboDocx-Templating/How-to-Create-a-Template.md): turn an existing document into a reusable template.
 - [How to Create a Document Template](./TurboDocx-Templating/How-to-Create-a-Document-Template.md) and [How to Create a Presentation Template](./TurboDocx-Templating/How-to-Create-a-Presentation-Template.md): format-specific walkthroughs for Word and PowerPoint.
 - [How to Create a Deliverable](./TurboDocx-Templating/How-to-Create-a-Deliverable.md): generate a finished document from a template.
-- [Advanced Templating](./Advanced-Configuration/Advanced-Templating.md): loops, conditionals, and expressions for complex templates.
 
 ## Get documents signed
 
