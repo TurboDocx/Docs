@@ -1,7 +1,7 @@
 ---
 title: Salesforce Integration
 sidebar_position: 2
-description: Transform Salesforce data into professional documents, proposals, and presentations. Create personalized deliverables powered by AI.
+description: Connect Salesforce to TurboDocx to generate documents from your CRM data, and send them for e-signature from any record with TurboSign for Salesforce.
 keywords:
   - salesforce integration
   - crm documents
@@ -23,15 +23,30 @@ keywords:
   - crm data visualization
   - salesforce workflow automation
   - salesforce business documents
+  - turbosign salesforce
+  - salesforce e-signature
+  - salesforce esignature app
+  - send for signature salesforce
+  - salesforce document signing
+  - salesforce signed pdf
+  - opportunity e-signature
+  - salesforce lease signing
 ---
 
-# Turn Your Salesforce Data into Professional Documents & Presentations
+# Salesforce Integration
 
-Say goodbye to copy-pasting customer information! TurboDocx's Salesforce integration automatically pulls your real CRM data to create personalized documents, proposals, and presentations. No more "John Doe" placeholder text — use actual account names, opportunities, and details.
+TurboDocx works with Salesforce in two ways. You can use either one on its own, or both together.
 
-:::tip Sending documents for e-signature from Salesforce?
-[TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce) adds a **Send for Signature** button to your records and saves the signed PDF back automatically. It uses the connection you set up on this page.
-:::
+- **Generate documents from Salesforce data.** Say goodbye to copy-pasting customer information! TurboDocx pulls your real CRM data to create personalized documents, proposals, and presentations. No more "John Doe" placeholder text — use actual account names, opportunities, and details.
+- **Send for signature from Salesforce with TurboSign for Salesforce.** A package you install in your Salesforce org adds a **Send for Signature** button to your records. The document fills itself from the record, and the signed PDF and audit trail are saved back to it.
+
+## Which parts of this guide you need
+
+| If you want to… | Follow |
+|---|---|
+| Generate documents from Salesforce data | [Steps 1 to 3](#step-1-create-a-private-salesforce-external-client-app) to connect Salesforce to TurboDocx, then [Step 4](#step-4-generate-documents-from-salesforce-data) |
+| Send documents for signature from Salesforce records | [Send for signature with TurboSign for Salesforce](#send-for-signature-with-turbosign-for-salesforce). To have the signed PDF saved back to the record, also do [Steps 1 to 3](#step-1-create-a-private-salesforce-external-client-app) and [check the connection for TurboSign](#check-the-connection-for-turbosign-for-salesforce) |
+| Both | Steps 1 to 3 once. Both features use the same connection |
 
 ## What You Can Create
 
@@ -50,16 +65,16 @@ Say goodbye to copy-pasting customer information! TurboDocx's Salesforce integra
 Don't worry! We've made this guide so detailed that any team member can follow it. Think of it as cooking instructions, but for software — and just as tasty! 😄
 :::
 
-To use the Salesforce integration, you'll need:
+To connect Salesforce to TurboDocx (Steps 1 to 3), you'll need:
 
 - A TurboDocx **Pro** or **Enterprise** plan, which include the Salesforce integration
-- A Salesforce account with permission to create External Client Apps (any edition works!)
-- System Administrator access to create a Salesforce connected app
+- A Salesforce account with permission to create External Client Apps (any edition works for the connection and document generation; TurboSign for Salesforce needs an edition that runs custom Apex, see [Which Salesforce orgs can use it](#which-salesforce-orgs-can-use-it))
+- System Administrator access to create a Salesforce External Client App
 - About 15 minutes and a cup of coffee ☕
 - This guide (which you're already reading — you're ahead of the game!)
 
 :::tip Quick note
-This process involves creating something called a "connected app" in Salesforce. Think of it as giving TurboDocx secure access to your Salesforce data — and only the data you want to share.
+This process involves creating something called an "External Client App" in Salesforce (older Salesforce guides call this a "connected app"). Think of it as giving TurboDocx secure access to your Salesforce data — and only the data you want to share.
 :::
 
 <br/>
@@ -235,7 +250,7 @@ After creating the app, you need to adjust its access policies and retrieve the 
 :::note The 30-day refresh token limit
 New External Client Apps no longer offer **"Refresh token is valid until revoked"**. A refresh token expires if it isn't used for 30 days. You don't need to do anything about this: TurboDocx keeps the connection active automatically.
 
-If the connection ever stops working, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in the Salesforce settings dialog and emails your organization's admins. To see the message, open **Settings > Features and integrations** and click **Configure SalesForce** on the Salesforce card. Reconnecting is safe.
+If the connection ever stops working, for example because a Salesforce admin revokes it, TurboDocx shows a **Reconnect Salesforce** message in the Salesforce settings dialog and emails your organization's admins. To see the message, open **Settings > Features and integrations** and click **Configure SalesForce** on the Salesforce card. Reconnecting is safe: your current connection keeps working until the new one succeeds.
 :::
 
 <br/>
@@ -336,7 +351,7 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 <br/>
 
 :::note Connect a sandbox
-The dialog has an **Environment** list, set to **Production** by default. To connect a Salesforce sandbox, choose **Sandbox** there before you save, so the connection signs in at `test.salesforce.com`. If your sandbox uses a My Domain login, click **Use Custom Domain** on the Salesforce login page and enter it.
+The dialog has an **Environment** list, set to **Production** by default. To connect a Salesforce sandbox, choose **Sandbox** there before you save, so the connection signs in at `test.salesforce.com`. If your sandbox uses a My Domain login, click **Use Custom Domain** on the Salesforce login page and enter it. TurboSign for Salesforce can save signed files back to a sandbox this way too.
 :::
 
 6. **Enter your Consumer Key and Consumer Secret**
@@ -394,15 +409,29 @@ If you've made it this far, you deserve a pat on the back! You've successfully c
 
 <br/>
 
-## Step 4: Using Your Salesforce Integration
+### Check the connection for TurboSign for Salesforce
+
+Skip this if you only generate documents. If you use [TurboSign for Salesforce](#send-for-signature-with-turbosign-for-salesforce), TurboDocx saves each signed PDF back to Salesforce through this connection. If you already used the Salesforce integration before installing TurboSign for Salesforce, check that your connection meets everything below.
+
+- **Connect the same Salesforce org the package is installed in.** The package sends its Salesforce org ID with each document. When the document is signed, TurboDocx saves the files through the connection to that same org. Only active connections of active TurboDocx users count. If no connection matches the org, nothing is saved, and TurboDocx records the failure. Saving signed files back needs TurboSign for Salesforce 1.1.0 or later, which sends the org ID. Earlier versions still send and sign, but the signed files are not saved back.
+- **Connect with the right Salesforce user.** That user must be able to create files and edit the records you send from, including the field you pick under **On Completion**. A dedicated integration user works best, so the connection doesn't break when a person leaves or changes their password.
+- **You can connect more than one Salesforce org.** For example, connect both a sandbox and production. Each send uses the connection to the org it was sent from. To connect a sandbox, see [Connect a sandbox](#configure-salesforce-integration) above.
+- **Check the app's scopes.** The connection needs the **api** scope, the **refresh_token** (offline access) scope, and the **openid** scope, because TurboDocx checks which Salesforce org each connection belongs to. See [Configure API Settings](#configure-api-settings). If you added **openid** to an existing app, reconnect Salesforce in TurboDocx.
+- **Leave the refresh token policy as Salesforce sets it.** See [Edit Policies](#edit-policies) for the 30-day limit and what happens if the connection stops working.
+
+Sending documents for signature works without this connection. You need it to save the signed files and the signing status back to Salesforce.
+
+<br/>
+
+## Step 4: Generate documents from Salesforce data
 
 Time to put your new integration to work! This is where the real magic happens — turning your boring Salesforce data into beautiful, professional documents that'll make your colleagues go "WOW!" 🤩✨
 
 ### Creating Your First Document
 
 1. **Go to document generation**
-   - Look for "Create Document", "New Document", or similar
-   - This is usually on your main dashboard
+   - On the TurboDocx **Home** page, click **Create a Document**
+   - To make slides instead, click **Create a Presentation**
 
 ![Document Creation Page](/img/salesforce-integration/Create_document_button.png)
 
@@ -416,8 +445,8 @@ Time to put your new integration to work! This is where the real magic happens �
 <br/>
 
 3. **Change your data source**
-   - Click on the "Change Source" dropdown
-   - Select "Change Resource" from the menu
+   - On the **Generate Variables with AI** page, open the **Source** dropdown under a variable (it shows **No resource selected** until you pick one)
+   - Select **Change Resource** from the menu
 
 ![Source Change Dropdown](/img/salesforce-integration/source_change_dropdown.png)
 
@@ -507,9 +536,70 @@ Time to put your new integration to work! This is where the real magic happens �
 
 <br/>
 
+## Send for signature with TurboSign for Salesforce
+
+TurboSign for Salesforce lets your team send a TurboDocx document for e-signature straight from a Salesforce record. The document fills itself from the record's fields, the signers come from the record, and when everyone has signed, the signed PDF and its audit trail are saved back to the record. The record can also move to a new stage automatically, for example **Closed Won**.
+
+### How it works
+
+1. An admin builds a **document setup** once: which TurboDocx template to use, which Salesforce fields fill it, who signs, and where each person signs.
+2. A sales rep opens a record, clicks **Send for Signature**, reviews the filled-in values and the finished document, and clicks **Send**.
+3. Each signer gets an email, verifies their identity if your organization requires it, and signs in the browser.
+4. When the last signer finishes, TurboDocx writes the signed PDF and the audit trail to the record's files and updates the stage you chose.
+
+Your TurboDocx API key never sits in a Salesforce field. It is stored encrypted in a Salesforce **External Credential** and added to each request by Salesforce itself, so nobody can read it back from Setup.
+
+### TurboSign for Salesforce guides
+
+| If you want to… | Read |
+|---|---|
+| Install the package in your Salesforce org | [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install) |
+| Find the install link for your org type, or check your installed version | [One-click install links](/docs/Integrations/turbosign-for-salesforce/install-links) |
+| Set everything up in Salesforce Setup, click by click | [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup) |
+| Send a document and see what signers experience | [Send a document for signature](/docs/Integrations/turbosign-for-salesforce/send-and-sign) |
+| Configure it from the Salesforce CLI after installing | [Scripted setup for admins](/docs/Integrations/turbosign-for-salesforce/scripted-setup) |
+| Fix an error message | [Troubleshooting TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/troubleshooting) |
+
+### What you need for TurboSign for Salesforce
+
+- A Salesforce org where you are a System Administrator, on an edition that can run it. See [Which Salesforce orgs can use it](#which-salesforce-orgs-can-use-it).
+- A TurboDocx account with TurboSign, plus an **API key** and your **Organization ID**. See [Getting your credentials](/docs/TurboSign/API-Signatures#getting-your-credentials).
+- A TurboDocx template. Every spot where someone signs must already be in the template as a text token, for example `{sig}`.
+- To save signed files back to Salesforce: the Salesforce connection from [Steps 1 to 3](#step-1-create-a-private-salesforce-external-client-app), checked against [Check the connection for TurboSign for Salesforce](#check-the-connection-for-turbosign-for-salesforce). Saving signed files back depends on TurboDocx's Salesforce write-back feature, which is part of TurboDocx and uses that connection to save the signed PDF to the record. The Salesforce integration is included on the TurboDocx **Pro** and **Enterprise** plans. Sending for signature works without it.
+
+### Which Salesforce orgs can use it
+
+Your Salesforce **edition** decides whether TurboSign for Salesforce can run in your org. The **install method** decides who puts it there.
+
+TurboSign for Salesforce includes custom Apex code, so it needs an edition that runs custom Apex.
+
+| Salesforce edition | Can use TurboSign for Salesforce |
+|---|---|
+| Enterprise | Yes |
+| Unlimited | Yes |
+| Performance | Yes |
+| Developer Edition | Yes |
+| Sandboxes of the editions above | Yes |
+| Professional | No |
+| Group | No |
+| Starter, Pro Suite, Essentials | Not supported |
+
+Professional and Group editions block custom Apex unless it ships in a managed package that passed the Salesforce AppExchange security review. TurboSign for Salesforce is not offered that way today. If you are on Starter, Pro Suite, or Essentials, or you are not sure which edition you have, check with your Salesforce account rep.
+
+#### How it gets installed
+
+| Method | Who can do it | Upgrades and removal |
+|---|---|---|
+| **[One-click install link](/docs/Integrations/turbosign-for-salesforce/install-links)** | Any Salesforce admin in your org, by clicking the link | A new version installs over the old one. Uninstall in one click. |
+| **[Deploy from source](/docs/Integrations/turbosign-for-salesforce/install#deploy-from-source-with-the-salesforce-cli)** with the Salesforce CLI | A developer, using `sf project deploy start` | Manual. Deploying to production runs your org's Apex tests, which must reach 75% code coverage. |
+
+There are two ways to install, and step-by-step instructions for both are in [Install TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/install). The method doesn't change which orgs can run TurboSign for Salesforce. It changes whether your own admin can install it, or whether someone has to deploy it for you. Either way, the person installing needs permission to install packages, which the **System Administrator** profile has.
+
+<br/>
+
 ## Troubleshooting 🤔
 
-Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't worry — we've got your back! Here are solutions to common issues:
+Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't worry — we've got your back! Here are solutions to common issues with the connection and with document generation. For TurboSign for Salesforce error messages, such as a signed PDF that never appears on the record, see [Troubleshooting TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/troubleshooting).
 
 ### "I Can't Find the Setup Menu in Salesforce"
 
@@ -536,7 +626,7 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 - Double-check that you copied the entire key and secret (they're usually quite long)
 - Make sure there are no extra spaces at the beginning or end
 - Verify your Salesforce external client app is still active
-- Complete the identity verification step when accessing "Manage Consumer Details"
+- Complete the identity verification step when you click **Consumer Key and Secret**
 - If all else fails, create a new external client app and get fresh keys
 
 ### "Permission Denied" Error
@@ -563,7 +653,8 @@ Even the best-laid plans sometimes go awry (Murphy's Law is real, folks!). Don't
 - This means TurboDocx can no longer use the connection, for example because a Salesforce admin revoked it or the connected user can no longer log in
 - TurboDocx shows this message in the Salesforce settings dialog, not on the Salesforce card itself, and also emails your organization's admins
 - Open **Settings > Features and integrations** in TurboDocx, click **Configure SalesForce** on the Salesforce card, and connect Salesforce again
-- Reconnecting is safe
+- Reconnecting is safe: your current connection keeps working until the new one succeeds
+- If you use TurboSign for Salesforce, signed files that couldn't be saved while the connection was down arrive on their own if you reconnect within about a day. See [The signed PDF never appears on the record](/docs/Integrations/turbosign-for-salesforce/troubleshooting#the-signed-pdf-never-appears-on-the-record)
 
 ### "No Records Found" in TurboDocx
 
@@ -595,7 +686,7 @@ Your data security is important to us (and should be to you too!):
 ### How Your Data is Protected
 
 - **Secure Authentication**: We use OAuth 2.0 (fancy industry-standard security)
-- **Scoped Access**: The connection uses your Salesforce user's API access, so it can only reach what that user can reach. In practice TurboDocx reads the fields you map. If you use [TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce), it also adds signed files to records and can update the one field you choose under **On Completion**
+- **Scoped Access**: The connection uses your Salesforce user's API access, so it can only reach what that user can reach. In practice TurboDocx reads the fields you map. If you use [TurboSign for Salesforce](#send-for-signature-with-turbosign-for-salesforce), it also adds signed files to records and can update the one field you choose under **On Completion**
 - **Encrypted Transmission**: All data transfers are encrypted (like sending a letter in a locked box)
 
 ### Best Practices
@@ -670,6 +761,7 @@ Congratulations, integration superstar! You've successfully:
 1. **Train your team** on being a prompting pro (share your newfound expertise!)
 2. **Create document and presentation templates** for common use cases (you're basically a template architect now!)
 3. **Experiment with different AI prompts** to find what works best (become the AI whisperer of your office! 🤖🗣️)
+4. **Send documents for signature from Salesforce** with [TurboSign for Salesforce](#send-for-signature-with-turbosign-for-salesforce), which uses the connection you just made to save signed PDFs back to your records
 
 :::tip Final Words of Wisdom 🎓
 Remember, you're not just creating documents or presentations — you're creating more time for yourself by automating repetitive tasks. Every minute saved on copy-pasting customer data is a minute you can spend on more important things (like actually talking to customers, or grabbing that extra cup of coffee! ☕). You're officially a productivity ninja now! 🎉🥷
