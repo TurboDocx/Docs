@@ -34,6 +34,8 @@ keywords:
   - bearer token authentication
   - resend email
   - resend signature
+  - signer roles
+  - template signature setup
 ---
 
 import ScriptLoader from '@site/src/components/ScriptLoader';
@@ -215,12 +217,12 @@ User-Agent: TurboDocx API Client
 | ------------------- | -------------- | ------------- | ------------------------------------------ |
 | file                | File           | Conditional\* | PDF, DOCX, or PPTX file to upload          |
 | deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
-| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)) |
+| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). Required when any recipient has a `role` |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
 | recipients          | String (JSON)  | **Yes**       | JSON string array of recipient objects     |
-| fields              | String (JSON)  | **Yes**       | JSON string array of field objects         |
+| fields              | String (JSON)  | Conditional\*\* | JSON string array of field objects. Must not be empty. Optional only when a recipient has a `role` |
 | senderName          | String         | No            | Name of sender (max 255 chars). Defaults to your API key's name. |
 | senderEmail         | String (email) | **Yes**       | Reply-to address on the signature email and the sender recorded in the audit trail |
 | ccEmails            | String (JSON)  | No            | JSON string array of CC email addresses    |
@@ -235,7 +237,9 @@ User-Agent: TurboDocx API Client
 
 \* **File Source**: Must provide exactly ONE of: file, deliverableId, templateId, or fileLink
 
-A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are what's used — a signature setup saved on the template in the TurboDocx app is not applied to API sends.
+\*\* **Fields**: Required, unless at least one recipient names a template signer `role`. Omitting `fields` without a role returns `400 FieldsRequired`. See [Sending with signer roles](#sending-with-signer-roles).
+
+A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are used as sent. A signature setup saved on the template in the TurboDocx app is applied only when a recipient names one of its roles (see [Sending with signer roles](#sending-with-signer-roles)).
 
 :::tip Reminders & expiration are optional
 The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
@@ -353,6 +357,137 @@ const fields = JSON.stringify([
 formData.append("fields", fields);
 ```
 
+### Sending with signer roles {#sending-with-signer-roles}
+
+A PDF template in TurboDocx can carry a saved signature setup: signer **roles** (for example "Client" and "Countersigner") with fields placed on the PDF for each role. Each role has a stable **key** (for example `client`), shown under **Use via API** on the template page (turn on **Dev Mode** to see it) and returned by [Get Template Signature Setup](#endpoint-8-get-template-signature-setup). A role is either a **slot** with no saved signer, filled in each time you send, or it has a **saved signer** (a name and email used when you leave the role out). Roles saved before keys existed answer to `signer_1`, `signer_2` and so on, by signing order.
+
+Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word or PowerPoint template, generate a deliverable and send it with `deliverableId`.
+
+#### How role keys are made {#how-role-keys-are-made}
+
+The key is made from the role name in TurboDocx: lowercase, with spaces and symbols turned into underscores.
+
+| Role name       | Key               |
+| --------------- | ----------------- |
+| Client          | `client`          |
+| Account Manager | `account_manager` |
+| Counter-signer  | `counter_signer`  |
+| Signer 1        | `signer_1`        |
+
+- A role left with the default name ("Signer 1", "Signer 2") has the key `signer_1`, `signer_2`. These keys follow the role's position, so they renumber if roles are reordered, added or removed. Give a role its own name if your code depends on it.
+- If two roles would make the same key, the second gets a number, such as `client_2`. TurboDocx does not allow two roles with the same name, so this is rare.
+- Once a template is saved, the key of a role you named never changes, even if you rename the role later.
+- Keys are matched ignoring case.
+
+To find the keys, turn on **Dev Mode** in TurboDocx. The template page then shows a **Use via API** panel, and the **Code** button on the send page shows **Send this template by role**. Both give ready-to-paste code with your template ID, organization ID and role keys. You can also call [Get Template Signature Setup](#endpoint-8-get-template-signature-setup).
+
+:::tip Use the key, not the display name
+Pass the key (`signer_1`), not the name shown in the app (`Signer 1`). A display name fails with `UnknownSignerRole`, and the error lists the valid keys: `Unknown role "Signer 1". This template's roles are: signer_1, signer_2`.
+:::
+
+To send such a template, pass its `templateId` and give each recipient a `role`:
+
+```bash
+curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-signing \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -F "templateId=TEMPLATE_ID" \
+  -F "senderEmail=you@company.com" \
+  -F 'recipients=[{"role":"client","name":"Jane Doe","email":"jane@client.com"}]'
+```
+
+How a role send behaves:
+
+- **Role keys** are matched case-insensitively. `role` requires `templateId`.
+- **Fields come from the template.** The fields saved for each role are placed for the signer who fills it, so `fields` can be left out. Any `fields` you do pass are added to the template's (for example an extra witness signature).
+- **Roles you leave out** use the template's saved signer. A role with no saved signer must be filled, or the request fails with `SignerRoleUnfilled`.
+- **Signing order** follows the template's role order, then any recipients without a role in their own `signingOrder`. The final order is renumbered so it runs 1, 2, 3 and so on. A recipient with a `role` needs no `signingOrder`.
+- **Template defaults fill the gaps.** The template's saved CC emails, document description, document name and reminder and expiration settings apply to anything the request leaves out. Values in the request always win.
+- **Identity verification.** A role's saved verification choice applies unless the recipient sets its own `identityVerification`. A role saved with SMS verification needs the recipient's `phone`. If your organization no longer allows a role's saved choice (for example SMS was turned off), the organization default applies instead of failing the send. A choice you set on the recipient yourself is still checked as usual. See [the recipient](/docs/TurboSign/embedded-signing/reference#the-recipient) in the embedded signing reference for those fields.
+- **Every signer needs a field.** A role send where a signer ends up with no fields fails with `SignerHasNoFields` (Prepare for Review skips this check, because you place fields in the review screen afterwards).
+
+#### Claiming a role with a different signer {#claiming-a-role-with-a-different-signer}
+
+A role with a saved signer can still be given to someone else for one send. Pass a recipient with that `role` and the new person's `name` and `email`, and the new person takes the role and all of its fields. The template is not changed.
+
+```json
+[{ "role": "countersigner", "name": "Alex Kim", "email": "alex@acme.com" }]
+```
+
+What changes for the new signer:
+
+- **Name and email fields** are filled from the new recipient. A first name field takes the first word of `name` and a last name field takes the rest. If that leaves a value empty (a one-word name has no last name), the field is left blank and unlocked so the signer types it.
+- **Title and company fields** lose the saved person's values and are unlocked, so the new signer fills them in.
+- **A field set to keep its own default value** in TurboDocx keeps that value.
+- **Identity verification** keeps the role's saved choice unless the recipient sets its own. The saved person's phone is never used: a role saved with SMS verification needs the new recipient's `phone`, or the send fails with `OtpPhoneRequired`.
+- **Email addresses** must stay unique. If the new signer's email matches another role's signer, or a recipient without a role, the send fails with `DuplicateRoleEmail`.
+- **Without roles nothing changes.** `fields` is still required when no recipient names a role.
+
+#### Signer role errors
+
+These return `400` with a body of the form `{ "message": "...", "type": "..." }`:
+
+| `type`                     | Example `message`                                                                   | Cause                                                        |
+| -------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `UnknownSignerRole`        | `Unknown role "clinet". This template's roles are: client, countersigner`           | A `role` does not match any of the template's role keys      |
+| `DuplicateSignerRole`      | `Role "client" was given more than one recipient`                                   | Two recipients name the same role                            |
+| `SignerRoleUnfilled`       | `Role "client" needs a signer. Pass recipients: [{ role: "<role>", name, email }]`   | A role has no saved signer and no recipient fills it         |
+| `TemplateHasNoSignerRoles` |                                                                                     | The template has no saved signer roles                       |
+| `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has no `templateId` |
+| `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address, or a recipient without a role has a role signer's email |
+| `SignerHasNoFields`        | `Signer "Jane Doe" has no fields to sign. Place a field for them or remove them.`  | A signer ends up with no fields after the template's fields are placed |
+| `OtpPhoneRequired`         |                                                                                     | A role requires SMS verification and the recipient has no `phone` |
+| `FieldsRequired`           |                                                                                     | `fields` was omitted and no recipient names a role           |
+| `TemplateRolesNeedPdfTemplate` |                                                                                | Roles were sent for a Word or PowerPoint template            |
+
+#### Document and field errors {#document-and-field-errors}
+
+These also return `400` with a body of the form `{ "message": "...", "type": "..." }` (the signature setup endpoints return `{ "error": "...", "code": "..." }` instead):
+
+| `type`                                | Example `message`                                                                                   | Cause                                                                                              |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `FieldsRequired`                      | `fields is required. Leave it out only when sending a templateId whose recipients name a role (recipients[].role).` | `fields` was omitted or empty and no recipient names a role |
+| `FieldPageOutOfRange`                 | `A field is placed on page 5, but the document has 3 pages.`                                        | A coordinate-based field has a `page` the document doesn't have                                    |
+| `SignatureSetupTemplateMismatch`      |                                                                                                     | A signature setup placed on an uploaded PDF was saved onto a template that isn't a PDF template     |
+| `SignatureSetupPageOutOfRange`        | `A field is placed on page 5, but this PDF has 3 pages.`                                            | A signature setup saved onto a PDF template has a field past the PDF's last page                   |
+
+#### Locked templates and permissions
+
+- Saving or deleting a template's signature setup returns `423` while someone is editing the template in TurboDocx. Retry once they have finished.
+- Get Template Signature Setup requires the administrator, contributor or user role. A viewer is refused.
+
+#### Reading a draft's signers {#reading-a-drafts-signers}
+
+`GET /turbosign/documents/{documentId}/with-recipients` returns a draft and its signers. When the draft was created from a template with signer roles, each signer that fills a role also has `templateRoleLabel`: the role's name as shown in TurboDocx (for example `"Client"`). It is for display only. To send by role, pass the role's key from [Get Template Signature Setup](#endpoint-8-get-template-signature-setup), not this label.
+
+Example response, trimmed to the signer fields:
+
+```json
+{
+  "data": {
+    "document": { "id": "DOCUMENT_ID", "name": "Service Agreement", "status": "DRAFT" },
+    "recipients": [
+      {
+        "id": "RECIPIENT_ID",
+        "name": "Jane Doe",
+        "email": "jane@client.com",
+        "signingOrder": 1,
+        "metadata": {},
+        "otpChannel": "none",
+        "phone": null,
+        "templateRoleLabel": "Client"
+      }
+    ]
+  }
+}
+```
+
+A signer that doesn't fill a template role has no `templateRoleLabel`.
+
+#### Editing a draft's signers
+
+When you change a draft's signers with `PATCH /turbosign/documents/{documentId}/update-with-recipients`, the recipients you send replace the draft's current signers. A recipient with an `id` is updated in place; a recipient without an `id` is added as a new signer; a current signer you leave out is removed, along with that signer's fields. This also applies to a draft created from a template, so sending recipients without `id` replaces the signers the template saved. The draft must still be in `DRAFT` status, otherwise the request returns `409`.
+
 ### Response
 
 ```json
@@ -422,6 +557,8 @@ User-Agent: TurboDocx API Client
 ### Request Body (multipart/form-data)
 
 The request format is **identical** to prepare-for-review. See the "Endpoint 1: Prepare for Review" section above for detailed field documentation.
+
+Signer roles work the same way here: pass `templateId` and give each recipient a `role`. See [Sending with signer roles](#sending-with-signer-roles).
 
 ### Response
 
@@ -1064,6 +1201,106 @@ The 400 returns an `invalidRecipientIds` array showing which IDs were rejected. 
 
 ---
 
+## Endpoint 8: Get Template Signature Setup
+
+List the signer roles saved on a template, so you know which `role` keys to pass when [sending it with signer roles](#sending-with-signer-roles).
+
+### Endpoint
+
+```http
+GET https://api.turbodocx.com/turbosign/templates/{templateId}/signature-setup
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| templateId | String (UUID) | Yes      | The unique identifier of the template |
+
+### Response
+
+```json
+{
+  "data": {
+    "templateId": "TEMPLATE_ID",
+    "roles": [
+      {
+        "key": "client",
+        "label": "Client",
+        "order": 1,
+        "hasSavedSigner": false,
+        "fieldCount": 3
+      },
+      {
+        "key": "countersigner",
+        "label": "Countersigner",
+        "order": 2,
+        "hasSavedSigner": true,
+        "defaultName": "Sam Lee",
+        "defaultEmail": "sam@acme.com",
+        "fieldCount": 2
+      }
+    ]
+  }
+}
+```
+
+### Response Fields
+
+| Field                       | Type    | Description                                                                 |
+| --------------------------- | ------- | --------------------------------------------------------------------------- |
+| data.templateId             | String  | The template's ID                                                           |
+| data.roles                  | Array   | The template's signer roles, in signing order                               |
+| data.roles[].key            | String  | The value to pass as a recipient's `role`                                   |
+| data.roles[].label          | String  | The role's name as shown in TurboDocx                                       |
+| data.roles[].order          | Number  | The role's signing order                                                    |
+| data.roles[].hasSavedSigner | Boolean | `true` when the template has a saved signer, used if you leave the role out |
+| data.roles[].defaultName    | String  | The saved signer's name. Present only when `hasSavedSigner` is `true`      |
+| data.roles[].defaultEmail   | String  | The saved signer's email. Present only when `hasSavedSigner` is `true`     |
+| data.roles[].fieldCount     | Number  | How many fields are saved for the role                                      |
+
+### Error Responses
+
+| Status | `type`                  | Cause                                                                        |
+| ------ | ----------------------- | ---------------------------------------------------------------------------- |
+| 404    | `SignatureSetupNotFound` | `"No saved signature setup found for this template"`: the template doesn't exist in your organization, or has no saved signature setup |
+| 400    |                         | `templateId` is not a valid UUID                                             |
+
+### Usage Notes
+
+- Works with an API key or a user token. The caller needs the administrator, contributor or user role; the viewer role is refused, because the response lists saved signer emails.
+- The same role keys are shown in the app under **Use via API** on the template page when **Dev Mode** is on.
+- Roles saved before keys existed are returned with keys `signer_1`, `signer_2` and so on.
+
+## Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
+
+When the signers and fields are already set up on a template in TurboDocx, an integration only needs to say who fills each role.
+
+1. In TurboDocx, upload the PDF as a template, add a role for each signer (for example "Client" and "Countersigner"), drag each role's fields onto the page and save the signature setup. Give a role a saved signer if the same person always signs it.
+2. Look up the role keys with [Get Template Signature Setup](#endpoint-8-get-template-signature-setup), or copy them from **Use via API** on the template page (shown with **Dev Mode** on).
+3. Send with [Prepare for Signing](#endpoint-2-prepare-for-signing) (or [Prepare for Review](#endpoint-1-prepare-for-review)), passing `templateId` and one recipient per role you want to fill. Leave out `fields` and `signingOrder`:
+
+```bash
+curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-signing \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -F "templateId=TEMPLATE_ID" \
+  -F "senderEmail=you@company.com" \
+  -F 'recipients=[{"role":"client","name":"Jane Doe","email":"jane@client.com"}]'
+```
+
+Here `client` is filled by Jane Doe and `countersigner`, left out, goes to the signer saved on the template. See [Sending with signer roles](#sending-with-signer-roles) for the full rules and errors. The SDKs support the same flow; see [Send a template set up in TurboDocx](/docs/SDKs/turbosign#send-a-template-set-up-in-turbodocx) in the TurboSign SDK guide.
+
+---
+
 ## Reminders & Expiration
 
 Two independent, opt-in features you can configure organization-wide in **E-Signature Settings → Reminders & Expiration**, or per-document via the [schedule fields](#endpoint-1-prepare-for-review) on either send endpoint.
@@ -1127,7 +1364,8 @@ Each recipient object in the `recipients` array should contain the following pro
 | ------------ | -------------- | -------- | ---------------------------------------------------------- |
 | name         | String         | Yes      | Full name of the recipient/signer                          |
 | email        | String (email) | Yes      | Email address of the recipient (must be unique)            |
-| signingOrder | Number         | Yes      | Order in which recipient should sign (starts at 1)         |
+| signingOrder | Number         | Conditional | Order in which recipient should sign (starts at 1). Not needed on a recipient with a `role` |
+| role         | String         | No       | Template signer role this recipient fills (for example `client`). Requires `templateId`. See [Sending with signer roles](#sending-with-signer-roles) |
 | metadata     | Object         | No       | Optional metadata for UI customization (color, lightColor) |
 
 ### Metadata Object (Optional)
