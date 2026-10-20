@@ -1,164 +1,110 @@
 ---
 title: How to Add Signature Fields to a Template
 sidebar_position: 1.5
-description: "Turn the placeholders in a Word or PowerPoint template into TurboSign signature fields, assign them to signers, add CC recipients, and pre-fill or lock values, so every document you create from the template is ready to send for signature."
+description: "Turn the variables in a Word or PowerPoint template into TurboSign signature fields. Each field is anchored to its tag, so it lands wherever the tag appears in every document you create and send from the template."
 keywords:
   - turbosign template signature fields
   - signature fields on a template
-  - template signers
-  - assign signature field to signer
-  - pre-filled signature fields
-  - locked signature field
-  - cc recipients template
+  - template variable signature field
+  - anchor signature field to variable
+  - use as signature field
+  - signature anchor tag
   - reusable signature setup
   - e-signature template
 ---
 
 # How to Add Signature Fields to a Template
 
-If you send the same kind of document for signature again and again (a contract, an offer letter, an order form), you can set up the signing once, on the template. You tell TurboDocx which placeholders are signature fields and who signs each one. Every document you then create from that template opens with the signers already added and the fields already placed where the placeholders are.
+If you send the same kind of document for signature again and again (a contract, an offer letter, an order form), you can tell TurboDocx which variables in the template are really signature fields. A variable such as `{ClientSignature}` then becomes an **anchored field**: when the document is sent, a field for the right signer goes wherever that tag appears. You don't place it by hand, and if the text moves, the field moves with it.
 
 This guide shows you how to:
 
-- Add the **signers** for a template, and any **CC** recipients who should get a copy
-- Turn a placeholder such as `{client_signature}` into a **signature field** and assign it to a signer
-- **Pre-fill** a field with a default value, and **lock** it so the signer can't change it
-- Check that it all comes through when you create a document from the template
+- Turn a variable into a signature field from the **Template Variables** tab
+- Anchor a field to a variable from the **Signatures** tab, with its size and offset
+- Check, change or undo anchored fields
+
+This works for **Word** and **PowerPoint** templates. To place fields at fixed spots on the page instead (and for PDF templates), see [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md). You can mix both: a signer can have anchored fields and placed fields in the same setup.
+
+:::note Where this differs from Signature Setups on Templates
+[How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md) saves a setup with **⋮ → Save signature setup to template** on the generate page. When you open the setup with **Edit setup** from the template's page, as in Option 2 below, you save with **Save to template** instead. Fields made with Option 1 are saved to the template straight away.
+:::
 
 :::note Before you start
-You need a template that already contains a placeholder for each place someone signs or fills something in, for example `{client_signature}`, `{client_name}` and `{client_date}`. If you haven't made one yet, see [How to Create a Template](/docs/TurboDocx-Templating/How-to-Create-a-Template).
-
-The example in this guide is a consulting agreement signed by the client and then by the provider.
+- Your template needs a variable in each place someone signs, for example `{ClientSignature}` and `{SalesSignature}`. If you haven't made one yet, see [How to Create a Template](/docs/TurboDocx-Templating/How-to-Create-a-Template).
+- The template needs a saved signature setup with its signers. Add the signers and save the setup as described in [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md#step-2-add-the-signers). You can add fields later.
+- You need permission to edit the template, and the template can't be locked.
 :::
 
-## Step 1: Open the Signers settings for your template
+## How anchored fields work
 
-1. On the **Templates** page, find your template. You can type its name in the search box at the top.
-2. Click the **•••** button on the template's card, then click **Edit Template & Preferences**. The template's **Details** page opens.
+- **Every place the tag appears gets its own field.** If `{ClientSignature}` is on page 1 and page 2, the client signs in both places.
+- **One signer per tag.** A tag that already belongs to one signer can't be anchored to another.
+- **The tag stays in the document until it's signed.** An anchored variable isn't something you fill in when you create the document. Its tag stays in the generated document, and the field covers it.
+- **A missing tag is skipped.** If someone edits the template and a tag is gone, that field is left out of the send. The send only stops if a signer would be left with no signature field at all.
 
-   ![Templates page with the ••• menu of a template card open and the Edit Template and Preferences item highlighted](/img/turbosign/template-signature-fields/00-open-template-details.png)
+## Option 1: Turn a variable into a signature field (Template Variables tab)
 
-   :::note
-   Clicking the card itself opens the page for creating a document from the template, not the **Details** page.
-   :::
+This is the quickest way when the field only needs the default size.
 
-3. On the **Details** page, click the **...** button at the top right, next to **Edit**.
-4. In the menu, click **Signers**.
+1. Go to **Templates** and click your template. Its generate page opens on the **Template Variables** tab.
+2. Find the variable, for example `{ClientSignature}`, and open its **variable menu**.
+3. Click **Use as signature field**.
+4. In the **Use {ClientSignature} as a signature field** window:
+   - Choose the **Field type**, for example **Signature**.
+   - Under **Who signs here**, choose the signer. If the signer isn't listed yet, choose **Add a signer…** to go to the **Signatures** tab and add them there.
+5. Click **Make signature field**.
 
-![Template details page with the ... menu open and Signers highlighted](/img/turbosign/template-signature-fields/01-template-menu-signers.png)
+The field is saved to the template's signature setup right away. A message confirms it, for example **{ClientSignature} is now a signature field for Client.** Click **Undo** in that message to take it back.
 
-## Step 2: Add your signers
+The variable then moves out of the list of variables you fill in and into **Signature fields**, grouped by signer. The note there reads **Signers fill these in when they sign. The tag stays in the document until then.**
 
-The **Signers** window lists the people who sign documents made from this template, in signing order.
-
-1. Click **Add Signer**.
-
-   ![Signers window with no signers yet and the Add Signer button highlighted](/img/turbosign/template-signature-fields/02-add-signer.png)
-
-2. A signer called **Signer 1** appears. Click the **pencil** button on its row, then type the signer's **Name** and **Email**.
-
-   ![Signer 1 being edited with the Name and Email boxes highlighted](/img/turbosign/template-signature-fields/03-signer-name-email.png)
-
-3. Click **Add Signer** again for each other person who signs, and fill in their name and email the same way.
-
-Changes save as you type.
-
-:::tip Signing order
-Signers sign in the order shown, so signer **1** signs first. To change the order, drag a signer by the handle on the left of its row.
+:::tip Change the size or signer later
+Option 1 always uses the default size. You can change the size, the offset or the signer afterwards on the **Signatures** tab (Option 2).
 :::
 
-:::note Names and emails can change later
-The names and emails you enter here are only defaults. You can still change them, or add more signers, when you send a document. If you leave a signer's email as the placeholder address (it ends in `@example.invalid` and is marked **placeholder**), TurboSign won't send the document until you replace it with a real one.
-:::
+## Option 2: Anchor a field from the Signatures tab
 
-## Step 3: Add CC recipients (optional)
+Use this way when you want to set the field's size or offset, add a default value, or anchor a tag that isn't in the variable list.
 
-CC recipients get a copy of the completed document, but they don't sign.
+1. Open the template's page: from the **Templates** list, open the template's menu and choose **Edit Template & Preferences**.
+2. Switch to **Signature setup** and click **Edit setup**. The generate page opens on its **Signatures** tab, ready to edit the template's setup.
+3. Under **Select a recipient to assign fields**, choose the signer.
+4. Click **Anchor to variable**. (**Drag onto document** next to it closes the form so you can drag a field from the palette and place it by hand.)
+5. In the **Anchor to variable** form:
+   - Choose the **Field type**.
+   - Under **Template variable**, choose the variable. A tag that already belongs to another signer is listed but can't be chosen. To type a tag that isn't in the list, choose **Custom tag…** and enter it, for example `{ClientSignature}`.
+   - Optionally set a **Default value**. For a **Date** field, leave it empty to fill in the date they sign. For a **Checkbox**, choose **Ticked** or **Unticked**. Text-type fields can also be **Locked**, so signers see the value but can't change it.
+   - Under **Size**, keep **Fit to tag (default)**, or choose **Custom** and enter **Width (pt)** and **Height (pt)**. **Offset right (pt)** and **Offset down (pt)** nudge the field away from the tag.
+6. Click **Add field**.
+7. Repeat for each field, then click **Save to template**.
 
-1. In the **CC** section at the bottom of the **Signers** window, type an email address.
-2. Click **Add CC**.
+The signer's anchored fields are listed under the form, each with its tag and size. Point at a row's buttons to see **Change** and **Remove**. A note explains: **Anchored fields go wherever the tag appears when the document is sent, so they follow the text if it moves. Boxes on the preview are approximate.**
 
-![CC section with an email address typed in and the Add CC button highlighted](/img/turbosign/template-signature-fields/04-add-cc.png)
+On the document preview, each anchored field shows as a dashed box labelled with the field type, the signer and **approximate**. You can drag a box to move it, or drag its corner to resize it. The exact values are on the field.
 
-You can add up to 15 CC recipients. A signer can't also be a CC recipient.
+## Check the setup on the template's page
 
-When your signers and CC recipients are set, click **Done**.
+On the template's page, switch to **Signature setup**. The **Fields** table lists every field with its **Field**, **Signer**, **Where** and **Size**:
 
-![Signers window with two signers and one CC recipient, and the Done button highlighted](/img/turbosign/template-signature-fields/05-signers-done.png)
+- A placed field shows its page, for example **Page 2, placed**.
+- An anchored field shows its tag and **every place it appears**.
+- If a tag can no longer be found in the template (for example, someone renamed `{SalesSignature}`), the row shows **Not found in this template**. Rename the tag back in the template, or change the field on the **Signatures** tab.
 
-## Step 4: Turn a placeholder into a signature field
+## Change or undo a signature field
 
-On the **Details** page, each placeholder in your template has its own card under **Template Variables**.
+On the generate page's **Template Variables** tab, open the menu of a variable under **Signature fields**:
 
-1. Find the card for the placeholder you want to turn into a signature field, for example `{client_signature}`.
-2. Click the **•••** button at the right of its **Default Value** box.
-3. In the menu, click **Signature Field**.
+- **Edit on the Signatures tab** opens the field on the **Signatures** tab, where you can change its type, size, offset or signer.
+- **Make it a normal variable again** removes the anchored field. The variable goes back to the list of variables you fill in.
 
-   ![Variable menu for client_signature with Signature Field highlighted](/img/turbosign/template-signature-fields/06-signature-field-menu.png)
+If you can't edit the template, the menu shows **Change in the Signatures tab** instead.
 
-4. In the **Signature field** window, choose the **Field type** (for example **Signature**) and the **Signer** who fills it in.
+## Send a document
 
-   ![Signature field window with the Field type and Signer menus highlighted](/img/turbosign/template-signature-fields/07-assign-dialog.png)
+Fill in the template's other variables and click **Generate And Sign**, as described in [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md#use-the-saved-setup). Each anchored field is added wherever its tag appears in the generated document, assigned to its signer, alongside any fields you placed by hand.
 
-5. Click **Assign**.
+## Related
 
-The card now shows the **TurboSign** label, the field type and the signer's name.
-
-![client_signature card now showing it is a Signature field assigned to Jordan Lee](/img/turbosign/template-signature-fields/08-signature-field-card.png)
-
-Repeat these steps for every placeholder that should be filled in at signing time. In the example, the client gets a **Signature**, **Full Name**, **Title** and **Date** field, and the provider gets a **Signature**, **Full Name** and **Date** field.
-
-Field types you can choose:
-
-| Field type | What the signer does |
-| ---------- | -------------------- |
-| **Signature**, **Initial** | Draws or types their signature or initials |
-| **Date** | Filled in with the date they sign |
-| **Full Name**, **First Name**, **Last Name**, **Title**, **Company**, **Email**, **Text** | Types a value, or accepts the default you set in Step 5 |
-
-:::tip Change or undo a signature field
-Once a placeholder is a signature field, its card has a **⋮** button instead of **•••**. Click it and choose **Signature Field** to change the field type or signer, or **Revert to a normal field** to turn it back into an ordinary placeholder.
-:::
-
-## Step 5: Pre-fill a value and lock it (optional)
-
-For the fields a signer types into (such as **Title** or **Company**), you can set a value in advance. The signer then only has to check it.
-
-1. On the field's card, type the value in the **Default for signers** box. It saves automatically.
-2. Under **Signer access**, choose:
-   - **Editable** — the signer sees your value and can change it.
-   - **Locked** — the signer sees your value but can't change it.
-
-![client_title card with Chief Executive Officer typed as the default and the Locked option highlighted](/img/turbosign/template-signature-fields/10-default-and-locked.png)
-
-A locked field shows its value to the signer, so it needs a value first. Until you type one, **Locked** is greyed out, and pointing at it tells you to add a default value. If you clear the value of a locked field, it goes back to **Editable**.
-
-![Locked option greyed out with the message: Add a default value first. A locked field shows this value to the signer, who cannot change it.](/img/turbosign/template-signature-fields/09-locked-needs-default.png)
-
-**Signature**, **Initial** and **Date** fields are always filled in when the person signs, so they don't have a default value.
-
-## Step 6: Check the result on a new document
-
-1. On the template's **Details** page, click **Create Deliverable**.
-
-   ![Template details page with the Create Deliverable button highlighted](/img/turbosign/template-signature-fields/11-create-deliverable.png)
-
-2. On the page that opens, click the **Signatures** tab.
-
-   ![Generate page with the Signatures tab highlighted](/img/turbosign/template-signature-fields/12-signatures-tab.png)
-
-Your signers, in signing order, and your CC recipients are already listed, and every signature field is placed over its placeholder in the document. Each signer's fields use that signer's colour. A locked field is marked **RO** (read-only).
-
-![Signatures tab with Jordan Lee and Sam Rivera as recipients, legal@example.com as CC, and the signature fields placed over the signature block](/img/turbosign/template-signature-fields/13-signatures-prefilled.png)
-
-From here, everything works like any other signature request. You can move or resize fields, change a signer's name or email, or add more fields for this document only. Fill in the template's other variables, then click **Generate And Sign** to send it.
-
-:::tip The placeholders don't show on the signed document
-Each field covers its placeholder, so text such as `{client_signature}` never shows on the document your signers see.
-:::
-
-## Finished
-
-Your template now carries its own signing setup. Every document you create from it starts with the right signers, CC recipients and signature fields, so you don't have to place fields by hand each time.
-
-To learn more about sending and tracking signature requests, see [Setting up TurboSign](/docs/TurboSign/Setting-up-TurboSign) and [Managing Your Signatures](/docs/TurboSign/Managing-Your-Signatures).
+- [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md)
+- [How to Get a Document Signed with TurboSign](./Setting-up-TurboSign.md)
+- [Managing Your Signatures](./Managing-Your-Signatures.md)
