@@ -110,6 +110,8 @@ Add a route to your server, for example `POST /api/signing-session`. It calls `c
 | `title` | No | The iframe's accessible name. Defaults to `TurboSign signing`. |
 | `allow-any-origin` | No | Development only. Accepts messages from any origin. Never ship it. |
 
+The element has no attribute for the signing page's page navigation. The thumbnail rail follows the element's width (open at 1200px and wider, collapsed from 900px to 1199px, a **Pages** button under 900px). To start it collapsed or hide it, pass `pageNavigation` on your server when you request the signing URL. See [Page navigation](../reference.md#page-navigation).
+
 The element re-emits `turbosign:completed` as a bubbling `CustomEvent`, so a listener on a parent element works too. It also defines `turbosign:declined` and `turbosign:error`, which the signing page does not send yet.
 
 :::warning Don't leave origin empty
