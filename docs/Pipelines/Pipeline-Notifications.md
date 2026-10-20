@@ -28,7 +28,7 @@ Pipelines are an **Enterprise** feature. If you don't see the option to create o
 
 <br/>
 
-You set **default notifications** on the **Destination** step (labeled **Deliver** in the wizard's progress rail), and **per-store overrides** on the **Extract & Route** step. If you haven't built a pipeline yet, start with **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline)** and come back here to fine-tune the alerts.
+You set **default notifications** on the **Destination** step (labeled **Deliver** in the wizard's progress rail), and **per-store overrides** on the **Extract & Route** step. If you haven't built a pipeline yet, start with **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline.md)** and come back here to fine-tune the alerts.
 
 <br/>
 
@@ -115,6 +115,6 @@ Per-store notifications are useful when different regions, branches, or departme
 
 ## What's Next?
 
-- **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline)**: build the pipeline these notifications belong to.
-- **[Field Extraction](./Field-Extraction)**: define the routing fields that create per-store rules.
-- **[Cloud Connectors](./Cloud-Connectors)**: resolve signers from your own internal systems.
+- **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline.md)**: build the pipeline these notifications belong to.
+- **[Field Extraction](./Field-Extraction.md)**: define the routing fields that create per-store rules.
+- **[Cloud Connectors](./Cloud-Connectors.md)**: resolve signers from your own internal systems.

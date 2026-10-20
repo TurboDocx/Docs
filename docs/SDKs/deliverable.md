@@ -76,6 +76,8 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 
 ## Installation {#installation}
 
+To have an AI coding agent scaffold the integration, install the TurboDocx Quickstart skill with `npx skills add TurboDocx/quickstart` and run `/turbodocx-sdk deliverable` in the agent. To install the SDK yourself:
+
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 

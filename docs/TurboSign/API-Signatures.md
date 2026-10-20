@@ -135,6 +135,8 @@ Now that you've seen the whole thing, let's dive into the details...
 
 ## Prerequisites
 
+To have an AI coding agent scaffold the integration, install the TurboDocx Quickstart skill with `npx skills add TurboDocx/quickstart` and run `/turbodocx-sdk turbosign` in the agent.
+
 Before you begin, ensure you have:
 
 - **API Access Token**: Bearer token for authentication
