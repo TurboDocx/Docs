@@ -36,6 +36,8 @@ keywords:
   - resend signature
   - signer roles
   - template signature setup
+  - update signature setup settings
+  - delete signature setup
 ---
 
 import ScriptLoader from '@site/src/components/ScriptLoader';
@@ -132,6 +134,8 @@ Use this endpoint when you need a preview URL to verify field placement:
 Now that you've seen the whole thing, let's dive into the details...
 
 ## Prerequisites
+
+To have an AI coding agent scaffold the integration, install the TurboDocx Quickstart skill with `npx skills add TurboDocx/quickstart` and run `/turbodocx-sdk turbosign` in the agent.
 
 Before you begin, ensure you have:
 
@@ -405,6 +409,7 @@ How a role send behaves:
 - **Template defaults fill the gaps.** The template's saved CC emails, document description, document name and reminder and expiration settings apply to anything the request leaves out. Values in the request always win.
 - **Identity verification.** A role's saved verification choice applies unless the recipient sets its own `identityVerification`. A role saved with SMS verification needs the recipient's `phone`. If your organization no longer allows a role's saved choice (for example SMS was turned off), the organization default applies instead of failing the send. A choice you set on the recipient yourself is still checked as usual. See [the recipient](/docs/TurboSign/embedded-signing/reference#the-recipient) in the embedded signing reference for those fields.
 - **Every signer needs a field.** A role send where a signer ends up with no fields fails with `SignerHasNoFields` (Prepare for Review skips this check, because you place fields in the review screen afterwards).
+- **Without roles nothing changes.** `fields` is still required when no recipient names a role.
 
 #### Claiming a role with a different signer {#claiming-a-role-with-a-different-signer}
 
@@ -421,7 +426,6 @@ What changes for the new signer:
 - **A field set to keep its own default value** in TurboDocx keeps that value.
 - **Identity verification** keeps the role's saved choice unless the recipient sets its own. The saved person's phone is never used: a role saved with SMS verification needs the new recipient's `phone`, or the send fails with `OtpPhoneRequired`.
 - **Email addresses** must stay unique. If the new signer's email matches another role's signer, or a recipient without a role, the send fails with `DuplicateRoleEmail`.
-- **Without roles nothing changes.** `fields` is still required when no recipient names a role.
 
 #### Signer role errors
 
@@ -1280,6 +1284,146 @@ User-Agent: TurboDocx API Client
 - The same role keys are shown in the app under **Use via API** on the template page when **Dev Mode** is on.
 - Roles saved before keys existed are returned with keys `signer_1`, `signer_2` and so on.
 
+## Endpoint 9: Update Template Signature Settings {#endpoint-9-update-template-signature-settings}
+
+Change the settings of a template's saved signature setup: CC recipients, the email message, reminders and expiration, and the document name. The signer roles, their keys and the fields are never changed, so integrations that send the template by role keep working. This is what **Edit** next to **Email to signers** or **Reminders & expiration** does on the template's page in TurboDocx (see [Change or remove the setup](./Signature-Setups-on-Templates.md#change-or-remove-the-setup)).
+
+### Endpoint
+
+```http
+PATCH https://api.turbodocx.com/turbosign/templates/{templateId}/signature-setup/settings
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+Content-Type: application/json
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| templateId | String (UUID) | Yes      | The unique identifier of the template |
+
+### Request Body (JSON)
+
+Send at least one of these. A setting you leave out keeps its saved value.
+
+| Field               | Type   | Description                                                                                                         |
+| ------------------- | ------ | ------------------------------------------------------------------------------------------------------------------- |
+| ccEmails            | Array  | CC email addresses copied on every document sent from the template. Up to 15, no duplicates. Replaces the saved list; `[]` clears it |
+| documentDescription | String | The message in the signature email (max 1000 chars). `""` clears it                                                 |
+| scheduleOverrides   | Object | Reminder and expiration settings for this template, using the same eight fields as the [schedule fields](#endpoint-1-prepare-for-review) at send time (no `expiresAt`). Replaces the saved overrides; `{}` follows your organization's defaults |
+| documentName        | String | The name documents are sent under (max 255 chars). PDF signature templates only; ignored for a Word or PowerPoint template. `""` uses the template's name |
+
+Any other key, such as `roles` or `fields`, is rejected with `400`.
+
+```bash
+curl -X PATCH https://api.turbodocx.com/turbosign/templates/TEMPLATE_ID/signature-setup/settings \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ccEmails": ["legal@acme.com"],
+    "documentDescription": "Please review and sign the attached agreement.",
+    "scheduleOverrides": {
+      "remindersEnabled": true,
+      "reminderDelay": { "value": 3, "unit": "days" }
+    }
+  }'
+```
+
+### Response
+
+```json
+{
+  "data": {
+    "templateId": "TEMPLATE_ID",
+    "setup": {
+      "roles": [ ... ],
+      "fields": [ ... ],
+      "ccEmails": ["legal@acme.com"],
+      "documentDescription": "Please review and sign the attached agreement.",
+      "scheduleOverrides": {
+        "remindersEnabled": true,
+        "reminderDelay": { "value": 3, "unit": "days" }
+      },
+      "savedOn": "2026-10-20T14:30:00.000Z"
+    }
+  }
+}
+```
+
+`data.setup` is the template's whole saved signature setup after the change, including its unchanged roles and fields.
+
+### Error Responses
+
+Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." }`, where `type` and `code` hold the same value.
+
+| Status | `type`                   | Cause                                                                                   |
+| ------ | ------------------------ | --------------------------------------------------------------------------------------- |
+| 400    |                          | No setting was sent (`Send at least one of ccEmails, documentDescription, scheduleOverrides, documentName`), an unknown key was sent, or a value is invalid |
+| 400    | `CcMatchesSigner`        | A CC address is also a saved signer on the template                                     |
+| 404    | `SignatureSetupNotFound` | The template has no saved signature setup                                                |
+| 404    | `TemplateNotFound`       | The template doesn't exist in your organization                                         |
+| 423    |                          | Someone is editing the template in TurboDocx. Retry once they have finished             |
+
+### Usage Notes
+
+- Requires the administrator or contributor role.
+- Your organization's own reminder and expiration settings are never changed. `scheduleOverrides` only applies to documents sent from this template.
+
+## Endpoint 10: Delete Template Signature Setup {#endpoint-10-delete-template-signature-setup}
+
+Remove a template's saved signature setup: its signer roles, fields, CC recipients, message, reminders and document name. Documents already sent are not affected. New sends from the template start with no signers or fields, and a role send fails with `TemplateHasNoSignerRoles`.
+
+### Endpoint
+
+```http
+DELETE https://api.turbodocx.com/turbosign/templates/{templateId}/save-signature-setup
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description                           |
+| ---------- | ------------- | -------- | ------------------------------------- |
+| templateId | String (UUID) | Yes      | The unique identifier of the template |
+
+### Response
+
+```json
+{
+  "data": {
+    "templateId": "TEMPLATE_ID"
+  }
+}
+```
+
+### Error Responses
+
+| Status | Body                                                         | Cause                                                               |
+| ------ | ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| 404    | `{ "error": "Template not found", "code": "TemplateNotFound" }` | The template doesn't exist in your organization                     |
+| 423    | `{ "error": "Resource is locked", ... }`                      | Someone is editing the template in TurboDocx. Retry once they have finished |
+
+### Usage Notes
+
+- Requires the administrator or contributor role.
+- Deleting a template that has no saved setup also returns `200`.
+- To change only the settings and keep the roles and fields, use [Update Template Signature Settings](#endpoint-9-update-template-signature-settings) instead.
+
 ## Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
 
 When the signers and fields are already set up on a template in TurboDocx, an integration only needs to say who fills each role.
@@ -2015,6 +2159,36 @@ formData.Add(new StringContent(recipients), "recipients");
 | `422`       | Unprocessable Entity  | Validate field values and constraints         |
 | `429`       | Too Many Requests     | Implement rate limiting and retry logic       |
 | `500`       | Internal Server Error | Contact support if persistent                 |
+
+### Error Codes for Sending and Updating Recipients {#error-codes-for-sending-and-updating-recipients}
+
+`POST /turbosign/single/prepare-for-review`, `POST /turbosign/single/prepare-for-signing` and `PATCH /turbosign/documents/{id}/update-with-recipients` return signature errors with a specific HTTP status and a machine-readable code. The body includes `error` (human-readable text) and `code` (the machine-readable value). It also repeats them as `message` and `type`, and may include a `data` object with details, so read the fields you need and ignore the rest:
+
+```json
+{
+  "message": "This organization does not allow changing the identity-verification method. Omit otpChannel or set it to 'email'.",
+  "type": "OtpOverrideNotAllowed",
+  "error": "This organization does not allow changing the identity-verification method. Omit otpChannel or set it to 'email'.",
+  "code": "OtpOverrideNotAllowed"
+}
+```
+
+| Status | `code` | Meaning |
+| ------ | ------ | ------- |
+| `400` | Any `code` not listed below, for example `OtpPhoneRequired`, `OtpPhoneInvalid`, `IdentityConfigInvalid`, `DuplicateExternalId` | The request is invalid. Fix the input and retry. |
+| `402` | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
+| `403` | `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed`, `OtpOverrideNotAllowed`, `EmbeddedSigningNotEnabled`, `SmsOtpNotEnabled` | The organization has not turned on the feature or mode the request uses, or has locked the passcode method. |
+| `404` | `DocumentNotFound`, `RecipientNotFound` | The document or recipient does not exist, was deleted, or belongs to another organization. On `update-with-recipients`, a document ID that does not exist returns `404` with only `{ "error": "Document not found" }`. |
+| `409` | `DocumentNotSignable`, `RecipientAlreadySigned`, `RecipientNotInTurn`, `NotSignersTurn`, `SmsProviderNotConfigured`, `RecipientRequiresSingleUseUrl` | The document or recipient is not in a state that allows the request, or the organization has no SMS provider saved. |
+| `410` | `SigningUrlNotRedeemable` | A single-use signing URL was already used or has expired. |
+
+None of these signature errors return a `5xx` status. A `500` from these endpoints means an unexpected server problem, not a problem with your request.
+
+:::note Changed in v1.132.0
+`DocumentNotFound` and `RecipientNotFound` returned `400` from these endpoints before v1.132.0. Since v1.132.0 they return `404`. If your integration checks for `400` to detect a missing document or recipient, check for `404` or read `code` instead.
+:::
+
+For what each identity and passcode code means and how to fix it, see [Embedded signing errors](./embedded-signing/reference.md#errors).
 
 ### Common Issues
 

@@ -7,6 +7,8 @@ keywords:
   - wrike generate document
   - wrike template automation
   - wrike automated documents
+  - wrike output filename
+  - wrike id in file name
 ---
 
 # How to Setup Document Generation Automation
@@ -46,6 +48,17 @@ Click on the template card you want to use for automated document generation.
 Click the **Select Template** button at the bottom-right corner of the dialog to finalize your template selection.
 
 ![Confirm Selected Template](/img/wrike-integration/Step14-ConfirmTemplate.png)
+
+### Optional: Name the Generated File
+
+On the same step, the **Output Filename** section builds the name of the generated file. Leave it empty to name the file after the template.
+
+- Click **Insert Field** to add a value from the triggering Wrike item: **Task Title**, **Folder Name** (the parent folder or project), **Status**, **Assignee** (the first assigned user), **Date** (today, in your organization's date format), **Wrike ID**, or one of your Wrike custom fields.
+- Click **Add Separator** or **Add Text** to put your own text between the fields. Drag the chips to reorder them.
+
+**Wrike ID** is the number in the item's Wrike link. For a task at `https://www.wrike.com/open.htm?id=1234567890`, it is `1234567890`. On a task trigger it is the task's own number, and on a folder or project trigger it is that folder's or project's number. If the link has no number, TurboDocx uses the item's Wrike API ID instead.
+
+For example, **Wrike ID**, the text ` - ` and **Task Title** name the file `1234567890 - Acme Q2 Proposal`.
 
 ### Step 6: Proceed to Final Configuration
 

@@ -214,6 +214,9 @@ field and scroll the preview to it.
 - **Change it:** on the template's page, click **Edit Setup**. The generate page opens on its
   **Signatures** (or **Prepare & Sign**) tab with the setup loaded. Make your changes, then click
   **⋮ → Save signature setup to template**.
+- **Change only the email or reminders:** on the template's page, click **Edit** next to
+  **Email to signers** (document name for PDF templates, message and CC recipients) or next to
+  **Reminders & expiration**, make your changes and save. The signers and fields stay as they are.
 - **Remove it:** on the template's page, click **Delete Setup** and confirm, or click
   **⋮ → Delete signature setup from template** on the generate page. Documents you already sent
   aren't affected. New sends start with no signers or fields.
@@ -222,8 +225,8 @@ field and scroll the preview to it.
 
 ![Signature setup view of a Word template with no saved setup, showing No signature setup yet and the Set Up On The Generate Page button highlighted](/img/signature_setups_on_templates/04_no_setup_yet.png)
 
-**Edit Setup**, **Delete Setup** and **Set Up On The Generate Page** are shown to Administrators
-and Contributors only.
+**Edit Setup**, **Edit**, **Delete Setup** and **Set Up On The Generate Page** are shown to
+Administrators and Contributors only.
 
 ## Save a setup from TurboSign
 

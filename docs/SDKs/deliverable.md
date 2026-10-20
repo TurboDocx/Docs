@@ -76,6 +76,8 @@ The official TurboDocx Deliverable SDK for Java applications. Generate documents
 
 ## Installation {#installation}
 
+To have an AI coding agent scaffold the integration, install the TurboDocx Quickstart skill with `npx skills add TurboDocx/quickstart` and run `/turbodocx-sdk deliverable` in the agent. To install the SDK yourself:
+
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
@@ -2141,6 +2143,8 @@ Files.write(Paths.get("report.pdf"), pdfData);
 
 </TabItem>
 </Tabs>
+
+A `templateId` that points to a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates) can't generate a document. The API answers `400` with the code `SignatureOnlyTemplate` and the message `PDF templates can only be used to collect signatures, not to generate documents.`, which the SDK raises as its validation error (`ValidationError` or `ValidationException`). Send a PDF template for signature with [TurboSign](/docs/SDKs/turbosign) instead.
 
 ### Handling Errors {#handling-errors}
 

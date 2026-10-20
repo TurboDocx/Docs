@@ -1,7 +1,7 @@
 ---
 title: Pipeline Notifications
 sidebar_position: 3
-description: Choose who is notified when a pipeline run succeeds or fails, override recipients per routing store, and customize the completion email and ZIP.
+description: Choose who is notified when a pipeline run succeeds or fails, set per-store recipients, customize the completion email, and add a note to failure emails.
 keywords:
   - pipeline notifications
   - signed and delivered email
@@ -13,6 +13,7 @@ keywords:
   - attach signed document zip
   - routing store notifications
   - pipeline email recipients
+  - failure email note
 ---
 
 # Pipeline Notifications
@@ -27,7 +28,7 @@ Pipelines are an **Enterprise** feature. If you don't see the option to create o
 
 <br/>
 
-You set **default notifications** on the **Destination** step (labeled **Deliver** in the wizard's progress rail), and **per-store overrides** on the **Extract & Route** step. If you haven't built a pipeline yet, start with **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline)** and come back here to fine-tune the alerts.
+You set **default notifications** on the **Destination** step (labeled **Deliver** in the wizard's progress rail), and **per-store overrides** on the **Extract & Route** step. If you haven't built a pipeline yet, start with **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline.md)** and come back here to fine-tune the alerts.
 
 <br/>
 
@@ -72,6 +73,19 @@ If the ZIP attachment is too large to email, the completion email is still sent 
 
 <br/>
 
+## Add a Note to Failure Emails
+
+You can add a short note of your own to every failure email the pipeline sends, for example what the recipient should do next. Under the **Failed** list, click **Add a note to the email** and type it in **Note for failure emails**.
+
+- The note appears under **Note from your administrator**, above the error details, in every failure email for this pipeline.
+- It is sent as plain text, as typed. Line breaks are kept. Insert-field chips are not available here.
+- The limit is 1,000 characters. A longer paste is cut to the limit and the wizard tells you.
+- Clear the box to stop adding a note.
+
+Once a note is saved, the button reads **Edit failure note**.
+
+<br/>
+
 ## Per-Store Notifications
 
 If your pipeline uses routing rules on the **Extract & Route** step, each routing rule is a "store" (for example, one region or one business unit). You can give any store its own recipients instead of the pipeline defaults.
@@ -101,6 +115,6 @@ Per-store notifications are useful when different regions, branches, or departme
 
 ## What's Next?
 
-- **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline)**: build the pipeline these notifications belong to.
-- **[Field Extraction](./Field-Extraction)**: define the routing fields that create per-store rules.
-- **[Cloud Connectors](./Cloud-Connectors)**: resolve signers from your own internal systems.
+- **[Creating an E-Signature Pipeline](./Creating-an-E-Signature-Pipeline.md)**: build the pipeline these notifications belong to.
+- **[Field Extraction](./Field-Extraction.md)**: define the routing fields that create per-store rules.
+- **[Cloud Connectors](./Cloud-Connectors.md)**: resolve signers from your own internal systems.

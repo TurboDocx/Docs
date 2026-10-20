@@ -536,7 +536,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 410 | `SigningUrlNotRedeemable` | A single-use signing URL was already used or has expired. Request a new one. |
 | 423 | `locked` | The signer entered 20 wrong codes. See [Passcode attempts and lockout](#passcode-attempts-and-lockout). |
 
-A missing document returns `404` with the older `{ "message", "type": "DocumentNotFound" }` body. The signer-facing passcode endpoints that the signing page calls use their own `{ "error", "code" }` body with lowercase codes, for example `locked` with HTTP `423`.
+A missing document returns `404` with `DocumentNotFound`. When you send a document, that error uses the same four-field body as above; other endpoints may return only `message` and `type`. See [Error Codes for Sending and Updating Recipients](../API-Signatures.md#error-codes-for-sending-and-updating-recipients) for the full list for those endpoints. The signer-facing passcode endpoints that the signing page calls use their own `{ "error", "code" }` body with lowercase codes, for example `locked` with HTTP `423`.
 
 :::warning A blank iframe is not an API error
 When your origin is not under **Allowed embedding domains**, the API calls all succeed but the browser refuses to render the frame (a `frame-ancestors` error in the console). Add your origin in [Set up your organization](./set-up-your-organization.md#step-5-allow-the-origins-that-may-embed-the-signing-page).

@@ -10,6 +10,7 @@ keywords:
   - getting started
   - digital signatures
   - document generation
+  - verify your email
 ---
 
 
@@ -34,7 +35,6 @@ TurboDocx Templating turns an existing Word or PowerPoint file into a reusable t
 - [How to Create a Template](./TurboDocx-Templating/How-to-Create-a-Template.md): turn an existing document into a reusable template.
 - [How to Create a Document Template](./TurboDocx-Templating/How-to-Create-a-Document-Template.md) and [How to Create a Presentation Template](./TurboDocx-Templating/How-to-Create-a-Presentation-Template.md): format-specific walkthroughs for Word and PowerPoint.
 - [How to Create a Deliverable](./TurboDocx-Templating/How-to-Create-a-Deliverable.md): generate a finished document from a template.
-- [Advanced Templating](./Advanced-Configuration/Advanced-Templating.md): loops, conditionals, and expressions for complex templates.
 
 ## Get documents signed
 
@@ -72,6 +72,17 @@ Every TurboDocx product is also a REST API. Official SDKs cover JavaScript/TypeS
 ## Troubleshooting
 
 If a document, template, or integration isn't behaving as expected, check that specific product's page first, most end with their own troubleshooting section, for example [Template Troubleshooting](./TurboDocx-Templating/Template-Troubleshooting.md). If you can't find an answer there, contact TurboDocx support with the organization name and a description of what you tried.
+
+### "Please verify your email" when you sign in {#please-verify-your-email}
+
+You may see a **Please verify your email** screen the first time you sign in with a new sign-in method that uses the same email address as an account you already have, before that address is verified. TurboDocx only connects a new sign-in to an existing account once the email address is verified, so nobody can take over an account with an unverified address.
+
+To continue:
+
+1. Open the verification link in the email we sent you. If you can't find it, click **Resend verification email**, then check your inbox and spam folder.
+2. Click **Sign in again** and sign in the same way as before.
+
+If you clicked resend a moment ago, the screen asks you to wait a minute before sending another email.
 
 ## Frequently asked questions
 
