@@ -85,9 +85,11 @@ function docSources() {
       continue;
     }
     if (typeof doc?.source !== 'string' || typeof doc?.permalink !== 'string') continue;
+    // Index docs and slug "/" pages can carry a trailing slash here.
     const source = doc.source.replace(/^@site\//, '');
-    bySource.set(source, doc.permalink);
-    byPermalink.set(doc.permalink, source);
+    const permalink = doc.permalink.replace(/\/+$/, '');
+    bySource.set(source, permalink);
+    byPermalink.set(permalink, source);
   }
   return { bySource, byPermalink };
 }
