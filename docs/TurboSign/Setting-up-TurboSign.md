@@ -509,7 +509,7 @@ When a signer opens the document, a **Pages** panel shows every page as a thumbn
 
 - **Wide screens:** the panel is open on the left.
 - **Narrower screens:** the panel collapses to slim tabs with a count badge. The signer can open it again, and their choice is remembered.
-- **Tablets and phones:** a **Pages** button in the bottom bar opens the same thumbnails in a drawer or a bottom sheet.
+- **Tablets and phones:** a page button in the bottom bar (a grid icon with the current page, like **3/6**) opens the same thumbnails in a drawer or a bottom sheet.
 
 ![The Pages bottom sheet on a phone, showing 4 required fields left and a row of page thumbnails with 2 left on page 2 and 1 left on page 3](/img/turbosign/page-navigation/02-phone-pages-sheet.png)
 

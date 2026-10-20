@@ -73,7 +73,7 @@ In your page, ask your server for a URL and set it as the iframe's `src`. Give t
 
 The browser code is the same whichever language your server uses.
 
-The signing page shows a page thumbnail rail that follows the iframe's width, not the browser window's: open at 1200px and wider, collapsed to slim tabs from 900px to 1199px, and a **Pages** button in the bottom bar under 900px. Picking a page scrolls only the document inside the iframe, never your page. To start the rail collapsed or hide it, pass `pageNavigation` when you request the signing URL. See [Page navigation](../reference.md#page-navigation).
+The signing page shows a page thumbnail rail that follows the iframe's width, not the browser window's: open at 1200px and wider, collapsed to slim tabs from 900px to 1199px, and under 900px a page button in the bottom bar (a grid icon with the current page, like **3/6**). Picking a page scrolls only the document inside the iframe, never your page. To start the rail collapsed or hide it, pass `pageNavigation` when you request the signing URL. See [Page navigation](../reference.md#page-navigation).
 
 ![The signing page in a host app's iframe, with the page thumbnail rail collapsed to slim tabs and count badges on the pages that still need the signer](/img/embedded-signing/page-navigation-iframe.png)
 

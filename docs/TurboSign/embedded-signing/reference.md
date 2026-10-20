@@ -159,9 +159,9 @@ The signing page shows every page of the document as a thumbnail, marks where th
 
 | Value | What the signer sees |
 |---|---|
-| `auto` (default) | Sized to the iframe's width, not the browser window's: the thumbnail rail is open at 1200px and wider, collapsed to slim tabs from 900px to 1199px, and replaced by a **Pages** button in the bottom bar under 900px. |
+| `auto` (default) | Sized to the iframe's width, not the browser window's: the thumbnail rail is open at 1200px and wider, collapsed to slim tabs from 900px to 1199px, and replaced under 900px by a page button in the bottom bar (a grid icon with the current page, like **3/6**). |
 | `collapsed` | The rail starts collapsed at any width. The signer can still open it. |
-| `hidden` | No rail and no **Pages** button. |
+| `hidden` | No rail and no page button in the bottom bar. |
 
 - Any other value is rejected with a `400`.
 - It is set per request, like `returnUrl`. Requesting a new signing URL without `pageNavigation`, or with `auto`, resets it to `auto`.
