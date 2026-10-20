@@ -283,6 +283,34 @@ result = TurboDocxSdk::TurboSign.send_signature(
 `templateId` references pre-configured TurboSign templates created in the TurboDocx dashboard. These templates come with built-in anchors and field positioning, making it easy to reuse signature workflows across multiple documents.
 :::
 
+### 5. Send a template set up in TurboDocx
+
+Upload a PDF as a template in TurboDocx, add its signers as roles (for example "Client" and "Countersigner"), drag their fields onto the page and save the signature setup. Then send it by naming each recipient's `role`. The fields saved for that role come with it, so `fields` can be left out, and a recipient with a `role` needs no `signingOrder`.
+
+```ruby
+# The role keys come from the template (also shown under "Use via API" on the template page)
+setup = TurboDocxSdk::TurboSign.get_template_signature_setup("your-template-id")
+setup["roles"].each { |r| puts "#{r['key']} (saved signer: #{r['hasSavedSigner']})" }
+# client (saved signer: false)
+# countersigner (saved signer: true)
+
+TurboDocxSdk::TurboSign.send_signature(
+  templateId: "your-template-id",
+  recipients: [
+    { role: "client", name: "Jane Doe", email: "jane@client.com" }
+    # "countersigner" left out: the signer saved on the template is used
+  ]
+)
+```
+
+- Roles sign in the order saved on the template; recipients without a `role` sign after them.
+- A role left out uses the template's saved signer. If it has none, the API returns a 400 naming the role.
+- An unknown role raises `TurboDocxSdk::ValidationError` listing the template's roles (`e.code == "UnknownSignerRole"`).
+- Any `fields` you pass are added to the template's (for example an extra witness signature).
+- `role` works the same way on `create_signature_review_link` and `create_embedded_signature`.
+
+See [Sending with signer roles](/docs/TurboSign/API-Signatures#sending-with-signer-roles) for every rule and error.
+
 ---
 
 ## API Reference
@@ -497,6 +525,22 @@ end
 
 ---
 
+### Get template signature setup
+
+List a template's signer roles, in signing order, to [send it with signer roles](#5-send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+
+```ruby
+setup = TurboDocxSdk::TurboSign.get_template_signature_setup("template-uuid")
+
+setup["roles"].each do |role|
+  puts "#{role['key']} saved signer: #{role['hasSavedSigner']}"
+end
+```
+
+Calls `GET /turbosign/templates/:templateId/signature-setup`. A template with no saved signature setup returns a 404 (`SignatureSetupNotFound`).
+
+---
+
 ## Error Handling
 
 The SDK provides typed error classes for different failure scenarios. All errors extend the base `TurboDocxSdk::TurboDocxError` class.
@@ -600,7 +644,8 @@ Recipient configuration for signature requests:
 | -------------- | --------- | -------- | ------------------------- |
 | `name`         | `String`  | Yes      | Recipient's full name     |
 | `email`        | `String`  | Yes      | Recipient's email address |
-| `signingOrder` | `Integer` | Yes      | Signing order (1-indexed) |
+| `signingOrder` | `Integer` | Conditional | Signing order (1-indexed). Not needed when `role` is set |
+| `role`         | `String`  | No       | Template signer role to fill (for example `"client"`). Requires `templateId` |
 
 ```ruby
 recipient = {
@@ -666,7 +711,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | Parameter             | Type            | Required    | Description                    |
 | --------------------- | --------------- | ----------- | ------------------------------ |
 | `recipients`          | `Array<Hash>`   | Yes         | Recipients who will sign       |
-| `fields`              | `Array<Hash>`   | Yes         | Signature fields configuration |
+| `fields`              | `Array<Hash>`   | Conditional | Signature fields configuration. Optional when a recipient has a `role` |
 | `file`                | `String \| IO`  | Conditional | Local file path or an IO object (multipart upload) |
 | `fileLink`            | `String`        | Conditional | URL to document file           |
 | `deliverableId`       | `String`        | Conditional | TurboDocx deliverable ID       |

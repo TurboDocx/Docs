@@ -461,6 +461,7 @@ Send documents for legally-binding eSignatures with full audit trails.
 | `void()`                      | Cancel/void a signature request                         |
 | `resend()`                    | Resend signature request emails                         |
 | `getAuditTrail()`             | Get complete audit trail with all events and timestamps |
+| `getTemplateSignatureSetup()` | List a template's signer roles, to send it by role      |
 
 [Learn more about TurboSign →](/docs/TurboSign/Setting-up-TurboSign)
 
