@@ -938,7 +938,7 @@ Quote list filters (one value or an array):
 | `validUntilFrom` / `validUntilTo` | `YYYY-MM-DD` | Inclusive; combined with the window |
 | `summaryCurrency` | A currency | The currency of `summary` (default: the one filtered currency, else USD) |
 
-The response adds `statusCounts` and `summary`; each quote carries `isExpired`, `isSignatureExpired` and `lineItemCount`.
+The response adds `statusCounts` and `summary`; each quote carries `isExpired`, `isSignatureExpired` and `lineItemCount`. In the other lists, each price book carries `overrideCount`, each bundle carries `itemCount` and `billingTotals` (the bundle price per billing type, for example `{ "one-time" => 1538.73, "monthly" => 11.27 }`), and each company carries `contactCount`.
 
 ```ruby
 page = TurboDocxSdk::TurboQuote.list_quotes(
