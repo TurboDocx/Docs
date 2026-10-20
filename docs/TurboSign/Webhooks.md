@@ -510,6 +510,7 @@ require "json"
 require "turbodocx_sdk"
 
 post "/webhook" do
+  request.body.rewind
   body = request.body.read
 
   valid = TurboDocxSdk.verify_webhook_signature(
