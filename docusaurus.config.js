@@ -12,6 +12,21 @@ const itemsJson = require("./items.json")
 const footerItems = require("./footerItems.json")
 const logoJson = require('./logo.json')
 
+// Doc files with `unlisted: true` in their frontmatter, relative to docs/.
+const unlistedDocs = (function findUnlisted(dir) {
+  const fs = require('fs');
+  const path = require('path');
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const file = path.join(dir, entry.name);
+    if (entry.isDirectory()) return findUnlisted(file);
+    if (!/\.mdx?$/.test(entry.name)) return [];
+    const frontMatter = fs.readFileSync(file, 'utf8').match(/^---\n([\s\S]*?)\n---/);
+    return frontMatter && /^unlisted:\s*true\b/m.test(frontMatter[1])
+      ? [path.relative('docs', file).split(path.sep).join('/')]
+      : [];
+  });
+})('docs');
+
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -93,11 +108,20 @@ const config = {
     [
       'docusaurus-plugin-llms',
       {
+        // Markdown twins: every doc page /<path> also serves /<path>.md, and
+        // llms.txt links the twins. scripts/agent-markdown.mjs (postbuild) adds
+        // the frontmatter and rel=alternate links and rebuilds llms-full.txt.
+        // See AGENTS.md "Every doc page ships a markdown twin".
         generateLLMsTxt: true,
+        generateLLMsFullTxt: false,
+        generateMarkdownFiles: true,
         docsDir: 'docs',
         includeBlog: false,
         excludeImports: true,
-        removeDuplicateHeadings: true
+        removeDuplicateHeadings: true,
+        // Unlisted pages are noindex and hidden from the sidebar; a twin or an
+        // llms.txt entry would expose them. Drafts are skipped by the plugin.
+        ignoreFiles: unlistedDocs,
       }
     ],
     [

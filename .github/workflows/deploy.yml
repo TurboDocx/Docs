@@ -15,10 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to Cloudflare Pages
     steps:
-      - name: Checkout (with submodules)
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive  # This pulls submodules
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -28,18 +26,49 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # postbuild (scripts/agent-markdown.mjs build) fails the build if any doc
+      # page has no markdown twin, a twin lacks frontmatter or rel=alternate, or
+      # llms.txt links something other than an existing twin. This is the PR gate.
+      # Spec: AGENTS.md "Every doc page ships a markdown twin".
       - name: Build Docusaurus site
         run: npm run build
         env:
           GTM_CONTAINER_ID: ${{ secrets.GTM_CONTAINER_ID }}
 
+      - name: Show sample markdown twins
+        continue-on-error: true
+        run: |
+          head -8 build/docs.md build/docs/API/delete-webhook.md build/docs/SDKs/deliverable.md
+          grep -o '<link rel="alternate" type="text/markdown"[^>]*>' build/docs.html build/docs/API/delete-webhook.html
+          head -12 build/llms.txt
+
       - name: Deploy to Cloudflare Pages
+        id: deploy
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy build --project-name=turbodocx-docs
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      # Every twin must be live as text/markdown. Previews are public, so this runs
+      # on PR previews (deployment URL) and on production (docs.turbodocx.com).
+      - name: Verify markdown twins are live
+        env:
+          BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://docs.turbodocx.com' || steps.deploy.outputs.deployment-url }}
+        run: |
+          sleep 30
+          fails=0; total=0
+          for f in llms.txt llms-full.txt $(cd build && find . -name '*.md' | sed 's#^\./##' | sort); do
+            total=$((total+1))
+            res=$(curl -s -o /dev/null -w '%{http_code} %{content_type}' --retry 3 --retry-all-errors "$BASE_URL/$f")
+            case "$f:$res" in
+              *.md:"200 text/markdown"*|*.txt:"200 text/plain"*) ;;
+              *) echo "::error::$BASE_URL/$f -> $res"; fails=$((fails+1)) ;;
+            esac
+          done
+          echo "$total URLs checked on $BASE_URL, $fails failing"
+          [ "$fails" -eq 0 ]
 
       - name: Submit URLs to IndexNow
         if: github.ref == 'refs/heads/main'
