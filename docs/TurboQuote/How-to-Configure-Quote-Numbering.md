@@ -1,6 +1,6 @@
 ---
 title: How to Configure Quote Numbering
-sidebar_position: 4
+sidebar_position: 9
 description: Set a custom quote number format for your organization in TurboQuote, including prefix, year, month, digit padding, starting number, and reset cadence.
 keywords:
   - turboquote
@@ -106,4 +106,16 @@ When the preview looks right, save. The **Save** button becomes active as soon a
 
 :::tip That's it
 Every new quote your organization creates from now on uses this format and picks up the next number in the sequence automatically.
+:::
+
+<br/>
+
+## Changing numbering while you make a quote
+
+You don't have to leave a new quote to change the format. In the **Quote details** dialog of a new quote, the **Quote number** field shows the number the quote will get. Click **Edit numbering** next to it to open the same **Quote numbering** settings, with the next numbers shown as you edit. Saving there changes the numbering for your whole organization, exactly as in Settings.
+
+![The Quote numbering dialog opened from a new quote, with the next quote number](/img/turboquote/new-quote/06-numbering.png)
+
+:::tip From code
+The API, the SDKs and n8n can read the next number without using it up, with `GET /v1/quotes/number-config/next` (`getNextQuoteNumber` in the SDKs). See the [TurboQuote SDK reference](../SDKs/quote.md).
 :::

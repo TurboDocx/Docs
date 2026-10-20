@@ -911,6 +911,78 @@ puts result["quote"]["id"]
 
 ---
 
+### Sorting, filters and the list summary
+
+Every list takes `sortBy` / `sortDirection` (`asc` | `desc`); leave them out for the list's usual order.
+
+| List | `sortBy` values | Order without a sort |
+|---|---|---|
+| Quotes | `updatedOn`, `createdOn`, `total` (grand total), `validUntil`, `quoteNumber` | Newest created first |
+| Products | `name`, `listPrice`, `createdOn` | Newest first |
+| Price books | `name`, `discountPercent`, `overrideCount`, `validFrom`, `validTo`, `createdOn` | Newest first |
+| Bundles | `name`, `itemCount`, `totalListPrice`, `totalFinalPrice`, `createdOn` | Newest first |
+| Companies | `name`, `contactCount`, `lastActivityDate` | Most recently active first |
+| Contacts (both lists) | `name`, `createdOn` | Newest first |
+| Types | `name`, `usageCount` (needs `categoryType`) | Name, A to Z |
+
+Quote list filters (one value or an array):
+
+| Filter | Values | Notes |
+|---|---|---|
+| `statuses` | `draft`, `pending_approval`, `sent`, `accepted`, `declined`, `voided`, **`expired`** | `expired` = a draft or sent quote past its Valid until day (UTC), or whose signature expired. It's a filter value, not a stored status. |
+| `companyId` / `companyIds` | One company, or several | Merged by the API |
+| `currency` / `currencies` | One currency, or several | Merged by the API |
+| `createdBy` | User IDs | From `listQuoteCreators` |
+| `createdByApiKeys` | `true` | Quotes created by any API key (combined with `createdBy`) |
+| `validUntilWindow` | `thisWeek` (today + 6 days), `thisMonth`, `past` | UTC days |
+| `validUntilFrom` / `validUntilTo` | `YYYY-MM-DD` | Inclusive; combined with the window |
+| `summaryCurrency` | A currency | The currency of `summary` (default: the one filtered currency, else USD) |
+
+The response adds `statusCounts` and `summary`; each quote carries `isExpired`, `isSignatureExpired` and `lineItemCount`.
+
+```ruby
+page = TurboDocxSdk::TurboQuote.list_quotes(
+  "statuses" => %w[sent expired],
+  "currencies" => %w[USD EUR],
+  "validUntilWindow" => "thisMonth",
+  "sortBy" => "validUntil",
+  "sortDirection" => "asc",
+  "summaryCurrency" => "USD"
+)
+puts page["statusCounts"]["expired"], page["summary"]["winRate"]["percent"]
+
+creators = TurboDocxSdk::TurboQuote.list_quote_creators          # ids for createdBy
+summary = TurboDocxSdk::TurboQuote.get_quote_summary("createdBy" => [creators.first["id"]])
+next_number = TurboDocxSdk::TurboQuote.get_next_quote_number     # read only
+
+copy = TurboDocxSdk::TurboQuote.duplicate_quote(quote["id"], name: "Q4 renewal") # name is optional
+```
+
+`duplicate_quote`, `duplicate_product`, `duplicate_price_book` and `duplicate_bundle` take an optional
+`name:` (otherwise "Copy of …"). Companies take an optional `"email"`; `update_price_book(id, "resetProductPricing" => true)`
+puts every product back on the book's discount.
+
+### Custom line item images
+
+A custom line item (one with no catalog product) can show up to three images on the quote (PNG or
+JPEG, 2 MB each; draft quotes only). Catalog products use `get_product_quote_images(product_ids)`.
+
+```ruby
+images = TurboDocxSdk::TurboQuote.add_line_item_images(quote["id"], item_id, ["./diagram.png"]) # paths or IO objects
+TurboDocxSdk::TurboQuote.reorder_line_item_images(quote["id"], item_id, images.map { |i| i["id"] }.reverse)
+TurboDocxSdk::TurboQuote.remove_line_item_image(quote["id"], item_id, images.first["id"])
+by_item = TurboDocxSdk::TurboQuote.get_quote_line_item_images(quote["id"]) # { line_item_id => [image, ...] }
+```
+
+**Deletes the API refuses.** `delete_quote` on a **sent** quote is a 409 `ConflictError` with code
+`CANNOT_DELETE_SENT_QUOTE` — void it instead; an accepted quote is a 409 `CANNOT_DELETE_ACCEPTED_QUOTE`.
+`delete_company` is a 409 `CompanyHasOpenQuotes` while the company has open quotes (draft, pending approval or
+sent), and `delete_contact` is a 409 `LastContact` (the company's only contact) or `ContactHasOpenQuotes`.
+`delete_price_book` on the org's default price book is a 400 `ValidationError` `PriceBookIsDefault`. Branch on
+`e.code`; `get_company_open_quotes` / `get_contact_open_quotes` list the open quotes that block a delete.
+
+Also: `get_next_quote_number` (the number the next quote will get, read only), `get_product_quote_images(product_ids)` (up to three images per product; products hold at most three), `email` on companies, `"resetProductPricing" => true` on `update_price_book`.
+
 ## Constants
 
 The gem exposes constants so you can avoid hard-coding string literals:
@@ -972,6 +1044,26 @@ end
 | 429 | `RateLimitError` | Rate limit exceeded — back off |
 
 ---
+
+### TurboQuote error codes
+
+Every typed error carries the API's `code` (`err.code`, `e.code`, `$e->errorCode`, `err.Code`, `e.getCode()`). The codes you're most likely to branch on:
+
+| Status | Code | When |
+|---|---|---|
+| 409 | `CANNOT_DELETE_SENT_QUOTE` | Deleting a sent quote. Void it instead. |
+| 409 | `CANNOT_DELETE_ACCEPTED_QUOTE` | Deleting an accepted quote. It's kept for your records. |
+| 409 | `CompanyHasOpenQuotes` | Deleting a company that has open quotes (draft, pending approval or sent). See `getCompanyOpenQuotes`. |
+| 409 | `ContactHasOpenQuotes` | Deleting a contact who is on open quotes. See `getContactOpenQuotes`. |
+| 409 | `LastContact` | Deleting a company's only contact. |
+| 400 | `PriceBookIsDefault` | Deleting the organization's default price book. |
+| 400 | `MAX_IMAGES_EXCEEDED` | More than three images on a product or custom line item. |
+| 400 | `IMAGE_TOO_LARGE` / `INVALID_FILE_TYPE` | An image over 2 MB, or not PNG / JPEG. |
+| 400 | `QUOTE_NOT_EDITABLE` | Changing a quote (or its line items or images) that isn't a draft. |
+| 404 | `QUOTE_NOT_FOUND`, `LINE_ITEM_NOT_FOUND`, `IMAGE_NOT_FOUND` | The quote, line item or image doesn't exist in your organization. |
+| 400 | `SenderEmailRequired` | An API-key caller whose quote template has no sender email. |
+
+Money fields are capped at 9,999,999,999,999.99, quantities at 2,147,483,647 and percents at 999.99 (a percent discount at 100); a larger value is a 400 with the field named. An amount discount larger than the price it comes off is a 400.
 
 ## See Also
 

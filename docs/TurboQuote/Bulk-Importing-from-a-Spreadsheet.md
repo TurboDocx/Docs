@@ -1,7 +1,7 @@
 ---
 title: Bulk Importing from a Spreadsheet
-sidebar_position: 3
-description: Bulk import products, companies, contacts, and bundles into TurboQuote from CSV or XLSX with column mapping, validation, and error reports.
+sidebar_position: 8
+description: Bulk import products, companies, contacts, bundles, price books and categories into TurboQuote from CSV or Excel, with column matching, validation and error reports.
 keywords:
   - turboquote
   - bulk import
@@ -18,14 +18,14 @@ keywords:
 
 # Bulk Importing from a Spreadsheet
 
-Instead of creating catalog and CRM records one at a time, you can import them in bulk from a CSV or XLSX spreadsheet. This is the fastest way to load an existing catalog exported from your CRM, ERP, or a previous tool.
+Instead of creating catalog and CRM records one at a time, you can import them in bulk from a CSV or Excel spreadsheet. This is the fastest way to load an existing catalog exported from your CRM, ERP, or a previous tool.
 
 ## What You'll Accomplish
 
 By the end of this guide, you will have:
 
-- 📤 **Uploaded** a CSV or XLSX file to a TurboQuote import dialog
-- 🔗 **Mapped** your spreadsheet columns to TurboQuote fields
+- 📤 **Uploaded** a CSV or Excel file to a TurboQuote import dialog
+- 🔗 **Matched** your spreadsheet columns to TurboQuote fields
 - ✅ **Reviewed** validation results and imported your records
 - 📥 **Downloaded an error report** for any rows that need fixing
 
@@ -44,89 +44,79 @@ Related records connect using the names and codes you already use, so you can bu
 
 ## What You Can Import
 
-Bulk import is available for each of these record types, from its own list page:
+Bulk import is available for each of these record types. On each page, click the **Import** button next to the **New …** button:
 
-| Record type | Where to find it | Button |
-| --- | --- | --- |
-| **Products** | TurboQuote → Products | **Import from Spreadsheet** |
-| **Companies** (with their contacts) | TurboQuote → Companies | **Import from Spreadsheet** |
-| **Contacts** | A company's Contacts page | **Import from Spreadsheet** |
-| **Bundles** | TurboQuote → Bundles | **Import from Spreadsheet** |
-| **Price Books** | TurboQuote → Price Books | **Bulk Create** |
-| **Categories** | TurboQuote → Categories | **Bulk Create** |
+| Record type | Where to find it |
+| --- | --- |
+| **Products** | TurboQuote → Products |
+| **Companies** (with their contacts) | TurboQuote → Companies |
+| **Contacts** | A company's Contacts page |
+| **Bundles** | TurboQuote → Bundles |
+| **Price Books** | TurboQuote → Price Books |
+| **Categories** | TurboQuote → Manage Categories, on the tab for the kind of category |
 
-The button to open the importer sits next to **New …** on each page.
-
-![The Products page with the Import From Spreadsheet button highlighted in the top-right toolbar](/img/turboquote_bulk_import/01_products_import_button.png)
+![The Products page with the Import button highlighted](/img/turboquote_bulk_import/00-import-button.png)
 
 ## Step 1: Upload Your File
 
-This walkthrough uses **Products** as the example. Companies, contacts, bundles, price books, and categories follow the same three steps; only the column names differ (see the [Column Reference](#column-reference)). For price books and categories, the button is labeled **Bulk Create** instead of **Import from Spreadsheet**.
+This walkthrough uses **Companies** as the example, because a company can span several rows (one per contact). Products, contacts, bundles, price books and categories follow the same three steps; only the columns differ (see the [Column Reference](#column-reference)).
 
-1. Click **Import from Spreadsheet** (or **Bulk Create**, for price books and categories) to open the import dialog.
-2. (Recommended) Click **Download template** in the top-right of the **Columns** box to get a correctly formatted CSV with the right column headers and an example row.
-3. Drag and drop your **CSV** or **XLSX** file onto the upload area, or click to browse.
+1. Click **Import** to open the import dialog.
+2. Check **What the file needs**. It lists the **required** and **optional** columns. For companies there are two groups: the company's own columns, and the columns for each contact.
+3. (Recommended) Click **Download template** to get a CSV with the right column headers and an example row.
+4. Drag and drop your **CSV** or **Excel** file onto the upload area, or click it to choose one.
+5. Click **Continue**.
 
-The dialog parses your file and shows the row and column counts plus a preview.
-
-- 📦 **Maximum 500 rows** per import. A larger file is rejected before anything is created, with a message like _"Spreadsheet contains 750 rows, which exceeds the maximum of 500. Please reduce the number of rows."_ Split the file into batches and import each one.
+- 📦 **Maximum 500 rows** per import. A larger file is rejected before anything is created. Split the file into batches and import each one.
 - 📅 Date columns (for example, a price book's valid-from and valid-to) are read in `YYYY-MM-DD` format.
 
-![The Upload step with the drag-and-drop upload area highlighted; above it, the Columns box lists the required and optional fields and the Download Template button](/img/turboquote_bulk_import/02_upload_step.png)
+![The Upload file step. What the file needs lists the required and optional columns for companies and for each contact](/img/turboquote_bulk_import/01-upload.png)
 
-## Step 2: Map Your Columns
+For products, **What the file needs** also explains the billing values and that new categories are created for you:
 
-TurboQuote auto-detects common column names (for example, `product_name` maps to **Product Name**). Header matching ignores case, spaces, and underscores, so `Product Name`, `product_name`, and `PRODUCTNAME` are all recognized. On the **Map Columns** step you can confirm or change each mapping:
+![The products import: Name, Billing Frequency, List Price and Category are required](/img/turboquote_bulk_import/05-products-upload.png)
 
-- **Required fields** are marked with an asterisk and must be mapped before you can continue.
-- **Optional fields** can be left unmapped. Sensible defaults are applied (for example, currency defaults to USD).
+## Step 2: Match Your Columns
 
-If you used the downloaded template, every column maps automatically.
+TurboQuote matches your columns by name. Matching ignores case, spaces and underscores, so `Company Name`, `company_name` and `COMPANYNAME` are all recognised, and a few common alternates work too (for example, `Company` for the company name). On the **Match columns** step, each field shows the column it was matched to and a status:
 
-![The Map Columns step with the Required Fields group highlighted, each required field auto-mapped to a spreadsheet column](/img/turboquote_bulk_import/03_map_columns.png)
+- **Matched**: the field will be filled from that column.
+- **Skipped**: no column was matched, or you chose **Don't import**. Only optional fields can be skipped.
+
+Change any match with the dropdown next to the field. Required fields are marked with an asterisk and must be matched before you can continue. If you used the downloaded template, every column matches automatically.
+
+![The Match columns step for the company fields, each matched to a column of the file](/img/turboquote_bulk_import/02-match-columns.png)
+
+For companies, the **Contact Fields** come next. Rows with the same company name are grouped into one company, and each row adds one contact.
+
+![The Contact Fields: Contact Name and Contact Email are required, and Contact Phone is skipped](/img/turboquote_bulk_import/03-contact-columns.png)
 
 ## Step 3: Review and Import
 
-The **Review & Import** step checks every row **before anything is created**, then sorts your rows into three groups, shown as a colored bar and a summary headline (for example, **"4 of 5 rows will import"**):
+The **Review & import** step checks every row **before anything is created**, then sorts your rows into three groups, shown as a colored bar and a summary headline (for example, **"1 of 2 rows will import"**):
 
 - ✅ **Import as-is.** The row is clean and imports unchanged.
 - ⚠️ **Import with changes.** The row still imports, but a bad **optional** value was cleared. For example, a non-numeric `cost`, an unrecognized `currency`, or an out-of-range minimum order quantity is dropped and the rest of the row is kept (currency falls back to the default, USD).
-- ❌ **Won't import.** A **required** value is missing or invalid, so the whole row is skipped. For example, a product with no name or an invalid billing frequency, or a bundle row missing its unit price.
+- ❌ **Won't import.** A **required** value is missing or invalid, so the whole row is skipped. For example, a product with no name, or a company whose industry doesn't match an existing industry.
 
 Expand any group to see the affected rows with their row number and the exact reason.
 
-When you're happy with the split, click **Import _N_ rows**. The button shows how many will import. TurboQuote creates any missing categories or price-book types first, then imports the eligible rows.
+For companies, rows are grouped by company before counting, so the headline counts **companies**, not spreadsheet rows. In this example, three rows (two contacts for Alpine Ski House, one for Woodgrove Bank) are **two companies**, and one of them won't import because its industry doesn't exist yet.
 
-![The Review and Import step showing the three colored groups (import as-is, import with changes, won't import) and the Import 4 Rows button highlighted](/img/turboquote_bulk_import/04_review_import.png)
+![The Review & import step: 1 of 2 rows will import. Row 4, Woodgrove Bank, won't import because its industry doesn't match an existing industry](/img/turboquote_bulk_import/04-review.png)
 
-:::tip Importing companies with contacts?
-A company can span several rows, one per contact, so it works a little differently. See the [worked example](#example-importing-companies-and-contacts) below.
-:::
+When you're happy with the split, click **Import _N_** (for example, **Import 1 company**). The button shows how many will import. TurboQuote creates any missing categories first, then imports the eligible rows.
 
 ### Adjustments and Error Reports
 
-After importing, the headline updates to something like **"4 of 5 rows imported"**, keeping the same three groups. Two downloads help you follow up:
+After importing, the headline updates to something like **"1 of 2 rows imported"**, keeping the same groups. Two downloads help you follow up:
 
 - **Download changes.** A report of every row that imported **with changes** (which value was cleared, and why), so you can fill them back in later.
-- **Download errors.** A report of every row that **didn't import**. Fix those rows in your spreadsheet and re-upload just them.
+- **Download errors.** A report of every row that **didn't import**. Fix those rows in your spreadsheet and upload just them again.
 
 :::tip Why your file rarely fails outright
 A bad **optional** value never blocks a row. TurboQuote clears just that value and keeps the rest. Only a missing or invalid **required** value skips a row. So even a messy export gets most of your data in, and the change and error reports tell you exactly what to clean up.
 :::
-
-## Example: Importing Companies and Contacts
-
-The companies importer works the same way as the products importer, but with one key difference: a company can span **several rows**, one per contact. You open it from **TurboQuote → Companies** with the **Import From Spreadsheet** button.
-
-![The Companies page with the Import From Spreadsheet button highlighted in the top-right toolbar](/img/turboquote_bulk_import/05_companies_import_button.png)
-
-On the **Map Columns** step, the fields are split into two groups: **Company Fields** (the company-level columns like name, phone, and city) and **Contact Fields** (the per-contact columns like contact name and email). Rows that share the same company name are grouped into one company, and each row adds one contact.
-
-![The Companies Map Columns step with the Company Fields and Contact Fields groups highlighted](/img/turboquote_bulk_import/06_companies_map.png)
-
-The **Review & Import** step groups the rows by company before counting, so the headline counts **companies**, not spreadsheet rows. In this example, three spreadsheet rows (two contacts for one company, one for another) become **two companies** — the review reads **"2 of 2 rows will import"** (one per company), and the **Import 2 Companies** button confirms the count before anything is created.
-
-![The Companies Review and Import step showing 2 of 2 rows will import and the Import 2 Companies button highlighted](/img/turboquote_bulk_import/07_companies_review.png)
 
 ## Column Reference
 
@@ -188,13 +178,13 @@ Price-book-level columns (repeat the same values on every row of the price book)
 | Column | Required? | Example | Notes |
 | --- | --- | --- | --- |
 | `price_book_name` | **Required** | Q1 Enterprise | Also accepts `price_book`, `name`. Groups the rows of one price book. |
-| `type` | **Required** | Enterprise | Price book type. Created automatically if it does not exist. |
+| `category` | **Required** | Enterprise | Price book category. Also accepts `type`. Created automatically if it does not exist. |
 | `valid_from` | **Required** | 2026-01-01 | `YYYY-MM-DD`. |
 | `description` | Optional | First quarter rates | |
 | `discount_percent` | Optional | 10 | 0 to 100. Defaults to 0. |
 | `valid_to` | Optional | 2026-12-31 | `YYYY-MM-DD`. Must be after `valid_from`. |
 | `is_default` | Optional | false | Defaults to false. |
-| `show_in_quote_builder` | Optional | true | Defaults to true. |
+| `offer_on_quotes` | Optional | true | Whether reps can pick the book on quotes. Also accepts `show_in_quote_builder`. Defaults to true. |
 
 Per-product override columns (one row per product):
 
@@ -211,7 +201,7 @@ Per-product override columns (one row per product):
 | --- | --- | --- | --- |
 | `category_name` | **Required** | Software Licenses | Also accepts `name`, `category`. |
 
-The category **type** (Product, Bundle, Price Book, or Industry) comes from which **Bulk Create** button you click on the Categories page, not from a column. Open the importer under the heading you want, and every row is created as that type.
+The kind of category (product, bundle, price book or industry) comes from the tab you are on when you click **Import** on the Categories page, not from a column. Open the tab you want first, and every row is created as that kind.
 
 ### Companies (TurboQuote → Companies)
 
@@ -220,11 +210,12 @@ Company-level columns (repeat the same values on every row of the company):
 | Column | Required? | Example | Notes |
 | --- | --- | --- | --- |
 | `company_name` | **Required** | Acme Corp | Also accepts `company`, `name`. Groups the rows of one company. |
+| `company_email` | **Required** | hello@acme.com | The company's own email address. |
+| `industry` | **Required** | Technology | Must be an existing industry name. See the note below. Also accepts `sector`, `vertical`. |
 | `phone` | Optional | +1 555-123-4567 | |
 | `city` | Optional | New York | |
 | `state` | Optional | NY | Also accepts `province`. |
 | `country` | Optional | United States | |
-| `industry` | Optional | Technology | Must be an existing industry name. See the note below. |
 
 Per-contact columns (one row per contact; each company needs at least one):
 
@@ -258,7 +249,7 @@ Some records span **multiple rows** in your spreadsheet:
 For these, all rows that share the same record name must repeat the same record-level values (company industry, bundle discount, price book type, and so on). **Only the per-item columns may differ between rows.** If two rows disagree on a record-level value, the import flags a conflict so nothing is created with the wrong value.
 
 :::note Categories and types are created for you
-When you import products, bundles, or price books, any category or price-book type that doesn't exist yet is created automatically before the records are imported. Company **industries** are the exception: they must already exist, so use a recognized industry name. You can pre-create industries in bulk from the **Industry Categories** section of the Categories page.
+When you import products, bundles, or price books, any category or price-book type that doesn't exist yet is created automatically before the records are imported. Company **industries** are the exception: they must already exist, so use a recognized industry name. You can add industries, one at a time or in bulk, on the **Industries** tab of the Categories page.
 :::
 
 ## Referencing Products by SKU (Bundles and Price Books)
@@ -285,4 +276,7 @@ Import your **products first**, then reference them by SKU in your bundle and pr
 ## Related
 
 - [Adding a New Product](./Adding-a-New-Product.md)
-- [Creating a New Quote](./Creating-a-New-Quote.md)
+- [Managing Companies and Contacts](./Managing-Companies-and-Contacts.md)
+- [Managing Bundles](./Managing-Bundles.md)
+- [Managing Price Books](./Managing-Price-Books.md)
+- [Managing Categories](./Managing-Categories.md)
