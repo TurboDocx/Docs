@@ -5,8 +5,9 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start --port 3001",
-    "prebuild": "npm --prefix ./vendor/docusaurus-plugin-llms install && npm --prefix ./vendor/docusaurus-plugin-llms run build",
     "build": "docusaurus build",
+    "postbuild": "node scripts/agent-markdown.mjs build",
+    "check:md": "node scripts/agent-markdown.mjs check",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -59,7 +60,7 @@
     "chroma-js": "^2.4.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "docusaurus-plugin-llms": "file:./vendor/docusaurus-plugin-llms",
+    "docusaurus-plugin-llms": "0.6.1",
     "docusaurus-plugin-openapi-docs": "^5.0.2",
     "docusaurus-plugin-sass": "^0.2.6",
     "docusaurus-theme-openapi-docs": "^5.0.2",
@@ -138,7 +139,8 @@
     "ws@7": "^7.5.11",
     "ws@8": "^8.21.0",
     "yaml": "^2.8.4",
-    "tinypool": "^2.1.2"
+    "tinypool": "^2.1.2",
+    "minimatch@9": "^9.0.9"
   },
   "engines": {
     "node": ">=18.0"
