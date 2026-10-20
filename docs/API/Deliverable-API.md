@@ -268,9 +268,13 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 | ------------- | ------ | -------- | ------------------------------------------ |
 | `name`        | String | **Yes**  | Deliverable name (3–255 characters)        |
 | `templateId`  | String | **Yes**  | Template ID to generate from. A PDF (signature-only) template returns `400 SignatureOnlyTemplate` |
-| `variables`   | Array  | **Yes**  | Array of variable objects for substitution |
+| `variables`   | Array  | **Yes**  | Array of variable objects for substitution. May be empty (`[]`) |
 | `description` | String | No       | Description (up to 65,535 characters)      |
 | `tags`        | Array  | No       | Array of tag strings to associate          |
+
+:::note Empty or partial `variables`
+`variables` must be sent, but it can be an empty array. `"variables": []` generates the document and returns `200`. Any placeholder you don't supply a value for renders blank in the document.
+:::
 
 ### Variable Object Structure
 

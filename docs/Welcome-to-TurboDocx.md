@@ -10,6 +10,7 @@ keywords:
   - getting started
   - digital signatures
   - document generation
+  - verify your email
 ---
 
 
@@ -72,6 +73,17 @@ Every TurboDocx product is also a REST API. Official SDKs cover JavaScript/TypeS
 ## Troubleshooting
 
 If a document, template, or integration isn't behaving as expected, check that specific product's page first, most end with their own troubleshooting section, for example [Template Troubleshooting](./TurboDocx-Templating/Template-Troubleshooting.md). If you can't find an answer there, contact TurboDocx support with the organization name and a description of what you tried.
+
+### "Please verify your email" when you sign in {#please-verify-your-email}
+
+You may see a **Please verify your email** screen the first time you sign in a new way, for example with Google or your company's single sign-on, using the email address of an account you already have. TurboDocx only connects a new sign-in to an existing account once the email address is verified, so nobody can take over an account with an unverified address.
+
+To continue:
+
+1. Open the verification link in the email we sent you. If you can't find it, click **Resend verification email**, then check your inbox and spam folder.
+2. Click **Sign in again** and sign in the same way as before.
+
+If you clicked resend a moment ago, the screen asks you to wait a minute before sending another email.
 
 ## Frequently asked questions
 

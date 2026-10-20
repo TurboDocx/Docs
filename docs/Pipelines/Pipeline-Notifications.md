@@ -1,7 +1,7 @@
 ---
 title: Pipeline Notifications
 sidebar_position: 3
-description: Choose who is notified when a pipeline run succeeds or fails, override recipients per routing store, and customize the completion email and ZIP.
+description: Choose who is notified when a pipeline run succeeds or fails, set per-store recipients, customize the completion email, and add a note to failure emails.
 keywords:
   - pipeline notifications
   - signed and delivered email
@@ -13,6 +13,7 @@ keywords:
   - attach signed document zip
   - routing store notifications
   - pipeline email recipients
+  - failure email note
 ---
 
 # Pipeline Notifications
@@ -69,6 +70,19 @@ To drop live values into the subject or message, use the **Insert a field** chip
 :::note Large attachments
 If the ZIP attachment is too large to email, the completion email is still sent without the attachment so the notice always gets through. The signed document always lands in its destination folder regardless of the email.
 :::
+
+<br/>
+
+## Add a Note to Failure Emails
+
+You can add a short note of your own to every failure email the pipeline sends, for example what the recipient should do next. Under the **Failed** list, click **Add a note to the email** and type it in **Note for failure emails**.
+
+- The note appears under **Note from your administrator**, above the error details, in every failure email for this pipeline.
+- It is sent as plain text, as typed. Line breaks are kept. Insert-field chips are not available here.
+- The limit is 1,000 characters. A longer paste is cut to the limit and the wizard tells you.
+- Clear the box to stop adding a note.
+
+Once a note is saved, the button reads **Edit failure note**.
 
 <br/>
 
