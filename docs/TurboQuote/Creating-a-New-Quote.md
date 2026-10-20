@@ -142,6 +142,10 @@ Every new quote starts with your organization's **default** price book, shown un
 2. Pick the book you want. Each book shows its discount and the dates it is valid. Only books that are offered on quotes appear.
 3. Click **Apply price book**.
 
+![The Price book in the quote header, showing Standard Pricing](/img/turboquote/new-quote/11a-price-book-button.png)
+
+![The Price book dialog with Nonprofit Program picked and the Apply price book button](/img/turboquote/new-quote/11b-price-book-dialog.png)
+
 Every catalog product on the quote is repriced from the new book, and any discount you set on those lines is reset. Bundles and custom items keep their prices. If a book changes after you applied it, the dialog says so; click **Apply again** to pick up the new prices. To stop using a price book, click **Remove price book**: the quote keeps its current prices.
 
 See [Managing Price Books](./Managing-Price-Books.md) to set up the books themselves.
