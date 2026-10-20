@@ -1,6 +1,6 @@
 ---
 title: 'Prepared By & Sender Identity'
-sidebar_position: 5
+sidebar_position: 10
 description: 'Configure TurboQuote sender identity: manage "Prepared by" name and email on quotes in the UI, API, SDKs, and n8n.'
 keywords:
   - turboquote

@@ -1,6 +1,6 @@
 ---
 title: Renaming a Quote
-sidebar_position: 7
+sidebar_position: 12
 description: Rename a draft quote from the quotes list or the quote page, and understand how a quote's name reaches the signer when you send it for signature.
 keywords:
   - turboquote
@@ -43,12 +43,14 @@ Two ordinary actions produce a name you probably don't want a client to read:
 
 | How you got here | The name you end up with |
 |---|---|
-| You **duplicated** a quote to reuse its line items | `Copy of Acme Q3 Proposal` |
+| You **duplicated** a quote and kept the suggested name | `Copy of Acme Q3 Proposal` |
 | You duplicated the copy again | `Copy of Copy of Acme Q3 Proposal` |
 
-If you send either of those without renaming, `Copy of Acme Q3 Proposal` is the title on the
-signature request your client receives. Renaming takes a couple of seconds and happens before the
-send, so it never reaches them.
+When you choose **Duplicate**, TurboQuote asks for the **name of the copy** and suggests
+`Copy of …`. Type the real name there and you are done. If you keep the suggestion and send the
+quote without renaming, `Copy of Acme Q3 Proposal` is the title on the signature request your
+client receives. Renaming takes a couple of seconds and happens before the send, so it never
+reaches them.
 
 :::tip Renewals don't do this
 Renewing an expired quote is different from duplicating one. A renewal is the **same deal
@@ -104,7 +106,7 @@ A few rules apply wherever you rename:
 ## When renaming is unavailable
 
 The **Rename** option is visible but greyed out once a quote leaves draft status — after it has
-been sent, accepted, declined, or voided. This is deliberate: the signature request has already
+been sent, accepted, declined, or voided. Hover the **ⓘ** icon next to it to see why. This is deliberate: the signature request has already
 been delivered under the current name, and quietly changing the title of a document someone has
 already received would be misleading.
 
@@ -123,7 +125,7 @@ Here's what to remember:
 
 1. A quote's name becomes the **signature document's name** when you send it
 2. Rename from the **quote page header** or the **⋮ menu** in the quotes list
-3. Duplicates arrive as `Copy of …` — rename them before sending
+3. Duplicates are named `Copy of …` unless you name the copy — rename them before sending
 4. Renewals keep the original name and never accumulate `Copy of` prefixes
 5. Renaming is **draft-only**; after sending, void and re-send instead
 

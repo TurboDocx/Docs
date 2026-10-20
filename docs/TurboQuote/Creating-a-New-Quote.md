@@ -1,204 +1,263 @@
 ---
 title: Creating a New Quote
 sidebar_position: 1
-description: Learn how to create a new professional quote in TurboQuote, including setting up company and contact details.
+description: Create a quote in TurboQuote from start to send. Pick the customer, set the quote details, add products, bundles and custom items, then preview and send it for signature.
 keywords:
   - turboquote
   - quote creation
   - create quote
   - new quote
-  - company details
-  - contact details
+  - custom line item
+  - send quote
+  - quote builder
   - professional quote
   - TurboDocx
 ---
 
 # Creating a New Quote
 
-This guide walks you through the complete process of creating a new professional quote using TurboQuote. You'll learn how to initiate a quote, set up a company with contact information, and finalize the quote for your client.
+This guide walks you through a quote from start to finish: choosing who it is for, setting its details, adding what you are selling, and sending it for signature.
 
 ## What You'll Accomplish
 
 By the end of this guide, you will have:
 
-- 🧾 **Created a new quote** from the TurboDocx home screen
-- 🏢 **Added a new company record** with industry classification
-- 👤 **Set up contact details** for the company
-- ✅ **Named and submitted** your completed quote
+- 👤 **Picked the contact** who receives and signs the quote
+- 🧾 **Set the quote details**: name, number, currency, quote type, term, valid-until date and tax
+- 📦 **Added products, bundles and a custom item**, with quantities and discounts
+- 👀 **Previewed** the quote as your customer will see it
+- ✉️ **Sent it** with reminders, ready for signature
+- ✅ **Know what happens next**, from Sent to Accepted
 
 :::tip Quick Start Promise
-Creating your first quote takes just a few minutes. Follow along and you'll have a professional, ready-to-send quote in no time! 🚀
+A quote takes a few minutes, and everything saves as you go. You can stop at any point and pick it up again from the Quotes page. 🚀
 :::
 
 <br/>
 
-## Step 1: Start Creating a New Quote from the Main TurboDocx Home Screen
-
-Begin the process of creating and sending a new professional quote using TurboQuote. The main options section provides the entry point to initiate this workflow, setting up the workspace to add client details, products, and pricing.
+## Step 1: Start a New Quote
 
 **Instruction:**
 
-- Click on the **Create a Quote** card in the main options section to start building a new quote.
+- On the **Quotes** page, click **New quote** in the top-right corner.
 
-![Start creating a new quote from the home screen](/img/turboquote/step-01.png)
+You can also start a quote from the **Create a Quote** card on the TurboDocx home screen.
+
+![The New quote button on the Quotes page](/img/turboquote/new-quote/01-new-quote-button.png)
 
 <br/>
 
-## Step 2: Initiate Quote Creation from the TurboQuote Quotes List Page
+## Step 2: Pick Who the Quote Is For
 
-Access the TurboQuote module directly to begin creating a new quote. This will transition to the quote creation interface where detailed quote information can be provided.
+The **Who is this quote for?** page lists your contacts, with your **Recent customers** first. Search by name, email or company, or switch to the table view if you prefer a list.
 
 **Instruction:**
 
-- Click the **+ New Quote** button located in the top-right toolbar of the quotes page.
+- Click the contact who will receive and sign the quote.
 
-![Initiate quote creation from the quotes list](/img/turboquote/step-02.png)
+![The contact picker with Recent customers and All contacts. The contact Liam Patel is selected](/img/turboquote/new-quote/02-pick-contact.png)
+
+### Quoting someone new?
+
+If the customer isn't in TurboQuote yet, click **Add new** and choose **New company** or **New contact**. A new company needs at least one contact, so you can add both in one go. The new contact is then picked for the quote. See [Managing Companies and Contacts](./Managing-Companies-and-Contacts.md) for the fields.
+
+![The Add new menu with New company and New contact](/img/turboquote/new-quote/03-add-new.png)
 
 <br/>
 
-## Step 3: Open the Add New Menu on the Quote Creation Page
+## Step 3: Fill In the Quote Details
 
-Access options to add new contacts or related items while building the quote. This menu exposes additional creation flows necessary for completing the quote setup.
+The **Quote details** dialog opens for the contact you picked.
 
 **Instruction:**
 
-- Click the purple **Add New** button on the quote page to reveal more creation options.
+1. Type a **Quote name**. Your customer sees it on the quote and on the signature request.
+2. Check the **Currency**. Only products and bundles in this currency can be added, and it can't be changed once the quote is created.
+3. Choose the **Quote type**:
+   - **One-time**: hardware, projects or services, with no contract.
+   - **Fixed term**: recurring services for a set period. Enter the **Contract length** in months or years (up to 10 years).
+   - **Auto-renewing**: renews until the customer cancels.
+4. Check **Valid until**. It defaults to 30 days from today; the customer can sign until then.
+5. Turn on **Tax** if you charge it, and enter the rate (0 to 100, two decimals). It is applied to the subtotal.
 
-![Open the Add New menu](/img/turboquote/step-03.png)
+![The Quote details dialog with the quote name filled in](/img/turboquote/new-quote/04-quote-details.png)
+
+![The three quote types: One-time, Fixed term and Auto-renewing](/img/turboquote/new-quote/05-quote-type.png)
+
+### The quote number
+
+The **Quote number** shows the number this quote will get. It is assigned when you create the quote. To change the format, click **Edit numbering**: the **Quote numbering** dialog is the same as **Settings › Quote numbering** and shows the next numbers as you edit. Changes apply to quotes created from then on. See [How to Configure Quote Numbering](./How-to-Configure-Quote-Numbering.md).
+
+![The Quote numbering dialog with a preview of the next quote number](/img/turboquote/new-quote/06-numbering.png)
+
+**Instruction:**
+
+- Click **Create quote**.
+
+![The Create quote button](/img/turboquote/new-quote/07-create-quote.png)
 
 <br/>
 
-## Step 4: Select New Company from the Add New Dropdown
+## Step 4: Add What You're Selling
 
-Create a new company record to associate with the quote. This ensures the quote is linked to an up-to-date company profile for accurate tracking and communication.
+The quote opens in the builder. The header shows the customer, valid-until date, term, tax and price book; the **Quote total** on the right updates with every change. There is no Save button: changes save automatically.
+
+The **Line items** section has three ways to add items:
+
+- **Add products**: from your product catalog.
+- **Add bundles**: products sold together at one price.
+- **Custom item**: a one-off item for this quote only.
+
+![The empty quote builder with the Add products, Add bundles and Custom item buttons](/img/turboquote/new-quote/08-builder-empty.png)
+
+### Add products
 
 **Instruction:**
 
-- Click the **New Company** option in the dropdown menu under the **Add New** button.
+1. Click **Add products**.
+2. Tick the products you want. You can set each one's quantity right in the list.
+3. Click **Add N products**.
 
-![Select New Company from dropdown](/img/turboquote/step-04.png)
+Prices come from the quote's **price book**, shown at the top of the dialog. The footer shows what you have selected and its total. If a product is missing, click **New product** to create it without leaving the quote.
+
+![The Add products dialog with three products ticked and a quantity of 40 on Wireless Access Point](/img/turboquote/new-quote/09-add-products.png)
+
+### Adjust quantities and discounts
+
+Each line has a quantity, a unit price and a **discount per unit**. Choose **%** for a percentage or **$** for an amount off each unit. Items are grouped under their category, and you can drag a line or a whole category to reorder them.
+
+![A line item with a quantity of 40 and a 10% discount per unit](/img/turboquote/new-quote/10-line-items.png)
+
+The **Quote total** shows the total, how much of it recurs and for how long, and a line for each billing type. **Overall margin** shows your profit on the quote, worked out from the cost of each product. It is for you only and never appears on the quote.
+
+![The Quote total with one-time and yearly lines, and the overall margin](/img/turboquote/new-quote/11-quote-total.png)
+
+### Change the price book
+
+Every new quote starts with your organization's **default** price book, shown under **Price book** in the header. To price this quote with a different book, for example partner or nonprofit pricing:
+
+**Instruction:**
+
+1. Click **Price book** in the header.
+2. Pick the book you want. Each book shows its discount and the dates it is valid. Only books that are offered on quotes appear.
+3. Click **Apply price book**.
+
+![The Price book in the quote header, showing Standard Pricing](/img/turboquote/new-quote/11a-price-book-button.png)
+
+![The Price book dialog with Nonprofit Program picked and the Apply price book button](/img/turboquote/new-quote/11b-price-book-dialog.png)
+
+Every catalog product on the quote is repriced from the new book, and any discount you set on those lines is reset. Bundles and custom items keep their prices. If a book changes after you applied it, the dialog says so; click **Apply again** to pick up the new prices. To stop using a price book, click **Remove price book**: the quote keeps its current prices.
+
+See [Managing Price Books](./Managing-Price-Books.md) to set up the books themselves.
 
 <br/>
 
-## Step 5: Focus the Company Name Field in the Create Company Form
+## Step 5: Add a Custom Item (Optional)
 
-Begin entering the company's name, which is the primary identifier for the new company record.
+Use a custom item for something you sell once, such as a site survey. It lives on this quote only and is not added to your catalog.
 
 **Instruction:**
 
-- Click on the **Company Name** text input field at the top of the Create Company form to activate text entry.
+1. Click **Custom item**.
+2. On the **General** tab, enter the **Name**, an optional **SKU**, the **Category** and the **Billing**, and an optional **Description**.
+3. On the **Pricing** tab, enter the **Unit price** and, optionally, **Your cost** to see the margin. A custom item always uses the quote's currency.
+4. On the **Images** tab, add up to **3 images** (JPEG or PNG, up to 2 MB each). Drag them by their grip to change the order; the quote shows them side by side in that order.
+5. Click **Add to quote**.
 
-![Focus the Company Name field](/img/turboquote/step-05.png)
+![The General tab of a new custom item](/img/turboquote/new-quote/12-custom-item.png)
+
+![The Pricing tab with the unit price, your cost and the margin](/img/turboquote/new-quote/13-custom-item-pricing.png)
+
+![The Images tab with one image and a preview of how it looks on a quote](/img/turboquote/new-quote/14-custom-item-images.png)
+
+The item is added at quantity 1 with no discount, and carries a **Custom** tag. Set its quantity and discount in the table like any other line. To change its name, price or images later, click its **⋮** button and choose **Edit**.
+
+![The custom item in the line items, tagged Custom](/img/turboquote/new-quote/15-custom-item-row.png)
+
+![The custom item's menu with Edit and Remove](/img/turboquote/new-quote/16-custom-item-menu.png)
 
 <br/>
 
-## Step 6: Open Industry Selection Options in Create Company Form
-
-Access the interface to select an industry or create a new one, specifying the business category associated with the company.
+## Step 6: Add Bundles (Optional)
 
 **Instruction:**
 
-- Click the icon button at the right side of the **Select or create industry...** field within the Create Company form.
+1. Click **Add bundles**.
+2. Tick the bundles you want and set their quantity.
+3. Click **Add N bundles**.
 
-![Open industry selection options](/img/turboquote/step-06.png)
+Each bundle shows its price for each billing type, so you can see what the customer pays once and what recurs.
+
+![The Add bundles dialog with Remote Team Kit ticked](/img/turboquote/new-quote/17-add-bundles.png)
 
 <br/>
 
-## Step 7: Choose an Industry from the Dropdown
+## Step 7: Change the Details Later (Optional)
 
-Define the company's industry by selecting the appropriate preset industry from the dropdown list.
+Click **Edit details** in the header to change the quote type, contract length, **Valid until** or **tax**. To rename the quote, click its name at the top of the page. The currency is fixed once a quote is created.
 
-**Instruction:**
-
-- Click on the desired industry option (e.g. **Construction (Default)**) in the Industry dropdown list to select it for the company.
-
-![Choose industry from dropdown](/img/turboquote/step-07.png)
+![The Edit quote details dialog with the Tax switch](/img/turboquote/new-quote/18-edit-details.png)
 
 <br/>
 
-## Step 8: Edit the Contact Name Field in the Create Company Form
-
-Focus on the primary contact's name field to enter or modify the contact person's full name.
+## Step 8: Preview the Quote
 
 **Instruction:**
 
-- Click on the **Name** text input field under the **Contact 1** section in the Create Company form to activate the text cursor.
+- Click **Preview & send** in the top-right corner.
 
-![Focus the contact name field](/img/turboquote/step-08a.png)
+![The Preview & send button](/img/turboquote/new-quote/19-preview-send-button.png)
 
-![Enter the contact name](/img/turboquote/step-08b.png)
+The preview shows the quote exactly as your customer will see it, including images on custom items. From the bar at the bottom you can go back with **Edit quote**, **Download PDF**, or **Send quote**.
+
+![The quote preview with Download PDF and Send quote](/img/turboquote/new-quote/20-preview.png)
 
 <br/>
 
-## Step 9: Enter the Contact Email Address
-
-Prepare to enter or update the email address for the primary contact, which is essential for communication related to the quote.
+## Step 9: Send the Quote
 
 **Instruction:**
 
-- Click on the email address text input field under **Contact 1** in the Create Company form to focus it for editing.
+1. Click **Send quote**.
+2. Check the recipient under **To**. They receive an email with a link to review and sign the quote.
+3. Optionally, add **CC** addresses (up to 15). CC'd people get a copy when the quote is signed; they can't sign.
+4. Open **Reminders & expiration** to change the defaults for this quote:
+   - **Send reminder emails**: when the first reminder goes out, how often after that, and how many reminders each signer gets (or **No limit**).
+   - **Expire the signature request**: makes the signing link stop working on the quote's **Valid until** date. Reminders stop on that date either way.
+5. Click **Send quote**.
 
-![Enter the contact email address](/img/turboquote/step-09.png)
+![The Send quote dialog](/img/turboquote/new-quote/21-send-dialog.png)
+
+![Reminders & expiration, with reminder emails turned on](/img/turboquote/new-quote/22-reminders.png)
+
+These settings apply to this quote only. To change your team's defaults, go to **E-signature settings**.
 
 <br/>
 
-## Step 10: Submit the Create Company Form
+## What Happens After You Send
 
-Complete the creation of the new company record along with its associated contact details by submitting the form.
+Sending a quote creates a **TurboSign** signature request with the quote attached and emails it to the recipient. From there:
 
-**Instruction:**
+1. **The quote moves to Sent.** You'll find it on the **Sent** tab of the Quotes page. It can no longer be edited or renamed.
+2. **The customer reviews and signs.** The email links to the quote, where the recipient reads it and signs to accept it. Any reminders you set go out on schedule until they sign or the quote's **Valid until** date passes.
+3. **Signing accepts the quote.** As soon as the signature is complete, the quote moves to **Accepted** and counts towards your **Won**, **Monthly recurring** and **Win rate** cards. CC'd people get a copy of the signed quote.
 
-- Click the **Create Company** button located at the bottom-right of the modal to submit the form.
+If things don't go to plan:
 
-![Submit the Create Company form](/img/turboquote/step-10.png)
-
-<br/>
-
-## Step 11: Select the Contact Card for the New Quote
-
-Associate the newly created contact with the quote by selecting their contact card.
-
-**Instruction:**
-
-- Click on the contact card labeled with the contact's name to select this contact for the quote.
-
-![Select the contact card](/img/turboquote/step-11.png)
-
-<br/>
-
-## Step 12: Submit the Completed Quote
-
-Finalize and create the new quote record by submitting the detailed quote information after linking company and contact.
-
-**Instruction:**
-
-- Click the blue **Create Quote** button at the bottom-right of the Quote Details dialog to submit and create the quote.
-
-![Submit the completed quote](/img/turboquote/step-12.png)
-
-<br/>
-
-## Step 13: Name Your Quote
-
-Name the quote appropriately to identify it clearly for future reference and client communication.
-
-**Instruction:**
-
-- Click on the **Quote Name** text input field at the top of the Quote Details modal to begin typing the quote name.
-
-![Focus the quote name field](/img/turboquote/step-13a.png)
-
-![Enter the quote name](/img/turboquote/step-13b.png)
+- **The customer says no.** Choose **Mark as declined** from the quote's **⋮** menu.
+- **You need to withdraw it.** Choose **Void quote**. Voiding the signature request in TurboSign voids the quote too.
+- **The Valid until date passes first.** The quote moves to the **Expired** tab. Choose **Renew** to close it and make a new draft. See [Managing Your Quotes](./Managing-Your-Quotes.md#renewing-an-expired-quote).
 
 <br/>
 
 ## Summary
 
-You've successfully created a new quote in TurboQuote! Here's a recap of what you accomplished:
+You've created and sent a quote in TurboQuote! Here's a recap:
 
-1. Initiated a new quote from the TurboDocx home screen or TurboQuote quotes list
-2. Created a new company record with industry classification
-3. Added contact details including name and email
-4. Selected the contact for the quote and submitted the final quote
+1. Started a quote with **New quote** and picked the **contact** who signs it
+2. Set the **quote details**: name, currency, quote type, term, valid-until date and tax
+3. Added **products**, **bundles** and a **custom item**, with quantities, discounts and the right **price book**
+4. **Previewed** the quote and **sent** it with reminders
 
-Your quote is now ready for you to add line items, pricing, and any additional details before sending it to your client.
+Track it from the [Quotes page](./Managing-Your-Quotes.md): it moves to **Sent**, then to **Accepted** once your customer signs.
+
