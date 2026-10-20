@@ -76,7 +76,7 @@ If a document, template, or integration isn't behaving as expected, check that s
 
 ### "Please verify your email" when you sign in {#please-verify-your-email}
 
-You may see a **Please verify your email** screen the first time you sign in a new way, for example with Google or your company's single sign-on, using the email address of an account you already have. TurboDocx only connects a new sign-in to an existing account once the email address is verified, so nobody can take over an account with an unverified address.
+You may see a **Please verify your email** screen the first time you sign in with a new sign-in method that uses the same email address as an account you already have, before that address is verified. TurboDocx only connects a new sign-in to an existing account once the email address is verified, so nobody can take over an account with an unverified address.
 
 To continue:
 

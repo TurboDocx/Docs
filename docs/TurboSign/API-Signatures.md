@@ -407,6 +407,7 @@ How a role send behaves:
 - **Template defaults fill the gaps.** The template's saved CC emails, document description, document name and reminder and expiration settings apply to anything the request leaves out. Values in the request always win.
 - **Identity verification.** A role's saved verification choice applies unless the recipient sets its own `identityVerification`. A role saved with SMS verification needs the recipient's `phone`. If your organization no longer allows a role's saved choice (for example SMS was turned off), the organization default applies instead of failing the send. A choice you set on the recipient yourself is still checked as usual. See [the recipient](/docs/TurboSign/embedded-signing/reference#the-recipient) in the embedded signing reference for those fields.
 - **Every signer needs a field.** A role send where a signer ends up with no fields fails with `SignerHasNoFields` (Prepare for Review skips this check, because you place fields in the review screen afterwards).
+- **Without roles nothing changes.** `fields` is still required when no recipient names a role.
 
 #### Claiming a role with a different signer {#claiming-a-role-with-a-different-signer}
 
@@ -423,7 +424,6 @@ What changes for the new signer:
 - **A field set to keep its own default value** in TurboDocx keeps that value.
 - **Identity verification** keeps the role's saved choice unless the recipient sets its own. The saved person's phone is never used: a role saved with SMS verification needs the new recipient's `phone`, or the send fails with `OtpPhoneRequired`.
 - **Email addresses** must stay unique. If the new signer's email matches another role's signer, or a recipient without a role, the send fails with `DuplicateRoleEmail`.
-- **Without roles nothing changes.** `fields` is still required when no recipient names a role.
 
 #### Signer role errors
 
