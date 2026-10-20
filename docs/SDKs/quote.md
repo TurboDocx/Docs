@@ -69,7 +69,7 @@ The official TurboDocx TurboQuote SDK for Node.js and browser applications. Buil
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
+TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `sent` → `accepted` / `declined` / `voided`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
 :::
 
 </TabItem>
@@ -5766,7 +5766,7 @@ The other five bulk methods follow the exact same pattern:
 
 | Type | Values |
 |---|---|
-| `QuoteStatus` | `draft`, `pending_approval`, `sent`, `accepted`, `declined`, `voided` |
+| `QuoteStatus` | `draft`, `sent`, `accepted`, `declined`, `voided` |
 | `BillingFrequency` | `monthly`, `quarterly`, `annual`, `one-time` |
 | `LineItemType` | `product`, `bundle` |
 | `RenewalPeriod` | `weekly`, `monthly`, `quarterly`, `annually` |
@@ -6001,7 +6001,7 @@ import type {
 
 | Type | Values |
 |---|---|
-| `QuoteStatus` | `'draft'` `'pending_approval'` `'sent'` `'accepted'` `'declined'` `'voided'` |
+| `QuoteStatus` | `'draft'` `'sent'` `'accepted'` `'declined'` `'voided'` |
 | `BillingFrequency` | `'monthly'` `'quarterly'` `'annual'` `'one-time'` |
 | `Currency` | `'USD'` `'EUR'` `'GBP'` `'CAD'` `'AUD'` `'INR'` |
 | `RenewalPeriod` | `'weekly'` `'monthly'` `'quarterly'` `'annually'` |
