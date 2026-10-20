@@ -11,6 +11,7 @@ keywords:
   - identityVerification
   - signing-url endpoint
   - turbosign:completed
+  - pageNavigation
   - embedded signing errors
   - OtpOverrideNotAllowed
 ---
@@ -47,6 +48,7 @@ Creates the document, adds each signer, and returns a signing URL for whoever si
 | `fields` | No | Full field list. When set, it replaces every recipient's `fields` shorthand. |
 | `sendEmail` | No | Defaults to `false`. |
 | `returnUrl` | No | `https` URL the signer returns to after signing. |
+| `pageNavigation` | No | `auto` (default), `collapsed` or `hidden`. How the signing page shows its page thumbnails in your iframe. See [Page navigation](#page-navigation). |
 
 A recipient's `auth` asks for a passcode, and its `fields` places fields on text anchors such as `{signature1}`. Leave `auth` off for no passcode (the [organization default](#the-organization-default) then applies).
 
@@ -106,6 +108,7 @@ REST: `POST /turbosign/documents/{documentId}/signing-url`
 |---|---|---|
 | `recipientId` or `externalId` | Exactly one | Picks the recipient. |
 | `returnUrl` | No | `https` URL the signer returns to after signing. See [Return URL](#return-url). |
+| `pageNavigation` | No | `auto` (default), `collapsed` or `hidden`. How the signing page shows its page thumbnails in your iframe. See [Page navigation](#page-navigation). |
 | `identityAssertion` | For `external_idv` | Your provider's verification. See [External identity verification](../identity-verification/external-identity-verification.md). |
 
 Unknown keys are rejected.
@@ -150,6 +153,24 @@ The REST response wraps the result in `data.results`. The SDKs return the inner 
 - The signing page reads it back when it loads and redirects there after the signer finishes.
 - It is set per request. Requesting a new signing URL without `returnUrl` clears the one stored earlier.
 
+#### Page navigation {#page-navigation}
+
+The signing page shows every page of the document as a thumbnail, marks where the signer's fields are, and counts the required fields left on each page. `pageNavigation` sets how that navigation appears in your iframe:
+
+| Value | What the signer sees |
+|---|---|
+| `auto` (default) | Sized to the iframe's width, not the browser window's: the thumbnail rail is open at 1200px and wider, collapsed to slim tabs from 900px to 1199px, and replaced under 900px by a page button in the bottom bar (a grid icon with the current page, like **3/6**). |
+| `collapsed` | The rail starts collapsed at any width. The signer can still open it. |
+| `hidden` | No rail and no page button in the bottom bar. |
+
+- Any other value is rejected with a `400`.
+- It is set per request, like `returnUrl`. Requesting a new signing URL without `pageNavigation`, or with `auto`, resets it to `auto`.
+- `createEmbeddedSignature` passes it to the signing URL it returns for the first signer. When you mint a URL for a later signer with `createSigningUrl`, pass it again.
+- It applies only to signing URLs from `createSigningUrl` and `createEmbeddedSignature`. Signing links sent by email always behave as `auto`.
+- When the signer picks a page, only the document inside the iframe scrolls, never your page.
+
+In the SDKs: `pageNavigation` in JavaScript / TypeScript (type `PageNavigationMode`), `page_navigation=` in Python, `PageNavigation` with the `PageNavigationAuto`, `PageNavigationCollapsed` and `PageNavigationHidden` constants in Go, the `PageNavigation` enum in PHP and Java, and `page_navigation:` on `create_signing_url` in Ruby (`pageNavigation:` in the `create_embedded_signature` request hash).
+
 ### Example
 
 <Tabs groupId="language" queryString>
@@ -161,6 +182,7 @@ const { url, expiresAt, identityVerificationMode, pendingChecks } =
   await TurboSign.createSigningUrl(documentId, {
     externalId: "your_customer_123", // or recipientId, exactly one
     returnUrl: "https://app.yourcompany.com/signed",
+    pageNavigation: "collapsed", // optional: "auto" (default), "collapsed" or "hidden"
   });
 ```
 
@@ -173,6 +195,7 @@ link = await TurboSign.create_signing_url(
     document_id,
     external_id="your_customer_123",  # or recipient_id, exactly one
     return_url="https://app.yourcompany.com/signed",
+    page_navigation="collapsed",  # optional: "auto" (default), "collapsed" or "hidden"
 )
 url, pending_checks = link["url"], link["pendingChecks"]
 ```
@@ -181,11 +204,13 @@ url, pending_checks = link["url"], link["pendingChecks"]
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
 ```php
+use TurboDocx\Types\PageNavigation;
 use TurboDocx\Types\Requests\CreateSigningUrlRequest;
 
 $link = TurboSign::createSigningUrl($documentId, new CreateSigningUrlRequest(
     externalId: 'your_customer_123', // or recipientId, exactly one
-    returnUrl: 'https://app.yourcompany.com/signed'
+    returnUrl: 'https://app.yourcompany.com/signed',
+    pageNavigation: PageNavigation::COLLAPSED // optional: AUTO (default), COLLAPSED or HIDDEN
 ));
 $url = $link->url;
 ```
@@ -196,8 +221,9 @@ $url = $link->url;
 ```go
 // Inside a function that returns error, with client and ctx as in "Your own iframe". pdf holds the PDF bytes.
 link, err := client.TurboSign.CreateSigningURL(ctx, documentID, &turbodocx.CreateSigningURLRequest{
-	ExternalID: "your_customer_123", // or RecipientID, exactly one
-	ReturnURL:  "https://app.yourcompany.com/signed",
+	ExternalID:     "your_customer_123", // or RecipientID, exactly one
+	ReturnURL:      "https://app.yourcompany.com/signed",
+	PageNavigation: turbodocx.PageNavigationCollapsed, // optional: Auto (default), Collapsed or Hidden
 })
 if err != nil {
 	return err
@@ -215,6 +241,7 @@ CreateSigningUrlResponse link = client.turboSign().createSigningUrl(
     new CreateSigningUrlRequest.Builder()
         .externalId("your_customer_123") // or recipientId, exactly one
         .returnUrl("https://app.yourcompany.com/signed")
+        .pageNavigation(PageNavigation.COLLAPSED) // optional: AUTO (default), COLLAPSED or HIDDEN
         .build());
 String url = link.getUrl();
 ```
@@ -227,7 +254,8 @@ String url = link.getUrl();
 link = TurboDocxSdk::TurboSign.create_signing_url(
   document_id,
   external_id: "your_customer_123", # or recipient_id:, exactly one
-  return_url: "https://app.yourcompany.com/signed"
+  return_url: "https://app.yourcompany.com/signed",
+  page_navigation: "collapsed" # optional: "auto" (default), "collapsed" or "hidden"
 )
 url = link["url"]
 ```
@@ -239,8 +267,9 @@ url = link["url"]
 
 | Status | `code` | Meaning |
 |---|---|---|
-| 400 | `RecipientSelectorInvalid`, `InvalidReturnUrl` | Send exactly one selector; `returnUrl` must be `https`. |
+| 400 | `RecipientSelectorInvalid` | Send exactly one selector. |
 | 400 | `IdentityAssertion*`, `IdentityProviderMismatch`, `IdentityEmailMismatch` | The `external_idv` assertion is missing or fails a check. |
+| 400 | none (`type` is `ValidationError`) | The body failed validation: `returnUrl` is not an `https` URL, or `pageNavigation` is not `auto`, `collapsed` or `hidden`. |
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. |
 | 403 | `EmbeddedSigningNotEnabled`, `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed` | The organization has not turned on what the recipient uses. |
 | 404 | `RecipientNotFound` | No recipient matches the selector. |
@@ -523,7 +552,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 400 | `IdentityConfigInvalid`, `IdvProviderRequired`, `OverrideNotAcknowledged`, `IdentityModeConflict` | The recipient's `identityVerification` block is invalid or incomplete. |
 | 400 | `DuplicateExternalId` | Two recipients on the document share an `externalId`. |
 | 400 | `RecipientSelectorInvalid` | `createSigningUrl` needs exactly one of `recipientId` or `externalId`. |
-| 400 | `InvalidReturnUrl` | `returnUrl` is not an `https` URL. |
+| 400 | none (`type` is `ValidationError`) | The `createSigningUrl` body failed validation: a `returnUrl` that is not `https`, or a `pageNavigation` other than `auto`, `collapsed` or `hidden`. This body is `{ "message", "type", "data": { "errors" } }`, not the four-field body above. |
 | 400 | `IdentityAssertionRequired`, `IdentityAssertionInvalid`, `IdentityProviderMismatch`, `IdentityEmailMismatch`, `IdentityAssertionStale`, `IdentityAssertionReused` | The `external_idv` assertion is missing or fails a check (see [External identity verification](../identity-verification/external-identity-verification.md#errors)). |
 | 402 | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. Requesting a signing URL needs an **Administrator** or **Contributor** key. |

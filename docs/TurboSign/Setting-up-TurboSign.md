@@ -501,6 +501,18 @@ After clicking "Send Document":
 3. **You track progress** on your TurboSign dashboard as each person signs
 4. **Everyone receives** a copy of the fully signed document, including you as the sender
 
+### What Your Signers See
+
+When a signer opens the document, a **Pages** panel shows every page as a thumbnail. A mark sits wherever that signer has a field: indigo for a field they still need to fill, green for one that's done, and dashed for an optional one. Each page also shows how many required fields are left on it. Clicking a thumbnail jumps to that page, and the highlight follows the page the signer is reading.
+
+![The signing page on a desktop, with the Pages panel open on the left showing 6 pages, page 2 highlighted with 2 left, page 3 with 1 left, and the Needs you, Done and Optional legend](/img/turbosign/page-navigation/01-desktop-rail.png)
+
+- **Wide screens:** the panel is open on the left.
+- **Narrower screens:** the panel collapses to slim tabs with a count badge. The signer can open it again, and their choice is remembered.
+- **Tablets and phones:** a page button in the bottom bar (a grid icon with the current page, like **3/6**) opens the same thumbnails in a drawer or a bottom sheet.
+
+![The Pages bottom sheet on a phone, showing 4 required fields left and a row of page thumbnails with 2 left on page 2 and 1 left on page 3](/img/turbosign/page-navigation/02-phone-pages-sheet.png)
+
 <br/>
 
 ## Congratulations! 🎉

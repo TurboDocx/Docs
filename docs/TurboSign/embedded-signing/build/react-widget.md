@@ -108,6 +108,8 @@ export function SignStep({ name, email }: { name: string; email: string }) {
 | `onDeclined`, `onError` | No | Reserved. The signing page does not send these events yet. |
 | `allowAnyOrigin` | No | Development only. Accepts messages from any origin. Never ship it. |
 
+The widget has no prop for the signing page's page navigation. The thumbnail rail follows the widget's width (open at 1200px and wider, collapsed from 900px to 1199px, a page button in the bottom bar under 900px). To start it collapsed or hide it, pass `pageNavigation` on your server when you request the signing URL. See [Page navigation](../reference.md#page-navigation).
+
 :::warning Don't leave origin empty
 The widget fails closed. If `origin` is missing, it ignores every message, logs a one-time warning in the console, and `onCompleted` never fires. `allowAnyOrigin` turns that off for local debugging, but then any frame on your page could fake a completion.
 :::
