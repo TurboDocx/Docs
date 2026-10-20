@@ -46,7 +46,7 @@ Every public doc page `/<path>` also serves `/<path>.md` as `text/markdown`, the
 
 **How twins are produced (you don't write them)**
 - `docusaurus-plugin-llms` (`generateMarkdownFiles: true` in `docusaurus.config.js`) writes one cleaned `.md` per doc, at the path of the page's real URL (it honors `id` and `slug`), and writes `llms.txt` pointing at the twins.
-- `npm run build` then runs `scripts/agent-markdown.mjs build` as `postbuild`. It adds YAML frontmatter (`title`, `description`, `url`) from the page's H1, meta description and canonical URL, makes root-relative links and images absolute, injects the `rel="alternate"` link, and rebuilds `llms-full.txt` from the twins in `llms.txt` order.
+- `npm run build` then runs `scripts/agent-markdown.mjs build` as `postbuild`. It adds YAML frontmatter (`title`, `description`, `url`) from the page's H1, meta description and canonical URL, rewrites doc links (relative `./Other.md` and `/docs/...`) to absolute twin URLs using the build's `.docusaurus` doc metadata, makes images absolute, unlinks links to pages that are not built, injects the `rel="alternate"` link, and rebuilds `llms-full.txt` from the twins in `llms.txt` order.
 - Excluded on purpose: `draft: true` pages (not built) and `unlisted: true` pages (noindex). The config reads `unlisted` from frontmatter, so a hidden page never gets a twin or an `llms.txt` entry. Partials (`_*.mdx`) are inlined into the pages that import them.
 - OpenAPI reference pages (`docs/API/*.api.mdx`) get twins too. Their prose, curl and JSON examples carry over; the generated endpoint, header and body tables (`<DisplayEndpoint>`, `<HeadersTable>`, `<BodyTable>`, `<QueryTable>`) do not, so put the method, path and key parameters in the prose.
 
