@@ -2,7 +2,7 @@
 title: TurboSign SDK
 sidebar_position: 2
 sidebar_label: TurboSign
-description: 'TurboSign SDK for JavaScript, TypeScript, Python, PHP, Go and Java: send documents for signature, track status, download signed PDFs and audit trails.'
+description: 'TurboSign SDK for JavaScript, TypeScript, Python, PHP, Go, Java and Ruby: send documents for signature, track status, download signed PDFs and audit trails.'
 keywords:
 - turbodocx javascript
 - turbodocx typescript
@@ -42,6 +42,12 @@ keywords:
 - java sdk
 - document api java
 - esignature java
+- turbodocx ruby
+- turbosign ruby
+- ruby sdk
+- gem turbodocx
+- rails turbodocx
+- esignature ruby
 ---
 
 import Tabs from '@theme/Tabs';
@@ -76,6 +82,11 @@ The official TurboDocx SDK for Go applications. Build document generation and di
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 The official TurboDocx SDK for Java applications. Build document generation and digital signature workflows with the Builder pattern, comprehensive error handling, and type-safe APIs. Available on Maven Central as `com.turbodocx:turbodocx-sdk`.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The official TurboDocx SDK for Ruby applications. Build document generation and digital signature workflows with a simple synchronous API and comprehensive error handling. Available on RubyGems as `turbodocx-sdk`.
 
 </TabItem>
 </Tabs>
@@ -182,6 +193,34 @@ implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
 </Tabs>
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+<Tabs>
+<TabItem value="gem" label="gem" default>
+
+```bash
+gem install turbodocx-sdk
+```
+
+</TabItem>
+<TabItem value="bundler" label="Bundler">
+
+Add to your `Gemfile`:
+
+```ruby
+gem "turbodocx-sdk"
+```
+
+Then run:
+
+```bash
+bundle install
+```
+
+</TabItem>
+</Tabs>
+
+</TabItem>
 </Tabs>
 
 ## Requirements {#requirements}
@@ -221,6 +260,12 @@ This SDK leverages PHP 8.1+ features including enums, named parameters, readonly
 - Java 11+
 - OkHttp 4.x (included)
 - Gson 2.x (included)
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+- Ruby 2.7+
+- No runtime dependencies (the SDK uses the standard library's `net/http` and `json`)
 
 </TabItem>
 </Tabs>
@@ -404,6 +449,26 @@ public class Main {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "turbodocx_sdk"
+
+# Configure globally (recommended)
+TurboDocxSdk::TurboSign.configure(
+  api_key:      ENV["TURBODOCX_API_KEY"],    # Required: Your TurboDocx API key
+  org_id:       ENV["TURBODOCX_ORG_ID"],     # Required: Your organization ID
+  sender_email: "contracts@yourcompany.com", # Required: Reply-to address for signature emails
+  sender_name:  "Your Company"               # Recommended: Sender name shown in emails
+  # base_url:   "https://api.turbodocx.com"  # Optional: Override base URL
+)
+```
+
+:::tip Authentication
+Authenticate using `api_key`. API keys are recommended for server-side applications.
+:::
+
+</TabItem>
 </Tabs>
 
 ### Builder Options {#builder-options}
@@ -438,6 +503,25 @@ TurboDocxClient client = new TurboDocxClient.Builder()
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The Ruby SDK has no builder. Pass these keyword arguments to `TurboDocxSdk::TurboSign.configure`; an argument you leave out falls back to the environment variable listed, where there is one.
+
+| Keyword          | Type                          | Required | Environment fallback      | Description                                   |
+| ---------------- | ----------------------------- | -------- | ------------------------- | --------------------------------------------- |
+| `api_key`        | `String`                      | Yes\*    | `TURBODOCX_API_KEY`       | Organization API key                          |
+| `access_token`   | `String`                      | Yes\*    | -                         | Bearer access token (alternative to `api_key`) |
+| `org_id`         | `String`                      | Yes      | `TURBODOCX_ORG_ID`        | Organization ID                               |
+| `sender_email`   | `String`                      | Yes      | `TURBODOCX_SENDER_EMAIL`  | Reply-to address for signature request emails |
+| `sender_name`    | `String`                      | No       | `TURBODOCX_SENDER_NAME`   | Display name used on signature request emails |
+| `base_url`       | `String`                      | No       | `TURBODOCX_BASE_URL`      | API base URL (default `https://api.turbodocx.com`) |
+| `client_context` | `TurboDocxSdk::ClientContext` | No       | -                         | Overrides the device and location details recorded on the audit trail |
+
+\*Provide either `api_key` or `access_token`.
+
+The SDK exposes no timeout settings: requests use the standard library's `Net::HTTP` defaults.
+
+</TabItem>
 </Tabs>
 
 ### Closing the Client {#closing-the-client}
@@ -461,6 +545,11 @@ try (TurboDocxClient client = new TurboDocxClient.Builder()
 :::tip Reuse a single client
 Creating a client per request leaks OkHttp threads until they are closed. Prefer one long-lived client for the life of your application and call `client.close()` during shutdown.
 :::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+There is nothing to close in Ruby. The SDK opens a new `Net::HTTP` connection for each request and keeps no connection pool or background threads, so configure it once at startup and call its class methods directly.
 
 </TabItem>
 </Tabs>
@@ -526,6 +615,21 @@ export TURBODOCX_SENDER_EMAIL=sender@yourcompany.com
 
 :::warning API Credentials Required
 Three parameters are **required** for TurboSign operations: `apiKey` (or `accessToken`), `orgId`, and `senderEmail`. The `senderEmail` is used as the reply-to address for signature request emails. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
+:::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```bash
+# .env
+TURBODOCX_API_KEY=your_api_key_here
+TURBODOCX_ORG_ID=your_org_id_here
+TURBODOCX_SENDER_EMAIL=contracts@yourcompany.com
+TURBODOCX_SENDER_NAME=Your Company
+```
+
+:::warning API Credentials Required
+`api_key` and `org_id` are **required** for all API requests. TurboSign additionally **requires `sender_email`** (set it on `configure`, per call, or via the `TURBODOCX_SENDER_EMAIL` environment variable): `configure` raises a `TurboDocxSdk::ValidationError` without it. `sender_name` is optional but strongly recommended. To get your credentials, follow the **[Get Your Credentials](/docs/SDKs#1-get-your-credentials)** steps from the SDKs main page.
 :::
 
 </TabItem>
@@ -902,6 +1006,48 @@ public class Main {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "json"
+require "turbodocx_sdk"
+
+TurboDocxSdk::TurboSign.configure(
+  api_key:      ENV["TURBODOCX_API_KEY"],
+  org_id:       ENV["TURBODOCX_ORG_ID"],
+  sender_email: "contracts@acme.com",
+  sender_name:  "Acme Corp"
+)
+
+result = TurboDocxSdk::TurboSign.send_signature(
+  # Request-hash keys are camelCase: the SDK forwards them to the API verbatim
+  recipients: [
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
+    { name: "Bob Johnson", email: "bob@example.com", signingOrder: 2 }
+  ],
+  fields: [
+    # Alice's signature
+    { type: "signature", page: 1, x: 100, y: 650, width: 200, height: 50, recipientEmail: "alice@example.com" },
+    # defaultValue pins a fixed date in MM/DD/YYYY; omit it to auto-fill the signing date
+    { type: "date", page: 1, x: 320, y: 650, width: 100, height: 30, recipientEmail: "alice@example.com", defaultValue: "12/31/2026" },
+    # Bob's signature
+    { type: "signature", page: 1, x: 100, y: 720, width: 200, height: 50, recipientEmail: "bob@example.com" },
+    { type: "date", page: 1, x: 320, y: 720, width: 100, height: 30, recipientEmail: "bob@example.com" }
+  ],
+  fileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
+  documentName: "Service Agreement",
+  senderName:   "Acme Corp",
+  senderEmail:  "contracts@acme.com"
+)
+
+puts "Result: #{JSON.pretty_generate(result)}"
+```
+
+:::warning Always Handle Errors
+The above example omits error handling for brevity. In production, wrap TurboSign calls in `begin`/`rescue`. See [Error Handling](#error-handling) for complete patterns.
+:::
+
+</TabItem>
 </Tabs>
 
 ### Using Template-Based Fields {#using-template-based-fields}
@@ -1192,6 +1338,44 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 :::
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_signature(
+  recipients: [{ name: "Alice Smith", email: "alice@example.com", signingOrder: 1 }],
+  fields: [
+    {
+      type:           "signature",
+      recipientEmail: "alice@example.com",
+      template: {
+        anchor:    "{SIGNATURE_ALICE}",
+        placement: "replace",
+        size:      { width: 200, height: 50 }
+      }
+    },
+    {
+      type:           "date",
+      recipientEmail: "alice@example.com",
+      # Pins a fixed date in MM/DD/YYYY; omit to auto-fill the signing date
+      defaultValue:   "12/31/2026",
+      template: {
+        anchor:    "{DATE_ALICE}",
+        placement: "replace",
+        size:      { width: 100, height: 30 }
+      }
+    }
+  ],
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf"
+)
+
+puts JSON.pretty_generate(result)
+```
+
+:::info Template Anchors Required
+**Important:** The document file must contain the anchor text (e.g., `{SIGNATURE_ALICE}`, `{DATE_ALICE}`) that you reference in your fields. If the anchors don't exist in the document, the API will return an error.
+:::
+
+</TabItem>
 </Tabs>
 
 ---
@@ -1226,6 +1410,15 @@ The SDK supports multiple ways to provide your document:
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
 The SDK supports multiple ways to provide your document:
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+TurboSign supports four different ways to provide document files:
+
+:::note camelCase request keys
+The keys inside the request hash (`fileLink`, `deliverableId`, `templateId`, `documentName`, `recipientEmail`, `signingOrder` and so on) are **camelCase**: the SDK passes them to the API verbatim and does **not** convert snake_case hash keys. Only the keyword arguments on `configure` (`api_key:`, `sender_email:` and so on) are snake_case.
+:::
 
 </TabItem>
 </Tabs>
@@ -1279,6 +1472,28 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Upload a document from bytes already in memory. Wrap the bytes in a `StringIO`: a plain `String` passed as `file` is read as a file path, not as content.
+
+```ruby
+require "stringio"
+
+pdf_bytes = File.binread("/path/to/document.pdf") # or bytes from S3, a database, an upload...
+
+result = TurboDocxSdk::TurboSign.send_signature(
+  file:     StringIO.new(pdf_bytes),
+  fileName: "document.pdf", # Optional: otherwise "document.<ext>", detected from the content
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 }
+  ],
+  fields: [
+    { type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "john@example.com" }
+  ]
+)
+```
+
+</TabItem>
 </Tabs>
 
 ### 1. File Upload (Direct) {#1-file-upload-direct}
@@ -1320,6 +1535,26 @@ $result = TurboSign::sendSignature(
         ]
     )
 );
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Pass any IO object opened in binary mode, such as a `File`. The SDK reads it, detects the file type from its content and uploads it as multipart form data.
+
+```ruby
+result = File.open("./contract.pdf", "rb") do |pdf|
+  TurboDocxSdk::TurboSign.send_signature(
+    file:     pdf,
+    fileName: "contract.pdf", # Optional
+    recipients: [
+      { name: "John Doe", email: "john@example.com", signingOrder: 1 }
+    ],
+    fields: [
+      { type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "john@example.com" }
+    ]
+  )
+end
 ```
 
 </TabItem>
@@ -1409,6 +1644,27 @@ Use `fileLink` when your documents are already hosted on cloud storage (S3, Goog
 :::
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Provide a publicly accessible URL to your document:
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_signature(
+  fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 }
+  ],
+  fields: [
+    { type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "john@example.com" }
+  ]
+)
+```
+
+:::tip When to use fileLink
+Use `fileLink` when your documents are already hosted on cloud storage (S3, Google Cloud Storage, etc.). This is more efficient than downloading and re-uploading files.
+:::
+
+</TabItem>
 </Tabs>
 
 ### 1. File Upload (bytes) {#1-file-upload-bytes}
@@ -1438,6 +1694,11 @@ result = await TurboSign.send_signature(
     ],
 )
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+For bytes already in memory, wrap them in a `StringIO` as shown in [the in-memory upload example](#1-file-upload-byte).
 
 </TabItem>
 </Tabs>
@@ -1521,6 +1782,27 @@ await TurboSign.sendSignature({
 });
 ```
 
+:::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Pass a local file path as a `String`. The SDK reads the file, uses its basename as the document filename and detects the file type from its content.
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_signature(
+  file: "./contract.pdf",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 }
+  ],
+  fields: [
+    { type: "signature", page: 1, x: 100, y: 650, width: 200, height: 50, recipientEmail: "john@example.com" }
+  ]
+)
+```
+
+:::tip A String is always a path
+`file` accepts a path (`String`) or any IO object (`File`, `StringIO`). Raw bytes must be wrapped in a `StringIO`; see [the in-memory upload example](#1-file-upload-byte). Pass `fileName:` to control the stored document filename.
 :::
 
 </TabItem>
@@ -1612,6 +1894,11 @@ result = await TurboSign.send_signature(
 :::tip When to use file_link
 Use `file_link` when your documents are already hosted on cloud storage (S3, Google Cloud Storage, etc.). This is more efficient than downloading and re-uploading files.
 :::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [2. File URL](#2-file-url): pass the URL as `fileLink:`.
 
 </TabItem>
 </Tabs>
@@ -1780,6 +2067,28 @@ SendSignatureResponse result = client.turboSign().sendSignature(
         ))
         .build()
 );
+```
+
+:::info Integration with TurboDocx
+`deliverableId` references documents generated using TurboDocx's document generation API. This creates a seamless workflow: generate → sign.
+:::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Use a document generated by TurboDocx document generation:
+
+```ruby
+# Use a previously generated TurboDocx document
+result = TurboDocxSdk::TurboSign.send_signature(
+  deliverableId: "deliverable-uuid-from-turbodocx",
+  recipients: [
+    { name: "John Doe", email: "john@example.com", signingOrder: 1 }
+  ],
+  fields: [
+    { type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "john@example.com" }
+  ]
+)
 ```
 
 :::info Integration with TurboDocx
@@ -1962,6 +2271,34 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 :::
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+# Use a pre-configured TurboSign template
+result = TurboDocxSdk::TurboSign.send_signature(
+  templateId: "template-uuid-from-turbodocx", # Template already contains anchors
+  recipients: [
+    { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 }
+  ],
+  fields: [
+    {
+      type:           "signature",
+      recipientEmail: "alice@example.com",
+      template: {
+        anchor:    "{SIGNATURE_ALICE}",
+        placement: "replace",
+        size:      { width: 200, height: 50 }
+      }
+    }
+  ]
+)
+```
+
+:::info Integration with TurboDocx
+`templateId` references pre-configured TurboSign templates created in the TurboDocx dashboard. These templates come with built-in anchors and field positioning, making it easy to reuse signature workflows across multiple documents.
+:::
+
+</TabItem>
 </Tabs>
 
 ### Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
@@ -2107,6 +2444,27 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 Use `new Recipient.Builder().role("client").name(...).email(...)` when you also need a phone or external id. `role` works the same way on `createSignatureReviewLink` and, through `new EmbeddedSignatureRecipient.Builder().role(...)`, on `createEmbeddedSignature`.
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+# The role keys come from the template
+setup = TurboDocxSdk::TurboSign.get_template_signature_setup("your-template-id")
+setup["roles"].each { |r| puts "#{r['key']} (saved signer: #{r['hasSavedSigner']})" }
+# client (saved signer: false)
+# countersigner (saved signer: true)
+
+result = TurboDocxSdk::TurboSign.send_signature(
+  templateId: "your-template-id",
+  recipients: [
+    { role: "client", name: "Jane Doe", email: "jane@client.com" }
+    # "countersigner" left out: the signer saved on the template is used
+  ]
+)
+```
+
+`role` works the same way on `create_signature_review_link` and `create_embedded_signature`. An unknown role raises `TurboDocxSdk::ValidationError` with `e.code == "UnknownSignerRole"`.
+
+</TabItem>
 </Tabs>
 
 - Roles sign in the order saved on the template; recipients without a role sign after them.
@@ -2143,6 +2501,13 @@ asyncio.run(main())
 
 :::note
 The snippets below assume a configured `client` and an available `Gson` instance, e.g. `Gson gson = new GsonBuilder().setPrettyPrinting().create();` (as shown in the [Quick Start](#quick-start)).
+:::
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+:::note Class-level, synchronous calls
+All methods are class methods on `TurboDocxSdk::TurboSign`: call `configure` once, then call any method directly. Every call is synchronous and returns a plain `Hash` with camelCase string keys (or raw bytes for `download`). Snippets that print with `JSON.pretty_generate` need `require "json"`.
 :::
 
 </TabItem>
@@ -2275,6 +2640,23 @@ TurboDocxClient client = new TurboDocxClient.Builder()
     .baseUrl("https://api.turbodocx.com")  // Optional
     .build();
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Configure the SDK with your API credentials and organization settings.
+
+```ruby
+TurboDocxSdk::TurboSign.configure(
+  api_key:      "your-api-key",             # Required: Your TurboDocx API key (or access_token:)
+  org_id:       "your-org-id",              # Required: Your organization ID
+  sender_email: "you@company.com",          # Required: Reply-to address for signature emails
+  sender_name:  "Your Company",             # Recommended: Sender name shown in emails
+  base_url:     "https://api.turbodocx.com" # Optional: API base URL
+)
+```
+
+`configure` raises `TurboDocxSdk::AuthenticationError` when no API key or access token is available, and `TurboDocxSdk::ValidationError` when no sender email is available.
 
 </TabItem>
 </Tabs>
@@ -2430,6 +2812,23 @@ CreateSignatureReviewLinkResponse result = client.turboSign().createSignatureRev
 );
 
 System.out.println("Result: " + gson.toJson(result));
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Upload a document for preview without sending signature request emails.
+
+```ruby
+result = TurboDocxSdk::TurboSign.create_signature_review_link(
+  recipients: [{ name: "John Doe", email: "john@example.com", signingOrder: 1 }],
+  fields: [{ type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "john@example.com" }],
+  fileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
+  documentName: "Contract Draft"
+)
+
+puts result["documentId"]
+puts result["previewUrl"]
 ```
 
 </TabItem>
@@ -2595,6 +2994,24 @@ System.out.println("Result: " + gson.toJson(result));
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Upload a document and immediately send signature requests to all recipients.
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_signature(
+  recipients: [{ name: "Recipient Name", email: "recipient@example.com", signingOrder: 1 }],
+  fields: [{ type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "recipient@example.com" }],
+  fileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
+  documentName: "Service Agreement",
+  senderName:   "Your Company",
+  senderEmail:  "sender@company.com"
+)
+
+puts result["documentId"]
+```
+
+</TabItem>
 </Tabs>
 
 ### Reminders and expiration {#reminders-and-expiration}
@@ -2631,6 +3048,37 @@ warnings. `maxReminders` accepts `-1` (unlimited), `0` (none), or any value up t
 deadline is readable afterwards via `getStatus()->expiresAt`.
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+`send_signature` (and `create_signature_review_link`) accept an optional per-document schedule. Both reminders and expiration are **off by default**, so omitting these keys preserves the original send behavior. Keys are camelCase like every other request key, and each duration is a `{ value:, unit: }` hash whose `unit` is `"days"` or `"hours"`. The resolved schedule is **frozen onto the document when it is sent**: changing your org defaults later never alters a document already out for signature.
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_signature(
+  # ...recipients, fields, fileLink, documentName
+
+  # Reminders: chase signers who haven't signed yet
+  remindersEnabled: true,
+  reminderDelay:    { value: 3, unit: "days" }, # time to the FIRST reminder
+  reminderInterval: { value: 3, unit: "days" }, # gap between later reminders
+  maxReminders:     5,                          # -1 unlimited, 0 none, max 50 (default 5)
+
+  # Expiration: close the signing window
+  expirationEnabled:         true,
+  expireAfter:               { value: 14, unit: "days" }, # how long it stays signable
+  expirationWarning:         { value: 3, unit: "days" },  # lead time before warnings (0 = never warn)
+  expirationWarningInterval: { value: 1, unit: "days" }
+)
+```
+
+| Field | Bounds |
+| --- | --- |
+| `maxReminders` | Cap per signer: `-1` unlimited, `0` none, **max `50`** (default `5`). |
+| any duration `value` | Whole number, **min 1**, **max 999 days (23976 hours)**. |
+| `expirationWarning` | May be `0` to never warn. |
+
+`false` and `0` are sent as given, so `remindersEnabled: false` or `maxReminders: 0` override the org default rather than being dropped. The resolved deadline is readable afterwards via `get_status(...)["expiresAt"]`.
+
+</TabItem>
 </Tabs>
 
 ### Send a reminder {#send-a-reminder}
@@ -2656,6 +3104,26 @@ foreach ($result['results'] as $r) {
 // Or limit to specific recipients (all-or-nothing): every id must be a current-order pending signer.
 TurboSign::sendReminder('document-uuid', ['recipient-uuid-1', 'recipient-uuid-2']);
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+`send_reminder` sends a standalone reminder to whoever's turn it is to sign (`POST /turbosign/documents/{documentId}/send-reminder`). It is independent of the automatic cadence: it works even when reminders are disabled or the per-signer cap is already spent, does **not** consume that cap, and only emails signers at the *current* signing order. Omit the second argument to remind everyone eligible. An empty array is treated the same as omitting it.
+
+```ruby
+# Remind everyone whose turn it is to sign
+result = TurboDocxSdk::TurboSign.send_reminder("document-uuid")
+
+result["results"].each do |r|
+  # "sent", or a "skipped_*" reason (e.g. "skipped_wrong_order", "skipped_completed")
+  puts "#{r['recipientId']}: #{r['status']}"
+end
+
+# Or limit to specific recipients (all-or-nothing): every id must be a current-order pending signer
+TurboDocxSdk::TurboSign.send_reminder("document-uuid", ["recipient-uuid-1", "recipient-uuid-2"])
+```
+
+This differs from **Resend**: resend re-sends the original invitation email, while `send_reminder` sends the reminder copy.
 
 </TabItem>
 </Tabs>
@@ -2750,6 +3218,11 @@ SendSignatureResponse result = client.turboSign().sendSignature(
 Each `Duration` is a `{value, unit}` pair where `unit` is `"hours"` or `"days"` and `value` is a whole number from **1 up to 999 days (23976 hours)**. `maxReminders` accepts **-1 to 50** (`-1` unlimited, `0` none, default `5`) and caps only automatic reminders, never expiry warnings; `expirationWarning` may be `0` to disable warnings. Reminders and expiry warnings run as two independent clocks, coordinated so a signer never receives both at the same moment, and a reminder cadence that would outlive the expiry window is rejected with `400`.
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Reminders and expiration](#reminders-and-expiration) for the Ruby schedule keys (`remindersEnabled`, `reminderDelay`, `expireAfter` and the rest).
+
+</TabItem>
 </Tabs>
 
 ### Reminders & expiration schedule {#reminders--expiration-schedule}
@@ -2818,6 +3291,11 @@ Durations are `{ value, unit }` objects: `unit` is `"hours"` or `"days"`, and `v
 | `expirationWarningInterval` | `Duration` | 1 day | Gap between warnings once they start |
 
 Reminders and expiry warnings run as **two independent clocks**, so a signer keeps getting reminders even after warnings begin; the two are coordinated so a reminder and a warning never land on the same tick. The API rejects a cadence that can't fit its window (for example a reminder interval that outlives `expireAfter`) with `400 InvalidSignatureSchedule`. See the [API validation rules](/docs/TurboSign/API-Signatures#reminders--expiration) for the full list.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Reminders and expiration](#reminders-and-expiration) for the Ruby schedule keys and their bounds.
 
 </TabItem>
 </Tabs>
@@ -2928,6 +3406,13 @@ client.turboSign().sendReminder("document-uuid", Arrays.asList("recipient-uuid-1
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Send a reminder](#send-a-reminder) for `TurboDocxSdk::TurboSign.send_reminder`.
+
+---
+
+</TabItem>
 </Tabs>
 
 ### Get status {#get-status}
@@ -3022,6 +3507,20 @@ System.out.println("Status: " + status.getStatus());       // "under_review", "c
 System.out.println("Expires: " + status.getExpiresAt());   // ISO 8601, or null when expiration is off
 System.out.println("Result: " + gson.toJson(status));
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Retrieve the document-level status. The `status` reaches the terminal value `"expired"` once the signing window closes, and `expiresAt` carries the deadline (ISO 8601, `nil` when expiration is off). For per-signer detail, use [Get recipients](#get-recipients).
+
+```ruby
+result = TurboDocxSdk::TurboSign.get_status("document-uuid")
+
+puts result["status"]    # "under_review" | "completed" | "voided" | "expired" | ...
+puts result["expiresAt"] # ISO 8601 deadline, or nil when expiration is off
+```
+
+The same deadline is also returned on the document from `get_recipients` (`result["document"]["expiresAt"]`).
 
 </TabItem>
 </Tabs>
@@ -3137,6 +3636,24 @@ for (DocumentRecipientsResponse.RecipientSignatureStatus r : progress.getRecipie
     System.out.println(r.getName() + " <" + r.getEmail() + ">: " + r.getEffectiveStatus()
             + " (emailed " + r.getDelivery().getTotalSent() + "x)");
 }
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See who the document went to, who has signed, who you are still waiting on,
+and who sent it.
+
+```ruby
+result = TurboDocxSdk::TurboSign.get_recipients("document-uuid")
+
+summary = result["summary"]
+puts "#{summary['completed']}/#{summary['total']} signed, waiting on #{summary['waitingOn']}"
+
+result["recipients"].each do |r|
+  puts "#{r['name']} <#{r['email']}>: #{r['effectiveStatus']} " \
+       "(emailed #{r['delivery']['totalSent']}x)"
+end
 ```
 
 </TabItem>
@@ -3279,6 +3796,18 @@ Files.write(Paths.get("signed-contract.pdf"), pdfData);
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Download the completed signed document as PDF bytes.
+
+```ruby
+pdf_bytes = TurboDocxSdk::TurboSign.download("document-uuid")
+
+# Save to file
+File.binwrite("signed-contract.pdf", pdf_bytes)
+```
+
+</TabItem>
 </Tabs>
 
 ### Void {#void}
@@ -3345,6 +3874,18 @@ Cancel/void a signature request.
 
 ```java
 VoidDocumentResponse result = client.turboSign().voidDocument("document-uuid", "Contract terms changed");
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Cancel/void a signature request.
+
+```ruby
+result = TurboDocxSdk::TurboSign.void_document("document-uuid", "Contract terms changed")
+
+puts result["status"]     # "voided"
+puts result["voidReason"]
 ```
 
 </TabItem>
@@ -3427,6 +3968,17 @@ ResendEmailResponse result = client.turboSign().resendEmail(
     "document-uuid",
     Arrays.asList("recipient-uuid-1", "recipient-uuid-2")
 );
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Resend signature request emails to specific recipients.
+
+```ruby
+result = TurboDocxSdk::TurboSign.resend_email("document-uuid", ["recipient-uuid-1", "recipient-uuid-2"])
+
+puts "Recipients notified: #{result['recipientCount']}"
 ```
 
 </TabItem>
@@ -3521,6 +4073,19 @@ System.out.println("Result: " + gson.toJson(auditTrail));
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Retrieve the complete audit trail for a document, including all events and actions.
+
+```ruby
+result = TurboDocxSdk::TurboSign.get_audit_trail("document-uuid")
+
+result["auditTrail"].each do |entry|
+  puts "#{entry['timestamp']} - #{entry['actionType']}"
+end
+```
+
+</TabItem>
 </Tabs>
 
 ### Get template signature setup {#get-template-signature-setup}
@@ -3612,6 +4177,21 @@ for (TemplateSignatureRole role : setup.getRoles()) {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+
+```ruby
+setup = TurboDocxSdk::TurboSign.get_template_signature_setup("template-uuid")
+
+setup["roles"].each do |role|
+  puts "#{role['key']} saved signer: #{role['hasSavedSigner']}"
+end
+```
+
+A missing setup raises `TurboDocxSdk::NotFoundError` (`e.code == "SignatureSetupNotFound"`).
+
+</TabItem>
 </Tabs>
 
 A template that doesn't exist in your organization, or has no saved signature setup, returns a 404 (`SignatureSetupNotFound`). Calls `GET /turbosign/templates/{templateId}/signature-setup`; see [Get Template Signature Setup](/docs/TurboSign/API-Signatures#endpoint-8-get-template-signature-setup).
@@ -3640,12 +4220,36 @@ SignatureFieldType::CHECKBOX      // Checkbox field
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+TurboSign supports 11 field types. In Ruby, pass the type as a plain string:
+
+```ruby
+"signature"  # Signature field
+"initial"    # Initial field
+"date"       # Date stamp (auto-filled when signed)
+"text"       # Free text input
+"full_name"  # Full name (auto-filled from recipient)
+"first_name" # First name
+"last_name"  # Last name
+"email"      # Email address
+"title"      # Job title
+"company"    # Company name
+"checkbox"   # Checkbox field
+```
+
+</TabItem>
 </Tabs>
 
 ### Field Positioning {#field-positioning}
 
 <Tabs groupId="language" queryString>
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+TurboSign supports two ways to position fields:
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
 TurboSign supports two ways to position fields:
 
@@ -3667,6 +4271,21 @@ new Field(
     width: 200,       // Width in pixels
     height: 50        // Height in pixels
 )
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+{
+  type:           "signature",
+  recipientEmail: "john@example.com",
+  page:           1,   # Page number (1-indexed)
+  x:              100, # X coordinate
+  y:              500, # Y coordinate
+  width:          200, # Width in pixels
+  height:         50   # Height in pixels
+}
 ```
 
 </TabItem>
@@ -3699,6 +4318,29 @@ new Field(
 - `FieldPlacement::AFTER` - Place after the anchor
 - `FieldPlacement::ABOVE` - Place above the anchor
 - `FieldPlacement::BELOW` - Place below the anchor
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+{
+  type:           "signature",
+  recipientEmail: "john@example.com",
+  template: {
+    anchor:    "{signature1}", # Text to find in the PDF
+    placement: "replace",      # How to place the field
+    size:      { width: 100, height: 30 }
+  }
+}
+```
+
+**Placement Options:**
+
+- `"replace"` - Replace the anchor text
+- `"before"` - Place before the anchor
+- `"after"` - Place after the anchor
+- `"above"` - Place above the anchor
+- `"below"` - Place below the anchor
 
 </TabItem>
 </Tabs>
@@ -3751,6 +4393,44 @@ new Field(
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+fields = [
+  # Checkbox (pre-checked, readonly)
+  {
+    type: "checkbox", recipientEmail: "john@example.com",
+    page: 1, x: 100, y: 600, width: 20, height: 20,
+    defaultValue: "true", # Pre-checked
+    isReadonly:   true    # Cannot be unchecked
+  },
+  # Multiline text field
+  {
+    type: "text", recipientEmail: "john@example.com",
+    page: 1, x: 100, y: 200, width: 400, height: 100,
+    isMultiline:     true,     # Allow multiple lines
+    required:        true,     # Field is required
+    backgroundColor: "#f0f0f0" # Background color
+  },
+  # Optional text field: the signer may leave it blank
+  {
+    type: "text", recipientEmail: "john@example.com",
+    page: 1, x: 100, y: 250, width: 300, height: 30,
+    required: false
+  },
+  # Readonly text (pre-filled, non-editable)
+  {
+    type: "text", recipientEmail: "john@example.com",
+    page: 1, x: 100, y: 300, width: 300, height: 30,
+    defaultValue: "This text is pre-filled",
+    isReadonly:   true
+  }
+]
+```
+
+Fields are required by default. `required: false` makes a field optional for the signer; signature and initial fields are always required, and the API rejects `required: false` on them with a 400.
+
+</TabItem>
 </Tabs>
 
 ### Conditional (IF/THEN) Fields {#conditional-ifthen-fields}
@@ -3799,6 +4479,42 @@ new Field(
 ```
 
 Use `action: 'unlock'` to keep a field visible but read-only until the box is checked. A
+malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
+`controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
+[Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields).
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The optional `metadata` hash builds IF/THEN relationships between fields. Put a `fieldKey` on a
+controlling checkbox, then point each dependent field's `controllingFieldKey` back at it.
+
+```ruby
+fields = [
+  # Controlling checkbox, carries a stable fieldKey
+  {
+    type: "checkbox", recipientEmail: "reviewer@company.com",
+    page: 1, x: 100, y: 400, width: 20, height: 20,
+    metadata: { fieldKey: "request_changes" }
+  },
+  # Dependent text field, hidden until the checkbox is checked
+  {
+    type: "text", recipientEmail: "reviewer@company.com",
+    page: 1, x: 130, y: 400, width: 300, height: 60,
+    metadata: {
+      conditional: {
+        controllingFieldKey: "request_changes", # = the checkbox's fieldKey
+        operator:            "is_checked",      # "is_checked" | "is_not_checked"
+        action:              "show"             # "show" | "unlock"
+      }
+    }
+  }
+]
+```
+
+Use `action: "unlock"` to keep a field visible but read-only until the box is checked. A
 malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
 `controllingFieldKey` matches no checkbox **fails open** (the field stays visible/editable). See
 [Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields).
@@ -3874,6 +4590,11 @@ Every typed error embeds `TurboDocxError` by value, which promotes its `Message 
 Every typed exception is a nested static class of `TurboDocxException` (`TurboDocxException.ValidationException`, not a separate top-level import) and extends `RuntimeException`, so the compiler never forces a catch:
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Every error is a `StandardError` subclass that extends `TurboDocxSdk::TurboDocxError`; rescue the most specific class first, since `rescue TurboDocxSdk::TurboDocxError` also matches every subclass. Each error exposes `message`, `status_code` and `code`. `code` is the API's own code when the response includes one (for example `UnknownSignerRole`), and otherwise the class default listed below, so you can branch on `e.code` for the precise reason instead of just the HTTP category.
+
+</TabItem>
 </Tabs>
 
 ### Error Types {#error-types}
@@ -3905,6 +4626,22 @@ Every typed exception is a nested static class of `TurboDocxException` (`TurboDo
 | `TurboDocxException.ConflictException`       | 409         | Request conflicts with current state of resource (e.g., webhook name already exists) |
 | `TurboDocxException.RateLimitException`      | 429         | Too many requests                  |
 | `TurboDocxException.NetworkException`        | -           | Network connectivity issues        |
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+| Error Class           | Status Code | Default `code`         | Description                         |
+| --------------------- | ----------- | ---------------------- | ----------------------------------- |
+| `TurboDocxError`      | varies      | `nil` unless the API sends one | Base error class for all SDK errors |
+| `AuthenticationError` | 401         | `AUTHENTICATION_ERROR` | Invalid or missing API credentials  |
+| `AuthorizationError`  | 403         | `AUTHORIZATION_ERROR`  | Authenticated but lacks required permissions |
+| `ValidationError`     | 400         | `VALIDATION_ERROR`     | Invalid request parameters          |
+| `NotFoundError`       | 404         | `NOT_FOUND`            | Document or resource not found      |
+| `ConflictError`       | 409         | `CONFLICT`             | Request conflicts with current resource state |
+| `RateLimitError`      | 429         | `RATE_LIMIT_EXCEEDED`  | Too many requests                   |
+| `NetworkError`        | -           | `NETWORK_ERROR`        | Network connectivity issues         |
+
+All classes live under the `TurboDocxSdk` namespace (for example `TurboDocxSdk::ValidationError`).
 
 </TabItem>
 </Tabs>
@@ -3958,6 +4695,13 @@ All exceptions extend `TurboDocxException` and include:
 - `getMessage()` - Human-readable error message
 - `statusCode` - HTTP status code, a public readonly `?int` (null for `NetworkException`)
 - `errorCode` - Error code string (e.g., `'AUTHENTICATION_ERROR'`), a public readonly `?string`
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Error Types](#error-types) for the Ruby error classes, their status codes and default codes.
 
 ---
 
@@ -4142,6 +4886,52 @@ asyncio.run(send_with_error_handling())
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "turbodocx_sdk"
+
+begin
+  result = TurboDocxSdk::TurboSign.send_signature(
+    recipients: [{ name: "John Doe", email: "john@example.com", signingOrder: 1 }],
+    fields: [{
+      type:           "signature",
+      page:           1,
+      x:              100,
+      y:              650,
+      width:          200,
+      height:         50,
+      recipientEmail: "john@example.com"
+    }],
+    fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf"
+  )
+rescue TurboDocxSdk::AuthenticationError => e
+  puts "Authentication failed: #{e.message}"
+  # Check your API key and org ID
+rescue TurboDocxSdk::AuthorizationError => e
+  puts "Not authorized: #{e.message}"
+  # Authenticated, but lacks permission for this operation
+rescue TurboDocxSdk::ValidationError => e
+  puts "Validation error: #{e.message} (#{e.code})"
+  # Check request parameters
+rescue TurboDocxSdk::NotFoundError => e
+  puts "Resource not found: #{e.message}"
+  # Document or recipient doesn't exist
+rescue TurboDocxSdk::ConflictError => e
+  puts "Conflict: #{e.message}"
+  # Request conflicts with the current resource state
+rescue TurboDocxSdk::RateLimitError => e
+  puts "Rate limited: #{e.message}"
+  # Wait and retry
+rescue TurboDocxSdk::NetworkError => e
+  puts "Network error: #{e.message}"
+  # Check connectivity
+rescue TurboDocxSdk::TurboDocxError => e
+  puts "SDK error: #{e.message}, status_code=#{e.status_code}, code=#{e.code}"
+end
+```
+
+</TabItem>
 </Tabs>
 
 ### Error Properties {#error-properties}
@@ -4189,6 +4979,17 @@ All errors include these instance attributes:
 | `getMessage()`    | `String` | Human-readable error message |
 | `getStatusCode()` | `int`    | HTTP status code             |
 | `getCode()`       | `String` | Machine-readable code; each of the 7 named subclasses falls back to its own default (e.g. `AuthenticationException`'s `AUTHENTICATION_ERROR`) whenever the API response carries none. The bare `TurboDocxException` thrown for an unmapped status (e.g. an unexpected 5xx) can return `null` |
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+All errors include these readers:
+
+| Property      | Type             | Description                          |
+| ------------- | ---------------- | ------------------------------------ |
+| `message`     | `String`         | Human-readable error description     |
+| `status_code` | `Integer \| nil` | HTTP status code (`nil` for `NetworkError`) |
+| `code`        | `String \| nil`  | Machine-readable error code; the API's code wins when present, otherwise the class default from [Error Types](#error-types) |
 
 </TabItem>
 </Tabs>
@@ -4277,6 +5078,13 @@ try {
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Handling Errors](#handling-errors) for a complete Ruby `begin`/`rescue` example.
+
+---
+
+</TabItem>
 </Tabs>
 
 <a id="python-types"></a>
@@ -4294,6 +5102,11 @@ The SDK exports TypeScript types for full type safety. Import them directly from
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
 The SDK uses Python type hints with `Dict[str, Any]` for flexible JSON-like structures.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The SDK uses plain Ruby `Hash` objects for requests and responses. Symbol and string keys are both accepted on requests; the key **spelling stays camelCase** because the SDK forwards the hash to the API verbatim. Responses use camelCase string keys.
 
 </TabItem>
 </Tabs>
@@ -4337,6 +5150,11 @@ The `type` field accepts the following string values:
 | `"email"`      | Email field      |
 | `"title"`      | Title field      |
 | `"company"`    | Company field    |
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Field Types](#field-types): the `type` key takes one of 11 plain strings. Note that the initials field is `"initial"`.
 
 </TabItem>
 </Tabs>
@@ -4397,6 +5215,11 @@ enum ConditionalAction: string {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The Ruby SDK defines no TurboSign enums. Field types, placements, conditional operators and actions are plain strings, listed under [Field Types](#field-types), [Template Anchors](#2-template-anchors-dynamic) and [Conditional (IF/THEN) Fields](#conditional-ifthen-fields).
+
+</TabItem>
 </Tabs>
 
 ### Readonly Classes {#readonly-classes}
@@ -4452,6 +5275,11 @@ final class FieldConditional {
 ```
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The Ruby SDK has no request or model classes: recipients and fields are plain `Hash` objects. See [Recipient](#recipient) and [Field](#field) for their keys.
+
+</TabItem>
 </Tabs>
 
 ### Request Objects {#request-objects}
@@ -4485,6 +5313,13 @@ Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `te
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Requests are plain `Hash` objects passed to `send_signature` and `create_signature_review_link`. See [Request Parameters](#request-parameters) for every key.
+
+---
+
+</TabItem>
 </Tabs>
 
 ### Importing Types {#importing-types}
@@ -4509,6 +5344,13 @@ import type {
 
 ```python
 from typing import Dict, List, Any, Optional
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+require "turbodocx_sdk" # loads TurboDocxSdk::TurboSign and the TurboDocxSdk error classes
 ```
 
 </TabItem>
@@ -4557,6 +5399,11 @@ field_types = [
     "checkbox",
 ]
 ```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Field Types](#field-types) for the 11 field type strings.
 
 </TabItem>
 </Tabs>
@@ -4616,6 +5463,28 @@ recipient: Dict[str, Any] = {
 | `email`        | `String` | Yes      | Recipient's email address                         |
 | `signingOrder` | `int`    | Conditional | Order in which recipient should sign (1, 2, 3...). Not needed when `role` is set |
 | `role`         | `String` | No       | Template signer role to fill (for example `"client"`), set with `Recipient.withRole(...)` or the builder. Requires `templateId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Recipient configuration for signature requests:
+
+&nbsp;
+
+| Property       | Type      | Required    | Description               |
+| -------------- | --------- | ----------- | ------------------------- |
+| `name`         | `String`  | Yes         | Recipient's full name     |
+| `email`        | `String`  | Yes         | Recipient's email address |
+| `signingOrder` | `Integer` | Conditional | Signing order (1-indexed). Not needed when `role` is set |
+| `role`         | `String`  | No          | Template signer role to fill (for example `"client"`). Requires `templateId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
+
+```ruby
+recipient = {
+  name:         "John Doe",
+  email:        "john@example.com",
+  signingOrder: 1
+}
+```
 
 </TabItem>
 </Tabs>
@@ -4839,6 +5708,44 @@ The coordinate-based constructor takes positional arguments in this order: `new 
 \*Required when not using template anchors
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Field configuration supporting both coordinate-based and template-based positioning:
+
+&nbsp;
+
+| Property          | Type      | Required | Description                                         |
+| ----------------- | --------- | -------- | --------------------------------------------------- |
+| `type`            | `String`  | Yes      | Field type (see [Field Types](#field-types))        |
+| `recipientEmail`  | `String`  | Yes      | Which recipient fills this field                    |
+| `page`            | `Integer` | No\*     | Page number (1-indexed)                             |
+| `x`               | `Integer` | No\*     | X coordinate in pixels                              |
+| `y`               | `Integer` | No\*     | Y coordinate in pixels                              |
+| `width`           | `Integer` | No\*     | Field width in pixels                               |
+| `height`          | `Integer` | No\*     | Field height in pixels                              |
+| `defaultValue`    | `String`  | No       | Default value (checkbox: `"true"`/`"false"`; date: a fixed `MM/DD/YYYY`, omit to auto-fill the signing date) |
+| `isMultiline`     | `Boolean` | No       | Enable multiline text                               |
+| `isReadonly`      | `Boolean` | No       | Make field read-only (pre-filled)                   |
+| `required`        | `Boolean` | No       | Whether the signer must complete the field. Default `true`; `false` makes it optional (not allowed on signature and initial fields) |
+| `backgroundColor` | `String`  | No       | Background color (hex, rgb, or named)               |
+| `template`        | `Hash`    | No       | Template anchor configuration, see [Template Configuration](#template-configuration) |
+| `metadata`        | `Hash`    | No       | Conditional (IF/THEN) metadata, see [Metadata Configuration](#metadata-configuration-conditional-fields) |
+
+\*Required when not using template anchors
+
+```ruby
+field = {
+  type:           "signature",
+  page:           1,
+  x:              100,
+  y:              500,
+  width:          200,
+  height:         50,
+  recipientEmail: "john@example.com"
+}
+```
+
+</TabItem>
 </Tabs>
 
 #### Metadata Configuration (Conditional Fields) {#metadata-configuration-conditional-fields}
@@ -4889,6 +5796,23 @@ A malformed rule returns `400 InvalidConditionalRule`; a well-formed rule whose
 [Conditional (IF/THEN) Fields](/docs/TurboSign/Conditional-Fields).
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+The optional `metadata` hash builds IF/THEN relationships between fields. Put a `fieldKey` on a
+controlling `checkbox`, then point each dependent field's `conditional.controllingFieldKey` back
+at it.
+
+| Property                          | Type     | Required | Description                                                    |
+| --------------------------------- | -------- | -------- | ------------------------------------------------------------- |
+| `fieldKey`                        | `String` | No       | Stable id on a **controlling checkbox** (`type: "checkbox"`). |
+| `conditional`                     | `Hash`   | No       | Rule on a **dependent field** (see below).                    |
+| `conditional.controllingFieldKey` | `String` | Yes      | The controlling checkbox's `fieldKey`. Must be non-empty.     |
+| `conditional.operator`            | `String` | Yes      | `"is_checked"` or `"is_not_checked"`.                         |
+| `conditional.action`              | `String` | Yes      | `"show"` (hidden until met) or `"unlock"` (locked until met). |
+
+See [Conditional (IF/THEN) Fields](#conditional-ifthen-fields) for a Ruby example.
+
+</TabItem>
 </Tabs>
 
 #### Template Configuration {#template-configuration}
@@ -4920,6 +5844,20 @@ When using `template` instead of coordinates:
 | `offset`        | `Offset`  | No       | Offset with `x` and `y`                                                               |
 | `caseSensitive` | `Boolean` | No       | Case-sensitive anchor search                                                          |
 | `useRegex`      | `Boolean` | No       | Use regex for anchor search                                                           |
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+When using `template` instead of coordinates:
+
+| Property        | Type      | Required | Description                                                      |
+| --------------- | --------- | -------- | ---------------------------------------------------------------- |
+| `anchor`        | `String`  | Yes      | Text anchor pattern like `{TagName}`                             |
+| `placement`     | `String`  | Yes      | `"replace"` \| `"before"` \| `"after"` \| `"above"` \| `"below"` |
+| `size`          | `Hash`    | Yes      | `{ width: Integer, height: Integer }`                            |
+| `offset`        | `Hash`    | No       | `{ x: Integer, y: Integer }`                                     |
+| `caseSensitive` | `Boolean` | No       | Case sensitive search (default: false)                           |
+| `useRegex`      | `Boolean` | No       | Use regex for anchor/searchText (default: false)                 |
 
 </TabItem>
 </Tabs>
@@ -5022,6 +5960,44 @@ Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `te
 ---
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Request configuration for `create_signature_review_link` and `send_signature`. Keys are camelCase:
+
+&nbsp;
+
+| Parameter             | Type            | Required    | Description                    |
+| --------------------- | --------------- | ----------- | ------------------------------ |
+| `recipients`          | `Array<Hash>`   | Yes         | Recipients who will sign       |
+| `fields`              | `Array<Hash>`   | Conditional | Signature fields configuration. Optional when a recipient has a `role` |
+| `file`                | `String \| IO`  | Conditional | Local file path, or an IO object such as `File` or `StringIO` (multipart upload) |
+| `fileName`            | `String`        | No          | Document filename stored with an uploaded `file` |
+| `fileLink`            | `String`        | Conditional | URL to document file           |
+| `deliverableId`       | `String`        | Conditional | TurboDocx deliverable ID       |
+| `templateId`          | `String`        | Conditional | TurboDocx template ID          |
+| `documentName`        | `String`        | No          | Document name                  |
+| `documentDescription` | `String`        | No          | Document description           |
+| `senderName`          | `String`        | No          | Sender name (overrides the configured value) |
+| `senderEmail`         | `String`        | No\*\*      | Sender / reply-to email (overrides the configured value) |
+| `ccEmails`            | `Array<String>` | No          | Array of CC email addresses    |
+| `remindersEnabled`    | `Boolean`       | No          | Send reminder emails to signers who haven't signed. Off by default |
+| `reminderDelay`       | `Hash`          | No          | `{ value: N, unit: "days" \| "hours" }`, time to the FIRST reminder |
+| `reminderInterval`    | `Hash`          | No          | `{ value: N, unit: ... }`, gap between later reminders |
+| `maxReminders`        | `Integer`       | No          | Cap per signer. `-1` unlimited, `0` none, max `50`. Default `5` |
+| `expirationEnabled`   | `Boolean`       | No          | Close the signing window after `expireAfter`. Off by default |
+| `expireAfter`         | `Hash`          | No          | `{ value: N, unit: ... }`, how long the document stays signable |
+| `expirationWarning`   | `Hash`          | No          | `{ value: N, unit: ... }`, how far before expiry warnings start. `0` = never warn |
+| `expirationWarningInterval` | `Hash`    | No          | `{ value: N, unit: ... }`, gap between warnings once they start |
+
+:::info File Source (Conditional)
+Exactly one file source is required: `file`, `fileLink`, `deliverableId`, or `templateId`.
+:::
+
+\*\* `senderEmail` is optional per call but **required at the SDK level** for TurboSign: it must be supplied via `configure`, the `TURBODOCX_SENDER_EMAIL` environment variable, or this per-call key, otherwise the SDK raises a `TurboDocxSdk::ValidationError`.
+
+---
+
+</TabItem>
 </Tabs>
 
 ### CreateSignatureReviewLinkRequest / SendSignatureRequest {#createsignaturereviewlinkrequest--sendsignaturerequest}
@@ -5071,6 +6047,13 @@ The API itself does not reject a send that omits a sender: if no sender email or
 it falls back to a generic TurboDocx sender identity rather than returning `400 SenderEmailRequired` or
 `400 SenderNameRequired`.
 :::
+
+---
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+See [Request Parameters](#request-parameters): Ruby takes the same request `Hash` for `create_signature_review_link` and `send_signature`.
 
 ---
 
@@ -5128,6 +6111,14 @@ For detailed information about advanced configuration and API concepts, see:
 
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)
 - [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk)
+- [API Reference](/docs/TurboSign/API-Signatures)
+- [Webhook Configuration](/docs/TurboSign/Webhooks)
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+- [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)
+- [RubyGems Package](https://rubygems.org/gems/turbodocx-sdk)
 - [API Reference](/docs/TurboSign/API-Signatures)
 - [Webhook Configuration](/docs/TurboSign/Webhooks)
 

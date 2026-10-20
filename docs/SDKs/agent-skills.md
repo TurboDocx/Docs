@@ -43,7 +43,7 @@ Works with:
 
 | Skill | What it does |
 | :--- | :--- |
-| **`turbodocx-sdk`** | Installs the TurboDocx SDK and generates working integration code for **TurboSign** (e-signatures), **Deliverable** (template document generation), **TurboQuote** (quotes & CPQ), **TurboWebhooks** (signature events), and **TurboPartner** (partner/org management). Supports JavaScript/TypeScript, Python, Go, PHP, and Java. |
+| **`turbodocx-sdk`** | Installs the TurboDocx SDK and generates working integration code for **TurboSign** (e-signatures), **Deliverable** (template document generation), **TurboQuote** (quotes & CPQ), **TurboWebhooks** (signature events), and **TurboPartner** (partner/org management). Supports JavaScript/TypeScript, Python, Go, PHP, Java, and Ruby. |
 | **`turbodocx-html-to-docx`** | Sets up [`@turbodocx/html-to-docx`](https://www.npmjs.com/package/@turbodocx/html-to-docx) to convert HTML to Microsoft Word documents in Node.js, browser, or hybrid projects. |
 
 ## Install
