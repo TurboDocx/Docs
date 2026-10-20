@@ -267,9 +267,9 @@ url = link["url"]
 
 | Status | `code` | Meaning |
 |---|---|---|
-| 400 | `RecipientSelectorInvalid`, `InvalidReturnUrl` | Send exactly one selector; `returnUrl` must be `https`. |
+| 400 | `RecipientSelectorInvalid` | Send exactly one selector. |
 | 400 | `IdentityAssertion*`, `IdentityProviderMismatch`, `IdentityEmailMismatch` | The `external_idv` assertion is missing or fails a check. |
-| 400 | none (`type` is `ValidationError`) | `pageNavigation` is not `auto`, `collapsed` or `hidden`. |
+| 400 | none (`type` is `ValidationError`) | The body failed validation: `returnUrl` is not an `https` URL, or `pageNavigation` is not `auto`, `collapsed` or `hidden`. |
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. |
 | 403 | `EmbeddedSigningNotEnabled`, `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed` | The organization has not turned on what the recipient uses. |
 | 404 | `RecipientNotFound` | No recipient matches the selector. |
@@ -552,8 +552,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 400 | `IdentityConfigInvalid`, `IdvProviderRequired`, `OverrideNotAcknowledged`, `IdentityModeConflict` | The recipient's `identityVerification` block is invalid or incomplete. |
 | 400 | `DuplicateExternalId` | Two recipients on the document share an `externalId`. |
 | 400 | `RecipientSelectorInvalid` | `createSigningUrl` needs exactly one of `recipientId` or `externalId`. |
-| 400 | `InvalidReturnUrl` | `returnUrl` is not an `https` URL. |
-| 400 | none (`type` is `ValidationError`) | `createSigningUrl` got a `pageNavigation` other than `auto`, `collapsed` or `hidden`. This body is `{ "message", "type", "data": { "errors" } }`, not the four-field body above. |
+| 400 | none (`type` is `ValidationError`) | The `createSigningUrl` body failed validation: a `returnUrl` that is not `https`, or a `pageNavigation` other than `auto`, `collapsed` or `hidden`. This body is `{ "message", "type", "data": { "errors" } }`, not the four-field body above. |
 | 400 | `IdentityAssertionRequired`, `IdentityAssertionInvalid`, `IdentityProviderMismatch`, `IdentityEmailMismatch`, `IdentityAssertionStale`, `IdentityAssertionReused` | The `external_idv` assertion is missing or fails a check (see [External identity verification](../identity-verification/external-identity-verification.md#errors)). |
 | 402 | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. Requesting a signing URL needs an **Administrator** or **Contributor** key. |
