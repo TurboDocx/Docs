@@ -403,8 +403,24 @@ How a role send behaves:
 - **Roles you leave out** use the template's saved signer. A role with no saved signer must be filled, or the request fails with `SignerRoleUnfilled`.
 - **Signing order** follows the template's role order, then any recipients without a role in their own `signingOrder`. The final order is renumbered so it runs 1, 2, 3 and so on. A recipient with a `role` needs no `signingOrder`.
 - **Template defaults fill the gaps.** The template's saved CC emails, document description, document name and reminder and expiration settings apply to anything the request leaves out. Values in the request always win.
-- **Identity verification.** A role's saved verification choice applies unless the recipient sets its own `identityVerification`. A role saved with SMS verification needs the recipient's `phone`. See [the recipient](/docs/TurboSign/embedded-signing/reference#the-recipient) in the embedded signing reference for those fields.
-- **Replacing a saved signer.** When you fill a role that had a saved signer, the saved person's values on name and email fields become your recipient's, and title and company values are dropped so the new signer fills them in.
+- **Identity verification.** A role's saved verification choice applies unless the recipient sets its own `identityVerification`. A role saved with SMS verification needs the recipient's `phone`. If your organization no longer allows a role's saved choice (for example SMS was turned off), the organization default applies instead of failing the send. A choice you set on the recipient yourself is still checked as usual. See [the recipient](/docs/TurboSign/embedded-signing/reference#the-recipient) in the embedded signing reference for those fields.
+- **Every signer needs a field.** A role send where a signer ends up with no fields fails with `SignerHasNoFields` (Prepare for Review skips this check, because you place fields in the review screen afterwards).
+
+#### Claiming a role with a different signer {#claiming-a-role-with-a-different-signer}
+
+A role with a saved signer can still be given to someone else for one send. Pass a recipient with that `role` and the new person's `name` and `email`, and the new person takes the role and all of its fields. The template is not changed.
+
+```json
+[{ "role": "countersigner", "name": "Alex Kim", "email": "alex@acme.com" }]
+```
+
+What changes for the new signer:
+
+- **Name and email fields** are filled from the new recipient. A first name field takes the first word of `name` and a last name field takes the rest. If that leaves a value empty (a one-word name has no last name), the field is left blank and unlocked so the signer types it.
+- **Title and company fields** lose the saved person's values and are unlocked, so the new signer fills them in.
+- **A field set to keep its own default value** in TurboDocx keeps that value.
+- **Identity verification** keeps the role's saved choice unless the recipient sets its own. The saved person's phone is never used: a role saved with SMS verification needs the new recipient's `phone`, or the send fails with `OtpPhoneRequired`.
+- **Email addresses** must stay unique. If the new signer's email matches another role's signer, or a recipient without a role, the send fails with `DuplicateRoleEmail`.
 - **Without roles nothing changes.** `fields` is still required when no recipient names a role.
 
 #### Signer role errors
@@ -418,7 +434,8 @@ These return `400` with a body of the form `{ "message": "...", "type": "..." }`
 | `SignerRoleUnfilled`       | `Role "client" needs a signer. Pass recipients: [{ role: "<role>", name, email }]`   | A role has no saved signer and no recipient fills it         |
 | `TemplateHasNoSignerRoles` |                                                                                     | The template has no saved signer roles                       |
 | `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has no `templateId` |
-| `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address                 |
+| `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address, or a recipient without a role has a role signer's email |
+| `SignerHasNoFields`        | `Signer "Jane Doe" has no fields to sign. Place a field for them or remove them.`  | A signer ends up with no fields after the template's fields are placed |
 | `OtpPhoneRequired`         |                                                                                     | A role requires SMS verification and the recipient has no `phone` |
 | `FieldsRequired`           |                                                                                     | `fields` was omitted and no recipient names a role           |
 | `TemplateRolesNeedPdfTemplate` |                                                                                | Roles were sent for a Word or PowerPoint template            |
@@ -438,6 +455,34 @@ These also return `400` with a body of the form `{ "message": "...", "type": "..
 
 - Saving or deleting a template's signature setup returns `423` while someone is editing the template in TurboDocx. Retry once they have finished.
 - Get Template Signature Setup requires the administrator, contributor or user role. A viewer is refused.
+
+#### Reading a draft's signers {#reading-a-drafts-signers}
+
+`GET /turbosign/documents/{documentId}/with-recipients` returns a draft and its signers. When the draft was created from a template with signer roles, each signer that fills a role also has `templateRoleLabel`: the role's name as shown in TurboDocx (for example `"Client"`). It is for display only. To send by role, pass the role's key from [Get Template Signature Setup](#endpoint-8-get-template-signature-setup), not this label.
+
+Example response, trimmed to the signer fields:
+
+```json
+{
+  "data": {
+    "document": { "id": "DOCUMENT_ID", "name": "Service Agreement", "status": "DRAFT" },
+    "recipients": [
+      {
+        "id": "RECIPIENT_ID",
+        "name": "Jane Doe",
+        "email": "jane@client.com",
+        "signingOrder": 1,
+        "metadata": {},
+        "otpChannel": "none",
+        "phone": null,
+        "templateRoleLabel": "Client"
+      }
+    ]
+  }
+}
+```
+
+A signer that doesn't fill a template role has no `templateRoleLabel`.
 
 #### Editing a draft's signers
 
