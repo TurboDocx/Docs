@@ -49,12 +49,12 @@ This is the quickest way when the field only needs the default size.
 1. Go to **Templates** and click your template. Its generate page opens on the **Template Variables** tab.
 2. Find the variable, for example `{ClientSignature}`, and open its **variable menu**.
 3. Click **Use as signature field**.
-4. In the **Use {ClientSignature} as a signature field** window:
+4. In the **Use `{ClientSignature}` as a signature field** window:
    - Choose the **Field type**, for example **Signature**.
    - Under **Who signs here**, choose the signer. If the signer isn't listed yet, choose **Add a signer…** to go to the **Signatures** tab and add them there.
 5. Click **Make signature field**.
 
-The field is saved to the template's signature setup right away. A message confirms it, for example **{ClientSignature} is now a signature field for Client.** Click **Undo** in that message to take it back.
+The field is saved to the template's signature setup right away. A message confirms it, for example **`{ClientSignature}` is now a signature field for Client.** Click **Undo** in that message to take it back.
 
 The variable then moves out of the list of variables you fill in and into **Signature fields**, grouped by signer. The note there reads **Signers fill these in when they sign. The tag stays in the document until then.**
 
