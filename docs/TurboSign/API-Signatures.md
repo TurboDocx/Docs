@@ -2179,7 +2179,7 @@ formData.Add(new StringContent(recipients), "recipients");
 | `402` | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
 | `403` | `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed`, `OtpOverrideNotAllowed`, `EmbeddedSigningNotEnabled`, `SmsOtpNotEnabled` | The organization has not turned on the feature or mode the request uses, or has locked the passcode method. |
 | `404` | `DocumentNotFound`, `RecipientNotFound` | The document or recipient does not exist, was deleted, or belongs to another organization. On `update-with-recipients`, a document ID that does not exist returns `404` with only `{ "error": "Document not found" }`. |
-| `409` | `DocumentNotSignable`, `RecipientAlreadySigned`, `RecipientNotInTurn`, `NotSignersTurn`, `SmsProviderNotConfigured`, `RecipientRequiresSingleUseUrl` | The document or recipient is not in a state that allows the request, or the organization has no SMS provider saved. |
+| `409` | `DocumentNotSignable`, `RecipientAlreadySigned`, `RecipientNotInTurn`, `SmsProviderNotConfigured`, `RecipientRequiresSingleUseUrl` | The document or recipient is not in a state that allows the request, or the organization has no SMS provider saved. |
 | `410` | `SigningUrlNotRedeemable` | A single-use signing URL was already used or has expired. |
 
 None of these signature errors return a `5xx` status. A `500` from these endpoints means an unexpected server problem, not a problem with your request.
