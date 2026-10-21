@@ -234,7 +234,7 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.7.0</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
@@ -242,14 +242,14 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.7.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.9.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.7.0")
+implementation("com.turbodocx:turbodocx-sdk:0.9.0")
 ```
 
 </TabItem>
@@ -414,8 +414,8 @@ use TurboDocx\TurboQuote;
 use TurboDocx\Config\QuoteClientConfig;
 
 TurboQuote::configure(new QuoteClientConfig(
-    apiKey: $_ENV['TURBODOCX_API_KEY'],
-    orgId: $_ENV['TURBODOCX_ORG_ID'],   // optional, but required for most endpoints
+    apiKey: getenv('TURBODOCX_API_KEY') ?: null,
+    orgId: getenv('TURBODOCX_ORG_ID') ?: null,   // optional, but required for most endpoints
 ));
 ```
 
