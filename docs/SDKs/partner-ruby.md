@@ -1,8 +1,6 @@
 ---
-# Hidden from the published site: the turbodocx-sdk gem is not on RubyGems yet.
-# Remove `draft: true` when the gem is published (TurboDocx/SDK issue).
-draft: true
 title: TurboPartner Ruby SDK
+unlisted: true
 sidebar_position: 13
 sidebar_label: "TurboPartner: Ruby"
 description: Official TurboDocx Partner SDK for Ruby. Manage organizations, users, API keys, and entitlements programmatically from plain Ruby, Rails, or Sinatra.
@@ -34,7 +32,7 @@ The official TurboDocx Partner SDK for Ruby applications. Build multi-tenant Saa
 <br />
 
 :::info What is TurboPartner?
-TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements — perfect for building white-label or multi-tenant applications on top of TurboDocx.
+TurboPartner is the partner management API for TurboDocx. It allows you to programmatically create and manage organizations, users, API keys, and feature entitlements, perfect for building white-label or multi-tenant applications on top of TurboDocx.
 :::
 
 ## TLDR
@@ -71,7 +69,7 @@ key = TurboDocxSdk::TurboPartner.create_organization_api_key(org_id,
   "name" => "Production Key",
   "role" => "admin"
 )
-puts "API Key: #{key['data']['key']}"   # Save this — only shown once!
+puts "API Key: #{key['data']['key']}"   # Save this, only shown once!
 ```
 
 ---
@@ -413,7 +411,7 @@ puts "Full Key: #{result['data']['key']}"   # Only shown once!
 ```
 
 :::caution Save Your API Key
-The full API key is only returned once during creation. Store it securely — you won't be able to retrieve it again.
+The full API key is only returned once during creation. Store it securely: you won't be able to retrieve it again.
 :::
 
 ### `list_organization_api_keys(organization_id, request = nil)`
@@ -525,11 +523,11 @@ result = TurboDocxSdk::TurboPartner.revoke_partner_api_key("partner-key-uuid-her
 ## Partner User Management
 
 :::danger Partner users use a different role enum
-Partner portal users take `"admin"`, `"member"`, or `"viewer"`. **Organization** users and organization API keys take `"admin"`, `"contributor"`, `"user"`, or `"viewer"`. The two enums do not overlap beyond `admin`/`viewer` — `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
+Partner portal users take `"admin"`, `"member"`, or `"viewer"`. **Organization** users and organization API keys take `"admin"`, `"contributor"`, `"user"`, or `"viewer"`. The two enums do not overlap beyond `admin`/`viewer`: `"member"` is rejected on an org call, and `"contributor"`/`"user"` are rejected on a partner call. See [Role Enums](#organization-user-roles).
 :::
 
 :::caution `permissions` is all-or-nothing
-The `"permissions"` hash itself is optional on both `add_user_to_partner_portal` and `update_partner_user_permissions`, and the Ruby SDK forwards your hash verbatim without client-side validation. But if you send `"permissions"`, **all seven keys are required** — there is no partial permissions update. Omitting even one key raises `TurboDocxSdk::ValidationError` (400). Always send the complete hash: read the current values first and re-send them with your change applied.
+The `"permissions"` hash itself is optional on both `add_user_to_partner_portal` and `update_partner_user_permissions`, and the Ruby SDK forwards your hash verbatim without client-side validation. But if you send `"permissions"`, **all seven keys are required**: there is no partial permissions update. Omitting even one key raises `TurboDocxSdk::ValidationError` (400). Always send the complete hash: read the current values first and re-send them with your change applied.
 :::
 
 ### `add_user_to_partner_portal(request)`
@@ -573,7 +571,7 @@ end
 
 ### `update_partner_user_permissions(user_id, request)`
 
-Update a partner user's role and permissions. If you pass `"permissions"`, send **all seven keys** — a partial hash is a 400.
+Update a partner user's role and permissions. If you pass `"permissions"`, send **all seven keys**: a partial hash is a 400.
 
 ```ruby
 result = TurboDocxSdk::TurboPartner.update_partner_user_permissions("partner-user-uuid-here",
@@ -686,7 +684,7 @@ Pass features as a plain Hash with camelCase string keys. The SDK sends them str
 
 ### Tracking (Usage Counters)
 
-Current consumption against the limits above. TurboDocx maintains these automatically, but `update_organization_entitlements` **accepts a `tracking` hash** — useful for seeding counters when migrating an existing customer:
+Current consumption against the limits above. TurboDocx maintains these automatically, but `update_organization_entitlements` **accepts a `tracking` hash**, useful for seeding counters when migrating an existing customer:
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -705,7 +703,7 @@ Every counter except `currentAICredits` floors at `0`. Only `currentAICredits` a
 
 ## Preferences Reference
 
-TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly — the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
+TurboSign display preferences you can read and set per organization. Every key is a boolean and is validated strictly: the strings `"true"` / `"false"` are rejected with a 400, so pass real booleans. The API returns only these keys and never any of the organization's other settings.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -812,6 +810,8 @@ permissions = {
 
 ## Error Handling
 
+`TurboDocxSdk::TurboPartner.create_organization` and the other partner calls raise `AuthorizationError` when the partner API key lacks the scope for the route, since partner keys are scoped separately from organization keys:
+
 ```ruby
 begin
   result = TurboDocxSdk::TurboPartner.create_organization("name" => "Acme Corp")
@@ -842,20 +842,7 @@ rescue TurboDocxSdk::TurboDocxError => e
 end
 ```
 
-All errors inherit from `TurboDocxSdk::TurboDocxError` and carry `status_code` and `code` readers.
-
-### Error Classes
-
-| Error Class | Status | When |
-|---|---|---|
-| `TurboDocxSdk::TurboDocxError` | varies | Base class for all SDK errors |
-| `TurboDocxSdk::AuthenticationError` | 401 | Invalid or missing partner credentials |
-| `TurboDocxSdk::AuthorizationError` | 403 | Valid credentials without permission for this operation |
-| `TurboDocxSdk::ValidationError` | 400 | Invalid request parameters, or TurboPartner not configured |
-| `TurboDocxSdk::NotFoundError` | 404 | Resource not found |
-| `TurboDocxSdk::ConflictError` | 409 | Request conflicts with current resource state |
-| `TurboDocxSdk::RateLimitError` | 429 | Too many requests — back off |
-| `TurboDocxSdk::NetworkError` | — | Network connectivity issues |
+The full typed-error table and HTTP status mapping is documented once in the [Ruby SDK's Error Handling reference](/docs/SDKs/turbosign?language=ruby#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types.
 
 ---
 
@@ -925,5 +912,5 @@ It creates an organization with entitlements, adds a user, mints an org API key,
 - [GitHub Repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk)
 - [RubyGems Package](https://rubygems.org/gems/turbodocx-sdk)
 - [TurboSign Ruby SDK](/docs/SDKs/ruby) — For digital signature operations
-- [TurboQuote Ruby SDK](/docs/SDKs/quote-ruby) — For quotes and proposals
+- [TurboQuote Ruby SDK](/docs/SDKs/quote?language=ruby) — For quotes and proposals
 - [SDKs Overview](/docs/SDKs/) — All TurboDocx SDKs

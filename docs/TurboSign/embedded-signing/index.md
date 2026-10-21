@@ -103,10 +103,6 @@ Requesting a signing URL needs an **Administrator** or **Contributor** key. A **
 You can allow `http://localhost` origins to test on your machine. Remove every `http://` origin before you go live; production origins must be `https://`.
 :::
 
-:::note Ruby
-The Ruby tabs in these guides show the Ruby SDK API. The `turbodocx-sdk` gem is not on RubyGems yet; until it is, install it from the [TurboDocx SDK repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk).
-:::
-
 ## The flow, end to end
 
 1. Your backend prepares the document with an embedded recipient and `sendEmail: false`, then stores the returned `documentId` on the customer record.

@@ -84,10 +84,10 @@ function scrollToHashTarget(hash) {
 // like /docs/SDKs/python#get-status points at a section that is no longer on the setup page, so once
 // the page has rendered and the anchor is still missing, hop to the same anchor on the TurboSign page
 // with that language's tab selected. Anchors that still exist on the setup page are left alone.
-const MOVED_TURBOSIGN = { javascript: 'js', python: 'python', php: 'php', go: 'go', java: 'java' };
+const MOVED_TURBOSIGN = { javascript: 'js', python: 'python', php: 'php', go: 'go', java: 'java', ruby: 'ruby' };
 
 function hopToMovedSection(pathname, hash) {
-  const m = pathname.match(/^\/docs\/SDKs\/(javascript|python|php|go|java)\/?$/);
+  const m = pathname.match(/^\/docs\/SDKs\/(javascript|python|php|go|java|ruby)\/?$/);
   if (!m) return null;
   let id;
   try {

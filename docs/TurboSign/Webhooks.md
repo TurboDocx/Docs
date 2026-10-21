@@ -570,10 +570,6 @@ public class WebhookController {
 </TabItem>
 <TabItem value="ruby" label="Ruby">
 
-:::note Ruby
-The `turbodocx-sdk` gem is not on RubyGems yet; until it is, install it from the [TurboDocx SDK repository](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk).
-:::
-
 ```ruby
 require "json"
 require "sinatra"
