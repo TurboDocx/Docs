@@ -213,7 +213,7 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.8.0</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
@@ -221,14 +221,14 @@ import turbodocx "github.com/TurboDocx/SDK/packages/go-sdk"
 <TabItem value="gradle" label="Gradle">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.8.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.9.0'
 ```
 
 </TabItem>
 <TabItem value="gradle-kts" label="Gradle (Kotlin DSL)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.8.0")
+implementation("com.turbodocx:turbodocx-sdk:0.9.0")
 ```
 
 </TabItem>
@@ -2952,7 +2952,7 @@ ok := turbodocx.VerifyWebhookSignature(
 )
 ```
 
-Pass `&turbodocx.VerifyWebhookSignatureOptions{ToleranceSeconds: 60}` to tighten the window, or `ToleranceSeconds: -1` to disable the timestamp check entirely (NOT recommended in production).
+Pass `&turbodocx.VerifyWebhookSignatureOptions{ToleranceSeconds: 60}` to tighten the window, or a larger positive value to widen it. `0` (the zero value) means the 300-second default, so the Go helper has no way to turn the timestamp check off, and a negative value rejects every delivery.
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>

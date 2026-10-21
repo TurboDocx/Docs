@@ -173,7 +173,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.8.0</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
@@ -181,14 +181,14 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.8.0")
+implementation("com.turbodocx:turbodocx-sdk:0.9.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.8.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.9.0'
 ```
 
 </TabItem>

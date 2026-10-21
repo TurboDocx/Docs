@@ -32,7 +32,7 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.8.0</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
@@ -40,14 +40,14 @@ The official TurboDocx SDK for Java applications. Build document generation and 
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.8.0")
+implementation("com.turbodocx:turbodocx-sdk:0.9.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.8.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.9.0'
 ```
 
 </TabItem>

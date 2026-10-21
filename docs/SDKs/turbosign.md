@@ -179,7 +179,7 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <dependency>
     <groupId>com.turbodocx</groupId>
     <artifactId>turbodocx-sdk</artifactId>
-    <version>0.8.0</version>
+    <version>0.9.0</version>
 </dependency>
 ```
 
@@ -187,14 +187,14 @@ go get github.com/TurboDocx/SDK/packages/go-sdk
 <TabItem value="gradle" label="Gradle (Kotlin)">
 
 ```kotlin
-implementation("com.turbodocx:turbodocx-sdk:0.8.0")
+implementation("com.turbodocx:turbodocx-sdk:0.9.0")
 ```
 
 </TabItem>
 <TabItem value="gradle-groovy" label="Gradle (Groovy)">
 
 ```groovy
-implementation 'com.turbodocx:turbodocx-sdk:0.8.0'
+implementation 'com.turbodocx:turbodocx-sdk:0.9.0'
 ```
 
 </TabItem>
@@ -2969,7 +2969,7 @@ puts result["documentId"]
 
 ### Send without emails and sign in your app {#send-without-emails}
 
-Set `sendEmail` to `false` to create the signature request without emailing the signers their links. The document still goes out for signing, and passcode and completed-copy emails are still sent. Then call `createSigningUrl` for a signer when they are ready to sign in your app. For a signer with an email/SMS passcode or no verification (as here), the URL is their reusable signing link for the life of the document, so treat it like a password and don't log it. `external_idv` and `override` signers get a single-use URL that expires in about five minutes; mint those at the moment of signing.
+Set `sendEmail` to `false` to create the signature request without emailing the signers their links. The document still goes out for signing, and passcode and completed-copy emails are still sent. The opt-out also covers the initial CC email, later signers' turn emails and scheduled reminders. Then call `createSigningUrl` for a signer when they are ready to sign in your app. For a signer with an email/SMS passcode or no verification (as here), the URL is their reusable signing link for the life of the document, so treat it like a password and don't log it. `external_idv` and `override` signers get a single-use URL that expires in about five minutes; mint those at the moment of signing.
 
 :::info Prerequisite
 Embedded signing must be turned on for your organization: in the E-Signature settings, turn on **Enable identity verification** (see [Set up your organization](/docs/TurboSign/how-to-enable-embedded-signing)). While it is off, `createSigningUrl` fails with `EmbeddedSigningNotEnabled`.
@@ -2989,7 +2989,7 @@ const result = await TurboSign.sendSignature({
 
 // When the signer is ready, mint their signing URL
 const link = await TurboSign.createSigningUrl(result.documentId, {
-  recipientId: result.recipients![0].id,
+  recipientId: result.recipients[0].id,
 });
 console.log(link.url); // open in a new tab or redirect to it
 ```
@@ -3109,6 +3109,26 @@ CreateSigningUrlResponse link = client.turboSign().createSigningUrl(
         .build()
 );
 System.out.println(link.getUrl()); // open in a new tab or redirect to it
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+result = TurboDocxSdk::TurboSign.send_signature(
+  fileLink:     "https://www.turbodocx.com/examples/turbodocx.pdf",
+  documentName: "Service Agreement",
+  recipients:   [{ name: "Recipient Name", email: "recipient@example.com", signingOrder: 1 }],
+  fields:       [{ type: "signature", page: 1, x: 100, y: 500, width: 200, height: 50, recipientEmail: "recipient@example.com" }],
+  sendEmail:    false # no signing-link emails; you hand out the link
+)
+
+# When the signer is ready, mint their signing URL
+link = TurboDocxSdk::TurboSign.create_signing_url(
+  result["documentId"],
+  recipient_id: result["recipients"][0]["id"]
+)
+puts link["url"] # open in a new tab or redirect to it
 ```
 
 </TabItem>
@@ -5158,10 +5178,11 @@ final class Recipient {
     public function __construct(
         public string $name,
         public string $email,
-        public int $signingOrder,
+        public ?int $signingOrder = null,                            // Required unless the recipient has a role
         public ?string $phone = null,                                // E.164; required for SMS passcodes
         public ?string $externalId = null,                           // Your own key, unique in the document
-        public ?IdentityVerification $identityVerification = null
+        public ?IdentityVerification $identityVerification = null,
+        public ?string $role = null                                  // Template signer role this recipient fills
     ) {}
 }
 
