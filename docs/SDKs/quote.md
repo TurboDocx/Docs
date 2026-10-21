@@ -6737,6 +6737,23 @@ Three fully runnable examples live in the SDK repo:
 Run any example after exporting `TURBODOCX_API_KEY` and `TURBODOCX_ORG_ID`.
 
 </TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+Three runnable examples live in the SDK repo:
+
+- **[`turboquote_basic.rb`](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turboquote_basic.rb)** — full quote lifecycle: create a company and contact, create a quote, add line items, download the PDF, send, clean up.
+- **[`turboquote_products.rb`](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turboquote_products.rb)** — product and bundle catalog management.
+- **[`turboquote_pricebooks.rb`](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turboquote_pricebooks.rb)** — price book CRUD, `apply_price_book`, and optional `send_quote_with_deliverable` (set the `DELIVERABLE_ID` env var).
+
+Run any example with:
+
+```bash
+export TURBODOCX_API_KEY=your_key
+export TURBODOCX_ORG_ID=your_org_id
+ruby examples/turboquote_basic.rb
+```
+
+</TabItem>
 </Tabs>
 
 ## See Also {#see-also}
