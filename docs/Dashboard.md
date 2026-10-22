@@ -98,6 +98,8 @@ The three numbers at the top break it down:
 - **Viewed, not signed**: somebody opened it and then stopped. These are your warmest leads for a nudge.
 - **Stalled over 72h**: nothing has happened for three days.
 
+If a signer's email bounced or couldn't be sent, the document appears first, under **Can't reach the signer**. Each row shows the document, the signer, and what happened (for example `Pat Lee · Bounced`). Click the row to open **Fix signer email**, correct the address, and resend. See [How to Fix a Signer's Email Address](./TurboSign/Managing-Your-Signatures.md#how-to-fix-a-signers-email-address). Documents in this list don't also appear in **Needs a Nudge**, because a reminder to an address that bounced would bounce too.
+
 Underneath them is **Needs a Nudge**, a short list of the specific documents that have been sitting the longest.
 
 ![The Needs a Nudge list highlighted inside the In Flight panel](/img/dashboard/needs_a_nudge.png)
