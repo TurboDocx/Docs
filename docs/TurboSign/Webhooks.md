@@ -1,7 +1,7 @@
 ---
 title: TurboSign Webhooks
 sidebar_position: 6
-description: "Configure TurboSign webhooks to receive notifications for signature events: sent, viewed, signed, completed, voided, and finalization failures."
+description: "Configure TurboSign webhooks to receive notifications for signature events: sent, viewed, signed, completed, voided, finalization failures, and signer emails that weren't delivered."
 keywords:
   - webhook configuration
   - signature webhooks
@@ -35,7 +35,7 @@ keywords:
 
 # Webhooks
 
-Webhooks enable your application to receive real-time notifications when important events occur in TurboSign. Instead of polling for changes, webhooks push event data to your specified endpoints immediately across the whole signature lifecycle — when a document is sent, viewed, signed by each recipient, completed, voided, or fails to finalize.
+Webhooks enable your application to receive real-time notifications when important events occur in TurboSign. Instead of polling for changes, webhooks push event data to your specified endpoints immediately across the whole signature lifecycle — when a document is sent, viewed, signed by each recipient, completed, voided, or fails to finalize, and when a signer's signing email doesn't reach them.
 
 ![Diagram comparing webhooks, which push new data to your app, with APIs, which your app has to ask for data](/img/webhooks/webhook-schema.png)
 
@@ -93,8 +93,9 @@ Webhooks can be configured from the E-Signature settings on the **Features and i
      - **Signature Completed**: Triggered when all recipients have signed and the signed PDF is finalized
      - **Finalization Failed**: Triggered when the signed PDF fails to finalize (e.g. KMS signing error); the document is not marked Completed
      - **Signature Voided**: Triggered when a document is voided or cancelled
+     - **Email Not Delivered**: Triggered when a signer's signing email bounces, is blocked, or is reported as spam
 
-![Subscribe to Events section with all seven signature webhook events highlighted](/img/webhooks/signature-webhook-config.png)
+![Subscribe to Events section with the signature webhook events highlighted](/img/webhooks/signature-webhook-config.png)
 
 6. **Save Configuration**
    - Click "Save Configuration" to activate your webhooks
@@ -131,7 +132,7 @@ Your webhook secret is used to verify that webhooks are genuinely from TurboDocx
 
 ## Webhook Events
 
-TurboSign emits **seven** subscribable events across the signature lifecycle. Every event shares the same envelope (`event`, `event_id`, `created_at`, `version`, `data`); only the `data` object differs per event.
+TurboSign emits **eight** subscribable events across the signature lifecycle. Every event shares the same envelope (`event`, `event_id`, `created_at`, `version`, `data`); only the `data` object differs per event.
 
 | Event | Fires when |
 | ----- | ---------- |
@@ -142,6 +143,7 @@ TurboSign emits **seven** subscribable events across the signature lifecycle. Ev
 | `signature.document.completed` | All recipients have signed and the signed PDF is finalized |
 | `signature.document.finalization_failed` | The signed PDF fails to finalize (e.g. KMS signing error); the document is **not** completed |
 | `signature.document.voided` | The document is voided or cancelled |
+| `signature.recipient.email_bounced` | A signer's signing email bounced, was blocked, or was reported as spam |
 
 ### How the signing events fit together
 
@@ -345,6 +347,49 @@ Triggered when a document is voided or cancelled.
 }
 ```
 
+### Signature Recipient Email Bounced
+
+Triggered when a signing email doesn't reach a signer, while the document is still out for signature. Use it to alert your team or correct the address in your own system.
+
+**Event Name**: `signature.recipient.email_bounced`
+
+It fires when:
+
+- the signer's mail provider rejected the email (`delivery_status: "bounced"`),
+- TurboSign didn't send it because the address bounced before (`delivery_status: "blocked"`), or
+- the signer reported the email as spam (`delivery_status: "complained"`).
+
+**Payload Example**:
+
+```json
+{
+  "event": "signature.recipient.email_bounced",
+  "event_id": "evt_5b0d8f7c1e2a4c6b9d3f0a1e2b3c4d5e",
+  "created_at": "2025-08-26T12:05:41.118Z",
+  "version": "1.0",
+  "data": {
+    "document_id": "9eee553b-28b6-4b43-b52b-4ef9957cc503",
+    "title": "Statement of Work Example Draft",
+    "recipient_id": "4c1f7e2a-8b3d-4e5f-9a6b-0c1d2e3f4a5b",
+    "recipient_email": "jordan.diaz@example.com",
+    "recipient_name": "Jordan Diaz",
+    "delivery_status": "bounced",
+    "reason": "address_not_found"
+  }
+}
+```
+
+`reason` is one of:
+
+| `reason` | Meaning |
+| -------- | ------- |
+| `address_not_found` | The address doesn't exist |
+| `mailbox_unavailable` | The receiving mail server permanently refused the email for another reason (for example, the mailbox is disabled) |
+| `previously_bounced` | Mail to this address bounced before, so TurboSign didn't send it |
+| `spam_report` | The signer reported the email as spam |
+
+To fix the address, open the document in TurboSign and use **Fix signer email**. The signer gets a new signing link, and their old link stops working.
+
 ### Payload Fields
 
 Every event shares the top-level envelope fields. The `data` fields present depend on the event — the last column lists which events include each field.
@@ -360,9 +405,9 @@ Every event shares the top-level envelope fields. The `data` fields present depe
 | `data.status`        | string | Human-readable status                                    | sent, completed, finalization_failed, voided |
 | `data.status_enum`   | string | Programmatic status enum value                           | completed, voided |
 | `data.sent_at`       | string | When the document was dispatched to recipients           | sent |
-| `data.recipient_id`  | string | Unique identifier of the recipient                       | viewed, recipient_signed, signed |
-| `data.recipient_email` | string | Recipient's email address                              | viewed, recipient_signed, signed |
-| `data.recipient_name`  | string | Recipient's display name                               | recipient_signed |
+| `data.recipient_id`  | string | Unique identifier of the recipient                       | viewed, recipient_signed, signed, email_bounced |
+| `data.recipient_email` | string | Recipient's email address                              | viewed, recipient_signed, signed, email_bounced |
+| `data.recipient_name`  | string | Recipient's display name                               | recipient_signed, email_bounced |
 | `data.viewed_at`     | string | When the recipient first viewed the document             | viewed |
 | `data.signed_at`     | string | When the signature was applied                           | recipient_signed, signed |
 | `data.remaining_signers` | number | Count of signers who have not yet completed            | recipient_signed, signed |
@@ -373,6 +418,8 @@ Every event shares the top-level envelope fields. The `data` fields present depe
 | `data.failure_step`  | string | Which step failed (e.g. `document_finalization`)         | finalization_failed |
 | `data.voided_at`     | string | When the document was voided                             | voided |
 | `data.void_reason`   | string | Reason for voiding                                       | voided |
+| `data.delivery_status` | string | `bounced`, `blocked`, or `complained`                  | email_bounced |
+| `data.reason`        | string | Why the email didn't arrive (see the table above)        | email_bounced |
 
 ## Signature Verification
 
@@ -748,7 +795,8 @@ If you encounter issues not covered here:
     "signature.document.signed",
     "signature.document.completed",
     "signature.document.finalization_failed",
-    "signature.document.voided"
+    "signature.document.voided",
+    "signature.recipient.email_bounced"
   ],
   "secretExists": true,
   "maskedSecret": "whs***f6a",
