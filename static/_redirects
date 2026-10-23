@@ -16,6 +16,9 @@
 /docs/SDKs/deliverable-java /docs/SDKs/deliverable?language=java 301
 /docs/SDKs/deliverable-java/ /docs/SDKs/deliverable?language=java 301
 /docs/SDKs/deliverable-java.html /docs/SDKs/deliverable?language=java 301
+/docs/SDKs/deliverable-ruby /docs/SDKs/deliverable?language=ruby 301
+/docs/SDKs/deliverable-ruby/ /docs/SDKs/deliverable?language=ruby 301
+/docs/SDKs/deliverable-ruby.html /docs/SDKs/deliverable?language=ruby 301
 /docs/SDKs/quote-javascript /docs/SDKs/quote?language=js 301
 /docs/SDKs/quote-javascript/ /docs/SDKs/quote?language=js 301
 /docs/SDKs/quote-javascript.html /docs/SDKs/quote?language=js 301
@@ -31,6 +34,9 @@
 /docs/SDKs/quote-java /docs/SDKs/quote?language=java 301
 /docs/SDKs/quote-java/ /docs/SDKs/quote?language=java 301
 /docs/SDKs/quote-java.html /docs/SDKs/quote?language=java 301
+/docs/SDKs/quote-ruby /docs/SDKs/quote?language=ruby 301
+/docs/SDKs/quote-ruby/ /docs/SDKs/quote?language=ruby 301
+/docs/SDKs/quote-ruby.html /docs/SDKs/quote?language=ruby 301
 /docs/SDKs/webhooks-javascript /docs/SDKs/webhooks?language=js 301
 /docs/SDKs/webhooks-javascript/ /docs/SDKs/webhooks?language=js 301
 /docs/SDKs/webhooks-javascript.html /docs/SDKs/webhooks?language=js 301
@@ -46,6 +52,9 @@
 /docs/SDKs/webhooks-java /docs/SDKs/webhooks?language=java 301
 /docs/SDKs/webhooks-java/ /docs/SDKs/webhooks?language=java 301
 /docs/SDKs/webhooks-java.html /docs/SDKs/webhooks?language=java 301
+/docs/SDKs/webhooks-ruby /docs/SDKs/webhooks?language=ruby 301
+/docs/SDKs/webhooks-ruby/ /docs/SDKs/webhooks?language=ruby 301
+/docs/SDKs/webhooks-ruby.html /docs/SDKs/webhooks?language=ruby 301
 
 # The TurboSign for Salesforce overview was merged into the Salesforce Integration page (CR #231).
 # Only the overview moved: the TurboSign for Salesforce guides below it keep their /turbosign-for-salesforce/... URLs, so these are exact matches, not a splat.
