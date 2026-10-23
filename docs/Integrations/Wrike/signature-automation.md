@@ -146,7 +146,7 @@ All three are optional and sit below **Map Document Fields** in the signature st
 
 In **Send a reminder when the task moves to**, pick the Wrike status your team uses to nudge signers.
 
-![The Send a reminder status picker highlighted, set to Needs Resend](/img/wrike-integration/SigAuto-SendReminder.png)
+![The Send a reminder status picker highlighted, set to Please Sign](/img/wrike-integration/SigAuto-SendReminder.png)
 
 When a task moves to that status, TurboDocx emails a reminder, with the same signing link, to every signer who hasn't signed yet. It doesn't create a new request, and requests that were voided are skipped. A comment on the task confirms how many signers were reminded.
 
