@@ -702,6 +702,7 @@ If you exceed rate limits, you'll receive a `429 Too Many Requests` response. Im
 **Solutions:**
 
 - Verify email format
+- Check the domain: it must end in at least two letters and have no empty parts, so `name@acme.c`, `name@acme.com.` and `name@acme..com` are rejected
 - Check for typos
 - Ensure no special characters in local part
 
