@@ -8,6 +8,8 @@ keywords:
   - wrike automated signing
   - wrike signature workflow
   - wrike document signing
+  - wrike void signature request
+  - wrike signature reminder
 ---
 
 # How to Setup E-Signature Automation
@@ -67,7 +69,7 @@ In the field editor, **Send** stays disabled until *each* recipient has at least
 ## Configure Signers
 
 :::note
-The steps below apply to **all three** delivery modes. If you chose **Place signature fields manually**, complete this section and then skip ahead to [Post-Signature Settings](#post-signature-settings) — the **Map Document Fields** steps won't appear.
+The steps below apply to **all three** delivery modes. If you chose **Place signature fields manually**, complete this section and then skip ahead to [Reminders, Re-sends and Voiding](#reminders-re-sends-and-voiding-optional). The **Map Document Fields** steps won't appear.
 :::
 
 ### Step 3: Select the First Recipient's Email Field
@@ -131,6 +133,54 @@ On the last step of the wizard, the field mappings table shows your choice in it
 Optionally, repeat the process to map more document fields for the signer.
 
 ![Map More Fields](/img/wrike-integration/SigAuto10-MapMoreFields.jpeg)
+
+<br/>
+
+## Reminders, Re-sends and Voiding (Optional)
+
+Signature requests don't always go out right the first time. A signer misses the email, or someone spots a typo after the request was sent. The three settings below let your team handle that from Wrike by moving the task to a status, without opening TurboDocx.
+
+All three are optional and sit below **Map Document Fields** in the signature step. Pick statuses your team doesn't already use to send for signature.
+
+### Send a reminder
+
+In **Send a reminder when the task moves to**, pick the Wrike status your team uses to nudge signers.
+
+![The Send a reminder status picker highlighted, set to Needs Resend](/img/wrike-integration/SigAuto-SendReminder.png)
+
+When a task moves to that status, TurboDocx emails a reminder, with the same signing link, to every signer who hasn't signed yet. It doesn't create a new request, and requests that were voided are skipped. A comment on the task confirms how many signers were reminded.
+
+### Void earlier requests when the task is sent again
+
+Under **When the task is sent again**, check **Void outstanding requests when sending a new one** if a task should only ever have one open request.
+
+![The "Void outstanding requests when sending a new one" option checked, with its warning and the Triggered by line](/img/wrike-integration/SigAuto-VoidOnSend.png)
+
+With this on, each time the task moves to a send status and the new request goes out, TurboDocx voids every earlier request this automation sent from that task that isn't fully signed. The warning lists the statuses that trigger it on the **Triggered by** line.
+
+:::caution Voiding can't be undone
+Requests some signers have already signed are voided too, and their signers are emailed that the request was withdrawn. Fully signed requests are never touched. Leave the option off if earlier requests should stay open when the task is sent again.
+:::
+
+If the automation uses **Send for review first** or **Place signature fields manually**, earlier requests stay open until the new draft is sent. They're voided when someone sends it.
+
+### Set a void status
+
+In **Void status**, pick the Wrike status that withdraws a task's open requests, for example **Rejected** or **Needs Changes**.
+
+![The Void status picker highlighted, set to Rejected](/img/wrike-integration/SigAuto-VoidStatus.png)
+
+When a task moves to that status, TurboDocx voids the open signature requests this automation sent from the task. Signers who were sent a request are emailed that it was withdrawn, and one comment on the task says how many requests were voided. To send a corrected request, fix the task and move it back to the send status.
+
+:::note Statuses can't overlap
+The void status can't be one of the automation's trigger statuses, the reminder status, the completed status, or a status used in [Wrike Activity Updates](#wrike-activity-updates-optional). The wizard won't let you save an overlap, because one status move would then both send and void.
+:::
+
+On the last step of the wizard, **Trigger conditions** lists all three, so you can check them before you create the automation.
+
+![The Trigger conditions summary highlighted, showing the Sends when, Reminds when and Voids when lines](/img/wrike-integration/SigAuto-ReviewVoidRules.png)
+
+Each run shows up in the automation's **View Logs** with a summary such as "Voided the signature request" or "Sent a reminder to 1 signer who hasn't signed."
 
 <br/>
 
