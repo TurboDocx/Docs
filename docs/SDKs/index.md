@@ -86,6 +86,16 @@ Generate documents from templates with dynamic variable injection, download sour
 | **Java**                  | `com.turbodocx:turbodocx-sdk` | [Maven Central](https://search.maven.org/artifact/com.turbodocx/turbodocx-sdk) | [Docs](/docs/SDKs/deliverable?language=java) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/java-sdk)                     |
 | **Ruby**                  | `turbodocx-sdk`            | `gem install turbodocx-sdk`                                          | [Docs](/docs/SDKs/deliverable?language=ruby) [GitHub](https://github.com/TurboDocx/SDK/tree/main/packages/ruby-sdk) |
 
+### Generate DOCX / PPTX examples
+
+Complete, copy-paste scripts that fill a Word or PowerPoint template from JSON and save the DOCX or PPTX and a PDF:
+
+- [JavaScript (Node.js)](./generate-docx-pptx-javascript.md)
+- [TypeScript](./generate-docx-pptx-typescript.md)
+- [Python](./generate-docx-pptx-python.md)
+- [PHP](./generate-docx-pptx-php.md)
+- [Ruby](./generate-docx-pptx-ruby.md)
+
 ## TurboQuote SDKs
 
 Build sales quotes and proposals programmatically: quotes and line items, a product/bundle catalog, price books, companies/contacts, and quote templates.

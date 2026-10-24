@@ -201,6 +201,38 @@ const sidebars = {
           ],
         },
         {
+          type: 'category',
+          label: 'Generate DOCX / PPTX examples',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'SDKs/generate-docx-pptx-javascript',
+              label: 'JavaScript',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/generate-docx-pptx-typescript',
+              label: 'TypeScript',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/generate-docx-pptx-python',
+              label: 'Python',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/generate-docx-pptx-php',
+              label: 'PHP',
+            },
+            {
+              type: 'doc',
+              id: 'SDKs/generate-docx-pptx-ruby',
+              label: 'Ruby',
+            },
+          ],
+        },
+        {
           type: 'doc',
           id: 'SDKs/turbosign',
           label: 'TurboSign SDK',
