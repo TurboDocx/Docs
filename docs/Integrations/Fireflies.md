@@ -36,7 +36,7 @@ keywords:
 
 TurboDocx connects to Fireflies through the Fireflies API, so the meeting transcripts you record in Fireflies can feed your TurboDocx templates directly. Instead of writing up notes by hand, you pick a transcript and TurboDocx turns it into meeting minutes, a proposal, or a presentation.
 
-**In short:** you generate an API key in Fireflies (**Integrations** > **Fireflies API**), paste it into TurboDocx under **Settings** > **Features and integrations** > **Fireflies**, and then choose Fireflies as a transcript source when you create a document. TurboDocx only reads your Fireflies data; it never changes it.
+**Setup at a glance:** you generate an API key in Fireflies (**Integrations** > **Fireflies API**), paste it into TurboDocx under **Settings** > **Features and integrations** > **Fireflies**, and then choose Fireflies as a transcript source when you create a document. TurboDocx only reads your Fireflies data; it never changes it.
 
 ## What You Can Create
 

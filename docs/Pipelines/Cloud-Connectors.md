@@ -24,7 +24,7 @@ keywords:
 
 A private cloud connector is the pipeline connector for systems TurboDocx can't reach directly. Sometimes the details you need to send a document for signature, such as the signer's name and email, live in an internal database behind your firewall or an internal API that never faces the public internet. A **Cloud connector** bridges that gap securely, without exposing your systems.
 
-**In short:** you run a small worker inside your own network. When a pipeline needs a signer from one of your private systems, the worker picks up the lookup over outbound HTTPS, queries your system locally, and sends back only the signer's name and email. You open no inbound firewall ports, and our team sets it up with you.
+**How it works in practice:** you run a small worker inside your own network. When a pipeline needs a signer from one of your private systems, the worker picks up the lookup over outbound HTTPS, queries your system locally, and sends back only the signer's name and email. You open no inbound firewall ports, and our team sets it up with you.
 
 <br/>
 

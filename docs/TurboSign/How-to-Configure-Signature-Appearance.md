@@ -19,7 +19,7 @@ keywords:
 
 Custom signature appearance controls how each signed field looks on the finished PDF. By default, TurboSign stamps every signed field with a thin outline, a small label, and a verification hash. It also decides how **locked fields** (read-only values imported onto a document that the signer can't change) appear while someone is signing. You set all of this for your whole organization from one settings screen.
 
-**In short:** an admin chooses the options once in **Settings** > **Features and integrations** > **Configure E-Signature**, and they apply to every new signature request in the organization, whether it is sent from the app, a pipeline, or the TurboSign API. Your API calls don't need to pass any appearance options.
+**Where it applies:** an admin chooses the options once in **Settings** > **Features and integrations** > **Configure E-Signature**, and they apply to every new signature request in the organization, whether it is sent from the app, a pipeline, or the TurboSign API. Your API calls don't need to pass any appearance options.
 
 This guide shows you how to find and change the **Signature Appearance** and **Locked Fields Rendering** options.
 
