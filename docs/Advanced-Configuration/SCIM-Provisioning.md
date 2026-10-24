@@ -1,5 +1,5 @@
 ---
-title: SCIM Provisioning for TurboDocx
+title: "SCIM Provisioning: Automate User Accounts"
 sidebar_label: SCIM User Provisioning
 description: Set up SCIM provisioning (SCIM 2.0) so your identity provider creates, updates, and deactivates TurboDocx user accounts automatically.
 keywords:
