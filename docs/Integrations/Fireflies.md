@@ -1,11 +1,8 @@
 ---
-title: "Fireflies API Integration: Transcripts to Docs"
-sidebar_label: Fireflies AI Integration
+title: Fireflies AI Integration
 sidebar_position: 7
-description: Connect TurboDocx to Fireflies with your Fireflies API key and turn meeting transcripts into documents and presentations from your templates.
+description: Transform Fireflies AI meeting transcripts into professional documents and presentations with AI-powered automation and workflow integration.
 keywords:
-  - fireflies api
-  - fireflies api key
   - fireflies ai integration
   - fireflies meeting documentation
   - fireflies transcript to document
@@ -32,11 +29,9 @@ keywords:
   - fireflies smart transcription
 ---
 
-# Fireflies API Integration
+# Fireflies AI Integration
 
-TurboDocx connects to Fireflies through the Fireflies API, so the meeting transcripts you record in Fireflies can feed your TurboDocx templates directly. Instead of writing up notes by hand, you pick a transcript and TurboDocx turns it into meeting minutes, a proposal, or a presentation.
-
-**Setup at a glance:** you generate an API key in Fireflies (**Integrations** > **Fireflies API**), paste it into TurboDocx under **Settings** > **Features and integrations** > **Fireflies**, and then choose Fireflies as a transcript source when you create a document. TurboDocx only reads your Fireflies data; it never changes it.
+Transform your meeting recordings into professional documents automatically. TurboDocx's Fireflies integration eliminates manual note-taking by converting meeting transcripts into polished deliverables, streamlining your post-meeting workflow.
 
 ## What You Can Create
 
