@@ -15,6 +15,10 @@ keywords:
 
 This guide shows a rep how to send a document from an Opportunity, what each signer sees, and where the signed copy ends up. Your admin must finish [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup) first.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Send a Document for Signature from a Salesforce Opportunity](https://www.turbodocx.com/resources/how-to-send-a-document-for-signature-from-salesforce) on turbodocx.com.
+:::
+
 ## Step 1: Start the send
 
 1. Open the Opportunity.

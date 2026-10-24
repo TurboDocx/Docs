@@ -22,6 +22,10 @@ A one-time passcode (OTP) verifies a signer's identity before they can open your
 
 This guide is for admins. It covers requiring a passcode, choosing email or SMS, connecting an SMS provider, setting up delivery-failure alerts, and what the signer sees.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Set Up One-Time Passcodes for Signers](https://www.turbodocx.com/resources/how-to-set-up-one-time-passcodes-for-signers) on turbodocx.com.
+:::
+
 :::tip Using passcodes with embedded signing?
 Requesting a passcode from your code, SMS in each SDK, and verifying only your embedded signers are covered in [Passcodes in embedded signing](../embedded-signing/passcodes.md).
 :::

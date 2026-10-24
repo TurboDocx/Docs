@@ -142,6 +142,10 @@ Signature requests don't always go out right the first time. A signer misses the
 
 All three are optional and sit below **Map Document Fields** in the signature step. Pick statuses your team doesn't already use to send for signature.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Send Reminders and Void Signature Requests from Wrike](https://www.turbodocx.com/resources/how-to-remind-and-void-signature-requests-from-wrike) on turbodocx.com.
+:::
+
 ### Send a reminder
 
 In **Send a reminder when the task moves to**, pick the Wrike status your team uses to nudge signers.

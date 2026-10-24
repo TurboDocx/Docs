@@ -31,6 +31,10 @@ import ScriptLoader from '@site/src/components/ScriptLoader';
 
 Transform your document workflows with intelligent, context-aware variable generation. This API leverages advanced AI to automatically create rich, relevant content for your template variables by analyzing uploaded files, understanding context, and generating human-quality text based on your specific prompts.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Use AI Variables in a Document Template](https://www.turbodocx.com/resources/how-to-use-ai-variables-in-a-template) on turbodocx.com.
+:::
+
 <!-- ![AI Variable Generation Overview](/img/ai-variable-generation/banner.gif) -->
 
 ## Overview

@@ -191,6 +191,10 @@ For each recipient, you'll need:
 
 **Drag to change the signing order** if it matters for your document. The signing order determines who gets the document first.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Set the Signing Order When a Document Has Several Signers](https://www.turbodocx.com/resources/how-to-set-signing-order) on turbodocx.com.
+:::
+
 **When order matters:**
 - Legal documents that require witness signatures
 - Contracts where one party must sign before the other

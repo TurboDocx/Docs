@@ -53,6 +53,10 @@ To select something from your Knowledgebase, click Lookup.<br/>
 
 #### Image
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Add Images to a Generated Document with an Image Variable](https://www.turbodocx.com/resources/how-to-add-images-with-an-image-variable) on turbodocx.com.
+:::
+
   For images, click Image. <br/>
   A pop up will come up where you can click on it to open your file browser and choose an image.
 

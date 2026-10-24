@@ -20,6 +20,10 @@ Embedded signing lets your application take a signer straight to a TurboSign sig
 
 You need an **admin** account for your organization.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Enable Embedded Signing and Allow Your Domain](https://www.turbodocx.com/resources/how-to-enable-embedded-signing) on turbodocx.com.
+:::
+
 ## Step 1: Open your E-Signature settings
 
 Click your name at the bottom of the left sidebar and choose **Settings**. In the settings menu, click **Features and integrations**. Under **Core Features**, find the **Signatures** card and click **Configure E-Signature**.

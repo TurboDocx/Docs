@@ -39,6 +39,10 @@ keywords:
 
 Need to send the same document to dozens — or hundreds — of recipients, each with their own personalized details and signature fields? The **Bulk Send** wizard lets you do exactly that, right from the TurboDocx UI. Upload a spreadsheet, map your columns, preview the results, and submit the entire batch in minutes.
 
+:::info Learn more
+Looking for a shorter overview? Read [Send Documents to Hundreds of Recipients at Once](https://www.turbodocx.com/resources/bulk-signature-sending-guide) on turbodocx.com.
+:::
+
 ## What You'll Learn
 
 - 📊 **Upload a spreadsheet** (CSV or XLSX) with recipient data

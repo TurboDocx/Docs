@@ -16,6 +16,10 @@ keywords:
 
 This guide walks you through setting up a custom quote number for your organization. You choose the format (prefix, year, month, and how many digits), pick the starting number, and decide when the count resets. A live preview shows the exact number your next quote will receive.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Set Up a Custom Quote Number Format](https://www.turbodocx.com/resources/how-to-configure-quote-numbering) on turbodocx.com.
+:::
+
 ## What You'll Accomplish
 
 By the end of this guide, you will have:

@@ -22,6 +22,10 @@ import QuickstartSkillNudge from '@site/src/components/QuickstartSkillNudge';
 
 Identity verification makes a signer prove who they are before the document opens. You set it per recipient, and an admin can set a default for the whole organization.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Choose a Verification Method for Each Signer](https://www.turbodocx.com/resources/how-to-choose-a-verification-method-for-each-signer) on turbodocx.com.
+:::
+
 **At a glance:**
 
 - **Three ways to verify:** a one-time passcode by email or SMS, external identity verification from your own provider, or the sender override (testing only, no verification).

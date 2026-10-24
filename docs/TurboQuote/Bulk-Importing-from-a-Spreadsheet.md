@@ -33,6 +33,10 @@ By the end of this guide, you will have:
 Already have your data in a spreadsheet? You can be importing in under a minute. Start by downloading the template so your columns line up automatically. 🚀
 :::
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Import Quote Products from a Spreadsheet](https://www.turbodocx.com/resources/how-to-import-products-into-turboquote) on turbodocx.com.
+:::
+
 ## How Records Link Together
 
 Related records connect using the names and codes you already use, so you can build your spreadsheet straight from data you already have:
