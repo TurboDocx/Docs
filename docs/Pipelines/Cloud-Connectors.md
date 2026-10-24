@@ -1,9 +1,12 @@
 ---
-title: Cloud Connectors (Enterprise)
+title: "Pipeline Connectors: Private Cloud Connector"
+sidebar_label: Cloud Connectors (Enterprise)
 sidebar_position: 6
-description: Cloud connectors resolve signer details from systems behind your firewall without inbound access. Secure lookup from databases and internal APIs.
+description: A private cloud connector lets TurboDocx pipelines look up signers in databases and internal APIs behind your firewall, with no inbound access.
 keywords:
   - cloud connectors
+  - pipeline connectors
+  - private cloud connector
   - signer resolution
   - internal database lookup
   - behind firewall integration
@@ -17,9 +20,11 @@ keywords:
   - white-glove setup
 ---
 
-# Cloud Connectors (Enterprise)
+# Pipeline Connectors: Private Cloud Connector (Enterprise)
 
-Sometimes the details you need to send a document for signature, such as the signer's name and email, live in a system TurboDocx can't reach directly: an internal database behind your firewall, or an internal API that never faces the public internet. A **Cloud connector** bridges that gap, securely, without ever exposing your systems.
+A private cloud connector is the pipeline connector for systems TurboDocx can't reach directly. Sometimes the details you need to send a document for signature, such as the signer's name and email, live in an internal database behind your firewall or an internal API that never faces the public internet. The connector bridges that gap securely, without exposing those systems.
+
+**How it works in practice:** you run a small worker inside your own network. When a pipeline needs a signer from one of your private systems, the worker picks up the lookup over outbound HTTPS, queries your system locally, and sends back only the signer's name and email. You open no inbound firewall ports, and our team sets it up with you.
 
 <br/>
 

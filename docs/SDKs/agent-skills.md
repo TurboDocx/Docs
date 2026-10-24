@@ -182,4 +182,3 @@ The skill is open source at **[github.com/TurboDocx/quickstart](https://github.c
 - [SDKs Overview](./index.md)
 - [TurboSign JavaScript SDK](/docs/SDKs/turbosign?language=js)
 - [TurboSign Python SDK](/docs/SDKs/turbosign?language=python)
-- [TurboPartner JavaScript SDK](./partner-javascript.md)

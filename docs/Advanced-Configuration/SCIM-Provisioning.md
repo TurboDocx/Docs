@@ -1,6 +1,7 @@
 ---
-title: SCIM User Provisioning
-description: Set up SCIM 2.0 provisioning so your identity provider can create, update, and deactivate TurboDocx accounts automatically.
+title: "SCIM Provisioning: Automate User Accounts"
+sidebar_label: SCIM User Provisioning
+description: Set up SCIM provisioning (SCIM 2.0) so your identity provider creates, updates, and deactivates TurboDocx user accounts automatically.
 keywords:
   - scim provisioning
   - user provisioning
@@ -11,9 +12,11 @@ keywords:
   - automated user management
 ---
 
-# SCIM User Provisioning
+# SCIM Provisioning
 
-TurboDocx supports SCIM 2.0 user provisioning, so your identity provider can automatically create, update, and deactivate TurboDocx accounts within your organization as employees join, change roles, or leave. SCIM manages accounts; pair it with [Single Sign-On](./Single-Sign-On.md) if you also want your identity provider to handle authentication.
+SCIM provisioning lets your identity provider create, update, and deactivate TurboDocx accounts in your organization automatically as employees join, change roles, or leave. TurboDocx supports the SCIM 2.0 User schema. SCIM manages accounts; pair it with [Single Sign-On](./Single-Sign-On.md) if you also want your identity provider to handle authentication.
+
+**In short:** TurboDocx support issues your organization a SCIM base URL and bearer token, you enter both in your identity provider's provisioning app, and from then on account changes in your identity provider flow into TurboDocx without manual user management. Removing someone in your identity provider takes away their TurboDocx access but keeps their documents.
 
 ## Prerequisites
 
@@ -27,6 +30,27 @@ TurboDocx supports SCIM 2.0 user provisioning, so your identity provider can aut
 2. In your identity provider's provisioning app, enter the base URL as the SCIM endpoint and set the token as the Bearer/Authorization credential.
 3. Map your identity provider's user attributes to the SCIM 2.0 User schema TurboDocx expects: `name.givenName`, `name.familyName`, `emails` (with a primary address), and `active`. Most SCIM apps do this mapping by default.
 4. Turn on provisioning and run your identity provider's test or "provision a single user" action first, then confirm the account appears in TurboDocx before assigning the rest of your users.
+
+### Example: the request your identity provider sends
+
+You don't write this request yourself; your identity provider sends it when you assign a user. It is shown here so you can check your attribute mapping. A new user arrives as a standard SCIM 2.0 `POST` to the `/Users` endpoint under your base URL:
+
+```http
+POST {your SCIM base URL}/Users
+Authorization: Bearer {your SCIM token}
+Content-Type: application/scim+json
+
+{
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+  "externalId": "00u1a2b3c4d5e6f7g8h9",
+  "userName": "jane.doe@example.com",
+  "name": { "givenName": "Jane", "familyName": "Doe" },
+  "emails": [{ "value": "jane.doe@example.com", "type": "work", "primary": true }],
+  "active": true
+}
+```
+
+TurboDocx uses the primary email (or the first email if none is marked primary) as the account's email address and answers `201 Created` with the provisioned user.
 
 ## What SCIM provisioning does
 

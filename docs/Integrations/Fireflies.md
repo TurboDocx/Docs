@@ -97,7 +97,7 @@ Your API key is like a password - never share it publicly or include it in email
 
 ## Step 2: Configuring TurboDocx
 
-### 🔧 How to Configure Fireflies in Settings
+### How to Configure Fireflies in Settings
 
 1. Click your **account avatar** at the bottom of the left sidebar, then click **Settings**
 

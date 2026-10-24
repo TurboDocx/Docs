@@ -1,9 +1,9 @@
 ---
-title: Embedded Signing
+title: "Embedded Signing: Sign Inside Your Own App"
 slug: /TurboSign/embedded-signing
 sidebar_label: Overview
 sidebar_position: 1
-description: Embed TurboSign in your own app and verify each signer with a one-time passcode, your own identity provider, or an explicit override. Request a signing URL at the moment a signer is ready, then pick a step-by-step guide.
+description: Embedded signing puts TurboSign inside your own app. Request a signing URL when a signer is ready and verify them with a passcode or your identity provider.
 keywords:
   - embedded signing
   - identity verification
