@@ -1,5 +1,5 @@
 ---
-title: "PHP DOCX and PPTX SDK Example (Generate Word Documents from JSON)"
+title: "PHP DOCX SDK Example: Word and PowerPoint"
 sidebar_position: 4
 sidebar_label: PHP
 description: "Copy-paste PHP example for the TurboDocx SDK: fill a Word or PowerPoint template from JSON with Composer, then save the DOCX or PPTX and a PDF."

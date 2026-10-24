@@ -1,8 +1,8 @@
 ---
-title: "Python DOCX Generation Example (Word and PowerPoint from JSON)"
+title: "Python DOCX Generation Example: Word and PPTX"
 sidebar_position: 3
 sidebar_label: Python
-description: "Copy-paste Python example for the TurboDocx SDK: fill a Word or PowerPoint template from a JSON file with async/await, then save the DOCX or PPTX and a PDF."
+description: "Copy-paste Python example for the TurboDocx SDK: fill a Word or PowerPoint template from JSON with async/await, then save the DOCX or PPTX and a PDF."
 keywords:
   - python docx generation
   - python pptx generation

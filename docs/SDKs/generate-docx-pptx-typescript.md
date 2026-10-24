@@ -1,8 +1,8 @@
 ---
-title: "TypeScript DOCX and PPTX Integration Example (TurboDocx SDK)"
+title: "TypeScript DOCX Integration Example"
 sidebar_position: 2
 sidebar_label: TypeScript
-description: "Typed TypeScript example for the TurboDocx SDK: map a JSON object to template variables, generate a Word or PowerPoint file, and download the DOCX or PPTX and a PDF."
+description: "TypeScript example for the TurboDocx SDK: map JSON to template variables, generate a Word or PowerPoint file, and download the DOCX or PPTX and a PDF."
 keywords:
   - typescript docx integration
   - typescript pptx sdk

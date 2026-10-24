@@ -1,8 +1,8 @@
 ---
-title: "Ruby DOCX and PPTX Example (TurboDocx Ruby SDK)"
+title: "Ruby DOCX Example: Word and PowerPoint"
 sidebar_position: 5
 sidebar_label: Ruby
-description: "Copy-paste Ruby example for the TurboDocx Ruby SDK: fill a Word or PowerPoint template from JSON, then save the DOCX or PPTX and a PDF. Works in plain Ruby or Rails."
+description: "Copy-paste Ruby example for the TurboDocx gem: fill a Word or PowerPoint template from JSON, then save the DOCX or PPTX and a PDF, in plain Ruby or Rails."
 keywords:
   - ruby docx example
   - ruby pptx sdk

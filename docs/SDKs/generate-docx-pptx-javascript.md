@@ -1,5 +1,5 @@
 ---
-title: "Generate DOCX and PPTX Files in JavaScript (Node.js SDK Example)"
+title: "JavaScript PPTX SDK: Generate PPTX and DOCX"
 sidebar_position: 1
 sidebar_label: JavaScript
 description: "Copy-paste Node.js example for the TurboDocx JavaScript SDK: fill a Word or PowerPoint template from JSON, then download the DOCX or PPTX and a PDF."
