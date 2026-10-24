@@ -1,5 +1,5 @@
 ---
-title: Embedded Signing
+title: "Embedded Signing: Sign Inside Your Own App"
 slug: /TurboSign/embedded-signing
 sidebar_label: Overview
 sidebar_position: 1

@@ -184,6 +184,10 @@ const config = {
           customCss: require.resolve('./src/css/custom.scss'),
         },
         sitemap: {
+          // <lastmod> comes from each doc's last git commit date, so CI must
+          // check out the full history (fetch-depth: 0 in deploy.yml); a
+          // shallow clone would stamp every page with the build date.
+          lastmod: 'date',
           // '/' is a client-side redirect to '/docs' (the real hub) and
           // carries a noindex meta tag; exclude it from the sitemap too so
           // the two signals don't conflict.

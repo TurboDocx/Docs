@@ -1,8 +1,10 @@
 ---
-title: How to Configure Signature Appearance
+title: Custom Signature Appearance in TurboSign
+sidebar_label: How to Configure Signature Appearance
 sidebar_position: 8
 description: "Control how signed fields look on TurboSign PDFs: toggle the signature outline, label and verification hash, and how locked fields appear to signers."
 keywords:
+  - custom signature appearance
   - turbosign signature appearance
   - signature outline
   - verification hash
@@ -13,19 +15,21 @@ keywords:
   - signing portal appearance
 ---
 
-# How to Configure Signature Appearance
+# Custom Signature Appearance in TurboSign
 
-TurboSign stamps each signed field onto the finished PDF with a thin outline, a small label, and a verification hash. It also decides how **locked fields** — read-only values imported onto a document that the signer can't change — appear while someone is signing. You can control all of this for your whole organization from one settings screen.
+Custom signature appearance controls how each signed field looks on the finished PDF. By default, TurboSign stamps every signed field with a thin outline, a small label, and a verification hash. It also decides how **locked fields** (read-only values imported onto a document that the signer can't change) appear while someone is signing. You set all of this for your whole organization from one settings screen.
+
+**In short:** an admin chooses the options once in **Settings** > **Features and integrations** > **Configure E-Signature**, and they apply to every new signature request in the organization, whether it is sent from the app, a pipeline, or the TurboSign API. Your API calls don't need to pass any appearance options.
 
 This guide shows you how to find and change the **Signature Appearance** and **Locked Fields Rendering** options.
 
 :::note What these options do
-**Signature Appearance** — how each signed field looks on the finished PDF:
-- **Show signature outline and label** — the thin border and caption drawn around each signed field on the PDF.
-- **Show verification hash** — the short verification code printed beneath a signature.
+**Signature Appearance:** how each signed field looks on the finished PDF:
+- **Show signature outline and label:** the thin border and caption drawn around each signed field on the PDF.
+- **Show verification hash:** the short verification code printed beneath a signature.
 
-**Locked Fields Rendering** — how locked (read-only) fields look to the signer in the signing portal:
-- **Show locked fields with grey background** — draw each locked field as a grey box, or, when turned off, render its value as plain document text (and hide blank locked fields entirely) for a cleaner page.
+**Locked Fields Rendering:** how locked (read-only) fields look to the signer in the signing portal:
+- **Show locked fields with grey background:** draw each locked field as a grey box, or, when turned off, render its value as plain document text (and hide blank locked fields entirely) for a cleaner page.
 
 All three are **on** by default, so your documents look the same until you change them. These settings apply to every new signature request in your organization.
 :::
@@ -78,5 +82,5 @@ This setting changes what signers see in the **signing portal**; it does not cha
 
 
 :::tip
-Turning the two **Signature Appearance** options off gives a cleaner, minimal signature stamp — useful when you want the signature to blend into a formal document layout. Turning **Show locked fields with grey background** off similarly declutters the signing page for the recipient. Signed PDFs still carry their full audit trail either way.
+Turning the two **Signature Appearance** options off gives a cleaner, minimal signature stamp. This is useful when you want the signature to blend into a formal document layout. Turning **Show locked fields with grey background** off similarly declutters the signing page for the recipient. Signed PDFs still carry their full audit trail either way.
 :::

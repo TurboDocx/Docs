@@ -1,0 +1,12 @@
+# Cloudflare Pages response headers (copied to the build root from static/).
+# Every doc page /<path> also serves a markdown twin at /<path>.md (see AGENTS.md
+# "Every doc page ships a markdown twin"). The twins are crawlable, so each one
+# points search engines at its HTML page as the canonical URL.
+# The splat captures everything between /docs/ and .md, e.g.
+# /docs/API/delete-webhook.md -> https://docs.turbodocx.com/docs/API/delete-webhook
+/docs/*.md
+  Link: <https://docs.turbodocx.com/docs/:splat>; rel="canonical"
+
+# The /docs hub twin lives at /docs.md, which the rule above does not match.
+/docs.md
+  Link: <https://docs.turbodocx.com/docs>; rel="canonical"
