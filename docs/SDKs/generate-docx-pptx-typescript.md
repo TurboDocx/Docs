@@ -26,7 +26,7 @@ The template keeps its fonts, styles and layout. TurboDocx does the rendering on
 - **A template.** Create the document in Word or PowerPoint and type a placeholder in curly braces wherever data should go, for example `{ClientName}`. Upload it under **Templates** in TurboDocx.
 - **The template ID.** Turn on [Developer Mode](/docs/SDKs/developer-mode), open the template and click **Code**. The code panel shows the template ID and the template's real placeholder names.
 - **An API key and your organization ID.** See [Get your credentials](/docs/SDKs#1-get-your-credentials).
-- **Node.js 18 or later and TypeScript 4.7 or later.**
+- **Node.js 18 or later.** The install step below adds TypeScript and the Node.js type definitions.
 
 :::note Plans
 Every plan can generate documents and download the PDF. Downloading the editable DOCX or PPTX file, and using PowerPoint templates, need a paid plan. On the free plan, remove the source-file download from the script and keep the PDF.
@@ -181,7 +181,7 @@ For repeating content, such as one table row per line item, use `variableStack` 
 
 ## Next steps
 
-- [Deliverable SDK reference](/docs/SDKs/deliverable?language=js): every method, option and error type, open on the TypeScript tab.
+- [Deliverable SDK reference](/docs/SDKs/deliverable?language=js): every method, option and error type, open on the JavaScript / TypeScript tab.
 - [Send the generated document for signature](/docs/SDKs/turbosign#3-turbodocx-deliverable-id): pass the deliverable ID to TurboSign with the same API key.
 - [Deliverable API](/docs/API/Deliverable-API): the REST endpoints behind the SDK, with cURL examples.
 - [JavaScript / TypeScript SDK setup](/docs/SDKs/javascript): installation and configuration options.
