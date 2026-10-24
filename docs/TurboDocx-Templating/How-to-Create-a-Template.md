@@ -14,6 +14,10 @@ keywords:
 
 Congratulations on starting your first template. In this guide, we will show you how to create your first template and how to upload it to your TurboDocx account.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Create a DOCX Template with Variables](https://www.turbodocx.com/resources/how-to-create-a-docx-template-with-variables) on turbodocx.com.
+:::
+
 ## Video Tutorial
 
 <div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', maxWidth: '100%'}}>

@@ -55,7 +55,7 @@
                 },
                 {
                     "label": "Privacy Policy",
-                    "to": "https://www.turbodocx.com/termsofservice",
+                    "to": "https://www.turbodocx.com/termsofservice/privacy-policy",
                     "prependBaseUrlToHref": false
                 }
             ],

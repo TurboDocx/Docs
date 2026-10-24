@@ -29,6 +29,10 @@ keywords:
 
 Say goodbye to copy-pasting customer information! TurboDocx's HubSpot integration automatically pulls your real CRM data to create personalized documents, proposals, and presentations. No more "John Doe" placeholder text — use actual customer names, deals, and details.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Connect HubSpot to TurboDocx with a Private App](https://www.turbodocx.com/resources/how-to-connect-hubspot-to-turbodocx) on turbodocx.com.
+:::
+
 ## What You Can Create
 
 - **📊 Client Proposals**: Use real deal data to create compelling, personalized proposals

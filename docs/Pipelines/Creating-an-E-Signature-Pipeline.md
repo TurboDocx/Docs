@@ -21,6 +21,10 @@ keywords:
 
 This guide walks you through the pipeline wizard one step at a time. By the end, you'll have a hands-free automation that picks up PDFs from a folder, signs them, and files the results.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Set Up a SharePoint Signature Pipeline](https://www.turbodocx.com/resources/how-to-set-up-a-sharepoint-signature-pipeline) on turbodocx.com.
+:::
+
 The wizard has five steps, shown in the progress rail on the left: **Sample**, **Source**, **Extract & Route**, **Sign**, and **Deliver**. This guide follows them in that order.
 
 As you work, the **If this ran now** panel on the right previews what the pipeline would produce for your sample: the fields it extracted, where the document would land, and its final file name. Any warnings there (for example, "add a routing rule or a fallback folder") are guidance for finishing setup, not errors.

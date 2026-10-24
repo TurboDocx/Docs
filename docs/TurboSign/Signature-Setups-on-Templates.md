@@ -24,6 +24,10 @@ and every new send from the template starts with everything already in place.
 
 This works for **Word**, **PowerPoint** and **PDF** templates.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Save a Signature Setup on a Word or PowerPoint Template](https://www.turbodocx.com/resources/how-to-save-a-signature-setup-on-a-template) on turbodocx.com.
+:::
+
 ## What a signature setup includes
 
 | Saved | Details |

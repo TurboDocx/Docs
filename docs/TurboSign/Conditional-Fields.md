@@ -22,6 +22,10 @@ Conditional fields let a document react to what the signer does. A **controlling
 decides whether one or more **dependent fields** are shown or unlocked, so signers only fill in
 the fields that actually apply to them.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Add Conditional (IF/THEN) Fields to a Document for Signature](https://www.turbodocx.com/resources/how-to-add-conditional-fields-to-a-signature-document) on turbodocx.com.
+:::
+
 A classic example: a reviewer ticks **"Request changes"**, and only then does a text box appear
 asking them to explain what to change. If they leave the box unticked, the text box never gets in
 the way.

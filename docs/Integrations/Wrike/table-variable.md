@@ -19,6 +19,10 @@ A **Wrike Table** variable turns a single template variable into a table. When t
 
 This is different from [Static Field Mapping](./field-mapping.md), which maps one Wrike field to one variable. A Wrike Table maps one variable to many rows.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Build a Table in a Document from Wrike Sub-items](https://www.turbodocx.com/resources/how-to-build-a-table-from-wrike-sub-items) on turbodocx.com.
+:::
+
 ## Prerequisites
 
 - A template uploaded to TurboDocx with at least one variable that is on its own line (a rich-text variable, so the generated table has room to render)

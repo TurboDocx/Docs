@@ -30,6 +30,10 @@ This guide shows you how to find and change the **Signature Appearance** and **L
 All three are **on** by default, so your documents look the same until you change them. These settings apply to every new signature request in your organization.
 :::
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Customize How Signatures Look on Signed PDFs](https://www.turbodocx.com/resources/how-to-customize-signature-appearance) on turbodocx.com.
+:::
+
 ## Step 1: Open the account menu
 
 In the left sidebar, click your **account avatar** at the bottom.

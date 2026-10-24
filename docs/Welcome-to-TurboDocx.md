@@ -43,6 +43,7 @@ TurboSign sends documents for e-signature, tracks who has signed, and keeps the 
 - [Setting up TurboSign](./TurboSign/Setting-up-TurboSign.md): send your first document for signature.
 - [Managing Your Signatures](./TurboSign/Managing-Your-Signatures.md): resend, remind, void, and download signed documents.
 - [API Signatures](./TurboSign/API-Signatures.md): send and track signature requests from your own code.
+- [Free signature maker](https://www.turbodocx.com/tools/digital-signature-maker): if you only need a signature image, draw or type one in your browser for free, with no sign-up.
 
 ## Build and send quotes
 
@@ -57,6 +58,7 @@ Every TurboDocx product is also a REST API. Official SDKs cover JavaScript/TypeS
 
 - [SDKs Overview](./SDKs/index.md): pick your language, install the client library, and find your API key.
 - [Deliverable API](./API/Deliverable-API.md): the document-generation endpoints behind the Deliverable SDKs.
+- [Developer guides](https://www.turbodocx.com/guides): step-by-step tutorials for adding e-signatures to your app in your language, including React and AI coding assistants.
 
 ## Connect your other tools
 

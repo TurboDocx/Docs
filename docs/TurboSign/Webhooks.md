@@ -43,6 +43,10 @@ Webhooks enable your application to receive real-time notifications when importa
 
 TurboSign webhooks provide a robust and secure way to integrate document signature events into your existing workflows. When configured, webhooks will automatically send HTTP POST requests to your specified URLs whenever subscribed events occur.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Set Up E-Signature Webhooks in TurboSign](https://www.turbodocx.com/resources/how-to-set-up-e-signature-webhooks) on turbodocx.com.
+:::
+
 ### Key Features
 
 - **Real-time Notifications**: Receive instant updates when documents are signed or voided

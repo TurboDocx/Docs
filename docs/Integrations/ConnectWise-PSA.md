@@ -38,6 +38,10 @@ keywords:
 
 TurboDocx integrates directly with your ConnectWise PSA environment to eliminate manual copy-paste and transform your real data into documents, proposals, and presentations. Pull in data from companies, tickets, configurations, and more — and generate polished deliverables instantly.
 
+:::info Learn more
+Looking for a shorter overview? Read [How to Connect ConnectWise PSA to TurboDocx](https://www.turbodocx.com/resources/how-to-connect-connectwise-psa-to-turbodocx) on turbodocx.com.
+:::
+
 ## What You Can Create
 
 * **📄 Statements of Work (SOWs)**: Pull in configurations, timelines, and tasks from project boards
