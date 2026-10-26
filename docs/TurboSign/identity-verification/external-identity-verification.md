@@ -418,7 +418,7 @@ url = link["url"]
 
 Open `url` right away: it is single-use and expires in about five minutes. To show it inside your app, hand it to the [React widget](../embedded-signing/build/react-widget.md), frame it in [your own iframe](../embedded-signing/build/own-iframe.md), or use the [web component](../embedded-signing/build/web-component.md).
 
-The REST equivalent is `POST /turbosign/documents/{documentId}/signing-url` with the same body (`externalId` or `recipientId`, `identityAssertion`, optional `returnUrl`). Unknown keys are rejected.
+The REST equivalent is `POST /turbosign/documents/{documentId}/signing-url` with the same body (`externalId` or `recipientId`, `identityAssertion`, optional `returnUrl`, optional `pageNavigation`). Unknown keys are rejected.
 
 ### Required assertion fields
 
