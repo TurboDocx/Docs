@@ -12,6 +12,8 @@ keywords:
   - dkim signature
   - arc seal
   - email troubleshooting
+  - email bounced
+  - signer email not received
 ---
 
 # Email Deliverability (DKIM / DMARC / SPF)
@@ -19,6 +21,10 @@ keywords:
 TurboDocx emails, including TurboSign signature requests and reminders, are sent from an authenticated domain with DKIM, SPF, and DMARC in place. If a message shows a DKIM, DMARC, or SPF failure, this page walks you through what to check and how to resolve it.
 
 The most common cause is something modifying the email **in transit, after it was signed**, usually a security gateway between the sender and the inbox. The steps below help you confirm where it's happening and what to do about it.
+
+:::tip First check whether the email arrived at all
+TurboSign shows the delivery state of every signing email. Hover over a signer's avatar in the TurboSign document list: **Delivered** means their mail provider accepted the email, so if they still can't find it, this page applies. **Bounced** or **Blocked** means the address itself is the problem, and you can correct it with **Fix signer email**. See [Check Whether a Signer's Email Arrived](./Managing-Your-Signatures.md#check-whether-a-signers-email-arrived).
+:::
 
 ## What's happening
 

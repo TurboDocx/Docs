@@ -24,6 +24,9 @@ keywords:
   - digital signature management
   - online signature tracking
   - signature reminder
+  - email bounced
+  - fix signer email
+  - email delivery status
   - electronic document workflow
   - paperless signing
   - signature analytics
@@ -42,6 +45,7 @@ Once you've sent your document for signature, your work isn't done! This guide c
 ## What You'll Learn
 
 - 📊 **Track signature progress** and see who's signed
+- 📬 **Check whether each signer's email arrived** and fix an address that bounced
 - 📧 **Resend signature emails** when needed
 - ❌ **Void documents** that need to be cancelled
 - 🔍 **View audit trails** for complete signature history
@@ -54,6 +58,7 @@ Once you've sent your document for signature, your work isn't done! This guide c
 | Action | Purpose |
 |--------|---------|
 | **Void Document** | Cancel signature request |
+| **Fix signer email** | Correct a signer's address after their email bounced, and resend |
 | **Resend Email** | Send reminder to recipients |
 | **Download PDF** | Get fully signed document |
 | **Audit Trail** | View complete activity history |
@@ -94,6 +99,80 @@ Organization admins can turn the sender's email off for everyone in the organiza
 ![E-Signature Settings dialog with the Email the sender when a document is fully signed checkbox highlighted](/img/turbosign/SenderNotificationsSetting.png)
 
 The change saves immediately. Signers and CC recipients still get their copies. The setting is checked when a document is completed, so it also applies to documents that are already out for signature.
+
+<br/>
+
+---
+
+## Check Whether a Signer's Email Arrived
+
+TurboSign tracks every signing email it sends. A signer's request can only be signed if it reaches them, so the TurboSign dashboard tells you when it didn't.
+
+**In the document list:**
+
+- When a signer's email bounces, the document's **Status** shows **Email bounced** instead of **Under Review**.
+- Hover over a signer's avatar to see their **Email delivery** state, when it changed, and what to do next.
+
+![A document whose Status shows Email bounced, with the signer's hover card showing Email delivery: Bounced](/img/turbosign/EmailBouncedStatus.png)
+
+
+| Delivery state | What it means | What to do |
+|----------------|---------------|------------|
+| **Sent** | We sent it and are waiting for their mail provider. | Nothing yet. |
+| **Delivered** | Their mail provider accepted it. | If they can't find it, ask them to check spam or junk. |
+| **Delayed** | Their mail provider is slow to accept it. We keep retrying. | Usually nothing. It often resolves on its own. |
+| **Bounced** | The address doesn't exist or can't receive mail. | Fix the signer's email (see below). |
+| **Blocked** | The address bounced before, so we didn't send it. | Fix the signer's email (see below). |
+| **Marked as spam** | The signer reported the email as spam. | Check the address with the signer before sending again. |
+| **Failed** | We couldn't send the email. | Resend it from the row menu. |
+
+**Show only the documents with a problem:** open the **Status** filter and pick **Delivery problems**. The list then shows only documents with a signer whose email bounced, was blocked, was marked as spam, or failed. You can combine it with other statuses, such as **Under Review**.
+
+:::note Delivered doesn't mean read
+**Delivered** means the signer's mail provider accepted the email. It may still have been filtered into spam or junk. TurboSign doesn't track opens.
+:::
+
+### Get an email when a signer's email bounces
+
+By default, the person who sent the document gets a "Your signing request didn't arrive" email when a signer's email bounces or is blocked. Its **Fix signer email** button opens the fix straight away. Organization admins can turn this off for everyone:
+
+1. Click your **account avatar** at the bottom of the left sidebar, then click **Settings**.
+2. In the menu on the left, click **Features and integrations**.
+3. On the **Signatures** card, click **Configure E-Signature**.
+4. In the **General** section, scroll to **Sender Notifications** and clear **Email me when a signer's email bounces**.
+
+<br/>
+
+---
+
+## How to Fix a Signer's Email Address
+
+If a signer's email bounced or was blocked, correct their address and send the request again in one step.
+
+### Step-by-Step: Fixing a Signer's Email
+
+**Step 1: Open Fix signer email**
+
+1. Navigate to your **TurboSign Dashboard**
+2. Find the document that shows **Email bounced**
+3. Click the **three-dot menu (⋮)** next to the document, then click **Fix signer email**
+
+![Document context menu with Fix signer email highlighted](/img/turbosign/FixSignerEmailMenu.png)
+
+You can also click **Fix signer email** in the "Your signing request didn't arrive" alert email, or click the document in the **Can't reach the signer** list on the [Dashboard](../Dashboard.md).
+
+**Step 2: Enter the new address**
+
+4. Type the correct address in **New email**
+5. Click **Update And Resend**
+
+![Fix signer email dialog showing the current address crossed out, the new address, and the Update And Resend button highlighted](/img/turbosign/FixSignerEmailDialog.png)
+
+The signer gets a new signing email at the new address straight away. Their old signing link stops working, and the change is recorded in the audit trail as **Signer email changed**, with who made it and the old and new addresses.
+
+:::tip
+**Resend Email** warns you when a signer's address bounced, because resending to it would bounce again. Fix the address instead.
+:::
 
 <br/>
 
@@ -220,6 +299,10 @@ These are the two most important user events to monitor for tracking signature p
 - **Document Digitally Signed by TurboSign** - When TurboSign applies digital signatures
 - **Document Updated** - When the document is modified or updated via signature
 - **Document Sent** - When the document is initially distributed for signature
+- **Email Bounced** - When a signer's email didn't reach them, or wasn't sent because the address bounced before
+- **Email Marked as Spam** - When the signer reported the signing email as spam
+- **Email Failed to Send** - When the signing email couldn't be sent
+- **Signer Email Changed** - When someone corrected a signer's address. The entry shows who changed it, the signer, and the old and new addresses
 
 
 <br/>

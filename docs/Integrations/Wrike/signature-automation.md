@@ -233,6 +233,7 @@ In the **Wrike activity updates** section of the signature action step, you'll s
 | **Progress** | A signer signs but the document is not yet fully complete | Document-level partial-signing progress |
 | **Finalization failed** | The signed PDF could not be finalized (e.g. a signing error) | The document is **not** marked Completed |
 | **Voided** | The signature request is voided or cancelled | e.g. `Document voided` |
+| **Email not delivered** | A signer's signing email bounced, was blocked, or was marked as spam | Names the signer and the address, says why, and links to **Fix the signer's email in TurboDocx** |
 
 These rows map to the same signature lifecycle events surfaced by [TurboSign webhooks](../../TurboSign/Webhooks.md) — see that page if you also want these events pushed to your own endpoints.
 
@@ -246,7 +247,7 @@ Each row is independent. You can, for example, post a comment on **Viewed** and 
 
 ### How it behaves
 
-- **Comments are off by default.** A row only posts a comment if you turn it on, so existing automations don't suddenly start commenting when you save.
+- **Defaults for new automations.** A new automation starts with comments on for **Viewed**, **Signed**, **Finalization failed**, **Voided** and **Email not delivered**. Existing automations keep the choices they were saved with, so they don't suddenly start commenting. Turn on **Email not delivered** in an existing automation to be told in Wrike when a signer can't be reached.
 - **Per-recipient progress.** The **Signed** comment includes how many of the total signers have signed (`X of Y signed`) so multi-signer flows read in sequence.
 - **Non-blocking.** Activity updates never interrupt the signature flow — if a Wrike comment or status change can't be applied, signing still completes and the event is logged.
 - **Deleted status safety.** If a status you selected is later removed in Wrike, TurboDocx posts a warning comment instead of silently failing.
