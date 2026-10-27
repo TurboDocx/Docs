@@ -68,7 +68,7 @@ To drop live values into the subject or message, use the **Insert a field** chip
 <br/>
 
 :::note Large attachments
-If the ZIP attachment is too large to email, the completion email is still sent without the attachment so the notice always gets through. The signed document always lands in its destination folder regardless of the email.
+If the ZIP is too large to attach (over about 6.7 MB), the completion email includes a download link to the ZIP instead. The link works for 28 days. The signed document always lands in its destination folder regardless of the email.
 :::
 
 <br/>
