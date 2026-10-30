@@ -28,6 +28,13 @@ This page is a map of the documentation. Pick the path that matches what you're 
 - For API or SDK work: an API key and organization ID, generated from your organization settings in the app.
 - For enterprise setup (SSO, SCIM, SharePoint): admin access to your TurboDocx organization and to your identity provider.
 
+## Start from your home page
+
+When you sign in, your home page is the AI Assistant. Type what you need in plain words, such as "what is waiting on a signature?", or attach a Word or PDF file and ask what to do with it. Nothing is sent or changed until you approve it.
+
+- [How to Use the AI Assistant](./How-to-Use-the-AI-Assistant.md): ask questions, attach files, turn a document into a template, and approve what it sends.
+- [Dashboard](./Dashboard.md): see which documents are waiting for signature and send reminders. To open it, click **Browse** at the top of the left sidebar, then the bar chart icon.
+
 ## Generate documents and presentations
 
 TurboDocx Templating turns an existing Word or PowerPoint file into a reusable template with variables, then fills it in to produce a finished document.
@@ -35,6 +42,7 @@ TurboDocx Templating turns an existing Word or PowerPoint file into a reusable t
 - [How to Create a Template](./TurboDocx-Templating/How-to-Create-a-Template.md): turn an existing document into a reusable template.
 - [How to Create a Document Template](./TurboDocx-Templating/How-to-Create-a-Document-Template.md) and [How to Create a Presentation Template](./TurboDocx-Templating/How-to-Create-a-Presentation-Template.md): format-specific walkthroughs for Word and PowerPoint.
 - [How to Create a Deliverable](./TurboDocx-Templating/How-to-Create-a-Deliverable.md): generate a finished document from a template.
+- [How to Review a Returned Copy](./TurboDocx-Templating/How-to-Review-a-Returned-Copy.md): go through the edits and comments a client made to one of your documents, then save the result.
 
 ## Get documents signed
 
@@ -87,7 +95,7 @@ If you clicked resend a moment ago, the screen asks you to wait a minute before 
 ## Frequently asked questions
 
 **Do I need to write code to use TurboDocx?**
-No. Templates, deliverables, quotes, and signature requests can all be created from the TurboDocx app. The API and SDKs exist for teams that want to automate the same actions from their own systems.
+No. Templates, deliverables, quotes, and signature requests can all be created from the TurboDocx app, either through its pages or by asking the AI Assistant on your home page. The API and SDKs exist for teams that want to automate the same actions from their own systems.
 
 **Which document formats does TurboDocx generate?**
 DOCX and PPTX from templates, and PDF from TurboSign and document conversion.
