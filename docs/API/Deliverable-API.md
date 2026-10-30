@@ -271,9 +271,10 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 | `variables`   | Array  | **Yes**  | Array of variable objects for substitution. May be empty (`[]`) |
 | `description` | String | No       | Description (up to 65,535 characters)      |
 | `tags`        | Array  | No       | Array of tag strings to associate          |
+| `strict`      | Boolean | No      | When `true`, refuse with `400 PlaceholderMismatch` instead of generating if any template field gets no value or you send a value the template does not have. Default `false` |
 
 :::note Empty or partial `variables`
-`variables` must be sent, but it can be an empty array. `"variables": []` generates the document and returns `200`. Any placeholder you don't supply a value for renders blank in the document.
+`variables` must be sent, but it can be an empty array. `"variables": []` generates the document and returns `200`. Any placeholder you don't supply a value for renders blank in the document. The response's `placeholderReport` lists those fields, so you can tell. Send `"strict": true` to get an error instead of a document with blanks. See [Checking placeholders](#checking-placeholders).
 :::
 
 ### Variable Object Structure
@@ -379,6 +380,10 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
         "isActive": true,
         "defaultFont": "",
         "fonts": null
+      },
+      "placeholderReport": {
+        "missing": [],
+        "unknown": []
       }
     }
   }
@@ -400,6 +405,70 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
 | `deliverable.isActive`     | Boolean | Active status (always `true` on creation)       |
 | `deliverable.defaultFont`  | String  | Default font (empty string if not specified)    |
 | `deliverable.fonts`        | JSON    | Font metadata array (null if not yet generated) |
+| `data.results.placeholderReport` | Object | How your `variables` matched the template's fields |
+| `placeholderReport.missing` | Array  | Template fields that got no value. They render empty |
+| `placeholderReport.unknown` | Array  | Placeholders you sent that the template does not have. They are ignored |
+
+### Checking placeholders {#checking-placeholders}
+
+Every successful create returns a `placeholderReport`. It compares the `variables` you sent with the template's fields:
+
+- `missing` lists each template field that got no value. A value counts as given when it has non-blank `text`, a non-empty `variableStack`, or `mimeType: "image"`. A field you send with only spaces is still missing.
+- `unknown` lists each placeholder you sent that the template does not have, for example a typo or a field that was removed from the template. It has no effect on the document.
+
+Matching ignores case, the same way generation does: `{CLIENT_NAME}` fills `{client_name}`. Names in the report are written the way the template writes them, braces included.
+
+This request leaves out `{fee}` and sends `{start_date}`, which the template does not have:
+
+```bash
+curl -X POST "https://api.turbodocx.com/v1/deliverable" \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "templateId": "YOUR_TEMPLATE_ID",
+    "name": "Agreement - Acme",
+    "variables": [
+      { "placeholder": "{client_name}", "text": "Acme Corporation", "mimeType": "text" },
+      { "placeholder": "{start_date}", "text": "1 March 2026", "mimeType": "text" }
+    ]
+  }'
+```
+
+The document is still generated (`200`), and the report says what went wrong:
+
+```json
+{
+  "data": {
+    "results": {
+      "deliverable": { "id": "e822dc67-045c-49ea-82e7-c46e8fe73a00", "name": "Agreement - Acme" },
+      "placeholderReport": {
+        "missing": ["{fee}"],
+        "unknown": ["{start_date}"]
+      }
+    }
+  }
+}
+```
+
+#### Strict mode
+
+Add `"strict": true` to the same request to refuse instead. Nothing is created and nothing counts against your deliverable quota. The response is `400`, and the message names every field:
+
+```json
+{
+  "error": "PlaceholderMismatch",
+  "message": "No value for: {fee}. Not in the template: {start_date}."
+}
+```
+
+When only one side is wrong, the message has only that sentence, for example `"No value for: {fee}."`. A strict request where every field has a value returns `200` with an empty report.
+
+Use strict mode when a blank field would be a real problem, such as a contract sent for signature straight after generation. Leave it off and read `placeholderReport` when you would rather log a warning and keep the document.
+
+:::tip Knowledge base fields count too
+A template field that is linked to a knowledge base entry is listed as `missing` when you do not send its value. Send the entry's text as that field's value, or the field renders empty.
+:::
 
 :::info Request Cancellation
 If the client disconnects during generation, the server will detect the cancellation, clean up any partially created resources, and return a `499` status code. This prevents orphaned deliverables from consuming storage.
@@ -763,7 +832,7 @@ When `showTags=true` is passed, tag arrays contain full tag objects with the fol
 | Status | Description           | Common Cause                                       |
 | ------ | --------------------- | -------------------------------------------------- |
 | `200`  | Success               | Request completed successfully                     |
-| `400`  | Bad Request           | Validation error — check required fields and types; or `SignatureOnlyTemplate` (the template is a PDF, which can't generate documents) |
+| `400`  | Bad Request           | Validation error — check required fields and types; `SignatureOnlyTemplate` (the template is a PDF, which can't generate documents); or `PlaceholderMismatch` (you sent `"strict": true` and a field is missing or unknown) |
 | `401`  | Unauthorized          | Invalid or missing Bearer token                    |
 | `403`  | Forbidden             | Missing role permission or invalid org ID          |
 | `404`  | Not Found             | Deliverable or template ID does not exist          |
