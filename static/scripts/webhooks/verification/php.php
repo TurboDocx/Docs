@@ -185,7 +185,7 @@ function testWebhookVerification(string $secret = 'test-secret'): bool
 
 // Example usage when script is run directly
 if (__FILE__ === $_SERVER['SCRIPT_FILENAME']) {
-    $webhookSecret = $_ENV['WEBHOOK_SECRET'] ?? 'your-webhook-secret';
+    $webhookSecret = getenv('WEBHOOK_SECRET') ?: 'your-webhook-secret';
     
     // If running from command line, run test
     if (php_sapi_name() === 'cli') {

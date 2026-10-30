@@ -193,6 +193,11 @@ const sidebars = {
               id: 'SDKs/java',
               label: 'Java',
             },
+            {
+              type: 'doc',
+              id: 'SDKs/ruby',
+              label: 'Ruby',
+            },
           ],
         },
         {
