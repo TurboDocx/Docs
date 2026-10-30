@@ -143,7 +143,7 @@ When a sent quote runs past its **Valid until** date, it moves to the **Expired*
 1. Open the **Expired** tab.
 2. Click the **⋮** button on the quote and choose **Renew**.
 
-![The Expired tab with one expired sent quote](/img/turboquote/quotes/09-expired-tab.png)
+![The Expired tab with three expired sent quotes](/img/turboquote/quotes/09-expired-tab.png)
 
 ![The Renew action in the menu of an expired quote](/img/turboquote/quotes/10-renew.png)
 

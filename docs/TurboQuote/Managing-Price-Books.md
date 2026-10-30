@@ -63,7 +63,7 @@ Every product follows the book's discount unless you give it its own here. A pro
 
 ![The Product prices tab with one product on its own price](/img/turboquote/price-books/04-product-prices.png)
 
-To put every product back on the book's discount at once, click **Reset all** at the bottom of the list. It covers every product in the book, including any your search or category filter hides, so it clears the search and filter and says how many products it resets (for example, **Reset all 14 products to 10%**).
+To put every product back on the book's discount at once, click **Reset all** at the bottom of the list. It covers every product in the book, including any your search or category filter hides, so it clears the search and filter and says how many products it resets (for example, **Reset all 14 products to 15%**).
 
 ![1 product has its own price, and the Reset all button](/img/turboquote/price-books/05-reset-all.png)
 
