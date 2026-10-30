@@ -41,7 +41,7 @@ TurboQuote has its own section in the left sidebar. Hover over the sidebar to ex
 
 ## The Summary Cards
 
-The row of cards at the top sums up the quotes on the page. They follow your tab, search and filters, so you can see what a single company or rep's pipeline is worth.
+The row of cards at the top sums up the quotes on the page. They follow your search and filters, so you can see what a single company or rep's pipeline is worth. They don't change with the status tab, since they already split quotes by status.
 
 | Card | What it counts |
 |---|---|
@@ -52,7 +52,7 @@ The row of cards at the top sums up the quotes on the page. They follow your tab
 | **Win rate** | Quotes accepted, out of all quotes accepted or declined in the last 90 days |
 | **Quotes this month** | Quotes created this calendar month |
 
-Amounts are shown in one currency. When the quotes on the page use two or more currencies, an **Amounts in** switch appears above the cards so you can pick which currency the cards add up.
+**Open pipeline** and **Monthly recurring** add up one currency at a time; the other cards count every quote, whatever its currency. Pick the currency in **Amounts in** above the cards: it lists every currency your organization quotes in, with your preferred currency picked first. With a **Currency** filter it offers only the currencies you filtered, and nothing to pick when you filter one.
 
 ![The summary cards: Open pipeline, Active quotes, Won, Monthly recurring, Win rate and Quotes this month](/img/turboquote/quotes/01-summary-cards.png)
 

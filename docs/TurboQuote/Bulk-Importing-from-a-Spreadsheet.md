@@ -93,23 +93,23 @@ For companies, the **Contact Fields** come next. Rows with the same company name
 
 ## Step 3: Review and Import
 
-The **Review & import** step checks every row **before anything is created**, then sorts your rows into three groups, shown as a colored bar and a summary headline (for example, **"1 of 2 rows will import"**):
+The **Review & import** step checks every row **before anything is created**, then sorts your rows into three groups, shown as a colored bar and a summary headline (for example, **"2 of 3 rows will import"**):
 
 - ✅ **Import as-is.** The row is clean and imports unchanged.
-- ⚠️ **Import with changes.** The row still imports, but a bad **optional** value was cleared. For example, a non-numeric `cost`, an unrecognized `currency`, or an out-of-range minimum order quantity is dropped and the rest of the row is kept (currency falls back to the default, USD).
-- ❌ **Won't import.** A **required** value is missing or invalid, so the whole row is skipped. For example, a product with no name, or a company whose industry doesn't match an existing industry.
+- ⚠️ **Import with changes.** The row still imports, but a bad **optional** value was cleared. For example, a non-numeric `cost`, an unrecognized `currency`, an out-of-range minimum order quantity, or a company industry that doesn't exist is dropped and the rest of the row is kept (currency falls back to the default, USD).
+- ❌ **Won't import.** A **required** value is missing or invalid, so the whole row is skipped. For example, a product with no name, or a contact with no email.
 
 Expand any group to see the affected rows with their row number and the exact reason.
 
-For companies, rows are grouped by company before counting, so the headline counts **companies**, not spreadsheet rows. In this example, three rows (two contacts for Alpine Ski House, one for Woodgrove Bank) are **two companies**, and one of them won't import because its industry doesn't exist yet.
+For companies, rows are grouped by company before counting, so the headline counts **companies**, not spreadsheet rows. In this example, four rows (two contacts for Alpine Ski House, one each for Woodgrove Bank and Fabrikam) are **three companies**: Woodgrove Bank imports without its industry, which doesn't exist yet, and Fabrikam won't import because its contact has no email.
 
-![The Review & import step: 1 of 2 rows will import. Row 4, Woodgrove Bank, won't import because its industry doesn't match an existing industry](/img/turboquote_bulk_import/04-review.png)
+![The Review & import step: 2 of 3 rows will import. Woodgrove Bank imports without its industry, and Fabrikam won't import because its contact has no email](/img/turboquote_bulk_import/04-review.png)
 
-When you're happy with the split, click **Import _N_** (for example, **Import 1 company**). The button shows how many will import. TurboQuote creates any missing categories first, then imports the eligible rows.
+When you're happy with the split, click **Import _N_** (for example, **Import 2 companies**). The button shows how many will import. TurboQuote creates any missing categories first, then imports the eligible rows.
 
 ### Adjustments and Error Reports
 
-After importing, the headline updates to something like **"1 of 2 rows imported"**, keeping the same groups. Two downloads help you follow up:
+After importing, the headline updates to something like **"2 of 3 rows imported"**, keeping the same groups. Two downloads help you follow up:
 
 - **Download changes.** A report of every row that imported **with changes** (which value was cleared, and why), so you can fill them back in later.
 - **Download errors.** A report of every row that **didn't import**. Fix those rows in your spreadsheet and upload just them again.
@@ -210,8 +210,8 @@ Company-level columns (repeat the same values on every row of the company):
 | Column | Required? | Example | Notes |
 | --- | --- | --- | --- |
 | `company_name` | **Required** | Acme Corp | Also accepts `company`, `name`. Groups the rows of one company. |
-| `company_email` | **Required** | hello@acme.com | The company's own email address. |
-| `industry` | **Required** | Technology | Must be an existing industry name. See the note below. Also accepts `sector`, `vertical`. |
+| `company_email` | Optional | hello@acme.com | The company's own email address. A malformed one stops the company from importing. |
+| `industry` | Optional | Technology | An existing industry name; one that doesn't exist is cleared and the company imports without it. See the note below. Also accepts `sector`, `vertical`. |
 | `phone` | Optional | +1 555-123-4567 | |
 | `city` | Optional | New York | |
 | `state` | Optional | NY | Also accepts `province`. |
@@ -249,7 +249,7 @@ Some records span **multiple rows** in your spreadsheet:
 For these, all rows that share the same record name must repeat the same record-level values (company industry, bundle discount, price book type, and so on). **Only the per-item columns may differ between rows.** If two rows disagree on a record-level value, the import flags a conflict so nothing is created with the wrong value.
 
 :::note Categories and types are created for you
-When you import products, bundles, or price books, any category or price-book type that doesn't exist yet is created automatically before the records are imported. Company **industries** are the exception: they must already exist, so use a recognized industry name. You can add industries, one at a time or in bulk, on the **Industries** tab of the Categories page.
+When you import products, bundles, or price books, any category or price-book type that doesn't exist yet is created automatically before the records are imported. Company **industries** are the exception: they are never created by an import. An industry that doesn't exist is cleared, and the company imports without one. To keep it, add the industry first, one at a time or in bulk, on the **Industries** tab of the Categories page.
 :::
 
 ## Referencing Products by SKU (Bundles and Price Books)

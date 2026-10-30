@@ -1215,9 +1215,9 @@ The quote list also takes these filters. Multi-value filters take one value or a
 | `createdByApiKeys` | `true` | Quotes created by any API key (combined with `createdBy`) |
 | `validUntilWindow` | `thisWeek` (today + 6 days), `thisMonth`, `past` | UTC days |
 | `validUntilFrom` / `validUntilTo` | `YYYY-MM-DD` | Inclusive; combined with the window |
-| `summaryCurrency` | A currency | The currency of `summary` (default: the one filtered currency, else USD) |
+| `summaryCurrency` | A currency | The currency of the `summary` amounts (default: the one filtered currency, else USD) |
 
-Each quote in the list carries `isExpired` (the same rule as the `expired` filter), `isSignatureExpired` and `lineItemCount`. Next to `results`, `totalRecords` and `stats`, the response carries `statusCounts` (how many quotes each status tab would hold, with every filter except `statuses`) and `summary` (the summary cards below, in `summaryCurrency`). Products also filter by several `billingFrequency` and `currency` values, bundles by several `currency` values, and contacts by several `companyIds`. In the other lists, each price book carries `overrideCount` (how many products have their own price in it), each bundle carries `itemCount` and `billingTotals` (the bundle price per billing type, for example `{ "one-time": 1538.73, "monthly": 11.27 }`, with the bundle discount shared across them), and each company carries `contactCount`.
+Each quote in the list carries `isExpired` (the same rule as the `expired` filter), `isSignatureExpired` and `lineItemCount`. Next to `results`, `totalRecords` and `stats`, the response carries `statusCounts` (how many quotes each status tab would hold, with every filter except `statuses`) and `summary` (the summary cards below: amounts in `summaryCurrency`, counts across every currency). Products also filter by several `billingFrequency` and `currency` values, bundles by several `currency` values, and contacts by several `companyIds`. In the other lists, each price book carries `overrideCount` (how many products have their own price in it), each bundle carries `itemCount` and `billingTotals` (the bundle price per billing type, for example `{ "one-time": 1538.73, "monthly": 11.27 }`, with the bundle discount shared across them), and each company carries `contactCount`.
 
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
@@ -1232,7 +1232,7 @@ const page = await TurboQuote.listQuotes({
   summaryCurrency: 'USD',
 });
 // page.statusCounts → { all, draft, sent, accepted, declined, voided, expired }
-// page.summary      → { openPipeline, winRate, monthlyRecurring, ... } in USD
+// page.summary      → { openPipeline, winRate, monthlyRecurring, ... }; amounts in USD
 for (const q of page.results) {
   console.log(q.quoteNumber, q.isExpired, q.lineItemCount);
 }
@@ -1333,7 +1333,7 @@ tq.listProducts(products);
 
 #### `getQuoteSummary` / `get_quote_summary` / GetQuoteSummary and `listQuoteCreators` {#getquotesummary}
 
-`getQuoteSummary` returns the quote list's summary cards for a set of filters, in one currency: the open pipeline (draft and sent quotes that aren't expired), accepted and declined counts, quotes created and won this month, quotes waiting to be signed, the win rate over the last 90 days (`percent` is `null` when none were decided) and the monthly recurring total of accepted quotes. It takes the same filters as `listQuotes`, except `statuses` (the cards split quotes by status themselves) and the currency list (the cards are in `summaryCurrency`).
+`getQuoteSummary` returns the quote list's summary cards for a set of filters: the open pipeline (draft and sent quotes that aren't expired), accepted and declined counts, quotes created and won this month, quotes waiting to be signed, the win rate over the last 90 days (`percent` is `null` when none were decided) and the monthly recurring total of accepted quotes. The two amounts, `openPipeline.total` and `monthlyRecurring`, are in `summaryCurrency`; every count and the win rate cover quotes in every currency. It takes the same filters as `listQuotes`, including the currency list, except `statuses` (the cards split quotes by status themselves).
 
 `listQuoteCreators` lists the people and API keys who created the organization's quotes. Use their `id` in the `createdBy` filter, for example for a per-rep report.
 
@@ -4765,7 +4765,7 @@ String contactId = contacts.getResults().get(0).getId();
 
 #### Company email and `getCompanyOpenQuotes` {#getcompanyopenquotes}
 
-Companies have an optional `email` (the company's own address) on create, update and bulk import; it's returned on every company. A company can't be deleted while it has open quotes — draft or sent (409 `CompanyHasOpenQuotes`); accepted, declined and voided quotes don't block it. `getCompanyOpenQuotes` returns those quotes (`{ results, totalRecords }`, the newest 50) so you can check before deleting. `listCompanyContacts` returns `company.contactCount`, the company's active contacts whatever the search.
+Companies have an optional `email` (the company's own address) on create, update and bulk import; it's returned on every company. A company can't be deleted while it has open quotes — draft or sent (409 `CompanyHasOpenQuotes`); accepted, declined and voided quotes don't block it. `getCompanyOpenQuotes` returns those quotes (`{ results, totalRecords }`, the newest 50) so you can check before deleting. `listCompanyContacts` returns `company.contactCount`, the company's active contacts whatever the search. An `industryId` that isn't one of your organization's active industries is a 400 `ValidationError`, and so is a line item `productId` or `categoryId` that isn't one of your organization's.
 
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>

@@ -30,7 +30,7 @@ By the end of this guide, you will know how to:
 
 ## The Companies Page
 
-In the sidebar, open **TurboQuote** and click **Companies**. Each company shows its industry, email, phone, number of contacts and when it last had activity. Search by name, email, phone or location, or use **Filter** and **Sort** to narrow the list.
+In the sidebar, open **TurboQuote** and click **Companies**. Each company shows its industry, email, phone, number of contacts and when it last had activity. Search by name, email, city, state or country, or use **Filter** and **Sort** to narrow the list.
 
 ![The Companies page with the New company button](/img/turboquote/companies/01-companies.png)
 

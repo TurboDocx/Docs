@@ -159,7 +159,7 @@ Use a custom item for something you sell once, such as a site survey. It lives o
 **Instruction:**
 
 1. Click **Custom item**.
-2. On the **General** tab, enter the **Name**, an optional **SKU**, the **Category** and the **Billing**, and an optional **Description**.
+2. On the **General** tab, enter the **Name**, an optional **SKU** and **Category**, the **Billing** (a new custom item starts as a one-time charge), and an optional **Description**.
 3. On the **Pricing** tab, enter the **Unit price** and, optionally, **Your cost** to see the margin. A custom item always uses the quote's currency.
 4. On the **Images** tab, add up to **3 images** (JPEG or PNG, up to 2 MB each). Drag them by their grip to change the order; the quote shows them side by side in that order.
 5. Click **Add to quote**.
@@ -186,7 +186,7 @@ The item is added at quantity 1 with no discount, and carries a **Custom** tag. 
 2. Tick the bundles you want and set their quantity.
 3. Click **Add N bundles**.
 
-Each bundle shows its price for each billing type, so you can see what the customer pays once and what recurs.
+Each bundle shows its price for each billing type, so you can see what the customer pays once and what recurs. A bundle comes onto the quote with its own bundle discount.
 
 ![The Add bundles dialog with Remote Team Kit ticked](/img/turboquote/new-quote/17-add-bundles.png)
 
@@ -236,7 +236,7 @@ These settings apply to this quote only. To change your team's defaults, go to *
 
 ## What Happens After You Send
 
-Sending a quote creates a **TurboSign** signature request with the quote attached and emails it to the recipient. From there:
+Sending a quote creates a **TurboSign** signature request with the quote attached and emails it to the recipient. Like any TurboSign request, it fires the `signature.document.sent` webhook. From there:
 
 1. **The quote moves to Sent.** You'll find it on the **Sent** tab of the Quotes page. It can no longer be edited or renamed.
 2. **The customer reviews and signs.** The email links to the quote, where the recipient reads it and signs to accept it. Any reminders you set go out on schedule until they sign or the quote's **Valid until** date passes.
