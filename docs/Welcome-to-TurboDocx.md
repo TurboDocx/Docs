@@ -48,8 +48,10 @@ TurboSign sends documents for e-signature, tracks who has signed, and keeps the 
 
 TurboQuote builds sales quotes and proposals from a product catalog, price books, and line items.
 
-- [Creating a New Quote](./TurboQuote/Creating-a-New-Quote.md): build your first quote.
-- [Adding a New Product](./TurboQuote/Adding-a-New-Product.md) and [Bulk Importing from a Spreadsheet](./TurboQuote/Bulk-Importing-from-a-Spreadsheet.md): populate your product catalog.
+- [Creating a New Quote](./TurboQuote/Creating-a-New-Quote.md): build your first quote and send it for signature.
+- [Managing Your Quotes](./TurboQuote/Managing-Your-Quotes.md): find, filter, renew, void, and delete quotes.
+- [Adding a New Product](./TurboQuote/Adding-a-New-Product.md), [Managing Bundles](./TurboQuote/Managing-Bundles.md), [Managing Price Books](./TurboQuote/Managing-Price-Books.md), and [Bulk Importing from a Spreadsheet](./TurboQuote/Bulk-Importing-from-a-Spreadsheet.md): populate your catalog.
+- [Managing Companies and Contacts](./TurboQuote/Managing-Companies-and-Contacts.md): keep your customers and the people who sign up to date.
 
 ## Build on the API and SDKs
 

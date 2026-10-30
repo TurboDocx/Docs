@@ -85,7 +85,7 @@ The official TurboDocx TurboQuote SDK for Node.js and browser applications. Buil
 <br />
 
 :::info What is TurboQuote?
-TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `pending_approval` → `sent` → `accepted` / `declined` / `voided`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
+TurboQuote is TurboDocx's quoting and CPQ module. Quotes progress through a lifecycle: `draft` → `sent` → `accepted` / `declined` / `voided`. A `draft` can also be marked `declined` directly, for a deal that dies before the quote is ever sent. Each quote belongs to a company and contact, carries line items (individual products or bundles), and can optionally have a price book applied. Accepted quotes can be merged with a TurboDocx Deliverable (e.g. a contract generated from a template) and sent for e-signature through TurboSign via `sendQuoteWithDeliverable`.
 :::
 
 </TabItem>
@@ -1385,6 +1385,253 @@ end
 </TabItem>
 </Tabs>
 
+#### Sorting and filtering lists {#sorting-and-filtering-lists}
+
+Every TurboQuote list takes `sortBy` and `sortDirection` (`asc` | `desc`). Leave them out and the list keeps the order it has always had.
+
+| List | `sortBy` values | Order without a sort |
+|---|---|---|
+| Quotes | `updatedOn`, `createdOn`, `total` (grand total), `validUntil`, `quoteNumber` | Newest created first |
+| Products | `name`, `listPrice`, `createdOn` | Newest first |
+| Price books | `name`, `discountPercent`, `overrideCount`, `validFrom`, `validTo`, `createdOn` | Newest first |
+| Bundles | `name`, `itemCount`, `totalListPrice`, `totalFinalPrice`, `createdOn` | Newest first |
+| Companies | `name`, `contactCount`, `lastActivityDate` | Most recently active first |
+| Contacts (both lists) | `name`, `createdOn` | Newest first |
+| Types | `name`, `usageCount` (needs `categoryType`) | Name, A to Z |
+
+The quote list also takes these filters. Multi-value filters take one value or a list (sent as repeated query parameters):
+
+| Filter | Values | Notes |
+|---|---|---|
+| `statuses` | `draft`, `sent`, `accepted`, `declined`, `voided`, **`expired`** | `expired` = a draft or sent quote past its Valid until day (UTC), or whose signature expired. It's a filter value, not a stored status. |
+| `companyId` / `companyIds` | One company, or several | Merged by the API |
+| `currency` / `currencies` | One currency, or several | Merged by the API |
+| `createdBy` | User IDs | From `listQuoteCreators` |
+| `createdByApiKeys` | `true` | Quotes created by any API key (combined with `createdBy`) |
+| `validUntilWindow` | `thisWeek` (today + 6 days), `thisMonth`, `past` | UTC days |
+| `validUntilFrom` / `validUntilTo` | `YYYY-MM-DD` | Inclusive; combined with the window |
+| `summaryCurrency` | A currency | The currency of the `summary` amounts (default: the one filtered currency, else USD) |
+
+Each quote in the list carries `isExpired` (the same rule as the `expired` filter), `isSignatureExpired` and `lineItemCount`. Next to `results`, `totalRecords` and `stats`, the response carries `statusCounts` (how many quotes each status tab would hold, with every filter except `statuses`) and `summary` (the summary cards below: amounts in `summaryCurrency`, counts across every currency). Products also filter by several `billingFrequency` and `currency` values, bundles by several `currency` values, and contacts by several `companyIds`. In the other lists, each price book carries `overrideCount` (how many products have their own price in it), each bundle carries `itemCount` and `billingTotals` (the bundle price per billing type, for example `{ "one-time": 1538.73, "monthly": 11.27 }`, with the bundle discount shared across them), and each company carries `contactCount`.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const page = await TurboQuote.listQuotes({
+  statuses: ['sent', 'expired'],
+  currencies: ['USD', 'EUR'],
+  validUntilWindow: 'thisMonth',
+  sortBy: 'validUntil',
+  sortDirection: 'asc',
+  summaryCurrency: 'USD',
+});
+// page.statusCounts → { all, draft, sent, accepted, declined, voided, expired }
+// page.summary      → { openPipeline, winRate, monthlyRecurring, ... }; amounts in USD
+for (const q of page.results) {
+  console.log(q.quoteNumber, q.isExpired, q.lineItemCount);
+}
+
+const products = await TurboQuote.listProducts({ billingFrequency: ['monthly', 'annual'], sortBy: 'listPrice', sortDirection: 'desc' });
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+page = await TurboQuote.list_quotes({
+    "statuses": ["sent", "expired"],
+    "currencies": ["USD", "EUR"],
+    "validUntilWindow": "thisMonth",
+    "sortBy": "validUntil",
+    "sortDirection": "asc",
+    "summaryCurrency": "USD",
+})
+print(page["statusCounts"]["expired"], page["summary"]["winRate"]["percent"])
+for q in page["results"]:
+    print(q["quoteNumber"], q["isExpired"], q["lineItemCount"])
+
+products = await TurboQuote.list_products({"billingFrequency": ["monthly", "annual"], "sortBy": "listPrice", "sortDirection": "desc"})
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+use TurboDocx\Types\Requests\Quote\ListQuotesRequest;
+use TurboDocx\Types\Requests\Quote\ListProductsRequest;
+
+$page = TurboQuote::listQuotes(new ListQuotesRequest(
+    statuses: ['sent', 'expired'],
+    currencies: ['USD', 'EUR'],
+    validUntilWindow: 'thisMonth',
+    sortBy: 'validUntil',
+    sortDirection: 'asc',
+    summaryCurrency: 'USD',
+));
+echo $page->statusCounts?->expired, ' ', $page->summary?->winRate['percent'];
+foreach ($page->results as $q) {
+    echo "{$q->quoteNumber} expired=" . var_export($q->isExpired, true) . "\n";
+}
+
+$products = TurboQuote::listProducts(new ListProductsRequest(billingFrequency: ['monthly', 'annual'], sortBy: 'listPrice', sortDirection: 'desc'));
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+str := func(s string) *string { return &s }
+
+page, err := qc.ListQuotes(ctx, &turbodocx.ListQuotesOptions{
+    Statuses:         []string{"sent", turbodocx.QuoteListStatusExpired},
+    Currencies:       []string{"USD", "EUR"},
+    ValidUntilWindow: str(turbodocx.ValidUntilThisMonth),
+    SortBy:           str(turbodocx.QuoteSortByValidUntil),
+    SortDirection:    str(turbodocx.SortAsc),
+    SummaryCurrency:  str("USD"),
+})
+fmt.Println(page.StatusCounts.Expired, page.Summary.WinRate.Percent)
+
+// Several values for a key that also takes one: BillingFrequencies / CurrencyCodes
+products, err := qc.ListProducts(ctx, &turbodocx.ListProductsOptions{
+    BillingFrequencies: []string{"monthly", "annual"},
+    SortBy:             str("listPrice"),
+    SortDirection:      str(turbodocx.SortDesc),
+})
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+ListQuotesOptions opts = new ListQuotesOptions();
+opts.setStatuses(Arrays.asList("sent", "expired"));
+opts.setCurrencies(Arrays.asList("USD", "EUR"));
+opts.setValidUntilWindow("thisMonth");
+opts.setSortBy("validUntil");
+opts.setSortDirection("asc");
+opts.setSummaryCurrency("USD");
+
+QuoteListResponse page = tq.listQuotes(opts);
+System.out.println(page.getStatusCounts().getExpired() + " " + page.getSummary().getWinRate().getPercent());
+
+ListProductsOptions products = new ListProductsOptions();
+products.setBillingFrequencies(Arrays.asList("monthly", "annual"));
+products.setSortBy("listPrice");
+products.setSortDirection("desc");
+tq.listProducts(products);
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+page = TurboDocxSdk::TurboQuote.list_quotes(
+  "statuses" => %w[sent expired],
+  "currencies" => %w[USD EUR],
+  "validUntilWindow" => "thisMonth",
+  "sortBy" => "validUntil",
+  "sortDirection" => "asc",
+  "summaryCurrency" => "USD"
+)
+puts page["statusCounts"]["expired"], page["summary"]["winRate"]["percent"]
+page["results"].each { |q| puts "#{q["quoteNumber"]} #{q["isExpired"]} #{q["lineItemCount"]}" }
+
+products = TurboDocxSdk::TurboQuote.list_products("billingFrequency" => %w[monthly annual], "sortBy" => "listPrice", "sortDirection" => "desc")
+```
+
+</TabItem>
+</Tabs>
+
+#### `getQuoteSummary` / `get_quote_summary` / GetQuoteSummary and `listQuoteCreators` {#getquotesummary}
+
+`getQuoteSummary` returns the quote list's summary cards for a set of filters: the open pipeline (draft and sent quotes that aren't expired), accepted and declined counts, quotes created and won this month, quotes waiting to be signed, the win rate over the last 90 days (`percent` is `null` when none were decided) and the monthly recurring total of accepted quotes. The two amounts, `openPipeline.total` and `monthlyRecurring`, are in `summaryCurrency`; every count and the win rate cover quotes in every currency. It takes the same filters as `listQuotes`, including the currency list, except `statuses` (the cards split quotes by status themselves).
+
+`listQuoteCreators` lists the people and API keys who created the organization's quotes. Use their `id` in the `createdBy` filter, for example for a per-rep report.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const summary = await TurboQuote.getQuoteSummary({ currencies: ['EUR'], summaryCurrency: 'EUR' });
+// { currency, openPipeline: { total, count }, completed: { accepted, declined },
+//   createdThisMonth, waitingToSign, wonThisMonth, currencies,
+//   winRate: { percent | null, accepted, declined, windowDays }, monthlyRecurring: { total, count } }
+
+const creators = await TurboQuote.listQuoteCreators();
+// [{ id, name, email | null, isAPIKey, apiKeyDeleted }] — use id in the createdBy filter
+const mine = await TurboQuote.listQuotes({ createdBy: [creators[0].id] });
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+summary = await TurboQuote.get_quote_summary({"currencies": ["EUR"], "summaryCurrency": "EUR"})
+print(summary["openPipeline"]["total"], summary["winRate"]["percent"])
+
+creators = await TurboQuote.list_quote_creators()
+# [{"id", "name", "email" (None for an API key), "isAPIKey", "apiKeyDeleted"}]
+mine = await TurboQuote.list_quotes({"createdBy": [creators[0]["id"]]})
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+use TurboDocx\Types\Requests\Quote\QuoteSummaryRequest;
+
+$summary = TurboQuote::getQuoteSummary(new QuoteSummaryRequest(currencies: ['EUR'], summaryCurrency: 'EUR'));
+echo $summary->openPipeline['total'], ' ', $summary->winRate['percent'] ?? 'n/a';
+
+$creators = TurboQuote::listQuoteCreators(); // QuoteCreator[]: id, name, email (null for an API key), isAPIKey, apiKeyDeleted
+$mine = TurboQuote::listQuotes(new ListQuotesRequest(createdBy: [$creators[0]->id]));
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+summary, err := qc.GetQuoteSummary(ctx, &turbodocx.QuoteSummaryOptions{
+    Currencies:      []string{"EUR"},
+    SummaryCurrency: str("EUR"),
+})
+fmt.Println(summary.OpenPipeline.Total, summary.WinRate.Percent) // Percent is nil when none were decided
+
+creators, err := qc.ListQuoteCreators(ctx) // []QuoteCreator: ID, Name, Email (nil for an API key), IsAPIKey, APIKeyDeleted
+mine, err := qc.ListQuotes(ctx, &turbodocx.ListQuotesOptions{CreatedBy: []string{creators[0].ID}})
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+QuoteSummaryOptions filters = new QuoteSummaryOptions();
+filters.setCurrencies(Arrays.asList("EUR"));
+filters.setSummaryCurrency("EUR");
+QuoteSummary summary = tq.getQuoteSummary(filters);
+System.out.println(summary.getOpenPipeline().getTotal() + " " + summary.getWinRate().getPercent());
+
+List<Quote.QuoteCreator> creators = tq.listQuoteCreators(); // getName(), getEmail() (null for an API key), getIsAPIKey()
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+summary = TurboDocxSdk::TurboQuote.get_quote_summary("currencies" => ["EUR"], "summaryCurrency" => "EUR")
+puts summary["openPipeline"]["total"], summary["winRate"]["percent"] # percent is nil when none were decided
+
+creators = TurboDocxSdk::TurboQuote.list_quote_creators
+# [{ "id", "name", "email" (nil for an API key), "isAPIKey", "apiKeyDeleted" }]
+mine = TurboDocxSdk::TurboQuote.list_quotes("createdBy" => [creators.first["id"]])
+```
+
+</TabItem>
+</Tabs>
+
+
 <a id="create_quote"></a>
 
 #### `createQuote` / `create_quote` / CreateQuote {#createquote}
@@ -1880,9 +2127,60 @@ result = TurboDocxSdk::TurboQuote.delete_quote("quote-uuid")
 </TabItem>
 </Tabs>
 
+:::caution Deletes the API refuses
+A **sent** quote can't be deleted: void it instead (409, code `CANNOT_DELETE_SENT_QUOTE`). An accepted quote can't be deleted either (409, `CANNOT_DELETE_ACCEPTED_QUOTE`). Drafts and declined or voided quotes can be deleted.
+:::
+
 <a id="duplicate_quote"></a>
 
 #### `duplicateQuote` / `duplicate_quote` / DuplicateQuote {#duplicatequote}
+
+Takes an optional name for the copy; without one the copy is called "Copy of …". Custom line items keep their images.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const copy = await TurboQuote.duplicateQuote(quoteId, { name: 'Acme renewal 2027' }); // name is optional
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+copy = await TurboQuote.duplicate_quote(quote_id, name="Acme renewal 2027")  # name is optional
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+$copy = TurboQuote::duplicateQuote($quoteId, 'Acme renewal 2027'); // name is optional
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+copy, err := qc.DuplicateQuote(ctx, quoteID, turbodocx.DuplicateOptions{Name: "Acme renewal 2027"}) // options are optional
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+Quote copy = tq.duplicateQuote(quoteId, "Acme renewal 2027"); // or duplicateQuote(quoteId)
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+copy = TurboDocxSdk::TurboQuote.duplicate_quote(quote_id, name: "Acme renewal 2027") # name is optional
+```
+
+</TabItem>
+</Tabs>
 
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
@@ -2405,6 +2703,55 @@ puts config["format"]["startNumber"]  # 1000
 ```
 
 The SDK also exposes constants for the enum values: `TurboDocxSdk::QuoteNumberYearToken`, `TurboDocxSdk::QuoteNumberMonthToken`, and `TurboDocxSdk::QuoteNumberResetCadence`.
+
+</TabItem>
+</Tabs>
+
+#### `getNextQuoteNumber` / `get_next_quote_number` / GetNextQuoteNumber {#getnextquotenumber}
+
+The number the next new quote will get, for showing before a quote is created. It's read only: the counter doesn't move, so a quote created by someone else in between takes that number first. Any role that can create quotes may call it; `canEdit` says whether the caller can change numbering (administrators).
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const { nextNumber, sequence, canEdit } = await TurboQuote.getNextQuoteNumber();
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+nxt = await TurboQuote.get_next_quote_number()  # {"nextNumber", "sequence", "canEdit"}
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+$next = TurboQuote::getNextQuoteNumber(); // ->nextNumber, ->sequence, ->canEdit
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+next, err := qc.GetNextQuoteNumber(ctx) // next.NextNumber, next.Sequence, next.CanEdit
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+NextQuoteNumber next = tq.getNextQuoteNumber(); // getNextNumber(), getSequence(), getCanEdit()
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+nxt = TurboDocxSdk::TurboQuote.get_next_quote_number # { "nextNumber", "sequence", "canEdit" }
+```
 
 </TabItem>
 </Tabs>
@@ -3965,6 +4312,84 @@ result = TurboDocxSdk::TurboQuote.remove_line_item("quote-uuid", "item-uuid")
 </TabItem>
 </Tabs>
 
+### Custom Line Item Images {#custom-line-item-images}
+
+A custom line item (a line with `productId: null`) can show up to **three** images on the quote preview and PDF, side by side in order, like a catalog product. Images are PNG or JPEG, 2 MB each, and can only be changed while the quote is a draft. Each call returns the line item's images after the change. Duplicating a quote copies them.
+
+| Method | HTTP |
+|---|---|
+| `getQuoteLineItemImages(quoteId)` | GET `/v1/quotes/{id}/items/images` — every custom item's images, keyed by line item ID |
+| `getLineItemImages(quoteId, itemId)` | GET `/v1/quotes/{id}/items/{itemId}/images` |
+| `addLineItemImages(quoteId, itemId, images)` | POST `/v1/quotes/{id}/items/{itemId}/images` (multipart `images` parts) |
+| `reorderLineItemImages(quoteId, itemId, imageIds)` | PUT `/v1/quotes/{id}/items/{itemId}/images/order` |
+| `removeLineItemImage(quoteId, itemId, imageId)` | DELETE `/v1/quotes/{id}/items/{itemId}/images/{imageId}` |
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const images = await TurboQuote.addLineItemImages(quoteId, itemId, ['./diagram.png', jpegBuffer]); // paths, Buffers or Files
+await TurboQuote.reorderLineItemImages(quoteId, itemId, [images[1].id, images[0].id]);   // first to last
+const left = await TurboQuote.removeLineItemImage(quoteId, itemId, images[0].id);        // the images left
+const one = await TurboQuote.getLineItemImages(quoteId, itemId);
+const byItem = await TurboQuote.getQuoteLineItemImages(quoteId);                        // { [lineItemId]: LineItemImage[] }
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+images = await TurboQuote.add_line_item_images(quote_id, item_id, ["./diagram.png"])  # paths, bytes or files
+await TurboQuote.reorder_line_item_images(quote_id, item_id, [images[1]["id"], images[0]["id"]])
+left = await TurboQuote.remove_line_item_image(quote_id, item_id, images[0]["id"])
+by_item = await TurboQuote.get_quote_line_item_images(quote_id)  # {line_item_id: [image, ...]}
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+$images = TurboQuote::addLineItemImages($quoteId, $itemId, ['/path/to/diagram.png']); // paths or raw bytes
+TurboQuote::reorderLineItemImages($quoteId, $itemId, [$images[1]->id, $images[0]->id]);
+$left = TurboQuote::removeLineItemImage($quoteId, $itemId, $images[0]->id);
+$byItem = TurboQuote::getQuoteLineItemImages($quoteId); // [lineItemId => LineItemImage[]]
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+images, err := qc.AddLineItemImages(ctx, quoteID, itemID, []turbodocx.ProductImageInput{{FilePath: "./diagram.png"}})
+_, err = qc.ReorderLineItemImages(ctx, quoteID, itemID, []string{images[1].ID, images[0].ID})
+left, err := qc.RemoveLineItemImage(ctx, quoteID, itemID, images[0].ID)
+byItem, err := qc.GetQuoteLineItemImages(ctx, quoteID) // map[lineItemID][]LineItemImage
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+List<LineItemImage> images = tq.addLineItemImages(quoteId, itemId,
+        new byte[][]{Files.readAllBytes(Paths.get("diagram.png"))});
+tq.reorderLineItemImages(quoteId, itemId, Arrays.asList(images.get(1).getId(), images.get(0).getId()));
+List<LineItemImage> left = tq.removeLineItemImage(quoteId, itemId, images.get(0).getId());
+Map<String, List<LineItemImage>> byItem = tq.getQuoteLineItemImages(quoteId);
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+images = TurboDocxSdk::TurboQuote.add_line_item_images(quote_id, item_id, ["./diagram.png"]) # paths or IO objects
+TurboDocxSdk::TurboQuote.reorder_line_item_images(quote_id, item_id, [images[1]["id"], images[0]["id"]])
+left = TurboDocxSdk::TurboQuote.remove_line_item_image(quote_id, item_id, images[0]["id"]) # the images left
+one = TurboDocxSdk::TurboQuote.get_line_item_images(quote_id, item_id)
+by_item = TurboDocxSdk::TurboQuote.get_quote_line_item_images(quote_id) # { line_item_id => [image, ...] }
+```
+
+</TabItem>
+</Tabs>
+
 ### Products {#products}
 
 <Tabs groupId="language" queryString>
@@ -4311,6 +4736,55 @@ if img, ok := images["product-uuid-1"]; ok && img != nil {
 ```
 
 ---
+
+</TabItem>
+</Tabs>
+
+#### `getProductQuoteImages` / `get_product_quote_images` / GetProductQuoteImages {#getproductquoteimages}
+
+A product holds up to **three** images (PNG or JPEG, 2 MB each); adding a fourth is a 400 `MAX_IMAGES_EXCEEDED`. A product that already has more keeps them until an image is added, and a duplicate copies the first three. `getProductQuoteImages` returns the images each product shows on a quote — up to three, in order (an empty list when none) — for 1 to 100 product IDs. `getProductPrimaryImages` still returns only the first image of each.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const images = await TurboQuote.getProductQuoteImages(['product-uuid-1', 'product-uuid-2']); // { [productId]: ProductImage[] }
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+images = await TurboQuote.get_product_quote_images(["product-uuid-1", "product-uuid-2"])
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+$images = TurboQuote::getProductQuoteImages(['product-uuid-1', 'product-uuid-2']);
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+images, err := qc.GetProductQuoteImages(ctx, []string{"product-uuid-1", "product-uuid-2"}) // map[productID][]ProductImage
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+Map<String, List<ProductImage>> images = tq.getProductQuoteImages(Arrays.asList("product-uuid-1", "product-uuid-2"));
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+images = TurboDocxSdk::TurboQuote.get_product_quote_images(["product-uuid-1", "product-uuid-2"])
+```
 
 </TabItem>
 </Tabs>
@@ -4815,6 +5289,58 @@ page = TurboDocxSdk::TurboQuote.list_price_book_products("pricebook-uuid", "limi
 </TabItem>
 </Tabs>
 
+#### Reset product pricing and the default price book {#reset-product-pricing}
+
+`updatePriceBook` takes `resetProductPricing: true` to put every product of the book back on the book's own discount (applied before any `productPricing` in the same request). Leaving `isDefault` out of an update no longer clears it. The organization's default price book can't be deleted (400 `PriceBookIsDefault`): make another book the default first. Duplicates of products, price books and bundles take an optional name, like `duplicateQuote`.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+await TurboQuote.updatePriceBook(priceBookId, { resetProductPricing: true });
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+await TurboQuote.update_price_book(price_book_id, {"resetProductPricing": True})
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+TurboQuote::updatePriceBook($priceBookId, new UpdatePriceBookRequest(resetProductPricing: true));
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+yes := true
+_, err := qc.UpdatePriceBook(ctx, priceBookID, &turbodocx.UpdatePriceBookRequest{ResetProductPricing: &yes})
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+UpdatePriceBookRequest req = new UpdatePriceBookRequest();
+req.setResetProductPricing(true);
+tq.updatePriceBook(priceBookId, req);
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+TurboDocxSdk::TurboQuote.update_price_book(price_book_id, "resetProductPricing" => true)
+```
+
+</TabItem>
+</Tabs>
+
 ### Companies {#companies}
 
 <Tabs groupId="language" queryString>
@@ -5021,6 +5547,70 @@ contacts = TurboDocxSdk::TurboQuote.list_company_contacts(company["id"])
 </TabItem>
 </Tabs>
 
+#### Company email and `getCompanyOpenQuotes` {#getcompanyopenquotes}
+
+Companies have an optional `email` (the company's own address) on create, update and bulk import; it's returned on every company. A company can't be deleted while it has open quotes — draft or sent (409 `CompanyHasOpenQuotes`); accepted, declined and voided quotes don't block it. `getCompanyOpenQuotes` returns those quotes (`{ results, totalRecords }`, the newest 50) so you can check before deleting. `listCompanyContacts` returns `company.contactCount`, the company's active contacts whatever the search. An `industryId` that isn't one of your organization's active industries is a 400 `ValidationError`, and so is a line item `productId` or `categoryId` that isn't one of your organization's.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const open = await TurboQuote.getCompanyOpenQuotes(companyId); // { results, totalRecords }
+if (open.totalRecords === 0) {
+  await TurboQuote.deleteCompany(companyId);
+}
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+open_quotes = await TurboQuote.get_company_open_quotes(company_id)
+if open_quotes["totalRecords"] == 0:
+    await TurboQuote.delete_company(company_id)
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+$open = TurboQuote::getCompanyOpenQuotes($companyId);
+if ($open->totalRecords === 0) {
+    TurboQuote::deleteCompany($companyId);
+}
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+open, err := qc.GetCompanyOpenQuotes(ctx, companyID)
+if err == nil && open.TotalRecords == 0 {
+    _, err = qc.DeleteCompany(ctx, companyID)
+}
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+OpenQuotesResponse open = tq.getCompanyOpenQuotes(companyId);
+if (open.getTotalRecords() == 0) {
+    tq.deleteCompany(companyId);
+}
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+open_quotes = TurboDocxSdk::TurboQuote.get_company_open_quotes(company_id)
+TurboDocxSdk::TurboQuote.delete_company(company_id) if open_quotes["totalRecords"].zero?
+```
+
+</TabItem>
+</Tabs>
+
 ### Contacts {#contacts}
 
 <Tabs groupId="language" queryString>
@@ -5181,6 +5771,55 @@ contact = TurboDocxSdk::TurboQuote.create_contact(
   "email"     => "john@acme.com",
   "companyId" => "company-uuid"
 )
+```
+
+</TabItem>
+</Tabs>
+
+#### `getContactOpenQuotes` / `get_contact_open_quotes` / GetContactOpenQuotes {#getcontactopenquotes}
+
+A contact can't be deleted while they're the contact on open quotes (409 `ContactHasOpenQuotes`), or when they're the company's only contact (409 `LastContact`; a company always keeps at least one). `getContactOpenQuotes` returns the open quotes made out to the contact.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+```typescript
+const open = await TurboQuote.getContactOpenQuotes(contactId); // { results, totalRecords }
+```
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+open_quotes = await TurboQuote.get_contact_open_quotes(contact_id)
+```
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+$open = TurboQuote::getContactOpenQuotes($contactId);
+```
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+open, err := qc.GetContactOpenQuotes(ctx, contactID)
+```
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+OpenQuotesResponse open = tq.getContactOpenQuotes(contactId);
+```
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+open_quotes = TurboDocxSdk::TurboQuote.get_contact_open_quotes(contact_id)
 ```
 
 </TabItem>
@@ -6081,7 +6720,7 @@ The other five bulk methods follow the exact same pattern:
 
 | Type | Values |
 |---|---|
-| `QuoteStatus` | `draft`, `pending_approval`, `sent`, `accepted`, `declined`, `voided` |
+| `QuoteStatus` | `draft`, `sent`, `accepted`, `declined`, `voided` |
 | `BillingFrequency` | `monthly`, `quarterly`, `annual`, `one-time` |
 | `LineItemType` | `product`, `bundle` |
 | `RenewalPeriod` | `weekly`, `monthly`, `quarterly`, `annually` |
@@ -6362,7 +7001,7 @@ import type {
 
 | Type | Values |
 |---|---|
-| `QuoteStatus` | `'draft'` `'pending_approval'` `'sent'` `'accepted'` `'declined'` `'voided'` |
+| `QuoteStatus` | `'draft'` `'sent'` `'accepted'` `'declined'` `'voided'` |
 | `BillingFrequency` | `'monthly'` `'quarterly'` `'annual'` `'one-time'` |
 | `Currency` | `'USD'` `'EUR'` `'GBP'` `'CAD'` `'AUD'` `'INR'` |
 | `RenewalPeriod` | `'weekly'` `'monthly'` `'quarterly'` `'annually'` |
@@ -6701,6 +7340,26 @@ end
 
 </TabItem>
 </Tabs>
+
+#### TurboQuote error codes {#turboquote-error-codes}
+
+Every typed error carries the API's `code` (`err.code`, `e.code`, `$e->errorCode`, `err.Code`, `e.getCode()`). The codes you're most likely to branch on:
+
+| Status | Code | When |
+|---|---|---|
+| 409 | `CANNOT_DELETE_SENT_QUOTE` | Deleting a sent quote. Void it instead. |
+| 409 | `CANNOT_DELETE_ACCEPTED_QUOTE` | Deleting an accepted quote. It's kept for your records. |
+| 409 | `CompanyHasOpenQuotes` | Deleting a company that has open quotes (draft or sent). See `getCompanyOpenQuotes`. |
+| 409 | `ContactHasOpenQuotes` | Deleting a contact who is on open quotes. See `getContactOpenQuotes`. |
+| 409 | `LastContact` | Deleting a company's only contact. |
+| 400 | `PriceBookIsDefault` | Deleting the organization's default price book. |
+| 400 | `MAX_IMAGES_EXCEEDED` | More than three images on a product or custom line item. |
+| 400 | `IMAGE_TOO_LARGE` / `INVALID_FILE_TYPE` | An image over 2 MB, or not PNG / JPEG. |
+| 400 | `QUOTE_NOT_EDITABLE` | Changing a quote (or its line items or images) that isn't a draft. |
+| 404 | `QUOTE_NOT_FOUND`, `LINE_ITEM_NOT_FOUND`, `IMAGE_NOT_FOUND` | The quote, line item or image doesn't exist in your organization. |
+| 400 | `SenderEmailRequired` | An API-key caller whose quote template has no sender email. |
+
+Money fields are capped at 9,999,999,999,999.99, quantities at 2,147,483,647 and percents at 999.99 (a percent discount at 100); a larger value is a 400 with the field named. An amount discount larger than the price it comes off is a 400.
 
 <a id="runnable-end-to-end-examples"></a>
 
