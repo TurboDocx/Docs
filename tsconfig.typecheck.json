@@ -1,5 +1,6 @@
 {
-  // tsrs (TS 7) only, used by `npm run typecheck`. Same options as @docusaurus/tsconfig, minus the `baseUrl` TS 7 removed.
+  // tsrs (TS 7) only, used by `npm run typecheck`.
+  // Dev boxes and PR CI use tsrs; staging/production builds, deploys and publishes still use regular tsc with tsconfig.json. Same options as @docusaurus/tsconfig, minus the `baseUrl` TS 7 removed.
   "compilerOptions": {
     "allowJs": true,
     "esModuleInterop": true,

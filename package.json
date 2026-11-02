@@ -98,7 +98,7 @@
     "@docusaurus/module-type-aliases": "3.10.1",
     "@docusaurus/tsconfig": "^3.10.1",
     "patch-package": "^8.0.1",
-    "tsrs": "0.18.0-ts7.1.0-dev.20260929",
+    "tsrs": "0.20.0-ts7.1.0-beta",
     "typescript": "~5.2.2"
   },
   "browserslist": {
