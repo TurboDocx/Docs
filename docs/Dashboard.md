@@ -39,9 +39,15 @@ The most common reason to open it is simple: you sent some documents out for sig
 ## Step 1: Open the Dashboard
 
 1. Look at the narrow sidebar running down the far left of the screen.
-2. Click the **bar chart icon**. It is the second icon from the top, directly below the house icon.
+2. Click the **bar chart icon**. It sits directly below the house (Home) icon.
 
 ![Left sidebar with the bar chart Dashboard icon highlighted](/img/dashboard/open_dashboard.png)
+
+:::tip
+When you sign in, your home page opens on the [AI Assistant](./How-to-Use-the-AI-Assistant.md), and the sidebar may be showing your conversations instead of the app's pages. If you don't see the house and bar chart icons, click **Browse** (the grid icon) at the very top of the sidebar first.
+
+![The Browse and Chat switch at the top of the sidebar highlighted](/img/dashboard/browse_switch.png)
+:::
 
 The Dashboard opens and shows everything at a glance.
 
@@ -184,6 +190,8 @@ Scroll down and you will find four more panels.
 ## Troubleshooting
 
 **A panel says there is nothing to show.** That panel had no activity in the time period you picked. Try a longer period, such as **This Year**.
+
+**The globe is marked Sample.** Nobody has signed one of your documents in the period you picked yet. Until they do, the Signing Activity panel shows sample places so you can see how it works. They are not your data.
 
 **The numbers look too low.** Check the time period dropdown in the top right first. **This Week** is the default, and it is the most common reason a Dashboard looks emptier than expected.
 

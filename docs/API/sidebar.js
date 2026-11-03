@@ -12,6 +12,14 @@ module.exports = [
   },
   {
     type: "category",
+    label: "Redlines & Template Upkeep",
+    collapsed: false,
+    items: [
+      { type: "doc", id: "API/Redline-and-Template-API", label: "Redline and Template API" }
+    ]
+  },
+  {
+    type: "category",
     label: "Templates",
     collapsed: false,
     items: [
