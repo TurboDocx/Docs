@@ -1,4 +1,4 @@
-import { cn } from "../../aceternity_utils/cn";
+import { cn } from "../../utils/cn";
 import React, { useState } from "react";
 
 export const BentoGrid = ({

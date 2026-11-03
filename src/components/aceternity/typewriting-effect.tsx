@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"; // Import React
 import { motion } from "framer-motion"; // Import framer-motion
-import { cn } from "../../aceternity_utils/cn"; // Import cn function
+import { cn } from "../../utils/cn"; // Import cn function
 
 export const TypewriterEffect = ({ words, className, cursorClassName }) => {
   // Splitting each word into characters
