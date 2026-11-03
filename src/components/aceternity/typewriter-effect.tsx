@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"; // Import React
 import { motion, animate } from "framer-motion";
-import { cn } from "../../aceternity_utils/cn";
+import { cn } from "../../utils/cn";
 import { TypewriterEffectSmooth } from "./typewriting-effect";
 
 export const TextGenerateEffect = ({ words, className }) => {

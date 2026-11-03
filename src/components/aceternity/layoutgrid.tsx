@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { cn } from "../../aceternity_utils/cn";
+import { cn } from "../../utils/cn";
 
 
 type Card = {
