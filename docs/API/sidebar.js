@@ -1,3 +1,5 @@
+// Hand-curated API sidebar, pulled into sidebars.js. Typed so each item keeps its literal `type`.
+/** @type {import('@docusaurus/plugin-content-docs').SidebarItemConfig[]} */
 module.exports = [
   { type: "doc", id: "API/turbodocx-api-documentation", label: "Introduction" },
   {
