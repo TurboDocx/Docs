@@ -288,7 +288,7 @@ Your AI app passes the values you gave it. TurboDocx fills each field it leaves 
 
 1. **Your knowledge base**, for details about your own organization, such as your legal name or your standard terms.
 2. **An earlier document you named**, passed as `reference_deliverable_id` (*same as the Acme statement of work*). Only a document made from the same template lends values. A customer's own details, such as their address, carry over only when it is the same customer.
-3. **A safe estimate.** TurboDocx fills only the document's own date (today, in your organization's date format) and a version number (1).
+3. **A safe estimate.** TurboDocx fills only the document's own date (today, in your organization's date format) and a version number (1). Your AI app can also pass its own estimate for a version or a length of time (`fill_estimate`). An estimate for money, a name or a deal date is refused.
 
 The document is generated straight away. There is no review card outside the TurboDocx app, so the result tells your AI app what happened, and it should tell you:
 

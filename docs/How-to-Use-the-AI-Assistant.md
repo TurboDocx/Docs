@@ -164,12 +164,12 @@ The assistant fills each field from the first place that has it:
 1. **What you said in the conversation.**
 2. **Your knowledge base**, for details about your own organization, such as your legal name or your standard terms.
 3. **Your earlier documents.** It looks at documents made from the same template first. If you name a document, such as *same as the Acme statement of work*, that one comes first. A customer's own details, such as their address, only come from earlier documents for **the same customer**. Details of the deal itself, such as the scope and the price, only come from a document you named.
-4. **A safe estimate.** The assistant only estimates the document's own date (today) and a version number (1).
+4. **A safe estimate.** The assistant only estimates the document's own date (today), a version number (1), or a length of time such as how long a project runs. Each estimate is marked **Estimate**, with its reason.
 
-Anything it can't find, it asks you for, all at once on the card.
+Anything it can't find, it asks you for, all at once on the card. When nothing is missing or estimated, it makes the document straight away and shows it in the preview.
 
 :::note What the assistant never makes up
-The assistant never fills in an amount of money you didn't give, a legal name, or a deal date such as a start date, an end date or a sign-by date. If you say a date in words, such as *starting December 1* or *sign by Friday*, it writes the calendar date and marks it **From you**.
+The assistant never makes up an amount of money, a legal name or a deal date (a start, end or sign-by date). Each one comes from what you said, your knowledge base, or a document or record you pointed to. Otherwise the card asks you for it. If you say a date in words, such as *starting December 1* or *sign by Friday*, it writes the calendar date and marks it **From you**.
 :::
 
 ### Read the card
