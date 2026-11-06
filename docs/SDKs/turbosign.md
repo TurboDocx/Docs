@@ -4488,7 +4488,7 @@ TurboDocxSdk::TurboSign.remove_template_signature_anchor("your-template-id", res
 </TabItem>
 </Tabs>
 
-When a tag becomes a signature field (`tagBecameSignatureField` is true), the value saved on the template for that variable is cleared, and generation keeps the tag as literal text from then on, so a value you send for it is not written into the document. Calls `POST /turbosign/templates/{templateId}/signature-setup/anchors` and `DELETE /turbosign/templates/{templateId}/signature-setup/anchors/{fieldId}`; see [Add an Anchored Field](/docs/TurboSign/API-Signatures#endpoint-11-add-an-anchored-field) and [Remove an Anchored Field](/docs/TurboSign/API-Signatures#endpoint-12-remove-an-anchored-field).
+When a tag becomes a signature field (`tagBecameSignatureField` is true), the value saved on the template for that variable is cleared, and generation keeps the tag as literal text from then on, so a value you send for it is not written into the document. Calls `POST /turbosign/templates/{templateId}/signature-setup/anchors` and `DELETE /turbosign/templates/{templateId}/signature-setup/anchors/{fieldId}`; see [Add an anchored field](/docs/TurboSign/API-Signatures#endpoint-11-add-an-anchored-field) and [Remove an anchored field](/docs/TurboSign/API-Signatures#endpoint-12-remove-an-anchored-field).
 
 ## Field Types {#field-types}
 
