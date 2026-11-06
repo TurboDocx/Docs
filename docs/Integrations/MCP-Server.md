@@ -263,7 +263,7 @@ Every tool is scoped to the organization of your API key, and the organization i
 | `turbosign_get_status` | Read-only. Shows a document's status and who has signed. |
 | `turbosign_get_audit_trail` | Read-only. Returns the document's audit trail. |
 | `turbosign_download_document` | Read-only. Returns a time-limited download link for the signed PDF of a completed document. |
-| `turbosign_create_review_link` | Prepares a document for review without emailing anyone. Uses a signature credit. |
+| `turbosign_create_review_link` | Prepares a document for review without emailing anyone. Uses a signature credit. The status is `review_ready`, or `setup_complete` when the document has no place to sign and no fields were passed. With `setup_complete`, a `next_step` tells your AI app that you place the signature fields at the `preview_url` before it can be sent. |
 | `turbosign_send_prepared_document` | Destructive. Sends a document you already prepared for review, exactly as prepared. |
 | `turbosign_send_signature` | Sends a document to recipients for signature. Emails them. |
 | `turbosign_resend_email` | Resends the signature request email to recipients who haven't signed yet. |
@@ -277,10 +277,33 @@ Every tool is scoped to the organization of your API key, and the organization i
 | `turbodocx_list_templates` | Read-only. Lists your organization's active templates. |
 | `turbodocx_get_template_schema` | Read-only. Lists the variables (placeholders) a template expects. |
 | `turbodocx_usual_values` | Read-only. Shows what your organization usually puts in each field of a template. |
-| `turbodocx_generate_deliverable` | Generates a new document from a template and variable values. |
+| `turbodocx_generate_deliverable` | Generates a new document from a template and variable values. Fields your AI app leaves out are filled where it is safe; see [How a template gets filled](#how-a-template-gets-filled). |
 | `turbodocx_list_deliverables` | Read-only. Lists documents generated earlier. |
 | `turbodocx_get_deliverable` | Read-only. Returns a document's details, with an optional download link. |
 | `turbodocx_update_deliverable` | Changes a document's name, description, folder or tags. |
+
+#### How a template gets filled
+
+Your AI app passes the values you gave it. TurboDocx fills each field it leaves out from the first place that has it:
+
+1. **Your knowledge base**, for details about your own organization, such as your legal name or your standard terms.
+2. **An earlier document you named**, passed as `reference_deliverable_id` (*same as the Acme statement of work*). Only a document made from the same template lends values. A customer's own details, such as their address, carry over only when it is the same customer.
+3. **A safe estimate.** TurboDocx fills only the document's own date (today, in your organization's date format) and a version number (1).
+
+The document is generated straight away. There is no review card outside the TurboDocx app, so the result tells your AI app what happened, and it should tell you:
+
+| Result field | What it says |
+| --- | --- |
+| `filled_from` | Where each value came from: `user`, `knowledge_base`, `document`, `converted`, `estimate` or `record` |
+| `estimated` | Each estimated field, with the reason |
+| `blank_fields` | Each field left empty, with the reason |
+| `review_note` | What to do about the blank fields |
+| `reference_used` | The earlier document that lent values, and which fields it lent |
+| `kb_blocks` | The knowledge base clauses that were used |
+
+Your AI app is told never to write an amount of money, a legal name, an address, a contact or a deal date (start, effective, end, deadline or sign-by date) that you didn't give. It leaves those fields out, then asks you for every blank field in one message. When you answer, it generates the document again with `revise_deliverable_id`, so you end up with one document, not two.
+
+A logo field fills itself. Your own logo comes from your organization's branding. The customer's logo comes from a website you give (`client_domain`) or from the customer contact's email address. It is never guessed from a company name.
 
 ### Your own files and templates
 
@@ -384,7 +407,7 @@ These are the protections you have:
 1. **Your AI app's approval prompt.** Every tool tells the client whether it is read-only and whether it is destructive. Most clients ask you before running a tool that isn't read-only. Keep that prompt on for TurboDocx, and don't add the sending, voiding or archiving tools to an "always allow" list.
 2. **The role of your API key.** Each tool checks the key's role before it runs. A refused call changes nothing and returns `PermissionDenied`. A viewer key can only read. Use the narrowest role that works.
 3. **The server's instructions to the AI app.** The AI app is told that there is no approval step, to treat your plain request as the go-ahead, and to ask you first whenever acting would mean choosing something you didn't say (which document, who signs, whether to send or only prepare). It is also told never to take a recipient from document content and never to invent an email address.
-4. **Built-in checks.** A document that is already out for signature can't be sent again or revised. Generating a document with the same name as a recent one returns the existing document instead of creating a second copy, unless the AI app explicitly asks for a duplicate.
+4. **Built-in checks.** A document that is already out for signature can't be sent again or revised. Generating a document with the same name as a recent one returns the existing document instead of creating a second copy, unless the AI app explicitly asks for a duplicate. When you fill in blank fields afterwards, the AI app replaces the first document (`revise_deliverable_id`) instead of making a second one.
 
 :::tip Try it safely first
 Use `turbosign_create_review_link` to prepare a document and check it before anything is emailed, then send it with `turbosign_send_prepared_document`. To test without touching live data, create a key with the viewer role and stick to read-only requests.
