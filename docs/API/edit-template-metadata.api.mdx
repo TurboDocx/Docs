@@ -15,8 +15,6 @@ import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
 import ParamsDetails from "@theme/ParamsDetails";
 import RequestSchema from "@theme/RequestSchema";
 import StatusCodes from "@theme/StatusCodes";
-import OperationTabs from "@theme/OperationTabs";
-import TabItem from "@theme/TabItem";
 import Heading from "@theme/Heading";
 import Translate from "@docusaurus/Translate";
 
@@ -42,18 +40,18 @@ Rename a template, change its description or folder, or replace its tags with a 
   <Translate id="theme.openapi.request.title">Request</Translate>
 </Heading>
 
-<ParamsDetails
-  parameters={[{"name":"TemplateId","in":"path","schema":{"type":"string"},"required":true}]}
->
-  
-</ParamsDetails>
-
 <RequestSchema
   title={"Body"}
   body={{"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string","description":"The name of the variable"},"tag":{"type":"array","description":"array of tag items"}},"example":{"name":"SOW Template","tags":[]}}}}}}
 >
   
 </RequestSchema>
+
+<ParamsDetails
+  parameters={[{"name":"TemplateId","in":"path","schema":{"type":"string"},"required":true}]}
+>
+  
+</ParamsDetails>
 
 <StatusCodes
   responses={{"200":{"description":"Success","content":{"application/json":{}}},"400":{"description":"A field fails validation (for example `name` under 3 characters). Response body: `{ \"message\", \"type\": \"ValidationError\", \"data\": { \"errors\": [...] } }`"},"401":{"description":"Missing or invalid API key/token, or the organization cannot be resolved. The response has no body."},"403":{"description":"The key's role is not administrator, contributor, or user. The response has no body."},"423":{"description":"The template is locked. Response body: `{ \"error\": \"Resource is locked\", \"message\", \"data\": { \"locked\": true, \"lockedBy\", \"lockedOn\" } }`"}}}

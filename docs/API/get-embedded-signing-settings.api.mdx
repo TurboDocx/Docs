@@ -15,8 +15,6 @@ import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
 import ParamsDetails from "@theme/ParamsDetails";
 import RequestSchema from "@theme/RequestSchema";
 import StatusCodes from "@theme/StatusCodes";
-import OperationTabs from "@theme/OperationTabs";
-import TabItem from "@theme/TabItem";
 import Heading from "@theme/Heading";
 import Translate from "@docusaurus/Translate";
 
@@ -34,23 +32,21 @@ import Translate from "@docusaurus/Translate";
 
 Returns what your organization allows for embedded signing and identity verification, so your integration can check before it sends or requests a signing URL. It is read-only; an administrator changes these settings in TurboDocx.
 
-<ParamsDetails>
-  
-</ParamsDetails>
-
 <RequestSchema
   title={"Body"}
 >
   
 </RequestSchema>
 
+<ParamsDetails>
+  
+</ParamsDetails>
+
 <StatusCodes
   responses={{"200":{"description":"Your organization's embedded signing settings.","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"results":{"type":"object","properties":{"enabled":{"type":"boolean","description":"Embedded signing and identity verification are on."},"allowExternalIdv":{"type":"boolean","description":"You may verify signers with your own provider (`external_idv`)."},"allowIdentityOverride":{"type":"boolean","description":"A sender may issue a link that skips verification (`override`)."},"defaultChannel":{"type":"string","enum":["none","email","sms"],"description":"Passcode channel for recipients that do not set one. `none` means only when requested."},"allowChannelOverride":{"type":"boolean","description":"Whether a request may set a channel other than `defaultChannel`."},"allowedFrameAncestors":{"type":"array","description":"Origins allowed to show the signing page in an iframe. Empty denies all framing.","items":{"type":"string"}}}}}}}},"example":{"data":{"results":{"enabled":true,"allowExternalIdv":true,"allowIdentityOverride":false,"defaultChannel":"email","allowChannelOverride":false,"allowedFrameAncestors":["https://app.example.com"]}}}}}},"401":{"description":"Missing or invalid API key, or the organization ID header is missing or is not an organization the key belongs to. The response has no body."}}}
 >
   
 </StatusCodes>
-
-
 
 
       

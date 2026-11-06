@@ -8,6 +8,14 @@
   --api-delete: var(--openapi-code-red, #c53030);
 }
 
+// Site-wide rules that predate the API layout (guide pages rely on them).
+#__docusaurus_skipToContent_fallback > div > main > div > div > div > div > div {
+  max-width: none !important;
+}
+.tabs-container {
+  margin-top: 2em;
+}
+
 // Remove the doc max-width cap so the two API columns get the full content width.
 [class*="docs-doc-id-API/"] .theme-doc-markdown,
 [class*="docs-doc-id-API/"] .col--7 {
@@ -130,6 +138,26 @@
   &--put { background: var(--api-put); }
   &--patch { background: var(--api-patch); }
   &--delete { background: var(--api-delete); }
+}
+
+// Param anchors: a "#" link appears in the gutter on hover/focus.
+.api-param-anchor {
+  position: relative;
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+
+  > .api-param-anchor__link {
+    position: absolute;
+    left: -1.1rem;
+    top: 0.45rem;
+    font-size: 0.85rem;
+    opacity: 0;
+    text-decoration: none;
+  }
+  &:hover > .api-param-anchor__link,
+  > .api-param-anchor__link:focus,
+  &:target > .api-param-anchor__link {
+    opacity: 1;
+  }
 }
 
 // Sidebar: small lowercase method tag before each endpoint name.

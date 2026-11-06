@@ -136,6 +136,9 @@ paths:
                     Used in other parts of the API, this specifies if this variable can be used in
                     Rich Text Injection. For knowledgebase/folders, it is best practice to leave
                     this set to true
+                  enum:
+                    - true
+                    - false
               required:
                 - name
                 - placeholder
@@ -160,6 +163,38 @@ paths:
                       orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
                       createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                       createdOn: '2026-05-01T14:22:10.000Z'
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: object
+                        properties:
+                          variable:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              placeholder:
+                                type: string
+                              mimeType:
+                                type: string
+                              isGlobal:
+                                type: boolean
+                              templateFolderId:
+                                type: string
+                              allowRichTextInjection:
+                                type: boolean
+                              orgId:
+                                type: string
+                              createdBy:
+                                type: string
+                              createdOn:
+                                type: string
         '400':
           description: >-
             `placeholder` is not wrapped in `{ }`, or already exists in that folder or knowledge
@@ -190,6 +225,9 @@ paths:
           in: query
           schema:
             type: boolean
+            enum:
+              - true
+              - false
           example: 'true'
         - name: templateFolderId
           in: query
@@ -217,6 +255,43 @@ paths:
                       createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                       updatedOn: '2026-05-01T14:22:10.000Z'
                   totalRecords: 1
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            variableMapId:
+                              type: string
+                            name:
+                              type: string
+                            placeholder:
+                              type: string
+                            description:
+                              type: string
+                            mimeType:
+                              type: string
+                            text:
+                              type: string
+                            isGlobal:
+                              type: boolean
+                            templateFolderId:
+                              nullable: true
+                            allowRichTextInjection:
+                              type: boolean
+                            createdBy:
+                              type: string
+                            updatedOn:
+                              type: string
+                      totalRecords:
+                        type: integer
         '400':
           description: >-
             Both `isGlobal` and `templateFolderId` are set, or a query parameter fails validation.
@@ -278,6 +353,41 @@ paths:
                         allowRichTextInjection: false
                     fonts:
                       - name: Calibri
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: object
+                        properties:
+                          filetype:
+                            type: string
+                          vars:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                placeholder:
+                                  type: string
+                                name:
+                                  type: string
+                                mimeType:
+                                  type: string
+                                order:
+                                  type: integer
+                                count:
+                                  type: integer
+                                allowRichTextInjection:
+                                  type: boolean
+                          fonts:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
         '400':
           description: >-
             Your plan's template or storage limit is reached. Response body: `{ "message", "type",
@@ -346,6 +456,44 @@ paths:
                       projectspaceId: null
                       createdOn: '2026-05-01T14:22:10.000Z'
                       updatedOn: '2026-05-01T14:22:10.000Z'
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: object
+                        properties:
+                          template:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              description:
+                                type: string
+                              orgId:
+                                type: string
+                              createdBy:
+                                type: string
+                              isActive:
+                                type: boolean
+                              templateFolderId:
+                                nullable: true
+                              defaultFont:
+                                nullable: true
+                              fonts:
+                                nullable: true
+                              metadata:
+                                nullable: true
+                              projectspaceId:
+                                nullable: true
+                              createdOn:
+                                type: string
+                              updatedOn:
+                                type: string
         '400':
           description: >-
             Your plan's template or storage limit is reached. Response body: `{ "message", "type",
@@ -373,6 +521,9 @@ paths:
           in: query
           schema:
             type: boolean
+            enum:
+              - true
+              - false
           example: 'true'
         - name: TemplateID
           in: path
@@ -416,6 +567,72 @@ paths:
                         mimeType: text
                         order: 0
                         count: 1
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          isActive:
+                            type: boolean
+                          createdOn:
+                            type: string
+                          updatedOn:
+                            type: string
+                          createdBy:
+                            type: string
+                          firstName:
+                            type: string
+                          lastName:
+                            type: string
+                          email:
+                            type: string
+                          orgId:
+                            type: string
+                          templateFolderId:
+                            nullable: true
+                          defaultFont:
+                            type: string
+                          fonts:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                          metadata:
+                            type: object
+                            properties: {}
+                          templateFileType:
+                            type: string
+                          isTurboDocxProvided:
+                            type: boolean
+                          deliverableCount:
+                            type: integer
+                          variables:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                placeholder:
+                                  type: string
+                                name:
+                                  type: string
+                                mimeType:
+                                  type: string
+                                order:
+                                  type: integer
+                                count:
+                                  type: integer
         '400':
           description: >-
             The `TemplateID` path parameter is not a valid UUID. Response body: `{ "message",
@@ -472,6 +689,9 @@ paths:
                     Used in other parts of the API, this specifies if this variable can be used in
                     Rich Text Injection. For knowledgebase/folders, it is best practice to leave
                     this set to true
+                  enum:
+                    - true
+                    - false
                 isGlobal:
                   type: boolean
                   description: >-
@@ -479,6 +699,9 @@ paths:
                     Knowledgebase). If true, the variable is available across all templates and
                     templateFolderId should not be provided. This field is required if
                     templateFolderId is not provided
+                  enum:
+                    - true
+                    - false
         parameters:
           - name: authorization
             in: header
@@ -581,6 +804,28 @@ paths:
                   isGlobal: true
                   templateFolderId: null
                   updatedOn: '2026-05-02T09:00:00.000Z'
+              schema:
+                type: object
+                properties:
+                  variable:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      placeholder:
+                        type: string
+                      mimeType:
+                        type: string
+                      text:
+                        type: string
+                      isGlobal:
+                        type: boolean
+                      templateFolderId:
+                        nullable: true
+                      updatedOn:
+                        type: string
         '400':
           description: >-
             `mimeType` or `text` is missing, or both `isGlobal` and `templateFolderId` are set.
@@ -613,6 +858,12 @@ paths:
             application/json:
               example:
                 data: {}
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties: {}
         '400':
           description: >-
             `ids` is missing or not an array. Response body: `{ "message", "type":
@@ -657,6 +908,29 @@ paths:
                     createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                     createdOn: '2026-05-01T14:22:10.000Z'
                     updatedOn: '2026-05-01T14:22:10.000Z'
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          label:
+                            type: string
+                          isActive:
+                            type: boolean
+                          orgId:
+                            type: string
+                          createdBy:
+                            type: string
+                          createdOn:
+                            type: string
+                          updatedOn:
+                            type: string
         '400':
           description: >-
             `label` is missing or not between 1 and 255 characters. Response body: `{ "message",
@@ -696,6 +970,33 @@ paths:
                       createdOn: '2026-05-01T14:22:10.000Z'
                       updatedOn: '2026-05-01T14:22:10.000Z'
                   totalRecords: 1
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            label:
+                              type: string
+                            isActive:
+                              type: boolean
+                            orgId:
+                              type: string
+                            createdBy:
+                              type: string
+                            createdOn:
+                              type: string
+                            updatedOn:
+                              type: string
+                      totalRecords:
+                        type: integer
         '400':
           description: >-
             A query parameter fails validation. Response body: `{ "message", "type":
@@ -740,6 +1041,23 @@ paths:
                 createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                 createdOn: '2026-05-01T14:22:10.000Z'
                 updatedOn: '2026-05-02T09:00:00.000Z'
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  label:
+                    type: string
+                  isActive:
+                    type: boolean
+                  orgId:
+                    type: string
+                  createdBy:
+                    type: string
+                  createdOn:
+                    type: string
+                  updatedOn:
+                    type: string
         '400':
           description: >-
             `TagId` is not a valid UUID, or `label` fails validation. Response body: `{ "message",
@@ -767,6 +1085,12 @@ paths:
             application/json:
               example:
                 data: {}
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties: {}
         '400':
           description: >-
             `ids` is missing or not an array. Response body: `{ "message", "type":
@@ -848,6 +1172,12 @@ paths:
             application/json:
               example:
                 data: {}
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties: {}
         '400':
           description: >-
             The `id` path parameter is not a valid UUID. Response body: `{ "message", "type":
@@ -881,6 +1211,9 @@ paths:
           in: query
           schema:
             type: boolean
+            enum:
+              - true
+              - false
           example: 'true'
       responses:
         '200':
@@ -924,6 +1257,51 @@ paths:
                       templateCount: 5
                       deliverableCount: 0
                   totalRecords: 2
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            type:
+                              type: string
+                            isActive:
+                              type: boolean
+                            templateFolderId:
+                              nullable: true
+                            createdBy:
+                              type: string
+                            email:
+                              type: string
+                            deliverableCount:
+                              type: integer
+                            templateCount:
+                              type: integer
+                            fileSize:
+                              type: integer
+                            fileType:
+                              type: string
+                            createdOn:
+                              type: string
+                            updatedOn:
+                              type: string
+                            tags:
+                              type: array
+                              items:
+                                type: string
+                      totalRecords:
+                        type: integer
         '400':
           description: >-
             A query parameter fails validation (for example a non-numeric `limit`). Response body:
@@ -995,6 +1373,40 @@ paths:
                   updatedOn: '2026-05-01T14:22:10.000Z'
                   secretExists: true
                 message: Webhook created successfully. Save the secret - it won't be shown again.
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      orgId:
+                        type: string
+                      name:
+                        type: string
+                      urls:
+                        type: array
+                        items:
+                          type: string
+                      events:
+                        type: array
+                        items:
+                          type: string
+                      secret:
+                        type: string
+                      isActive:
+                        type: boolean
+                      createdBy:
+                        type: string
+                      createdOn:
+                        type: string
+                      updatedOn:
+                        type: string
+                      secretExists:
+                        type: boolean
+                  message:
+                    type: string
         '400':
           description: >-
             `name`, `urls`, or `events` is missing or invalid, or any URL is not HTTPS. Response
@@ -1011,10 +1423,6 @@ paths:
           description: >-
             A webhook named `signature` already exists in your organization. Response body: `{
             "message", "error": "WebhookNameTaken", "data": { "constraint", "orgId", "name" } }`
-          content:
-            application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
           content:
             application/json: {}
       x-codeSamples:
@@ -1203,10 +1611,6 @@ paths:
             "Webhook not found" }`
           content:
             application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
-          content:
-            application/json: {}
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -1301,6 +1705,9 @@ paths:
                   type: boolean
                   description: Enable or disable delivery without deleting the webhook.
                   example: true
+                  enum:
+                    - true
+                    - false
       responses:
         '200':
           description: Success
@@ -1372,10 +1779,6 @@ paths:
           description: >-
             Renaming to a name another active webhook already uses. Response body: `{ "message",
             "error": "WebhookNameTaken", "data": { "constraint", "orgId", "name" } }`
-        '429':
-          description: Too Many Requests — rate limit exceeded
-          content:
-            application/json: {}
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -1485,10 +1888,6 @@ paths:
           description: >-
             No webhook with that name exists in your organization. Response body: `{ "error":
             "Webhook not found" }`
-          content:
-            application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
           content:
             application/json: {}
       x-codeSamples:
@@ -1673,10 +2072,6 @@ paths:
           description: >-
             No webhook with that name exists in your organization. Response body: `{ "error":
             "Webhook not found" }`
-          content:
-            application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
           content:
             application/json: {}
       x-codeSamples:
@@ -1871,10 +2266,6 @@ paths:
             "Webhook not found" }`
           content:
             application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
-          content:
-            application/json: {}
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -2006,10 +2397,6 @@ paths:
             "Webhook not found" }`
           content:
             application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
-          content:
-            application/json: {}
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -2108,6 +2495,9 @@ paths:
           in: query
           schema:
             type: boolean
+            enum:
+              - true
+              - false
           description: Filter by delivery success.
           example: 'true'
         - name: httpStatus
@@ -2191,10 +2581,6 @@ paths:
           description: >-
             No webhook with that name exists in your organization. Response body: `{ "error":
             "Webhook not found" }`
-          content:
-            application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
           content:
             application/json: {}
       x-codeSamples:
@@ -2361,10 +2747,6 @@ paths:
           description: >-
             No webhook with that name exists, or `deliveryId` does not belong to it. Response body:
             `{ "error": "Webhook or delivery not found" }`
-          content:
-            application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
           content:
             application/json: {}
       x-codeSamples:
@@ -2562,10 +2944,6 @@ paths:
           description: >-
             No webhook with that name exists in your organization. Response body: `{ "error":
             "Webhook not found" }`
-          content:
-            application/json: {}
-        '429':
-          description: Too Many Requests — rate limit exceeded
           content:
             application/json: {}
       x-codeSamples:
@@ -2781,6 +3159,40 @@ paths:
                         value: 500
                         label: limit
                         key: limit
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                limit:
+                                  type: integer
+                                value:
+                                  type: integer
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -2944,6 +3356,9 @@ paths:
                         type: boolean
                         default: false
                         description: Set to `true` to skip this variable during generation.
+                        enum:
+                          - true
+                          - false
                       subvariables:
                         type: array
                         description: >-
@@ -3019,6 +3434,9 @@ paths:
                   type: boolean
                   default: false
                   description: Set to `true` to replace the document's fonts with `defaultFont`.
+                  enum:
+                    - true
+                    - false
                 defaultFont:
                   type: string
                   nullable: true
@@ -3171,6 +3589,40 @@ paths:
                     data:
                       explanation: Please upgrade your subscription to add additional Deliverables.
                       context: ''
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                limit:
+                                  type: integer
+                                value:
+                                  type: string
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -3186,6 +3638,13 @@ paths:
               example:
                 error: TemplateNotFound
                 message: Template with id 0b1099cf-d7b9-41a4-822b-51b68fd4885a not found
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
         '423':
           description: Someone is editing the template in TurboDocx. Retry once they have finished.
           content:
@@ -3197,6 +3656,22 @@ paths:
                   locked: true
                   lockedBy: f5e6d7c8-9a0b-4c1d-8e3f-4a5b6c7d8e9f
                   lockedOn: '2026-01-15T14:10:00.000Z'
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      locked:
+                        type: boolean
+                      lockedBy:
+                        type: string
+                      lockedOn:
+                        type: string
         '499':
           description: >-
             The client disconnected before generation finished. Any partly created deliverable is
@@ -3206,6 +3681,13 @@ paths:
               example:
                 error: Request cancelled
                 message: Deliverable generation was cancelled during processing
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  message:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -3447,6 +3929,38 @@ paths:
                         label: id
                         value: not-a-uuid
                         key: id
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                value:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -3638,6 +4152,40 @@ paths:
                         value: ab
                         label: name
                         key: name
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                limit:
+                                  type: integer
+                                value:
+                                  type: string
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -3784,6 +4332,38 @@ paths:
                         label: id
                         value: not-a-uuid
                         key: id
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                value:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -3896,6 +4476,20 @@ paths:
                 data:
                   explanation: Missing Entitlement for this feature.
                   context: ''
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      explanation:
+                        type: string
+                      context:
+                        type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -3914,6 +4508,20 @@ paths:
                 data:
                   explanation: There was an issue loading your file. Please contact support.
                   context: ''
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      explanation:
+                        type: string
+                      context:
+                        type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -4026,6 +4634,20 @@ paths:
                 data:
                   explanation: There was an issue loading your file. Please contact support.
                   context: ''
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      explanation:
+                        type: string
+                      context:
+                        type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -4250,6 +4872,9 @@ paths:
                             description: >-
                               For `override`: must be `true` to acknowledge that verification is
                               skipped.
+                            enum:
+                              - true
+                              - false
                           reason:
                             type: string
                             description: 'For `override`: why verification is skipped.'
@@ -4297,6 +4922,9 @@ paths:
                           Whether the signer must fill the field. Defaults to `true`; `null` counts
                           as `true`. Cannot be `false` on `signature` or `initial` fields, and must
                           be a JSON boolean.
+                        enum:
+                          - true
+                          - false
                       defaultValue:
                         type: string
                         maxLength: 600
@@ -4307,9 +4935,15 @@ paths:
                       isReadonly:
                         type: boolean
                         description: Make the field read-only for the signer. Use with `defaultValue`.
+                        enum:
+                          - true
+                          - false
                       isMultiline:
                         type: boolean
                         description: Allow multiple lines in a text field.
+                        enum:
+                          - true
+                          - false
                       backgroundColor:
                         type: string
                         description: >-
@@ -4400,10 +5034,16 @@ paths:
                             type: boolean
                             default: false
                             description: Match the anchor case-sensitively.
+                            enum:
+                              - true
+                              - false
                           useRegex:
                             type: boolean
                             default: false
                             description: Treat the anchor as a regular expression.
+                            enum:
+                              - true
+                              - false
                           alignment:
                             type: string
                             enum:
@@ -4865,7 +5505,7 @@ paths:
                 documentId: 4a20eca5-7944-430c-97d5-fcce4be24296
                 status: review_ready
                 previewUrl: >-
-                  https://www.turbodocx.com/e-signature/assign-fields/4a20eca5-7944-430c-97d5-fcce4be24296
+                  https://app.turbodocx.com/e-signature/assign-fields/4a20eca5-7944-430c-97d5-fcce4be24296
                 recipients:
                   - id: 5f673f37-9912-4e72-85aa-8f3649760f6b
                     name: John Smith
@@ -4918,6 +5558,36 @@ paths:
                       fields:
                         - reminderDelay
                         - expireAfter
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -4944,6 +5614,13 @@ paths:
                     type: OtpNotEntitled
                     error: SMS verification requires a Pro or Enterprise plan.
                     code: OtpNotEntitled
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
         '403':
           description: >-
             The key's role cannot send documents (viewers cannot; no body), or the organization has
@@ -4959,6 +5636,17 @@ paths:
                   This organization does not allow changing the identity-verification method. Omit
                   otpChannel or set it to 'email'.
                 code: OtpOverrideNotAllowed
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
         '409':
           description: >-
             A recipient resolves to SMS verification but your organization has no SMS provider
@@ -4970,6 +5658,17 @@ paths:
                 type: SmsProviderNotConfigured
                 error: SMS verification is not configured for this organization.
                 code: SmsProviderNotConfigured
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
         '500':
           description: An unexpected server error. Nothing is wrong with your request.
           content:
@@ -4977,6 +5676,13 @@ paths:
               example:
                 error: An unexpected error occurred while preparing the document for review
                 code: UnexpectedError
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -5276,6 +5982,9 @@ paths:
                             description: >-
                               For `override`: must be `true` to acknowledge that verification is
                               skipped.
+                            enum:
+                              - true
+                              - false
                           reason:
                             type: string
                             description: 'For `override`: why verification is skipped.'
@@ -5323,6 +6032,9 @@ paths:
                           Whether the signer must fill the field. Defaults to `true`; `null` counts
                           as `true`. Cannot be `false` on `signature` or `initial` fields, and must
                           be a JSON boolean.
+                        enum:
+                          - true
+                          - false
                       defaultValue:
                         type: string
                         maxLength: 600
@@ -5333,9 +6045,15 @@ paths:
                       isReadonly:
                         type: boolean
                         description: Make the field read-only for the signer. Use with `defaultValue`.
+                        enum:
+                          - true
+                          - false
                       isMultiline:
                         type: boolean
                         description: Allow multiple lines in a text field.
+                        enum:
+                          - true
+                          - false
                       backgroundColor:
                         type: string
                         description: >-
@@ -5426,10 +6144,16 @@ paths:
                             type: boolean
                             default: false
                             description: Match the anchor case-sensitively.
+                            enum:
+                              - true
+                              - false
                           useRegex:
                             type: boolean
                             default: false
                             description: Treat the anchor as a regular expression.
+                            enum:
+                              - true
+                              - false
                           alignment:
                             type: string
                             enum:
@@ -5958,6 +6682,36 @@ paths:
                       fields:
                         - reminderDelay
                         - expireAfter
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -5984,6 +6738,13 @@ paths:
                     type: OtpNotEntitled
                     error: SMS verification requires a Pro or Enterprise plan.
                     code: OtpNotEntitled
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
         '403':
           description: >-
             The key's role cannot send documents (viewers cannot; no body), or the organization has
@@ -5999,6 +6760,17 @@ paths:
                   This organization does not allow changing the identity-verification method. Omit
                   otpChannel or set it to 'email'.
                 code: OtpOverrideNotAllowed
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
         '409':
           description: >-
             A recipient resolves to SMS verification but your organization has no SMS provider
@@ -6010,6 +6782,17 @@ paths:
                 type: SmsProviderNotConfigured
                 error: SMS verification is not configured for this organization.
                 code: SmsProviderNotConfigured
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
         '500':
           description: An unexpected server error. Nothing is wrong with your request.
           content:
@@ -6017,6 +6800,13 @@ paths:
               example:
                 error: An unexpected error occurred while preparing the document for signing
                 code: UnexpectedError
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -6355,6 +7145,11 @@ paths:
             application/json:
               example:
                 error: Invalid startDate format. Expected ISO 8601 date string.
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -6365,6 +7160,11 @@ paths:
             application/json:
               example:
                 error: Failed to fetch signature documents
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /turbosign/documents/{documentId}/status:
     get:
       tags:
@@ -6423,12 +7223,22 @@ paths:
             application/json:
               example:
                 error: Document not found
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
             application/json:
               example:
                 error: Failed to fetch document status
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -6722,6 +7532,13 @@ paths:
               example:
                 message: Document not found
                 type: DocumentNotFound
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -6882,6 +7699,36 @@ paths:
                   value:
                     error: Document has been voided and cannot be voided again
                     code: DocumentVoided
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -6894,12 +7741,22 @@ paths:
             application/json:
               example:
                 error: Document not found
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
             application/json:
               example:
                 error: Failed to void document
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -7062,6 +7919,36 @@ paths:
                     error: Some recipients are not eligible for email resend at this time
                     invalidRecipientIds:
                       - 7a891c23-4d56-4e78-9abc-def012345678
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -7074,6 +7961,11 @@ paths:
             application/json:
               example:
                 error: Document not found
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '409':
           description: >-
             The document is not out for signature (for example it is still in review, voided, or
@@ -7101,12 +7993,26 @@ paths:
                     data:
                       recipientIds:
                         - 5f673f37-9912-4e72-85aa-8f3649760f6b
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
+                  status:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
             application/json:
               example:
                 error: Failed to resend signature request emails
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -7293,6 +8199,41 @@ paths:
                     error: Some recipients are not eligible for a reminder at this time
                     invalidRecipientIds:
                       - 7a891c23-4d56-4e78-9abc-def012345678
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
+                                limit:
+                                  type: integer
+                                value:
+                                  type: array
+                                  items: {}
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -7305,6 +8246,11 @@ paths:
             application/json:
               example:
                 error: Document not found
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '409':
           description: >-
             The document is not out for signature (for example voided or expired), or the recipients
@@ -7329,12 +8275,26 @@ paths:
                       These recipients sign through a single-use signing URL, so no reminder email
                       can be sent. Use the signing-url endpoint to mint one.
                     code: RecipientRequiresSingleUseUrl
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
+                  status:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
             application/json:
               example:
                 error: Failed to send signature reminders
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -7463,6 +8423,11 @@ paths:
                   summary: Voided
                   value:
                     error: Document has been voided and cannot be downloaded
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -7473,12 +8438,22 @@ paths:
             application/json:
               example:
                 error: Document not found
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
             application/json:
               example:
                 error: Failed to download document
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -7692,12 +8667,22 @@ paths:
             application/json:
               example:
                 error: Document not found
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
             application/json:
               example:
                 error: Failed to get audit trail
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -7857,6 +8842,38 @@ paths:
                         label: templateId
                         key: templateId
                         value: abc
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
+                                value:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -7874,12 +8891,28 @@ paths:
                 type: SignatureSetupNotFound
                 error: No saved signature setup found for this template
                 code: SignatureSetupNotFound
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
             application/json:
               example:
                 error: Failed to read the template's signature setup
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -8058,6 +9091,9 @@ paths:
                       description: >-
                         Set to `true` to accept a `subjectEmail` that differs from the recipient's
                         email.
+                      enum:
+                        - true
+                        - false
             example:
               recipientId: 5f673f37-9912-4e72-85aa-8f3649760f6b
               returnUrl: https://app.example.com/signed
@@ -8146,6 +9182,17 @@ paths:
                             label: senderName
                             key: senderName
                             value: Jane
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -8161,6 +9208,17 @@ paths:
                 type: EmbeddedSigningNotEnabled
                 error: Embedded signing is not enabled for this organization
                 code: EmbeddedSigningNotEnabled
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
         '404':
           description: The document does not exist in your organization, or no recipient matches the selector.
           content:
@@ -8178,6 +9236,13 @@ paths:
                     type: RecipientNotFound
                     error: Recipient not found
                     code: RecipientNotFound
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
         '409':
           description: >-
             The document can no longer be signed (for example it is voided, expired or not sent
@@ -8189,6 +9254,17 @@ paths:
                 type: DocumentNotSignable
                 error: This document can no longer be signed
                 code: DocumentNotSignable
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  error:
+                    type: string
+                  code:
+                    type: string
       x-codeSamples:
         - lang: NodeJs
           label: SDK
@@ -8608,6 +9684,9 @@ paths:
                                   description: >-
                                     For `override`: must be `true` to acknowledge that verification
                                     is skipped.
+                                  enum:
+                                    - true
+                                    - false
                                 reason:
                                   type: string
                                   description: 'For `override`: why verification is skipped.'
@@ -8655,6 +9734,9 @@ paths:
                                 Whether the signer must fill the field. Defaults to `true`; `null`
                                 counts as `true`. Cannot be `false` on `signature` or `initial`
                                 fields, and must be a JSON boolean.
+                              enum:
+                                - true
+                                - false
                             defaultValue:
                               type: string
                               maxLength: 600
@@ -8665,9 +9747,15 @@ paths:
                             isReadonly:
                               type: boolean
                               description: Make the field read-only for the signer. Use with `defaultValue`.
+                              enum:
+                                - true
+                                - false
                             isMultiline:
                               type: boolean
                               description: Allow multiple lines in a text field.
+                              enum:
+                                - true
+                                - false
                             backgroundColor:
                               type: string
                               description: >-
@@ -8762,10 +9850,16 @@ paths:
                                   type: boolean
                                   default: false
                                   description: Match the anchor case-sensitively.
+                                  enum:
+                                    - true
+                                    - false
                                 useRegex:
                                   type: boolean
                                   default: false
                                   description: Treat the anchor as a regular expression.
+                                  enum:
+                                    - true
+                                    - false
                                 alignment:
                                   type: string
                                   enum:
@@ -8960,6 +10054,36 @@ paths:
                     data:
                       explanation: Missing Entitlement for this feature.
                       context: ''
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -8975,6 +10099,13 @@ paths:
                   Insufficient signature credits. Required: 50, Available: 20. Please upgrade your
                   plan.
                 type: InsufficientBulkCredits
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
@@ -8982,6 +10113,13 @@ paths:
               example:
                 error: An unexpected error occurred while ingesting bulk batch
                 code: UnexpectedError
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
   /turbosign/bulk/batches:
     get:
       tags:
@@ -9157,6 +10295,38 @@ paths:
                         label: status
                         key: status
                         value: pending
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
+                                value:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -9168,6 +10338,13 @@ paths:
               example:
                 error: An unexpected error occurred while listing batches
                 code: UnexpectedError
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
   /turbosign/bulk/batch/{batchId}:
     get:
       tags:
@@ -9258,6 +10435,13 @@ paths:
               example:
                 error: Batch not found or access denied
                 code: BatchNotFound
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
@@ -9265,6 +10449,13 @@ paths:
               example:
                 error: An unexpected error occurred while fetching batch details
                 code: UnexpectedError
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
   /turbosign/bulk/batch/{batchId}/jobs:
     get:
       tags:
@@ -9469,6 +10660,38 @@ paths:
                         label: status
                         key: status
                         value: failed
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            message:
+                              type: string
+                            path:
+                              type: array
+                              items:
+                                type: string
+                            type:
+                              type: string
+                            context:
+                              type: object
+                              properties:
+                                label:
+                                  type: string
+                                key:
+                                  type: string
+                                value:
+                                  type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -9480,6 +10703,13 @@ paths:
               example:
                 error: Batch not found or access denied
                 code: BatchNotFound
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
@@ -9487,6 +10717,13 @@ paths:
               example:
                 error: An unexpected error occurred while listing batch jobs
                 code: UnexpectedError
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
   /turbosign/bulk/batch/{batchId}/cancel:
     post:
       tags:
@@ -9544,6 +10781,13 @@ paths:
                   Cannot cancel batch with status COMPLETED. Only PENDING or PROCESSING batches can
                   be cancelled.
                 code: BatchNotCancellable
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
         '401':
           description: >-
             Missing or invalid API key, or the organization ID header is missing or is not an
@@ -9557,6 +10801,13 @@ paths:
               example:
                 error: Batch not found or access denied
                 code: BatchNotFound
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
         '500':
           description: An unexpected server error.
           content:
@@ -9564,6 +10815,13 @@ paths:
               example:
                 error: An unexpected error occurred while cancelling batch
                 code: UnexpectedError
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  code:
+                    type: string
   /organization:
     get:
       tags:
