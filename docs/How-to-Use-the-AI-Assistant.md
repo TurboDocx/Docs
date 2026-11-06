@@ -2,7 +2,7 @@
 title: How to Use the AI Assistant
 sidebar_label: AI Assistant
 sidebar_position: 1.5
-description: Use the TurboDocx AI Assistant on your home page to ask questions, attach Word or PDF files, turn a document into a template, and approve anything it wants to send.
+description: Use the TurboDocx AI Assistant on your home page to ask questions, attach Word or PDF files, turn a document into a template, fill a document from a template and review every field, and approve anything it wants to send.
 keywords:
   - turbodocx ai assistant
   - ai assistant
@@ -11,6 +11,10 @@ keywords:
   - attach a document
   - turn a document into a template
   - save as template
+  - fill a template
+  - review card
+  - where values come from
+  - customer logo
   - approve before sending
   - approval card
   - conversation history
@@ -32,6 +36,7 @@ You stay in control. **Nothing is sent and nothing is changed until you approve 
 - 🧠 **See how the assistant worked** by opening its activity rows
 - 📎 **Attach a Word or PDF file** to your message
 - 📄 **Turn a document into a template**, and update it later
+- 📝 **Fill a document from a template**, and check where every value came from before it is generated
 - ✅ **Approve or decline** anything the assistant wants to send
 - 🗂️ **Manage your conversations**: start a new one, rename it, or delete it
 - ✏️ **Stay within the message length limit**
@@ -146,7 +151,85 @@ If you ask for a change after saving, you don't get a second copy of the templat
 
 ![The Update the saved template card with the Update template button highlighted](/img/how_to_use_the_ai_assistant/update_template_card.png)
 
-## Step 6: Approve or decline what the assistant wants to send
+## Step 6: Fill a document from a template and review it
+
+Ask the assistant for a document in your own words, for example *Fill out our statement of work for Harbor Point Properties and get it signed.* It picks the template and fills in what it can. If anything is missing, estimated or worth a second look, it shows you a **review card** first, and nothing is generated until you click **Generate**.
+
+<!-- Screenshot to capture: the review card for a statement of work, showing the Needs you and Check these groups and the Generate button. -->
+
+### Where the values come from
+
+The assistant fills each field from the first place that has it:
+
+1. **What you said in the conversation.**
+2. **Your knowledge base**, for details about your own organization, such as your legal name or your standard terms.
+3. **Your earlier documents.** It looks at documents made from the same template first. If you name a document, such as *same as the Acme statement of work*, that one comes first. A customer's own details, such as their address, only come from earlier documents for **the same customer**. Details of the deal itself, such as the scope and the price, only come from a document you named.
+4. **A safe estimate.** The assistant only estimates the document's own date (today), a version number (1), or a length of time such as how long a project runs. Each estimate is marked **Estimate**, with its reason.
+
+Anything it can't find, it asks you for, all at once on the card. When nothing is missing or estimated, it makes the document straight away and shows it in the preview.
+
+:::note What the assistant never makes up
+The assistant never makes up an amount of money, a legal name or a deal date (a start, end or sign-by date). Each one comes from what you said, your knowledge base, or a document or record you pointed to. Otherwise the card asks you for it. If you say a date in words, such as *starting December 1* or *sign by Friday*, it writes the calendar date and marks it **From you**.
+:::
+
+### Read the card
+
+The top of the card shows the template's name, how long the card stays open (**Expires in 2 hours**), and a count such as **8 fields · 6 filled · 2 need you**.
+
+The fields are in three groups:
+
+- **Needs you**: fields the assistant couldn't fill. Each one says why.
+- **Check these**: estimates, and values it changed to fit the field. Each one says why.
+- **Filled from your records**: everything else. This group is folded shut. Click it to open it.
+
+Every field has a small label that tells you where its value came from:
+
+| Label | Where the value came from |
+| --- | --- |
+| **From you** | Something you said in the conversation, or a value you typed on the card |
+| **Knowledge base** | Your knowledge base |
+| **From "*document name*"** | An earlier document, or a record such as a quote or a contact |
+| **Estimate** | The assistant's estimate, with its reason |
+| **Converted to plain text** | Formatted text from your knowledge base, turned into plain text because the field doesn't take formatting |
+| **Needs you** | Nothing was found, with the reason |
+
+### Fix or fill in a field
+
+1. Click the field and type the value. The fields work the same way as when you [generate a document yourself](./TurboDocx-Templating/How-to-Create-a-Deliverable.md). The **⋯** menu next to a field has the same options, such as **Lookup** to pick a value from your knowledge base, a date picker, and the **Text Editor** and **Image** for a field that takes formatting.
+2. For a field with a fixed list of choices, pick one from the list.
+
+When you change a field, its label changes to **From you**. A field that says **Can't be edited here** can only be changed by asking the assistant.
+
+### Add the customer's logo
+
+If the template has a place for the customer's logo, the card shows a **Customer logo** row.
+
+1. Click **Add website**.
+2. Type the customer's website, such as `example.com`, and press **Enter**. The card shows the logo it found.
+3. To leave the logo out, click **Remove logo**.
+
+If the assistant found a logo by itself, the row says which company name it was guessed from and is marked **Estimate**. Check it before you generate.
+
+Your own logo comes from your organization's branding. If you haven't set one, click **Set it in Branding settings** on the card. See [Brand Identity](./TurboDocx-Templating/Brand-Identity.md).
+
+### Generate the document
+
+1. Fill in every field under **Needs you**. Until you do, **Generate** stays greyed out and the card says how many fields still need you. Click **Go to** *field name* to jump to the first one.
+2. When the card says **Ready to generate**, click **Generate**.
+
+The card shrinks to a single **Generated** line, with a link to the new document. Click **Values used** under it to see what went into the document.
+
+<!-- Screenshot to capture: the card after Generate, with the Generated line and the Values used list. -->
+
+### Ask for changes instead
+
+Click **Ask for changes** when you'd rather explain in words. Nothing is generated, the card shrinks to **Not generated**, and your cursor moves to the text box. Type what to change, and the assistant shows a new card.
+
+:::tip
+You can also answer in the conversation while a card is open, for example *The start date is March 2.* The assistant shows a new card with your answer, and the older card says **Replaced by a newer draft**.
+:::
+
+## Step 7: Approve or decline what the assistant wants to send
 
 The assistant never sends an email, a signature request or a quote on its own, and it never voids a document on its own. When you ask it to do something like that, it gets everything ready and then shows you an **approval card**.
 
@@ -163,7 +246,7 @@ The card then shrinks to a single line that records your decision, such as **Sen
 Declining does not delete anything. In the example above, the signature request stays prepared and waiting, so you can change it or send it later.
 :::
 
-## Step 7: Manage your conversations
+## Step 8: Manage your conversations
 
 Every conversation is saved, so you can come back to it later.
 
@@ -218,6 +301,12 @@ Have a long document? Attach it as a file instead of pasting it in. Attached fil
 **The send button is greyed out.** Either the text box is empty, a file is still uploading, or the message is over 8,000 characters. Point at the button to see which.
 
 **The assistant said it would send something, but nothing was sent.** That is expected. Look for the approval card in the conversation and click **Send now**.
+
+**Generate is greyed out on the review card.** A field under **Needs you** is still empty. Click **Go to** *field name* on the card to jump to it.
+
+**The review card says Approval expired.** A review card stays open for 2 hours. Ask the assistant again, and it shows a new card.
+
+**The assistant asked for a price or a start date I've used before.** That is expected. The assistant only reuses the price, the scope or the dates of an earlier document when you name that document, for example *same as the Acme statement of work*.
 
 ## What's Next
 
