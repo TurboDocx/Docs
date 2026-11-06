@@ -1,0 +1,67 @@
+---
+id: create-embedded-signing-url
+title: "Create Embedded Signing URL"
+description: "Returns a signing URL for one signer of a sent document, to open, redirect to or show in an iframe in your app. Request it when the signer is ready and never store it; for external identity verification, pass your provider's result in `identityAssertion`."
+sidebar_label: "Create Embedded Signing URL"
+hide_title: true
+hide_table_of_contents: true
+api: eJztW+lyGzmSfhVseWJFOooUJeuw2ePpkSW1zbZb0uronh6XgwSrkiRGVUA1gBLFVShiX2Nfb59kIhN18pDU/r36Y4lMIBOJLxN5+cGzfGq8/lfvNBlDFEHErsRUCjn1vvleBCbUIrVCSa/vXYLNtDSMM+NI2M3lFzZRmikJ9Blopib4PUjLIhVmCUjrM6uYSkH6TEMkNISWPtHMzNScCcm4ZGKieQL4x0JlmvE07bJL+CMDY5mwbD4Dyeys5CIM08CjBeMyYhLuQDNjlQYm7A8kEdxb0JLHTEQgrbALdgdaTETI8TA+S7kxjlWq1Z2IQG/hliaLLQoxKpYdGQMal4y6nu+lHKW0oFFjD57kCXh9rzjoIPJ8T6CmUm5nnu9p+CMTGiKvb3UGy+q8zo/Dbaah1BYbnCAnE84g4V7/wbOLFJkYq/FSfG+idMKt1/eyTETe4+M3xweM/aCiBa5YZhsqaUFa/IqnaZzrYPtfBsV4WGWlxv+C0HrL8l6BjBjc89DGC7pxNWEjDaFIBR1+hFc6KhQ/iEZddiNvpZpLdgsLw7gGpgG3hoiUqVWKugXjhC43ev7U61RZbrBl2HWmx+pEhfekzUffq6Rat3nC77+AnNqZ19/dP1i3ef1YCBtmwDLlIFkyJk6ajORGx0+fQouVQ4xm1qZmREZVg7rOrc4qxicWge6Mr8vOE2EtmqGwLIyBa+MMESwDrmMBmiRagfLzV32ZI4hMiVcnZJlBfqU2hiK6G/VX7KhuaoiS6jTdhlV89YpFnu/VF5EluQ8gOkL5TEaSniZcxOiZmuApt1l3uUIWl7vTvOpeb/ncv2TGsoTbcNa82S3DRgWPESl1Sdo/xXcVYr8vKXBwQpq3M9FUZped8nDGQi7ZGFhmIGJKhlCTiNT1FPIibqFjRQIrl/7bko+d84I5RKw1uDpnbw96O21i1riOp9gBUSyzonUFMkoeKWiDZ3ziFmg7kiABO1NrFQ8ySxBbIhoWThX9cvXXMBZ3IMEYz/duxxyl45aPuUGdGKM831N2Bnr1Bfyk5ps0VBPqBOwGtTyNvtLq6LUbuc1G+NaNSB6HPG5MprkM4QvcwXNc9no1ZJzRc/WcVOgtEYcyhJd5scbyvbeb3Fos5C06serKcwehIVTa6U/dgdYiAsLHL4gA5FiJMFYqBi4JTxOexdbrT3hsVp7WK6AQY4Tv34g8ZxhCahlnozpyR8zOuGWRmExAGzbRKtmIOPzBd4QnaQwrD5a3Pzk4fDN5c9h5925nt7MHh7udt/ucd95O3hzsvTs86E0Oxl7jdfBIL/3tbYx18n27oUq2CVyR5xhqMKmSxrm53V4P/1kfRuTxGHrY737wm14VreJ5Khc0mecJsxegiVScCg3mT7gxmcUxH+OtrAuzjsYqs2wi7oAlQmYWTP6OCmMyyF84fNZi6GQGUIc/MLK3uTBAeCgcB8IBpVtQpINsR/mb/ydil2ejkeZxag/4rzWr+UVFa225cH7Kpl7FCN9przIvdGwrXFKQkZDT4xmEt/Xb5FrzxYoHv+DGhCoCZiykdZ+YoPOmaKTLTpPULlyCgPpkiYrAIECFhcQ8JT5Z3dAdwiSGfvv2mP80zLAAaQ2GWcO85vN512I8GKnwngwMOmXYvQ2Y9Wzv8d0ehHy/c/hub6+z96YXdt4dRvudSRjC3hh293bfHfxoMvuej8Od3TdeA6Xebm/3oNPb6ezsX+/0+nu9fq/X7fV6//T873MSdXh4YWasSkAPHd/NWKhud+Uuv34rFLe3yYOMVbTAl0bIOx6LyMeYMlJgmFSWYZ7TiPyrgLA1uix+v4IYQqv0wG0xavuYHuT+jp4x3IuuhbVGOdVlSdD2GYU8UKVsvIhYcXEiDAWfSrMJFzGmoSGe7wUOL4cLgcPkUtLvWZJwvfD63pnKXUDtaCWl793xOCO0JWAMn6K2L1y0tpwQ1S6c1dJQCmhzsG9SGN681ijZ92weOhBs3Bxvn37jRQpQnb6Wpq0/7PUMNFC4g6k6+c1iLzmlO0P8VEf8tWR0SifySzOlE7rsudo+8AzICDQGKIFXIIXHsZpDRGk3Bhdfa1TowRqvTTdzZyjAcE9giPkYQ6T6Qt/DUy59lB/Z+5lLwJT6sbKXnVV7+aVCYm4u7OhigNorIaz0lEvx3y7AGZywGfDIlS1qMC7OKZvkuP4WFmwMsZJTTPy6zCW4LhRgM44LSeX0/Oz13qw36ltYYFVDxVDyihIhhbGaW/TKmqGytBhn+Gcr39RZIiV1DcEcX8vQYinzYFDUjIoAZNmC0eM3QyrMWgxr/Xx1fuaYvdx+m5g8XeadHxEkPmtRlUDVz1BBtFieV7vOlD11C2tm+L0sclvczKIA1976eytrQaUHhnthbFkdq7Oju5KqpmDKnMC4Rzn3An/SSZZ5U8NNnBRioUQTlclovbdYS5ervfjuTNmf6JvHevzU5Ff6sucYridcdrcly+qC1y9cdqU1WYuLe/fMxWGGLhVDAwaNuboL6lnL1SZJ0/jEYn6vRASR7yJLiNx1WldCXYBt+0v2g1bIY1f9dLsSBNxmZJ4zEJqM9HtN6xox/dxZ1t4pQp2iykrHL90s1/q6zXK133eQ5qqA6Vf075geemcqgp8xmy/8/dXJZwwcVaZD3FMkqdKWPbi6IG7LHl22t/X3MjTcNtHt1g+BDGRJ1Q2VnIhppqH1EEjGeCo+w6KPlZoQjOmCvOte31x+OD85P/7H8OhiMPx8+ruPlEpPB9EmwvPLj8PBCdG5V4iS0T7bcn/9vZYMbtWo8K3qsy2qFR2rJOVygV8/tkno7W2GMfmLQ4ZAhkoa69Ly94zPubCsdnIN3ELuuW503Nr6/fzmcnhyfnzzy+nZ9XBwsuUzUkqNA0qHVJenx4OLQUHmiPIwr8+2isB8OecVctoJFX5koTwYCqli6MZq2kJRu5mOfRK6W4bgSOc9+iUcLhZ2Rn74aThws5ChUIHM/1YG9eiKAAUohia6Zfn3pXI2YQQPSiAZ3sLivaJrF1rJr4G3gpLA++Y7eqWnQxFtIndYqagdFIaUH70v4qY6YgKvSYmx+/vAq6OGSNoBnYOUwCKYsIQL2Wr33eJXT4NpKBpoGorILXsSTMP8koeZjnNd4U/gLSOrPAL+1Hm+z2nr+FoiRpghg/eB9xKclavb7p9UC2kJaF8DzCNR8Sz/s8Rb4H2ra0+ors5ky+mvvQTFTxebcfjXH9NZGsi8Hs6Gw5PB5XDIumxr+w5kpPQ2z6yKFY+66Sx1vgkrFGV3IwhKHf+w8tUx4TIIPlmbHseoQffJKuX1IgUTBHm7zQTB8ZLx5980nWO/XyFfwpwt86nMgXzmFCzIu9bWiiVstdmPfYbliMog0JWsLnC2sEL/Mh/6jBdtf68X/UuO+bpeXuI7UWUb9Jxr7kWO9ftcK50WwpliJH7nb5mOWZcFXhDIwFtyp5fZeLEZxAV6A6/hNAOvBAuC7Cq67fc3+czcY/bZ6dmvT/lK5ylXyZo+su4h++wJF1lzkEjX9JC5g/wOP1jHw7qjr/eFG71gnVefbXaAletDqpf5PjpkmlnDGh6vef0f1ebLT3l4y6dAbweqK38pW4EMbFAk4gQFG3iTpPw1VtPiV2UcVAJb4ocF3lTYWTYmsUtFbl+dfN7OOZrtqerkMKOLmmQyzJ8wDEsCG9p71n/Pchm6H3h4O9UYxbec77Yh+SqfgdZIWJUIz2Du/Nhvws5yX1Z9W3dxxCiwRxcDcnH0o0z3o/Nca5Hc9t2acz0dnORLNqwpYF0suar7uY24riidp1tBNtE8ohKsmNDp/+M9kyJm+WliNe3+xC2PW6A1kT06hW1vM+yrLNlCmSUNTtAUTgvXeIJLEFalhp3Cu5UpNN3f5ZdWaO/99ZbA/rN2A0vLcq+Zi1+TZ7O5OELym5df+hSEvDha+A7l2UliuxcYWsTSRbE3l1/agXxES/tW9TK9VBlb1ru8bTozCrFd5E9m+6GaNnksBcSKt+8Z0HfFaEq21GISzRr4aj1fqygL6Q+UyECYaWEXtNcYuAZ9lFER7pvv0QNNVeUa5RU2lVz1oE5flvhRlGKuhVp5RLQiB2G1Gt/I62qsZSzX1rC5sDM2uj75RwfrxZQjc8NGyEvpvCLSZx9ob/bXW1j8zXVocpGrpgZFJcW4jqvOYevFDfTcdzRPRYTK6ig97ayZOFmSc6ne16WyBubYl9Vozumm3uGbCX+7PznY6+wf7hx29vYPdjvjN5Owsxu+O3gzOTjgE36w3BYoOyb1jmL54dqRj2pIoiJcHmNY/saNE2CHY6/TO+zsvrve2e/v7/R333Z7hzv/XB7M6HuZafokr4buZkO+2SuvGC/3t1dFcn3sWtOo3q6uPt7QTKaGMV6PkBNFkBA2pqpHA3VFHaKo6S3NSkAcqgSKfvYTS7F2KwxDF6JhBtJgI3KaYXUf6yKQF4asKuY/WITnxsZpDncex66oKl0j0fXM81EBq5iQFjQPraNuipPG3OIq3HyqeYLLQx7Hiy769N9mQH25hcq2NLBYqVuq5yuGiUfCbb2ihV6X6o0Jl/jmUyXSQoIswLgalLQw1biskmAC1GjDzpJV5XBfXA7iIe84ZhMhI5JdAlZMuF4wkFGqhLQGp/WKuTufJv6KWiXDvgQd5dUr9vr1R3DzUOQsIHJqfv0av/8AExwPjMQd1XFlfnEmhRANwBTDKEcXA5+BNDiSR8MBOOw143fA1NhyQVfVkPIoxN/YtboFSbIRMdKEStOsYwqaiv4qH+JyC6ivDIYuUYOLqAwd5TNA6hTV2JscLRCLSOVF4VS5DnWCpeE0G8cijBc5BzGOAWfuuGEmC2foJz8K+ykb+/lL3DGINiyp+Qxs2GWvX2MNE30peo98OgP5nS91MwQ23+64Flido3kzbl2VUilbaDJUMdae0QTcFbx6xT5w12DHP4/imKwlH140OA2axRHWBBMelaY1zpcU5hGxLFV5Hbx4HTRMXU/D2dsidRinJiaCGuPbW6BSfR9Zj0Yjhg+Bs+hAbnwmkZiNRqNc/KZqGgkO6mSuNNkP9itxVgDF+wwLNonVPAfuJG+Q4OQCG4OQU5/NqbqrkgTnK6eaj8dFU62ACt0/TXtRdYrOjo52yyCJyqQlZMU4B4ummevGdNnvKqOSK5kXl2XpGbs5OMukMM3OrbLOTLg21OhDnAHVREZsouIINCH0WiF7Zy81iPrlpxOFvTs8RoaRqNur8UizT/TmjtZdx/rXnCK5o+Pj06ur4fX559Oz5uUs3w6j+nPZNEOiwQRV0DCqqiGHfi1GV1nU04tGODqAuYhjvCRA580l+3R9fcH2ejvsRvJcWGfGrkGHNtUtxHr9+gywhYTPxQzi9EdnDQPJQoR26V/ICtBJ+GyK0Ncqm87oKi125wSPDWu1iikqujK0Bxqkxn1LV50360BDu91l50hmhKWdfjr6L5YiQqqNXHMhhjsuLX3XbpPo5/QsEHiozc5wigb3QKRmUrjBjiyh9oSG//uf/0WnMFUqYuEMn+8l4plrHnNp5qDJDhYq67JfS9nKZ8/tWxNx6Zt2Gz/UcCcAEZyKEI3L3NY1iLaGMyjSWQyNnzjvOipMgsdGVc8bTgFFEeXBzpbEWHMt8GGjMZfixXFbu3GW0m0zCRC5xzjht0ATsyRMd+TCFuOihp1ur9vDcBTj/IRTVJaHnC6pYctD+Oj5loOPh6qn8/8j+UVAj0n+dhpzgbWLYtSsmBso8yhUZZFJeb7Xb0zu15Opb743w1ys/9V7eMAn6EbHj4/48R8ZYHMS86DiBaQkKRLG9XbXTiTW76xVzHm22ZP/BWDtyYr8RdYmNbxyqKF2nsdvj36R2KB8juDYSdHBkm9tg5XOINZ/3Iojmpx8kraewV6cX117vjfO/ytC4pp6ms8xVeFzJ6wirbjpQfzM1Zoy13x0e+LPvwF6P7AE
+sidebar_class_name: "post api-method"
+info_path: docs/API/turbodocx-api-documentation
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<ApiTitle method="post" title="Create Embedded Signing URL" />
+
+<MethodEndpoint
+  method={"post"}
+  path={"/turbosign/documents/{documentId}/signing-url"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns a signing URL for one signer of a sent document, to open, redirect to or show in an iframe in your app. Request it when the signer is ready and never store it; for external identity verification, pass your provider's result in `identityAssertion`.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"documentId","in":"path","required":true,"description":"The signature document ID.","schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":true,"content":{"application/json":{"schema":{"type":"object","description":"Send exactly one of `recipientId` or `externalId`. Unknown keys are rejected.","properties":{"recipientId":{"type":"string","format":"uuid","description":"The recipient's TurboDocx ID."},"externalId":{"type":"string","maxLength":256,"description":"The `externalId` you set on the recipient."},"returnUrl":{"type":"string","format":"uri","description":"`https` URL the signer returns to after signing. Omitting it clears one set earlier."},"identityAssertion":{"type":"object","description":"Required for a recipient using `external_idv`: your provider's verification of the signer.","required":["provider","verificationId","verifiedAt","subjectEmail"],"properties":{"provider":{"type":"string","minLength":1,"maxLength":200,"description":"Must match the recipient's `provider`."},"verificationId":{"type":"string","minLength":1,"maxLength":256,"description":"Your provider's ID for this verification. Each can be used once."},"verifiedAt":{"type":"string","format":"date-time","description":"When the signer was verified (ISO 8601)."},"subjectEmail":{"type":"string","format":"email","description":"Email of the verified person. Must match the recipient's email."},"method":{"type":"string","enum":["id_document","id_document_liveness","kba","database","sso","other"],"description":"How the signer was verified."},"methodDetail":{"type":"string","maxLength":200,"description":"Required when `method` is `other`."},"assuranceLevel":{"type":"string","maxLength":40},"verifiedName":{"type":"string","maxLength":200},"evidenceUrl":{"type":"string","format":"uri","maxLength":2048,"description":"`https` link to the verification record."},"overrideEmailMatching":{"type":"boolean","default":false,"description":"Set to `true` to accept a `subjectEmail` that differs from the recipient's email."}}}}},"example":{"recipientId":"5f673f37-9912-4e72-85aa-8f3649760f6b","returnUrl":"https://app.example.com/signed"}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  responses={{"200":{"description":"The signing URL.","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"results":{"type":"object","properties":{"url":{"type":"string","format":"uri"},"expiresAt":{"type":"string","format":"date-time","nullable":true,"description":"About five minutes after issue for a single-use URL; otherwise the document's expiry or `null`."},"recipientId":{"type":"string","format":"uuid"},"externalId":{"type":"string","nullable":true},"identityVerificationMode":{"type":"string","enum":["otp","external_idv","override"],"nullable":true},"pendingChecks":{"type":"array","description":"Passcode step the signer must clear. Empty for other modes.","items":{"type":"string","enum":["email_otp","sms_otp"]}}}}}}}},"example":{"data":{"results":{"url":"https://www.turbodocx.com/e-signature/embed/4a20eca5-7944-430c-97d5-fcce4be24296?sut=abc123","expiresAt":"2026-01-15T10:40:00.000Z","recipientId":"5f673f37-9912-4e72-85aa-8f3649760f6b","externalId":"customer_123","identityVerificationMode":"override","pendingChecks":[]}}}}}},"400":{"description":"The body is invalid, it does not name exactly one recipient (`RecipientSelectorInvalid`), `returnUrl` is not https (`InvalidReturnUrl`), or the identity assertion is missing or fails a check.","content":{"application/json":{"examples":{"selector":{"summary":"No single recipient selector","value":{"message":"Provide exactly one of recipientId or externalId","type":"RecipientSelectorInvalid","error":"Provide exactly one of recipientId or externalId","code":"RecipientSelectorInvalid"}},"validation":{"summary":"Unknown key","value":{"message":"There was an issue validating the body","type":"ValidationError","data":{"errors":[{"message":"\"senderName\" is not allowed","path":["senderName"],"type":"object.unknown","context":{"label":"senderName","key":"senderName","value":"Jane"}}]}}}}}}},"401":{"description":"Missing or invalid API key, or the organization ID header is missing or is not an organization the key belongs to. The response has no body."},"403":{"description":"The key's role is not administrator or contributor (no body), or your organization has not turned on embedded signing or the identity mode the recipient uses (JSON body).","content":{"application/json":{"example":{"message":"Embedded signing is not enabled for this organization","type":"EmbeddedSigningNotEnabled","error":"Embedded signing is not enabled for this organization","code":"EmbeddedSigningNotEnabled"}}}},"404":{"description":"The document does not exist in your organization, or no recipient matches the selector.","content":{"application/json":{"examples":{"document":{"summary":"Document not found","value":{"message":"Document not found","type":"DocumentNotFound"}},"recipient":{"summary":"Recipient not found","value":{"message":"Recipient not found","type":"RecipientNotFound","error":"Recipient not found","code":"RecipientNotFound"}}}}}},"409":{"description":"The document can no longer be signed (for example it is voided, expired or not sent yet), the recipient has already signed, or it is not their turn.","content":{"application/json":{"example":{"message":"This document can no longer be signed","type":"DocumentNotSignable","error":"This document can no longer be signed","code":"DocumentNotSignable"}}}}}}
+>
+  
+</StatusCodes>
+
+
+
+
+      

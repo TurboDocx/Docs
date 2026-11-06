@@ -1,65 +1,111 @@
-// Hand-curated API sidebar, pulled into sidebars.js. Typed so each item keeps its literal `type`.
-/** @type {import('@docusaurus/plugin-content-docs').SidebarItemConfig[]} */
+// API reference sidebar. Endpoint pages are generated from tdocxcollection.yml (see dev-docs-openapi.js);
+// `className` drives the small method tag shown before each endpoint name.
+// Guides that live in other sections are `ref` items so they keep their own URL and breadcrumb.
+// The sidebar text is the page title: generated pages set sidebar_label, which wins over a label here.
+const ep = (id, method) => ({ type: "doc", id: `API/${id}`, className: `api-method ${method}` });
+const group = (label, items) => ({ type: "category", label, collapsed: true, items });
+
 module.exports = [
-  { type: "doc", id: "API/turbodocx-api-documentation", label: "Introduction" },
   {
     type: "category",
-    label: "Deliverables",
+    label: "Getting Started",
     collapsed: false,
     items: [
-      { type: "doc", id: "API/Deliverable-API", label: "Deliverable API" }
-    ]
+      { type: "doc", id: "API/turbodocx-api-documentation", label: "Introduction and Authentication" },
+      { type: "doc", id: "API/Deliverable-API", label: "Generate Documents" },
+      { type: "ref", id: "TurboSign/API-Signatures", label: "Send for Signature" },
+      { type: "ref", id: "TurboSign/API-Bulk-Signatures", label: "Bulk Signatures" },
+      { type: "ref", id: "TurboDocx-Templating/API-Templates", label: "Templates" },
+      { type: "ref", id: "TurboSign/Webhooks", label: "Webhooks" },
+    ],
   },
   {
     type: "category",
-    label: "Templates",
+    label: "Resources and Endpoints",
     collapsed: false,
     items: [
-      { type: "doc", id: "API/upload-template-with-optional-default-values", label: "Upload Template", className: "api-method post" },
-      { type: "doc", id: "API/extract-template-placeholders-and-generate-preview", label: "Extract Placeholders & Preview", className: "api-method post" },
-      { type: "doc", id: "API/get-templates-and-folders", label: "List Templates & Folders", className: "api-method get" },
-      { type: "doc", id: "API/get-template-by-id", label: "Get Template by ID", className: "api-method get" },
-      { type: "doc", id: "API/edit-template-metadata", label: "Edit Template Metadata", className: "api-method patch" },
-      { type: "doc", id: "API/delete-template", label: "Delete Template", className: "api-method delete" }
-    ]
+      group("Templates", [
+        ep("upload-template-with-optional-default-values", "post"),
+        ep("extract-template-placeholders-and-generate-preview", "post"),
+        ep("get-templates-and-folders", "get"),
+        ep("get-template-by-id", "get"),
+        ep("edit-template-metadata", "patch"),
+        ep("delete-template", "delete"),
+      ]),
+      group("Variables", [
+        ep("create-image-variable-folder", "post"),
+        ep("read-variables-folder", "get"),
+        ep("update-variable-by-id", "put"),
+        ep("delete-variables-by-i-ds", "delete"),
+      ]),
+      group("Tags", [
+        ep("create-tag", "post"),
+        ep("read-tag", "get"),
+        ep("update-tag", "put"),
+        ep("delete-tags-by-i-ds", "delete"),
+      ]),
+      group("Deliverables", [
+        ep("generate-deliverable", "post"),
+        ep("list-deliverables", "get"),
+        ep("get-deliverable", "get"),
+        ep("update-deliverable", "patch"),
+        ep("delete-deliverable", "delete"),
+        ep("download-deliverable-source-file", "get"),
+        ep("download-deliverable-pdf", "get"),
+      ]),
+      group("TurboSign", [
+        ep("prepare-document-for-review", "post"),
+        ep("send-document-for-signature", "post"),
+        ep("list-signature-documents", "get"),
+        ep("get-document-status", "get"),
+        ep("get-document-recipients", "get"),
+        ep("send-signing-reminder", "post"),
+        ep("resend-signing-email", "post"),
+        ep("void-document", "post"),
+        ep("download-signed-document", "get"),
+        ep("get-audit-trail", "get"),
+        ep("get-template-signature-setup", "get"),
+      ]),
+      group("Bulk Signatures", [
+        ep("create-bulk-batch", "post"),
+        ep("list-bulk-batches", "get"),
+        ep("get-bulk-batch", "get"),
+        ep("list-bulk-batch-jobs", "get"),
+        ep("cancel-bulk-batch", "post"),
+      ]),
+      group("Webhooks", [
+        ep("create-webhook", "post"),
+        ep("get-webhook", "get"),
+        ep("update-webhook", "patch"),
+        ep("delete-webhook", "delete"),
+        ep("test-webhook", "post"),
+        ep("notify-webhook", "post"),
+        ep("regenerate-webhook-secret", "post"),
+        ep("list-webhook-deliveries", "get"),
+        ep("replay-webhook-delivery", "post"),
+        ep("get-webhook-stats", "get"),
+      ]),
+      group("Account", [ep("list-organizations", "get")]),
+    ],
   },
   {
     type: "category",
-    label: "Variables",
-    collapsed: false,
+    label: "Embedded Signing",
+    collapsed: true,
     items: [
-      { type: "doc", id: "API/create-image-variable-folder", label: "Create Image Variable (Folder)", className: "api-method post" },
-      { type: "doc", id: "API/read-variables-folder", label: "Read Variables (Folder)", className: "api-method get" },
-      { type: "doc", id: "API/update-variable-by-id", label: "Update Variable (by ID)", className: "api-method put" },
-      { type: "doc", id: "API/delete-variables-by-i-ds", label: "Delete Variables (by IDs)", className: "api-method delete" }
-    ]
+      { type: "ref", id: "TurboSign/embedded-signing/index", label: "Overview" },
+      ep("create-embedded-signing-url", "post"),
+      ep("get-embedded-signing-settings", "get"),
+      { type: "ref", id: "TurboSign/embedded-signing/reference", label: "Embedded Signing Reference" },
+    ],
   },
   {
     type: "category",
-    label: "Tags",
-    collapsed: false,
+    label: "SDKs and Integrations",
+    collapsed: true,
     items: [
-      { type: "doc", id: "API/create-tag", label: "Create Tag", className: "api-method post" },
-      { type: "doc", id: "API/read-tag", label: "Read Tag", className: "api-method get" },
-      { type: "doc", id: "API/update-tag", label: "Update Tag", className: "api-method put" },
-      { type: "doc", id: "API/delete-tags-by-i-ds", label: "Delete Tags (by IDs)", className: "api-method delete" }
-    ]
+      { type: "ref", id: "SDKs/index", label: "SDKs Overview" },
+      { type: "ref", id: "SDKs/agent-skills", label: "Agent Skills" },
+    ],
   },
-  {
-    type: "category",
-    label: "Webhooks",
-    collapsed: false,
-    items: [
-      { type: "doc", id: "API/create-webhook", label: "Create Webhook", className: "api-method post" },
-      { type: "doc", id: "API/get-webhook", label: "Get Webhook", className: "api-method get" },
-      { type: "doc", id: "API/update-webhook", label: "Update Webhook", className: "api-method patch" },
-      { type: "doc", id: "API/delete-webhook", label: "Delete Webhook", className: "api-method delete" },
-      { type: "doc", id: "API/test-webhook", label: "Test Webhook", className: "api-method post" },
-      { type: "doc", id: "API/notify-webhook", label: "Notify Webhook", className: "api-method post" },
-      { type: "doc", id: "API/regenerate-webhook-secret", label: "Regenerate Secret", className: "api-method post" },
-      { type: "doc", id: "API/list-webhook-deliveries", label: "List Deliveries", className: "api-method get" },
-      { type: "doc", id: "API/replay-webhook-delivery", label: "Replay Delivery", className: "api-method post" },
-      { type: "doc", id: "API/get-webhook-stats", label: "Stats", className: "api-method get" }
-    ]
-  }
 ];

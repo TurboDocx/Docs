@@ -5,8 +5,19 @@ import TracingBeam from "@site/src/components/tracing-beam";
 import svgToDataUri from "mini-svg-data-uri";
 import { BackgroundGradientAnimation } from "@site/src/components/background-gradient-animation";
 import { useHistory } from "@docusaurus/router";
+import { useDoc } from "@docusaurus/plugin-content-docs/client";
+
+// True on generated API reference pages. useDoc throws outside a doc (MDX pages), which means "not an API page".
+function useIsApiPage() {
+  try {
+    return Boolean(useDoc().frontMatter.api);
+  } catch {
+    return false;
+  }
+}
 
 export default function MDXContentWrapper(props) {
+  const isApiPage = useIsApiPage();
   let image = `url("${svgToDataUri(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="white" id="pattern-circle" cx="10" cy="10" r="1.6257413380501518"></circle></svg>`
   )}")`;
@@ -74,9 +85,9 @@ export default function MDXContentWrapper(props) {
           </BackgroundGradientAnimation>
           <MDXContent style={{ backgroundImage: image }} {...props} />
         </>
-      ) : props?.children?.props?.children?.props?.className?.includes("theme-api-markdown") ? (
-        // Render something for the new condition
-        <div style={{ paddingTop: "2em" }}>
+      ) : isApiPage ? (
+        // API reference pages: full width for the two-column layout, no tracing beam
+        <div style={{ paddingTop: "1em" }}>
           <MDXContent style={{ backgroundImage: image }} {...props} />
         </div>
       ) : (

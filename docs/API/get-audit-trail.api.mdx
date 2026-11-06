@@ -1,0 +1,66 @@
+---
+id: get-audit-trail
+title: "Get Audit Trail"
+description: "Returns every recorded event on a document in time order, such as sent, viewed, signed and voided, with the person who acted. Entries form a hash chain, so each `currentHash` builds on the previous entry's hash and tampering would break the chain."
+sidebar_label: "Get Audit Trail"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "get api-method"
+info_path: docs/API/turbodocx-api-documentation
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<ApiTitle method="get" title="Get Audit Trail" />
+
+<MethodEndpoint
+  method={"get"}
+  path={"/turbosign/documents/{documentId}/audit-trail"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns every recorded event on a document in time order, such as sent, viewed, signed and voided, with the person who acted. Entries form a hash chain, so each `currentHash` builds on the previous entry's hash and tampering would break the chain.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails
+  parameters={[{"name":"documentId","in":"path","required":true,"description":"The signature document ID.","schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  responses={{"200":{"description":"The document and its audit entries.","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"document":{"type":"object","properties":{"id":{"type":"string","format":"uuid"},"name":{"type":"string"}}},"auditTrail":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string","format":"uuid"},"documentId":{"type":"string","format":"uuid"},"actionType":{"type":"string","description":"The event, for example `prepared_for_review`, `document_sent`, `document_viewed`, `document_signed`, `document_voided` or `reminder_sent`."},"timestamp":{"type":"string","format":"date-time"},"previousHash":{"type":"string","nullable":true},"currentHash":{"type":"string"},"createdOn":{"type":"string","format":"date-time"},"details":{"type":"object","description":"Event details, such as IP address and user agent."},"user":{"type":"object","description":"Present when a sender acted.","properties":{"name":{"type":"string"},"email":{"type":"string"}}},"userId":{"type":"string","format":"uuid"},"recipient":{"type":"object","description":"Present when a recipient acted.","properties":{"name":{"type":"string"},"email":{"type":"string"}}},"recipientId":{"type":"string","format":"uuid"}}}}}}}},"example":{"data":{"document":{"id":"4a20eca5-7944-430c-97d5-fcce4be24296","name":"Service Agreement"},"auditTrail":[{"id":"b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e","documentId":"4a20eca5-7944-430c-97d5-fcce4be24296","actionType":"document_sent","timestamp":"2026-01-15T10:35:00.000Z","previousHash":null,"currentHash":"a1b2c3d4e5f6...","createdOn":"2026-01-15T10:35:00.000Z","details":{"ipAddress":"203.0.113.10"},"user":{"name":"Jane Sender","email":"sender@example.com"},"userId":"f5e6d7c8-9a0b-4c1d-8e3f-4a5b6c7d8e9f"},{"id":"c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f","documentId":"4a20eca5-7944-430c-97d5-fcce4be24296","actionType":"document_signed","timestamp":"2026-01-16T14:02:00.000Z","previousHash":"a1b2c3d4e5f6...","currentHash":"b2c3d4e5f6a7...","createdOn":"2026-01-16T14:02:00.000Z","details":{"ipAddress":"198.51.100.7"},"recipient":{"name":"John Smith","email":"john.smith@example.com"},"recipientId":"5f673f37-9912-4e72-85aa-8f3649760f6b"}]}}}}},"401":{"description":"Missing or invalid API key, or the organization ID header is missing or is not an organization the key belongs to. The response has no body."},"404":{"description":"The document does not exist, was deleted, or belongs to another organization.","content":{"application/json":{"example":{"error":"Document not found"}}}},"500":{"description":"An unexpected server error.","content":{"application/json":{"example":{"error":"Failed to get audit trail"}}}}}}
+>
+  
+</StatusCodes>
+
+
+
+
+      

@@ -1,115 +1,155 @@
-.theme-api-markdown {
-display: flex;
-flex-direction: column;
-
-
+// API reference layout: center column (reference) + sticky right column (samples and Try it).
+// Method colors follow the brand primary for GET and the theme's code palette for the rest.
+:root {
+  --api-get: var(--ifm-color-primary);
+  --api-post: var(--openapi-code-green, #2e8b57);
+  --api-put: var(--openapi-code-blue, #2b6cb0);
+  --api-patch: var(--openapi-code-orange, #c05621);
+  --api-delete: var(--openapi-code-red, #c53030);
 }
 
-#__docusaurus_skipToContent_fallback > div > main > div > div > div > div > div {
-    max-width: none !important;
+// Remove the doc max-width cap so the two API columns get the full content width.
+[class*="docs-doc-id-API/"] .theme-doc-markdown,
+[class*="docs-doc-id-API/"] .col--7 {
+  max-width: unset;
+}
+[class*="docs-doc-id-API/"] .tracing-beam {
+  display: none;
 }
 
 .openapi-left-panel__container {
-    max-width: unset;
-    border: none !important;
-    margin-bottom: 2em;
+  max-width: unset;
+  border: none !important;
+  margin-bottom: 2em;
 }
 
-
-.openapi-right-panel__container::before {
-    content: ("Try it Out");
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    letter-spacing: -0.5px;
-    margin-top: 2em;
-    margin-bottom: 2em;
-}
-
-.openapi-right-panel__container {
-    max-width: unset;
-}
-
-.tabs-container {
-    margin-top: 2em;
-}
-
-[class^="docs\-doc\-id-api"] {
-    .tracing-beam {
-        display: none;
-    }
-    .col--7 {
-        max-width: unset;
-    }
+// Right column: sticky on wide screens, stacks under the reference below 997px (Docusaurus' breakpoint).
+@media (min-width: 997px) {
+  .openapi-right-panel__container {
+    position: sticky;
+    top: calc(var(--ifm-navbar-height) + 1rem);
+    align-self: flex-start;
+    max-height: calc(100vh - var(--ifm-navbar-height) - 2rem);
+    overflow-y: auto;
   }
-
-.body-cards {
-    .bg-card {
-        min-height: 50vh !important;
-        max-height: 50vh !important;
-        overflow-x: scroll;
-    }
 }
-  
-.headers-card {
-    justify-content: center;
-    display: flex;
-    padding-top: 2em !important;
+@media (max-width: 996px) {
+  .openapi-left-panel__container,
+  .openapi-right-panel__container {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 
-.openapi-tabs__code-container:not(.openapi-tabs__code-container-inner) {
-    background-color: hsl(var(--card))!important;
-}
-
-.openapi-explorer__request-form {
-    background-color: hsl(var(--card))!important;
-}
-
+.openapi-tabs__code-container:not(.openapi-tabs__code-container-inner),
+.openapi-explorer__request-form,
 .openapi-explorer__response-container {
-    background-color: hsl(var(--card))!important;
+  background-color: hsl(var(--card)) !important;
 }
 
-.query-table {
-    display: flex;
-    justify-content: center;
-    padding-top: 2em !important;
+.openapi-explorer__code-block-container .openapi-explorer__code-block {
+  max-height: 480px;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-// Make webhook code sections larger and more readable
-.openapi-explorer__code-block-container {
-    min-height: 600px !important;
-    max-height: 800px !important;
-    
-    .openapi-explorer__code-block {
-        min-height: 600px !important;
-        max-height: 800px !important;
-        font-size: 14px !important;
-        line-height: 1.5 !important;
-    }
-    
-    .prism-code {
-        min-height: 600px !important;
-        max-height: 800px !important;
-        padding: 1.5rem !important;
-    }
+.openapi-tabs__code-container-inner .tabs__item {
+  white-space: nowrap;
 }
 
-// Make subtabs wider to prevent text wrapping
-.openapi-tabs__code-container-inner {
-    .tabs__item {
-        min-width: 120px !important;
-        padding: 0.75rem 1.5rem !important;
-        text-align: center;
-        white-space: nowrap;
-        
-        span {
-            font-weight: 500;
-            font-size: 13px;
-        }
-    }
+// Seven language tabs must fit the right column: wrap and size to content.
+.openapi-tabs__code-list-container {
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.openapi-tabs__code-container .openapi-tabs__code-list-container .openapi-tabs__code-item {
+  flex: 0 0 auto !important;
+  min-width: 3.5rem;
+  margin-right: 0 !important;
+  padding: 0.35rem 0.6rem !important;
+  font-size: 0.7rem;
+  &::after {
+    display: none !important; // language logo
+  }
+}
+// The C# tab is the .NET sample.
+.openapi-tabs__code-container .openapi-tabs__code-item--csharp > span {
+  font-size: 0 !important;
+  &::after {
+    content: ".NET";
+    font-size: 0.7rem;
+  }
 }
 
-.col--7 {
+// Title row: title, Copy page button, method badge.
+.api-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
 
+  h1 {
+    margin: 0;
+    flex: 1 1 auto;
+  }
 }
+
+.api-copy-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--ifm-color-primary);
+    color: var(--ifm-color-primary);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.api-method-badge {
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  &--get { background: var(--api-get); }
+  &--post { background: var(--api-post); }
+  &--put { background: var(--api-put); }
+  &--patch { background: var(--api-patch); }
+  &--delete { background: var(--api-delete); }
+}
+
+// Sidebar: small lowercase method tag before each endpoint name.
+.menu__list-item.api-method > .menu__link {
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+
+  &::before {
+    flex: 0 0 2.6rem;
+    font-size: 0.68rem;
+    line-height: 1.2rem;
+    font-weight: 600;
+    text-align: right;
+    text-transform: lowercase;
+    font-family: var(--ifm-font-family-monospace);
+  }
+}
+.menu__list-item.api-method.get > .menu__link::before { content: "get"; color: var(--api-get); }
+.menu__list-item.api-method.post > .menu__link::before { content: "post"; color: var(--api-post); }
+.menu__list-item.api-method.put > .menu__link::before { content: "put"; color: var(--api-put); }
+.menu__list-item.api-method.patch > .menu__link::before { content: "patch"; color: var(--api-patch); }
+.menu__list-item.api-method.delete > .menu__link::before { content: "del"; color: var(--api-delete); }

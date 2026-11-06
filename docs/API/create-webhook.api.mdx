@@ -1,21 +1,67 @@
 ---
 id: create-webhook
 title: "Create Webhook"
-description: "Register a new signature webhook for your org. The SDK always sends name=\"signature\". The returned secret is shown once; store it immediately."
+description: "Register a new signature webhook for your org. The SDK always sends name='signature'. The returned secret is shown once; store it immediately."
 sidebar_label: "Create Webhook"
 hide_title: true
 hide_table_of_contents: true
-api: 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
+api: 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
 sidebar_class_name: "post api-method"
-info_path: docs/api/turbodocx/turbodocx-api-documentation
+info_path: docs/API/turbodocx-api-documentation
 custom_edit_url: null
 ---
 
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import OperationTabs from "@theme/OperationTabs";
+import TabItem from "@theme/TabItem";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
 
-  
-  
+<ApiTitle method="post" title="Create Webhook" />
 
-  # Create Webhook
+<MethodEndpoint
+  method={"post"}
+  path={"/api/webhooks"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Register a new signature webhook for your org. The SDK always sends name="signature". The returned secret is shown once; store it immediately.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<ParamsDetails>
+  
+</ParamsDetails>
+
+<RequestSchema
+  title={"Body"}
+  body={{"content":{"application/json":{"schema":{"type":"object","properties":{"name":{"type":"string","description":"Webhook name. The SDK always sends \"signature\".","example":"signature"},"urls":{"type":"array","description":"One or more HTTPS endpoints to receive event payloads. HTTP URLs are rejected.","items":{"type":"string"},"example":["https://example.com/webhooks/turbodocx"]},"events":{"type":"array","description":"List of event types to subscribe to.","items":{"type":"string"},"example":["signature.document.completed","signature.document.voided"]}},"required":["name","urls","events"]}}}}}
+>
+  
+</RequestSchema>
+
+<StatusCodes
+  responses={{"201":{"description":"`secret` is only ever returned in full on create and on [Regenerate Webhook Secret](/docs/API/regenerate-webhook-secret); every other endpoint returns a masked `maskedSecret` instead. Use `secret` to verify the `X-TurboDocx-Signature` header on incoming webhook calls.","content":{"application/json":{"example":{"data":{"id":"b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34","orgId":"a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d","name":"signature","urls":["https://example.com/webhooks/turbodocx"],"events":["signature.document.completed","signature.document.voided"],"secret":"whsec_REPLACE_WITH_YOUR_WEBHOOK_SECRET","isActive":true,"createdBy":"f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f","createdOn":"2026-05-01T14:22:10.000Z","updatedOn":"2026-05-01T14:22:10.000Z","secretExists":true},"message":"Webhook created successfully. Save the secret - it won't be shown again."}}}},"400":{"description":"`name`, `urls`, or `events` is missing or invalid, or any URL is not HTTPS. Response body: `{ \"message\", \"type\": \"ValidationError\", \"data\": { \"errors\": [...] } }`","content":{"application/json":{}}},"401":{"description":"Missing or invalid API key/token, or the organization cannot be resolved. The response has no body."},"403":{"description":"The key's role is not administrator. The response has no body."},"409":{"description":"A webhook named `signature` already exists in your organization. Response body: `{ \"message\", \"error\": \"WebhookNameTaken\", \"data\": { \"constraint\", \"orgId\", \"name\" } }`","content":{"application/json":{}}},"429":{"description":"Too Many Requests — rate limit exceeded","content":{"application/json":{}}}}}
+>
+  
+</StatusCodes>
+
+
+
+## Overview
 
 The Create Webhook endpoint registers a webhook that TurboDocx calls when TurboSign events happen in your organization, such as a document being signed or completed. Each webhook needs a unique `name` among your org's active webhooks; every TurboDocx SDK sends `"signature"`. A second create call with that name conflicts (409) only while an active webhook already has it; if you paused a webhook via [Update Webhook](/docs/API/update-webhook)'s `isActive: false` instead of deleting it, creating a new one with the same name succeeds and leaves two rows sharing that name, and by-name lookups on the other endpoints may then hit either one. Delete the old webhook (see [Delete Webhook](/docs/API/delete-webhook)) before reusing its name, rather than just pausing it.
 
@@ -23,55 +69,9 @@ The Create Webhook endpoint registers a webhook that TurboDocx calls when TurboS
 
 Use this endpoint once, during integration setup, to start receiving signature lifecycle events instead of polling the API. To change the URLs or subscribed events later, use [Update Webhook](/docs/API/update-webhook) rather than creating a new one.
 
-## Example request
-
-```bash
-curl -X POST "https://api.turbodocx.com/api/webhooks" \
-  -H "Authorization: Bearer $TURBODOCX_API_KEY" \
-  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "signature",
-    "urls": ["https://example.com/webhooks/turbodocx"],
-    "events": ["signature.document.completed", "signature.document.voided"]
-  }'
-```
+## Request notes
 
 `urls` accepts up to 10 HTTPS endpoints (plain HTTP is rejected); `events` must be one or more of the values listed in [Get Webhook](/docs/API/get-webhook)'s `availableEvents`. Requires an API key with the administrator role.
-
-## Example response
-
-On success the endpoint returns `201 Created`:
-
-```json
-{
-  "data": {
-    "id": "b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34",
-    "orgId": "a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
-    "name": "signature",
-    "urls": ["https://example.com/webhooks/turbodocx"],
-    "events": ["signature.document.completed", "signature.document.voided"],
-    "secret": "whsec_REPLACE_WITH_YOUR_WEBHOOK_SECRET",
-    "isActive": true,
-    "createdBy": "f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f",
-    "createdOn": "2026-05-01T14:22:10.000Z",
-    "updatedOn": "2026-05-01T14:22:10.000Z",
-    "secretExists": true
-  },
-  "message": "Webhook created successfully. Save the secret - it won't be shown again."
-}
-```
-
-`secret` is only ever returned in full on create and on [Regenerate Webhook Secret](/docs/API/regenerate-webhook-secret); every other endpoint returns a masked `maskedSecret` instead. Use `secret` to verify the `X-TurboDocx-Signature` header on incoming webhook calls.
-
-## Common errors
-
-| Status | When | Response body |
-| ------ | ---- | ------------- |
-| 401 | Missing or invalid API key/token, or the organization cannot be resolved | Empty (status only) |
-| 403 | The key's role is not administrator | Empty (status only) |
-| 400 | `name`, `urls`, or `events` is missing or invalid, or any URL is not HTTPS | `{ "message", "type": "ValidationError", "data": { "errors": [...] } }` |
-| 409 | A webhook named `signature` already exists in your organization | `{ "message", "error": "WebhookNameTaken", "data": { "constraint", "orgId", "name" } }` |
 
 ## Related endpoints
 
@@ -79,12 +79,4 @@ On success the endpoint returns `201 Created`:
 - [Update Webhook](/docs/API/update-webhook) to change its URLs, events, or active state
 - [Test Webhook](/docs/API/test-webhook) to send a sample event before going live
 
-  <DisplayEndpoint method="POST" endpoint="/api/webhooks"/>
-  <QueryTable title="query" data="W10=" />
-  <HeadersTable title="headers" data="W3sia2V5IjoiYXV0aG9yaXphdGlvbiIsImV4YW1wbGUiOiIifSx7ImtleSI6IngtcmFwaWRkb2N4LW9yZy1pZCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdCIsImV4YW1wbGUiOiIifSx7ImtleSI6ImFjY2VwdC1sYW5ndWFnZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImNvbnRlbnQtdHlwZSIsImV4YW1wbGUiOiIifSx7ImtleSI6ImRudCIsImV4YW1wbGUiOiIifSx7ImtleSI6Im9yaWdpbiIsImV4YW1wbGUiOiIifSx7ImtleSI6InJlZmVyZXIiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtY2gtdWEtbW9iaWxlIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWNoLXVhLXBsYXRmb3JtIiwiZXhhbXBsZSI6IiJ9LHsia2V5Ijoic2VjLWZldGNoLWRlc3QiLCJleGFtcGxlIjoiIn0seyJrZXkiOiJzZWMtZmV0Y2gtbW9kZSIsImV4YW1wbGUiOiIifSx7ImtleSI6InNlYy1mZXRjaC1zaXRlIiwiZXhhbXBsZSI6IiJ9XQ==" />
-  <BodyTable title="body" data="eyJuYW1lIjp7InR5cGUiOiJzdHJpbmciLCJkZXNjcmlwdGlvbiI6IldlYmhvb2sgbmFtZS4gVGhlIFNESyBhbHdheXMgc2VuZHMgXCJzaWduYXR1cmVcIi4iLCJleGFtcGxlIjoic2lnbmF0dXJlIn0sInVybHMiOnsidHlwZSI6ImFycmF5IiwiZGVzY3JpcHRpb24iOiJPbmUgb3IgbW9yZSBIVFRQUyBlbmRwb2ludHMgdG8gcmVjZWl2ZSBldmVudCBwYXlsb2Fkcy4gSFRUUCBVUkxzIGFyZSByZWplY3RlZC4iLCJpdGVtcyI6eyJ0eXBlIjoic3RyaW5nIn0sImV4YW1wbGUiOlsiaHR0cHM6Ly9leGFtcGxlLmNvbS93ZWJob29rcy90dXJib2RvY3giXX0sImV2ZW50cyI6eyJ0eXBlIjoiYXJyYXkiLCJkZXNjcmlwdGlvbiI6Ikxpc3Qgb2YgZXZlbnQgdHlwZXMgdG8gc3Vic2NyaWJlIHRvLiIsIml0ZW1zIjp7InR5cGUiOiJzdHJpbmcifSwiZXhhbXBsZSI6WyJzaWduYXR1cmUuZG9jdW1lbnQuY29tcGxldGVkIiwic2lnbmF0dXJlLmRvY3VtZW50LnZvaWRlZCJdfX0=" />
-           
-  
-  
-     
       
