@@ -240,6 +240,16 @@ const config = {
           'bash'
         ],
       },
+      // API reference right column: request sample tabs, in display order.
+      languageTabs: [
+        { highlight: 'bash', language: 'curl', logoClass: 'bash' },
+        { highlight: 'javascript', language: 'nodejs', logoClass: 'nodejs', variant: 'axios' },
+        { highlight: 'python', language: 'python', logoClass: 'python', variant: 'requests' },
+        { highlight: 'php', language: 'php', logoClass: 'php', variant: 'guzzle' },
+        { highlight: 'ruby', language: 'ruby', logoClass: 'ruby' },
+        { highlight: 'go', language: 'go', logoClass: 'go' },
+        { highlight: 'csharp', language: 'csharp', logoClass: 'csharp', variant: 'httpclient' },
+      ],
     }),
 };
 

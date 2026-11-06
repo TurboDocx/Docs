@@ -1,0 +1,62 @@
+---
+id: list-bulk-batch-jobs
+title: "List Bulk Batch Jobs"
+description: "Returns a page of the jobs in a batch, one per document, with each job's status, the created signature document ID once sent, and any error. Batch-wide job counts are included and ignore the filters."
+sidebar_label: "List Bulk Batch Jobs"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "get api-method"
+info_path: docs/API/turbodocx-api-documentation
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<ApiTitle method="get" title="List Bulk Batch Jobs" />
+
+<MethodEndpoint
+  method={"get"}
+  path={"/turbosign/bulk/batch/{batchId}/jobs"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns a page of the jobs in a batch, one per document, with each job's status, the created signature document ID once sent, and any error. Batch-wide job counts are included and ignore the filters.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<RequestSchema
+  title={"Body"}
+>
+  
+</RequestSchema>
+
+<ParamsDetails
+  parameters={[{"name":"batchId","in":"path","required":true,"description":"The batch ID.","schema":{"type":"string","format":"uuid"}},{"name":"limit","in":"query","required":false,"description":"Number of items to return.","schema":{"type":"integer","minimum":1,"maximum":100,"default":10}},{"name":"offset","in":"query","required":false,"description":"Number of items to skip.","schema":{"type":"integer","minimum":0,"default":0}},{"name":"query","in":"query","required":false,"description":"Search text matched against the document name (up to 100 characters).","schema":{"type":"string","maxLength":100}},{"name":"status","in":"query","required":false,"description":"Only return these job statuses, comma separated and in uppercase (for example `CLAIMED,PROCESSING`). Allowed values: `PENDING`, `CLAIMED`, `PROCESSING`, `SUCCEEDED`, `FAILED`, `CANCELLED`.","schema":{"type":"string"}},{"name":"sortBy","in":"query","required":false,"description":"Sort field. An unknown value falls back to `createdOn`.","schema":{"type":"string","enum":["documentName","status","attempts","createdOn","updatedOn"],"default":"createdOn"}},{"name":"sortDirection","in":"query","required":false,"description":"Sort direction.","schema":{"type":"string","enum":["asc","desc"],"default":"desc"}}]}
+>
+  
+</ParamsDetails>
+
+<StatusCodes
+  responses={{"200":{"description":"A page of jobs.","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"batchId":{"type":"string","format":"uuid"},"batchName":{"type":"string"},"batchStatus":{"type":"string","enum":["INGESTING","PENDING","PROCESSING","COMPLETED","FAILED","CANCELLED"]},"jobs":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string","format":"uuid"},"batchId":{"type":"string","format":"uuid"},"status":{"type":"string","enum":["PENDING","CLAIMED","PROCESSING","SUCCEEDED","FAILED","CANCELLED"]},"documentId":{"type":"string","format":"uuid","nullable":true,"description":"The signature document created by this job, or `null` until it is sent."},"documentName":{"type":"string"},"recipientEmails":{"type":"array","items":{"type":"string"}},"attempts":{"type":"integer"},"errorCode":{"type":"string","nullable":true},"errorMessage":{"type":"string","nullable":true},"createdOn":{"type":"string","format":"date-time"},"updatedOn":{"type":"string","format":"date-time"},"lastAttemptedAt":{"type":"string","format":"date-time","nullable":true}}}},"totalJobs":{"type":"integer","description":"All jobs in the batch."},"totalRecords":{"type":"integer","description":"Jobs matching the filters."},"succeededJobs":{"type":"integer"},"failedJobs":{"type":"integer"},"pendingJobs":{"type":"integer"}}}}},"example":{"data":{"batchId":"550e8400-e29b-41d4-a716-446655440000","batchName":"Q4 Employment Contracts","batchStatus":"COMPLETED","jobs":[{"id":"770e8400-e29b-41d4-a716-446655440000","batchId":"550e8400-e29b-41d4-a716-446655440000","status":"SUCCEEDED","documentId":"4a20eca5-7944-430c-97d5-fcce4be24296","documentName":"Employment Contract - John Smith","recipientEmails":["john.smith@example.com"],"attempts":1,"errorCode":null,"errorMessage":null,"createdOn":"2026-01-15T10:30:00.000Z","updatedOn":"2026-01-15T11:45:00.000Z","lastAttemptedAt":"2026-01-15T11:45:00.000Z"}],"totalJobs":50,"totalRecords":50,"succeededJobs":48,"failedJobs":2,"pendingJobs":0}}}}},"400":{"description":"A query parameter is invalid, for example a lowercase `status` value.","content":{"application/json":{"example":{"message":"There was an issue validating the query","type":"ValidationError","data":{"errors":[{"message":"Invalid status values. Valid statuses: PENDING, CLAIMED, PROCESSING, SUCCEEDED, FAILED, CANCELLED","path":["status"],"type":"any.only","context":{"label":"status","key":"status","value":"failed"}}]}},"schema":{"type":"object","properties":{"message":{"type":"string"},"type":{"type":"string"},"data":{"type":"object","properties":{"errors":{"type":"array","items":{"type":"object","properties":{"message":{"type":"string"},"path":{"type":"array","items":{"type":"string"}},"type":{"type":"string"},"context":{"type":"object","properties":{"label":{"type":"string"},"key":{"type":"string"},"value":{"type":"string"}}}}}}}}}}}}},"401":{"description":"Missing or invalid API key, or the organization ID header is missing or is not an organization the key belongs to. The response has no body."},"404":{"description":"The batch does not exist in your organization.","content":{"application/json":{"example":{"error":"Batch not found or access denied","code":"BatchNotFound"},"schema":{"type":"object","properties":{"error":{"type":"string"},"code":{"type":"string"}}}}}},"500":{"description":"An unexpected server error.","content":{"application/json":{"example":{"error":"An unexpected error occurred while listing batch jobs","code":"UnexpectedError"},"schema":{"type":"object","properties":{"error":{"type":"string"},"code":{"type":"string"}}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

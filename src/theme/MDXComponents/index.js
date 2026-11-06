@@ -10,6 +10,7 @@ import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
 import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
+import ApiTitle from '@site/src/components/ApiTitle';
 
 export default {
   ...MDXComponents,
@@ -23,4 +24,5 @@ export default {
   HeadersTable,
   DisplayJson,
   DisplayEndpoint,
+  ApiTitle,
 };
