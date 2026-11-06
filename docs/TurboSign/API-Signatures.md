@@ -370,7 +370,6 @@ Signer roles work with a **PDF signature template** sent by `templateId`, and wi
 
 - **A PDF signature template** (`templateId`) gets the fields placed on the PDF and its [anchored fields](#anchored-fields).
 - **A deliverable of a Word or PowerPoint template** (`deliverableId`) gets the template's anchored fields, found by their tags in the generated document. Fields placed by position are left out, because the generated pages don't match them.
-- **A deliverable of a PDF signature template** gets the fields placed on the PDF.
 
 A Word or PowerPoint template sent by `templateId` with roles fails with `TemplateRolesNeedPdfTemplate`. Generate a deliverable and send it with `deliverableId` instead.
 
@@ -442,7 +441,7 @@ A saved signature setup can also hold **anchored fields**. An anchored field bel
 - The field is sized to its tag. A tag missing from the document is skipped instead of failing the send.
 - After the tags are expanded, the send checks again that every signer has a field (`SignerHasNoFields`) and that the document is within the field limit (`TooManyFields`).
 - A role send brings the role's anchored fields with it. A send without roles uses them only with [`applySignatureSetup`](#apply-a-saved-setup-without-roles).
-- [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) lists them under `anchors`. Add one with [Add an Anchored Field](#endpoint-11-add-an-anchored-field) and remove one with [Remove an Anchored Field](#endpoint-12-remove-an-anchored-field).
+- [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) lists them under `anchors`. Add one with [Add an anchored field](#endpoint-11-add-an-anchored-field) and remove one with [Remove an anchored field](#endpoint-12-remove-an-anchored-field).
 
 :::warning An anchored tag is not filled in at generation
 When a template's saved signature setup anchors a variable, generating a document from the template keeps that tag as literal text, so TurboSign can find it. A value you send for that variable (for example with [Create Deliverable](/docs/API/Deliverable-API#endpoint-2-create-deliverable)) is not written into the document. If your integration fills a variable that has since become a signature field, stop sending its value, or remove the anchored field to make it a normal variable again.
@@ -1328,7 +1327,7 @@ User-Agent: TurboDocx API Client
 | data.roles[].fieldCount     | Number  | How many fields are saved for the role, placed and anchored                 |
 | data.roles[].anchoredFieldCount | Number | How many of those fields are [anchored to a tag](#anchored-fields)      |
 | data.anchors                | Array   | The setup's anchored fields. Empty when it has none                         |
-| data.anchors[].fieldId      | String  | The field's ID, for [Remove an Anchored Field](#endpoint-12-remove-an-anchored-field). Absent on fields saved before IDs existed |
+| data.anchors[].fieldId      | String  | The field's ID, for [Remove an anchored field](#endpoint-12-remove-an-anchored-field). Absent on fields saved before IDs existed |
 | data.anchors[].roleKey      | String  | The key of the role that fills the field                                    |
 | data.anchors[].type         | String  | The field type, such as `signature` or `date`                               |
 | data.anchors[].anchor       | String  | The tag, in single braces                                                   |
@@ -1490,7 +1489,7 @@ User-Agent: TurboDocx API Client
 - Deleting a template that has no saved setup also returns `200`.
 - To change only the settings and keep the roles and fields, use [Update Template Signature Settings](#endpoint-9-update-template-signature-settings) instead.
 
-## Endpoint 11: Add an Anchored Field {#endpoint-11-add-an-anchored-field}
+## Endpoint 11: Add an anchored field {#endpoint-11-add-an-anchored-field}
 
 Add an [anchored field](#anchored-fields) to a template's saved signature setup: a field for one signer role, placed wherever a tag such as `{ClientSign}` appears in the document being sent.
 
@@ -1563,7 +1562,7 @@ curl -X POST https://api.turbodocx.com/turbosign/templates/TEMPLATE_ID/signature
 
 | Field                                | Type    | Description                                                                                       |
 | ------------------------------------ | ------- | ------------------------------------------------------------------------------------------------- |
-| data.results.fieldId                 | String  | The anchored field's ID. Pass it to [Remove an Anchored Field](#endpoint-12-remove-an-anchored-field) |
+| data.results.fieldId                 | String  | The anchored field's ID. Pass it to [Remove an anchored field](#endpoint-12-remove-an-anchored-field) |
 | data.results.signatureSetup          | Object  | The template's whole saved signature setup after the change                                       |
 | data.results.tagBecameSignatureField | Boolean | `true` when the tag was not a signature field before. The value saved on the template for that variable was cleared |
 
@@ -1588,7 +1587,7 @@ Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." 
 - Sending the same `roleKey`, `type` and `anchor` again returns the existing field's `fieldId` with `tagBecameSignatureField: false`, updated with any `defaultValue` or `isReadonly` you send.
 - Once a variable is anchored, generating a document from the template keeps its tag as literal text and ignores a value sent for it. See [Anchored fields](#anchored-fields).
 
-## Endpoint 12: Remove an Anchored Field {#endpoint-12-remove-an-anchored-field}
+## Endpoint 12: Remove an anchored field {#endpoint-12-remove-an-anchored-field}
 
 Remove one anchored field from a template's saved signature setup. Documents already sent are not affected.
 
@@ -1611,7 +1610,7 @@ User-Agent: TurboDocx API Client
 | Parameter  | Type          | Required | Description                                                                                 |
 | ---------- | ------------- | -------- | ------------------------------------------------------------------------------------------- |
 | templateId | String (UUID) | Yes      | The unique identifier of the template                                                       |
-| fieldId    | String        | Yes      | The anchored field's ID, from [Add an Anchored Field](#endpoint-11-add-an-anchored-field) or `anchors[].fieldId` in [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) |
+| fieldId    | String        | Yes      | The anchored field's ID, from [Add an anchored field](#endpoint-11-add-an-anchored-field) or `anchors[].fieldId` in [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) |
 
 ### Response
 
