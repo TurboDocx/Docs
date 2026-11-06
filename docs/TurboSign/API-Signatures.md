@@ -128,7 +128,7 @@ Use this endpoint when you need a preview URL to verify field placement:
 | Sends emails?        | ❌ No                          | ✅ Yes                    |
 | Returns preview URL? | ✅ Yes                         | ❌ No                     |
 | Returns recipients?  | ✅ Yes                         | ✅ Yes                    |
-| Final status         | REVIEW_READY                   | UNDER_REVIEW              |
+| Final status         | `review_ready` (or `setup_complete` with no fields) | `under_review` |
 | Use when             | Need to verify field placement | Ready to send immediately |
 
 Now that you've seen the whole thing, let's dive into the details...
@@ -498,7 +498,7 @@ When you change a draft's signers with `PATCH /turbosign/documents/{documentId}/
 {
   "success": true,
   "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-  "status": "REVIEW_READY",
+  "status": "review_ready",
   "previewUrl": "https://www.turbodocx.com/sign/preview/abc123...",
   "recipients": [
     {
@@ -522,7 +522,7 @@ When you change a draft's signers with `PATCH /turbosign/documents/{documentId}/
 | ---------- | ------------- | ---------------------------------------------- |
 | success    | Boolean       | Request success status                         |
 | documentId | String (UUID) | Unique document identifier - save for tracking |
-| status     | String        | Document status (REVIEW_READY)                 |
+| status     | String        | `review_ready`, or `setup_complete` when you sent no fields. With `setup_complete`, the `previewUrl` opens the field editor: place the signature fields there before you send. |
 | previewUrl | String (URL)  | URL to preview and verify document             |
 | recipients | Array         | Array of recipient objects with generated IDs  |
 | message    | String        | Human-readable success message                 |
@@ -570,7 +570,7 @@ Signer roles work the same way here: pass `templateId` and give each recipient a
 {
   "success": true,
   "documentId": "4a20eca5-7944-430c-97d5-fcce4be24296",
-  "status": "UNDER_REVIEW",
+  "status": "under_review",
   "recipients": [
     {
       "id": "5f673f37-9912-4e72-85aa-8f3649760f6b",
@@ -593,7 +593,7 @@ Signer roles work the same way here: pass `templateId` and give each recipient a
 | ---------- | ------------- | ---------------------------------------------- |
 | success    | Boolean       | Request success status                         |
 | documentId | String (UUID) | Unique document identifier - save for tracking |
-| status     | String        | Document status (UNDER_REVIEW)                 |
+| status     | String        | Document status (`under_review`)               |
 | recipients | Array         | Array of recipient objects with generated IDs  |
 | message    | String        | Human-readable success message                 |
 
