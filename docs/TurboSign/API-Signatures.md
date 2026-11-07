@@ -223,7 +223,7 @@ User-Agent: TurboDocx API Client
 | deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
 | templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). Required when any recipient has a `role` |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
-| applySignatureSetup | Boolean        | No            | With `templateId` or `deliverableId` and no recipient `role`: treat each field you send whose `template.anchor` and `type` match an [anchored field](#anchored-fields) of the template's saved signature setup as that field. See [Apply a saved setup without roles](#apply-a-saved-setup-without-roles) |
+| applySignatureSetup | Boolean        | No            | With `templateId` or `deliverableId`, with or without recipient roles: treat each field you send whose `template.anchor` and `type` match an [anchored field](#anchored-fields) of the template's saved signature setup as that field (it fits its tag, centred on it). See [Apply a saved setup to your own fields](#apply-a-saved-setup-to-your-own-fields) |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
 | recipients          | String (JSON)  | **Yes**       | JSON string array of recipient objects     |
@@ -244,7 +244,7 @@ User-Agent: TurboDocx API Client
 
 \*\* **Fields**: Required, unless at least one recipient names a template signer `role`. Omitting `fields` without a role returns `400 FieldsRequired`. See [Sending with signer roles](#sending-with-signer-roles).
 
-A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are used as sent. A signature setup saved on the template in the TurboDocx app is applied when a recipient names one of its roles (see [Sending with signer roles](#sending-with-signer-roles)). Without roles, `applySignatureSetup: true` matches the fields you send to the setup's anchored fields (see [Apply a saved setup without roles](#apply-a-saved-setup-without-roles)).
+A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are used as sent. A signature setup saved on the template in the TurboDocx app is applied when a recipient names one of its roles (see [Sending with signer roles](#sending-with-signer-roles)). With or without roles, `applySignatureSetup: true` matches the fields you send to the setup's anchored fields (see [Apply a saved setup to your own fields](#apply-a-saved-setup-to-your-own-fields)).
 
 :::tip Reminders & expiration are optional
 The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
@@ -415,7 +415,7 @@ How a role send behaves:
 - **Template defaults fill the gaps.** The template's saved CC emails, document description, document name and reminder and expiration settings apply to anything the request leaves out. Values in the request always win.
 - **Identity verification.** A role's saved verification choice applies unless the recipient sets its own `identityVerification`. A role saved with SMS verification needs the recipient's `phone`. If your organization no longer allows a role's saved choice (for example SMS was turned off), the organization default applies instead of failing the send. A choice you set on the recipient yourself is still checked as usual. See [the recipient](/docs/TurboSign/embedded-signing/reference#the-recipient) in the embedded signing reference for those fields.
 - **Every signer needs a field.** A role send where a signer ends up with no fields fails with `SignerHasNoFields` (Prepare for Review skips this check, because you place fields in the review screen afterwards).
-- **Without roles** `fields` is still required. The template's saved setup is only read when you pass `applySignatureSetup: true` (see [Apply a saved setup without roles](#apply-a-saved-setup-without-roles)).
+- **Without roles** `fields` is still required, and the template's saved setup is only read when you pass `applySignatureSetup: true`. On a role send, the same flag decides how your own anchor fields are placed (see [Apply a saved setup to your own fields](#apply-a-saved-setup-to-your-own-fields)).
 
 #### Claiming a role with a different signer {#claiming-a-role-with-a-different-signer}
 
@@ -438,25 +438,25 @@ What changes for the new signer:
 A saved signature setup can also hold **anchored fields**. An anchored field belongs to one role and is tied to a tag such as `{ClientSign}` instead of a page position, so it lands wherever that tag appears in the document being sent. On a Word or PowerPoint template the tag is one of the template's variables; on a PDF signature template it is text in the PDF.
 
 - A tag belongs to one role and holds one field.
-- The field is sized to its tag. A tag missing from the document is skipped instead of failing the send.
+- The field is sized to its tag and centred on it. A tag missing from the document is skipped instead of failing the send.
 - After the tags are expanded, the send checks again that every signer has a field (`SignerHasNoFields`) and that the document is within the field limit (`TooManyFields`).
-- A role send brings the role's anchored fields with it. A send without roles uses them only with [`applySignatureSetup`](#apply-a-saved-setup-without-roles).
+- A role send brings the role's anchored fields with it. Fields you send yourself, with or without roles, use them only with [`applySignatureSetup`](#apply-a-saved-setup-to-your-own-fields).
 - [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) lists them under `anchors`. Add one with [Add an anchored field](#endpoint-11-add-an-anchored-field) and remove one with [Remove an anchored field](#endpoint-12-remove-an-anchored-field).
 
 :::warning An anchored tag is not filled in at generation
 When a template's saved signature setup anchors a variable, generating a document from the template keeps that tag as literal text, so TurboSign can find it. A value you send for that variable (for example with [Create Deliverable](/docs/API/Deliverable-API#endpoint-2-create-deliverable)) is not written into the document. If your integration fills a variable that has since become a signature field, stop sending its value, or remove the anchored field to make it a normal variable again.
 :::
 
-#### Apply a saved setup without roles {#apply-a-saved-setup-without-roles}
+#### Apply a saved setup to your own fields {#apply-a-saved-setup-to-your-own-fields}
 
-If your integration sends its own `fields` and names no `role`, add `applySignatureSetup: true` (form value `true`) to have the template's anchored fields apply to them:
+If your integration sends its own `fields` by anchor, with or without roles, add `applySignatureSetup: true` (form value `true`) to have the template's anchored fields apply to them:
 
-- Each field you send with a `template.anchor` whose tag (ignoring case) and `type` match an anchored field of the setup is treated as that field: it is sized to its tag, and it is skipped if the tag is missing from the document.
+- Each field you send with a `template.anchor` whose tag (ignoring case) and `type` match an anchored field of the setup is treated as that field: it is sized to its tag, centred on it, and skipped if the tag is missing from the document.
 - Fields that don't match, and coordinate fields, are used as sent.
-- No fields are added for you, so `fields` is still required.
+- The flag adds no fields of its own, so a send without roles still needs `fields`.
 - It needs `templateId` or `deliverableId`. With `deliverableId`, the setup of the deliverable's template is used. It has no effect with `file` or `fileLink`.
-- Without the flag, or with `false`, the template's setup is not read and the send behaves as before.
-- A send that names a role applies the setup without the flag.
+- Without the flag, or with `false`, your own anchor fields keep the standard placement (a field wider than its tag starts at the tag), and a tag missing from the document fails the send.
+- A role send brings the role's own saved fields, anchored ones included, without the flag. Your own anchor fields on that send follow the flag like on any other send.
 
 ```bash
 curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-signing \
@@ -604,7 +604,7 @@ User-Agent: TurboDocx API Client
 
 The request format is **identical** to prepare-for-review. See the "Endpoint 1: Prepare for Review" section above for detailed field documentation.
 
-Signer roles work the same way here: pass `templateId` (or `deliverableId`) and give each recipient a `role`. See [Sending with signer roles](#sending-with-signer-roles). `applySignatureSetup` also works the same way; see [Apply a saved setup without roles](#apply-a-saved-setup-without-roles).
+Signer roles work the same way here: pass `templateId` (or `deliverableId`) and give each recipient a `role`. See [Sending with signer roles](#sending-with-signer-roles). `applySignatureSetup` also works the same way; see [Apply a saved setup to your own fields](#apply-a-saved-setup-to-your-own-fields).
 
 ### Response
 
@@ -2113,6 +2113,7 @@ Use `alignment` to choose where the signer's entry (a typed or drawn signature, 
 - **Anchor fields:** set it on the template as `template.alignment`. With `"placement": "replace"`, it also pins the field to that side of the anchor text: `"left"` starts the field where the anchor starts, `"right"` ends it where the anchor ends.
 - **Coordinate fields:** set it at the top level of the field as `alignment`.
 - **Leave it out (or send `null`)** to keep the standard placement. Existing integrations don't change.
+- **Saved setup fields:** a saved setup's fields are centred on their tag; your own fields keep the standard placement unless you set [`applySignatureSetup`](#apply-a-saved-setup-to-your-own-fields) (or `template.alignment`).
 - Any other value is rejected with a `400` error: `alignment must be one of: left, center, right`.
 - Checkbox fields ignore it.
 
