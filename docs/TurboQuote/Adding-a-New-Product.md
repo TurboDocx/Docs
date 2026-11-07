@@ -1,200 +1,133 @@
 ---
 title: Adding a New Product
-sidebar_position: 2
-description: Learn how to add a new custom product to a sales quote in TurboQuote, including setting up product details, category, billing frequency, and pricing.
+sidebar_position: 3
+description: Add products to your TurboQuote catalog with category, billing, list price, cost and up to three images, then hide, duplicate or delete them from the Products page.
 keywords:
   - turboquote
   - add product
   - new product
   - product catalog
-  - quote line item
+  - product images
   - pricing
   - billing frequency
+  - duplicate product
   - TurboDocx
 ---
 
-# Adding a New Product to a Quote
+# Adding a New Product
 
-This guide walks you through adding a new custom product to a sales quote in TurboQuote. You'll learn how to create a product record with category, billing frequency, and pricing details, then insert it as a line item in your quote.
+Products are the things you sell, each with a list price and how often it is billed. Reps add them to quotes from the catalog, so a product you set up once can be reused on every quote.
 
 ## What You'll Accomplish
 
 By the end of this guide, you will have:
 
-- 🗂️ **Opened the product catalog** from within a quote
-- 📦 **Created a new product** with name, category, and billing frequency
-- 💵 **Set up list price** and optional cost for margin tracking
-- ➕ **Inserted the product** as a line item in your active quote
+- 📦 **Created a product** with a name, SKU, category and billing
+- 💵 **Set its list price** and cost, and checked the margin
+- 🖼️ **Added product images** that appear on quotes
+- 🗂️ **Managed your catalog**: hidden, duplicated and deleted products
 
 :::tip Quick Start Promise
-Adding products to your catalog takes only a moment, and reusable products make every future quote faster to build. 🚀
+A product takes about a minute to add. Have a lot of them? [Import them from a spreadsheet](./Bulk-Importing-from-a-Spreadsheet.md) instead. 🚀
 :::
 
 <br/>
 
-## Step 1: Open the Add Product Interface
-
-Initiate the process of adding a product line item to the current quote by accessing the product selection interface. This sets the stage for searching, selecting, or creating products to enrich the quote.
+## Step 1: Open the Products Page
 
 **Instruction:**
 
-- Click the **+ Add Product** button in the top action bar above the quote line items section.
+- In the sidebar, open **TurboQuote** and click **Products**, then click **New product**.
 
-![Open the Add Product interface](/img/turboquote/product-step-01.png)
+You can also create a product while building a quote: click **Add products**, then **New product** in the dialog.
+
+![The Products page with the New product button](/img/turboquote/products/01-products.png)
 
 <br/>
 
-## Step 2: Begin Creating a New Product
-
-Open the new product creation form when the desired product is not available in the existing catalog. This step enables adding a new product record to reuse in the quote and future transactions.
+## Step 2: Fill In the General Tab
 
 **Instruction:**
 
-- In the Product Catalog dialog, click the **+ New Product** button located to the right of the search field.
+1. Enter the **Name**. Customers see it on quotes.
+2. Optionally enter a **SKU**, your own code for the product. Bundles and price books use it when you import them from a spreadsheet.
+3. Pick a **Category**, or type a new name to create one. Quotes list items under their category.
+4. Choose the **Billing**: **One-time**, **Monthly**, **Quarterly** or **Yearly**.
+5. Set the **Minimum order**. Quotes start at this quantity.
+6. Optionally add a **Description**, shown under the name on quotes and in lists, and **Internal notes**, which only your team sees.
+7. Leave **Show in the catalog** on so reps can add the product to quotes.
 
-![Begin creating a new product](/img/turboquote/product-step-02.png)
+![The General tab of a new product](/img/turboquote/products/03-new-product-general.png)
 
 <br/>
 
-## Step 3: Focus the Product Name Field
-
-Set the cursor in the Product Name input field to begin specifying a clear and recognizable name for the new product.
+## Step 3: Set the Price
 
 **Instruction:**
 
-- Click on the **Product Name** text input field near the top of the New Product form.
+1. Open the **Pricing** tab.
+2. Choose the **Currency**. The price and cost are in this currency, and the product can only be added to quotes in the same currency.
+3. Enter the **List price**, the price before any discount or price book. Use 0 for a free product.
+4. Optionally enter **Your cost**. It is only used to work out the margin.
 
-![Focus the Product Name field](/img/turboquote/product-step-03.png)
+The **Margin** panel shows the margin and the profit per unit as you type.
+
+![The Pricing tab with list price, cost and a 39% margin](/img/turboquote/products/04-new-product-pricing.png)
+
+:::note Changing a price later
+When you lower a product's price, TurboQuote updates the price books and bundles that use it. A price book or bundle that took more off than the new price is capped at the new price.
+:::
 
 <br/>
 
-## Step 4: Select or Enter a Product Category
-
-Identify or create a category for the new product to organize it properly within the catalog for easier selection and reporting.
+## Step 4: Add Images (Optional)
 
 **Instruction:**
 
-- Click on the **Category** text field in the New Product form to begin searching or entering a category.
+1. Open the **Images** tab.
+2. Drop images on the upload area, or click it to choose files. A product can have up to **3 images**, JPEG or PNG, up to 2 MB each.
+3. Drag an image by its grip (or use the arrow keys on it) to change the order. Quotes show the images side by side in this order.
 
-![Select or enter a product category](/img/turboquote/product-step-04.png)
+The **On a quote** preview shows how the images will look on a line item.
+
+![The Images tab with one image and the On a quote preview](/img/turboquote/products/05-new-product-images.png)
+
+**Instruction:**
+
+- Click **Create product**.
 
 <br/>
 
-## Step 5: Choose a Category from the Dropdown
+## Managing Your Catalog
 
-Assign the new product to a category to align it with similar catalog items and facilitate proper organization.
+### Show or hide a product
 
-**Instruction:**
+The **In catalog** switch on each row controls whether reps can add the product to new quotes. A hidden product stays in your catalog and on the quotes that already use it. The **All**, **In catalog** and **Hidden** tabs filter the list.
 
-- Click the desired category option (e.g. **Hardware (Default)**) from the Category dropdown list.
+![The All, In catalog and Hidden tabs, and the In catalog switch on a product](/img/turboquote/products/02-catalog-tabs.png)
 
-![Choose a category](/img/turboquote/product-step-05.png)
+### Edit, duplicate or delete a product
 
-<br/>
+Click the **⋮** button on a product to **Edit**, **Duplicate** or **Delete** it.
 
-## Step 6: Open the Billing Frequency Dropdown
+![The product menu with Edit, Duplicate and Delete](/img/turboquote/products/06-product-actions.png)
 
-Review or change the billing frequency to ensure it matches the intended sales and revenue model for the new product.
+**Duplicate** asks for the **Name of the copy**, which starts as **Copy of …**. The copy keeps the price, cost, billing, category, description, notes and images, and its SKU gets a **-COPY** suffix.
 
-**Instruction:**
-
-- Click on the **Billing Frequency** dropdown field currently showing **Monthly Recurring**.
-
-![Open the Billing Frequency dropdown](/img/turboquote/product-step-06.png)
-
-<br/>
-
-## Step 7: Select a Billing Frequency
-
-Switch the billing schedule to correspond with the product's sales type.
-
-**Instruction:**
-
-- Click on the desired option (e.g. **One-Time**) in the Billing Frequency dropdown list.
-
-![Select billing frequency](/img/turboquote/product-step-07.png)
-
-<br/>
-
-## Step 8: Navigate to the Pricing & Costs Tab
-
-Access the section to configure pricing details of the new product after setting general information.
-
-**Instruction:**
-
-- Click on the **Pricing & Costs** tab in the New Product dialog's tab bar.
-
-![Navigate to Pricing & Costs tab](/img/turboquote/product-step-08.png)
-
-<br/>
-
-## Step 9: Enter the List Price
-
-Focus on the List Price field to input or modify the product's list price amount for quoting.
-
-**Instruction:**
-
-- Click inside the **List Price** text input field in the Pricing & Costs tab.
-
-![Enter the list price](/img/turboquote/product-step-09.png)
-
-<br/>
-
-## Step 10: Enter the Optional Cost Value
-
-Specify the internal cost of the product to enable accurate margin tracking, if applicable.
-
-**Instruction:**
-
-- Click on the **Cost (Optional)** input field in the Pricing & Costs tab.
-
-![Enter the optional cost value](/img/turboquote/product-step-10.png)
-
-<br/>
-
-## Step 11: Submit the New Product
-
-Finalize and save the new product record to update the product catalog and make it available to add to the quote.
-
-**Instruction:**
-
-- Click the blue **Create Product** button at the bottom-right of the New Product dialog.
-
-![Submit the new product](/img/turboquote/product-step-11.png)
-
-<br/>
-
-## Step 12: Open Additional Options for the Product
-
-Access extra settings or detailed information about the new product within the catalog.
-
-**Instruction:**
-
-- Click on the circular icon button in the top-right corner of the product card.
-
-![Open additional options](/img/turboquote/product-step-12.png)
-
-<br/>
-
-## Step 13: Insert the Product into the Quote
-
-Complete the process by adding the created product as a line item in the active quote.
-
-**Instruction:**
-
-- Click the blue **+ Insert 1 Product** button at the bottom-right of the Product Catalog dialog.
-
-![Insert the product into the quote](/img/turboquote/product-step-13.png)
+![The Duplicate dialog with the name of the copy](/img/turboquote/products/07-duplicate.png)
 
 <br/>
 
 ## Summary
 
-You've successfully added a new custom product to your quote in TurboQuote! Here's a recap of what you accomplished:
+1. Create products from the **Products** page or from **Add products** in a quote
+2. Set the **category**, **billing**, **list price** and optional **cost**
+3. Add up to **3 images** that appear on quotes
+4. Use the **In catalog** switch to hide a product without deleting it
 
-1. Opened the product catalog from the quote interface
-2. Created a new product with a name and category
-3. Configured billing frequency and pricing details
-4. Inserted the product as a line item in your active quote
+## Related
 
-Your product is now saved in the catalog for future use and has been added to the current quote. You can continue adding more products or proceed to finalize your quote.
+- [Managing Bundles](./Managing-Bundles.md)
+- [Managing Price Books](./Managing-Price-Books.md)
+- [Bulk Importing from a Spreadsheet](./Bulk-Importing-from-a-Spreadsheet.md)
+- [Managing Categories](./Managing-Categories.md)

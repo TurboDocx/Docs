@@ -1,6 +1,6 @@
 ---
 title: How to Set Your Quote Sender Information
-sidebar_position: 6
+sidebar_position: 11
 description: Set your organization's Sender Name, Sender Phone, and Sender Email so they appear as "Prepared by" on every TurboQuote quote.
 keywords:
   - turboquote
