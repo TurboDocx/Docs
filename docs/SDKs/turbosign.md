@@ -2428,6 +2428,7 @@ See [Sending with signer roles](/docs/TurboSign/API-Signatures#sending-with-sign
 - A role left out uses the template's saved signer. If it has none, the API returns a 400 (`SignerRoleUnfilled`) naming the role.
 - An unknown role returns a 400 (`UnknownSignerRole`) whose message lists the template's roles. The SDKs raise their validation error with that code.
 - Any fields you pass are added to the template's (for example an extra witness signature).
+- Roles also work with the `deliverableId` of a document generated from a Word or PowerPoint template: the role's [anchored fields](#add-or-remove-an-anchored-field) are placed on their tags.
 
 See [Sending with signer roles](/docs/TurboSign/API-Signatures#sending-with-signer-roles) in the API reference for every rule and error.
 
@@ -4199,7 +4200,7 @@ end
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
 
-List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer. Each role also has `anchoredFieldCount`, and `setup.anchors` lists the [anchored fields](#add-or-remove-an-anchored-field) (`fieldId`, `roleKey`, `type`, `anchor`, `placement`, optional `offset` / `size`, and `notFound: true` when the template has no such tag).
 
 <Tabs groupId="js-variant">
 <TabItem value="javascript" label="JavaScript" default>
@@ -4227,7 +4228,7 @@ setup.roles.forEach((role) => console.log(role.key, role.hasSavedSigner));
 </TabItem>
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
 
-List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer. Each role also has `anchoredFieldCount`, and `setup["anchors"]` lists the [anchored fields](#add-or-remove-an-anchored-field) (`fieldId`, `roleKey`, `type`, `anchor`, `placement`, optional `offset` / `size`, and `notFound` set to `True` when the template has no such tag).
 
 ```python
 setup = await TurboSign.get_template_signature_setup("template-uuid")
@@ -4241,7 +4242,7 @@ for role in setup["roles"]:
 </TabItem>
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
-List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, `anchoredFieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer. `$setup->anchors` lists the [anchored fields](#add-or-remove-an-anchored-field) as `TemplateSignatureAnchor` objects (`fieldId`, `roleKey`, `type`, `anchor`, `placement`, `offset`, `size`, and `notFound`, true when the template has no such tag).
 
 ```php
 $setup = TurboSign::getTemplateSignatureSetup('template-uuid');
@@ -4256,7 +4257,7 @@ foreach ($setup->roles as $role) {
 </TabItem>
 <TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
 
-List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` carries `Key` (the value for `Recipient.Role`), `Label`, `Order`, `HasSavedSigner`, `FieldCount`, and `DefaultName` / `DefaultEmail` when it has a saved signer.
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` carries `Key` (the value for `Recipient.Role`), `Label`, `Order`, `HasSavedSigner`, `FieldCount`, `AnchoredFieldCount`, and `DefaultName` / `DefaultEmail` when it has a saved signer. `setup.Anchors` lists the [anchored fields](#add-or-remove-an-anchored-field) as `TemplateSignatureAnchor` values (`FieldID`, `RoleKey`, `Type`, `Anchor`, `Placement`, `Offset`, `Size`, and `NotFound`, true when the template has no such tag).
 
 ```go
 setup, err := client.TurboSign.GetTemplateSignatureSetup(ctx, "template-uuid")
@@ -4272,7 +4273,7 @@ for _, role := range setup.Roles {
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
 
-List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` exposes `getKey()` (the value for a recipient's role), `getLabel()`, `getOrder()`, `hasSavedSigner()`, `getFieldCount()`, and `getDefaultName()` / `getDefaultEmail()` when it has a saved signer.
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each `TemplateSignatureRole` exposes `getKey()` (the value for a recipient's role), `getLabel()`, `getOrder()`, `hasSavedSigner()`, `getFieldCount()`, `getAnchoredFieldCount()`, and `getDefaultName()` / `getDefaultEmail()` when it has a saved signer. `setup.getAnchors()` lists the [anchored fields](#add-or-remove-an-anchored-field) as `TemplateSignatureAnchor` objects (`getFieldId()`, `getRoleKey()`, `getType()`, `getAnchor()`, `getPlacement()`, `getOffset()`, `getSize()`, and `isNotFound()`, true when the template has no such tag).
 
 ```java
 TemplateSignatureSetup setup = client.turboSign().getTemplateSignatureSetup("template-uuid");
@@ -4285,7 +4286,7 @@ for (TemplateSignatureRole role : setup.getRoles()) {
 </TabItem>
 <TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
 
-List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer.
+List a template's signer roles, in signing order, to [send it with signer roles](#send-a-template-set-up-in-turbodocx). Each role carries `key` (the value for a recipient's `role`), `label`, `order`, `hasSavedSigner`, `fieldCount`, and `defaultName` / `defaultEmail` when it has a saved signer. Each role also has `anchoredFieldCount`, and `setup["anchors"]` lists the [anchored fields](#add-or-remove-an-anchored-field) (`fieldId`, `roleKey`, `type`, `anchor`, `placement`, optional `offset` / `size`, and `notFound` set to `true` when the template has no such tag).
 
 ```ruby
 setup = TurboDocxSdk::TurboSign.get_template_signature_setup("template-uuid")
@@ -4301,6 +4302,193 @@ Calls `GET /turbosign/templates/:templateId/signature-setup`. A template with no
 </Tabs>
 
 A template that doesn't exist in your organization, or has no saved signature setup, returns a 404 (`SignatureSetupNotFound`). Calls `GET /turbosign/templates/{templateId}/signature-setup`; see [Get Template Signature Setup](/docs/TurboSign/API-Signatures#endpoint-8-get-template-signature-setup).
+
+### Add or remove an anchored field {#add-or-remove-an-anchored-field}
+
+An anchored field is a field of a template's saved signature setup that is tied to a tag such as `{ClientSign}` for one signer role, and placed wherever that tag appears in the document being sent. Adding and removing one needs an administrator or contributor API key. A role send brings the role's anchored fields with it, with no flag. On any send that passes its own fields by anchor, with or without roles, set `applySignatureSetup` with `templateId` or `deliverableId`: each field you send with a `template.anchor` whose tag and type match an anchored field is treated as that field, so it fits its tag, centred on it, and a tag missing from the document is skipped instead of failing the send. Without it, your own anchor fields keep the standard placement and a tag missing from the document fails the send.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+const { fieldId, tagBecameSignatureField } = await TurboSign.addTemplateSignatureAnchor({
+  templateId: "your-template-id",
+  roleKey: "signer_1", // on a template with no signer yet, signer_1 creates the first one
+  type: "signature",
+  anchor: "{ClientSign}",
+  size: { width: 150, height: 40 }, // optional, also offset, placement, defaultValue, isReadonly
+});
+
+// Your own anchor field, here without roles: it fits its tag, centred on it, or is skipped if the tag is missing
+await TurboSign.sendSignature({
+  deliverableId: "your-deliverable-id",
+  recipients: [{ name: "Jane Doe", email: "jane@client.com", signingOrder: 1 }],
+  fields: [{ type: "signature", recipientEmail: "jane@client.com", template: { anchor: "{ClientSign}" } }],
+  applySignatureSetup: true,
+});
+
+await TurboSign.removeTemplateSignatureAnchor("your-template-id", fieldId);
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+const { fieldId, tagBecameSignatureField } = await TurboSign.addTemplateSignatureAnchor({
+  templateId: "your-template-id",
+  roleKey: "signer_1", // on a template with no signer yet, signer_1 creates the first one
+  type: "signature",
+  anchor: "{ClientSign}",
+  size: { width: 150, height: 40 }, // optional, also offset, placement, defaultValue, isReadonly
+});
+
+// Your own anchor field, here without roles: it fits its tag, centred on it, or is skipped if the tag is missing
+await TurboSign.sendSignature({
+  deliverableId: "your-deliverable-id",
+  recipients: [{ name: "Jane Doe", email: "jane@client.com", signingOrder: 1 }],
+  fields: [{ type: "signature", recipientEmail: "jane@client.com", template: { anchor: "{ClientSign}" } }],
+  applySignatureSetup: true,
+});
+
+await TurboSign.removeTemplateSignatureAnchor("your-template-id", fieldId);
+```
+
+</TabItem>
+</Tabs>
+
+- A second field on a tag, or another role's tag, throws `ConflictError` (409, code `AnchorTagHasField` or `AnchorOwnedByOtherRole`).
+- An unknown role or field ID throws `NotFoundError` (404, `SignerRoleNotFound` / `SetupFieldNotFound`).
+- `applySignatureSetup` works on `sendSignature` and `createSignatureReviewLink`.
+
+---
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+added = await TurboSign.add_template_signature_anchor(
+    template_id="your-template-id",
+    role_key="signer_1",  # on a template with no signer yet, signer_1 creates the first one
+    type="signature",
+    anchor="{ClientSign}",
+    size={"width": 150, "height": 40},  # optional, also offset, placement, default_value, is_readonly
+)
+# added -> {"fieldId": "...", "signatureSetup": {...}, "tagBecameSignatureField": True}
+
+# Your own anchor field, here without roles: it fits its tag, centred on it, or is skipped if the tag is missing
+await TurboSign.send_signature(
+    deliverable_id="your-deliverable-id",
+    recipients=[{"name": "Jane Doe", "email": "jane@client.com", "signingOrder": 1}],
+    fields=[{"type": "signature", "recipientEmail": "jane@client.com", "template": {"anchor": "{ClientSign}"}}],
+    apply_signature_setup=True,
+)
+
+await TurboSign.remove_template_signature_anchor("your-template-id", added["fieldId"])
+```
+
+- A second field on a tag, or another role's tag, raises `ConflictError` (409, code `AnchorTagHasField` or `AnchorOwnedByOtherRole`).
+- An unknown role or field ID raises `NotFoundError` (404, `SignerRoleNotFound` / `SetupFieldNotFound`).
+- `apply_signature_setup` works on `send_signature` and `create_signature_review_link`.
+
+---
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+use TurboDocx\TurboSign;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\Requests\AddTemplateSignatureAnchorRequest;
+
+$added = TurboSign::addTemplateSignatureAnchor(new AddTemplateSignatureAnchorRequest(
+    templateId: 'your-template-id',
+    roleKey: 'signer_1', // on a template with no signer yet, signer_1 creates the first one
+    type: SignatureFieldType::SIGNATURE,
+    anchor: '{ClientSign}',
+    size: ['width' => 150, 'height' => 40], // optional, also offset, placement, defaultValue, isReadonly
+));
+
+TurboSign::removeTemplateSignatureAnchor('your-template-id', $added->fieldId);
+```
+
+- `$added->signatureSetup` is the saved setup as stored (an array), and `$added->tagBecameSignatureField` is true when the tag was not a signature field before.
+- A second field on a tag, or another role's tag, throws `ConflictException` (409, `$e->errorCode` `AnchorTagHasField` or `AnchorOwnedByOtherRole`).
+- An unknown role or field ID throws `NotFoundException` (404, `SignerRoleNotFound` / `SetupFieldNotFound`).
+- On any send that passes its own fields by anchor, with or without roles, pass `applySignatureSetup: true` to `SendSignatureRequest` or `CreateSignatureReviewLinkRequest`, with `templateId` or `deliverableId`.
+
+---
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+added, err := client.TurboSign.AddTemplateSignatureAnchor(ctx, &turbodocx.AddTemplateSignatureAnchorRequest{
+    TemplateID: "your-template-id",
+    RoleKey:    "signer_1", // on a template with no signer yet, signer_1 creates the first one
+    Type:       "signature",
+    Anchor:     "{ClientSign}",
+    Size:       &turbodocx.AnchorSize{Width: 150, Height: 40}, // optional, also Offset, Placement, DefaultValue, IsReadonly
+})
+if err != nil {
+    log.Fatal(err)
+}
+
+_, err = client.TurboSign.RemoveTemplateSignatureAnchor(ctx, "your-template-id", added.FieldID)
+```
+
+- A second field on a tag, or another role's tag, is a `*turbodocx.ConflictError` (409, `Code` `"AnchorTagHasField"` or `"AnchorOwnedByOtherRole"`).
+- An unknown role or field ID is a `*turbodocx.NotFoundError` (404, `"SignerRoleNotFound"` / `"SetupFieldNotFound"`).
+- On any send that passes its own fields by anchor, with or without roles, set `ApplySignatureSetup: turbodocx.BoolPtr(true)` on `SendSignatureRequest` or `CreateSignatureReviewLinkRequest`, with `TemplateID` or `DeliverableID`. Leave it nil for the default behaviour.
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+AddTemplateSignatureAnchorResponse added = client.turboSign().addTemplateSignatureAnchor(
+    new AddTemplateSignatureAnchorRequest.Builder()
+        .templateId("your-template-id")
+        .roleKey("signer_1") // on a template with no signer yet, signer_1 creates the first one
+        .type("signature")
+        .anchor("{ClientSign}")
+        .size(new Field.Size(150, 40)) // optional, also offset, placement, defaultValue, isReadonly
+        .build()
+);
+
+client.turboSign().removeTemplateSignatureAnchor("your-template-id", added.getFieldId());
+```
+
+- `getSignatureSetup()` on both results is the saved setup as stored, as a `Map<String, Object>`.
+- A second field on a tag, or another role's tag, is a `TurboDocxException.ConflictException` (409, code `AnchorTagHasField` or `AnchorOwnedByOtherRole`).
+- An unknown role or field ID is a `TurboDocxException.NotFoundException` (404, `SignerRoleNotFound` / `SetupFieldNotFound`).
+- On any send that passes its own fields by anchor, with or without roles, call `.applySignatureSetup(true)` on the `SendSignatureRequest` or `CreateSignatureReviewLinkRequest` builder, with `templateId` or `deliverableId`.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+result = TurboDocxSdk::TurboSign.add_template_signature_anchor(
+  templateId: "your-template-id",
+  roleKey: "signer_1", # on a template with no signer yet, signer_1 creates the first one
+  type: "signature",
+  anchor: "{ClientSign}",
+  size: { width: 150, height: 40 } # optional, also offset, placement, defaultValue, isReadonly
+)
+result["fieldId"] # also "signatureSetup" and "tagBecameSignatureField"
+
+TurboDocxSdk::TurboSign.remove_template_signature_anchor("your-template-id", result["fieldId"])
+```
+
+- A second field on a tag, or another role's tag, raises `TurboDocxSdk::ConflictError` (409, `e.code` `AnchorTagHasField` or `AnchorOwnedByOtherRole`).
+- An unknown role or field ID raises `TurboDocxSdk::NotFoundError` (404, `SignerRoleNotFound` / `SetupFieldNotFound`).
+- On any send that passes its own fields by anchor, with or without roles, pass `applySignatureSetup: true` to `send_signature` or `create_signature_review_link`, with `templateId` or `deliverableId`. An explicit `false` is sent as is; leave the key out for the default behaviour.
+
+</TabItem>
+</Tabs>
+
+When a tag becomes a signature field (`tagBecameSignatureField` is true), the value saved on the template for that variable is cleared, and generation keeps the tag as literal text from then on, so a value you send for it is not written into the document. Calls `POST /turbosign/templates/{templateId}/signature-setup/anchors` and `DELETE /turbosign/templates/{templateId}/signature-setup/anchors/{fieldId}`; see [Add an anchored field](/docs/TurboSign/API-Signatures#endpoint-11-add-an-anchored-field) and [Remove an anchored field](/docs/TurboSign/API-Signatures#endpoint-12-remove-an-anchored-field).
 
 ## Field Types {#field-types}
 
@@ -5848,6 +6036,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `file_link`            | `str`        | Conditional | URL to document file           |
 | `deliverable_id`       | `str`        | Conditional | TurboDocx deliverable ID       |
 | `template_id`          | `str`        | Conditional | TurboDocx template ID          |
+| `apply_signature_setup` | `bool`      | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) fits its tag, centred on it, and is skipped if the tag is missing |
 | `document_name`        | `str`        | No          | Document name                  |
 | `document_description` | `str`        | No          | Document description           |
 | `sender_name`          | `str`        | No          | Sender name (overrides the configured value) |
@@ -5887,6 +6076,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `FileLink`            | `string`      | Conditional | URL to document          |
 | `DeliverableID`       | `string`      | Conditional | TurboDocx deliverable ID |
 | `TemplateID`          | `string`      | Conditional | TurboDocx template ID    |
+| `ApplySignatureSetup` | `*bool`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) fits its tag, centred on it, and is skipped if the tag is missing. Nil leaves it out |
 | `Recipients`          | `[]Recipient` | Yes         | List of recipients       |
 | `Fields`              | `[]Field`     | Conditional | List of fields. Optional when a recipient has a `Role` |
 | `DocumentName`        | `string`      | No          | Document display name    |
@@ -5912,6 +6102,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `fileLink`            | `String`          | Conditional | URL to document          |
 | `deliverableId`       | `String`          | Conditional | TurboDocx deliverable ID |
 | `templateId`          | `String`          | Conditional | TurboDocx template ID    |
+| `applySignatureSetup` | `Boolean`         | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) fits its tag, centred on it, and is skipped if the tag is missing |
 | `recipients`          | `List<Recipient>` | Yes         | List of recipients       |
 | `fields`              | `List<Field>`     | Conditional | List of fields. Optional when a recipient has a role |
 | `documentName`        | `String`          | No          | Document display name    |
@@ -5943,6 +6134,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `fileLink`            | `String`        | Conditional | URL to document file           |
 | `deliverableId`       | `String`        | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `String`        | Conditional | TurboDocx template ID          |
+| `applySignatureSetup` | `Boolean`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) fits its tag, centred on it, and is skipped if the tag is missing |
 | `documentName`        | `String`        | No          | Document name                  |
 | `documentDescription` | `String`        | No          | Document description           |
 | `senderName`          | `String`        | No          | Sender name (overrides the configured value) |
@@ -5986,6 +6178,7 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | `fileLink`            | `string`      | Conditional | URL to document file           |
 | `deliverableId`       | `string`      | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `string`      | Conditional | TurboDocx template ID          |
+| `applySignatureSetup` | `boolean`     | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) fits its tag, centred on it, and is skipped if the tag is missing |
 | `recipients`          | `Recipient[]` | Yes         | Recipients who will sign       |
 | `fields`              | `Field[]`     | Conditional | Signature fields configuration. Optional when a recipient has a `role` |
 | `documentName`        | `string`      | No          | Document name                  |
