@@ -442,7 +442,7 @@ What changes for the new signer:
 A saved signature setup can also hold **anchored fields**. In the TurboDocx app these are **TurboSign fields**: a template variable made into a TurboSign field of any type (signature, date, name and so on). An anchored field belongs to one role and is tied to a tag such as `{ClientSign}` instead of a page position, so it lands wherever that tag appears in the document being sent. On a Word or PowerPoint template the tag is one of the template's variables; on a PDF signature template it is text in the PDF.
 
 - A tag belongs to one role and holds one field.
-- On a role send, each anchored field keeps the size, offset, placement, default value and lock saved with it. With no saved size it is as wide as its tag (at least the type's default width) at the type's default height. With `replace` placement it is centred on the tag.
+- On a role send, each anchored field keeps the size, offset, placement, default value and lock saved with it. With no saved size it is as wide as its tag (at least the type's default width) at the type's default height. With `replace` placement it is centred on the tag, unless an alignment is saved on the field.
 - A tag missing from the document is skipped instead of failing the send.
 - After the tags are placed, the request checks again, on Prepare for Review and Prepare for Signing alike, that every signer still has a field to fill in (`SignerHasNoFields`, also raised when a signer is left with only locked fields) and that the document is within the field limit (`TooManyFields`).
 - A role send brings the role's anchored fields with it (see the table in [Sending with signer roles](#sending-with-signer-roles)). Fields you send yourself, with or without roles, are matched to them only with [`applySignatureSetup`](#apply-a-saved-setup-to-your-own-fields).
@@ -510,7 +510,7 @@ These also return `400` with a body of the form `{ "message": "...", "type": "..
 
 #### Locked templates and permissions
 
-- Saving or deleting a template's signature setup, or adding or removing an anchored field, returns `423` while someone is editing the template in TurboDocx. Retry once they have finished. For the anchored field endpoints the body has no `type` or `code`, so detect it by the status (see [Locked template](#locked-template-423)).
+- Saving or deleting a template's signature setup, or adding or removing an anchored field, returns `423` while someone is editing the template in TurboDocx. Retry once they have finished. The `423` body has no `type` or `code`, so detect it by the status (see [Locked template](#locked-template-423)).
 - Get Template Signature Setup requires the administrator, contributor or user role. A viewer is refused.
 
 #### Reading a draft's signers {#reading-a-drafts-signers}
@@ -2138,7 +2138,7 @@ Use `alignment` to choose where the signer's entry (a typed or drawn signature, 
 - **Anchor fields:** set it on the template as `template.alignment`. With `"placement": "replace"`, it also pins the field to that side of the anchor text: `"left"` starts the field where the anchor starts, `"center"` centres it on the anchor, `"right"` ends it where the anchor ends.
 - **Coordinate fields:** set it at the top level of the field as `alignment`.
 - **Leave it out (or send `null`)** to keep the standard placement. Existing integrations don't change. With `"placement": "replace"`, the standard placement centres a field narrower than its anchor text within it, and starts a field as wide as the anchor text or wider where the anchor starts.
-- **Saved setup fields:** only fields that come from a template's saved signature setup (a role send's [anchored fields](#anchored-fields), or your own fields matched with [`applySignatureSetup`](#apply-a-saved-setup-to-your-own-fields)) are centred on their tag at every width, unless `template.alignment` is set. Every other anchor field keeps the standard placement above.
+- **Saved setup fields:** only fields that come from a template's saved signature setup (a role send's [anchored fields](#anchored-fields), or your own fields matched with [`applySignatureSetup`](#apply-a-saved-setup-to-your-own-fields)) are centred on their tag at every width, unless the field has an alignment (saved on the setup field, or your own `template.alignment`). Every other anchor field keeps the standard placement above.
 - Any other value is rejected with a `400` error: `alignment must be one of: left, center, right`.
 - Checkbox fields ignore it.
 
