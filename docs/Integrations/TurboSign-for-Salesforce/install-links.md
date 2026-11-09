@@ -16,6 +16,8 @@ keywords:
 
 These links install the TurboSign for Salesforce package that TurboDocx publishes. Pick the link for the kind of org you're installing into, then follow [Install with a one-click link](/docs/Integrations/turbosign-for-salesforce/install#install-with-a-one-click-link).
 
+Install links for every version are also in the [GitHub release notes](https://github.com/TurboDocx/turbodocx-salesforce/releases/latest).
+
 ## Version 1.1.1 (latest)
 
 | Install into | Link |
@@ -48,7 +50,7 @@ If you have a sandbox, install there first, finish the [setup](/docs/Integration
 :::
 
 :::tip Already logged in to your org?
-The links go through `login.salesforce.com` (or `test.salesforce.com`), which may ask you to log in again even when you're already signed in to your org. To skip that, replace the start of the link with your org's My Domain address, the one in your browser's address bar when you're in Salesforce. For example: `https://yourcompany.my.salesforce.com/packaging/installPackage.apexp?p0=04tbm000000o8LlAAI`.
+The links go through `login.salesforce.com` (or `test.salesforce.com`), which may ask you to log in again even when you're already signed in to your org. To skip that, replace the start of the link with your org's My Domain address, the one in your browser's address bar when you're in Salesforce. For example: `https://yourcompany.my.salesforce.com/packaging/installPackage.apexp?p0=04tbm000000oqUrAAI`.
 :::
 
 :::note Logged in to a different org?

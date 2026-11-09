@@ -1,0 +1,19 @@
+{
+  // tsrs (TS 7) only, used by `npm run typecheck`.
+  // Dev boxes and PR CI use tsrs; staging/production builds, deploys and publishes still use regular tsc with tsconfig.json. Same options as @docusaurus/tsconfig, minus the `baseUrl` TS 7 removed.
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "noEmit": true,
+    "strict": false,
+    "paths": { "@site/*": ["./*"] },
+    "skipLibCheck": true,
+    "types": ["node", "@docusaurus/module-type-aliases", "@docusaurus/theme-classic"]
+  },
+  "exclude": ["node_modules", "build", ".docusaurus"]
+}

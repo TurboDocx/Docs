@@ -104,7 +104,7 @@ export const Illustration = ({ mouseEnter }: { mouseEnter: boolean }) => {
               delay={mouseEnter ? staticDelay : delay}
             />
             {mouseEnter && <Glow delay={staticDelay} />}
-            <AnimatePresence mode="wait">
+            <AnimatePresence exitBeforeEnter>
               {isGlowing && <Glow delay={delay} />}
             </AnimatePresence>
           </div>

@@ -14,6 +14,8 @@ keywords:
 
 # Install TurboSign for Salesforce
 
+Learn more: [TurboSign for Salesforce overview and pricing](https://www.turbodocx.com/integrations/salesforce-esignature).
+
 There are two ways to install TurboSign for Salesforce in your org. Most admins use the one-click install link.
 
 | Method | Best for | Who does it |

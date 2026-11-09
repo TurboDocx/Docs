@@ -13,7 +13,7 @@ keywords:
 
 # Send a document for signature from Salesforce
 
-This guide shows a rep how to send a document from an Opportunity, what each signer sees, and where the signed copy ends up. Your admin must finish [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup) first.
+This guide shows a rep how to send a document from an Opportunity, what each signer sees, and where the signed copy ends up. Your admin must finish [Set up TurboSign for Salesforce](/docs/Integrations/turbosign-for-salesforce/setup) first. For a walkthrough with screenshots, see the [guide to sending documents for signature from Salesforce](https://www.turbodocx.com/guides/send-documents-for-signature-from-salesforce).
 
 ## Step 1: Start the send
 
@@ -75,9 +75,9 @@ If you see a message telling you to check before sending again, don't click **Se
 
 Each signer gets an email with a link. Signers sign in order, so the second signer's email arrives after the first signer finishes.
 
-1. If your organization requires identity verification, the signer clicks **Send Code** and gets a six-digit code by email or text message, depending on your settings. See [one-time passcodes](/docs/TurboSign/how-to-configure-one-time-passcode).
+1. If your organization requires identity verification, the signer clicks **Send code** and gets a six-digit code by email. Texting a code isn't available for documents sent from the Salesforce app. See [one-time passcodes](/docs/TurboSign/how-to-configure-one-time-passcode).
 
-   ![Verify your identity screen with the Send Code button highlighted](/img/turbosign-salesforce/50-signer-send-code.png)
+   ![Verify your identity screen with the Send code button highlighted](/img/turbosign-salesforce/50-signer-send-code.png)
 
 2. They type the code and click **Verify And Continue**.
 
@@ -101,7 +101,7 @@ Each signer gets an email with a link. Signers sign in order, so the second sign
 
 ## Where the signed copy goes
 
-TurboDocx saves files only after every signer has signed and the document is sealed. Saving can take a minute after the last signature. A declined, voided, or expired document saves nothing to the record.
+TurboDocx saves files only after every signer has signed and the document is sealed. Saving can take a minute after the last signature. A voided or expired document saves nothing to the record.
 
 When the document is complete, TurboDocx saves two files to the record:
 
@@ -122,6 +122,6 @@ The **TurboSign Signatures** panel on the record lists the documents sent from i
 - click **Remind** to email signers who haven't signed yet, or
 - click **Void** to cancel the document. Type a **Reason**, then click **Void request**. Void can't be undone.
 
-:::tip React to declined or voided documents
-Nothing is saved to the record when a document is declined or voided. To act on those outcomes today, ask your admin to build a Flow on the **TurboSign Envelope** record's **Status** field. The status updates when a rep clicks **Refresh** in the **TurboSign Signatures** panel.
+:::tip React to voided or expired documents
+Nothing is saved to the record when a document is voided or expires. To act on those outcomes today, ask your admin to build a Flow on the **TurboSign Envelope** record's **Status** field (see the [Salesforce Flow e-signature guide](https://www.turbodocx.com/guides/salesforce-flow-e-signature)). The status updates when a rep clicks **Refresh** in the **TurboSign Signatures** panel.
 :::

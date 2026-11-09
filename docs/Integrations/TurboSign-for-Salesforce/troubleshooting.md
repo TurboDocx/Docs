@@ -69,7 +69,7 @@ A token in the template, such as `{guarantor_sig}`, isn't listed in the document
 
 ## The signed PDF never appears on the record
 
-TurboDocx saves the signed files only after every signer has signed, and it can take a minute after the last signature. A declined, voided, or expired document saves nothing.
+TurboDocx saves the signed files only after every signer has signed, and it can take a minute after the last signature. A voided or expired document saves nothing.
 
 TurboDocx saves the files through the Salesforce connection to the org you sent from. The package sends its org ID with each document, and TurboDocx uses the connection whose Salesforce org matches it. Only active connections of active TurboDocx users count.
 

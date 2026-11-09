@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { cn } from "../utils/cn";
+import { cn } from "../../utils/cn";
 
 export const GlowingStarsBackgroundCard = ({
   className,
@@ -104,7 +104,7 @@ export const Illustration = ({ mouseEnter }: { mouseEnter: boolean }) => {
               delay={mouseEnter ? staticDelay : delay}
             />
             {mouseEnter && <Glow delay={staticDelay} />}
-            <AnimatePresence mode="wait">
+            <AnimatePresence exitBeforeEnter>
               {isGlowing && <Glow delay={delay} />}
             </AnimatePresence>
           </div>
