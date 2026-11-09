@@ -35,6 +35,8 @@ keywords:
 
 # Salesforce Integration
 
+Overview: see [TurboSign for Salesforce overview and pricing](https://www.turbodocx.com/integrations/salesforce-esignature).
+
 TurboDocx works with Salesforce in two ways. You can use either one on its own, or both together.
 
 - **Generate documents from Salesforce data.** Say goodbye to copy-pasting customer information! TurboDocx pulls your real CRM data to create personalized documents, proposals, and presentations. No more "John Doe" placeholder text — use actual account names, opportunities, and details.
@@ -70,7 +72,7 @@ To connect Salesforce to TurboDocx (Steps 1 to 3), you'll need:
 - A TurboDocx **Pro** or **Enterprise** plan, which include the Salesforce integration
 - A Salesforce account with permission to create External Client Apps (any edition works for the connection and document generation; TurboSign for Salesforce needs an edition that runs custom Apex, see [Which Salesforce orgs can use it](#which-salesforce-orgs-can-use-it))
 - System Administrator access to create a Salesforce External Client App
-- About 15 minutes and a cup of coffee ☕
+- About 15 minutes for Steps 1 to 3, and a cup of coffee ☕
 - This guide (which you're already reading — you're ahead of the game!)
 
 :::tip Quick note
@@ -340,7 +342,7 @@ Now we'll connect your shiny new Salesforce external client app to TurboDocx. Th
 
 <br/>
 
-5. **Click "Configure Salesforce"** 🚀
+5. **Click "Configure SalesForce"** 🚀
    - A popup or form will appear
    - This is where the magic happens! Time to make these two apps best friends! ✨👯‍♀️
 

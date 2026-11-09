@@ -15,7 +15,7 @@ keywords:
 
 # Set up TurboSign for Salesforce
 
-This guide walks a Salesforce admin through the whole setup, from storing your TurboDocx credentials to saving your first document setup. It takes about 20 minutes. When you finish, your reps can send documents for signature from an Opportunity.
+This guide walks a Salesforce admin through the whole setup, from storing your TurboDocx credentials to saving your first document setup. It takes about 20 minutes, plus about 15 minutes if you still need to create the Salesforce connection in [Step 4](#step-4-connect-salesforce-in-turbodocx). When you finish, your reps can send documents for signature from an Opportunity.
 
 :::tip Prefer the command line?
 Every credential and access step below can also be scripted. See [Scripted setup for admins](/docs/Integrations/turbosign-for-salesforce/scripted-setup).
