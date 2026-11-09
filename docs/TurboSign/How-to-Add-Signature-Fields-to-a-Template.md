@@ -164,7 +164,7 @@ Both save to the template right away. The variable goes back to the list of vari
 
 ![TurboSign fields menu on the generate page](/img/turbosign/template-signature-fields/13-signature-field-menu.png)
 
-:::caution Changes on the generate page are for that document only
+:::caution Changes on the generate page's Signatures tab are for that document only
 On the generate page, **Edit on the Signatures tab** opens the document's **Signatures** tab. Changes you make there, such as removing a field, apply to the document you're about to send, not to the template. To save them to the template, use **Edit Setup** instead, or **⋮ → Save signature setup to template** as described in [How to Save a Signature Setup on a Template](./Signature-Setups-on-Templates.md).
 :::
 
