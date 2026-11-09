@@ -276,6 +276,12 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 `variables` must be sent, but it can be an empty array. `"variables": []` generates the document and returns `200`. Any placeholder you don't supply a value for renders blank in the document.
 :::
 
+:::warning Placeholders made into TurboSign fields stay as tags
+When a placeholder of the template has been made into a TurboSign field (an [anchored field](/docs/TurboSign/API-Signatures#anchored-fields) of the template's saved signature setup, such as a signature field on `{ClientSign}`), generation keeps that placeholder as literal text so TurboSign can place the field on it. A value you send for it in `variables` is not written into the document. Remove the anchored field from the template's setup to fill the placeholder again.
+
+Generate the deliverable after the placeholder became a TurboSign field. A deliverable generated before that has the value (or a blank) where the tag was, so TurboSign cannot find the tag. On a role send, or with `applySignatureSetup`, the field is then skipped, which can fail the send with `SignerHasNoFields`; a plain anchor send fails on the missing tag.
+:::
+
 ### Variable Object Structure
 
 Each variable in the `variables` array represents a placeholder in the template to be substituted:
