@@ -101,7 +101,7 @@ Each signer gets an email with a link. Signers sign in order, so the second sign
 
 ## Where the signed copy goes
 
-TurboDocx saves files only after every signer has signed and the document is sealed. Saving can take a minute after the last signature. A declined, voided, or expired document saves nothing to the record.
+TurboDocx saves files only after every signer has signed and the document is sealed. Saving can take a minute after the last signature. A voided or expired document saves nothing to the record.
 
 When the document is complete, TurboDocx saves two files to the record:
 
@@ -122,6 +122,6 @@ The **TurboSign Signatures** panel on the record lists the documents sent from i
 - click **Remind** to email signers who haven't signed yet, or
 - click **Void** to cancel the document. Type a **Reason**, then click **Void request**. Void can't be undone.
 
-:::tip React to declined or voided documents
-Nothing is saved to the record when a document is declined or voided. To act on those outcomes today, ask your admin to build a Flow on the **TurboSign Envelope** record's **Status** field (see the [Salesforce Flow e-signature guide](https://www.turbodocx.com/guides/salesforce-flow-e-signature)). The status updates when a rep clicks **Refresh** in the **TurboSign Signatures** panel.
+:::tip React to voided or expired documents
+Nothing is saved to the record when a document is voided or expires. To act on those outcomes today, ask your admin to build a Flow on the **TurboSign Envelope** record's **Status** field (see the [Salesforce Flow e-signature guide](https://www.turbodocx.com/guides/salesforce-flow-e-signature)). The status updates when a rep clicks **Refresh** in the **TurboSign Signatures** panel.
 :::
