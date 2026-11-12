@@ -83,9 +83,17 @@
 }
 
 // Title row: title, Copy page button, method badge.
+// Long titles wrap inside their own box; Copy page and the badge stay on the right, never on a new line.
 .api-title {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  > * {
+    flex-shrink: 0;
+  }
+  > h1 {
+    flex: 1 1 0;
+    min-width: 0;
+  }
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
@@ -175,6 +183,106 @@
 .menu__list-item.api-method.patch > .menu__link::before { content: "patch"; color: var(--api-patch); }
 .menu__list-item.api-method.delete > .menu__link::before { content: "del"; color: var(--api-delete); }
 
+// ---- Readability: softer text on API pages ----
+// Pure black text, heavy headings, tightened tracking and pink inline code made the pages tiring to read.
+// Slate text tones, normal tracking and lighter weights; dark mode uses soft greys, never pure white.
+:root {
+  --api-text: #484c58;
+  --api-text-strong: #32343a;
+  --api-text-muted: #666b79;
+  --api-required: #ad273c;
+  --api-code-text: #32343a;
+  --api-code-bg: #f1f3f6;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --api-text: #b9bdc8;
+    --api-text-strong: #e3e5ea;
+    --api-text-muted: #8f94a1;
+    --api-required: #f08a98;
+    --api-code-text: #e3e5ea;
+    --api-code-bg: #262a33;
+  }
+}
+[data-theme="dark"] {
+  --api-text: #b9bdc8;
+  --api-text-strong: #e3e5ea;
+  --api-text-muted: #8f94a1;
+  --api-required: #f08a98;
+  --api-code-text: #e3e5ea;
+  --api-code-bg: #262a33;
+}
+
+[class*="docs-doc-id-API/"] {
+  // Site-wide rules force p and h1-h6 to pure black/white with !important; these selectors are
+  // more specific, so !important here wins on API pages only.
+  .theme-doc-markdown {
+    color: var(--api-text);
+    letter-spacing: normal;
+
+    p,
+    li,
+    td {
+      color: var(--api-text) !important;
+      letter-spacing: normal;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    strong {
+      color: var(--api-text-strong) !important;
+      letter-spacing: normal;
+    }
+    h1 {
+      font-weight: 600;
+    }
+    h2,
+    h3 {
+      font-weight: 600;
+    }
+    // Inline code: neutral chip instead of the site's pink.
+    :not(pre) > code {
+      color: var(--api-code-text);
+      background: var(--api-code-bg);
+      border: 0;
+      font-size: 0.85em;
+      padding: 0.1em 0.35em;
+    }
+  }
+  // Description under the title: one comfortable paragraph.
+  .openapi-left-panel__container > p,
+  .openapi-left-panel__container > div > p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  // Param rows: smaller, muted descriptions; the name stays the strongest element.
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    :is(p, li, div) {
+      font-size: 0.8125rem !important;
+      line-height: 1.45;
+      color: var(--api-text) !important;
+    }
+  }
+  .openapi-schema__property {
+    color: var(--api-text-strong);
+    font-weight: 600;
+  }
+  .openapi-schema__type {
+    color: var(--api-text-muted);
+  }
+  .openapi-schema__required {
+    color: var(--api-required);
+    font-weight: 500;
+    text-transform: lowercase;
+  }
+  .openapi__method-endpoint-path {
+    letter-spacing: normal;
+    color: var(--api-text-strong);
+  }
+}
+
 // ---- Reference-fidelity pass: denser reference column, compact right column ----
 // Scoped to API reference pages (doc ids under API/).
 [class*="docs-doc-id-API/"] {
@@ -257,7 +365,12 @@
 }
 
 // Language tabs on one row; hide a variant row that only repeats the language (cURL).
+.openapi-tabs__code-container.tabs-container {
+  margin-top: 0;
+  padding-top: 0.5rem;
+}
 .openapi-tabs__code-container .openapi-tabs__code-list-container {
+  margin-top: 0;
   flex-wrap: nowrap;
   justify-content: space-between;
   gap: 0;
