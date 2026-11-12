@@ -56,7 +56,6 @@ module.exports = [
       group("TurboSign", [
         ep("prepare-document-for-review", "post"),
         ep("send-document-for-signature", "post"),
-        ep("list-signature-documents", "get"),
         ep("get-document-status", "get"),
         ep("get-document-recipients", "get"),
         ep("send-signing-reminder", "post"),
@@ -65,13 +64,6 @@ module.exports = [
         ep("download-signed-document", "get"),
         ep("get-audit-trail", "get"),
         ep("get-template-signature-setup", "get"),
-      ]),
-      group("Bulk Signatures", [
-        ep("create-bulk-batch", "post"),
-        ep("list-bulk-batches", "get"),
-        ep("get-bulk-batch", "get"),
-        ep("list-bulk-batch-jobs", "get"),
-        ep("cancel-bulk-batch", "post"),
       ]),
       group("Webhooks", [
         ep("create-webhook", "post"),
@@ -85,7 +77,6 @@ module.exports = [
         ep("replay-webhook-delivery", "post"),
         ep("get-webhook-stats", "get"),
       ]),
-      group("Account", [ep("list-organizations", "get")]),
     ],
   },
   {
