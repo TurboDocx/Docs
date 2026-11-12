@@ -76,8 +76,11 @@
   margin-right: 0 !important;
   padding: 0.35rem 0.6rem !important;
   font-size: 0.7rem;
-  &::after {
-    display: none !important; // language logo
+  // Keep the language logo (the ::after background), just smaller so seven tabs fit the column.
+  --code-tab-logo-width: 18px;
+  --code-tab-logo-height: 18px;
+  span {
+    padding-top: 0.3rem !important;
   }
 }
 // The C# tab is the .NET sample.
