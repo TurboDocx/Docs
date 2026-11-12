@@ -271,16 +271,22 @@ This endpoint requires one of these roles: **administrator**, **contributor**, o
 | `variables`   | Array  | **Yes**  | Array of variable objects for substitution. May be empty (`[]`) |
 | `description` | String | No       | Description (up to 65,535 characters)      |
 | `tags`        | Array  | No       | Array of tag strings to associate          |
+| `keepAnchoredTags` | Boolean | No | `true` keeps the template's [anchored TurboSign field](/docs/TurboSign/API-Signatures#anchored-fields) tags in the document as literal text, so a later signature request can place fields on them. Leave it out (or send `false`) to fill every variable with the value you send. See [Placeholders that are TurboSign fields](#placeholders-that-are-turbosign-fields) |
 
 :::note Empty or partial `variables`
 `variables` must be sent, but it can be an empty array. `"variables": []` generates the document and returns `200`. Any placeholder you don't supply a value for renders blank in the document.
 :::
 
-:::warning Placeholders made into TurboSign fields stay as tags
-When a placeholder of the template has been made into a TurboSign field (an [anchored field](/docs/TurboSign/API-Signatures#anchored-fields) of the template's saved signature setup, such as a signature field on `{ClientSign}`), generation keeps that placeholder as literal text so TurboSign can place the field on it. A value you send for it in `variables` is not written into the document. Remove the anchored field from the template's setup to fill the placeholder again.
+### Placeholders that are TurboSign fields {#placeholders-that-are-turbosign-fields}
 
-Generate the deliverable after the placeholder became a TurboSign field. A deliverable generated before that has the value (or a blank) where the tag was, so TurboSign cannot find the tag. On a role send, or with `applySignatureSetup`, the field is then skipped, which can fail the send with `SignerHasNoFields`; a plain anchor send fails on the missing tag.
-:::
+A placeholder of the template can be made into a TurboSign field: an [anchored field](/docs/TurboSign/API-Signatures#anchored-fields) of the template's saved signature setup, such as a signature field on `{ClientSign}`. TurboSign places that field wherever it finds the tag in the document being sent, so the tag has to stay in the generated document.
+
+- **Without `keepAnchoredTags`** (or with `false`), generation fills every variable as usual, including one that is now a TurboSign field: the value you send is written, and a placeholder you don't send renders blank. The tag is then not in the document.
+- **With `"keepAnchoredTags": true`**, each anchored tag of the template's setup (matched ignoring case) stays in the document as its own literal text, even where you send a value for it, and even if you don't send that variable at all. A value you send for such a tag is saved on the deliverable as the tag. Every other variable is filled as usual.
+
+To send a deliverable for signature with [signer roles](/docs/TurboSign/API-Signatures#sending-with-signer-roles) or with [`applySignatureSetup`](/docs/TurboSign/API-Signatures#apply-a-saved-setup-to-your-own-fields), generate it with `"keepAnchoredTags": true`, after the placeholder became a TurboSign field. A deliverable generated without the flag, or before the placeholder became a field, has no tag for the field to find: the anchored field is skipped, which can fail the send with `SignerHasNoFields`, and a plain anchor field you send without `applySignatureSetup` fails on the missing tag.
+
+Documents generated in the TurboDocx app keep the tags. A TurboSign mail merge takes no `keepAnchoredTags`: it keeps the setup's anchored tags only when it applies the template's saved signature setup, and otherwise fills the variables with each row's values as usual.
 
 ### Variable Object Structure
 

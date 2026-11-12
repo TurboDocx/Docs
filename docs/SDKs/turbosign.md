@@ -4307,7 +4307,7 @@ A template that doesn't exist in your organization, or has no saved signature se
 
 An anchored field is a field of a template's saved signature setup that is tied to a tag such as `{ClientSign}` for one signer role, and placed wherever that tag appears in the document being sent. In the TurboDocx app it is a **TurboSign field**: a template variable made into a TurboSign field of any type. Adding and removing one needs an administrator or contributor API key.
 
-A role send brings the role's saved fields with it, with no flag (see [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) for which ones). On any send that passes its own fields by anchor, with or without roles, set `applySignatureSetup` with `templateId` or `deliverableId`: each field you send with a `template.anchor` whose tag (ignoring case) and type match an anchored field is treated as that setup's field, so a tag missing from the document is skipped instead of failing the send, and with no size of its own the field fits its tag, centred on it. Without the flag, your own anchor fields keep the standard placement and a tag missing from the document fails the send.
+A role send brings the role's saved fields with it, with no flag (see [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) for which ones). On any send that passes its own fields by anchor, with or without roles, set `applySignatureSetup` with `templateId` or `deliverableId`: each field you send with a `template.anchor` whose tag (ignoring case) and type match an anchored field is treated as that setup's field, so a tag missing from the document is skipped instead of failing the send, and with no size of its own the field is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field), starting where the tag starts. Without the flag, your own anchor fields keep the standard placement and a tag missing from the document fails the send.
 
 <Tabs groupId="language" queryString>
 <TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
@@ -4324,7 +4324,7 @@ const { fieldId, tagBecameSignatureField } = await TurboSign.addTemplateSignatur
   size: { width: 150, height: 40 }, // optional, also offset, placement, defaultValue, isReadonly
 });
 
-// Your own anchor field, here without roles: it fits its tag, centred on it, or is skipped if the tag is missing
+// Your own anchor field, here without roles: it is fitted to its tag's line, or skipped if the tag is missing
 await TurboSign.sendSignature({
   deliverableId: "your-deliverable-id",
   recipients: [{ name: "Jane Doe", email: "jane@client.com", signingOrder: 1 }],
@@ -4347,7 +4347,7 @@ const { fieldId, tagBecameSignatureField } = await TurboSign.addTemplateSignatur
   size: { width: 150, height: 40 }, // optional, also offset, placement, defaultValue, isReadonly
 });
 
-// Your own anchor field, here without roles: it fits its tag, centred on it, or is skipped if the tag is missing
+// Your own anchor field, here without roles: it is fitted to its tag's line, or skipped if the tag is missing
 await TurboSign.sendSignature({
   deliverableId: "your-deliverable-id",
   recipients: [{ name: "Jane Doe", email: "jane@client.com", signingOrder: 1 }],
@@ -4381,7 +4381,7 @@ added = await TurboSign.add_template_signature_anchor(
 )
 # added -> {"fieldId": "...", "signatureSetup": {...}, "tagBecameSignatureField": True}
 
-# Your own anchor field, here without roles: it fits its tag, centred on it, or is skipped if the tag is missing
+# Your own anchor field, here without roles: it is fitted to its tag's line, or skipped if the tag is missing
 await TurboSign.send_signature(
     deliverable_id="your-deliverable-id",
     recipients=[{"name": "Jane Doe", "email": "jane@client.com", "signingOrder": 1}],
@@ -4499,10 +4499,10 @@ TurboDocxSdk::TurboSign.remove_template_signature_anchor("your-template-id", res
 In every language:
 
 - Adding the same type on the same tag for the same role again keeps that field: the same `fieldId`, `tagBecameSignatureField` false, updated with any `size`, `offset`, `placement`, `defaultValue` or `isReadonly` you send. A setting you leave out keeps its saved value. `tagBecameSignatureField` is true only when the call created the field.
-- With `applySignatureSetup`, only the match comes from the setup: the saved field's size, offset, placement, default value and lock are not copied onto your field. A matched field is centred on its tag unless its `template.alignment` is set (where your SDK's field type has it). If a skipped tag leaves a signer with no field, or only locked ones, the send or the review link fails with a 400 `SignerHasNoFields`.
+- With `applySignatureSetup`, only the match comes from the setup: the saved field's size, offset, placement, default value and lock are not copied onto your field. A matched field with no size of its own is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field); one with a size is centred on its tag unless its `template.alignment` is set (where your SDK's field type has it). If a skipped tag leaves a signer with no field, or only locked ones, sending fails with a 400 `SignerHasNoFields`; a review link is still created, and you place the signer's fields in the review screen.
 - A role used without `templateId` or `deliverableId` is a 400 `RoleRequiresTemplate`.
 
-When a tag becomes a TurboSign field (`tagBecameSignatureField` is true), the value saved on the template for that variable is cleared, and generation keeps the tag as literal text from then on, so a value you send for it is not written into the document. Generate the deliverable you send after that, because one generated earlier has no tag for the field to find.
+When a tag becomes a TurboSign field (`tagBecameSignatureField` is true), the value saved on the template for that variable is cleared. Generation still fills the variable with the value you send (or a blank), which removes the tag, unless the generation request sends `"keepAnchoredTags": true`: then the tag stays in the document as literal text, whatever value you send for it. To send the deliverable with roles or `applySignatureSetup`, generate it after the tag became a field, with `keepAnchoredTags` set (see [Placeholders that are TurboSign fields](/docs/API/Deliverable-API#placeholders-that-are-turbosign-fields)); one generated without it, or earlier, has no tag for the field to find. `keepAnchoredTags` is a Create Deliverable API option that not every Deliverable SDK passes yet; if yours doesn't, generate such a deliverable with the API.
 
 Full examples that add an anchored field, prepare a deliverable for signing with it, then remove it if the run created it: [JavaScript / TypeScript](https://github.com/TurboDocx/SDK/blob/main/packages/js-sdk/examples/turbosign-anchored-fields.ts), [Python](https://github.com/TurboDocx/SDK/blob/main/packages/py-sdk/examples/turbosign_anchored_fields.py), [PHP](https://github.com/TurboDocx/SDK/blob/main/packages/php-sdk/examples/turbosign-anchored-fields.php), [Go](https://github.com/TurboDocx/SDK/blob/main/packages/go-sdk/examples/turbosign_anchored_fields.go), [Java](https://github.com/TurboDocx/SDK/blob/main/packages/java-sdk/examples/TurboSignAnchoredFields.java), [Ruby](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turbosign_anchored_fields.rb). These links go live when the SDK release that adds these methods is published. Calls `POST /turbosign/templates/{templateId}/signature-setup/anchors` and `DELETE /turbosign/templates/{templateId}/signature-setup/anchors/{fieldId}`; see [Add an anchored field](/docs/TurboSign/API-Signatures#endpoint-11-add-an-anchored-field) and [Remove an anchored field](/docs/TurboSign/API-Signatures#endpoint-12-remove-an-anchored-field).
 
@@ -6052,7 +6052,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `file_link`            | `str`        | Conditional | URL to document file           |
 | `deliverable_id`       | `str`        | Conditional | TurboDocx deliverable ID       |
 | `template_id`          | `str`        | Conditional | TurboDocx template ID          |
-| `apply_signature_setup` | `bool`      | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, fits its tag, centred on it |
+| `apply_signature_setup` | `bool`      | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
 | `document_name`        | `str`        | No          | Document name                  |
 | `document_description` | `str`        | No          | Document description           |
 | `sender_name`          | `str`        | No          | Sender name (overrides the configured value) |
@@ -6092,7 +6092,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `FileLink`            | `string`      | Conditional | URL to document          |
 | `DeliverableID`       | `string`      | Conditional | TurboDocx deliverable ID |
 | `TemplateID`          | `string`      | Conditional | TurboDocx template ID    |
-| `ApplySignatureSetup` | `*bool`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, fits its tag, centred on it. Nil leaves it out |
+| `ApplySignatureSetup` | `*bool`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field). Nil leaves it out |
 | `Recipients`          | `[]Recipient` | Yes         | List of recipients       |
 | `Fields`              | `[]Field`     | Conditional | List of fields. Optional when a recipient has a `Role` |
 | `DocumentName`        | `string`      | No          | Document display name    |
@@ -6118,7 +6118,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `fileLink`            | `String`          | Conditional | URL to document          |
 | `deliverableId`       | `String`          | Conditional | TurboDocx deliverable ID |
 | `templateId`          | `String`          | Conditional | TurboDocx template ID    |
-| `applySignatureSetup` | `Boolean`         | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, fits its tag, centred on it |
+| `applySignatureSetup` | `Boolean`         | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
 | `recipients`          | `List<Recipient>` | Yes         | List of recipients       |
 | `fields`              | `List<Field>`     | Conditional | List of fields. Optional when a recipient has a role |
 | `documentName`        | `String`          | No          | Document display name    |
@@ -6150,7 +6150,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `fileLink`            | `String`        | Conditional | URL to document file           |
 | `deliverableId`       | `String`        | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `String`        | Conditional | TurboDocx template ID          |
-| `applySignatureSetup` | `Boolean`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, fits its tag, centred on it |
+| `applySignatureSetup` | `Boolean`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
 | `documentName`        | `String`        | No          | Document name                  |
 | `documentDescription` | `String`        | No          | Document description           |
 | `senderName`          | `String`        | No          | Sender name (overrides the configured value) |
@@ -6194,7 +6194,7 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | `fileLink`            | `string`      | Conditional | URL to document file           |
 | `deliverableId`       | `string`      | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `string`      | Conditional | TurboDocx template ID          |
-| `applySignatureSetup` | `boolean`     | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, fits its tag, centred on it |
+| `applySignatureSetup` | `boolean`     | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
 | `recipients`          | `Recipient[]` | Yes         | Recipients who will sign       |
 | `fields`              | `Field[]`     | Conditional | Signature fields configuration. Optional when a recipient has a `role` |
 | `documentName`        | `string`      | No          | Document name                  |

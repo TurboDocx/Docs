@@ -682,6 +682,7 @@ Understanding the variable structure is key to successful document generation:
 | `variables[].aiPrompt`               | string  | No       | AI prompt for content generation               |
 | `variables[].metadata`               | object  | No       | Custom metadata for the variable               |
 | `tags`                               | array   | No       | Tags for categorization                        |
+| `keepAnchoredTags`                   | boolean | No       | `true` keeps the template's TurboSign field tags as literal text, for a later signature request. See [Placeholders that are TurboSign fields](/docs/API/Deliverable-API#placeholders-that-are-turbosign-fields) |
 | `metadata`                           | object  | No       | Additional metadata (sessions, tracking, etc.) |
 
 ### Step 2: Download Generated File
