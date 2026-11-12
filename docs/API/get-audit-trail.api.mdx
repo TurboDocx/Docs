@@ -1,0 +1,62 @@
+---
+id: get-audit-trail
+title: "Get Audit Trail"
+description: "Returns every recorded event on a document in time order, such as sent, viewed, signed and voided, with the person who acted. Entries form a hash chain, so each `currentHash` builds on the previous entry's hash and tampering would break the chain."
+sidebar_label: "Get Audit Trail"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "get api-method"
+info_path: docs/API/turbodocx-api-documentation
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<ApiTitle method="get" title="Get Audit Trail" />
+
+<MethodEndpoint
+  method={"get"}
+  path={"/turbosign/documents/{documentId}/audit-trail"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns every recorded event on a document in time order, such as sent, viewed, signed and voided, with the person who acted. Entries form a hash chain, so each `currentHash` builds on the previous entry's hash and tampering would break the chain.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<RequestSchema
+  title={"Body"}
+>
+  
+</RequestSchema>
+
+<ParamsDetails
+  parameters={[{"name":"documentId","in":"path","required":true,"description":"The signature document ID.","schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<StatusCodes
+  responses={{"200":{"description":"The document and its audit entries.","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"document":{"type":"object","properties":{"id":{"type":"string","format":"uuid"},"name":{"type":"string"}}},"auditTrail":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string","format":"uuid"},"documentId":{"type":"string","format":"uuid"},"actionType":{"type":"string","description":"The event, for example `prepared_for_review`, `document_sent`, `document_viewed`, `document_signed`, `document_voided` or `reminder_sent`."},"timestamp":{"type":"string","format":"date-time"},"previousHash":{"type":"string","nullable":true},"currentHash":{"type":"string"},"createdOn":{"type":"string","format":"date-time"},"details":{"type":"object","description":"Event details, such as IP address and user agent."},"user":{"type":"object","description":"Present when a sender acted.","properties":{"name":{"type":"string"},"email":{"type":"string"}}},"userId":{"type":"string","format":"uuid"},"recipient":{"type":"object","description":"Present when a recipient acted.","properties":{"name":{"type":"string"},"email":{"type":"string"}}},"recipientId":{"type":"string","format":"uuid"}}}}}}}},"example":{"data":{"document":{"id":"4a20eca5-7944-430c-97d5-fcce4be24296","name":"Service Agreement"},"auditTrail":[{"id":"b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e","documentId":"4a20eca5-7944-430c-97d5-fcce4be24296","actionType":"document_sent","timestamp":"2026-01-15T10:35:00.000Z","previousHash":null,"currentHash":"a1b2c3d4e5f6...","createdOn":"2026-01-15T10:35:00.000Z","details":{"ipAddress":"203.0.113.10"},"user":{"name":"Jane Sender","email":"sender@example.com"},"userId":"f5e6d7c8-9a0b-4c1d-8e3f-4a5b6c7d8e9f"},{"id":"c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f","documentId":"4a20eca5-7944-430c-97d5-fcce4be24296","actionType":"document_signed","timestamp":"2026-01-16T14:02:00.000Z","previousHash":"a1b2c3d4e5f6...","currentHash":"b2c3d4e5f6a7...","createdOn":"2026-01-16T14:02:00.000Z","details":{"ipAddress":"198.51.100.7"},"recipient":{"name":"John Smith","email":"john.smith@example.com"},"recipientId":"5f673f37-9912-4e72-85aa-8f3649760f6b"}]}}}}},"401":{"description":"Missing or invalid API key, or the organization ID header is missing or is not an organization the key belongs to. The response has no body."},"404":{"description":"The document does not exist, was deleted, or belongs to another organization.","content":{"application/json":{"example":{"error":"Document not found"},"schema":{"type":"object","properties":{"error":{"type":"string"}}}}}},"500":{"description":"An unexpected server error.","content":{"application/json":{"example":{"error":"Failed to get audit trail"},"schema":{"type":"object","properties":{"error":{"type":"string"}}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

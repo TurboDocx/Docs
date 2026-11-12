@@ -1,0 +1,189 @@
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/markdown/schema.js b/node_modules/docusaurus-theme-openapi-docs/lib/markdown/schema.js
+index 0581f09..b7d2e4a 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/markdown/schema.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/markdown/schema.js
+@@ -130,7 +130,7 @@ function getQualifierMessage(schema) {
+     }
+     let message = `**${(0, Translate_1.translate)({
+         id: "theme.openapi.schemaItem.possibleValues",
+-        message: "Possible values:",
++        message: "Allowed:",
+     })}** `;
+     let qualifierGroups = [];
+     // Check for enum in array items (directly or inside allOf)
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js
+index 45abf08..f91df2f 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js
+@@ -17,7 +17,7 @@ const theme_common_1 = require("@docusaurus/theme-common");
+ const clsx_1 = __importDefault(require("clsx"));
+ const codeBlockUtils_1 = require("@theme/utils/codeBlockUtils");
+ function CodeBlockContainer({ as: As, ...props }) {
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   const prismCssVariables = (0, codeBlockUtils_1.getPrismCssVariables)(
+     prismTheme
+   );
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js
+index eb19bf4..fc3c96f 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js
+@@ -46,7 +46,7 @@ function CodeBlockString({
+     languageProp ??
+     (0, codeBlockUtils_1.parseLanguage)(blockClassName) ??
+     defaultLanguage;
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   const wordWrap = (0, useCodeWordWrap_1.useCodeWordWrap)();
+   // We still parse the metastring in case we want to support more syntax in the
+   // future. Note that MDX doesn't strip quotes when parsing metastring:
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js
+index 5b51ca9..6256ed0 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js
+@@ -94,7 +94,7 @@ function ExpandButton({
+   lineClassNames,
+ }) {
+   const [isModalOpen, setIsModalOpen] = (0, react_1.useState)(false);
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   (0, react_1.useEffect)(() => {
+     react_modal_1.default.setAppElement("body");
+   }, []);
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/MethodEndpoint/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/MethodEndpoint/index.js
+index 9f0954f..838917f 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/MethodEndpoint/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/MethodEndpoint/index.js
+@@ -57,7 +57,7 @@ function MethodEndpoint({ method, path, context }) {
+           react_1.default.createElement(
+             "h2",
+             { className: "openapi__method-endpoint-path" },
+-            `${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`
++            `${path}`
+           )
+       ),
+       react_1.default.createElement("div", { className: "openapi__divider" })
+@@ -105,7 +105,7 @@ function MethodEndpoint({ method, path, context }) {
+           "h2",
+           { className: "openapi__method-endpoint-path" },
+           renderServerUrl(),
+-          `${path.replace(/{([a-z0-9-_]+)}/gi, ":$1")}`
++          `${path}`
+         )
+     ),
+     react_1.default.createElement("div", { className: "openapi__divider" })
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
+index cdb5a9a..aa11554 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
+@@ -135,11 +135,11 @@ function Request({ item }) {
+   );
+   const auth = (0, hooks_1.useTypedSelector)((state) => state.auth);
+   const dispatch = (0, hooks_1.useTypedDispatch)();
+-  const [expandAccept, setExpandAccept] = (0, react_1.useState)(true);
++  const [expandAccept, setExpandAccept] = (0, react_1.useState)(false);
+   const [expandAuth, setExpandAuth] = (0, react_1.useState)(true);
+-  const [expandBody, setExpandBody] = (0, react_1.useState)(true);
+-  const [expandParams, setExpandParams] = (0, react_1.useState)(true);
+-  const [expandServer, setExpandServer] = (0, react_1.useState)(true);
++  const [expandBody, setExpandBody] = (0, react_1.useState)(false);
++  const [expandParams, setExpandParams] = (0, react_1.useState)(false);
++  const [expandServer, setExpandServer] = (0, react_1.useState)(false);
+   const serverLabelId = (0, react_1.useId)();
+   const allParams = [
+     ...pathParams,
+@@ -494,6 +494,12 @@ function Request({ item }) {
+               id: "theme.openapi.request.sendButton",
+               message: "Send API Request",
+             })
++          ),
++        item.method !== "event" &&
++          react_1.default.createElement(
++            "p",
++            { className: "openapi-explorer__request-note" },
++            "Your API key and organization ID stay in this browser tab and are sent only to the API with this request. They are never saved: reload or leave the page and they are gone."
+           )
+       )
+     )
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js
+index c24ddc6..dc300a1 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js
+@@ -151,7 +151,7 @@ function Response({ item }) {
+   const themeConfig = siteConfig.themeConfig;
+   const hideSendButton = metadata.frontMatter.hide_send_button;
+   const proxy = metadata.frontMatter.proxy ?? themeConfig.api?.proxy;
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   const code = (0, hooks_1.useTypedSelector)((state) => state.response.code);
+   const headers = (0, hooks_1.useTypedSelector)(
+     (state) => state.response.headers
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/index.js
+index 466f4a7..f612829 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/index.js
+@@ -91,9 +91,6 @@ function ApiExplorer({ item, infoPath }) {
+   return react_1.default.createElement(
+     react_1.default.Fragment,
+     null,
+-    react_1.default.createElement(SecuritySchemes_1.default, {
+-      infoPath: infoPath,
+-    }),
+     item.method !== "event" &&
+       react_1.default.createElement(CodeSnippets_1.default, {
+         postman: postman,
+@@ -101,6 +98,9 @@ function ApiExplorer({ item, infoPath }) {
+         maskCredentials: mask_credentials,
+         requestBody: item.requestBody,
+       }),
++    react_1.default.createElement(SecuritySchemes_1.default, {
++      infoPath: infoPath,
++    }),
+     react_1.default.createElement(Request_1.default, { item: item }),
+     react_1.default.createElement(Response_1.default, { item: item })
+   );
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ResponseSchema/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ResponseSchema/index.js
+index d3a2204..aa57b8c 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ResponseSchema/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ResponseSchema/index.js
+@@ -72,6 +72,16 @@ const ResponseSchemaComponent = ({ title, body, style }) => {
+             react_1.default.createElement(
+               SchemaTabs_1.default,
+               { className: "openapi-tabs__schema" },
++              responseExample &&
++                (0, ResponseExamples_1.ResponseExample)({
++                  responseExample,
++                  mimeType,
++                }),
++              responseExamples &&
++                (0, ResponseExamples_1.ResponseExamples)({
++                  responseExamples,
++                  mimeType,
++                }),
+               react_1.default.createElement(
+                 TabItem_1.default,
+                 { key: title, label: title, value: title },
+@@ -135,20 +145,12 @@ const ResponseSchemaComponent = ({ title, body, style }) => {
+                   )
+                 )
+               ),
+-              firstBody &&
++              !responseExample &&
++                !responseExamples &&
++                firstBody &&
+                 (0, ResponseExamples_1.ExampleFromSchema)({
+                   schema: firstBody,
+                   mimeType: mimeType,
+-                }),
+-              responseExamples &&
+-                (0, ResponseExamples_1.ResponseExamples)({
+-                  responseExamples,
+-                  mimeType,
+-                }),
+-              responseExample &&
+-                (0, ResponseExamples_1.ResponseExample)({
+-                  responseExample,
+-                  mimeType,
+                 })
+             )
+           )

@@ -1,7 +1,7 @@
 ---
 id: turbodocx-api-documentation
 title: "TurboDocx API Documentation"
-description: "Welcome to the TurboDocx API Documentation. This comprehensive guide is designed to provide developers with all the information required to interact with the TurboDocx platform programmatically."
+description: "The TurboDocx API lets you generate documents from your templates, send them for signature with TurboSign, and get notified with webhooks. Every endpoint page below shows its parameters, responses, request samples in seven languages, and a Try it console that calls the API with your own key."
 sidebar_label: Introduction
 sidebar_position: 0
 hide_title: true
@@ -9,53 +9,129 @@ custom_edit_url: null
 ---
 
 import ApiLogo from "@theme/ApiLogo";
+import Heading from "@theme/Heading";
 import SchemaTabs from "@theme/SchemaTabs";
 import TabItem from "@theme/TabItem";
 import Export from "@theme/ApiExplorer/Export";
 
-<span className={"theme-doc-version-badge badge badge--secondary"}>Version: 1.0.0</span>
+<span
+  className={"theme-doc-version-badge badge badge--secondary"}
+  children={"Version: 1.0.0"}
+>
+</span>
 
-<h1 className={"openapi__heading"}>TurboDocx API Documentation</h1>
+<Heading
+  as={"h1"}
+  className={"openapi__heading"}
+  children={"TurboDocx API Documentation"}
+>
+</Heading>
 
 
 
-Welcome to the TurboDocx API Documentation. This comprehensive guide is designed to provide developers with all the information required to interact with the TurboDocx platform programmatically.
-
-Whether you're looking to automate document creation, manage your templates, or integrate TurboDocx features into your application, you'll find the necessary endpoints, parameters, and examples here.
-
-## **Getting started guide**
-
-Before diving into the specifics of the API, ensure that you have obtained the necessary Access Token and have the correct permissions to access the desired resources.
-
-Keep your Access Token secure and do not expose them in publicly accessible areas such as GitHub, client-side code, etc. **The Authentication and Organization ID is a variable set at the root of the collection.**
+The TurboDocx API lets you generate documents from your templates, send them for signature with TurboSign, and get notified with webhooks. Every endpoint page below shows its parameters, responses, request samples in seven languages, and a Try it console that calls the API with your own key.
 
 ## Base URL
 
-All API requests should be made to the base URL provided upon your API key registration. Typically, it looks like this:
+All requests go to:
 
-``` typescript
+```
 https://api.turbodocx.com
-
- ```
+```
 
 ## Authentication
 
-TurboDocx is working on it's API Key flows, and for the time being, we recommend grabbing the access token used from your user's accounts to leverage our APIs. You can find an example on how to get your access token in the `Blueprint` folder.
+Every request needs two headers:
 
-To use the Access Token, use the following under the `Authorization Header`
+```
+Authorization: Bearer YOUR_API_KEY
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+```
 
-``` typescript
-Authorization: Bearer YOUR_ACCESS_TOKEN
+To get them:
 
- ```
+1. Sign in to [TurboDocx](https://www.turbodocx.com), click your avatar, then **Settings**.
+2. Open **API keys** (under **Developers**) to create or copy an API key. Keys start with `TDX-`.
+3. Copy your organization ID from the **Features and integrations** page.
 
-### Authentication error response
+Keep your API key secret: never put it in client-side code or a public repository. A missing or invalid key returns `401 Unauthorized`, and a key whose role is not allowed to perform an action returns `403 Forbidden`.
 
-If an Access Token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized response code.
+## SDKs
 
-### **Need some help?**
+Official SDKs for JavaScript and TypeScript, Python, PHP, Ruby, Go and Java wrap these endpoints. See [SDKs](/docs/SDKs) to install one.
 
-In case you have questions, go through our tutorials, click through out UI and network trace it, or visit our [Discord](https://discord.gg/NYKwz4BcpX) to review topics, ask questions, and learn from others.
+## Need help?
+
+Ask in our [Discord](https://discord.gg/NYKwz4BcpX) or start with the guides under Getting Started.
 
 
+<div
+  style={{"marginBottom":"2rem"}}
+>
+  <Heading
+    id={"authentication"}
+    as={"h2"}
+    className={"openapi-tabs__heading"}
+    children={"Authentication"}
+  >
+  </Heading><SchemaTabs
+    className={"openapi-tabs__security-schemes"}
+  >
+    <TabItem
+      label={"HTTP: Bearer Auth"}
+      value={"bearerAuth"}
+    >
+      
+      
+      Your TurboDocx API key (starts with `TDX-`), sent as `Authorization: Bearer <key>`.
+      
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                Security Scheme Type:
+              </th><td>
+                http
+              </td>
+            </tr><tr>
+              <th>
+                HTTP Authorization Scheme:
+              </th><td>
+                bearer
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem><TabItem
+      label={"API Key: orgId"}
+      value={"orgId"}
+    >
+      
+      
+      Your TurboDocx organization ID.
+      
+      <div>
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                Security Scheme Type:
+              </th><td>
+                apiKey
+              </td>
+            </tr><tr>
+              <th>
+                Header parameter name:
+              </th><td>
+                x-rapiddocx-org-id
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </TabItem>
+  </SchemaTabs>
+</div>
       

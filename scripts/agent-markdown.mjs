@@ -9,6 +9,7 @@
 //   node scripts/agent-markdown.mjs check [outDir]   verify a finished build without changing it
 import fs from 'node:fs';
 import path from 'node:path';
+import { apiJsxToMarkdown } from './api-twin.mjs';
 
 const SITE = 'https://docs.turbodocx.com';
 const errors = [];
@@ -181,7 +182,8 @@ function run(out, write) {
     twins++;
 
     if (write) {
-      const body = rewriteBody(stripFrontmatter(fs.readFileSync(p.md, 'utf8')).trim(), p, ctx);
+      const raw = apiJsxToMarkdown(stripFrontmatter(fs.readFileSync(p.md, 'utf8')).trim());
+      const body = rewriteBody(raw, p, ctx);
       fs.writeFileSync(p.md, `---\n${frontmatter(p, body)}\n---\n\n${body}\n`);
       if (!p.html.includes('type="text/markdown"')) {
         p.html = p.html.replace('</head>', `<link rel="alternate" type="text/markdown" href="${p.mdUrl}"></head>`);
@@ -192,6 +194,7 @@ function run(out, write) {
     const md = fs.readFileSync(p.md, 'utf8');
     if (!/^---\ntitle: .+\n(description: .+\n)?url: .+\n---\n/.test(md)) fail(p.md, 'missing title/description/url frontmatter');
     if (!/^# \S/m.test(md)) fail(p.md, 'has no "# H1" heading');
+    if (/^<(MethodEndpoint|ParamsDetails|RequestSchema|StatusCodes)\b/m.test(md)) fail(p.md, 'raw API reference JSX left in the twin');
     if (!p.html.includes(`<link rel="alternate" type="text/markdown" href="${p.mdUrl}">`)) {
       fail(p.file, `missing <link rel="alternate" type="text/markdown" href="${p.mdUrl}">`);
     }

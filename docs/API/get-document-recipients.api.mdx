@@ -1,0 +1,62 @@
+---
+id: get-document-recipients
+title: "Get Document Recipients"
+description: "Returns every recipient on a document with their signing status, email history and who sent the document. Use `effectiveStatus` to see who you are still waiting on, because it also reflects a voided or expired document."
+sidebar_label: "Get Document Recipients"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "get api-method"
+info_path: docs/API/turbodocx-api-documentation
+custom_edit_url: null
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<ApiTitle method="get" title="Get Document Recipients" />
+
+<MethodEndpoint
+  method={"get"}
+  path={"/turbosign/documents/{documentId}/recipients"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Returns every recipient on a document with their signing status, email history and who sent the document. Use `effectiveStatus` to see who you are still waiting on, because it also reflects a voided or expired document.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<RequestSchema
+  title={"Body"}
+>
+  
+</RequestSchema>
+
+<ParamsDetails
+  parameters={[{"name":"documentId","in":"path","required":true,"description":"The signature document ID.","schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<StatusCodes
+  responses={{"200":{"description":"The document's recipients, ordered by `signingOrder`.","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"document":{"type":"object","properties":{"id":{"type":"string","format":"uuid"},"name":{"type":"string"},"status":{"type":"string","enum":["draft","setup_complete","review_ready","under_review","finalizing","completed","finalization_failed","voided","expired"]},"createdOn":{"type":"string","format":"date-time"},"sentOn":{"type":"string","format":"date-time","nullable":true,"description":"When the document was sent, or `null` while it is a draft."},"expiresAt":{"type":"string","format":"date-time","nullable":true},"sentBy":{"type":"object","properties":{"name":{"type":"string"},"email":{"type":"string"}}}}},"recipients":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string","format":"uuid"},"name":{"type":"string"},"email":{"type":"string"},"status":{"type":"string","enum":["pending","viewed","completed"],"description":"Raw recipient status. An unsigned signer on a voided or expired document still reads `pending`."},"effectiveStatus":{"type":"string","enum":["pending","viewed","completed","voided","expired"],"description":"Status with the document's outcome applied. Use this for display and follow-up."},"signedOn":{"type":"string","format":"date-time","nullable":true},"signingOrder":{"type":"integer"},"delivery":{"type":"object","description":"Emails sent to this recipient. CC emails are not counted.","properties":{"firstSentOn":{"type":"string","format":"date-time","nullable":true},"lastSentOn":{"type":"string","format":"date-time","nullable":true},"totalSent":{"type":"integer","description":"All emails: request, resends, reminders, warnings and final notices."},"reminderCount":{"type":"integer","description":"Scheduled reminders only. A manual reminder does not count here."},"lastRemindedAt":{"type":"string","format":"date-time","nullable":true,"description":"When the reminder clock was last reset. Set by the first send too, so it is not proof of a reminder."},"warningCount":{"type":"integer","description":"Expiry warnings sent."},"lastWarningAt":{"type":"string","format":"date-time","nullable":true}}}}}},"summary":{"type":"object","description":"Recipient counts by `effectiveStatus`, plus `waitingOn` (pending and viewed).","properties":{"total":{"type":"integer"},"pending":{"type":"integer"},"viewed":{"type":"integer"},"completed":{"type":"integer"},"voided":{"type":"integer"},"expired":{"type":"integer"},"waitingOn":{"type":"integer"}}}}}}},"example":{"data":{"document":{"id":"4a20eca5-7944-430c-97d5-fcce4be24296","name":"Service Agreement","status":"under_review","createdOn":"2026-01-15T10:30:00.000Z","sentOn":"2026-01-15T10:35:00.000Z","expiresAt":null,"sentBy":{"name":"Jane Sender","email":"sender@example.com"}},"recipients":[{"id":"5f673f37-9912-4e72-85aa-8f3649760f6b","name":"John Smith","email":"john.smith@example.com","status":"completed","effectiveStatus":"completed","signedOn":"2026-01-16T14:02:00.000Z","signingOrder":1,"delivery":{"firstSentOn":"2026-01-15T10:35:00.000Z","lastSentOn":"2026-01-15T10:35:00.000Z","totalSent":1,"reminderCount":0,"lastRemindedAt":"2026-01-15T10:35:00.000Z","warningCount":0,"lastWarningAt":null}},{"id":"7a891c23-4d56-4e78-9abc-def012345678","name":"Jane Doe","email":"jane.doe@example.com","status":"pending","effectiveStatus":"pending","signedOn":null,"signingOrder":2,"delivery":{"firstSentOn":"2026-01-16T14:02:05.000Z","lastSentOn":"2026-01-20T09:00:00.000Z","totalSent":2,"reminderCount":1,"lastRemindedAt":"2026-01-20T09:00:00.000Z","warningCount":0,"lastWarningAt":null}}],"summary":{"total":2,"pending":1,"viewed":0,"completed":1,"voided":0,"expired":0,"waitingOn":1}}}}}},"401":{"description":"Missing or invalid API key, or the organization ID header is missing or is not an organization the key belongs to. The response has no body."},"404":{"description":"The document does not exist, was deleted, or belongs to another organization.","content":{"application/json":{"example":{"message":"Document not found","type":"DocumentNotFound"},"schema":{"type":"object","properties":{"message":{"type":"string"},"type":{"type":"string"}}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

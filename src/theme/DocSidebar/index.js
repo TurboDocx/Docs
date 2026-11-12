@@ -21,7 +21,8 @@ function getActiveLeafSidebarLink() {
   let leaf = null;
   activeLinks.forEach(a => {
     const href = (a.getAttribute('href') || '').replace(/\/+$/, '');
-    if (href === path) leaf = a;
+    // First match wins: guides also linked from the API "Getting Started" group stay centred in their own section.
+    if (href === path && !leaf) leaf = a;
   });
   return leaf || activeLinks[activeLinks.length - 1];
 }

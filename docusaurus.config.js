@@ -119,6 +119,9 @@ const config = {
         includeBlog: false,
         excludeImports: true,
         removeDuplicateHeadings: true,
+        // API reference pages: keep these theme components intact so scripts/api-twin.mjs (postbuild)
+        // can turn their JSON props into markdown (method + URL + curl, params, body, responses).
+        preserveComponents: ['MethodEndpoint', 'ParamsDetails', 'RequestSchema', 'StatusCodes'],
         // Unlisted pages are noindex and hidden from the sidebar; a twin or an
         // llms.txt entry would expose them. Drafts are skipped by the plugin.
         ignoreFiles: unlistedDocs,
@@ -240,6 +243,18 @@ const config = {
           'bash'
         ],
       },
+      // API reference right column: request sample tabs, in display order.
+      // Try it: keep the reader's API key and org ID in memory only (the theme defaults to sessionStorage).
+      api: { authPersistence: false },
+      languageTabs: [
+        { highlight: 'bash', language: 'curl', logoClass: 'bash' },
+        { highlight: 'javascript', language: 'nodejs', logoClass: 'nodejs', variant: 'axios' },
+        { highlight: 'python', language: 'python', logoClass: 'python', variant: 'requests' },
+        { highlight: 'php', language: 'php', logoClass: 'php', variant: 'guzzle' },
+        { highlight: 'ruby', language: 'ruby', logoClass: 'ruby' },
+        { highlight: 'go', language: 'go', logoClass: 'go' },
+        { highlight: 'csharp', language: 'csharp', logoClass: 'csharp', variant: 'httpclient' },
+      ],
     }),
 };
 

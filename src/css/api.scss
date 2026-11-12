@@ -1,115 +1,698 @@
-.theme-api-markdown {
-display: flex;
-flex-direction: column;
-
-
+// API reference layout: center column (reference) + sticky right column (samples and Try it).
+// Method colors follow the brand primary for GET and the theme's code palette for the rest.
+:root {
+  --api-get: var(--ifm-color-primary);
+  --api-post: var(--openapi-code-green, #2e8b57);
+  --api-put: var(--openapi-code-blue, #2b6cb0);
+  --api-patch: var(--openapi-code-orange, #c05621);
+  --api-delete: var(--openapi-code-red, #c53030);
+  // Text: slate tones, never pure black. Surfaces: white cards with hairline borders.
+  --api-text: #484c58;
+  --api-text-strong: #32343a;
+  --api-text-muted: #666b79;
+  --api-required: #ad273c;
+  --api-code-text: #32343a;
+  --api-code-bg: #f1f3f6;
+  --api-card: #ffffff;
+  --api-card-head: #f6f7f9;
+  --api-hairline: rgba(0, 0, 0, 0.1);
+  --api-label: #666b79;
+}
+// Dark mode: soft greys, never pure white.
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --api-text: #b9bdc8;
+    --api-text-strong: #e3e5ea;
+    --api-text-muted: #8f94a1;
+    --api-required: #f08a98;
+    --api-code-text: #e3e5ea;
+    --api-code-bg: #262a33;
+    --api-card: #1b1e24;
+    --api-card-head: #22262e;
+    --api-hairline: rgba(255, 255, 255, 0.1);
+    --api-label: #8f94a1;
+  }
+}
+[data-theme="dark"] {
+  --api-text: #b9bdc8;
+  --api-text-strong: #e3e5ea;
+  --api-text-muted: #8f94a1;
+  --api-required: #f08a98;
+  --api-code-text: #e3e5ea;
+  --api-code-bg: #262a33;
+  --api-card: #1b1e24;
+  --api-card-head: #22262e;
+  --api-hairline: rgba(255, 255, 255, 0.1);
+  --api-label: #8f94a1;
 }
 
+// Site-wide rules that predate the API layout (guide pages rely on them).
 #__docusaurus_skipToContent_fallback > div > main > div > div > div > div > div {
-    max-width: none !important;
+  max-width: none !important;
+}
+.tabs-container {
+  margin-top: 2em;
+}
+
+// Remove the doc max-width cap so the two API columns get the full content width.
+[class*="docs-doc-id-API/"] .theme-doc-markdown,
+[class*="docs-doc-id-API/"] .col--7 {
+  max-width: unset;
+}
+[class*="docs-doc-id-API/"] .tracing-beam {
+  display: none;
 }
 
 .openapi-left-panel__container {
-    max-width: unset;
-    border: none !important;
-    margin-bottom: 2em;
+  max-width: unset;
+  border: none !important;
+  margin-bottom: 2em;
 }
 
-
-.openapi-right-panel__container::before {
-    content: ("Try it Out");
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    letter-spacing: -0.5px;
-    margin-top: 2em;
-    margin-bottom: 2em;
+// Right column: sticky on wide screens, stacks under the reference below 997px (Docusaurus' breakpoint).
+@media (min-width: 997px) {
+  .openapi-right-panel__container {
+    position: sticky;
+    top: calc(var(--ifm-navbar-height) + 1rem);
+    align-self: flex-start;
+  }
+}
+@media (max-width: 996px) {
+  .openapi-left-panel__container,
+  .openapi-right-panel__container {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 
-.openapi-right-panel__container {
-    max-width: unset;
+.openapi-tabs__code-container:not(.openapi-tabs__code-container-inner),
+.openapi-explorer__request-form,
+.openapi-explorer__response-container {
+  background-color: hsl(var(--card)) !important;
 }
 
-.tabs-container {
-    margin-top: 2em;
+.openapi-explorer__code-block-container .openapi-explorer__code-block {
+  max-height: 480px;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-[class^="docs\-doc\-id-api"] {
-    .tracing-beam {
-        display: none;
+.openapi-tabs__code-container-inner .tabs__item {
+  white-space: nowrap;
+}
+
+// Language tab sizing; the row layout is set in the fidelity pass at the end of this file.
+.openapi-tabs__code-container .openapi-tabs__code-list-container .openapi-tabs__code-item {
+  margin-right: 0 !important;
+  // Keep the language logo (the ::after background), just smaller so seven tabs fit the column.
+  --code-tab-logo-width: 18px;
+  --code-tab-logo-height: 18px;
+  span {
+    padding-top: 0.3rem !important;
+  }
+}
+// The C# tab is the .NET sample.
+.openapi-tabs__code-container .openapi-tabs__code-item--csharp > span {
+  font-size: 0 !important;
+  &::after {
+    content: ".NET";
+    font-size: 0.7rem;
+  }
+}
+
+// Title row: title, Copy page button, method badge.
+// Long titles wrap inside their own box; Copy page and the badge stay on the right, never on a new line.
+.api-title {
+  display: flex;
+  flex-wrap: nowrap;
+  > * {
+    flex-shrink: 0;
+  }
+  > h1 {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  h1 {
+    margin: 0;
+    flex: 1 1 auto;
+  }
+}
+
+.api-copy-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--ifm-color-primary);
+    color: var(--ifm-color-primary);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.api-method-badge {
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  &--get { background: var(--api-get); }
+  &--post { background: var(--api-post); }
+  &--put { background: var(--api-put); }
+  &--patch { background: var(--api-patch); }
+  &--delete { background: var(--api-delete); }
+}
+
+// Param anchors: a "#" link appears in the gutter on hover/focus.
+.api-param-anchor {
+  position: relative;
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
+
+  > .api-param-anchor__link {
+    position: absolute;
+    left: -1.1rem;
+    top: 0.45rem;
+    font-size: 0.85rem;
+    opacity: 0;
+    text-decoration: none;
+  }
+  &:hover > .api-param-anchor__link,
+  > .api-param-anchor__link:focus,
+  &:target > .api-param-anchor__link {
+    opacity: 1;
+  }
+}
+
+// Sidebar: small filled method pill (lowercase) before each endpoint name.
+.menu__list-item.api-method > .menu__link {
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+
+  &::before {
+    flex: 0 0 auto;
+    min-width: 2.4rem;
+    padding: 0 0.3rem;
+    border-radius: 4px;
+    font-size: 0.62rem;
+    line-height: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    text-transform: lowercase;
+    font-family: var(--ifm-font-family-monospace);
+    color: #fff;
+  }
+}
+.menu__list-item.api-method.get > .menu__link::before { content: "get"; background: var(--api-get); }
+.menu__list-item.api-method.post > .menu__link::before { content: "post"; background: var(--api-post); }
+.menu__list-item.api-method.put > .menu__link::before { content: "put"; background: var(--api-put); }
+.menu__list-item.api-method.patch > .menu__link::before { content: "patch"; background: var(--api-patch); }
+.menu__list-item.api-method.delete > .menu__link::before { content: "del"; background: var(--api-delete); }
+
+// ---- Readability: softer text on API pages ----
+// Pure black text, heavy headings, tightened tracking and pink inline code made the pages tiring to read.
+// Slate text tones (tokens at the top), normal tracking and lighter weights.
+
+[class*="docs-doc-id-API/"] {
+  // Site-wide rules force p and h1-h6 to pure black/white with !important; these selectors are
+  // more specific, so !important here wins on API pages only.
+  .theme-doc-markdown {
+    color: var(--api-text);
+    letter-spacing: normal;
+
+    p,
+    li,
+    td {
+      color: var(--api-text) !important;
+      letter-spacing: normal;
     }
-    .col--7 {
-        max-width: unset;
+    h1,
+    h2,
+    h3,
+    h4,
+    strong {
+      color: var(--api-text-strong) !important;
+      letter-spacing: normal;
+    }
+    h1 {
+      font-weight: 600;
+    }
+    h2,
+    h3 {
+      font-weight: 600;
+    }
+    // Inline code: neutral chip instead of the site's pink.
+    :not(pre) > code {
+      color: var(--api-code-text);
+      background: var(--api-code-bg);
+      border: 0;
+      font-size: 0.85em;
+      padding: 0.1em 0.35em;
+    }
+  }
+  // Description under the title: one comfortable paragraph.
+  .openapi-left-panel__container > p,
+  .openapi-left-panel__container > div > p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  // Param rows: smaller, muted descriptions; the name stays the strongest element.
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    :is(p, li, div) {
+      font-size: 0.8125rem !important;
+      line-height: 1.45;
+      color: var(--api-text) !important;
+    }
+  }
+  .openapi-schema__property {
+    color: var(--api-text-strong);
+    font-weight: 600;
+  }
+  .openapi-schema__type {
+    color: var(--api-text-muted);
+  }
+  .openapi-schema__required {
+    color: var(--api-required);
+    font-weight: 500;
+    text-transform: lowercase;
+  }
+  .openapi__method-endpoint-path {
+    letter-spacing: normal;
+    color: var(--api-text-strong);
+  }
+}
+
+// ---- Reference-fidelity pass: denser reference column, compact right column ----
+// Scoped to API reference pages (doc ids under API/).
+[class*="docs-doc-id-API/"] {
+  // Flex columns must not grow to fit a wide child (the response-code strip scrolls inside its own box).
+  .openapi-left-panel__container,
+  .openapi-right-panel__container {
+    min-width: 0;
+    overflow: visible;
+    // The theme caps this column at the viewport height; uncapped it counts toward the row height,
+    // so on short pages Try it and Response cannot spill over the footer.
+    max-height: none !important;
+  }
+
+  // Less chrome before the first field: small tab-row margins, hide a content-type picker with one choice.
+  .tabs-container {
+    margin-top: 0.5rem;
+  }
+  .openapi-tabs__schema-tabs-container {
+    margin-bottom: 0.25rem;
+  }
+  .openapi-tabs__schema-list-container {
+    margin: 0.25rem 0;
+  }
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    :is(p, li, div, strong) {
+      font-size: 0.875rem;
+    }
+  }
+  .openapi-tabs__mime-list-container:has(> li:only-child) {
+    display: none;
+  }
+  .openapi-tabs__heading {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  // Endpoint line: plain monospace URL, no boxed pill.
+  .openapi__method-endpoint {
+    background: none;
+    border: 0;
+    padding: 0;
+    gap: 0.6rem;
+  }
+  .openapi__method-endpoint-path {
+    font-family: var(--ifm-font-family-monospace);
+    font-size: 0.875rem;
+    word-break: break-all;
+  }
+
+  // Param and body rows: compact type (card and dividers are in the reference-patterns pass).
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    p {
+      margin-bottom: 0.25rem;
+    }
+  }
+  .openapi-schema__divider {
+    display: none;
+  }
+  .openapi-schema__property {
+    font-size: 0.875rem;
+  }
+  .openapi-schema__type,
+  .openapi-schema__required,
+  .openapi-schema__nullable {
+    font-size: 0.75rem;
+  }
+}
+
+// Language tabs on one row; hide a variant row that only repeats the language (cURL).
+.openapi-tabs__code-container.tabs-container {
+  margin-top: 0;
+  padding-top: 0.5rem;
+}
+.openapi-tabs__code-container .openapi-tabs__code-list-container {
+  margin-top: 0;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 0;
+  .openapi-tabs__code-item {
+    min-width: 0;
+    flex: 1 1 0 !important;
+    padding: 0.35rem 0.1rem !important;
+    font-size: 0.65rem;
+  }
+}
+@media (max-width: 996px) {
+  .openapi-tabs__code-container .openapi-tabs__code-list-container {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    .openapi-tabs__code-item {
+      flex: 0 0 auto !important;
+      min-width: 3.5rem;
+    }
+  }
+}
+.openapi-tabs__code-container-inner > ul:has(> li:only-child) {
+  display: none;
+}
+
+// The theme's cURL logo is a white glyph on a transparent tile in light mode, so it is invisible:
+// use a terminal glyph with its own dark tile, visible in both themes.
+.openapi-tabs__code-container :is(.openapi-tabs__code-item--curl, .openapi-tabs__code-item--bash)::after {
+  content: "";
+  width: var(--code-tab-logo-width, 18px);
+  height: var(--code-tab-logo-height, 18px);
+  border-radius: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='4' width='20' height='16' rx='3' fill='%23334155'/%3E%3Cpath d='M6.5 9.5l3 2.5-3 2.5M11.5 15h5' fill='none' stroke='%23f8fafc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain !important;
+  background-color: transparent !important;
+}
+
+// Credentials box (src/theme/ApiExplorer/SecuritySchemes): a label and the two required headers.
+.api-auth {
+  margin: 1rem 0;
+}
+.api-auth__title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--api-label);
+  margin: 0 0 0.5rem;
+}
+.api-auth__headers {
+  font-size: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0 0.6rem;
+  white-space: pre-wrap;
+  background: var(--api-card) !important;
+  border: 1px solid var(--api-hairline);
+  border-radius: 8px;
+}
+.api-auth__hint {
+  font-size: 0.8rem;
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+// ==== Reference patterns (adopted, not reinvented) ====
+// Proven API-reference conventions, in TurboDocx colors: small breadcrumb with Copy page on its right,
+// method pill on the URL line, small section labels, one white param card with hairline rows,
+// a labelled language picker, a dark request card, light cards with grey headers for Try it and Response.
+
+[class*="docs-doc-id-API/"] {
+  // Breadcrumb: small, quiet.
+  .breadcrumbs__link {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--api-label);
+  }
+
+  // Header: Copy page sits up in the breadcrumb row; the method shows once, on the URL line.
+  .api-title {
+    position: relative;
+    margin-bottom: 0.25rem;
+    h1 {
+      font-size: 2rem;
+    }
+  }
+  .api-title .api-method-badge {
+    display: none;
+  }
+  .openapi__method-endpoint {
+    margin-bottom: 1rem;
+    .badge {
+      border-radius: 999px;
+      font-size: 0.75rem;
+      padding: 0.1rem 0.6rem;
+    }
+  }
+  .openapi__method-endpoint-path {
+    color: var(--api-text-muted) !important;
+    font-size: 0.875rem;
+  }
+  .openapi__divider {
+    display: none;
+  }
+
+  // Section labels instead of a big "Request" heading.
+  #request {
+    display: none;
+  }
+  .openapi-markdown__details-summary-header-body {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .openapi-markdown__details-summary-header-body,
+  .openapi-markdown__details-summary-header-params {
+    font-size: 1rem !important;
+    font-weight: 600;
+    text-transform: none !important;
+    letter-spacing: normal;
+    color: var(--api-text-strong);
+  }
+  // The request body's Body / Example (auto) switch: the example is already in the request sample.
+  .openapi-left-panel__container .openapi-tabs__schema-list-container:not(.openapi-tabs__response-container .openapi-tabs__schema-list-container) {
+    display: none;
+  }
+
+  // Param card: white, hairline border, one row per field.
+  .openapi-left-panel__container ul:has(> :is(.api-param-anchor, .openapi-schema__list-item)) {
+    margin-left: 0 !important;
+    background: var(--api-card);
+    border: 1px solid var(--api-hairline);
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.024);
+    padding: 0;
+  }
+  .openapi-left-panel__container ul:has(> :is(.api-param-anchor, .openapi-schema__list-item)) ul:has(> :is(.api-param-anchor, .openapi-schema__list-item)) {
+    box-shadow: none;
+    background: transparent;
+  }
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    padding: 0.7rem 0.85rem;
+  }
+  .api-param-anchor + .api-param-anchor > .openapi-params__list-item,
+  .api-param-anchor + .api-param-anchor > .openapi-schema__list-item,
+  .openapi-schema__list-item + .openapi-schema__list-item {
+    border-top: 1px solid var(--api-hairline);
+  }
+  .openapi-schema__property,
+  .openapi-params__list-item strong:first-child {
+    font-family: var(--ifm-font-family-base);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .openapi-schema__type {
+    font-size: 0.75rem;
+  }
+  .openapi-schema__required {
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  // Examples belong in the request sample, not in every row.
+  .openapi-example {
+    display: none;
+  }
+
+  // Right column: no card around the language picker; a small label above it.
+  .openapi-tabs__code-container.tabs-container {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  .openapi-tabs__code-container-inner::before {
+    content: "Example request";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--api-label);
+    margin: 0.75rem 0 0.4rem;
+  }
+  .openapi-tabs__code-container:not(.openapi-tabs__code-container-inner)::before {
+    content: "Language";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--api-label);
+    margin-bottom: 0.4rem;
+  }
+  .openapi-tabs__code-list-container .openapi-tabs__code-item {
+    border: 1px solid transparent !important;
+    border-radius: 8px;
+    &.active {
+      border-color: var(--api-hairline) !important;
+      background: var(--api-card);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+  }
+  // Request sample: a dark card.
+  .openapi-explorer__code-block-container,
+  .openapi-tabs__code-container .theme-code-block {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .openapi-explorer__code-block {
+    font-size: 13px !important;
+  }
+
+  // Try it and Response: light cards with a grey header strip.
+  .openapi-explorer__request-form,
+  .openapi-explorer__response-container {
+    background: var(--api-card) !important;
+    border: 1px solid var(--api-hairline);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .openapi-explorer__request-header-container,
+  .openapi-explorer__response-title-container {
+    background: var(--api-card-head);
+    border-bottom: 1px solid var(--api-hairline);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--api-label);
+  }
+  // Security note under Send: clear space from the button, a lock glyph so it reads as a security note.
+  // Response status chips: heading, then a wrapping row of small chips with a status dot (no scroll arrows).
+  .openapi-tabs__response-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--api-hairline);
+    h2 {
+      margin: 0;
+    }
+  }
+  .openapi-tabs__response-container .openapi-tabs__arrow {
+    display: none;
+  }
+  // The chip row's wrapper carries the theme's 16px inset; align it with the heading.
+  .openapi-tabs__response-header-section > .openapi-tabs__response-container {
+    padding-left: 0;
+  }
+  .openapi-tabs__response-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+  }
+  .openapi-tabs__response-code-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: 0 !important;
+    padding: 0.2rem 0.7rem;
+    line-height: 1.5;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    font-family: var(--ifm-font-family-monospace);
+    color: var(--api-text-strong) !important;
+    background: var(--api-card) !important;
+    border: 1px solid var(--api-hairline) !important;
+    border-radius: 6px;
+    opacity: 1 !important;
+    &::before {
+      content: "";
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: var(--ifm-color-info);
+    }
+    &.success::before {
+      background: var(--ifm-color-success);
+    }
+    &.danger::before {
+      background: var(--ifm-color-danger);
+    }
+    &.active {
+      border-color: var(--api-text-muted) !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+      font-weight: 600;
     }
   }
 
-.body-cards {
-    .bg-card {
-        min-height: 50vh !important;
-        max-height: 50vh !important;
-        overflow-x: scroll;
+  .openapi-explorer__request-note {
+    position: relative;
+    font-size: 0.75rem !important;
+    line-height: 1.5 !important;
+    color: var(--api-label) !important;
+    margin: 0.9rem 0 0.25rem !important;
+    padding-left: 1.25rem;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.1rem;
+      width: 0.85rem;
+      height: 0.85rem;
+      background: var(--api-label);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h1zm2 0h6V7a3 3 0 0 0-6 0v3z'/%3E%3C/svg%3E") no-repeat center / contain;
     }
-}
-  
-.headers-card {
-    justify-content: center;
-    display: flex;
-    padding-top: 2em !important;
-}
-
-.openapi-tabs__code-container:not(.openapi-tabs__code-container-inner) {
-    background-color: hsl(var(--card))!important;
-}
-
-.openapi-explorer__request-form {
-    background-color: hsl(var(--card))!important;
-}
-
-.openapi-explorer__response-container {
-    background-color: hsl(var(--card))!important;
-}
-
-.query-table {
-    display: flex;
-    justify-content: center;
-    padding-top: 2em !important;
-}
-
-// Make webhook code sections larger and more readable
-.openapi-explorer__code-block-container {
-    min-height: 600px !important;
-    max-height: 800px !important;
-    
-    .openapi-explorer__code-block {
-        min-height: 600px !important;
-        max-height: 800px !important;
-        font-size: 14px !important;
-        line-height: 1.5 !important;
-    }
-    
-    .prism-code {
-        min-height: 600px !important;
-        max-height: 800px !important;
-        padding: 1.5rem !important;
-    }
-}
-
-// Make subtabs wider to prevent text wrapping
-.openapi-tabs__code-container-inner {
-    .tabs__item {
-        min-width: 120px !important;
-        padding: 0.75rem 1.5rem !important;
-        text-align: center;
-        white-space: nowrap;
-        
-        span {
-            font-weight: 500;
-            font-size: 13px;
-        }
-    }
-}
-
-.col--7 {
-
+  }
+  .openapi-explorer__request-btn {
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: none;
+    padding: 0.35rem 0.9rem;
+  }
 }
