@@ -11,6 +11,45 @@ index 0581f09..b7d2e4a 100644
      })}** `;
      let qualifierGroups = [];
      // Check for enum in array items (directly or inside allOf)
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js
+index 45abf08..f91df2f 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Container/index.js
+@@ -17,7 +17,7 @@ const theme_common_1 = require("@docusaurus/theme-common");
+ const clsx_1 = __importDefault(require("clsx"));
+ const codeBlockUtils_1 = require("@theme/utils/codeBlockUtils");
+ function CodeBlockContainer({ as: As, ...props }) {
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   const prismCssVariables = (0, codeBlockUtils_1.getPrismCssVariables)(
+     prismTheme
+   );
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js
+index eb19bf4..fc3c96f 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/Content/String.js
+@@ -46,7 +46,7 @@ function CodeBlockString({
+     languageProp ??
+     (0, codeBlockUtils_1.parseLanguage)(blockClassName) ??
+     defaultLanguage;
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   const wordWrap = (0, useCodeWordWrap_1.useCodeWordWrap)();
+   // We still parse the metastring in case we want to support more syntax in the
+   // future. Note that MDX doesn't strip quotes when parsing metastring:
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js
+index 5b51ca9..6256ed0 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/ApiCodeBlock/ExpandButton/index.js
+@@ -94,7 +94,7 @@ function ExpandButton({
+   lineClassNames,
+ }) {
+   const [isModalOpen, setIsModalOpen] = (0, react_1.useState)(false);
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   (0, react_1.useEffect)(() => {
+     react_modal_1.default.setAppElement("body");
+   }, []);
 diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/MethodEndpoint/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/MethodEndpoint/index.js
 index 9f0954f..838917f 100644
 --- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/MethodEndpoint/index.js
@@ -53,6 +92,19 @@ index cdb5a9a..0e950e0 100644
    const serverLabelId = (0, react_1.useId)();
    const allParams = [
      ...pathParams,
+diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js
+index c24ddc6..dc300a1 100644
+--- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js
++++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js
+@@ -151,7 +151,7 @@ function Response({ item }) {
+   const themeConfig = siteConfig.themeConfig;
+   const hideSendButton = metadata.frontMatter.hide_send_button;
+   const proxy = metadata.frontMatter.proxy ?? themeConfig.api?.proxy;
+-  const prismTheme = (0, theme_common_1.usePrismTheme)();
++  const prismTheme = require("prism-react-renderer").themes.oneDark; // TurboDocx: right-column code is always dark
+   const code = (0, hooks_1.useTypedSelector)((state) => state.response.code);
+   const headers = (0, hooks_1.useTypedSelector)(
+     (state) => state.response.headers
 diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/index.js
 index 466f4a7..f612829 100644
 --- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/index.js

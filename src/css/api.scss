@@ -432,3 +432,228 @@
   margin: 0;
   color: var(--ifm-color-emphasis-700);
 }
+
+// ==== Reference patterns (adopted, not reinvented) ====
+// Proven API-reference conventions, in TurboDocx colors: small breadcrumb with Copy page on its right,
+// method pill on the URL line, small section labels, one white param card with hairline rows,
+// a labelled language picker, a dark request card, light cards with grey headers for Try it and Response.
+:root {
+  --api-card: #ffffff;
+  --api-card-head: #f6f7f9;
+  --api-hairline: rgba(0, 0, 0, 0.1);
+  --api-label: #666b79;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --api-card: #1b1e24;
+    --api-card-head: #22262e;
+    --api-hairline: rgba(255, 255, 255, 0.1);
+    --api-label: #8f94a1;
+  }
+}
+[data-theme="dark"] {
+  --api-card: #1b1e24;
+  --api-card-head: #22262e;
+  --api-hairline: rgba(255, 255, 255, 0.1);
+  --api-label: #8f94a1;
+}
+
+[class*="docs-doc-id-API/"] {
+  // Breadcrumb: small, quiet.
+  .breadcrumbs__link {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--api-label);
+  }
+
+  // Header: Copy page sits up in the breadcrumb row; the method shows once, on the URL line.
+  .api-title {
+    position: relative;
+    margin-bottom: 0.25rem;
+    h1 {
+      font-size: 2rem;
+    }
+  }
+  .api-title .api-method-badge {
+    display: none;
+  }
+  .openapi__method-endpoint {
+    margin-bottom: 1rem;
+    .badge {
+      border-radius: 999px;
+      font-size: 0.75rem;
+      padding: 0.1rem 0.6rem;
+    }
+  }
+  .openapi__method-endpoint-path {
+    color: var(--api-text-muted) !important;
+    font-size: 0.875rem;
+  }
+  .openapi__divider {
+    display: none;
+  }
+
+  // Section labels instead of a big "Request" heading.
+  #request {
+    display: none;
+  }
+  .openapi-markdown__details-summary-header-body {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .openapi-markdown__details-summary-header-body,
+  .openapi-markdown__details-summary-header-params {
+    font-size: 1rem !important;
+    font-weight: 600;
+    text-transform: none !important;
+    letter-spacing: normal;
+    color: var(--api-text-strong);
+  }
+  // The request body's Body / Example (auto) switch: the example is already in the request sample.
+  .openapi-left-panel__container .openapi-tabs__schema-list-container:not(.openapi-tabs__response-container .openapi-tabs__schema-list-container) {
+    display: none;
+  }
+
+  // Param card: white, hairline border, one row per field.
+  .openapi-left-panel__container ul:has(> .api-param-anchor) {
+    background: var(--api-card);
+    border: 1px solid var(--api-hairline);
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.024);
+    padding: 0;
+  }
+  .openapi-left-panel__container ul:has(> .api-param-anchor) ul:has(> .api-param-anchor) {
+    box-shadow: none;
+    background: transparent;
+  }
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    padding: 0.7rem 0.85rem;
+  }
+  .api-param-anchor + .api-param-anchor > .openapi-params__list-item,
+  .api-param-anchor + .api-param-anchor > .openapi-schema__list-item {
+    border-top: 1px solid var(--api-hairline);
+  }
+  .openapi-schema__property,
+  .openapi-params__list-item strong:first-child {
+    font-family: var(--ifm-font-family-base);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .openapi-schema__type {
+    font-size: 0.75rem;
+  }
+  .openapi-schema__required {
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+  // Examples belong in the request sample, not in every row.
+  .openapi-example {
+    display: none;
+  }
+
+  // Right column: no card around the language picker; a small label above it.
+  .openapi-tabs__code-container.tabs-container {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  .openapi-tabs__code-container-inner::before {
+    content: "Example request";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--api-label);
+    margin: 0.75rem 0 0.4rem;
+  }
+  .openapi-tabs__code-container:not(.openapi-tabs__code-container-inner)::before {
+    content: "Language";
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--api-label);
+    margin-bottom: 0.4rem;
+  }
+  .openapi-tabs__code-list-container .openapi-tabs__code-item {
+    border: 1px solid transparent !important;
+    border-radius: 8px;
+    &.active {
+      border-color: var(--api-hairline) !important;
+      background: var(--api-card);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+  }
+  // Request sample: a dark card.
+  .openapi-explorer__code-block-container,
+  .openapi-tabs__code-container .theme-code-block {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .openapi-explorer__code-block {
+    font-size: 13px !important;
+  }
+
+  // Try it and Response: light cards with a grey header strip.
+  .openapi-explorer__request-form,
+  .openapi-explorer__response-container {
+    background: var(--api-card) !important;
+    border: 1px solid var(--api-hairline);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .openapi-explorer__request-header-container,
+  .openapi-explorer__response-title-container {
+    background: var(--api-card-head);
+    border-bottom: 1px solid var(--api-hairline);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--api-label);
+  }
+  .openapi-explorer__request-btn {
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: none;
+    padding: 0.35rem 0.9rem;
+  }
+}
+
+// Credentials box: same label treatment, header rows like a key/value table.
+.api-auth {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.api-auth__title {
+  color: var(--api-label);
+  letter-spacing: 0.04em;
+}
+.api-auth__headers {
+  background: var(--api-card) !important;
+  border: 1px solid var(--api-hairline);
+  border-radius: 8px;
+}
+
+// Sidebar: small filled method pills (lowercase, before the name).
+.menu__list-item.api-method > .menu__link::before {
+  flex: 0 0 auto;
+  min-width: 2.4rem;
+  text-align: center;
+  color: #fff !important;
+  border-radius: 4px;
+  font-size: 0.62rem;
+  line-height: 1.1rem;
+  padding: 0 0.3rem;
+}
+.menu__list-item.api-method.get > .menu__link::before { background: var(--api-get); }
+.menu__list-item.api-method.post > .menu__link::before { background: var(--api-post); }
+.menu__list-item.api-method.put > .menu__link::before { background: var(--api-put); }
+.menu__list-item.api-method.patch > .menu__link::before { background: var(--api-patch); }
+.menu__list-item.api-method.delete > .menu__link::before { background: var(--api-delete); }

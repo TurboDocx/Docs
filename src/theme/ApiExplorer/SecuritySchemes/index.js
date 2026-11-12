@@ -7,7 +7,7 @@ export default function SecuritySchemes() {
   return (
     <section className="api-auth" aria-labelledby="api-auth-title">
       <h3 id="api-auth-title" className="api-auth__title">
-        Authentication
+        Credentials
       </h3>
       <pre className="api-auth__headers">
         <code>
