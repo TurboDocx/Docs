@@ -486,7 +486,7 @@ A field from a template's saved setup (a role send's anchored field, or your own
 - **Height** follows the font size of that line, by field type (a checkbox is a square). The field is centred vertically on the line and never reaches into the text on the lines above or below.
 - **Width** depends on the type. A text field is as wide as its tag; the other types aim for a width that fits their entry at that font size (a signature is wider than a date, for example). Apart from a checkbox, the field is never narrower than its tag, and it stops before the next word on the line or the edge of the text column, so it does not cover other text.
 - **Position**: the field starts where the tag starts. A checkbox narrower than its tag is centred on it. An alignment does not move a fitted field; it only aligns the signer's entry inside it.
-- An offset (saved on the field, or your `template.offset`) moves the fitted field, which stays wholly on the page.
+- An offset (saved on the field, or your `template.offset`) moves the fitted field, which is kept on the page.
 - As with any `replace` field, the tag is covered, so it does not show around the field.
 
 When the line can't be measured (for example rotated text, or a very small or very large font) or the field has no room on it (for example a short tag at the right edge of the text column), the field gets the standard size instead: as wide as its tag (at least the type's default width) at the type's default height, centred on the tag unless an alignment is set. A setup field with another placement (`before`, `after`, `above` or `below`) and no size gets that same standard size, positioned by its placement. A size saved on the field, or sent in `template.size`, is used as given.

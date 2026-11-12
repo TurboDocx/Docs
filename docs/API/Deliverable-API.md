@@ -286,7 +286,7 @@ A placeholder of the template can be made into a TurboSign field: an [anchored f
 
 To send a deliverable for signature with [signer roles](/docs/TurboSign/API-Signatures#sending-with-signer-roles) or with [`applySignatureSetup`](/docs/TurboSign/API-Signatures#apply-a-saved-setup-to-your-own-fields), generate it with `"keepAnchoredTags": true`, after the placeholder became a TurboSign field. A deliverable generated without the flag, or before the placeholder became a field, has no tag for the field to find: the anchored field is skipped, which can fail the send with `SignerHasNoFields`, and a plain anchor field you send without `applySignatureSetup` fails on the missing tag.
 
-Documents generated in the TurboDocx app keep the tags. A TurboSign mail merge takes no `keepAnchoredTags`: it keeps the setup's anchored tags only when it applies the template's saved signature setup, and otherwise fills the variables with each row's values as usual.
+Documents generated in the TurboDocx app keep the tags. A TurboSign mail merge needs no `keepAnchoredTags`: it keeps the setup's anchored tags only when it applies the template's saved signature setup, and otherwise fills the variables with each row's values as usual.
 
 ### Variable Object Structure
 
