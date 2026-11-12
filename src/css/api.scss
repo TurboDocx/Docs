@@ -37,8 +37,6 @@
     position: sticky;
     top: calc(var(--ifm-navbar-height) + 1rem);
     align-self: flex-start;
-    max-height: calc(100vh - var(--ifm-navbar-height) - 2rem);
-    overflow-y: auto;
   }
 }
 @media (max-width: 996px) {
@@ -65,17 +63,9 @@
   white-space: nowrap;
 }
 
-// Seven language tabs must fit the right column: wrap and size to content.
-.openapi-tabs__code-list-container {
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
+// Language tab sizing; the row layout is set in the fidelity pass at the end of this file.
 .openapi-tabs__code-container .openapi-tabs__code-list-container .openapi-tabs__code-item {
-  flex: 0 0 auto !important;
-  min-width: 3.5rem;
   margin-right: 0 !important;
-  padding: 0.35rem 0.6rem !important;
-  font-size: 0.7rem;
   // Keep the language logo (the ::after background), just smaller so seven tabs fit the column.
   --code-tab-logo-width: 18px;
   --code-tab-logo-height: 18px;
@@ -184,3 +174,148 @@
 .menu__list-item.api-method.put > .menu__link::before { content: "put"; color: var(--api-put); }
 .menu__list-item.api-method.patch > .menu__link::before { content: "patch"; color: var(--api-patch); }
 .menu__list-item.api-method.delete > .menu__link::before { content: "del"; color: var(--api-delete); }
+
+// ---- Reference-fidelity pass: denser reference column, compact right column ----
+// Scoped to API reference pages (doc ids under API/).
+[class*="docs-doc-id-API/"] {
+  // Flex columns must not grow to fit a wide child (the response-code strip scrolls inside its own box).
+  .openapi-left-panel__container,
+  .openapi-right-panel__container {
+    min-width: 0;
+    overflow: visible;
+  }
+
+  // Less chrome before the first field: small tab-row margins, hide a content-type picker with one choice.
+  .tabs-container {
+    margin-top: 0.5rem;
+  }
+  .openapi-tabs__schema-tabs-container {
+    margin-bottom: 0.25rem;
+  }
+  .openapi-tabs__schema-list-container {
+    margin: 0.25rem 0;
+  }
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    :is(p, li, div, strong) {
+      font-size: 0.875rem;
+    }
+  }
+  .openapi-tabs__mime-list-container:has(> li:only-child) {
+    display: none;
+  }
+  .openapi-tabs__heading {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  // Endpoint line: plain monospace URL, no boxed pill.
+  .openapi__method-endpoint {
+    background: none;
+    border: 0;
+    padding: 0;
+    gap: 0.6rem;
+  }
+  .openapi__method-endpoint-path {
+    font-family: var(--ifm-font-family-monospace);
+    font-size: 0.875rem;
+    word-break: break-all;
+  }
+
+  // Param and body rows: one bordered card, a divider per row, compact type.
+  .openapi-left-panel__container ul:has(> .api-param-anchor) {
+    border: 1px solid var(--ifm-color-emphasis-200);
+    border-radius: 8px;
+    padding: 0 0.9rem;
+    margin-left: 0 !important;
+  }
+  .openapi-params__list-item,
+  .openapi-schema__list-item {
+    padding: 0.6rem 0;
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    p {
+      margin-bottom: 0.25rem;
+    }
+  }
+  .api-param-anchor + .api-param-anchor > .openapi-params__list-item,
+  .api-param-anchor + .api-param-anchor > .openapi-schema__list-item {
+    border-top: 1px solid var(--ifm-color-emphasis-200);
+  }
+  .openapi-schema__divider {
+    display: none;
+  }
+  .openapi-schema__property {
+    font-size: 0.875rem;
+  }
+  .openapi-schema__type,
+  .openapi-schema__required,
+  .openapi-schema__nullable {
+    font-size: 0.75rem;
+  }
+}
+
+// Language tabs on one row; hide a variant row that only repeats the language (cURL).
+.openapi-tabs__code-container .openapi-tabs__code-list-container {
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 0;
+  .openapi-tabs__code-item {
+    min-width: 0;
+    flex: 1 1 0 !important;
+    padding: 0.35rem 0.1rem !important;
+    font-size: 0.65rem;
+  }
+}
+@media (max-width: 996px) {
+  .openapi-tabs__code-container .openapi-tabs__code-list-container {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    .openapi-tabs__code-item {
+      flex: 0 0 auto !important;
+      min-width: 3.5rem;
+    }
+  }
+}
+.openapi-tabs__code-container-inner > ul:has(> li:only-child) {
+  display: none;
+}
+
+// The theme's cURL logo is a white glyph on a transparent tile in light mode, so it is invisible:
+// use a terminal glyph with its own dark tile, visible in both themes.
+.openapi-tabs__code-container :is(.openapi-tabs__code-item--curl, .openapi-tabs__code-item--bash)::after {
+  content: "";
+  width: var(--code-tab-logo-width, 18px);
+  height: var(--code-tab-logo-height, 18px);
+  border-radius: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='4' width='20' height='16' rx='3' fill='%23334155'/%3E%3Cpath d='M6.5 9.5l3 2.5-3 2.5M11.5 15h5' fill='none' stroke='%23f8fafc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain !important;
+  background-color: transparent !important;
+}
+
+// Authentication box (src/theme/ApiExplorer/SecuritySchemes).
+.api-auth {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  background: hsl(var(--card));
+}
+.api-auth__title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+}
+.api-auth__headers {
+  font-size: 0.8rem;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0 0.6rem;
+  white-space: pre-wrap;
+}
+.api-auth__hint {
+  font-size: 0.8rem;
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+}
