@@ -616,6 +616,12 @@
     letter-spacing: 0.04em;
     color: var(--api-label);
   }
+  .openapi-explorer__request-note {
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--api-label) !important;
+    margin: 0.6rem 0 0;
+  }
   .openapi-explorer__request-btn {
     border-radius: 8px;
     font-size: 0.875rem;

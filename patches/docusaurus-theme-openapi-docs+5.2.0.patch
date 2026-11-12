@@ -73,7 +73,7 @@ index 9f0954f..838917f 100644
      ),
      react_1.default.createElement("div", { className: "openapi__divider" })
 diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
-index cdb5a9a..0e950e0 100644
+index cdb5a9a..aa11554 100644
 --- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
 +++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
 @@ -135,11 +135,11 @@ function Request({ item }) {
@@ -92,6 +92,19 @@ index cdb5a9a..0e950e0 100644
    const serverLabelId = (0, react_1.useId)();
    const allParams = [
      ...pathParams,
+@@ -494,6 +494,12 @@ function Request({ item }) {
+               id: "theme.openapi.request.sendButton",
+               message: "Send API Request",
+             })
++          ),
++        item.method !== "event" &&
++          react_1.default.createElement(
++            "p",
++            { className: "openapi-explorer__request-note" },
++            "Your API key and organization ID stay in this browser tab and are sent only to the API with this request. They are never saved: reload or leave the page and they are gone."
+           )
+       )
+     )
 diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js
 index c24ddc6..dc300a1 100644
 --- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Response/index.js

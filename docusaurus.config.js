@@ -241,6 +241,8 @@ const config = {
         ],
       },
       // API reference right column: request sample tabs, in display order.
+      // Try it: keep the reader's API key and org ID in memory only (the theme defaults to sessionStorage).
+      api: { authPersistence: false },
       languageTabs: [
         { highlight: 'bash', language: 'curl', logoClass: 'bash' },
         { highlight: 'javascript', language: 'nodejs', logoClass: 'nodejs', variant: 'axios' },
