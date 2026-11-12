@@ -616,11 +616,24 @@
     letter-spacing: 0.04em;
     color: var(--api-label);
   }
+  // Security note under Send: clear space from the button, a lock glyph so it reads as a security note.
   .openapi-explorer__request-note {
-    font-size: 0.75rem;
-    line-height: 1.45;
+    position: relative;
+    font-size: 0.75rem !important;
+    line-height: 1.5 !important;
     color: var(--api-label) !important;
-    margin: 0.6rem 0 0;
+    margin: 0.9rem 0 0.25rem !important;
+    padding-left: 1.25rem;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.1rem;
+      width: 0.85rem;
+      height: 0.85rem;
+      background: var(--api-label);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10V7a5 5 0 0 1 10 0v3h1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1h1zm2 0h6V7a3 3 0 0 0-6 0v3z'/%3E%3C/svg%3E") no-repeat center / contain;
+    }
   }
   .openapi-explorer__request-btn {
     border-radius: 8px;
