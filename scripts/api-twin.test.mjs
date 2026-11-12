@@ -46,6 +46,23 @@ test('params, body and responses become markdown', () => {
   assert.match(out, /#### 401\n\nMissing key\./);
 });
 
+test('the endpoint line becomes the method, full URL and a curl request', () => {
+  const md = '<MethodEndpoint\n  method={"post"}\n  path={"/api/webhooks/{id}"}\n  context={"endpoint"}\n>\n  \n</MethodEndpoint>';
+  const out = apiJsxToMarkdown(md);
+  assert.doesNotMatch(out, /<MethodEndpoint/);
+  assert.match(out, /`POST https:\/\/api\.turbodocx\.com\/api\/webhooks\/\{id\}`/);
+  assert.match(out, /```bash\ncurl -X POST "https:\/\/api\.turbodocx\.com\/api\/webhooks\/\{id\}" \\\n  -H "Authorization: Bearer \$TURBODOCX_API_KEY" \\\n  -H "x-rapiddocx-org-id: \$TURBODOCX_ORG_ID"/);
+});
+
+test('shallow blocks (description-only responses) still convert', () => {
+  const md = '<StatusCodes\n  responses={{"204":{"description":"Deleted."}}}\n>\n  \n</StatusCodes>';
+  assert.match(apiJsxToMarkdown(md), /#### 204\n\nDeleted\./);
+});
+
+test('an empty block (no params) is removed', () => {
+  assert.equal(apiJsxToMarkdown('A\n\n<ParamsDetails>\n\n</ParamsDetails>\n\nB'), 'A\n\n\n\nB');
+});
+
 test('pages without API components are unchanged', () => {
   const md = '# Guide\n\n<Tabs>\n<TabItem value="a">x</TabItem>\n</Tabs>\n';
   assert.equal(apiJsxToMarkdown(md), md);

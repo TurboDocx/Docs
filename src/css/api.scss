@@ -6,6 +6,44 @@
   --api-put: var(--openapi-code-blue, #2b6cb0);
   --api-patch: var(--openapi-code-orange, #c05621);
   --api-delete: var(--openapi-code-red, #c53030);
+  // Text: slate tones, never pure black. Surfaces: white cards with hairline borders.
+  --api-text: #484c58;
+  --api-text-strong: #32343a;
+  --api-text-muted: #666b79;
+  --api-required: #ad273c;
+  --api-code-text: #32343a;
+  --api-code-bg: #f1f3f6;
+  --api-card: #ffffff;
+  --api-card-head: #f6f7f9;
+  --api-hairline: rgba(0, 0, 0, 0.1);
+  --api-label: #666b79;
+}
+// Dark mode: soft greys, never pure white.
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --api-text: #b9bdc8;
+    --api-text-strong: #e3e5ea;
+    --api-text-muted: #8f94a1;
+    --api-required: #f08a98;
+    --api-code-text: #e3e5ea;
+    --api-code-bg: #262a33;
+    --api-card: #1b1e24;
+    --api-card-head: #22262e;
+    --api-hairline: rgba(255, 255, 255, 0.1);
+    --api-label: #8f94a1;
+  }
+}
+[data-theme="dark"] {
+  --api-text: #b9bdc8;
+  --api-text-strong: #e3e5ea;
+  --api-text-muted: #8f94a1;
+  --api-required: #f08a98;
+  --api-code-text: #e3e5ea;
+  --api-code-bg: #262a33;
+  --api-card: #1b1e24;
+  --api-card-head: #22262e;
+  --api-hairline: rgba(255, 255, 255, 0.1);
+  --api-label: #8f94a1;
 }
 
 // Site-wide rules that predate the API layout (guide pages rely on them).
@@ -161,57 +199,35 @@
   }
 }
 
-// Sidebar: small lowercase method tag before each endpoint name.
+// Sidebar: small filled method pill (lowercase) before each endpoint name.
 .menu__list-item.api-method > .menu__link {
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
 
   &::before {
-    flex: 0 0 2.6rem;
-    font-size: 0.68rem;
-    line-height: 1.2rem;
+    flex: 0 0 auto;
+    min-width: 2.4rem;
+    padding: 0 0.3rem;
+    border-radius: 4px;
+    font-size: 0.62rem;
+    line-height: 1.1rem;
     font-weight: 600;
-    text-align: right;
+    text-align: center;
     text-transform: lowercase;
     font-family: var(--ifm-font-family-monospace);
+    color: #fff;
   }
 }
-.menu__list-item.api-method.get > .menu__link::before { content: "get"; color: var(--api-get); }
-.menu__list-item.api-method.post > .menu__link::before { content: "post"; color: var(--api-post); }
-.menu__list-item.api-method.put > .menu__link::before { content: "put"; color: var(--api-put); }
-.menu__list-item.api-method.patch > .menu__link::before { content: "patch"; color: var(--api-patch); }
-.menu__list-item.api-method.delete > .menu__link::before { content: "del"; color: var(--api-delete); }
+.menu__list-item.api-method.get > .menu__link::before { content: "get"; background: var(--api-get); }
+.menu__list-item.api-method.post > .menu__link::before { content: "post"; background: var(--api-post); }
+.menu__list-item.api-method.put > .menu__link::before { content: "put"; background: var(--api-put); }
+.menu__list-item.api-method.patch > .menu__link::before { content: "patch"; background: var(--api-patch); }
+.menu__list-item.api-method.delete > .menu__link::before { content: "del"; background: var(--api-delete); }
 
 // ---- Readability: softer text on API pages ----
 // Pure black text, heavy headings, tightened tracking and pink inline code made the pages tiring to read.
-// Slate text tones, normal tracking and lighter weights; dark mode uses soft greys, never pure white.
-:root {
-  --api-text: #484c58;
-  --api-text-strong: #32343a;
-  --api-text-muted: #666b79;
-  --api-required: #ad273c;
-  --api-code-text: #32343a;
-  --api-code-bg: #f1f3f6;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --api-text: #b9bdc8;
-    --api-text-strong: #e3e5ea;
-    --api-text-muted: #8f94a1;
-    --api-required: #f08a98;
-    --api-code-text: #e3e5ea;
-    --api-code-bg: #262a33;
-  }
-}
-[data-theme="dark"] {
-  --api-text: #b9bdc8;
-  --api-text-strong: #e3e5ea;
-  --api-text-muted: #8f94a1;
-  --api-required: #f08a98;
-  --api-code-text: #e3e5ea;
-  --api-code-bg: #262a33;
-}
+// Slate text tones (tokens at the top), normal tracking and lighter weights.
 
 [class*="docs-doc-id-API/"] {
   // Site-wide rules force p and h1-h6 to pure black/white with !important; these selectors are
@@ -291,6 +307,9 @@
   .openapi-right-panel__container {
     min-width: 0;
     overflow: visible;
+    // The theme caps this column at the viewport height; uncapped it counts toward the row height,
+    // so on short pages Try it and Response cannot spill over the footer.
+    max-height: none !important;
   }
 
   // Less chrome before the first field: small tab-row margins, hide a content-type picker with one choice.
@@ -330,26 +349,15 @@
     word-break: break-all;
   }
 
-  // Param and body rows: one bordered card, a divider per row, compact type.
-  .openapi-left-panel__container ul:has(> .api-param-anchor) {
-    border: 1px solid var(--ifm-color-emphasis-200);
-    border-radius: 8px;
-    padding: 0 0.9rem;
-    margin-left: 0 !important;
-  }
+  // Param and body rows: compact type (card and dividers are in the reference-patterns pass).
   .openapi-params__list-item,
   .openapi-schema__list-item {
-    padding: 0.6rem 0;
     margin: 0;
     font-size: 0.875rem;
     line-height: 1.5;
     p {
       margin-bottom: 0.25rem;
     }
-  }
-  .api-param-anchor + .api-param-anchor > .openapi-params__list-item,
-  .api-param-anchor + .api-param-anchor > .openapi-schema__list-item {
-    border-top: 1px solid var(--ifm-color-emphasis-200);
   }
   .openapi-schema__divider {
     display: none;
@@ -406,19 +414,16 @@
   background-color: transparent !important;
 }
 
-// Authentication box (src/theme/ApiExplorer/SecuritySchemes).
+// Credentials box (src/theme/ApiExplorer/SecuritySchemes): a label and the two required headers.
 .api-auth {
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
   margin: 1rem 0;
-  background: hsl(var(--card));
 }
 .api-auth__title {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: var(--api-label);
   margin: 0 0 0.5rem;
 }
 .api-auth__headers {
@@ -426,6 +431,9 @@
   padding: 0.5rem 0.75rem;
   margin: 0 0 0.6rem;
   white-space: pre-wrap;
+  background: var(--api-card) !important;
+  border: 1px solid var(--api-hairline);
+  border-radius: 8px;
 }
 .api-auth__hint {
   font-size: 0.8rem;
@@ -437,26 +445,6 @@
 // Proven API-reference conventions, in TurboDocx colors: small breadcrumb with Copy page on its right,
 // method pill on the URL line, small section labels, one white param card with hairline rows,
 // a labelled language picker, a dark request card, light cards with grey headers for Try it and Response.
-:root {
-  --api-card: #ffffff;
-  --api-card-head: #f6f7f9;
-  --api-hairline: rgba(0, 0, 0, 0.1);
-  --api-label: #666b79;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --api-card: #1b1e24;
-    --api-card-head: #22262e;
-    --api-hairline: rgba(255, 255, 255, 0.1);
-    --api-label: #8f94a1;
-  }
-}
-[data-theme="dark"] {
-  --api-card: #1b1e24;
-  --api-card-head: #22262e;
-  --api-hairline: rgba(255, 255, 255, 0.1);
-  --api-label: #8f94a1;
-}
 
 [class*="docs-doc-id-API/"] {
   // Breadcrumb: small, quiet.
@@ -517,14 +505,15 @@
   }
 
   // Param card: white, hairline border, one row per field.
-  .openapi-left-panel__container ul:has(> .api-param-anchor) {
+  .openapi-left-panel__container ul:has(> :is(.api-param-anchor, .openapi-schema__list-item)) {
+    margin-left: 0 !important;
     background: var(--api-card);
     border: 1px solid var(--api-hairline);
     border-radius: 8px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.024);
     padding: 0;
   }
-  .openapi-left-panel__container ul:has(> .api-param-anchor) ul:has(> .api-param-anchor) {
+  .openapi-left-panel__container ul:has(> :is(.api-param-anchor, .openapi-schema__list-item)) ul:has(> :is(.api-param-anchor, .openapi-schema__list-item)) {
     box-shadow: none;
     background: transparent;
   }
@@ -533,7 +522,8 @@
     padding: 0.7rem 0.85rem;
   }
   .api-param-anchor + .api-param-anchor > .openapi-params__list-item,
-  .api-param-anchor + .api-param-anchor > .openapi-schema__list-item {
+  .api-param-anchor + .api-param-anchor > .openapi-schema__list-item,
+  .openapi-schema__list-item + .openapi-schema__list-item {
     border-top: 1px solid var(--api-hairline);
   }
   .openapi-schema__property,
@@ -643,36 +633,3 @@
     padding: 0.35rem 0.9rem;
   }
 }
-
-// Credentials box: same label treatment, header rows like a key/value table.
-.api-auth {
-  background: transparent;
-  border: 0;
-  padding: 0;
-}
-.api-auth__title {
-  color: var(--api-label);
-  letter-spacing: 0.04em;
-}
-.api-auth__headers {
-  background: var(--api-card) !important;
-  border: 1px solid var(--api-hairline);
-  border-radius: 8px;
-}
-
-// Sidebar: small filled method pills (lowercase, before the name).
-.menu__list-item.api-method > .menu__link::before {
-  flex: 0 0 auto;
-  min-width: 2.4rem;
-  text-align: center;
-  color: #fff !important;
-  border-radius: 4px;
-  font-size: 0.62rem;
-  line-height: 1.1rem;
-  padding: 0 0.3rem;
-}
-.menu__list-item.api-method.get > .menu__link::before { background: var(--api-get); }
-.menu__list-item.api-method.post > .menu__link::before { background: var(--api-post); }
-.menu__list-item.api-method.put > .menu__link::before { background: var(--api-put); }
-.menu__list-item.api-method.patch > .menu__link::before { background: var(--api-patch); }
-.menu__list-item.api-method.delete > .menu__link::before { background: var(--api-delete); }

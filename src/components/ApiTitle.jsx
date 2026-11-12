@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Heading from '@theme/Heading';
 
 // Title row for API reference pages: title, "Copy page" and the method badge.
@@ -14,17 +14,31 @@ async function pageMarkdown() {
   return document.querySelector('article')?.innerText ?? '';
 }
 
-export default function ApiTitle({ title, method }) {
+// Safari only allows a clipboard write inside the click itself, so hand it a pending ClipboardItem
+// (resolved after the fetch) instead of awaiting the fetch first. Other browsers take the same path;
+// writeText is the fallback where ClipboardItem is unavailable.
+function copyPageMarkdown() {
+  if (typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write) {
+    const blob = pageMarkdown().then((text) => new Blob([text], {type: 'text/plain'}));
+    return navigator.clipboard.write([new ClipboardItem({'text/plain': blob})]);
+  }
+  return pageMarkdown().then((text) => navigator.clipboard.writeText(text));
+}
+
+export default function ApiTitle({title, method}) {
   const [state, setState] = useState('idle');
+  const timer = useRef();
+  useEffect(() => () => clearTimeout(timer.current), []);
 
   async function copy() {
     try {
-      await navigator.clipboard.writeText(await pageMarkdown());
+      await copyPageMarkdown();
       setState('copied');
     } catch {
       setState('failed');
     }
-    setTimeout(() => setState('idle'), 2000);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setState('idle'), 2000);
   }
 
   const label = state === 'copied' ? 'Copied' : state === 'failed' ? 'Copy failed' : 'Copy page';

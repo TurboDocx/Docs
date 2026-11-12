@@ -46,9 +46,9 @@ function DocArticleJsonLd() {
 // The right column (code sample, credentials, Try it) is sticky. When it is taller than the screen,
 // a fixed top would hide its bottom (the Send button) until the page ends. Set a negative top
 // instead, so it scrolls with the page until its bottom is in view, then sticks there.
-function useTallStickyColumn() {
+function useTallStickyColumn(isApiPage) {
   useEffect(() => {
-    if (typeof ResizeObserver === 'undefined') return undefined;
+    if (!isApiPage || typeof ResizeObserver === 'undefined') return undefined;
     let col;
     let ro;
     const navbar = () => document.querySelector('.navbar')?.offsetHeight ?? 60;
@@ -74,11 +74,13 @@ function useTallStickyColumn() {
       ro?.disconnect();
       window.removeEventListener('resize', update);
     };
-  }, []);
+  }, [isApiPage]);
 }
 
 export default function ApiItemLayoutWrapper(props) {
-  useTallStickyColumn();
+  // This layout also renders every non-API doc (docItemComponent is @theme/ApiItem).
+  const {frontMatter} = useDoc();
+  useTallStickyColumn(Boolean(frontMatter.api));
   return (
     <>
       <DocArticleJsonLd />

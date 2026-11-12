@@ -1,80 +1,69 @@
 openapi: 3.0.0
 info:
   title: TurboDocx API Documentation
-  description: >-
-    Welcome to the TurboDocx API Documentation. This comprehensive guide is designed to provide
-    developers with all the information required to interact with the TurboDocx platform
-    programmatically.
-
-
-    Whether you're looking to automate document creation, manage your templates, or integrate
-    TurboDocx features into your application, you'll find the necessary endpoints, parameters, and
-    examples here.
-
-
-    ## **Getting started guide**
-
-
-    Before diving into the specifics of the API, ensure that you have obtained the necessary Access
-    Token and have the correct permissions to access the desired resources.
-
-
-    Keep your Access Token secure and do not expose them in publicly accessible areas such as
-    GitHub, client-side code, etc. **The Authentication and Organization ID is a variable set at the
-    root of the collection.**
+  description: >
+    The TurboDocx API lets you generate documents from your templates, send them for signature with
+    TurboSign, and get notified with webhooks. Every endpoint page below shows its parameters,
+    responses, request samples in seven languages, and a Try it console that calls the API with your
+    own key.
 
 
     ## Base URL
 
 
-    All API requests should be made to the base URL provided upon your API key registration.
-    Typically, it looks like this:
+    All requests go to:
 
 
-    ``` typescript
+    ```
 
     https://api.turbodocx.com
 
-     ```
+    ```
+
 
     ## Authentication
 
 
-    TurboDocx is working on it's API Key flows, and for the time being, we recommend grabbing the
-    access token used from your user's accounts to leverage our APIs. You can find an example on how
-    to get your access token in the `Blueprint` folder.
+    Every request needs two headers:
 
 
-    To use the Access Token, use the following under the `Authorization Header`
+    ```
+
+    Authorization: Bearer YOUR_API_KEY
+
+    x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+
+    ```
 
 
-    ``` typescript
-
-    Authorization: Bearer YOUR_ACCESS_TOKEN
-
-     ```
-
-    ### Authentication error response
+    To get them:
 
 
-    If an Access Token is missing, malformed, or invalid, you will receive an HTTP 401 Unauthorized
-    response code.
+    1. Sign in to [TurboDocx](https://www.turbodocx.com), click your avatar, then **Settings**.
+
+    2. Open **API keys** (under **Developers**) to create or copy an API key. Keys start with
+    `TDX-`.
+
+    3. Copy your organization ID from the **Features and integrations** page.
 
 
-    ### **Need some help?**
+    Keep your API key secret: never put it in client-side code or a public repository. A missing or
+    invalid key returns `401 Unauthorized`, and a key whose role is not allowed to perform an action
+    returns `403 Forbidden`.
 
 
-    In case you have questions, go through our tutorials ((link to your video or help documentation
-    here)). Or visit our FAQ page ((link to the relevant page)).
+    ## SDKs
 
 
-    Or you can check out our community forum, there’s a good chance our community has an answer for
-    you. Visit our developer forum ((link to developer forum)) to review topics, ask questions, and
-    learn from others.
+    Official SDKs for JavaScript and TypeScript, Python, PHP, Ruby, Go and Java wrap these
+    endpoints. See [SDKs](/docs/SDKs) to install one.
 
 
-    `You can also document or add links to libraries, code examples, and other resources needed to
-    make a request.`
+    ## Need help?
+
+
+    Ask in our [Discord](https://discord.gg/NYKwz4BcpX) or start with the guides under Getting
+    Started.
   version: 1.0.0
 servers:
   - url: https://api.turbodocx.com
@@ -872,6 +861,27 @@ paths:
             has no body.
         '403':
           description: The key's role is not administrator, contributor, or user. The response has no body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  minItems: 1
+                  description: >-
+                    IDs of the variables to delete. Each is a variableMapId, the id returned by Read
+                    Variables (Folder).
+                  items:
+                    type: string
+                    format: uuid
+            example:
+              ids:
+                - e4f5a6b7-8c9d-4e0f-a1b2-3c4d5e6f7a8b
   /Tag:
     post:
       tags:
@@ -1099,6 +1109,26 @@ paths:
             has no body.
         '403':
           description: The key's role is not administrator, contributor, or user. The response has no body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  minItems: 1
+                  description: IDs of the tags to delete.
+                  items:
+                    type: string
+                    format: uuid
+            example:
+              ids:
+                - 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
+                - 9d2b1c63-0f77-4a9c-b1d0-2c5e6f7a8b90
   /template/{TemplateId}:
     patch:
       tags:

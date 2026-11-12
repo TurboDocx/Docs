@@ -1,7 +1,8 @@
 // Markdown twins of API reference pages: the generated MDX renders params, body and responses through
 // theme components (<ParamsDetails>, <RequestSchema>, <StatusCodes>) whose data is JSON in a prop.
 // The twin would otherwise carry that raw JSX; turn each block into plain markdown instead.
-const BLOCK = /^<(ParamsDetails|RequestSchema|StatusCodes)\n([\s\S]*?)\n>(?:\s*\n\s*<\/\1>)?/gm;
+const BLOCK = /^<(MethodEndpoint|ParamsDetails|RequestSchema|StatusCodes)\n([\s\S]*?)\n>(?:\s*\n\s*<\/\1>)?/gm;
+const BASE_URL = 'https://api.turbodocx.com';
 
 const code = (v) => `\`${typeof v === 'string' ? v : JSON.stringify(v)}\``;
 
@@ -59,6 +60,20 @@ function responses(rs = {}) {
   ];
 }
 
+// The endpoint line: method and full URL, plus the minimal authenticated request.
+function endpoint({method = '', path = ''}) {
+  const verb = method.toUpperCase();
+  const url = `${BASE_URL}${path}`;
+  return [
+    `\`${verb} ${url}\``,
+    '```bash\n' +
+      `curl -X ${verb} "${url}" \\\n` +
+      '  -H "Authorization: Bearer $TURBODOCX_API_KEY" \\\n' +
+      '  -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID"\n' +
+      '```',
+  ];
+}
+
 function props(text) {
   const out = {};
   for (const m of text.matchAll(/^\s+(\w+)=\{(.*)\}$/gm)) {
@@ -71,11 +86,19 @@ function props(text) {
   return out;
 }
 
+const EMPTY_BLOCK = /^<(MethodEndpoint|ParamsDetails|RequestSchema|StatusCodes)>\s*<\/\1>/gm;
+
 export function apiJsxToMarkdown(md) {
-  return md.replace(BLOCK, (_, tag, inner) => {
+  return md.replace(EMPTY_BLOCK, '').replace(BLOCK, (_, tag, inner) => {
     const p = props(inner);
     const parts =
-      tag === 'ParamsDetails' ? params(p.parameters) : tag === 'RequestSchema' ? body(p.body) : responses(p.responses);
+      tag === 'MethodEndpoint'
+        ? endpoint(p)
+        : tag === 'ParamsDetails'
+          ? params(p.parameters)
+          : tag === 'RequestSchema'
+            ? body(p.body)
+            : responses(p.responses);
     return parts.join('\n\n');
   });
 }

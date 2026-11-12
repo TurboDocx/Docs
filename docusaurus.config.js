@@ -119,6 +119,9 @@ const config = {
         includeBlog: false,
         excludeImports: true,
         removeDuplicateHeadings: true,
+        // API reference pages: keep these theme components intact so scripts/api-twin.mjs (postbuild)
+        // can turn their JSON props into markdown (method + URL + curl, params, body, responses).
+        preserveComponents: ['MethodEndpoint', 'ParamsDetails', 'RequestSchema', 'StatusCodes'],
         // Unlisted pages are noindex and hidden from the sidebar; a twin or an
         // llms.txt entry would expose them. Drafts are skipped by the plugin.
         ignoreFiles: unlistedDocs,

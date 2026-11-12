@@ -194,7 +194,7 @@ function run(out, write) {
     const md = fs.readFileSync(p.md, 'utf8');
     if (!/^---\ntitle: .+\n(description: .+\n)?url: .+\n---\n/.test(md)) fail(p.md, 'missing title/description/url frontmatter');
     if (!/^# \S/m.test(md)) fail(p.md, 'has no "# H1" heading');
-    if (/^<(ParamsDetails|RequestSchema|StatusCodes)\b/m.test(md)) fail(p.md, 'raw API reference JSX left in the twin');
+    if (/^<(MethodEndpoint|ParamsDetails|RequestSchema|StatusCodes)\b/m.test(md)) fail(p.md, 'raw API reference JSX left in the twin');
     if (!p.html.includes(`<link rel="alternate" type="text/markdown" href="${p.mdUrl}">`)) {
       fail(p.file, `missing <link rel="alternate" type="text/markdown" href="${p.mdUrl}">`);
     }
