@@ -224,6 +224,7 @@ User-Agent: TurboDocx API Client
 | templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). Required when any recipient has a `role` |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
 | applySignatureSetup | Boolean        | No            | With `templateId` or `deliverableId`, with or without recipient roles: treat each field you send whose `template.anchor` and `type` match an [anchored field](#anchored-fields) of the template's saved signature setup as that field (a missing tag is skipped; with no size of its own it is fitted to its tag's line, see [Size of a setup field](#size-of-a-setup-field)). See [Apply a saved setup to your own fields](#apply-a-saved-setup-to-your-own-fields) |
+| fitAnchoredTags     | Boolean        | No            | Places each of your own fields on a single-brace tag such as `{ClientSign}` like a saved setup field: with no size of its own it is fitted to its tag's line. Off by default. See [Fit your own tag fields](#fit-your-own-tag-fields) |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
 | recipients          | String (JSON)  | **Yes**       | JSON string array of recipient objects     |
@@ -479,15 +480,39 @@ curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-signing \
   -F 'fields=[{"type":"signature","recipientEmail":"jane@client.com","template":{"anchor":"{ClientSign}"}}]'
 ```
 
+#### Fit your own tag fields {#fit-your-own-tag-fields}
+
+`applySignatureSetup` only changes fields whose tag is an anchored field of the template's setup. To have your other tag fields placed the same way, add `fitAnchoredTags: true` (form value `true`). It applies to each field you send with a `template.anchor` that is one tag in single braces with no spaces (such as `{ClientSign}`), with `replace` placement (or no placement), and without `useRegex`:
+
+- With no `template.size` of its own, the field is fitted to its tag's line, as described in [Size of a setup field](#size-of-a-setup-field).
+- With a size, the field keeps it and is centred on its tag, unless you set `template.alignment`.
+- Either way the field is kept on the page.
+- A tag missing from the document still fails the send. Only fields matched with `applySignatureSetup` are skipped when their tag is missing.
+- The template's saved setup is not read or changed, so the flag works with `file`, `fileLink`, `templateId` or `deliverableId`.
+- A field already matched with `applySignatureSetup` follows that flag. On a role send, the role's saved fields keep their own rules; only your own fields are affected.
+- Without the flag, or with `false`, your fields keep the standard placement (see [Field Alignment](#field-alignment)).
+
+```bash
+curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-signing \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "x-rapiddocx-org-id: YOUR_ORGANIZATION_ID" \
+  -F "file=@contract.pdf" \
+  -F "senderEmail=you@company.com" \
+  -F "fitAnchoredTags=true" \
+  -F 'recipients=[{"name":"Jane Doe","email":"jane@client.com","signingOrder":1}]' \
+  -F 'fields=[{"type":"signature","recipientEmail":"jane@client.com","template":{"anchor":"{ClientSign}"}}]'
+```
+
 #### Size of a setup field {#size-of-a-setup-field}
 
-A field from a template's saved setup (a role send's anchored field, or your own field matched with `applySignatureSetup`) that has `replace` placement and no size of its own is fitted to the line its tag is on:
+A field from a template's saved setup (a role send's anchored field, or your own field matched with `applySignatureSetup`), or a field placed with [`fitAnchoredTags`](#fit-your-own-tag-fields), that has `replace` placement and no size of its own is fitted to the line its tag is on:
 
 - **Height** follows the font size of that line, by field type (a checkbox is a square). The field is centred vertically on the line and never reaches into the text on the lines above or below.
-- **Width** depends on the type. A text field is as wide as its tag; the other types aim for a width that fits their entry at that font size (a signature is wider than a date, for example). Apart from a checkbox, the field is never narrower than its tag, and it stops before the next word on the line or the edge of the text column, so it does not cover other text.
-- **Position**: the field starts where the tag starts. A checkbox narrower than its tag is centred on it. An alignment does not move a fitted field; it only aligns the signer's entry inside it.
+- **Width** depends on the type. A text field is as wide as its tag; the other types aim for a width that fits their entry at that font size (a signature is wider than a date, for example). Apart from a checkbox, the field is never narrower than its tag, and it stops before the next word on the line, text in a neighbouring column, or the edge of the text column, so it does not cover other text.
+- **Position**: the field starts where the tag starts, a checkbox narrower than its tag too, so checkboxes on tags of different lengths line up. An alignment does not move a fitted field; it only aligns the signer's entry inside it.
 - An offset (saved on the field, or your `template.offset`) moves the fitted field, which is kept on the page.
 - As with any `replace` field, the tag is covered, so it does not show around the field.
+- **Text** typed into a fitted field, or its default value, shrinks to fit the field, down to 6pt. It is never cut off: if it is still too long at 6pt, it runs past the field.
 
 When the line can't be measured (for example rotated text, or a very small or very large font) or the field has no room on it (for example a short tag at the right edge of the text column), the field gets the standard size instead: as wide as its tag (at least the type's default width) at the type's default height, centred on the tag unless an alignment is set. A setup field with another placement (`before`, `after`, `above` or `below`) and no size gets that same standard size, positioned by its placement. A size saved on the field, or sent in `template.size`, is used as given.
 
@@ -626,7 +651,7 @@ User-Agent: TurboDocx API Client
 
 The request format is **identical** to prepare-for-review. See the "Endpoint 1: Prepare for Review" section above for detailed field documentation.
 
-Signer roles work the same way here: pass `templateId` (or `deliverableId`) and give each recipient a `role`. See [Sending with signer roles](#sending-with-signer-roles). `applySignatureSetup` also works the same way; see [Apply a saved setup to your own fields](#apply-a-saved-setup-to-your-own-fields).
+Signer roles work the same way here: pass `templateId` (or `deliverableId`) and give each recipient a `role`. See [Sending with signer roles](#sending-with-signer-roles). `applySignatureSetup` and `fitAnchoredTags` also work the same way; see [Apply a saved setup to your own fields](#apply-a-saved-setup-to-your-own-fields) and [Fit your own tag fields](#fit-your-own-tag-fields).
 
 ### Response
 
@@ -1540,7 +1565,8 @@ User-Agent: TurboDocx API Client
 
 | Field        | Type    | Required | Description                                                                                          |
 | ------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| roleKey      | String  | **Yes**  | The role's key from [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) (max 50 chars, matched ignoring case). On a template with no signers yet, `signer_1` creates the first one ("Signer 1") |
+| roleKey      | String  | **Yes**  | The role's key from [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) (max 50 chars, matched ignoring case). On a template with no signers yet, `signer_1` creates the first one ("Signer 1", or the name in `roleLabel`) |
+| roleLabel    | String  | No       | The name of the first signer when this call creates it (max 255 chars). Blank keeps "Signer 1". Send it only for a template with no signers yet: if the template already has signers, the call fails with `409 SignerRolesChanged` |
 | type         | String  | **Yes**  | The field type: `signature`, `initial`, `date`, `full_name`, `first_name`, `last_name`, `title`, `company`, `email`, `text` or `checkbox` |
 | anchor       | String  | **Yes**  | One tag in single braces with no spaces, such as `{ClientSign}` (3 to 100 chars)                     |
 | size         | Object  | No       | `{ "width": 150, "height": 40 }`. Both above 0 and at most 2000                                     |
@@ -1574,7 +1600,8 @@ curl -X POST https://api.turbodocx.com/turbosign/templates/TEMPLATE_ID/signature
         "fields": [ ... ],
         "savedOn": "2026-11-06T14:30:00.000Z"
       },
-      "tagBecameSignatureField": true
+      "tagBecameSignatureField": true,
+      "createdRoleId": "5c8e2a41-7b0d-4e9f-a3c6-1d2f8b4e6a90"
     }
   }
 }
@@ -1587,6 +1614,7 @@ curl -X POST https://api.turbodocx.com/turbosign/templates/TEMPLATE_ID/signature
 | data.results.fieldId                 | String  | The anchored field's ID. Pass it to [Remove an anchored field](#endpoint-12-remove-an-anchored-field) |
 | data.results.signatureSetup          | Object  | The template's whole saved signature setup after the change                                       |
 | data.results.tagBecameSignatureField | Boolean | `true` when the tag was not a signature field before. The value saved on the template for that variable was cleared |
+| data.results.createdRoleId           | String  | Only when the call created the template's first signer: that role's ID. Pass it as `removeRoleId` to [Remove an anchored field](#endpoint-12-remove-an-anchored-field) to take the field and the signer back |
 
 ### Error Responses
 
@@ -1601,6 +1629,7 @@ Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." 
 | 404    | `TemplateNotFound`            | The template doesn't exist in your organization                                         |
 | 409    | `AnchorTagHasField`           | The tag already holds a different field. A tag holds one field                          |
 | 409    | `AnchorOwnedByOtherRole`      | The tag already belongs to another role. A tag belongs to one role                      |
+| 409    | `SignerRolesChanged`          | `roleLabel` was sent, but the template already has signers. Get the setup again and send the role's `roleKey` without `roleLabel` |
 | 423    | (none)                        | Someone is editing the template in TurboDocx. Retry once they have finished             |
 
 #### Locked template (423) {#locked-template-423}
@@ -1648,6 +1677,12 @@ User-Agent: TurboDocx API Client
 | templateId | String (UUID) | Yes      | The unique identifier of the template                                                       |
 | fieldId    | String        | Yes      | The anchored field's ID, from [Add an anchored field](#endpoint-11-add-an-anchored-field) or `anchors[].fieldId` in [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) |
 
+### Query Parameters
+
+| Parameter    | Type   | Required | Description |
+| ------------ | ------ | -------- | ----------- |
+| removeRoleId | String | No       | The `createdRoleId` that [Add an anchored field](#endpoint-11-add-an-anchored-field) returned. Removes that signer with the field, but only when it is the field's signer, no other field is left on it, and it is the template's only signer. Otherwise only the field is removed |
+
 ### Response
 
 ```json
@@ -1658,13 +1693,20 @@ User-Agent: TurboDocx API Client
         "roles": [ ... ],
         "fields": [ ... ],
         "savedOn": "2026-11-06T14:35:00.000Z"
-      }
+      },
+      "roleRemoved": false
     }
   }
 }
 ```
 
-`data.results.signatureSetup` is the template's whole saved signature setup after the change.
+### Response Fields
+
+| Field                       | Type    | Description |
+| --------------------------- | ------- | ----------- |
+| data.results.signatureSetup | Object  | The template's whole saved signature setup after the change |
+| data.results.roleRemoved    | Boolean | `true` when the `removeRoleId` signer was removed with the field |
+| data.results.roleKeptReason | String  | Only when `removeRoleId` was sent and the signer was kept: `NotTheFieldsRole` (it is not the removed field's signer), `RoleStillHasFields` (another field is still on it) or `OtherRolesRemain` (the template has other signers) |
 
 ### Error Responses
 
@@ -2149,7 +2191,7 @@ Use `alignment` to choose where the signer's entry (a typed or drawn signature, 
 - **Anchor fields:** set it on the template as `template.alignment`. With `"placement": "replace"`, it also pins the field to that side of the anchor text: `"left"` starts the field where the anchor starts, `"center"` centres it on the anchor, `"right"` ends it where the anchor ends.
 - **Coordinate fields:** set it at the top level of the field as `alignment`.
 - **Leave it out (or send `null`)** to keep the standard placement. Existing integrations don't change. With `"placement": "replace"`, the standard placement centres a field narrower than its anchor text within it, and starts a field as wide as the anchor text or wider where the anchor starts.
-- **Saved setup fields:** only fields that come from a template's saved signature setup (a role send's [anchored fields](#anchored-fields), or your own fields matched with [`applySignatureSetup`](#apply-a-saved-setup-to-your-own-fields)) are centred on their tag at every width when they have a size, unless the field has an alignment (saved on the setup field, or your own `template.alignment`). With `"placement": "replace"` and no size, such a field is fitted to its tag's line and starts where the tag starts; an alignment then only aligns the entry inside it (see [Size of a setup field](#size-of-a-setup-field)). Every other anchor field keeps the standard placement above.
+- **Saved setup fields:** only fields that come from a template's saved signature setup (a role send's [anchored fields](#anchored-fields), or your own fields matched with [`applySignatureSetup`](#apply-a-saved-setup-to-your-own-fields)) and fields placed with [`fitAnchoredTags`](#fit-your-own-tag-fields) are centred on their tag at every width when they have a size, unless the field has an alignment (saved on the setup field, or your own `template.alignment`). With `"placement": "replace"` and no size, such a field is fitted to its tag's line and starts where the tag starts; an alignment then only aligns the entry inside it (see [Size of a setup field](#size-of-a-setup-field)). Every other anchor field keeps the standard placement above.
 - Any other value is rejected with a `400` error: `alignment must be one of: left, center, right`.
 - Checkbox fields ignore it.
 
