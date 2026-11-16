@@ -1566,7 +1566,7 @@ User-Agent: TurboDocx API Client
 | Field        | Type    | Required | Description                                                                                          |
 | ------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------- |
 | roleKey      | String  | **Yes**  | The role's key from [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) (max 50 chars, matched ignoring case). On a template with no signers yet, `signer_1` creates the first one ("Signer 1"). Not used when `roleLabel` is sent |
-| roleLabel    | String  | No       | Creates a new signer with this name (trimmed, max 255 chars) and puts the field on it. The new signer is added last, after the template's other signers, and has no key of its own, so it answers to `signer_<order>` (for example `signer_2`). No other signer's key or order changes. A blank name becomes "Signer N" for its place. If a signer already has this name (ignoring case), the call fails with `409 SignerRoleNameTaken` |
+| roleLabel    | String  | No       | Creates a new signer with this name and puts the field on it. The name is saved trimmed, with each run of spaces as one space (max 255 chars). It must have text: a blank name fails with `400`. The new signer is added last, after the template's other signers, and has no key of its own, so it answers to `signer_<order>` (for example `signer_2`). No other signer's key or order changes. If a signer already has this name (ignoring case and spacing), the call fails with `409 SignerRoleNameTaken`. "Signer N" is the default name of place N, so it is accepted only when N is the new signer's own place; otherwise the call fails with `409 SignerDefaultNameTaken`. A template has at most 15 signers: on a template that already has 15, the call fails with `409 SignerLimitReached` |
 | type         | String  | **Yes**  | The field type: `signature`, `initial`, `date`, `full_name`, `first_name`, `last_name`, `title`, `company`, `email`, `text` or `checkbox` |
 | anchor       | String  | **Yes**  | One tag in single braces with no spaces, such as `{ClientSign}` (3 to 100 chars)                     |
 | size         | Object  | No       | `{ "width": 150, "height": 40 }`. Both above 0 and at most 2000                                     |
@@ -1622,7 +1622,7 @@ Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." 
 
 | Status | `type`                        | Cause                                                                                   |
 | ------ | ----------------------------- | --------------------------------------------------------------------------------------- |
-| 400    |                               | A body value is invalid, such as a malformed anchor (`Anchor must be one tag in single braces with no spaces, like "{ClientSign}"`) |
+| 400    |                               | A body value is invalid, such as a malformed anchor (`Anchor must be one tag in single braces with no spaces, like "{ClientSign}"`) or a blank `roleLabel` |
 | 400    | `ReadonlyFieldNoDefaultValue` | `isReadonly` is `true` and neither the field nor its role has a default value            |
 | 404    | `SignerRoleNotFound`          | `roleKey` is not one of the template's roles                                            |
 | 404    | `SignatureSetupNotFound`      | The template has no saved signature setup, and `roleKey` is not `signer_1`              |
@@ -1630,6 +1630,8 @@ Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." 
 | 409    | `AnchorTagHasField`           | The tag already holds a different field. A tag holds one field                          |
 | 409    | `AnchorOwnedByOtherRole`      | The tag already belongs to another role. A tag belongs to one role                      |
 | 409    | `SignerRoleNameTaken`         | `roleLabel` names a signer the template already has. Nothing is changed. Send that signer's `roleKey` without `roleLabel` instead |
+| 409    | `SignerDefaultNameTaken`      | `roleLabel` is "Signer N" for a place other than the new signer's own ("Signer 5 is the default name of another signer's place. Choose a different name."). Nothing is changed |
+| 409    | `SignerLimitReached`          | `roleLabel` would add a signer to a template that already has 15, the most it can have. Nothing is changed |
 | 423    | (none)                        | Someone is editing the template in TurboDocx. Retry once they have finished             |
 
 #### Locked template (423) {#locked-template-423}
@@ -1681,7 +1683,7 @@ User-Agent: TurboDocx API Client
 
 | Parameter    | Type   | Required | Description |
 | ------------ | ------ | -------- | ----------- |
-| removeRoleId | String | No       | The `createdRoleId` that [Add an anchored field](#endpoint-11-add-an-anchored-field) returned. Removes that signer with the field, but only when it is the field's signer, no other field is left on it, it is the template's last signer (so no other signer is renumbered), and it has nothing saved on it (no key, default name or email, phone, verification choice or default values). Otherwise only the field is removed |
+| removeRoleId | String | No       | The `createdRoleId` that [Add an anchored field](#endpoint-11-add-an-anchored-field) returned. Removes that signer with the field, but only when it is the field's signer, no other field is left on it, it is the template's last signer (so no other signer is renumbered), and it has nothing saved on it (no key, default name or email, phone, verification choice or default values). A signer is also kept when it or any other signer was saved without a signing order, since which one is last is then unknown. Otherwise only the field is removed |
 
 ### Response
 
@@ -1706,7 +1708,7 @@ User-Agent: TurboDocx API Client
 | --------------------------- | ------- | ----------- |
 | data.results.signatureSetup | Object  | The template's whole saved signature setup after the change |
 | data.results.roleRemoved    | Boolean | `true` when the `removeRoleId` signer was removed with the field |
-| data.results.roleKeptReason | String  | Only when `removeRoleId` was sent and the signer was kept: `NotTheFieldsRole` (it is not the removed field's signer), `RoleStillHasFields` (another field is still on it) `OtherRolesRemain` (a later signer follows it, so removing it would renumber them) or `RoleHasSavedDetails` (it has saved details) |
+| data.results.roleKeptReason | String  | Only when `removeRoleId` was sent and the signer was kept: `NotTheFieldsRole` (it is not the removed field's signer), `RoleStillHasFields` (another field is still on it), `RoleOrderUnknown` (it or another signer has no signing order, so which one is last is unknown), `OtherRolesRemain` (a later signer follows it, so removing it would renumber them) or `RoleHasSavedDetails` (it has saved details) |
 
 ### Error Responses
 
