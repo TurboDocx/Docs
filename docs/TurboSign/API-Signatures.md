@@ -1565,8 +1565,8 @@ User-Agent: TurboDocx API Client
 
 | Field        | Type    | Required | Description                                                                                          |
 | ------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------- |
-| roleKey      | String  | **Yes**  | The role's key from [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) (max 50 chars, matched ignoring case). On a template with no signers yet, `signer_1` creates the first one ("Signer 1", or the name in `roleLabel`) |
-| roleLabel    | String  | No       | The name of the first signer when this call creates it (max 255 chars). Blank keeps "Signer 1". Send it only for a template with no signers yet: if the template already has signers, the call fails with `409 SignerRolesChanged` |
+| roleKey      | String  | **Yes**  | The role's key from [Get Template Signature Setup](#endpoint-8-get-template-signature-setup) (max 50 chars, matched ignoring case). On a template with no signers yet, `signer_1` creates the first one ("Signer 1"). Not used when `roleLabel` is sent |
+| roleLabel    | String  | No       | Creates a new signer with this name (trimmed, max 255 chars) and puts the field on it. The new signer is added last, after the template's other signers, and has no key of its own, so it answers to `signer_<order>` (for example `signer_2`). No other signer's key or order changes. A blank name becomes "Signer N" for its place. If a signer already has this name (ignoring case), the call fails with `409 SignerRoleNameTaken` |
 | type         | String  | **Yes**  | The field type: `signature`, `initial`, `date`, `full_name`, `first_name`, `last_name`, `title`, `company`, `email`, `text` or `checkbox` |
 | anchor       | String  | **Yes**  | One tag in single braces with no spaces, such as `{ClientSign}` (3 to 100 chars)                     |
 | size         | Object  | No       | `{ "width": 150, "height": 40 }`. Both above 0 and at most 2000                                     |
@@ -1614,7 +1614,7 @@ curl -X POST https://api.turbodocx.com/turbosign/templates/TEMPLATE_ID/signature
 | data.results.fieldId                 | String  | The anchored field's ID. Pass it to [Remove an anchored field](#endpoint-12-remove-an-anchored-field) |
 | data.results.signatureSetup          | Object  | The template's whole saved signature setup after the change                                       |
 | data.results.tagBecameSignatureField | Boolean | `true` when the tag was not a signature field before. The value saved on the template for that variable was cleared |
-| data.results.createdRoleId           | String  | Only when the call created the template's first signer: that role's ID. Pass it as `removeRoleId` to [Remove an anchored field](#endpoint-12-remove-an-anchored-field) to take the field and the signer back |
+| data.results.createdRoleId           | String  | Only when the call created a signer (with `roleLabel`, or the template's first signer): that role's ID. Pass it as `removeRoleId` to [Remove an anchored field](#endpoint-12-remove-an-anchored-field) to take the field and the signer back |
 
 ### Error Responses
 
@@ -1629,7 +1629,7 @@ Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." 
 | 404    | `TemplateNotFound`            | The template doesn't exist in your organization                                         |
 | 409    | `AnchorTagHasField`           | The tag already holds a different field. A tag holds one field                          |
 | 409    | `AnchorOwnedByOtherRole`      | The tag already belongs to another role. A tag belongs to one role                      |
-| 409    | `SignerRolesChanged`          | `roleLabel` was sent, but the template already has signers. Get the setup again and send the role's `roleKey` without `roleLabel` |
+| 409    | `SignerRoleNameTaken`         | `roleLabel` names a signer the template already has. Nothing is changed. Send that signer's `roleKey` without `roleLabel` instead |
 | 423    | (none)                        | Someone is editing the template in TurboDocx. Retry once they have finished             |
 
 #### Locked template (423) {#locked-template-423}
@@ -1681,7 +1681,7 @@ User-Agent: TurboDocx API Client
 
 | Parameter    | Type   | Required | Description |
 | ------------ | ------ | -------- | ----------- |
-| removeRoleId | String | No       | The `createdRoleId` that [Add an anchored field](#endpoint-11-add-an-anchored-field) returned. Removes that signer with the field, but only when it is the field's signer, no other field is left on it, and it is the template's only signer. Otherwise only the field is removed |
+| removeRoleId | String | No       | The `createdRoleId` that [Add an anchored field](#endpoint-11-add-an-anchored-field) returned. Removes that signer with the field, but only when it is the field's signer, no other field is left on it, it is the template's last signer (so no other signer is renumbered), and it has nothing saved on it (no key, default name or email, phone, verification choice or default values). Otherwise only the field is removed |
 
 ### Response
 
@@ -1706,7 +1706,7 @@ User-Agent: TurboDocx API Client
 | --------------------------- | ------- | ----------- |
 | data.results.signatureSetup | Object  | The template's whole saved signature setup after the change |
 | data.results.roleRemoved    | Boolean | `true` when the `removeRoleId` signer was removed with the field |
-| data.results.roleKeptReason | String  | Only when `removeRoleId` was sent and the signer was kept: `NotTheFieldsRole` (it is not the removed field's signer), `RoleStillHasFields` (another field is still on it) or `OtherRolesRemain` (the template has other signers) |
+| data.results.roleKeptReason | String  | Only when `removeRoleId` was sent and the signer was kept: `NotTheFieldsRole` (it is not the removed field's signer), `RoleStillHasFields` (another field is still on it) `OtherRolesRemain` (a later signer follows it, so removing it would renumber them) or `RoleHasSavedDetails` (it has saved details) |
 
 ### Error Responses
 
