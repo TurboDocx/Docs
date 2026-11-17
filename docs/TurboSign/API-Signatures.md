@@ -1772,7 +1772,8 @@ User-Agent: TurboDocx API Client
       "movedRoles": [
         {
           "roleId": "...",
-          "label": "Signer 3",
+          "label": "Signer 2",
+          "fromLabel": "Signer 3",
           "fromOrder": 3,
           "toOrder": 2,
           "fromKey": "signer_3",
@@ -1791,6 +1792,8 @@ User-Agent: TurboDocx API Client
 | data.results.signatureSetup | Object | The template's whole saved signature setup after the change |
 | data.results.removedRole    | Object | The removed signer's `roleId`, `label` and `order` |
 | data.results.movedRoles     | Array  | The signers that moved up one place, each with its `roleId`, `label`, `fromOrder` and `toOrder`. Empty when the signer was last, or when another signer shares its signing order |
+| data.results.movedRoles[].label   | String | The signer's name now |
+| data.results.movedRoles[].fromLabel | String | Only for a signer that had its old place's default name: that name (`Signer 3`), now changed to its new place's (`Signer 2`) |
 | data.results.movedRoles[].fromKey | String | Only for a signer saved without a key of its own: the role name it answered to before (`signer_3`) |
 | data.results.movedRoles[].toKey   | String | Only for a signer saved without a key of its own: the role name it answers to now (`signer_2`). Send it under this name from now on |
 
@@ -1810,7 +1813,7 @@ Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." 
 
 - Requires the administrator or contributor role.
 - The signers after the removed one move up one place in the signing order. A signer with a key of its own keeps it. A signer without one is sent under the role name of its new place (`signer_2` instead of `signer_3`), listed in `movedRoles`; update any integration that sends this template by role.
-- A signer's name is kept when it moves, so a signer named `Signer 3` that moves up to 2nd is still called `Signer 3`.
+- A signer named after its place follows it: `Signer 3` that moves up to 2nd becomes `Signer 2` (any case and spacing, listed with `fromLabel` in `movedRoles`). A name of its own, such as `Client`, is kept.
 
 ## Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
 
