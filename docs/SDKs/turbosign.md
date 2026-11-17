@@ -4506,6 +4506,147 @@ When a tag becomes a TurboSign field (`tagBecameSignatureField` is true), the va
 
 Full examples that add an anchored field, prepare a deliverable for signing with it, then remove it if the run created it: [JavaScript / TypeScript](https://github.com/TurboDocx/SDK/blob/main/packages/js-sdk/examples/turbosign-anchored-fields.ts), [Python](https://github.com/TurboDocx/SDK/blob/main/packages/py-sdk/examples/turbosign_anchored_fields.py), [PHP](https://github.com/TurboDocx/SDK/blob/main/packages/php-sdk/examples/turbosign-anchored-fields.php), [Go](https://github.com/TurboDocx/SDK/blob/main/packages/go-sdk/examples/turbosign_anchored_fields.go), [Java](https://github.com/TurboDocx/SDK/blob/main/packages/java-sdk/examples/TurboSignAnchoredFields.java), [Ruby](https://github.com/TurboDocx/SDK/blob/main/packages/ruby-sdk/examples/turbosign_anchored_fields.rb). These links go live when the SDK release that adds these methods is published. Calls `POST /turbosign/templates/{templateId}/signature-setup/anchors` and `DELETE /turbosign/templates/{templateId}/signature-setup/anchors/{fieldId}`; see [Add an anchored field](/docs/TurboSign/API-Signatures#endpoint-11-add-an-anchored-field) and [Remove an anchored field](/docs/TurboSign/API-Signatures#endpoint-12-remove-an-anchored-field).
 
+### Fit your own tag fields {#fit-your-own-tag-fields}
+
+`applySignatureSetup` only changes fields whose tag is an anchored field of the template's setup. To have your other tag fields placed the same way, set `fitAnchoredTags` on `sendSignature`, `createSignatureReviewLink` or `createEmbeddedSignature`. It applies to each field you send with a `template.anchor` that is one tag in single braces with no spaces (such as `{ClientSign}`), with `replace` placement (or no placement), and without `useRegex`. See [Fit your own tag fields](/docs/TurboSign/API-Signatures#fit-your-own-tag-fields) in the API reference.
+
+<Tabs groupId="language" queryString>
+<TabItem value="js" label="JavaScript / TypeScript" attributes={{className: 'tab-lang tab-lang--js'}}>
+
+<Tabs groupId="js-variant">
+<TabItem value="javascript" label="JavaScript" default>
+
+```javascript
+await TurboSign.sendSignature({
+  file: "./contract.pdf",
+  recipients: [{ name: "Jane Doe", email: "jane@client.com", signingOrder: 1 }],
+  fields: [{ type: "signature", recipientEmail: "jane@client.com", template: { anchor: "{ClientSign}" } }],
+  fitAnchoredTags: true,
+});
+```
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript">
+
+```typescript
+await TurboSign.sendSignature({
+  file: "./contract.pdf",
+  recipients: [{ name: "Jane Doe", email: "jane@client.com", signingOrder: 1 }],
+  fields: [{ type: "signature", recipientEmail: "jane@client.com", template: { anchor: "{ClientSign}" } }],
+  fitAnchoredTags: true,
+});
+```
+
+</TabItem>
+</Tabs>
+
+</TabItem>
+<TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
+
+```python
+with open("contract.pdf", "rb") as f:
+    pdf_bytes = f.read()
+
+await TurboSign.send_signature(
+    file=pdf_bytes,
+    recipients=[{"name": "Jane Doe", "email": "jane@client.com", "signingOrder": 1}],
+    fields=[{"type": "signature", "recipientEmail": "jane@client.com", "template": {"anchor": "{ClientSign}"}}],
+    fit_anchored_tags=True,
+)
+```
+
+`fit_anchored_tags` also works on `create_signature_review_link` and `create_embedded_signature`.
+
+</TabItem>
+<TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
+
+```php
+use TurboDocx\TurboSign;
+use TurboDocx\Types\Field;
+use TurboDocx\Types\Recipient;
+use TurboDocx\Types\Requests\SendSignatureRequest;
+use TurboDocx\Types\SignatureFieldType;
+use TurboDocx\Types\TemplateConfig;
+
+TurboSign::sendSignature(new SendSignatureRequest(
+    recipients: [new Recipient('Jane Doe', 'jane@client.com', 1)],
+    fields: [new Field(SignatureFieldType::SIGNATURE, 'jane@client.com', template: new TemplateConfig(anchor: '{ClientSign}'))],
+    file: file_get_contents('contract.pdf'),
+    fitAnchoredTags: true,
+));
+```
+
+`fitAnchoredTags` is also on `CreateSignatureReviewLinkRequest` and `CreateEmbeddedSignatureRequest`.
+
+</TabItem>
+<TabItem value="go" label="Go" attributes={{className: 'tab-lang tab-lang--go'}}>
+
+```go
+pdfBytes, err := os.ReadFile("contract.pdf")
+if err != nil {
+    log.Fatal(err)
+}
+
+result, err := client.TurboSign.SendSignature(ctx, &turbodocx.SendSignatureRequest{
+    File:       pdfBytes,
+    Recipients: []turbodocx.Recipient{{Name: "Jane Doe", Email: "jane@client.com", SigningOrder: 1}},
+    Fields: []turbodocx.Field{
+        {Type: "signature", RecipientEmail: "jane@client.com", Template: &turbodocx.TemplateAnchor{Anchor: "{ClientSign}"}},
+    },
+    FitAnchoredTags: true,
+})
+```
+
+`FitAnchoredTags` is a `bool` (not a pointer), also on `CreateSignatureReviewLinkRequest` and `CreateEmbeddedSignatureRequest`.
+
+</TabItem>
+<TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
+
+```java
+SendSignatureResponse result = client.turboSign().sendSignature(
+    new SendSignatureRequest.Builder()
+        .file(Files.readAllBytes(Paths.get("contract.pdf")))
+        .recipients(Arrays.asList(new Recipient("Jane Doe", "jane@client.com", 1)))
+        .fields(Arrays.asList(
+            new Field.Builder()
+                .type("signature")
+                .recipientEmail("jane@client.com")
+                .template(new Field.TemplateAnchor.Builder().anchor("{ClientSign}").build())
+                .build()
+        ))
+        .fitAnchoredTags(true)
+        .build()
+);
+```
+
+`.fitAnchoredTags(true)` is also on the `CreateSignatureReviewLinkRequest` and `CreateEmbeddedSignatureRequest` builders.
+
+</TabItem>
+<TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
+
+```ruby
+TurboDocxSdk::TurboSign.send_signature(
+  file: "contract.pdf",
+  recipients: [{ name: "Jane Doe", email: "jane@client.com", signingOrder: 1 }],
+  fields: [{ type: "signature", recipientEmail: "jane@client.com", template: { anchor: "{ClientSign}" } }],
+  fitAnchoredTags: true
+)
+```
+
+`fitAnchoredTags` also works on `create_signature_review_link` and `create_embedded_signature`.
+
+</TabItem>
+</Tabs>
+
+In every language:
+
+- With no `template.size` of its own, the field is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field), starting where the tag starts. With a size, it keeps that size and is centred on its tag.
+- A tag missing from the document still fails the request. Only fields matched with `applySignatureSetup` are skipped when their tag is missing.
+- The template's saved setup is not read or changed, so it works with a file, file link, template ID or deliverable ID.
+- It is off by default and sent only when true. Without it, your fields keep the standard placement.
+- `createEmbeddedSignature`'s per-recipient `fields` shorthand gives each field a size, so with the flag those fields are centred on their tags. Pass full `fields` without a size to have them fitted.
+- The SDK option ships in the next SDK release. Until then, send `fitAnchoredTags` with the API directly.
+
 ## Field Types {#field-types}
 
 <Tabs groupId="language" queryString>
@@ -6053,6 +6194,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `deliverable_id`       | `str`        | Conditional | TurboDocx deliverable ID       |
 | `template_id`          | `str`        | Conditional | TurboDocx template ID          |
 | `apply_signature_setup` | `bool`      | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
+| `fit_anchored_tags`    | `bool`       | No          | Places each field you send on a single-brace tag such as `{ClientSign}` like a saved setup field: with no size of its own it is fitted to its tag's line. Off by default; sent only when `True`. See [Fit your own tag fields](#fit-your-own-tag-fields) |
 | `document_name`        | `str`        | No          | Document name                  |
 | `document_description` | `str`        | No          | Document description           |
 | `sender_name`          | `str`        | No          | Sender name (overrides the configured value) |
@@ -6093,6 +6235,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `DeliverableID`       | `string`      | Conditional | TurboDocx deliverable ID |
 | `TemplateID`          | `string`      | Conditional | TurboDocx template ID    |
 | `ApplySignatureSetup` | `*bool`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field). Nil leaves it out |
+| `FitAnchoredTags`     | `bool`        | No          | Places each field you send on a single-brace tag such as `{ClientSign}` like a saved setup field: with no size of its own it is fitted to its tag's line. Off by default; sent only when `true`. See [Fit your own tag fields](#fit-your-own-tag-fields) |
 | `Recipients`          | `[]Recipient` | Yes         | List of recipients       |
 | `Fields`              | `[]Field`     | Conditional | List of fields. Optional when a recipient has a `Role` |
 | `DocumentName`        | `string`      | No          | Document display name    |
@@ -6119,6 +6262,7 @@ Both `CreateSignatureReviewLinkRequest` and `SendSignatureRequest` accept:
 | `deliverableId`       | `String`          | Conditional | TurboDocx deliverable ID |
 | `templateId`          | `String`          | Conditional | TurboDocx template ID    |
 | `applySignatureSetup` | `Boolean`         | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
+| `fitAnchoredTags`     | `boolean`         | No          | Places each field you send on a single-brace tag such as `{ClientSign}` like a saved setup field: with no size of its own it is fitted to its tag's line. Off by default; sent only when `true`. See [Fit your own tag fields](#fit-your-own-tag-fields) |
 | `recipients`          | `List<Recipient>` | Yes         | List of recipients       |
 | `fields`              | `List<Field>`     | Conditional | List of fields. Optional when a recipient has a role |
 | `documentName`        | `String`          | No          | Document display name    |
@@ -6151,6 +6295,7 @@ Request configuration for `create_signature_review_link` and `send_signature` me
 | `deliverableId`       | `String`        | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `String`        | Conditional | TurboDocx template ID          |
 | `applySignatureSetup` | `Boolean`       | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
+| `fitAnchoredTags`     | `Boolean`       | No          | Places each field you send on a single-brace tag such as `{ClientSign}` like a saved setup field: with no size of its own it is fitted to its tag's line. Off by default; sent only when `true`. See [Fit your own tag fields](#fit-your-own-tag-fields) |
 | `documentName`        | `String`        | No          | Document name                  |
 | `documentDescription` | `String`        | No          | Document description           |
 | `senderName`          | `String`        | No          | Sender name (overrides the configured value) |
@@ -6195,6 +6340,7 @@ Request configuration for `createSignatureReviewLink` and `sendSignature` method
 | `deliverableId`       | `string`      | Conditional | TurboDocx deliverable ID       |
 | `templateId`          | `string`      | Conditional | TurboDocx template ID          |
 | `applySignatureSetup` | `boolean`     | No          | With a template or deliverable ID, with or without recipient roles: a field sent with a `template.anchor` matching an [anchored field](#add-or-remove-an-anchored-field) of the template's setup (same tag and type) is skipped if the tag is missing and, with no size of its own, is [fitted to its tag's line](/docs/TurboSign/API-Signatures#size-of-a-setup-field) |
+| `fitAnchoredTags`     | `boolean`     | No          | Places each field you send on a single-brace tag such as `{ClientSign}` like a saved setup field: with no size of its own it is fitted to its tag's line. Off by default; sent only when `true`. See [Fit your own tag fields](#fit-your-own-tag-fields) |
 | `recipients`          | `Recipient[]` | Yes         | Recipients who will sign       |
 | `fields`              | `Field[]`     | Conditional | Signature fields configuration. Optional when a recipient has a `role` |
 | `documentName`        | `string`      | No          | Document name                  |
