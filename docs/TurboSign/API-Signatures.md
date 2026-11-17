@@ -1646,7 +1646,7 @@ The template lock check runs before the request body is validated, so a locked t
 }
 ```
 
-Detect it by the HTTP status `423`, not by a code. The same applies to [Remove an anchored field](#endpoint-12-remove-an-anchored-field).
+Detect it by the HTTP status `423`, not by a code. The same applies to [Remove an anchored field](#endpoint-12-remove-an-anchored-field) and [Remove a signer](#endpoint-13-remove-a-signer).
 
 ### Usage Notes
 
@@ -1709,6 +1709,11 @@ User-Agent: TurboDocx API Client
 | data.results.signatureSetup | Object  | The template's whole saved signature setup after the change |
 | data.results.roleRemoved    | Boolean | `true` when the `removeRoleId` signer was removed with the field |
 | data.results.roleKeptReason | String  | Only when `removeRoleId` was sent and the signer was kept: `NotTheFieldsRole` (it is not the removed field's signer), `RoleStillHasFields` (another field is still on it), `RoleOrderUnknown` (it or another signer has no signing order, so which one is last is unknown), `OtherRolesRemain` (a later signer follows it, so removing it would renumber them) or `RoleHasSavedDetails` (it has saved details) |
+| data.results.roleNowEmpty   | Object  | Only when the removed field was its signer's last field and the signer was kept. A template with a signer that has no fields can't be sent until the signer gets a field or is removed with [Remove a signer](#endpoint-13-remove-a-signer) |
+| data.results.roleNowEmpty.roleId | String | The signer's role ID, for [Remove a signer](#endpoint-13-remove-a-signer) |
+| data.results.roleNowEmpty.label  | String | The signer's name |
+| data.results.roleNowEmpty.order  | Number | The signer's signing order |
+| data.results.roleNowEmpty.isLast | Boolean | `true` when no other signer comes at or after it, so removing it moves no one. `false` also when any signer was saved without a signing order |
 
 ### Error Responses
 
@@ -1726,6 +1731,86 @@ Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." 
 - Requires the administrator or contributor role.
 - Only anchored fields can be removed here. A field placed by position, or an ID that isn't in the setup, returns `404 SetupFieldNotFound`.
 - Once no anchored field uses the tag, it is a normal variable again and generation fills it with the value you send, even with `keepAnchoredTags`. A value cleared when the tag became a signature field is not restored.
+
+## Endpoint 13: Remove a signer {#endpoint-13-remove-a-signer}
+
+Remove a signer that has no fields from a template's saved signature setup, for example after [Remove an anchored field](#endpoint-12-remove-an-anchored-field) returned `roleNowEmpty`. Documents already sent are not affected.
+
+### Endpoint
+
+```http
+DELETE https://api.turbodocx.com/turbosign/templates/{templateId}/signature-setup/roles/{roleId}
+```
+
+### Headers
+
+```http
+Authorization: Bearer YOUR_API_TOKEN
+x-rapiddocx-org-id: YOUR_ORGANIZATION_ID
+User-Agent: TurboDocx API Client
+```
+
+### Path Parameters
+
+| Parameter  | Type          | Required | Description |
+| ---------- | ------------- | -------- | ----------- |
+| templateId | String (UUID) | Yes      | The unique identifier of the template |
+| roleId     | String        | Yes      | The signer's role ID: `roleNowEmpty.roleId` from [Remove an anchored field](#endpoint-12-remove-an-anchored-field), `createdRoleId` from [Add an anchored field](#endpoint-11-add-an-anchored-field), or `signatureSetup.roles[].roleId` in either response |
+
+### Response
+
+```json
+{
+  "data": {
+    "results": {
+      "signatureSetup": {
+        "roles": [ ... ],
+        "fields": [ ... ],
+        "savedOn": "2026-11-16T14:35:00.000Z"
+      },
+      "removedRole": { "roleId": "...", "label": "Client SignerD", "order": 2 },
+      "movedRoles": [
+        {
+          "roleId": "...",
+          "label": "Signer 3",
+          "fromOrder": 3,
+          "toOrder": 2,
+          "fromKey": "signer_3",
+          "toKey": "signer_2"
+        }
+      ]
+    }
+  }
+}
+```
+
+### Response Fields
+
+| Field                       | Type   | Description |
+| --------------------------- | ------ | ----------- |
+| data.results.signatureSetup | Object | The template's whole saved signature setup after the change |
+| data.results.removedRole    | Object | The removed signer's `roleId`, `label` and `order` |
+| data.results.movedRoles     | Array  | The signers that moved up one place, each with its `roleId`, `label`, `fromOrder` and `toOrder`. Empty when the signer was last, or when another signer shares its signing order |
+| data.results.movedRoles[].fromKey | String | Only for a signer saved without a key of its own: the role name it answered to before (`signer_3`) |
+| data.results.movedRoles[].toKey   | String | Only for a signer saved without a key of its own: the role name it answers to now (`signer_2`). Send it under this name from now on |
+
+### Error Responses
+
+Errors return `{ "message": "...", "type": "...", "error": "...", "code": "..." }`, where `type` and `code` hold the same value, except the `423`, which comes from the template lock check with no `type` or `code` (see [Locked template](#locked-template-423)).
+
+| Status | `type`                   | Cause |
+| ------ | ------------------------ | ----- |
+| 404    | `SignerRoleNotFound`     | The setup has no signer with this role ID |
+| 404    | `SignatureSetupNotFound` | The template has no saved signature setup |
+| 404    | `TemplateNotFound`       | The template doesn't exist in your organization |
+| 409    | `SignerRoleHasFields`    | The signer still has fields. Remove them first, or leave the signer |
+| 423    | (none)                   | Someone is editing the template in TurboDocx. Retry once they have finished. Detect it by status |
+
+### Usage Notes
+
+- Requires the administrator or contributor role.
+- The signers after the removed one move up one place in the signing order. A signer with a key of its own keeps it. A signer without one is sent under the role name of its new place (`signer_2` instead of `signer_3`), listed in `movedRoles`; update any integration that sends this template by role.
+- A signer's name is kept when it moves, so a signer named `Signer 3` that moves up to 2nd is still called `Signer 3`.
 
 ## Send a template set up in TurboDocx {#send-a-template-set-up-in-turbodocx}
 
