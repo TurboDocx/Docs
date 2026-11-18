@@ -1,455 +1,137 @@
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Text.Json;
-using System.Text;
-using System.Web;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.Mvc;
 
-/**
- * Complete Template Generation Workflows
- * Demonstrates both Path A (Upload) and Path B (Browse/Select) followed by generation
- */
-class TemplateWorkflowManager
+// Register in Program.cs:
+//   builder.Services.AddControllers();
+//   builder.Services.AddHttpClient<TemplateWorkflowController>();
+//   app.MapControllers();
+
+[ApiController]
+[Route("api")]
+public class TemplateWorkflowController : ControllerBase
 {
     // Configuration - Update these values
-    private const string API_TOKEN = "YOUR_API_TOKEN";
-    private const string ORG_ID = "YOUR_ORGANIZATION_ID";
-    private const string BASE_URL = "https://api.turbodocx.com";
+    private const string ApiToken = "YOUR_API_TOKEN";
+    private const string OrgId = "YOUR_ORGANIZATION_ID";
+    private const string BaseUrl = "https://api.turbodocx.com";
+    private const string TemplatePath = "./contract-template.docx";
 
-    private readonly HttpClient client;
+    private readonly HttpClient _httpClient;
 
-    public TemplateWorkflowManager()
+    public TemplateWorkflowController(HttpClient httpClient)
     {
-        client = new HttpClient();
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + API_TOKEN);
-        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", ORG_ID);
-        client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri(BaseUrl);
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiToken}");
+        _httpClient.DefaultRequestHeaders.Add("x-rapiddocx-org-id", OrgId);
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
     }
 
-    static async Task Main(string[] args)
+    public record BrowseRequest(string? Query);
+
+    /// <summary>Path A: upload a new template, then generate from it. POST api/workflow/upload</summary>
+    [HttpPost("workflow/upload")]
+    public async Task<IActionResult> WorkflowUpload()
     {
-        var workflow = new TemplateWorkflowManager();
-
-        try
+        if (!System.IO.File.Exists(TemplatePath))
         {
-            // Demo Path B (Browse existing templates)
-            await workflow.DemoPathB();
-
-            // Uncomment to demo Path A (requires template file):
-            // await workflow.DemoPathA("./path/to/your/template.docx");
-
-            // Uncomment to run full comparison:
-            // await workflow.DemoComparison();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Workflow demo failed: {ex.Message}");
-        }
-        finally
-        {
-            workflow.client?.Dispose();
-        }
-    }
-
-    // ===============================
-    // PATH A: Upload New Template
-    // ===============================
-
-    /**
-     * Complete Path A workflow: Upload → Generate
-     */
-    public async Task<TemplateWorkflowResult> PathA_UploadAndGenerate(string templateFilePath, string deliverableName)
-    {
-        Console.WriteLine("🔄 PATH A: Upload New Template → Generate Deliverable");
-        Console.WriteLine(new string('=', 48));
-
-        try
-        {
-            // Step 1: Upload and create template
-            Console.WriteLine("\n📤 Step 1: Uploading template...");
-            var template = await UploadTemplate(templateFilePath);
-
-            // Step 2: Generate deliverable using uploaded template
-            Console.WriteLine("\n📝 Step 2: Generating deliverable...");
-            using var templateDoc = JsonDocument.Parse(template);
-            var templateInfo = templateDoc.RootElement.GetProperty("data").GetProperty("results").GetProperty("template");
-
-            var deliverable = await GenerateDeliverable(
-                templateInfo.GetProperty("id").GetString(),
-                deliverableName,
-                $"Generated from uploaded template: {templateInfo.GetProperty("name").GetString()}"
-            );
-
-            Console.WriteLine("\n✅ PATH A COMPLETE!");
-            Console.WriteLine($"Template ID: {templateInfo.GetProperty("id").GetString()}");
-
-            using var deliverableDoc = JsonDocument.Parse(deliverable);
-            var deliverableInfo = deliverableDoc.RootElement.GetProperty("data").GetProperty("results").GetProperty("deliverable");
-            Console.WriteLine($"Deliverable ID: {deliverableInfo.GetProperty("id").GetString()}");
-
-            // Download the generated file
-            await DownloadDeliverable(
-                deliverableInfo.GetProperty("id").GetString(),
-                $"{deliverableInfo.GetProperty("name").GetString()}.docx"
-            );
-
-            return new TemplateWorkflowResult(template, deliverable, null);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ Path A failed: {ex.Message}");
-            throw;
-        }
-    }
-
-    private async Task<string> UploadTemplate(string templateFilePath)
-    {
-        if (!File.Exists(templateFilePath))
-        {
-            throw new FileNotFoundException($"Template file not found: {templateFilePath}");
+            return BadRequest(new { error = $"Template file not found: {TemplatePath}" });
         }
 
-        using var content = new MultipartFormDataContent();
-
-        var fileContent = new ByteArrayContent(File.ReadAllBytes(templateFilePath));
-        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(
+        using var form = new MultipartFormDataContent();
+        var fileContent = new ByteArrayContent(await System.IO.File.ReadAllBytesAsync(TemplatePath));
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        content.Add(fileContent, "templateFile", Path.GetFileName(templateFilePath));
+        form.Add(fileContent, "templateFile", Path.GetFileName(TemplatePath));
+        form.Add(new StringContent("Employee Contract Template"), "name");
+        form.Add(new StringContent("Standard employee contract with variable placeholders"), "description");
+        form.Add(new StringContent("[]"), "variables");
+        form.Add(new StringContent("[]"), "tags");
 
-        content.Add(new StringContent("API Upload Template"), "name");
-        content.Add(new StringContent("Template uploaded via API for testing"), "description");
-        content.Add(new StringContent("[]"), "variables");
-        content.Add(new StringContent("[]"), "tags");
-
-        var response = await client.PostAsync($"{BASE_URL}/template/upload-and-create", content);
-
-        if (!response.IsSuccessStatusCode)
+        // Upload and create answers 201 Created
+        var upload = await _httpClient.PostAsync("/template/upload-and-create", form);
+        if (upload.StatusCode != HttpStatusCode.Created)
         {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Upload failed: {response.StatusCode} - {errorContent}");
+            return StatusCode(502, new { error = await upload.Content.ReadAsStringAsync() });
         }
 
-        var result = await response.Content.ReadAsStringAsync();
-
-        using var document = JsonDocument.Parse(result);
-        var template = document.RootElement.GetProperty("data").GetProperty("results").GetProperty("template");
-
-        Console.WriteLine($"✅ Template uploaded: {template.GetProperty("name").GetString()} ({template.GetProperty("id").GetString()})");
-
-        var variableCount = 0;
-        if (template.TryGetProperty("variables", out var variables) && variables.ValueKind != JsonValueKind.Null)
-        {
-            variableCount = variables.GetArrayLength();
-        }
-        Console.WriteLine($"📊 Variables extracted: {variableCount}");
-
-        Console.WriteLine($"🔤 Default font: {template.GetProperty("defaultFont").GetString()}");
-
-        var fontCount = 0;
-        if (template.TryGetProperty("fonts", out var fonts) && fonts.ValueKind != JsonValueKind.Null)
-        {
-            fontCount = fonts.GetArrayLength();
-        }
-        Console.WriteLine($"📝 Fonts used: {fontCount}");
-
-        return result;
+        var template = JsonNode.Parse(await upload.Content.ReadAsStringAsync())!["data"]!["results"]!["template"]!;
+        return await GenerateFrom(template, "A");
     }
 
-    // ===============================
-    // PATH B: Browse and Select
-    // ===============================
-
-    /**
-     * Complete Path B workflow: Browse → Select → Generate
-     */
-    public async Task<TemplateWorkflowResult> PathB_BrowseAndGenerate(string searchQuery, string deliverableName)
+    /// <summary>Path B: pick an existing template, then generate from it. POST api/workflow/browse</summary>
+    [HttpPost("workflow/browse")]
+    public async Task<IActionResult> WorkflowBrowse([FromBody] BrowseRequest? request)
     {
-        Console.WriteLine("🔍 PATH B: Browse Existing Templates → Generate Deliverable");
-        Console.WriteLine(new string('=', 56));
-
-        try
+        var query = Uri.EscapeDataString(request?.Query ?? "contract");
+        var browse = await _httpClient.GetAsync($"/template-item?limit=10&offset=0&showTags=true&query={query}");
+        if (!browse.IsSuccessStatusCode)
         {
-            // Step 1: Browse templates
-            Console.WriteLine("\n🔍 Step 1: Browsing templates...");
-            var browseResult = await BrowseTemplates(searchQuery);
+            return StatusCode(502, new { error = await browse.Content.ReadAsStringAsync() });
+        }
 
-            // Step 2: Select first available template
-            using var browseDoc = JsonDocument.Parse(browseResult);
-            var results = browseDoc.RootElement.GetProperty("data").GetProperty("results");
+        var items = JsonNode.Parse(await browse.Content.ReadAsStringAsync())!["data"]!["results"]!.AsArray();
+        var selected = items.FirstOrDefault(item => (string?)item?["type"] == "template");
+        if (selected is null)
+        {
+            return NotFound(new { error = "No matching template" });
+        }
 
-            JsonElement? selectedTemplate = null;
-            foreach (var item in results.EnumerateArray())
+        var details = await _httpClient.GetAsync($"/template/{Uri.EscapeDataString((string)selected["id"]!)}");
+        if (!details.IsSuccessStatusCode)
+        {
+            return StatusCode(502, new { error = await details.Content.ReadAsStringAsync() });
+        }
+
+        var template = JsonNode.Parse(await details.Content.ReadAsStringAsync())!["data"]!["results"]!;
+        return await GenerateFrom(template, "B");
+    }
+
+    /// <summary>The generated file. GET api/deliverables/{id}/download</summary>
+    [HttpGet("deliverables/{id}/download")]
+    public async Task<IActionResult> Download(string id)
+    {
+        var response = await _httpClient.GetAsync($"/v1/deliverable/file/{Uri.EscapeDataString(id)}");
+        if (!response.IsSuccessStatusCode)
+        {
+            return StatusCode(502, new { error = await response.Content.ReadAsStringAsync() });
+        }
+
+        var contentType = response.Content.Headers.ContentType?.ToString() ?? "application/octet-stream";
+        return File(await response.Content.ReadAsByteArrayAsync(), contentType, $"deliverable-{id}.docx");
+    }
+
+    // Both paths: generate a deliverable, filling each of the template's variables
+    private async Task<IActionResult> GenerateFrom(JsonNode template, string pathLabel)
+    {
+        var variables = (template["variables"]?.AsArray() ?? new JsonArray())
+            .Select(variable => new
             {
-                if (item.GetProperty("type").GetString() == "template")
-                {
-                    selectedTemplate = item;
-                    break;
-                }
-            }
+                placeholder = (string?)variable?["placeholder"],
+                text = $"Sample value for {(string?)variable?["name"] ?? (string?)variable?["placeholder"]}",
+                mimeType = "text",
+            });
 
-            if (!selectedTemplate.HasValue)
-            {
-                throw new Exception("No templates found in browse results");
-            }
-
-            var template = selectedTemplate.Value;
-            Console.WriteLine($"📋 Selected: {template.GetProperty("name").GetString()} ({template.GetProperty("id").GetString()})");
-
-            // Step 3: Get template details
-            Console.WriteLine("\n📖 Step 2: Getting template details...");
-            var templateDetails = await GetTemplateDetails(template.GetProperty("id").GetString());
-
-            // Step 4: Get PDF preview (optional)
-            Console.WriteLine("\n🖼️  Step 3: Getting PDF preview...");
-            var pdfPreview = await GetTemplatePDFPreview(template.GetProperty("id").GetString());
-
-            // Step 5: Generate deliverable
-            Console.WriteLine("\n📝 Step 4: Generating deliverable...");
-            using var detailsDoc = JsonDocument.Parse(templateDetails);
-            var templateInfo = detailsDoc.RootElement.GetProperty("data").GetProperty("results");
-
-            var deliverable = await GenerateDeliverable(
-                templateInfo.GetProperty("id").GetString(),
-                deliverableName,
-                $"Generated from existing template: {templateInfo.GetProperty("name").GetString()}"
-            );
-
-            Console.WriteLine("\n✅ PATH B COMPLETE!");
-            Console.WriteLine($"Template ID: {templateInfo.GetProperty("id").GetString()}");
-
-            using var deliverableDoc = JsonDocument.Parse(deliverable);
-            var deliverableInfo = deliverableDoc.RootElement.GetProperty("data").GetProperty("results").GetProperty("deliverable");
-            Console.WriteLine($"Deliverable ID: {deliverableInfo.GetProperty("id").GetString()}");
-            Console.WriteLine($"PDF Preview: {pdfPreview}");
-
-            // Download the generated file
-            Console.WriteLine("\n📥 Step 5: Downloading file...");
-            await DownloadDeliverable(
-                deliverableInfo.GetProperty("id").GetString(),
-                $"{deliverableInfo.GetProperty("name").GetString()}.docx"
-            );
-
-            return new TemplateWorkflowResult(templateDetails, deliverable, pdfPreview);
-        }
-        catch (Exception ex)
+        var payload = new
         {
-            Console.WriteLine($"❌ Path B failed: {ex.Message}");
-            throw;
-        }
-    }
+            templateId = (string?)template["id"],
+            name = $"Contract Document - Path {pathLabel}",
+            description = $"Employment contract generated via workflow path {pathLabel}",
+            variables,
+            tags = new[] { "api-generated" },
+        };
 
-    private async Task<string> BrowseTemplates(string query)
-    {
-        var queryParams = "limit=25&offset=0&showTags=true";
-
-        if (!string.IsNullOrEmpty(query))
-        {
-            queryParams += $"&query={HttpUtility.UrlEncode(query)}";
-        }
-
-        var response = await client.GetAsync($"{BASE_URL}/template-item?{queryParams}");
-
+        var response = await _httpClient.PostAsJsonAsync("/v1/deliverable", payload);
         if (!response.IsSuccessStatusCode)
         {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Browse failed: {response.StatusCode} - {errorContent}");
+            return StatusCode(502, new { error = await response.Content.ReadAsStringAsync() });
         }
 
-        var result = await response.Content.ReadAsStringAsync();
-
-        using var document = JsonDocument.Parse(result);
-        var totalRecords = document.RootElement.GetProperty("data").GetProperty("totalRecords").GetInt32();
-        Console.WriteLine($"🔍 Found {totalRecords} templates/folders");
-
-        return result;
-    }
-
-    private async Task<string> GetTemplateDetails(string templateId)
-    {
-        var response = await client.GetAsync($"{BASE_URL}/template/{templateId}");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Template details failed: {response.StatusCode} - {errorContent}");
-        }
-
-        var result = await response.Content.ReadAsStringAsync();
-
-        using var document = JsonDocument.Parse(result);
-        var template = document.RootElement.GetProperty("data").GetProperty("results");
-
-        var variableCount = 0;
-        if (template.TryGetProperty("variables", out var variables) && variables.ValueKind != JsonValueKind.Null)
-        {
-            variableCount = variables.GetArrayLength();
-        }
-        Console.WriteLine($"📊 Variables: {variableCount}");
-
-        var defaultFont = template.TryGetProperty("defaultFont", out var font) ? font.GetString() : "N/A";
-        Console.WriteLine($"🔤 Default font: {defaultFont}");
-
-        return result;
-    }
-
-    private async Task<string> GetTemplatePDFPreview(string templateId)
-    {
-        var response = await client.GetAsync($"{BASE_URL}/template/{templateId}/previewpdflink");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"PDF preview failed: {response.StatusCode} - {errorContent}");
-        }
-
-        var result = await response.Content.ReadAsStringAsync();
-
-        using var document = JsonDocument.Parse(result);
-        var pdfUrl = document.RootElement.GetProperty("results").GetString();
-
-        Console.WriteLine($"🖼️  PDF Preview available: {pdfUrl}");
-
-        return pdfUrl;
-    }
-
-    // ===============================
-    // COMMON: Generate Deliverable
-    // ===============================
-
-    private async Task<string> GenerateDeliverable(string templateId, string name, string description)
-    {
-        var payload = $$"""
-        {
-          "templateId": "{{templateId}}",
-          "name": "{{name}}",
-          "description": "{{description}}",
-          "variables": [
-            {
-              "mimeType": "text",
-              "name": "Sample Variable",
-              "placeholder": "{SampleVariable}",
-              "text": "Sample Content from C# Workflow",
-              "allowRichTextInjection": 0,
-              "autogenerated": false,
-              "count": 1,
-              "order": 1,
-              "subvariables": [],
-              "metadata": {
-                "generatedBy": "C# Workflow"
-              },
-              "aiPrompt": ""
-            }
-          ],
-          "tags": ["api-generated"],
-          "fonts": "[]"
-        }
-        """;
-
-        var content = new StringContent(payload, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync($"{BASE_URL}/v1/deliverable", content);
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Deliverable generation failed: {response.StatusCode} - {errorContent}");
-        }
-
-        var result = await response.Content.ReadAsStringAsync();
-
-        using var document = JsonDocument.Parse(result);
-        var deliverable = document.RootElement.GetProperty("data").GetProperty("results").GetProperty("deliverable");
-
-        Console.WriteLine($"✅ Generated: {deliverable.GetProperty("name").GetString()}");
-        Console.WriteLine($"📄 Created by: {deliverable.GetProperty("createdBy").GetString()}");
-        Console.WriteLine($"📅 Created on: {deliverable.GetProperty("createdOn").GetString()}");
-
-        return result;
-    }
-
-    private async Task DownloadDeliverable(string deliverableId, string filename)
-    {
-        Console.WriteLine($"📥 Downloading file: {filename}");
-
-        var response = await client.GetAsync($"{BASE_URL}/v1/deliverable/file/{deliverableId}");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new HttpRequestException($"Download failed: {response.StatusCode}");
-        }
-
-        Console.WriteLine($"✅ File ready for download: {filename}");
-
-        var contentType = response.Content.Headers.ContentType?.ToString() ?? "N/A";
-        var contentLength = response.Content.Headers.ContentLength?.ToString() ?? "N/A";
-
-        Console.WriteLine($"📁 Content-Type: {contentType}");
-        Console.WriteLine($"📊 Content-Length: {contentLength} bytes");
-
-        // In a real application, you would save the file
-        // var fileBytes = await response.Content.ReadAsByteArrayAsync();
-        // await File.WriteAllBytesAsync(filename, fileBytes);
-    }
-
-    // ===============================
-    // DEMO FUNCTIONS
-    // ===============================
-
-    public async Task<TemplateWorkflowResult> DemoPathA(string templateFilePath)
-    {
-        Console.WriteLine("🚀 DEMO: Path A - Upload New Template Workflow");
-        Console.WriteLine(new string('=', 45));
-        Console.WriteLine();
-
-        return await PathA_UploadAndGenerate(templateFilePath, "Contract Generated via Path A - API Upload");
-    }
-
-    public async Task<TemplateWorkflowResult> DemoPathB()
-    {
-        Console.WriteLine("🚀 DEMO: Path B - Browse Existing Template Workflow");
-        Console.WriteLine(new string('=', 51));
-        Console.WriteLine();
-
-        return await PathB_BrowseAndGenerate("contract", "Contract Generated via Path B - Browse & Select");
-    }
-
-    public async Task DemoComparison()
-    {
-        Console.WriteLine("🚀 DEMO: Complete Workflow Comparison");
-        Console.WriteLine(new string('=', 36));
-        Console.WriteLine();
-
-        try
-        {
-            Console.WriteLine("Testing both paths with the same template type...\n");
-
-            // Run Path B first (browse existing)
-            var pathBResult = await DemoPathB();
-
-            Console.WriteLine("\n" + new string('=', 60) + "\n");
-
-            // For Path A, we'd need a template file
-            Console.WriteLine("📝 Path A requires a template file to upload.");
-            Console.WriteLine("   Example: await workflow.DemoPathA(\"./contract-template.docx\")");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Demo comparison failed: {ex.Message}");
-        }
-    }
-
-    // Result container class
-    public class TemplateWorkflowResult
-    {
-        public string Template { get; }
-        public string Deliverable { get; }
-        public string PdfPreview { get; }
-
-        public TemplateWorkflowResult(string template, string deliverable, string pdfPreview)
-        {
-            Template = template;
-            Deliverable = deliverable;
-            PdfPreview = pdfPreview;
-        }
+        var deliverable = JsonNode.Parse(await response.Content.ReadAsStringAsync())!["data"]!["results"]!["deliverable"]!;
+        var deliverableId = (string?)deliverable["id"];
+        return Ok(new { templateId = (string?)template["id"], deliverableId, download = $"/api/deliverables/{deliverableId}/download" });
     }
 }

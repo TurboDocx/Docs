@@ -61,3 +61,50 @@ test('every sample file is shown by a page (no dead copies)', () => {
     .filter((f) => f !== 'README.md' && !requested.has(f));
   assert.deepEqual(unused, []);
 });
+
+// A sub-tab is only real if its file uses the framework it is named after.
+const FRAMEWORK = {
+  express: /require\(["']express["']\)/,
+  fastify: /require\(["']fastify["']\)/,
+  fastapi: /from fastapi import/,
+  flask: /from flask import/,
+  controller: /ControllerBase/,
+  minimal: /WebApplication\.CreateBuilder/,
+};
+
+test('every framework sub-tab sample uses that framework', () => {
+  const wrong = [];
+  for (const u of usages) {
+    for (const [lang, variants] of Object.entries(u.languages ?? DEFAULT_LANGUAGES)) {
+      for (const variant of variants) {
+        const rel = `${u.scriptPath}/${lang}/${variant}.${EXTENSIONS[lang]}`;
+        const file = path.join(root, 'static', 'scripts', rel);
+        if (fs.existsSync(file) && !FRAMEWORK[variant].test(fs.readFileSync(file, 'utf8'))) wrong.push(rel);
+      }
+    }
+  }
+  assert.deepEqual(wrong, []);
+});
+
+test('framework variants of a sample are not copies of each other', () => {
+  const copies = [];
+  for (const u of usages) {
+    for (const [lang, variants] of Object.entries(u.languages ?? DEFAULT_LANGUAGES)) {
+      const bodies = variants.map((v) => fs.readFileSync(path.join(root, 'static', 'scripts', u.scriptPath, lang, `${v}.${EXTENSIONS[lang]}`), 'utf8'));
+      if (bodies.length > 1 && new Set(bodies).size < bodies.length) copies.push(`${u.scriptPath}/${lang}`);
+    }
+  }
+  assert.deepEqual(copies, []);
+});
+
+test('SDK pages do not show the same code under JavaScript and TypeScript', () => {
+  const same = [];
+  for (const file of walk(path.join(root, 'docs', 'SDKs')).filter((f) => /\.mdx?$/.test(f))) {
+    const s = fs.readFileSync(file, 'utf8');
+    for (const m of s.matchAll(/<Tabs groupId="js-variant">([\s\S]*?)<\/Tabs>/g)) {
+      const blocks = [...m[1].matchAll(/```\w+\n([\s\S]*?)```/g)].map((b) => b[1]);
+      if (blocks.length === 2 && blocks[0] === blocks[1]) same.push(`${path.relative(root, file)}:${s.slice(0, m.index).split('\n').length}`);
+    }
+  }
+  assert.deepEqual(same, []);
+});

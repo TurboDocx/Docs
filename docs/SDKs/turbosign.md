@@ -1074,8 +1074,10 @@ console.log(JSON.stringify(result, null, 2));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
+import { TurboSign, type SendSignatureRequest, type SendSignatureResponse } from "@turbodocx/sdk";
+
 // Use text anchors instead of coordinates
-const result = await TurboSign.sendSignature({
+const request: SendSignatureRequest = {
   fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
@@ -1100,7 +1102,9 @@ const result = await TurboSign.sendSignature({
       },
     },
   ],
-});
+};
+
+const result: SendSignatureResponse = await TurboSign.sendSignature(request);
 
 console.log(JSON.stringify(result, null, 2));
 ```
@@ -1763,7 +1767,9 @@ const result = await TurboSign.sendSignature({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await TurboSign.sendSignature({
+import { TurboSign, type SendSignatureRequest, type SendSignatureResponse } from "@turbodocx/sdk";
+
+const request: SendSignatureRequest = {
   fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -1779,7 +1785,9 @@ const result = await TurboSign.sendSignature({
       recipientEmail: "john@example.com",
     },
   ],
-});
+};
+
+const result: SendSignatureResponse = await TurboSign.sendSignature(request);
 ```
 
 </TabItem>
@@ -1879,8 +1887,10 @@ const result = await TurboSign.sendSignature({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
+import { TurboSign, type SendSignatureRequest, type SendSignatureResponse } from "@turbodocx/sdk";
+
 // Use a previously generated TurboDocx document
-const result = await TurboSign.sendSignature({
+const request: SendSignatureRequest = {
   deliverableId: "deliverable-uuid-from-turbodocx",
   recipients: [
     { name: "John Doe", email: "john@example.com", signingOrder: 1 },
@@ -1896,7 +1906,9 @@ const result = await TurboSign.sendSignature({
       recipientEmail: "john@example.com",
     },
   ],
-});
+};
+
+const result: SendSignatureResponse = await TurboSign.sendSignature(request);
 ```
 
 </TabItem>
@@ -2080,8 +2092,10 @@ const result = await TurboSign.sendSignature({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
+import { TurboSign, type SendSignatureRequest, type SendSignatureResponse } from "@turbodocx/sdk";
+
 // Use a pre-configured TurboSign template
-const result = await TurboSign.sendSignature({
+const request: SendSignatureRequest = {
   templateId: "template-uuid-from-turbodocx", // Template already contains anchors
   recipients: [
     { name: "Alice Smith", email: "alice@example.com", signingOrder: 1 },
@@ -2097,7 +2111,9 @@ const result = await TurboSign.sendSignature({
       },
     },
   ],
-});
+};
+
+const result: SendSignatureResponse = await TurboSign.sendSignature(request);
 ```
 
 </TabItem>
@@ -2278,11 +2294,13 @@ const result = await TurboSign.sendSignature({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
+import { TurboSign, type SendSignatureResponse, type TemplateSignatureSetup } from "@turbodocx/sdk";
+
 // The role keys come from the template
-const { roles } = await TurboSign.getTemplateSignatureSetup("your-template-id");
+const { roles }: TemplateSignatureSetup = await TurboSign.getTemplateSignatureSetup("your-template-id");
 // [{ key: "client", hasSavedSigner: false, ... }, { key: "countersigner", hasSavedSigner: true, ... }]
 
-const result = await TurboSign.sendSignature({
+const result: SendSignatureResponse = await TurboSign.sendSignature({
   templateId: "your-template-id",
   recipients: [
     { role: "client", name: "Jane Doe", email: "jane@client.com" },
@@ -2649,7 +2667,13 @@ const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
+import {
+  TurboSign,
+  type CreateSignatureReviewLinkRequest,
+  type CreateSignatureReviewLinkResponse,
+} from "@turbodocx/sdk";
+
+const request: CreateSignatureReviewLinkRequest = {
   fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Contract Draft",
   recipients: [
@@ -2666,7 +2690,10 @@ const { documentId, previewUrl } = await TurboSign.createSignatureReviewLink({
       recipientEmail: "john@example.com",
     },
   ],
-});
+};
+
+const { documentId, previewUrl }: CreateSignatureReviewLinkResponse =
+  await TurboSign.createSignatureReviewLink(request);
 ```
 
 </TabItem>
@@ -2824,7 +2851,9 @@ const { documentId } = await TurboSign.sendSignature({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const { documentId } = await TurboSign.sendSignature({
+import { TurboSign, type SendSignatureRequest, type SendSignatureResponse } from "@turbodocx/sdk";
+
+const request: SendSignatureRequest = {
   fileLink: "https://www.turbodocx.com/examples/turbodocx.pdf",
   documentName: "Service Agreement",
   senderName: "Your Company",
@@ -2843,7 +2872,9 @@ const { documentId } = await TurboSign.sendSignature({
       recipientEmail: "recipient@example.com",
     },
   ],
-});
+};
+
+const { documentId }: SendSignatureResponse = await TurboSign.sendSignature(request);
 ```
 
 </TabItem>
@@ -3376,8 +3407,10 @@ const result = await TurboSign.sendSignature({
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await TurboSign.sendSignature({
-  // ...fileLink, recipients, fields, etc.
+import { TurboSign, type SendSignatureRequest, type SendSignatureResponse } from "@turbodocx/sdk";
+
+const request: SendSignatureRequest = {
+  ...baseRequest, // your fileLink, recipients, fields, etc.
 
   // Reminders: nudge signers who haven't signed yet
   remindersEnabled: true,
@@ -3390,7 +3423,9 @@ const result = await TurboSign.sendSignature({
   expireAfter: { value: 30, unit: "days" },      // how long the document stays signable
   expirationWarning: { value: 3, unit: "days" }, // how far before expiry warnings start
   expirationWarningInterval: { value: 1, unit: "days" },
-});
+};
+
+const result: SendSignatureResponse = await TurboSign.sendSignature(request);
 ```
 
 </TabItem>
@@ -3542,7 +3577,9 @@ console.log(result.status); // 'under_review' | 'completed' | 'voided' | ...
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await TurboSign.getStatus("document-uuid");
+import { TurboSign, type DocumentStatusResponse } from "@turbodocx/sdk";
+
+const result: DocumentStatusResponse = await TurboSign.getStatus("document-uuid");
 
 console.log(result.status); // 'under_review' | 'completed' | 'voided' | ...
 ```
@@ -3939,7 +3976,9 @@ await TurboSign.void("document-uuid", "Contract terms changed");
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-await TurboSign.void("document-uuid", "Contract terms changed");
+import { TurboSign, type VoidDocumentResponse } from "@turbodocx/sdk";
+
+const result: VoidDocumentResponse = await TurboSign.void("document-uuid", "Contract terms changed");
 ```
 
 </TabItem>
@@ -4021,8 +4060,10 @@ await TurboSign.resend("document-uuid", [
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
+import { TurboSign, type ResendEmailResponse } from "@turbodocx/sdk";
+
 // Resend to specific recipients
-await TurboSign.resend("document-uuid", [
+const result: ResendEmailResponse = await TurboSign.resend("document-uuid", [
   "recipient-uuid-1",
   "recipient-uuid-2",
 ]);
@@ -4110,7 +4151,9 @@ console.log(JSON.stringify(result, null, 2));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await TurboSign.getAuditTrail("document-uuid");
+import { TurboSign, type AuditTrailResponse } from "@turbodocx/sdk";
+
+const result: AuditTrailResponse = await TurboSign.getAuditTrail("document-uuid");
 
 console.log(JSON.stringify(result, null, 2));
 ```
@@ -4214,7 +4257,9 @@ setup.roles.forEach((role) => console.log(role.key, role.hasSavedSigner));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const setup = await TurboSign.getTemplateSignatureSetup("template-uuid");
+import { TurboSign, type TemplateSignatureSetup } from "@turbodocx/sdk";
+
+const setup: TemplateSignatureSetup = await TurboSign.getTemplateSignatureSetup("template-uuid");
 
 setup.roles.forEach((role) => console.log(role.key, role.hasSavedSigner));
 ```

@@ -1,196 +1,98 @@
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Web;
+using Microsoft.AspNetCore.Mvc;
 
-/**
- * Path B: Browse and Select Existing Templates
- */
-class TemplateBrowser
+// Register in Program.cs:
+//   builder.Services.AddControllers();
+//   builder.Services.AddHttpClient<TemplateBrowserController>();
+//   app.MapControllers();
+
+[ApiController]
+[Route("api/templates")]
+public class TemplateBrowserController : ControllerBase
 {
     // Configuration - Update these values
-    private const string API_TOKEN = "YOUR_API_TOKEN";
-    private const string ORG_ID = "YOUR_ORGANIZATION_ID";
-    private const string BASE_URL = "https://api.turbodocx.com";
+    private const string ApiToken = "YOUR_API_TOKEN";
+    private const string OrgId = "YOUR_ORGANIZATION_ID";
+    private const string BaseUrl = "https://api.turbodocx.com";
 
-    static async Task Main(string[] args)
+    private readonly HttpClient _httpClient;
+
+    public TemplateBrowserController(HttpClient httpClient)
     {
-        try
-        {
-            Console.WriteLine("=== Path B: Browse and Select Template ===");
-
-            // Step 1: Browse templates
-            Console.WriteLine("\n1. Browsing templates...");
-            var browseResult = await BrowseTemplates(10, 0, "contract", true, null);
-
-            using var browseDoc = JsonDocument.Parse(browseResult);
-            var results = browseDoc.RootElement.GetProperty("data").GetProperty("results");
-
-            // Find a template (not a folder)
-            JsonElement? selectedTemplate = null;
-            foreach (var item in results.EnumerateArray())
-            {
-                if (item.GetProperty("type").GetString() == "template")
-                {
-                    selectedTemplate = item;
-                    break;
-                }
-            }
-
-            if (!selectedTemplate.HasValue)
-            {
-                Console.WriteLine("No templates found in browse results");
-                return;
-            }
-
-            var template = selectedTemplate.Value;
-            Console.WriteLine($"\nSelected template: {template.GetProperty("name").GetString()} ({template.GetProperty("id").GetString()})");
-
-            // Step 2: Get detailed template information
-            Console.WriteLine("\n2. Getting template details...");
-            var templateDetails = await GetTemplateDetails(template.GetProperty("id").GetString());
-
-            // Step 3: Get PDF preview (optional)
-            Console.WriteLine("\n3. Getting PDF preview...");
-            var pdfPreview = await GetTemplatePDFPreview(template.GetProperty("id").GetString());
-
-            using var detailsDoc = JsonDocument.Parse(templateDetails);
-            var templateInfo = detailsDoc.RootElement.GetProperty("data").GetProperty("results");
-
-            Console.WriteLine("\n=== Template Ready for Generation ===");
-            Console.WriteLine($"Template ID: {templateInfo.GetProperty("id").GetString()}");
-
-            var variableCount = 0;
-            if (templateInfo.TryGetProperty("variables", out var variables) &&
-                variables.ValueKind != JsonValueKind.Null)
-            {
-                variableCount = variables.GetArrayLength();
-            }
-            Console.WriteLine($"Variables available: {variableCount}");
-            Console.WriteLine($"PDF Preview: {pdfPreview}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Browsing workflow failed: {ex.Message}");
-        }
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri(BaseUrl);
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiToken}");
+        _httpClient.DefaultRequestHeaders.Add("x-rapiddocx-org-id", OrgId);
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
     }
 
-    /**
-     * Step 1: Browse Templates and Folders
-     */
-    private static async Task<string> BrowseTemplates(int limit, int offset, string query,
-                                                    bool showTags, string[] selectedTags)
+    /// <summary>
+    /// Path B: browse templates and folders.
+    /// GET api/templates?query=contract&amp;limit=25&amp;offset=0&amp;selectedTags=TAG_ID
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> BrowseTemplates(
+        [FromQuery] string? query,
+        [FromQuery] int limit = 25,
+        [FromQuery] int offset = 0,
+        [FromQuery] string[]? selectedTags = null)
     {
-        using var client = new HttpClient();
-
-        // Set headers
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + API_TOKEN);
-        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", ORG_ID);
-        client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
-
-        // Build query parameters
-        var queryParams = $"limit={limit}&offset={offset}&showTags={showTags.ToString().ToLower()}";
-
+        var queryString = $"limit={limit}&offset={offset}&showTags=true";
         if (!string.IsNullOrEmpty(query))
         {
-            queryParams += $"&query={HttpUtility.UrlEncode(query)}";
+            queryString += $"&query={HttpUtility.UrlEncode(query)}";
         }
 
-        if (selectedTags != null)
+        // Repeat selectedTags once per tag ID (the API reads ?selectedTags=<id>&selectedTags=<id>)
+        foreach (var tagId in selectedTags ?? Array.Empty<string>())
         {
-            foreach (var tag in selectedTags)
-            {
-                queryParams += $"&selectedTags={HttpUtility.UrlEncode(tag)}";
-            }
+            queryString += $"&selectedTags={HttpUtility.UrlEncode(tagId)}";
         }
 
-        var url = $"{BASE_URL}/template-item?{queryParams}";
-
-        var response = await client.GetAsync(url);
-
+        var response = await _httpClient.GetAsync($"/template-item?{queryString}");
         if (!response.IsSuccessStatusCode)
         {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"HTTP error {response.StatusCode}: {errorContent}");
+            return StatusCode(502, new { error = await response.Content.ReadAsStringAsync() });
         }
 
-        var result = await response.Content.ReadAsStringAsync();
+        var data = JsonNode.Parse(await response.Content.ReadAsStringAsync())!["data"]!;
+        var items = data["results"]!.AsArray();
 
-        using var document = JsonDocument.Parse(result);
-        var totalRecords = document.RootElement.GetProperty("data").GetProperty("totalRecords").GetInt32();
-        Console.WriteLine($"Found {totalRecords} templates/folders");
-
-        return result;
+        return Ok(new
+        {
+            totalRecords = data["totalRecords"]?.GetValue<int>(),
+            templates = items.Where(item => (string?)item?["type"] == "template"),
+            folders = items.Where(item => (string?)item?["type"] == "folder"),
+        });
     }
 
-    /**
-     * Step 2: Get Template Details by ID
-     */
-    private static async Task<string> GetTemplateDetails(string templateId)
+    /// <summary>
+    /// Template details (variables, fonts) and its PDF preview link.
+    /// GET api/templates/{id}
+    /// </summary>
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTemplate(string id)
     {
-        using var client = new HttpClient();
+        var templatePath = $"/template/{Uri.EscapeDataString(id)}";
 
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + API_TOKEN);
-        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", ORG_ID);
-        client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
-
-        var response = await client.GetAsync($"{BASE_URL}/template/{templateId}");
-
-        if (!response.IsSuccessStatusCode)
+        var details = await _httpClient.GetAsync(templatePath);
+        var preview = await _httpClient.GetAsync($"{templatePath}/previewpdflink");
+        if (!details.IsSuccessStatusCode || !preview.IsSuccessStatusCode)
         {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"HTTP error {response.StatusCode}: {errorContent}");
+            return StatusCode(502, new { error = "Failed to load the template" });
         }
 
-        var result = await response.Content.ReadAsStringAsync();
+        var template = JsonNode.Parse(await details.Content.ReadAsStringAsync())!["data"]!["results"]!;
+        var previewUrl = JsonNode.Parse(await preview.Content.ReadAsStringAsync())!["results"]!;
 
-        using var document = JsonDocument.Parse(result);
-        var template = document.RootElement.GetProperty("data").GetProperty("results");
-
-        Console.WriteLine($"Template: {template.GetProperty("name").GetString()}");
-
-        var variableCount = 0;
-        if (template.TryGetProperty("variables", out var variables) &&
-            variables.ValueKind != JsonValueKind.Null)
+        return Ok(new
         {
-            variableCount = variables.GetArrayLength();
-        }
-        Console.WriteLine($"Variables: {variableCount}");
-
-        var defaultFont = template.TryGetProperty("defaultFont", out var font) ? font.GetString() : "N/A";
-        Console.WriteLine($"Default font: {defaultFont}");
-
-        return result;
-    }
-
-    /**
-     * Step 3: Get PDF Preview Link (Optional)
-     */
-    private static async Task<string> GetTemplatePDFPreview(string templateId)
-    {
-        using var client = new HttpClient();
-
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + API_TOKEN);
-        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", ORG_ID);
-        client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
-
-        var response = await client.GetAsync($"{BASE_URL}/template/{templateId}/previewpdflink");
-
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"HTTP error {response.StatusCode}: {errorContent}");
-        }
-
-        var result = await response.Content.ReadAsStringAsync();
-
-        using var document = JsonDocument.Parse(result);
-        var pdfUrl = document.RootElement.GetProperty("results").GetString();
-
-        Console.WriteLine($"PDF Preview: {pdfUrl}");
-
-        return pdfUrl;
+            id = (string?)template["id"],
+            name = (string?)template["name"],
+            defaultFont = (string?)template["defaultFont"],
+            variables = template["variables"],
+            pdfPreviewUrl = (string?)previewUrl,
+        });
     }
 }
