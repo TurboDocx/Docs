@@ -52,6 +52,15 @@ info:
     returns `403 Forbidden`.
 
 
+    ## Yes/no values in responses
+
+
+    Yes/no fields that the API reads from its database, such as `isActive`, `isGlobal`,
+    `allowRichTextInjection` and `isDelivered`, come back as `1` or `0`, not `true` or `false`.
+    Each endpoint's response schema shows which fields these are. Check them as truthy values. The
+    SDKs convert them to `true` and `false` for you. In request bodies, send `true` or `false`.
+
+
     ## SDKs
 
 
@@ -165,9 +174,9 @@ paths:
                       name: Company Logo
                       placeholder: '{CompanyLogo}'
                       mimeType: image
-                      isGlobal: false
+                      isGlobal: 0
                       templateFolderId: 9d2b1c63-0f77-4a9c-b1d0-2c5e6f7a8b90
-                      allowRichTextInjection: true
+                      allowRichTextInjection: 1
                       orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
                       createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                       createdOn: '2026-05-01T14:22:10.000Z'
@@ -192,11 +201,21 @@ paths:
                               mimeType:
                                 type: string
                               isGlobal:
-                                type: boolean
+                                type: integer
+                                enum:
+                                  - 0
+                                  - 1
+                                description: >-
+                                  `1` for a knowledge-base variable, `0` otherwise.
                               templateFolderId:
                                 type: string
                               allowRichTextInjection:
-                                type: boolean
+                                type: integer
+                                enum:
+                                  - 0
+                                  - 1
+                                description: >-
+                                  `1` when the variable takes rich text, `0` otherwise.
                               orgId:
                                 type: string
                               createdBy:
@@ -293,9 +312,9 @@ paths:
                       description: Standard mailing address block
                       mimeType: text
                       text: 123 Main St, Suite 400, Austin, TX 78701
-                      isGlobal: true
+                      isGlobal: 1
                       templateFolderId: null
-                      allowRichTextInjection: false
+                      allowRichTextInjection: 0
                       createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                       updatedOn: '2026-05-01T14:22:10.000Z'
                   totalRecords: 1
@@ -325,11 +344,21 @@ paths:
                             text:
                               type: string
                             isGlobal:
-                              type: boolean
+                              type: integer
+                              enum:
+                                - 0
+                                - 1
+                              description: >-
+                                `1` for a knowledge-base variable, `0` otherwise.
                             templateFolderId:
                               nullable: true
                             allowRichTextInjection:
-                              type: boolean
+                              type: integer
+                              enum:
+                                - 0
+                                - 1
+                              description: >-
+                                `1` when the variable takes rich text, `0` otherwise.
                             createdBy:
                               type: string
                             updatedOn:
@@ -369,7 +398,7 @@ paths:
           in: query
           description: >-
             Set to `true` to return only `filetype`, `vars` and `fonts` and skip the slower PDF
-            render. Leave it out to get the preview.
+            render. Any value skips it, even `false`, so leave the parameter out to get the preview.
           schema:
             type: boolean
           example: 'true'
@@ -507,7 +536,7 @@ paths:
                       description: Standard statement of work
                       orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
                       createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
-                      isActive: true
+                      isActive: 1
                       templateFolderId: null
                       defaultFont: null
                       fonts: null
@@ -538,7 +567,12 @@ paths:
                               createdBy:
                                 type: string
                               isActive:
-                                type: boolean
+                                type: integer
+                                enum:
+                                  - 0
+                                  - 1
+                                description: >-
+                                  `1` while the item exists, `0` once deleted.
                               templateFolderId:
                                 nullable: true
                               defaultFont:
@@ -578,6 +612,9 @@ paths:
       parameters:
         - name: showTags
           in: query
+          description: >-
+            Include the template's `tags`. Any value turns this on, even `false`, so leave the
+            parameter out to omit the tags.
           schema:
             type: boolean
             enum:
@@ -604,7 +641,7 @@ paths:
                     id: 2b8f1c9e-4d3a-4a7c-9f21-6b0d5e9a1c34
                     name: SOW Template
                     description: Standard statement of work
-                    isActive: true
+                    isActive: 1
                     createdOn: '2026-05-01T14:22:10.000Z'
                     updatedOn: '2026-05-01T14:22:10.000Z'
                     createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
@@ -642,7 +679,12 @@ paths:
                           description:
                             type: string
                           isActive:
-                            type: boolean
+                            type: integer
+                            enum:
+                              - 0
+                              - 1
+                            description: >-
+                              `1` while the item exists, `0` once deleted.
                           createdOn:
                             type: string
                           updatedOn:
@@ -701,7 +743,36 @@ paths:
             Missing or invalid API key/token, or the organization cannot be resolved. The response
             has no body.
         '404':
-          description: No active template with that ID exists in your organization. The response has no body.
+          description: >-
+            The template exists, but its Word or PowerPoint file can no longer be found. The response
+            has no body.
+        '500':
+          description: >-
+            No active template with that ID exists in your organization: the ID is unknown, the
+            template was deleted, or it belongs to another organization. The API answers this with
+            a server error today, not `404`.
+          content:
+            application/json:
+              example:
+                message: There was an issue with TurboDocx. Please contact support.
+                type: ServerError
+                data:
+                  explanation: There was an issue with TurboDocx. Please contact support.
+                  context: ''
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      explanation:
+                        type: string
+                      context:
+                        type: string
   /Variable/{VariableId}:
     put:
       tags:
@@ -922,7 +993,7 @@ paths:
                   results:
                     id: 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
                     label: legal
-                    isActive: true
+                    isActive: 1
                     orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
                     createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                     createdOn: '2026-05-01T14:22:10.000Z'
@@ -941,7 +1012,12 @@ paths:
                           label:
                             type: string
                           isActive:
-                            type: boolean
+                            type: integer
+                            enum:
+                              - 0
+                              - 1
+                            description: >-
+                              `1` while the item exists, `0` once deleted.
                           orgId:
                             type: string
                           createdBy:
@@ -983,7 +1059,7 @@ paths:
                   results:
                     - id: 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
                       label: legal
-                      isActive: true
+                      isActive: 1
                       orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
                       createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                       createdOn: '2026-05-01T14:22:10.000Z'
@@ -1005,7 +1081,12 @@ paths:
                             label:
                               type: string
                             isActive:
-                              type: boolean
+                              type: integer
+                              enum:
+                                - 0
+                                - 1
+                              description: >-
+                                `1` while the item exists, `0` once deleted.
                             orgId:
                               type: string
                             createdBy:
@@ -1063,7 +1144,7 @@ paths:
               example:
                 id: 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
                 label: legal-2026
-                isActive: true
+                isActive: 1
                 orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
                 createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                 createdOn: '2026-05-01T14:22:10.000Z'
@@ -1076,7 +1157,12 @@ paths:
                   label:
                     type: string
                   isActive:
-                    type: boolean
+                    type: integer
+                    enum:
+                      - 0
+                      - 1
+                    description: >-
+                      `1` while the item exists, `0` once deleted.
                   orgId:
                     type: string
                   createdBy:
@@ -1376,7 +1462,7 @@ paths:
                       name: SOW Template
                       description: Standard statement of work
                       type: template
-                      isActive: true
+                      isActive: 1
                       templateFolderId: null
                       createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                       email: jane@example.com
@@ -1389,7 +1475,7 @@ paths:
                       tags:
                         - id: 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
                           label: legal
-                          isActive: true
+                          isActive: 1
                           orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
                           createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                           createdOn: '2026-05-01T14:22:10.000Z'
@@ -1397,7 +1483,7 @@ paths:
                     - id: 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
                       name: Proposals
                       type: folder
-                      isActive: true
+                      isActive: 1
                       templateFolderId: null
                       templateCount: 5
                       deliverableCount: 0
@@ -1422,7 +1508,12 @@ paths:
                             type:
                               type: string
                             isActive:
-                              type: boolean
+                              type: integer
+                              enum:
+                                - 0
+                                - 1
+                              description: >-
+                                `1` while the item exists, `0` once deleted.
                             templateFolderId:
                               nullable: true
                             createdBy:
@@ -1452,7 +1543,12 @@ paths:
                                   label:
                                     type: string
                                   isActive:
-                                    type: boolean
+                                    type: integer
+                                    enum:
+                                      - 0
+                                      - 1
+                                    description: >-
+                                      `1` while the item exists, `0` once deleted.
                                   orgId:
                                     type: string
                                   createdBy:
@@ -1542,7 +1638,7 @@ paths:
                     - signature.document.completed
                     - signature.document.voided
                   secret: whsec_REPLACE_WITH_YOUR_WEBHOOK_SECRET
-                  isActive: true
+                  isActive: 1
                   createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                   createdOn: '2026-05-01T14:22:10.000Z'
                   updatedOn: '2026-05-01T14:22:10.000Z'
@@ -1571,7 +1667,12 @@ paths:
                       secret:
                         type: string
                       isActive:
-                        type: boolean
+                        type: integer
+                        enum:
+                          - 0
+                          - 1
+                        description: >-
+                          `1` while the item exists, `0` once deleted.
                       createdBy:
                         type: string
                       createdOn:
@@ -1728,7 +1829,12 @@ paths:
                         items:
                           type: string
                       isActive:
-                        type: boolean
+                        type: integer
+                        enum:
+                          - 0
+                          - 1
+                        description: >-
+                          `1` while the item exists, `0` once deleted.
                       createdOn:
                         type: string
                         format: date-time
@@ -1768,7 +1874,7 @@ paths:
                   events:
                     - signature.document.completed
                     - signature.document.voided
-                  isActive: true
+                  isActive: 1
                   createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                   createdOn: '2026-05-01T14:22:10.000Z'
                   updatedOn: '2026-05-01T14:22:10.000Z'
@@ -1937,7 +2043,12 @@ paths:
                         items:
                           type: string
                       isActive:
-                        type: boolean
+                        type: integer
+                        enum:
+                          - 0
+                          - 1
+                        description: >-
+                          `1` while the item exists, `0` once deleted.
                       createdOn:
                         type: string
                         format: date-time
@@ -1955,7 +2066,7 @@ paths:
                     - https://example.com/webhooks/turbodocx
                   events:
                     - signature.document.completed
-                  isActive: true
+                  isActive: 1
                   createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
                   createdOn: '2026-05-01T14:22:10.000Z'
                   updatedOn: '2026-05-02T09:10:00.000Z'
@@ -2195,7 +2306,7 @@ paths:
       responses:
         '200':
           description: >-
-            If a URL returns a non-2xx status or times out, its entry has `isDelivered: false` and
+            If a URL returns a non-2xx status or times out, its entry has `isDelivered: 0` and
             `status: "retrying"` (while attempts remain) or `"failed"` (once all attempts are
             exhausted), with details in `errorMessage`. `summary.failed`/`summary.errors` do not
             currently reflect HTTP-level failures; they only count a database error while creating
@@ -2240,8 +2351,9 @@ paths:
                               type: integer
                               description: Attempts allowed before the delivery fails.
                             isDelivered:
-                              type: boolean
-                              description: Whether a 2xx response was received.
+                              description: >-
+                                `true` when your endpoint answered 2xx. Otherwise `0`, the stored
+                                value, so check it as truthy rather than comparing with `false`.
                             deliveredAt:
                               type: string
                               format: date-time
@@ -2471,8 +2583,9 @@ paths:
                               type: integer
                               description: Attempts allowed before the delivery fails.
                             isDelivered:
-                              type: boolean
-                              description: Whether a 2xx response was received.
+                              description: >-
+                                `true` when your endpoint answered 2xx. Otherwise `0`, the stored
+                                value, so check it as truthy rather than comparing with `false`.
                             deliveredAt:
                               type: string
                               format: date-time
@@ -2835,7 +2948,10 @@ paths:
                               type: integer
                               description: Attempts allowed before the delivery fails.
                             isDelivered:
-                              type: boolean
+                              type: integer
+                              enum:
+                                - 0
+                                - 1
                               description: Whether a 2xx response was received.
                             deliveredAt:
                               type: string
@@ -2879,7 +2995,7 @@ paths:
                       responseBody: Bad Gateway
                       attemptCount: 2
                       maxAttempts: 3
-                      isDelivered: false
+                      isDelivered: 0
                       deliveredAt: null
                       nextRetryAt: '2026-05-02T09:15:00.000Z'
                       errorMessage: Request failed with status code 502
@@ -3039,7 +3155,10 @@ paths:
                         type: integer
                         description: Attempts allowed before the delivery fails.
                       isDelivered:
-                        type: boolean
+                        type: integer
+                        enum:
+                          - 0
+                          - 1
                         description: Whether a 2xx response was received.
                       deliveredAt:
                         type: string
@@ -3076,7 +3195,7 @@ paths:
                   url: https://example.com/webhooks/turbodocx
                   attemptCount: 0
                   maxAttempts: 3
-                  isDelivered: false
+                  isDelivered: 0
                   status: pending
                   createdOn: '2026-05-02T09:30:00.000Z'
                   updatedOn: '2026-05-02T09:30:00.000Z'
@@ -3196,7 +3315,12 @@ paths:
                           name:
                             type: string
                           isActive:
-                            type: boolean
+                            type: integer
+                            enum:
+                              - 0
+                              - 1
+                            description: >-
+                              `1` while the item exists, `0` once deleted.
                           events:
                             type: array
                             items:
@@ -3263,7 +3387,7 @@ paths:
                   webhook:
                     id: b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34
                     name: signature
-                    isActive: true
+                    isActive: 1
                     events:
                       - signature.document.completed
                       - signature.document.voided
@@ -3457,7 +3581,12 @@ paths:
                                   usage:
                                     type: string
                             isActive:
-                              type: boolean
+                              type: integer
+                              enum:
+                                - 0
+                                - 1
+                              description: >-
+                                `1` while the item exists, `0` once deleted.
                             createdOn:
                               type: string
                               format: date-time
@@ -3493,7 +3622,7 @@ paths:
                       fonts:
                         - name: Arial
                           usage: body
-                      isActive: true
+                      isActive: 1
                       createdOn: '2026-01-15T14:12:10.721Z'
                       updatedOn: '2026-01-15T14:13:45.724Z'
                   totalRecords: 42
@@ -3882,7 +4011,12 @@ paths:
                                 type: string
                                 format: date-time
                               isActive:
-                                type: boolean
+                                type: integer
+                                enum:
+                                  - 0
+                                  - 1
+                                description: >-
+                                  `1` while the item exists, `0` once deleted.
                               defaultFont:
                                 type: string
                               fonts:
@@ -3916,7 +4050,7 @@ paths:
                       createdBy: f5e6d7c8-9a0b-4c1d-8e3f-4a5b6c7d8e9f
                       createdOn: '2026-01-15T14:12:10.721Z'
                       updatedOn: '2026-01-15T14:12:10.721Z'
-                      isActive: true
+                      isActive: 1
                       defaultFont: Arial
                       fonts: null
                     placeholderReport:
@@ -4188,7 +4322,9 @@ paths:
         - name: showTags
           in: query
           required: false
-          description: Set to `true` to include the deliverable's tags.
+          description: >-
+            Set to `true` to include the deliverable's tags. Any value turns this on, even `false`,
+            so leave the parameter out to omit the tags.
           schema:
             type: boolean
             enum:
@@ -4222,7 +4358,10 @@ paths:
                           templateName:
                             type: string
                           templateNotDeleted:
-                            type: boolean
+                            type: integer
+                            enum:
+                              - 0
+                              - 1
                             description: Whether the source template still exists.
                           defaultFont:
                             type: string
@@ -4240,7 +4379,12 @@ paths:
                           fileType:
                             type: string
                           isActive:
-                            type: boolean
+                            type: integer
+                            enum:
+                              - 0
+                              - 1
+                            description: >-
+                              `1` while the item exists, `0` once deleted.
                           createdOn:
                             type: string
                             format: date-time
@@ -4278,14 +4422,14 @@ paths:
                     description: Employment contract for new senior developer
                     templateId: 0b1099cf-d7b9-41a4-822b-51b68fd4885a
                     templateName: Employment Contract Template
-                    templateNotDeleted: true
+                    templateNotDeleted: 1
                     defaultFont: Arial
                     fonts:
                       - name: Arial
                         usage: body
                     email: admin@example.com
                     fileType: application/vnd.openxmlformats-officedocument.wordprocessingml.document
-                    isActive: true
+                    isActive: 1
                     createdOn: '2026-01-15T14:12:10.721Z'
                     updatedOn: '2026-01-15T14:13:45.724Z'
                     variables:

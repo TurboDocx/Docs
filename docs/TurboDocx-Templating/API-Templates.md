@@ -272,7 +272,7 @@ User-Agent: TurboDocx API Client
 | `data.results.deliverable.createdBy`  | string  | Email of the user who created it |
 | `data.results.deliverable.createdOn`  | string  | ISO timestamp of creation        |
 | `data.results.deliverable.orgId`      | string  | Organization ID                  |
-| `data.results.deliverable.isActive`   | boolean | Whether deliverable is active    |
+| `data.results.deliverable.isActive`   | number  | Active status (1 = active, 0 = inactive) |
 | `data.results.deliverable.templateId` | string  | Original template ID used        |
 
 ### Code Examples
@@ -415,7 +415,7 @@ GET https://api.turbodocx.com/template/{templateId}
           "placeholder": "{EmployeeName}",
           "text": "",
           "mimeType": "text",
-          "allowRichTextInjection": false,
+          "allowRichTextInjection": 0,
           "order": 1,
           "subvariables": []
         },
@@ -425,7 +425,7 @@ GET https://api.turbodocx.com/template/{templateId}
           "placeholder": "{Department}",
           "text": "",
           "mimeType": "text",
-          "allowRichTextInjection": true,
+          "allowRichTextInjection": 1,
           "order": 2,
           "subvariables": [
             {
@@ -590,7 +590,7 @@ User-Agent: TurboDocx API Client
         "createdBy": "api-user@company.com",
         "createdOn": "2024-12-19T21:22:10.000Z",
         "orgId": "your-organization-id",
-        "isActive": true,
+        "isActive": 1,
         "templateId": "0b1099cf-d7b9-41a4-822b-51b68fd4885a"
       }
     }

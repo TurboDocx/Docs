@@ -115,3 +115,90 @@ test('every JSON response example only uses keys its schema documents', () => {
   }
   assert.deepEqual(misses, []);
 });
+
+// The backend's MySQL driver returns TINYINT(1) columns as numbers, so a yes/no value read from the
+// database reaches the caller as 1/0 (the SDKs convert it). Values built in code stay true/false.
+const nodeAt = (schema, dotted) =>
+  dotted.split('.').reduce((node, key) => {
+    if (!node) return undefined;
+    const array = key.endsWith('[]');
+    const child = node.properties?.[array ? key.slice(0, -2) : key];
+    return array ? child?.items : child;
+  }, schema);
+const valuesAt = (value, dotted) =>
+  dotted.split('.').reduce((values, key) => {
+    const array = key.endsWith('[]');
+    const name = array ? key.slice(0, -2) : key;
+    const next = values.map((v) => v?.[name]).filter((v) => v !== undefined);
+    return array ? next.flat() : next;
+  }, [value]);
+const examplesOf = (content) => [
+  ...(content.example !== undefined ? [content.example] : []),
+  ...Object.values(content.examples ?? {}).map((e) => e.value),
+];
+
+const DATABASE_FLAGS = [
+  ['post', '/Variable', '200', ['data.results.variable.isGlobal', 'data.results.variable.allowRichTextInjection']],
+  ['get', '/Variable', '200', ['data.results[].isGlobal', 'data.results[].allowRichTextInjection']],
+  ['post', '/template', '201', ['data.results.template.isActive']],
+  ['get', '/template/{TemplateID}', '200', ['data.results.isActive']],
+  ['post', '/Tag', '200', ['data.results.isActive']],
+  ['get', '/Tag', '200', ['data.results[].isActive']],
+  ['put', '/Tag/{TagId}', '200', ['isActive']],
+  ['get', '/template-item', '200', ['data.results[].isActive', 'data.results[].tags[].isActive']],
+  ['post', '/api/webhooks', '201', ['data.isActive']],
+  ['get', '/api/webhooks/signature', '200', ['data.isActive']],
+  ['patch', '/api/webhooks/signature', '200', ['data.isActive']],
+  ['get', '/api/webhooks/signature/deliveries', '200', ['data.results[].isDelivered']],
+  ['post', '/api/webhooks/signature/replay', '200', ['data.isDelivered']],
+  ['get', '/api/webhooks/signature/stats', '200', ['data.webhook.isActive']],
+  ['get', '/v1/deliverable', '200', ['data.results[].isActive']],
+  ['post', '/v1/deliverable', '200', ['data.results.deliverable.isActive']],
+  ['get', '/v1/deliverable/{id}', '200', ['data.results.isActive', 'data.results.templateNotDeleted']],
+];
+
+test('yes/no fields read from the database are documented as 1/0, as the API returns them', () => {
+  const wrong = [];
+  for (const [method, path, status, fields] of DATABASE_FLAGS) {
+    const content = op(method, path).responses[status].content['application/json'];
+    for (const field of fields) {
+      const node = nodeAt(content.schema, field);
+      if (node?.type !== 'integer' || JSON.stringify(node.enum) !== '[0,1]') wrong.push(`${path} ${field} schema`);
+      for (const example of examplesOf(content)) {
+        for (const v of valuesAt(example, field)) if (v !== 0 && v !== 1) wrong.push(`${path} ${field} example ${v}`);
+      }
+    }
+  }
+  assert.deepEqual(wrong, []);
+});
+
+test('test/notify isDelivered is true on success and 0 otherwise', () => {
+  for (const path of ['/api/webhooks/signature/test', '/api/webhooks/signature/notify']) {
+    const node = nodeAt(jsonSchema(op('post', path), '200'), 'data.deliveries[].isDelivered');
+    assert.notEqual(node?.type, 'boolean', `${path}: isDelivered is not always a boolean`);
+    assert.match(node?.description ?? '', /`true`.*`0`/s);
+  }
+});
+
+test('the overview says how yes/no values come back', () => {
+  assert.match(spec.info.description, /`1`.*`0`/s);
+});
+
+test('Get Template by ID documents the 500 an unknown ID returns today', () => {
+  const responses = op('get', '/template/{TemplateID}').responses;
+  assert.match(responses['500']?.description ?? '', /no active template with that ID/i, 'the 500 for an unknown ID is missing');
+  assert.doesNotMatch(responses['404']?.description ?? '', /no active template with that ID/i, 'an unknown ID does not return 404 today');
+});
+
+test('showTags and skipFile say that any value, even false, turns them on', () => {
+  const param = (method, path, name) => op(method, path).parameters?.find((p) => p.name === name);
+  for (const [method, path, name] of [
+    ['get', '/template/{TemplateID}', 'showTags'],
+    ['get', '/v1/deliverable/{id}', 'showTags'],
+    ['post', '/template/file', 'skipFile'],
+  ]) {
+    const p = param(method, path, name);
+    assert.ok(p, `${path} does not declare ${name}`);
+    assert.match(p.description ?? '', /`false`/, `${path} ${name} does not say false is ignored`);
+  }
+});

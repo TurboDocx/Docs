@@ -40,7 +40,6 @@ const config = {
     {
       href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css',
     },
-    'src/css/custom.css',
     {
       href: 'https://cdn.tailwindcss.com/3.4.3'
     },

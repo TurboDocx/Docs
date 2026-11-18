@@ -56,6 +56,10 @@ To get them:
 
 Keep your API key secret: never put it in client-side code or a public repository. A missing or invalid key returns `401 Unauthorized`, and a key whose role is not allowed to perform an action returns `403 Forbidden`.
 
+## Yes/no values in responses
+
+Yes/no fields that the API reads from its database, such as `isActive`, `isGlobal`, `allowRichTextInjection` and `isDelivered`, come back as `1` or `0`, not `true` or `false`. Each endpoint's response schema shows which fields these are. Check them as truthy values. The SDKs convert them to `true` and `false` for you. In request bodies, send `true` or `false`.
+
 ## SDKs
 
 Official SDKs for JavaScript and TypeScript, Python, PHP, Ruby, Go and Java wrap these endpoints. See [SDKs](/docs/SDKs) to install one.

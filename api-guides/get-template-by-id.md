@@ -8,7 +8,9 @@ Use this endpoint to load a template's details and variable list before generati
 
 ## Request notes
 
-Pass `showTags=true` to include the template's `tags` array in the response; it is omitted by default.
+Pass `showTags=true` to include the template's `tags` array in the response; it is omitted when you leave the parameter out. Any value includes the tags, even `showTags=false`.
+
+An ID that doesn't match an active template in your organization (unknown, deleted, or from another organization) returns `500` with a `ServerError` body today, not `404`.
 
 ## Related endpoints
 
