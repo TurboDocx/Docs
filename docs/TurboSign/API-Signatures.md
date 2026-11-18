@@ -437,7 +437,7 @@ These return `400` with a body of the form `{ "message": "...", "type": "..." }`
 | `DuplicateSignerRole`      | `Role "client" was given more than one recipient`                                   | Two recipients name the same role                            |
 | `SignerRoleUnfilled`       | `Role "client" needs a signer. Pass recipients: [{ role: "<role>", name, email }]`   | A role has no saved signer and no recipient fills it         |
 | `TemplateHasNoSignerRoles` |                                                                                     | The template has no saved signer roles                       |
-| `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has no `templateId` |
+| `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has neither a `templateId` nor a `deliverableId` |
 | `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address, or a recipient without a role has a role signer's email |
 | `SignerHasNoFields`        | `Signer "Jane Doe" has no fields to sign. Place a field for them or remove them.`  | A signer ends up with no fields after the template's fields are placed |
 | `OtpPhoneRequired`         |                                                                                     | A role requires SMS verification and the recipient has no `phone` |
@@ -1508,7 +1508,7 @@ Each recipient object in the `recipients` array should contain the following pro
 | Property     | Type           | Required | Description                                                |
 | ------------ | -------------- | -------- | ---------------------------------------------------------- |
 | name         | String         | Yes      | Full name of the recipient/signer                          |
-| email        | String (email) | Yes      | Email address of the recipient (must be unique)            |
+| email        | String (email) | Yes      | Email address of the recipient                             |
 | signingOrder | Number         | Conditional | Order in which recipient should sign (starts at 1). Not needed on a recipient with a `role` |
 | role         | String         | No       | Template signer role this recipient fills (for example `client`). Requires `templateId`. See [Sending with signer roles](#sending-with-signer-roles) |
 | metadata     | Object         | No       | Optional metadata for UI customization (color, lightColor) |

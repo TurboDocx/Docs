@@ -881,7 +881,7 @@ try {
 }
 ```
 
-The full typed-exception table and HTTP status mapping is documented once in the [Java SDK's Error Handling reference](./java.md#error-handling); partner calls use the same `AuthenticationException`/`ValidationException`/`AuthorizationException`/`NotFoundException`/`RateLimitException` types.
+The full typed-exception table and HTTP status mapping is documented once in the [Java SDK's Error Handling reference](./index.md#error-handling); partner calls use the same `AuthenticationException`/`ValidationException`/`AuthorizationException`/`NotFoundException`/`RateLimitException` types.
 
 Transport failures are **not** wrapped: the partner client propagates OkHttp's checked `IOException` directly, so catch `IOException` for connectivity problems rather than `TurboDocxException.NetworkException`.
 

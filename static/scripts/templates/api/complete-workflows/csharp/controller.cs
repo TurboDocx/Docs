@@ -120,7 +120,7 @@ class TemplateWorkflowManager
         content.Add(new StringContent("API Upload Template"), "name");
         content.Add(new StringContent("Template uploaded via API for testing"), "description");
         content.Add(new StringContent("[]"), "variables");
-        content.Add(new StringContent("[\"api\", \"test\", \"upload\"]"), "tags");
+        content.Add(new StringContent("[]"), "tags");
 
         var response = await client.PostAsync($"{BASE_URL}/template/upload-and-create", content);
 
@@ -342,23 +342,12 @@ class TemplateWorkflowManager
             }
           ],
           "tags": ["api-generated"],
-          "fonts": "[]",
-          "metadata": {
-            "sessions": [
-              {
-                "id": "{{Guid.NewGuid()}}",
-                "starttime": "{{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ss.fffZ}}",
-                "endtime": "{{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ss.fffZ}}"
-              }
-            ],
-            "workflow": "C# Complete Workflow",
-            "generated": "{{DateTime.UtcNow:yyyy-MM-ddTHH:mm:ss.fffZ}}"
-          }
+          "fonts": "[]"
         }
         """;
 
         var content = new StringContent(payload, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync($"{BASE_URL}/deliverable", content);
+        var response = await client.PostAsync($"{BASE_URL}/v1/deliverable", content);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -382,7 +371,7 @@ class TemplateWorkflowManager
     {
         Console.WriteLine($"📥 Downloading file: {filename}");
 
-        var response = await client.GetAsync($"{BASE_URL}/deliverable/file/{deliverableId}");
+        var response = await client.GetAsync($"{BASE_URL}/v1/deliverable/file/{deliverableId}");
 
         if (!response.IsSuccessStatusCode)
         {

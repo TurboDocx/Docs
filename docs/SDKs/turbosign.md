@@ -5366,7 +5366,7 @@ Recipient configuration for signature requests:
 | `name`         | `string` | Yes      | Recipient's full name     |
 | `email`        | `string` | Yes      | Recipient's email address |
 | `signingOrder` | `number` | Conditional | Signing order (1-indexed). Not needed when `role` is set |
-| `role`         | `string` | No       | Template signer role to fill (for example `"client"`). Requires `templateId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
+| `role`         | `string` | No       | Template signer role to fill (for example `"client"`). Needs a PDF signature `templateId` or a `deliverableId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 </TabItem>
 <TabItem value="python" label="Python" attributes={{className: 'tab-lang tab-lang--python'}}>
@@ -5380,7 +5380,7 @@ Recipient configuration for signature requests:
 | `name`         | `str` | Yes      | Recipient's full name     |
 | `email`        | `str` | Yes      | Recipient's email address |
 | `signingOrder` | `int` | Conditional | Signing order (1-indexed). Not needed when `role` is set |
-| `role`         | `str` | No       | Template signer role to fill (for example `"client"`). Requires `template_id`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
+| `role`         | `str` | No       | Template signer role to fill (for example `"client"`). Needs a PDF signature `template_id` or a `deliverable_id`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 ```python
 recipient: Dict[str, Any] = {
@@ -5398,7 +5398,7 @@ recipient: Dict[str, Any] = {
 | `Name`         | `string` | Yes      | Recipient's full name                             |
 | `Email`        | `string` | Yes      | Recipient's email address                         |
 | `SigningOrder` | `int`    | Conditional | Order in which recipient should sign (1, 2, 3...). Not needed when `Role` is set |
-| `Role`         | `string` | No       | Template signer role to fill (for example `"client"`). Requires `TemplateID`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
+| `Role`         | `string` | No       | Template signer role to fill (for example `"client"`). Needs a PDF signature `TemplateID` or a `DeliverableID`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 </TabItem>
 <TabItem value="java" label="Java" attributes={{className: 'tab-lang tab-lang--java'}}>
@@ -5408,7 +5408,7 @@ recipient: Dict[str, Any] = {
 | `name`         | `String` | Yes      | Recipient's full name                             |
 | `email`        | `String` | Yes      | Recipient's email address                         |
 | `signingOrder` | `int`    | Conditional | Order in which recipient should sign (1, 2, 3...). Not needed when `role` is set |
-| `role`         | `String` | No       | Template signer role to fill (for example `"client"`), set with `Recipient.withRole(...)` or the builder. Requires `templateId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
+| `role`         | `String` | No       | Template signer role to fill (for example `"client"`), set with `Recipient.withRole(...)` or the builder. Needs a PDF signature `templateId` or a `deliverableId`. See [Send a template set up in TurboDocx](#send-a-template-set-up-in-turbodocx) |
 
 </TabItem>
 <TabItem value="ruby" label="Ruby" attributes={{className: 'tab-lang tab-lang--ruby'}}>
@@ -5422,7 +5422,7 @@ Recipient configuration for signature requests:
 | `name`         | `String`  | Yes      | Recipient's full name     |
 | `email`        | `String`  | Yes      | Recipient's email address |
 | `signingOrder` | `Integer` | Conditional | Signing order (1-indexed). Not needed when `role` is set |
-| `role`         | `String`  | No       | Template signer role to fill (for example `"client"`). Requires `templateId` |
+| `role`         | `String`  | No       | Template signer role to fill (for example `"client"`). Needs a PDF signature `templateId` or a `deliverableId` |
 
 ```ruby
 recipient = {

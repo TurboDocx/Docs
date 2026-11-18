@@ -16,7 +16,7 @@ async function uploadTemplate() {
     formData.append('name', TEMPLATE_NAME);
     formData.append('description', 'Standard employee contract with variable placeholders');
     formData.append('variables', '[]'); // Optional: pre-defined variables
-    formData.append('tags', '["hr", "contract", "template"]');
+    formData.append('tags', '[]');
 
     const response = await fetch(`${BASE_URL}/template/upload-and-create`, {
       method: 'POST',

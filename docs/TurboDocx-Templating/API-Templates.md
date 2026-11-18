@@ -202,7 +202,7 @@ User-Agent: TurboDocx API Client
   "name": "Employee Contract Template",
   "description": "Standard employee contract with variable placeholders",
   "variables": "[]", // Optional: Pre-defined variables (usually extracted automatically)
-  "tags": "[]" // Optional: Categorization tags
+  "tags": "[]" // Optional: tag objects as a JSON string, e.g. [{"id": "TAG_ID"}]
 }
 ```
 
@@ -308,16 +308,16 @@ User-Agent: TurboDocx API Client
 #### Query Parameters
 
 ```http
-?limit=25&offset=0&query=contract&showTags=true&selectedTags[]=tag-123
+?limit=25&offset=0&query=contract&showTags=true&selectedTags=TAG_ID_1&selectedTags=TAG_ID_2
 ```
 
 | Parameter      | Type    | Description                         |
 | -------------- | ------- | ----------------------------------- |
-| `limit`        | number  | Items per page (default: 6)         |
+| `limit`        | number  | Items per page (default: 9)         |
 | `offset`       | number  | Pagination offset (default: 0)      |
 | `query`        | string  | Search term for template names      |
 | `showTags`     | boolean | Include tag information in response |
-| `selectedTags` | array   | Filter by specific tag IDs          |
+| `selectedTags` | string  | Tag ID to filter by; repeat the parameter for several (items must have all of them) |
 
 #### Response
 

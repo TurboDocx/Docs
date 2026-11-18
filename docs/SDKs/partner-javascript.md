@@ -846,7 +846,7 @@ try {
 }
 ```
 
-The full typed-error table and HTTP status mapping is documented once in the [JavaScript / TypeScript SDK's Error Handling reference](./javascript.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types.
+The full typed-error table and HTTP status mapping is documented once in the [JavaScript / TypeScript SDK's Error Handling reference](./index.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types.
 
 ---
 

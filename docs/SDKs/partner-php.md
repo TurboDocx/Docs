@@ -892,7 +892,7 @@ try {
 }
 ```
 
-The full typed-exception table and HTTP status mapping is documented once in the [PHP SDK's Error Handling reference](./php.md#error-handling).
+The full typed-exception table and HTTP status mapping is documented once in the [PHP SDK's Error Handling reference](./index.md#error-handling).
 
 ---
 

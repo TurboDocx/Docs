@@ -39,7 +39,7 @@ class TemplateBrowser:
                 # For requests library, we need to handle multiple values manually
                 param_string = urlencode(params)
                 for tag in selected_tags:
-                    param_string += f"&selectedTags[]={tag}"
+                    param_string += f"&selectedTags={tag}"
                 url += f"?{param_string}"
             else:
                 url += f"?{urlencode(params)}"

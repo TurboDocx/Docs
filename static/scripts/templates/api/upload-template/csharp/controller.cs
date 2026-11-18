@@ -93,7 +93,7 @@ class TemplateUpload
         content.Add(new StringContent(TEMPLATE_NAME), "name");
         content.Add(new StringContent("Standard employee contract with variable placeholders"), "description");
         content.Add(new StringContent("[]"), "variables");
-        content.Add(new StringContent("[\"hr\", \"contract\", \"template\"]"), "tags");
+        content.Add(new StringContent("[]"), "tags");
 
         // Make request
         var response = await client.PostAsync(BASE_URL + "/template/upload-and-create", content);

@@ -884,7 +884,7 @@ if err != nil {
 }
 ```
 
-The full typed-error table and HTTP status mapping is documented once in the [Go SDK's Error Handling reference](./go.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types (for example, `AddUserToPartnerPortal()` returns a `*ConflictError` (409) when the target user already has partner-portal access).
+The full typed-error table and HTTP status mapping is documented once in the [Go SDK's Error Handling reference](./index.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types (for example, `AddUserToPartnerPortal()` returns a `*ConflictError` (409) when the target user already has partner-portal access).
 
 ---
 

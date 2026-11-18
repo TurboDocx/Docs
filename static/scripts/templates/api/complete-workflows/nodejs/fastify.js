@@ -66,7 +66,7 @@ class TemplateWorkflowManager {
     formData.append('name', 'API Upload Template');
     formData.append('description', 'Template uploaded via API for testing');
     formData.append('variables', '[]');
-    formData.append('tags', '["api", "test", "upload"]');
+    formData.append('tags', '[]');
 
     const response = await fetch(`${this.baseUrl}/template/upload-and-create`, {
       method: 'POST',
@@ -221,19 +221,10 @@ class TemplateWorkflowManager {
       description: deliverableData.description || '',
       variables: deliverableData.variables,
       tags: deliverableData.tags || ['api-generated'],
-      fonts: deliverableData.fonts || '[]',
-      metadata: deliverableData.metadata || {
-        sessions: [{
-          id: this.generateSessionId(),
-          starttime: new Date().toISOString(),
-          endtime: new Date().toISOString()
-        }],
-        workflow: 'API Complete Workflow',
-        generated: new Date().toISOString()
-      }
+      fonts: deliverableData.fonts || '[]'
     };
 
-    const response = await fetch(`${this.baseUrl}/deliverable`, {
+    const response = await fetch(`${this.baseUrl}/v1/deliverable`, {
       method: 'POST',
       headers: {
         ...this.headers,
@@ -320,16 +311,10 @@ class TemplateWorkflowManager {
     return [];
   }
 
-  generateSessionId() {
-    return Math.random().toString(36).substr(2, 9) + '-' +
-           Math.random().toString(36).substr(2, 9) + '-' +
-           Math.random().toString(36).substr(2, 9);
-  }
-
   async downloadDeliverable(deliverableId, filename) {
     console.log(`\n📥 Downloading file: ${filename}`);
 
-    const response = await fetch(`${this.baseUrl}/deliverable/file/${deliverableId}`, {
+    const response = await fetch(`${this.baseUrl}/v1/deliverable/file/${deliverableId}`, {
       method: 'GET',
       headers: this.headers
     });

@@ -80,7 +80,7 @@ class TemplateWorkflowManager:
             'name': 'API Upload Template',
             'description': 'Template uploaded via API for testing',
             'variables': '[]',
-            'tags': '["api", "test", "upload"]'
+            'tags': '[]'
         }
 
         try:
@@ -227,19 +227,10 @@ class TemplateWorkflowManager:
             "description": deliverable_data.get('description', ''),
             "variables": deliverable_data['variables'],
             "tags": deliverable_data.get('tags', ['api-generated']),
-            "fonts": deliverable_data.get('fonts', '[]'),
-            "metadata": deliverable_data.get('metadata', {
-                "sessions": [{
-                    "id": self.generate_session_id(),
-                    "starttime": datetime.utcnow().isoformat() + "Z",
-                    "endtime": datetime.utcnow().isoformat() + "Z"
-                }],
-                "workflow": "API Complete Workflow",
-                "generated": datetime.utcnow().isoformat() + "Z"
-            })
+            "fonts": deliverable_data.get('fonts', '[]')
         }
 
-        url = f"{self.base_url}/deliverable"
+        url = f"{self.base_url}/v1/deliverable"
         headers = {**self.headers, 'Content-Type': 'application/json'}
 
         response = requests.post(url, headers=headers, json=payload)
@@ -318,15 +309,11 @@ class TemplateWorkflowManager:
 
         return []
 
-    def generate_session_id(self):
-        """Generate a unique session ID"""
-        return str(uuid.uuid4())
-
     def download_deliverable(self, deliverable_id, filename):
         """Download the generated deliverable file"""
         print(f"\n📥 Downloading file: {filename}")
 
-        url = f"{self.base_url}/deliverable/file/{deliverable_id}"
+        url = f"{self.base_url}/v1/deliverable/file/{deliverable_id}"
 
         response = requests.get(url, headers=self.headers)
         response.raise_for_status()

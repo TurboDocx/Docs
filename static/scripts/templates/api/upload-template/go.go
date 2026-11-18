@@ -108,7 +108,7 @@ func uploadTemplate(templateFilePath string) (*UploadResponse, error) {
 	writer.WriteField("name", TEMPLATE_NAME)
 	writer.WriteField("description", "Standard employee contract with variable placeholders")
 	writer.WriteField("variables", "[]")
-	writer.WriteField("tags", `["hr", "contract", "template"]`)
+	writer.WriteField("tags", `[]`)
 
 	writer.Close()
 
@@ -132,7 +132,7 @@ func uploadTemplate(templateFilePath string) (*UploadResponse, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusCreated {
 		body, _ := io.ReadAll(resp.Body)
 		return nil, fmt.Errorf("HTTP error %d: %s", resp.StatusCode, string(body))
 	}

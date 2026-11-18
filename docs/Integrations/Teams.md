@@ -38,9 +38,7 @@ keywords:
   textAlign: 'center'
 }}>
   <h2 style={{color: 'white', marginBottom: '1rem'}}>🚀 Coming Soon</h2>
-  <p style={{fontSize: '1.1rem', marginBottom: '0', opacity: '0.9'}}>
-    Transform your Microsoft Teams meetings into professional documents and presentations with AI-powered automation.
-  </p>
+  <p style={{fontSize: '1.1rem', marginBottom: '0', opacity: '0.9'}}>Transform your Microsoft Teams meetings into professional documents and presentations with AI-powered automation.</p>
 </div>
 
 ## What's Coming
@@ -238,7 +236,7 @@ Want to be among the first to know when Microsoft Teams integration becomes avai
 - Discuss your specific Teams integration needs
 
 <div style={{marginTop: '1.5rem'}}>
-  <strong>📧 Email:</strong> <a href="mailto:team@turbodocx.com">team@turbodocx.com</a><br/>
+  <strong>📧 Email:</strong> <a href="mailto:team@turbodocx.com">{'team@turbodocx.com'}</a><br/>
   <strong>💬 Subject:</strong> "Teams Integration Updates"
 </div>
 
@@ -284,10 +282,6 @@ We're looking for organizations to participate in our Teams integration beta tes
   marginTop: '3rem'
 }}>
   <h3>🚀 The Future of Meeting Documentation</h3>
-  <p style={{fontSize: '1.1rem', marginBottom: '1rem'}}>
-    Microsoft Teams integration will transform how your organization handles meeting follow-ups, documentation, and collaboration workflows.
-  </p>
-  <p style={{marginBottom: '0'}}>
-    Stay tuned for updates on availability and beta program announcements.
-  </p>
+  <p style={{fontSize: '1.1rem', marginBottom: '1rem'}}>Microsoft Teams integration will transform how your organization handles meeting follow-ups, documentation, and collaboration workflows.</p>
+  <p style={{marginBottom: '0'}}>Stay tuned for updates on availability and beta program announcements.</p>
 </div>

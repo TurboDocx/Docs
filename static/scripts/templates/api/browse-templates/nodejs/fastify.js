@@ -31,7 +31,7 @@ async function browseTemplates(options = {}) {
 
     // Add selected tags (multiple values)
     selectedTags.forEach(tag => {
-      params.append('selectedTags[]', tag);
+      params.append('selectedTags', tag);
     });
 
     const url = `${BASE_URL}/template-item?${params.toString()}`;

@@ -1443,7 +1443,7 @@ $variables = [
 ```
 
 :::info Variable Stack
-For repeating content (e.g., table rows), use `variableStack` instead of `text` to provide multiple values for the same placeholder. See the [PHP Types section](#php-types) for details.
+For repeating content (e.g., table rows), use `variableStack` instead of `text` to provide multiple values for the same placeholder. See the [PHP Types section](#typescript-types) for details.
 :::
 
 </TabItem>
@@ -3419,7 +3419,7 @@ The deliverable object returned by `get_deliverable_details`. Includes all field
 </TabItem>
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
-The deliverable record returned by `getDeliverableDetails`. Includes all fields from [Deliverable Record](#deliverable-record) **except `fileSize`**, plus:
+The deliverable record returned by `getDeliverableDetails`. Includes all fields from [Deliverable Record](#deliverablerecord) **except `fileSize`**, plus:
 
 | Key                  | Type     | Description                              |
 | -------------------- | -------- | ---------------------------------------- |

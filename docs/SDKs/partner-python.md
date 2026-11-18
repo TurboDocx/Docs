@@ -834,7 +834,7 @@ except TurboDocxError as e:
         print(f"  Error Code: {e.code}")
 ```
 
-The full typed-error table and HTTP status mapping is documented once in the [Python SDK's Error Handling reference](./python.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types.
+The full typed-error table and HTTP status mapping is documented once in the [Python SDK's Error Handling reference](./index.md#error-handling); partner calls use the same `AuthenticationError`/`AuthorizationError`/`ValidationError`/`NotFoundError`/`ConflictError`/`RateLimitError`/`NetworkError` types.
 
 ---
 

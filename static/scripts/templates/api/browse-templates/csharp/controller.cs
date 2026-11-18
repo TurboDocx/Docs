@@ -102,7 +102,7 @@ class TemplateBrowser
         {
             foreach (var tag in selectedTags)
             {
-                queryParams += $"&selectedTags[]={HttpUtility.UrlEncode(tag)}";
+                queryParams += $"&selectedTags={HttpUtility.UrlEncode(tag)}";
             }
         }
 

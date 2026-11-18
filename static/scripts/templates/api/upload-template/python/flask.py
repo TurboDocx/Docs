@@ -31,7 +31,7 @@ def upload_template():
             'name': TEMPLATE_NAME,
             'description': 'Standard employee contract with variable placeholders',
             'variables': '[]',  # Optional: pre-defined variables
-            'tags': '["hr", "contract", "template"]'
+            'tags': '[]'
         }
 
         response = requests.post(url, headers=headers, files=files, data=data)
