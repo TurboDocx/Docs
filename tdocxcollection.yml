@@ -21,7 +21,7 @@ info:
     ```
 
 
-    ## Authentication
+    ## Required headers
 
 
     Every request needs two headers:
@@ -93,20 +93,30 @@ paths:
               properties:
                 name:
                   type: string
-                  description: The name of the variable
+                  maxLength: 255
+                  description: The name of the variable, up to 255 characters.
                 description:
                   type: string
-                  description: The description of the variable
+                  maxLength: 255
+                  description: The description of the variable, up to 255 characters.
                 tags:
                   type: array
+                  description: Tags to attach. Each item is a tag object with its `id`.
                   items:
-                    type: string
-                  description: List of tags associated with the variable
+                    type: object
+                    required:
+                      - id
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
                 placeholder:
                   type: string
+                  maxLength: 255
                   description: >-
-                    A unique placeholder text that is used to insert the variable content into
-                    documents
+                    The placeholder that inserts the variable into documents, in curly braces, for
+                    example `{CompanyName}`. Letters, numbers, dashes and underscores; anything else
+                    returns 400.
                 text:
                   type: string
                   description: >-
@@ -126,9 +136,20 @@ paths:
                   enum:
                     - true
                     - false
+                isGlobal:
+                  type: boolean
+                  description: >-
+                    Set to `true` to add the variable to the knowledge base (administrator or
+                    contributor keys only; a `user` key gets `403`). Send either `isGlobal` or
+                    `templateFolderId`.
+                  enum:
+                    - true
+                    - false
+                templateFolderId:
+                  type: string
+                  format: uuid
+                  description: Add the variable to this template folder instead of the knowledge base.
               required:
-                - name
-                - placeholder
                 - text
                 - mimeType
       responses:
@@ -203,13 +224,9 @@ paths:
         List the variables in your knowledge base or a template folder, with search, tags, and
         pagination. Includes example request and response.
       parameters:
-        - name: limit
+        - name: isGlobal
           in: query
-          schema:
-            type: integer
-          example: '5'
-        - name: showTags
-          in: query
+          description: Set to `true` to list the knowledge base. Send either `isGlobal` or `templateFolderId`.
           schema:
             type: boolean
             enum:
@@ -218,9 +235,49 @@ paths:
           example: 'true'
         - name: templateFolderId
           in: query
+          description: List the variables of this template folder instead of the knowledge base.
           schema:
             type: string
-          example: '{{templateFolderId}}'
+            format: uuid
+          example: 3a1f2b4c-5d6e-4f70-8a9b-0c1d2e3f4a5b
+        - name: query
+          in: query
+          description: Search text, 1 to 100 characters.
+          schema:
+            type: string
+        - name: selectedTags
+          in: query
+          description: Only variables with these tags. Repeat the parameter for several tag IDs.
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: showTags
+          in: query
+          description: Include each variable's tags.
+          schema:
+            type: boolean
+            enum:
+              - true
+              - false
+          example: 'true'
+        - name: limit
+          in: query
+          description: Variables per page, 1 to 100.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          example: '5'
+        - name: offset
+          in: query
+          description: How many variables to skip.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
       responses:
         '200':
           description: An image variable's `text` holds a `data:` URI rather than plain text.
@@ -303,21 +360,23 @@ paths:
               properties:
                 file:
                   type: string
-                  description: This is an example Template
+                  description: The DOCX or PPTX file to read.
                   format: binary
+              required:
+                - file
       parameters:
-        - name: x-filename
-          in: header
+        - name: skipFile
+          in: query
+          description: >-
+            Set to `true` to return only `filetype`, `vars` and `fonts` and skip the slower PDF
+            render. Leave it out to get the preview.
           schema:
-            type: string
-          example: SOW Template.docx
+            type: boolean
+          example: 'true'
       responses:
         '200':
           description: >-
-            With `skipFile=true`:
-
-
-            Without `skipFile`, the response also includes `templatePdf`, the rendered PDF of the
+            The response always has `filetype`, `vars` and `fonts`. Without `skipFile`, it also includes `templatePdf`, the rendered PDF of the
             uploaded file. It is a JSON-serialized Node.js Buffer, not a base64 string: an object of
             the form `{"type": "Buffer", "data": [37, 80, 68, 70, ...]}`, where `data` is an array
             of the PDF's raw bytes. To use it, reconstruct the binary from the byte array, for
@@ -407,18 +466,31 @@ paths:
                 templateFile:
                   type: string
                   format: binary
+                  description: The DOCX or PPTX template file.
                 name:
                   type: string
+                  minLength: 3
+                  maxLength: 255
+                  description: The template's name, 3 to 255 characters.
                   example: SOW Template
                 description:
                   type: string
+                  description: The template's description.
                 variables:
                   type: string
+                  description: >-
+                    The template's variables as a JSON-encoded array, usually the `vars` returned by
+                    [Extract Template Placeholders](/docs/API/extract-template-placeholders-and-generate-preview).
                   example: >-
                     [{"placeholder":"CustomerName","name":"CustomerName","allowRichTextInjection":false,"order":0,"count":25},{"placeholder":"ProjectName","name":"ProjectName","allowRichTextInjection":false,"order":1,"count":2},{"placeholder":"Date","name":"Date","allowRichTextInjection":false,"order":2,"count":2},{"placeholder":"CustomerLogo","name":"CustomerLogo","allowRichTextInjection":true,"order":3,"count":1},{"placeholder":"VersionNumber","name":"VersionNumber","allowRichTextInjection":false,"order":4,"count":1},{"placeholder":"Scope","name":"Scope","allowRichTextInjection":true,"order":5,"count":1},{"placeholder":"BillRate","name":"BillRate","allowRichTextInjection":false,"order":6,"count":1}]
                 tags:
                   type: string
+                  description: Tags to attach, as a JSON-encoded array of tag objects with their `id`.
                   example: '[]'
+              required:
+                - templateFile
+                - name
+                - variables
       responses:
         '201':
           description: >-
@@ -643,133 +715,71 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - id
+                - mimeType
+                - text
               properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: The variable's ID. Must be the same as `VariableId` in the path.
                 name:
                   type: string
-                  description: The name of the variable
+                  description: The name of the variable, 1 to 255 characters.
                 description:
                   type: string
-                  description: The description of the variable
-                tags:
-                  type: array
-                items:
-                  type: string
-                  description: List of tags associated with the variable
+                  description: The description of the variable, up to 255 characters.
                 placeholder:
                   type: string
                   description: >-
-                    A unique placeholder text that is used to insert the variable content into
-                    documents
+                    The placeholder that inserts the variable into documents, for example
+                    `{CompanyAddress}`. It must stay unique in the knowledge base or folder.
                 text:
                   type: string
                   description: >-
-                    The content of the variable, which can be text, HTML, or a base64 encoded string
-                    for images
+                    The content of the variable: text, HTML, or a base64 encoded image, depending on
+                    `mimeType`.
                 mimeType:
                   type: string
-                  description: >-
-                    The type of content that the variable holds, which can be `text`, `html`, or
-                    `image`
+                  description: The type of content in `text`.
+                  enum:
+                    - text
+                    - html
+                    - image
                 allowRichTextInjection:
                   type: boolean
                   description: >-
-                    Used in other parts of the API, this specifies if this variable can be used in
-                    Rich Text Injection. For knowledgebase/folders, it is best practice to leave
-                    this set to true
+                    Whether the variable can be used for rich text injection. For knowledge base and
+                    folder variables, leave this set to `true`.
                   enum:
                     - true
                     - false
+                tags:
+                  type: array
+                  description: >-
+                    The tags to attach, replacing the current ones. Each item is a tag object with
+                    its `id`.
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
                 isGlobal:
                   type: boolean
                   description: >-
-                    A flag indicating whether the variable is global (i.e., part of the
-                    Knowledgebase). If true, the variable is available across all templates and
-                    templateFolderId should not be provided. This field is required if
-                    templateFolderId is not provided
+                    Set to `true` for a knowledge base variable. Send either `isGlobal` or
+                    `templateFolderId`, not both.
                   enum:
                     - true
                     - false
-        parameters:
-          - name: authorization
-            in: header
-            schema:
-              type: string
-            example: Bearer {{TurboDocx Access Token}}
-          - name: x-rapiddocx-org-id
-            in: header
-            schema:
-              type: string
-            example: '{{TurboDocx Organization ID}}'
-          - name: accept
-            in: header
-            schema:
-              type: string
-            example: application/json, text/plain, */*
-          - name: accept-language
-            in: header
-            schema:
-              type: string
-            example: en-US,en;q=0.9
-          - name: content-type
-            in: header
-            schema:
-              type: string
-            example: application/json
-          - name: dnt
-            in: header
-            schema:
-              type: integer
-            example: '1'
-          - name: origin
-            in: header
-            schema:
-              type: string
-            example: https://app.turbodocx.com
-          - name: referer
-            in: header
-            schema:
-              type: string
-            example: https://app.turbodocx.com/
-          - name: sec-ch-ua
-            in: header
-            schema:
-              type: string
-            example: '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
-          - name: sec-ch-ua-mobile
-            in: header
-            schema:
-              type: string
-            example: '?0'
-          - name: sec-ch-ua-platform
-            in: header
-            schema:
-              type: string
-            example: '"Windows"'
-          - name: sec-fetch-dest
-            in: header
-            schema:
-              type: string
-            example: empty
-          - name: sec-fetch-mode
-            in: header
-            schema:
-              type: string
-            example: cors
-          - name: sec-fetch-site
-            in: header
-            schema:
-              type: string
-            example: same-site
-          - name: VariableId
-            in: path
-            schema:
-              type: string
-            required: true
-        responses:
-          '200':
-            description: Successful response
-            content:
-              application/json: {}
+                templateFolderId:
+                  type: string
+                  format: uuid
+                  description: >-
+                    The folder of a folder variable. Send either `templateFolderId` or `isGlobal`,
+                    not both.
       parameters:
         - name: VariableId
           in: path
@@ -815,8 +825,8 @@ paths:
                         type: string
         '400':
           description: >-
-            `mimeType` or `text` is missing, or both `isGlobal` and `templateFolderId` are set.
-            Response body: `{ "message", "type": "ValidationError", "data": { "errors": [...] } }`
+            `id`, `mimeType` or `text` is missing, or both `isGlobal` and `templateFolderId` are
+            set. Response body: `{ "message", "type": "ValidationError", "data": { "errors": [...] } }`
         '401':
           description: >-
             Missing or invalid API key/token, or the organization cannot be resolved. The response
@@ -825,13 +835,15 @@ paths:
           description: >-
             The key's role is not administrator, contributor, or user. For `isGlobal: true` updates
             (as in the example above), only administrator and contributor are allowed; the `user`
-            role is also rejected with `403`.. The response has no body.
+            role is also rejected with `403`. The response has no body.
         '409':
           description: >-
             The variable was deleted or modified by someone else before this update landed. Response
             body: `{ "error", "data": { "explanation" } }`
   /Variable/bulk/action:
     delete:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Variables
       summary: Delete Variables (by IDs)
@@ -872,7 +884,6 @@ paths:
               properties:
                 ids:
                   type: array
-                  minItems: 1
                   description: >-
                     IDs of the variables to delete. Each is a variableMapId, the id returned by Read
                     Variables (Folder).
@@ -1025,11 +1036,19 @@ paths:
             schema:
               type: object
               properties:
+                id:
+                  type: string
+                  format: uuid
+                  description: >-
+                    The tag's ID, the same as `TagId` in the path. Always send it: without it the tag
+                    is given a new ID.
                 label:
                   type: string
-                  description: The updated label of the tag
+                  minLength: 1
+                  maxLength: 255
+                  description: The new label of the tag, 1 to 255 characters.
               required:
-                - label
+                - id
       parameters:
         - name: TagId
           in: path
@@ -1078,6 +1097,8 @@ paths:
           description: The key's role is not administrator, contributor, or user. The response has no body.
   /Tag/bulk/action:
     delete:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Tags
       summary: Delete Tags (by IDs)
@@ -1120,7 +1141,6 @@ paths:
               properties:
                 ids:
                   type: array
-                  minItems: 1
                   description: IDs of the tags to delete.
                   items:
                     type: string
@@ -1145,13 +1165,34 @@ paths:
               properties:
                 name:
                   type: string
-                  description: The name of the variable
-                tag:
+                  minLength: 3
+                  maxLength: 255
+                  description: The template's new name, 3 to 255 characters.
+                description:
+                  type: string
+                  description: The template's new description. Send an empty string to clear it.
+                templateFolderId:
+                  type: string
+                  format: uuid
+                  description: Move the template into this folder.
+                tags:
                   type: array
-                  description: array of tag items
+                  description: >-
+                    Replaces all of the template's tags. Each item is a tag object with its `id`; send
+                    an empty array to remove every tag.
+                  items:
+                    type: object
+                    required:
+                      - id
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
               example:
                 name: SOW Template
-                tags: []
+                description: Statement of work for consulting engagements
+                tags:
+                  - id: 7c9e6679-7425-40de-944b-e07fc1f90ae7
       parameters:
         - name: TemplateId
           in: path
@@ -1160,12 +1201,16 @@ paths:
           required: true
       responses:
         '200':
-          description: Success
+          description: The template was updated. The response body is the plain text `OK`.
           content:
-            application/json: {}
+            text/plain:
+              example: OK
+              schema:
+                type: string
         '400':
           description: >-
-            A field fails validation (for example `name` under 3 characters). Response body: `{
+            A field fails validation (for example `name` under 3 characters, or an unknown field such
+            as `tag`). Response body: `{
             "message", "type": "ValidationError", "data": { "errors": [...] } }`
         '401':
           description: >-
@@ -1178,6 +1223,8 @@ paths:
             The template is locked. Response body: `{ "error": "Resource is locked", "message",
             "data": { "locked": true, "lockedBy", "lockedOn" } }`
     delete:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Templates
       summary: Delete Template
@@ -1230,19 +1277,84 @@ paths:
         IDs, names, folders, and tags so you can browse or build a template picker. Includes example
         request, response, and pagination.
       parameters:
-        - name: limit
+        - name: query
           in: query
+          description: Search text matched against item names.
           schema:
-            type: integer
-          example: '9'
+            type: string
+        - name: type
+          in: query
+          description: >-
+            `template` lists templates at every folder level, without folders. Leave it out to list
+            the top level: folders and the templates outside them.
+          schema:
+            type: string
+            enum:
+              - template
+        - name: selectedTags
+          in: query
+          description: Only items that have all of these tags. Repeat the parameter for several tag IDs.
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
         - name: showTags
           in: query
+          description: Include each item's tags.
           schema:
             type: boolean
+            default: true
             enum:
               - true
               - false
           example: 'true'
+        - name: includeSignatureTemplates
+          in: query
+          description: Also list PDF signature templates. Off by default.
+          schema:
+            type: boolean
+            default: false
+        - name: pdfOnly
+          in: query
+          description: List only folders and PDF signature templates.
+          schema:
+            type: boolean
+            default: false
+        - name: column0
+          in: query
+          description: Sort column.
+          schema:
+            type: string
+            enum:
+              - name
+              - createdOn
+              - updatedOn
+              - email
+              - templateCount
+        - name: order0
+          in: query
+          description: Sort direction for `column0`.
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+        - name: limit
+          in: query
+          description: Items per page, at least 1.
+          schema:
+            type: integer
+            minimum: 1
+            default: 9
+          example: '9'
+        - name: offset
+          in: query
+          description: How many items to skip.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
       responses:
         '200':
           description: >-
@@ -1275,8 +1387,13 @@ paths:
                       createdOn: '2026-05-01T14:22:10.000Z'
                       updatedOn: '2026-05-01T14:22:10.000Z'
                       tags:
-                        - sales
-                        - legal
+                        - id: 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
+                          label: legal
+                          isActive: true
+                          orgId: a1b2c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d
+                          createdBy: f5e6d7c8-9a0b-4c1d-2e3f-4a5b6c7d8e9f
+                          createdOn: '2026-05-01T14:22:10.000Z'
+                          updatedOn: '2026-05-01T14:22:10.000Z'
                     - id: 7c1a0b52-9e88-4f0d-b3a2-1d4c6f8e2a90
                       name: Proposals
                       type: folder
@@ -1326,8 +1443,24 @@ paths:
                               type: string
                             tags:
                               type: array
+                              description: The item's tags, when `showTags` is on.
                               items:
-                                type: string
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  label:
+                                    type: string
+                                  isActive:
+                                    type: boolean
+                                  orgId:
+                                    type: string
+                                  createdBy:
+                                    type: string
+                                  createdOn:
+                                    type: string
+                                  updatedOn:
+                                    type: string
                       totalRecords:
                         type: integer
         '400':
@@ -1354,20 +1487,34 @@ paths:
               properties:
                 name:
                   type: string
-                  description: Webhook name. The SDK always sends "signature".
+                  minLength: 1
+                  maxLength: 100
+                  description: Webhook name, 1 to 100 characters. The SDK always sends "signature".
                   example: signature
                 urls:
                   type: array
-                  description: One or more HTTPS endpoints to receive event payloads. HTTP URLs are rejected.
+                  description: 1 to 10 HTTPS endpoints to receive event payloads. HTTP URLs are rejected.
+                  minItems: 1
+                  maxItems: 10
                   items:
                     type: string
+                    format: uri
                   example:
                     - https://example.com/webhooks/turbodocx
                 events:
                   type: array
-                  description: List of event types to subscribe to.
+                  description: The event types to subscribe to, at least one.
+                  minItems: 1
                   items:
                     type: string
+                    enum:
+                      - signature.document.sent
+                      - signature.document.viewed
+                      - signature.document.signed
+                      - signature.document.recipient_signed
+                      - signature.document.completed
+                      - signature.document.finalization_failed
+                      - signature.document.voided
                   example:
                     - signature.document.completed
                     - signature.document.voided
@@ -1563,41 +1710,54 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                  name:
-                    type: string
-                  urls:
-                    type: array
-                    items:
-                      type: string
-                  events:
-                    type: array
-                    items:
-                      type: string
-                  isActive:
-                    type: boolean
-                  createdOn:
-                    type: string
-                    format: date-time
-                  updatedOn:
-                    type: string
-                    format: date-time
-                  deliveryStats:
+                  data:
                     type: object
                     properties:
-                      totalDeliveries:
-                        type: integer
-                      successfulDeliveries:
-                        type: integer
-                      failedDeliveries:
-                        type: integer
-                      pendingRetries:
-                        type: integer
-                  availableEvents:
-                    type: array
-                    items:
-                      type: string
+                      id:
+                        type: string
+                      orgId:
+                        type: string
+                      name:
+                        type: string
+                      urls:
+                        type: array
+                        items:
+                          type: string
+                      events:
+                        type: array
+                        items:
+                          type: string
+                      isActive:
+                        type: boolean
+                      createdOn:
+                        type: string
+                        format: date-time
+                      updatedOn:
+                        type: string
+                        format: date-time
+                      deliveryStats:
+                        type: object
+                        properties:
+                          totalDeliveries:
+                            type: integer
+                          successfulDeliveries:
+                            type: integer
+                          failedDeliveries:
+                            type: integer
+                          pendingRetries:
+                            type: integer
+                      availableEvents:
+                        type: array
+                        items:
+                          type: string
+                      createdBy:
+                        type: string
+                      secretExists:
+                        type: boolean
+                        description: Whether a signing secret is set.
+                      maskedSecret:
+                        type: string
+                        description: The secret with all but its last characters hidden.
               example:
                 data:
                   id: b7e2c4a1-3f9d-4e6a-8c1b-5d0f7a2e9c34
@@ -1715,18 +1875,35 @@ paths:
             schema:
               type: object
               properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  description: Rename the webhook, 1 to 100 characters. A name already in use returns `409`.
                 urls:
                   type: array
-                  description: Replace the full list of delivery URLs.
+                  description: Replace the full list of delivery URLs, 1 to 10 HTTPS URLs.
+                  minItems: 1
+                  maxItems: 10
                   items:
                     type: string
+                    format: uri
                   example:
                     - https://example.com/webhooks/turbodocx
                 events:
                   type: array
-                  description: Replace the subscribed event types.
+                  description: Replace the subscribed event types, at least one.
+                  minItems: 1
                   items:
                     type: string
+                    enum:
+                      - signature.document.sent
+                      - signature.document.viewed
+                      - signature.document.signed
+                      - signature.document.recipient_signed
+                      - signature.document.completed
+                      - signature.document.finalization_failed
+                      - signature.document.voided
                   example:
                     - signature.document.completed
                 isActive:
@@ -1887,6 +2064,8 @@ paths:
           label: SDK
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewWebhooksClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey: os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:  os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\t// Leave a field unset to keep its current value\n\twebhook, err := client.UpdateWebhook(ctx, turbodocx.UpdateWebhookRequest{\n\t\tURLs:     []string{\"https://example.com/webhooks/turbodocx-v2\"},\n\t\tIsActive: turbodocx.BoolPtr(true),\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", webhook)\n}\n"
     delete:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Webhooks
       summary: Delete Webhook
@@ -1997,6 +2176,14 @@ paths:
               properties:
                 eventType:
                   type: string
+                  enum:
+                    - signature.document.sent
+                    - signature.document.viewed
+                    - signature.document.signed
+                    - signature.document.recipient_signed
+                    - signature.document.completed
+                    - signature.document.finalization_failed
+                    - signature.document.voided
                   description: The event type to simulate.
                   example: signature.document.completed
                 payload:
@@ -2005,9 +2192,6 @@ paths:
                   example:
                     documentId: doc_abc123
                     status: completed
-              required:
-                - eventType
-                - payload
       responses:
         '200':
           description: >-
@@ -2034,22 +2218,54 @@ paths:
                           properties:
                             id:
                               type: string
-                            webhookId:
-                              type: string
+                              description: Delivery ID.
                             eventType:
                               type: string
+                              description: The event that was delivered, for example `signature.document.completed`.
+                            url:
+                              type: string
+                              description: The endpoint the delivery went to.
                             httpStatus:
                               type: integer
                               nullable: true
-                            isDelivered:
-                              type: boolean
+                              description: Your endpoint's HTTP status, or `null` before a response.
+                            responseBody:
+                              type: string
+                              nullable: true
+                              description: The start of your endpoint's response body.
                             attemptCount:
                               type: integer
+                              description: Attempts made so far.
+                            maxAttempts:
+                              type: integer
+                              description: Attempts allowed before the delivery fails.
+                            isDelivered:
+                              type: boolean
+                              description: Whether a 2xx response was received.
                             deliveredAt:
                               type: string
                               format: date-time
                               nullable: true
+                            nextRetryAt:
+                              type: string
+                              format: date-time
+                              nullable: true
+                              description: When the next retry runs, if one is scheduled.
+                            errorMessage:
+                              type: string
+                              nullable: true
+                              description: Why the last attempt failed.
+                            status:
+                              type: string
+                              enum:
+                              - delivered
+                              - failed
+                              - retrying
+                              - pending
                             createdOn:
+                              type: string
+                              format: date-time
+                            updatedOn:
                               type: string
                               format: date-time
                       summary:
@@ -2183,6 +2399,8 @@ paths:
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewWebhooksClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey: os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:  os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\t// Sends a test delivery to every configured URL\n\tresult, err := client.TestWebhook(ctx, turbodocx.TestWebhookRequest{\n\t\tEventType: \"signature.document.completed\",\n\t\tPayload: map[string]interface{}{\n\t\t\t\"documentId\":   \"YOUR_DOCUMENT_ID\",\n\t\t\t\"documentName\": \"Service Agreement\",\n\t\t},\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result[\"summary\"])\n}\n"
   /api/webhooks/signature/notify:
     post:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Webhooks
       summary: Notify Webhook
@@ -2197,6 +2415,14 @@ paths:
               properties:
                 eventType:
                   type: string
+                  enum:
+                    - signature.document.sent
+                    - signature.document.viewed
+                    - signature.document.signed
+                    - signature.document.recipient_signed
+                    - signature.document.completed
+                    - signature.document.finalization_failed
+                    - signature.document.voided
                   description: The event type to include in the notification payload.
                   example: signature.document.completed
                 payload:
@@ -2205,9 +2431,6 @@ paths:
                   example:
                     documentId: doc_abc123
                     status: completed
-              required:
-                - eventType
-                - payload
       responses:
         '200':
           description: Success
@@ -2226,22 +2449,54 @@ paths:
                           properties:
                             id:
                               type: string
-                            webhookId:
-                              type: string
+                              description: Delivery ID.
                             eventType:
                               type: string
+                              description: The event that was delivered, for example `signature.document.completed`.
+                            url:
+                              type: string
+                              description: The endpoint the delivery went to.
                             httpStatus:
                               type: integer
                               nullable: true
-                            isDelivered:
-                              type: boolean
+                              description: Your endpoint's HTTP status, or `null` before a response.
+                            responseBody:
+                              type: string
+                              nullable: true
+                              description: The start of your endpoint's response body.
                             attemptCount:
                               type: integer
+                              description: Attempts made so far.
+                            maxAttempts:
+                              type: integer
+                              description: Attempts allowed before the delivery fails.
+                            isDelivered:
+                              type: boolean
+                              description: Whether a 2xx response was received.
                             deliveredAt:
                               type: string
                               format: date-time
                               nullable: true
+                            nextRetryAt:
+                              type: string
+                              format: date-time
+                              nullable: true
+                              description: When the next retry runs, if one is scheduled.
+                            errorMessage:
+                              type: string
+                              nullable: true
+                              description: Why the last attempt failed.
+                            status:
+                              type: string
+                              enum:
+                              - delivered
+                              - failed
+                              - retrying
+                              - pending
                             createdOn:
+                              type: string
+                              format: date-time
+                            updatedOn:
                               type: string
                               format: date-time
                       summary:
@@ -2375,6 +2630,8 @@ paths:
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewWebhooksClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey: os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:  os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\t// Sends this event and payload to every configured URL\n\tresult, err := client.NotifyWebhook(ctx, turbodocx.TestWebhookRequest{\n\t\tEventType: \"signature.document.completed\",\n\t\tPayload: map[string]interface{}{\n\t\t\t\"documentId\":   \"YOUR_DOCUMENT_ID\",\n\t\t\t\"documentName\": \"Service Agreement\",\n\t\t},\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result[\"summary\"])\n}\n"
   /api/webhooks/signature/regenerate:
     post:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Webhooks
       summary: Regenerate Webhook Secret
@@ -2546,39 +2803,72 @@ paths:
               schema:
                 type: object
                 properties:
-                  results:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        webhookId:
-                          type: string
-                        eventType:
-                          type: string
-                        payload:
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
                           type: object
-                        httpStatus:
-                          type: integer
-                          nullable: true
-                        isDelivered:
-                          type: boolean
-                        attemptCount:
-                          type: integer
-                        deliveredAt:
-                          type: string
-                          format: date-time
-                          nullable: true
-                        createdOn:
-                          type: string
-                          format: date-time
-                  totalRecords:
-                    type: integer
-                  limit:
-                    type: integer
-                  offset:
-                    type: integer
+                          properties:
+                            id:
+                              type: string
+                              description: Delivery ID.
+                            eventType:
+                              type: string
+                              description: The event that was delivered, for example `signature.document.completed`.
+                            url:
+                              type: string
+                              description: The endpoint the delivery went to.
+                            httpStatus:
+                              type: integer
+                              nullable: true
+                              description: Your endpoint's HTTP status, or `null` before a response.
+                            responseBody:
+                              type: string
+                              nullable: true
+                              description: The start of your endpoint's response body.
+                            attemptCount:
+                              type: integer
+                              description: Attempts made so far.
+                            maxAttempts:
+                              type: integer
+                              description: Attempts allowed before the delivery fails.
+                            isDelivered:
+                              type: boolean
+                              description: Whether a 2xx response was received.
+                            deliveredAt:
+                              type: string
+                              format: date-time
+                              nullable: true
+                            nextRetryAt:
+                              type: string
+                              format: date-time
+                              nullable: true
+                              description: When the next retry runs, if one is scheduled.
+                            errorMessage:
+                              type: string
+                              nullable: true
+                              description: Why the last attempt failed.
+                            status:
+                              type: string
+                              enum:
+                              - delivered
+                              - failed
+                              - retrying
+                              - pending
+                            createdOn:
+                              type: string
+                              format: date-time
+                            updatedOn:
+                              type: string
+                              format: date-time
+                      totalRecords:
+                        type: integer
+                      limit:
+                        type: integer
+                      offset:
+                        type: integer
               example:
                 data:
                   results:
@@ -2692,6 +2982,8 @@ paths:
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewWebhooksClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey: os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:  os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tresult, err := client.ListWebhookDeliveries(ctx, turbodocx.ListDeliveriesRequest{\n\t\tLimit:       turbodocx.IntPtr(20),\n\t\tOffset:      turbodocx.IntPtr(0),\n\t\tIsDelivered: turbodocx.BoolPtr(false),\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result[\"results\"])\n}\n"
   /api/webhooks/signature/replay:
     post:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Webhooks
       summary: Replay Webhook Delivery
@@ -2725,24 +3017,54 @@ paths:
                     properties:
                       id:
                         type: string
-                      webhookId:
-                        type: string
+                        description: Delivery ID.
                       eventType:
                         type: string
-                      payload:
-                        type: object
+                        description: The event that was delivered, for example `signature.document.completed`.
+                      url:
+                        type: string
+                        description: The endpoint the delivery went to.
                       httpStatus:
                         type: integer
                         nullable: true
-                      isDelivered:
-                        type: boolean
+                        description: Your endpoint's HTTP status, or `null` before a response.
+                      responseBody:
+                        type: string
+                        nullable: true
+                        description: The start of your endpoint's response body.
                       attemptCount:
                         type: integer
+                        description: Attempts made so far.
+                      maxAttempts:
+                        type: integer
+                        description: Attempts allowed before the delivery fails.
+                      isDelivered:
+                        type: boolean
+                        description: Whether a 2xx response was received.
                       deliveredAt:
                         type: string
                         format: date-time
                         nullable: true
+                      nextRetryAt:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        description: When the next retry runs, if one is scheduled.
+                      errorMessage:
+                        type: string
+                        nullable: true
+                        description: Why the last attempt failed.
+                      status:
+                        type: string
+                        enum:
+                        - delivered
+                        - failed
+                        - retrying
+                        - pending
                       createdOn:
+                        type: string
+                        format: date-time
+                      updatedOn:
                         type: string
                         format: date-time
                   message:
@@ -2863,73 +3185,79 @@ paths:
               schema:
                 type: object
                 properties:
-                  webhook:
+                  data:
                     type: object
                     properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-                      isActive:
-                        type: boolean
-                      events:
+                      webhook:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          isActive:
+                            type: boolean
+                          events:
+                            type: array
+                            items:
+                              type: string
+                          urls:
+                            type: array
+                            items:
+                              type: string
+                      period:
+                        type: object
+                        properties:
+                          days:
+                            type: integer
+                          from:
+                            type: string
+                            format: date-time
+                          to:
+                            type: string
+                            format: date-time
+                      summary:
+                        type: object
+                        properties:
+                          totalDeliveries:
+                            type: integer
+                          successfulDeliveries:
+                            type: integer
+                          failedDeliveries:
+                            type: integer
+                          pendingRetries:
+                            type: integer
+                          avgResponseTime:
+                            type: number
+                            nullable: true
+                            description: >-
+                              Average time in milliseconds from creating a delivery to its successful
+                              delivery, rounded, or `null` when nothing was delivered in the period
+                          successRate:
+                            type: number
+                          lastSuccessfulDelivery:
+                            type: string
+                            format: date-time
+                            nullable: true
+                          lastFailedDelivery:
+                            type: string
+                            format: date-time
+                            nullable: true
+                      eventBreakdown:
                         type: array
                         items:
-                          type: string
-                      urls:
-                        type: array
-                        items:
-                          type: string
-                  period:
-                    type: object
-                    properties:
-                      days:
-                        type: integer
-                      from:
-                        type: string
-                        format: date-time
-                      to:
-                        type: string
-                        format: date-time
-                  summary:
-                    type: object
-                    properties:
-                      totalDeliveries:
-                        type: integer
-                      successfulDeliveries:
-                        type: integer
-                      failedDeliveries:
-                        type: integer
-                      pendingRetries:
-                        type: integer
-                      avgResponseTime:
-                        type: number
-                        description: Average response time in milliseconds
-                      successRate:
-                        type: number
-                      lastSuccessfulDelivery:
-                        type: string
-                        format: date-time
-                        nullable: true
-                      lastFailedDelivery:
-                        type: string
-                        format: date-time
-                        nullable: true
-                  eventBreakdown:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        eventType:
-                          type: string
-                        total:
-                          type: integer
-                        successful:
-                          type: integer
-                        failed:
-                          type: integer
-                        successRate:
-                          type: number
+                          type: object
+                          properties:
+                            eventType:
+                              type: string
+                            total:
+                              type: integer
+                            successful:
+                              type: integer
+                            failed:
+                              type: integer
+                            successRate:
+                              type: number
               example:
                 data:
                   webhook:
@@ -3357,7 +3685,6 @@ paths:
                     type: object
                     required:
                       - placeholder
-                      - mimeType
                     properties:
                       placeholder:
                         type: string
@@ -3379,7 +3706,10 @@ paths:
                           - html
                           - image
                           - markdown
-                        description: How `text` is interpreted.
+                        description: >-
+                          How `text` is interpreted; `text` when omitted. `html` needs a template
+                          variable that allows rich text, otherwise the request returns 400 with
+                          `{ "error": "ValidationError", "message" }`.
                       isDisabled:
                         type: boolean
                         default: false
@@ -3444,11 +3774,30 @@ paths:
                 tags:
                   type: array
                   maxItems: 50
-                  description: Tag labels (1 to 255 characters each) to attach to the deliverable.
+                  description: >-
+                    Tags to attach to the deliverable: tag labels (1 to 255 characters each), or tag
+                    objects with their `id`.
                   items:
-                    type: string
-                    minLength: 1
-                    maxLength: 255
+                    oneOf:
+                      - type: string
+                        minLength: 1
+                        maxLength: 255
+                      - type: object
+                        required:
+                          - id
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                keepAnchoredTags:
+                  type: boolean
+                  description: >-
+                    Set to `true` to keep the template's TurboSign field tags (the anchored tags of its
+                    saved signature setup) as literal text, so a later signature request can place
+                    fields on them. Omitted, every placeholder is filled with the value sent.
+                  enum:
+                    - true
+                    - false
                 strict:
                   type: boolean
                   enum:
@@ -3620,6 +3969,9 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
                   message:
                     type: string
                   type:
@@ -4309,6 +4661,8 @@ paths:
           label: SDK
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewDeliverableClientOnly(turbodocx.ClientConfig{\n\t\tAPIKey: os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:  os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\t// Passing Tags replaces every existing tag on the deliverable\n\ttags := []string{\"hr\", \"final\"}\n\tresult, err := client.UpdateDeliverableInfo(ctx, \"YOUR_DELIVERABLE_ID\", &turbodocx.UpdateDeliverableRequest{\n\t\tName:        \"Employee Contract - Jane Smith (Final)\",\n\t\tDescription: \"Signed-off version\",\n\t\tTags:        &tags,\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result)\n}\n"
     delete:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - Deliverables
       summary: Delete Deliverable
@@ -4754,7 +5108,8 @@ paths:
       description: >-
         Creates a signature document from a file, deliverable, template or URL and returns a preview
         URL where you check and adjust fields before sending. No email goes to recipients; the
-        document waits with status `review_ready` until someone clicks Send in TurboDocx.
+        document waits with status `review_ready` until someone clicks Send in TurboDocx (or
+        `setup_complete` when `fields` is an empty array).
       requestBody:
         required: true
         content:
@@ -4778,8 +5133,10 @@ paths:
                   type: string
                   format: uuid
                   description: >-
-                    Send a template (Word, PowerPoint, or a PDF signature template). Required when
-                    any recipient has a `role`. One file source is required.
+                    Send a template (Word, PowerPoint, or a PDF signature template). One file source
+                    is required. Recipients with a `role` need a PDF signature template here, or the
+                    `deliverableId` of a generated Word or PowerPoint document; a Word or PowerPoint
+                    `templateId` with roles returns 400 `TemplateRolesNeedPdfTemplate`.
                 fileLink:
                   type: string
                   format: uri
@@ -4819,20 +5176,22 @@ paths:
                       email:
                         type: string
                         format: email
-                        description: Signer's email address. Must be unique within the document.
+                        description: Signer's email address.
                         example: john.smith@example.com
                       signingOrder:
                         type: integer
                         minimum: 1
                         description: >-
-                          Position in the signing sequence, starting at 1 with no gaps. Required
-                          unless the recipient has a `role`.
+                          Position in the signing sequence, starting at 1 with no gaps. Each
+                          recipient needs a different value (a repeat returns 400
+                          `DuplicateSigningOrder`). Required unless the recipient has a `role`.
                         example: 1
                       role:
                         type: string
                         description: >-
                           Key of a signer role saved on the template (for example `client`), matched
-                          ignoring case. Requires `templateId`; the role's saved fields are placed
+                          ignoring case. Needs a PDF signature `templateId` or a `deliverableId`
+                          (otherwise 400 `RoleRequiresTemplate`); the role's saved fields are placed
                           for this signer.
                       metadata:
                         type: object
@@ -4840,10 +5199,10 @@ paths:
                         properties:
                           color:
                             type: string
-                            description: HSL color, for example `hsl(200, 75%, 50%)`.
+                            description: Hex color `#RRGGBB`, for example `#4A90E2`. Other formats return 400 `InvalidMetadataColor`.
                           lightColor:
                             type: string
-                            description: Light HSL color, for example `hsl(200, 75%, 93%)`.
+                            description: Light hex color `#RRGGBB`, for example `#E3F2FD`. Other formats return 400 `InvalidMetadataLightColor`.
                       phone:
                         type: string
                         description: >-
@@ -4910,8 +5269,11 @@ paths:
                   type: array
                   maxItems: 150
                   description: >-
-                    Fields to place, sent as one JSON-encoded string part. Required and non-empty
-                    unless a recipient names a template `role`.
+                    Fields to place, sent as one JSON-encoded string part. Required unless a
+                    recipient names a template `role` (leaving it out returns 400 `FieldsRequired`).
+                    An empty array `[]` is accepted: Prepare for Review then returns
+                    `setup_complete` so you can add fields in TurboDocx, and Send for Signature sends
+                    a document with no fields.
                   items:
                     type: object
                     required:
@@ -5303,8 +5665,10 @@ paths:
                   type: string
                   format: uuid
                   description: >-
-                    Send a template (Word, PowerPoint, or a PDF signature template). Required when
-                    any recipient has a `role`. One file source is required.
+                    Send a template (Word, PowerPoint, or a PDF signature template). One file source
+                    is required. Recipients with a `role` need a PDF signature template here, or the
+                    `deliverableId` of a generated Word or PowerPoint document; a Word or PowerPoint
+                    `templateId` with roles returns 400 `TemplateRolesNeedPdfTemplate`.
                 fileLink:
                   type: string
                   format: uri
@@ -5589,6 +5953,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  code:
+                    type: string
+                    description: Error code, for example `DocumentNotActionable`. Sent together with `error`.
                   message:
                     type: string
                   type:
@@ -5645,6 +6015,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  code:
+                    type: string
+                    description: Error code, for example `DocumentNotActionable`. Sent together with `error`.
                   message:
                     type: string
                   type:
@@ -5712,6 +6088,16 @@ paths:
                   code:
                     type: string
       x-codeSamples:
+        - lang: cURL
+          label: multipart
+          source: |
+            curl -X POST 'https://api.turbodocx.com/turbosign/single/prepare-for-review' \
+              -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+              -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+              -F "file=@contract.pdf" \
+              -F "documentName=Service Agreement" \
+              -F 'recipients=[{"name":"John Smith","email":"john.smith@example.com","signingOrder":1}]' \
+              -F 'fields=[{"recipientEmail":"john.smith@example.com","type":"signature","template":{"anchor":"{Signature1}","placement":"replace","size":{"width":200,"height":80}}}]'
         - lang: NodeJs
           label: SDK
           source: |
@@ -5858,6 +6244,8 @@ paths:
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey:      os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:       os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t\tSenderEmail: \"sender@example.com\",\n\t\tSenderName:  \"Your Company\",\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tresult, err := client.TurboSign.CreateSignatureReviewLink(ctx, &turbodocx.CreateSignatureReviewLinkRequest{\n\t\tFileLink:     \"https://example.com/contracts/service-agreement.pdf\",\n\t\tDocumentName: \"Service Agreement\",\n\t\tRecipients: []turbodocx.Recipient{\n\t\t\t{Name: \"Jane Smith\", Email: \"jane.smith@example.com\", SigningOrder: 1},\n\t\t},\n\t\tFields: []turbodocx.Field{\n\t\t\t{\n\t\t\t\tType:           \"signature\",\n\t\t\t\tRecipientEmail: \"jane.smith@example.com\",\n\t\t\t\tPage:           1,\n\t\t\t\tX:              100,\n\t\t\t\tY:              500,\n\t\t\t\tWidth:          200,\n\t\t\t\tHeight:         50,\n\t\t\t},\n\t\t},\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result)\n}\n"
   /turbosign/single/prepare-for-signing:
     post:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - TurboSign
       summary: Send Document for Signature
@@ -5888,8 +6276,10 @@ paths:
                   type: string
                   format: uuid
                   description: >-
-                    Send a template (Word, PowerPoint, or a PDF signature template). Required when
-                    any recipient has a `role`. One file source is required.
+                    Send a template (Word, PowerPoint, or a PDF signature template). One file source
+                    is required. Recipients with a `role` need a PDF signature template here, or the
+                    `deliverableId` of a generated Word or PowerPoint document; a Word or PowerPoint
+                    `templateId` with roles returns 400 `TemplateRolesNeedPdfTemplate`.
                 fileLink:
                   type: string
                   format: uri
@@ -5929,20 +6319,22 @@ paths:
                       email:
                         type: string
                         format: email
-                        description: Signer's email address. Must be unique within the document.
+                        description: Signer's email address.
                         example: john.smith@example.com
                       signingOrder:
                         type: integer
                         minimum: 1
                         description: >-
-                          Position in the signing sequence, starting at 1 with no gaps. Required
-                          unless the recipient has a `role`.
+                          Position in the signing sequence, starting at 1 with no gaps. Each
+                          recipient needs a different value (a repeat returns 400
+                          `DuplicateSigningOrder`). Required unless the recipient has a `role`.
                         example: 1
                       role:
                         type: string
                         description: >-
                           Key of a signer role saved on the template (for example `client`), matched
-                          ignoring case. Requires `templateId`; the role's saved fields are placed
+                          ignoring case. Needs a PDF signature `templateId` or a `deliverableId`
+                          (otherwise 400 `RoleRequiresTemplate`); the role's saved fields are placed
                           for this signer.
                       metadata:
                         type: object
@@ -5950,10 +6342,10 @@ paths:
                         properties:
                           color:
                             type: string
-                            description: HSL color, for example `hsl(200, 75%, 50%)`.
+                            description: Hex color `#RRGGBB`, for example `#4A90E2`. Other formats return 400 `InvalidMetadataColor`.
                           lightColor:
                             type: string
-                            description: Light HSL color, for example `hsl(200, 75%, 93%)`.
+                            description: Light hex color `#RRGGBB`, for example `#E3F2FD`. Other formats return 400 `InvalidMetadataLightColor`.
                       phone:
                         type: string
                         description: >-
@@ -6020,8 +6412,11 @@ paths:
                   type: array
                   maxItems: 150
                   description: >-
-                    Fields to place, sent as one JSON-encoded string part. Required and non-empty
-                    unless a recipient names a template `role`.
+                    Fields to place, sent as one JSON-encoded string part. Required unless a
+                    recipient names a template `role` (leaving it out returns 400 `FieldsRequired`).
+                    An empty array `[]` is accepted: Prepare for Review then returns
+                    `setup_complete` so you can add fields in TurboDocx, and Send for Signature sends
+                    a document with no fields.
                   items:
                     type: object
                     required:
@@ -6423,8 +6818,10 @@ paths:
                   type: string
                   format: uuid
                   description: >-
-                    Send a template (Word, PowerPoint, or a PDF signature template). Required when
-                    any recipient has a `role`. One file source is required.
+                    Send a template (Word, PowerPoint, or a PDF signature template). One file source
+                    is required. Recipients with a `role` need a PDF signature template here, or the
+                    `deliverableId` of a generated Word or PowerPoint document; a Word or PowerPoint
+                    `templateId` with roles returns 400 `TemplateRolesNeedPdfTemplate`.
                 fileLink:
                   type: string
                   format: uri
@@ -6713,6 +7110,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  code:
+                    type: string
+                    description: Error code, for example `DocumentNotActionable`. Sent together with `error`.
                   message:
                     type: string
                   type:
@@ -6769,6 +7172,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  code:
+                    type: string
+                    description: Error code, for example `DocumentNotActionable`. Sent together with `error`.
                   message:
                     type: string
                   type:
@@ -6836,6 +7245,16 @@ paths:
                   code:
                     type: string
       x-codeSamples:
+        - lang: cURL
+          label: multipart
+          source: |
+            curl -X POST 'https://api.turbodocx.com/turbosign/single/prepare-for-signing' \
+              -H "Authorization: Bearer $TURBODOCX_API_KEY" \
+              -H "x-rapiddocx-org-id: $TURBODOCX_ORG_ID" \
+              -F "file=@contract.pdf" \
+              -F "documentName=Service Agreement" \
+              -F 'recipients=[{"name":"John Smith","email":"john.smith@example.com","signingOrder":1}]' \
+              -F 'fields=[{"recipientEmail":"john.smith@example.com","type":"signature","template":{"anchor":"{Signature1}","placement":"replace","size":{"width":200,"height":80}}}]'
         - lang: NodeJs
           label: SDK
           source: |
@@ -7428,6 +7847,8 @@ paths:
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey:      os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:       os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t\tSenderEmail: \"sender@example.com\",\n\t\tSenderName:  \"Your Company\",\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tresult, err := client.TurboSign.GetRecipients(ctx, \"YOUR_DOCUMENT_ID\")\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result)\n}\n"
   /turbosign/documents/{documentId}/void:
     post:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - TurboSign
       summary: Void Document
@@ -7517,6 +7938,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  code:
+                    type: string
+                    description: Error code, for example `DocumentNotActionable`. Sent together with `error`.
                   message:
                     type: string
                   type:
@@ -7650,6 +8077,8 @@ paths:
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey:      os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:       os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t\tSenderEmail: \"sender@example.com\",\n\t\tSenderName:  \"Your Company\",\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tresult, err := client.TurboSign.VoidDocument(ctx, \"YOUR_DOCUMENT_ID\", \"Contract terms changed\")\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result)\n}\n"
   /turbosign/documents/{documentId}/resend-email:
     post:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - TurboSign
       summary: Resend Signing Email
@@ -7737,6 +8166,15 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  invalidRecipientIds:
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                    description: The recipients that cannot be emailed right now.
                   message:
                     type: string
                   type:
@@ -7811,6 +8249,16 @@ paths:
               schema:
                 type: object
                 properties:
+                  message:
+                    type: string
+                    description: What went wrong. Request validation errors send it; some TurboSign errors send it beside
+                      `error`.
+                  type:
+                    type: string
+                    description: Error type, for example `ValidationError`. The same value as `code` when both are sent.
+                  data:
+                    type: object
+                    description: 'Details: the validation errors, or more context about the error.'
                   error:
                     type: string
                   code:
@@ -7902,6 +8350,8 @@ paths:
           source: "package main\n\nimport (\n\t\"context\"\n\t\"fmt\"\n\t\"log\"\n\t\"os\"\n\n\tturbodocx \"github.com/TurboDocx/SDK/packages/go-sdk\"\n)\n\nfunc main() {\n\tctx := context.Background()\n\n\tclient, err := turbodocx.NewClientWithConfig(turbodocx.ClientConfig{\n\t\tAPIKey:      os.Getenv(\"TURBODOCX_API_KEY\"),\n\t\tOrgID:       os.Getenv(\"TURBODOCX_ORG_ID\"),\n\t\tSenderEmail: \"sender@example.com\",\n\t\tSenderName:  \"Your Company\",\n\t})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\n\tresult, err := client.TurboSign.ResendEmail(ctx, \"YOUR_DOCUMENT_ID\", []string{\"YOUR_RECIPIENT_ID\"})\n\tif err != nil {\n\t\tlog.Fatal(err)\n\t}\n\tfmt.Printf(\"%+v\\n\", result)\n}\n"
   /turbosign/documents/{documentId}/send-reminder:
     post:
+      # Try it would call the live API with the reader's key: deletes, sends or re-delivers for real
+      x-hide-send-button: true
       tags:
         - TurboSign
       summary: Send Signing Reminder
@@ -7967,6 +8417,7 @@ paths:
                                 - skipped_max_reached
                                 - skipped_disabled
                                 - skipped_claim_lost
+                                - skipped_requires_single_use_url
                             reminderCount:
                               type: integer
                               description: Reminder count after the send. Only set when `sent`.
@@ -8017,6 +8468,15 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  invalidRecipientIds:
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                    description: The recipients that cannot be emailed right now.
                   message:
                     type: string
                   type:
@@ -8093,6 +8553,13 @@ paths:
               schema:
                 type: object
                 properties:
+                  message:
+                    type: string
+                    description: What went wrong. Request validation errors send it; some TurboSign errors send it beside
+                      `error`.
+                  type:
+                    type: string
+                    description: Error type, for example `ValidationError`. The same value as `code` when both are sent.
                   error:
                     type: string
                   code:
@@ -8624,6 +9091,51 @@ paths:
                               description: Saved signer's email. Only when `hasSavedSigner` is `true`.
                             fieldCount:
                               type: integer
+                              description: >-
+                                Every field the role owns. An anchored field counts once, though it
+                                lands on each occurrence of its tag.
+                            anchoredFieldCount:
+                              type: integer
+                              description: How many of the role's fields are anchored to a tag.
+                      anchors:
+                        type: array
+                        description: The template's anchored fields, one entry per field.
+                        items:
+                          type: object
+                          properties:
+                            fieldId:
+                              type: string
+                            roleKey:
+                              type: string
+                              description: The `key` of the role that owns the field.
+                            type:
+                              type: string
+                              description: Field type, as in `fields[].type` when sending.
+                            anchor:
+                              type: string
+                              description: The tag the field is anchored to, for example `{Signature1}`.
+                            placement:
+                              type: string
+                              description: How the field is placed on the tag; `replace` when not saved.
+                            offset:
+                              type: object
+                              properties:
+                                x:
+                                  type: number
+                                y:
+                                  type: number
+                            size:
+                              type: object
+                              properties:
+                                width:
+                                  type: number
+                                height:
+                                  type: number
+                            notFound:
+                              type: boolean
+                              description: >-
+                                `true` when the tag is no longer in the template, so the field can't be
+                                placed.
               example:
                 data:
                   templateId: 0b1099cf-d7b9-41a4-822b-51b68fd4885a
@@ -8633,6 +9145,7 @@ paths:
                       order: 1
                       hasSavedSigner: false
                       fieldCount: 3
+                      anchoredFieldCount: 1
                     - key: countersigner
                       label: Countersigner
                       order: 2
@@ -8640,6 +9153,17 @@ paths:
                       defaultName: Sam Lee
                       defaultEmail: sam@example.com
                       fieldCount: 2
+                      anchoredFieldCount: 0
+                  anchors:
+                    - fieldId: 5f0e2c1a-7b3d-4e8f-9a6b-1c2d3e4f5a6b
+                      roleKey: client
+                      type: signature
+                      anchor: '{ClientSignature}'
+                      placement: replace
+                      size:
+                        width: 200
+                        height: 80
+                      notFound: false
         '400':
           description: '`templateId` is not a valid UUID.'
           content:
@@ -8969,9 +9493,9 @@ paths:
                     pendingChecks: []
         '400':
           description: >-
-            The body is invalid, it does not name exactly one recipient
-            (`RecipientSelectorInvalid`), `returnUrl` is not https (`InvalidReturnUrl`), or the
-            identity assertion is missing or fails a check.
+            The body is invalid (including a `returnUrl` that is not an https URL, which returns
+            `ValidationError`), it does not name exactly one recipient (`RecipientSelectorInvalid`),
+            or the identity assertion is missing or fails a check.
           content:
             application/json:
               examples:
@@ -9000,6 +9524,9 @@ paths:
               schema:
                 type: object
                 properties:
+                  data:
+                    type: object
+                    description: 'Details: the validation errors, or more context about the error.'
                   message:
                     type: string
                   type:
@@ -9054,6 +9581,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  error:
+                    type: string
+                    description: What went wrong. TurboSign errors send it; request validation errors send `message` instead.
+                  code:
+                    type: string
+                    description: Error code, for example `DocumentNotActionable`. Sent together with `error`.
                   message:
                     type: string
                   type:

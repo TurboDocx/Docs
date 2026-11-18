@@ -8,7 +8,7 @@ Use this endpoint to build a variable library browser, or to look up a variable'
 
 ## Request notes
 
-Optionally pass `isGlobal=true` (your org-wide knowledge base) or `templateFolderId=<folder id>` (a specific folder) to scope the list; at most one may be set, and passing both is rejected. Omit both to list across your accessible scope. `limit` defaults to `6`, `offset` to `0`, and `query` filters by name.
+Optionally pass `isGlobal=true` (your org-wide knowledge base) or `templateFolderId=<folder id>` (a specific folder) to scope the list; at most one may be set, and passing both is rejected. Omit both to list across your accessible scope. `limit` defaults to `10` (1 to 100), `offset` to `0`, and `query` filters by name.
 
 ## Related endpoints
 

@@ -8,7 +8,7 @@ Use this endpoint to populate a tag picker or filter dropdown, or to search for 
 
 ## Request notes
 
-`limit` defaults to `6`, `offset` to `0`. `query` filters by a case-insensitive match on `label`. Sort with `column0` (`label`, `createdOn`, or `updatedOn`) and `order0` (`asc` or `desc`).
+`limit` defaults to `10` (1 to 100), `offset` to `0`. `query` filters by a case-insensitive match on `label`. Sort with `column0` (`label`, `createdOn`, or `updatedOn`) and `order0` (`asc` or `desc`).
 
 ## Related endpoints
 

@@ -51,6 +51,7 @@ const config = {
   baseUrl: '/',
   trailingSlash: false,
   onBrokenLinks: 'ignore',
+  clientModules: [require.resolve('./src/clientModules/openApiAnchor.js')],
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: 'warn',

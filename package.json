@@ -8,6 +8,7 @@
     "build": "docusaurus build",
     "postbuild": "node scripts/agent-markdown.mjs build",
     "check:md": "node scripts/agent-markdown.mjs check",
+    "test": "node --test scripts/api-twin.test.mjs scripts/openapi-spec.test.mjs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

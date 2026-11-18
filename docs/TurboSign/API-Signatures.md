@@ -291,8 +291,8 @@ const recipients = JSON.stringify([
     email: "john.smith@company.com",
     signingOrder: 1,
     metadata: {
-      color: "hsl(200, 75%, 50%)",
-      lightColor: "hsl(200, 75%, 93%)",
+      color: "#4A90E2",
+      lightColor: "#E3F2FD",
     },
   },
   {
@@ -300,8 +300,8 @@ const recipients = JSON.stringify([
     email: "jane.doe@partner.com",
     signingOrder: 2,
     metadata: {
-      color: "hsl(270, 75%, 50%)",
-      lightColor: "hsl(270, 75%, 93%)",
+      color: "#8E44AD",
+      lightColor: "#F3E5F5",
     },
   },
 ]);
@@ -507,8 +507,8 @@ When you change a draft's signers with `PATCH /turbosign/documents/{documentId}/
       "email": "john.smith@company.com",
       "signingOrder": 1,
       "metadata": {
-        "color": "hsl(200, 75%, 50%)",
-        "lightColor": "hsl(200, 75%, 93%)"
+        "color": "#4A90E2",
+        "lightColor": "#E3F2FD"
       }
     }
   ],
@@ -578,8 +578,8 @@ Signer roles work the same way here: pass `templateId` and give each recipient a
       "email": "john.smith@company.com",
       "signingOrder": 1,
       "metadata": {
-        "color": "hsl(200, 75%, 50%)",
-        "lightColor": "hsl(200, 75%, 93%)"
+        "color": "#4A90E2",
+        "lightColor": "#E3F2FD"
       }
     }
   ],
@@ -1176,6 +1176,7 @@ A recipient who was **not** emailed is reported rather than silently dropped, so
 | `skipped_max_reached` | Scheduled path only: their reminder cap is spent                |
 | `skipped_disabled`    | Scheduled path only: reminders are off for this document        |
 | `skipped_claim_lost`  | A concurrent request won the send; no duplicate was sent        |
+| `skipped_requires_single_use_url` | They sign only through a single-use link (ID verification or an override), so a reminder email can't work |
 
 ### Error Responses
 
@@ -1518,8 +1519,8 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 
 | Property   | Type   | Description                                        | Example                |
 | ---------- | ------ | -------------------------------------------------- | ---------------------- |
-| color      | String | Primary color for recipient in HSL format          | `"hsl(200, 75%, 50%)"` |
-| lightColor | String | Light background color for recipient in HSL format | `"hsl(200, 75%, 93%)"` |
+| color      | String | Primary color for recipient in HSL format          | `"#4A90E2"` |
+| lightColor | String | Light background color for recipient in HSL format | `"#E3F2FD"` |
 
 ### Example Recipients Array
 
@@ -1547,8 +1548,8 @@ The `metadata` object allows you to customize the recipient's UI appearance:
     "email": "john.smith@company.com",
     "signingOrder": 1,
     "metadata": {
-      "color": "hsl(200, 75%, 50%)",
-      "lightColor": "hsl(200, 75%, 93%)"
+      "color": "#4A90E2",
+      "lightColor": "#E3F2FD"
     }
   }
 ]

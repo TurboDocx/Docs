@@ -1,6 +1,6 @@
 ## Overview
 
-The Update Tag endpoint changes a tag's `label`. It is a `PUT`, but in practice `label` is the only field you should send. `orgId` is not an accepted body field and returns a validation error if sent. `id` is different: it isn't rejected by validation, and it isn't ignored either; the endpoint applies whatever body you send, so an `id` that differs from the `TagId` in the URL will overwrite the tag's actual `id` instead of being discarded. Omit `id` from the body and let the URL path segment identify the tag to update.
+The Update Tag endpoint changes a tag's `label`. It is a `PUT`; send the new `label` together with the tag's `id`, the same value as `TagId` in the URL. `orgId` is not an accepted body field and returns a validation error if sent. Always include `id`: the endpoint applies the body as sent, and a body without `id` is given a new random one, which changes the tag's ID and returns an empty response. An `id` that differs from `TagId` likewise overwrites the tag's ID.
 
 ## When to use it
 
