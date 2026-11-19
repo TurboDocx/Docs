@@ -55,3 +55,15 @@ for (const [name, theme, base] of [
     }
   });
 }
+
+test('CSS copies of the code colours (code cards, the Quickstart terminal) match code-themes.js', async () => {
+  const fs = await import('node:fs');
+  const api = fs.readFileSync(new URL('../src/css/api.scss', import.meta.url), 'utf8');
+  const terminal = fs.readFileSync(new URL('../src/components/QuickstartSkillNudge.module.css', import.meta.url), 'utf8');
+  for (const theme of [lightCodeTheme, darkCodeTheme]) {
+    assert.ok(api.includes(`--code-block-bg: ${theme.plain.backgroundColor}`), `api.scss --code-block-bg ${theme.plain.backgroundColor}`);
+    assert.ok(api.includes(`--code-block-text: ${theme.plain.color}`), `api.scss --code-block-text ${theme.plain.color}`);
+    assert.ok(terminal.includes(`--qs-term-bg: ${theme.plain.backgroundColor}`), `terminal bg ${theme.plain.backgroundColor}`);
+    assert.ok(terminal.includes(`--qs-term-fg: ${theme.plain.color}`), `terminal text ${theme.plain.color}`);
+  }
+});

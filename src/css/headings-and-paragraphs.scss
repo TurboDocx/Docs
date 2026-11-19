@@ -278,3 +278,13 @@ a:hover {
   display: inline-block;
   text-align: left;
 }
+
+// Inline code: one neutral chip on every page and in every box (the API reference style), light and
+// dark. Guide pages used Infima's chip, tinted per admonition; API pages this one.
+:is(.markdown, .openapi-right-panel__container) :not(pre) > code {
+  color: var(--api-code-text);
+  background: var(--api-code-bg);
+  border: 0;
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+}

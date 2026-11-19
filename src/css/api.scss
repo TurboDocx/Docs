@@ -13,6 +13,8 @@
   --api-required: #ad273c;
   --api-code-text: #32343a;
   --api-code-bg: #f1f3f6;
+  --code-block-bg: hsl(230, 1%, 98%); // One Light, as in code-themes.js
+  --code-block-text: hsl(230, 8%, 24%);
   --api-card: #ffffff;
   --api-card-head: #f6f7f9;
   --api-hairline: rgba(0, 0, 0, 0.1);
@@ -27,6 +29,8 @@
     --api-required: #f08a98;
     --api-code-text: #e3e5ea;
     --api-code-bg: #262a33;
+    --code-block-bg: hsl(220, 13%, 18%); // One Dark, as in code-themes.js
+    --code-block-text: hsl(220, 14%, 71%);
     --api-card: #1b1e24;
     --api-card-head: #22262e;
     --api-hairline: rgba(255, 255, 255, 0.1);
@@ -40,6 +44,8 @@
   --api-required: #f08a98;
   --api-code-text: #e3e5ea;
   --api-code-bg: #262a33;
+  --code-block-bg: hsl(220, 13%, 18%); // One Dark, as in code-themes.js
+  --code-block-text: hsl(220, 14%, 71%);
   --api-card: #1b1e24;
   --api-card-head: #22262e;
   --api-hairline: rgba(255, 255, 255, 0.1);
@@ -416,7 +422,9 @@
   padding: 0.5rem 0.75rem;
   margin: 0 0 0.6rem;
   white-space: pre-wrap;
-  background: var(--api-card) !important;
+  // Header lines are code: the same card as every code block (One Light / One Dark).
+  color: var(--code-block-text);
+  background: var(--code-block-bg) !important;
   border: 1px solid var(--api-hairline);
   border-radius: 8px;
 }
