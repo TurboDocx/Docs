@@ -316,6 +316,7 @@ curl 'https://api.turbodocx.com/ai/generate/variable/one' \
 
 <ScriptLoader
   scriptPath="ai/variable-generation"
+  languages={{ nodejs: ['express', 'fastify'], python: ['flask'] }}
   id="ai-variable-generation-examples"
   label="AI Variable Generation - Complete Examples"
 />

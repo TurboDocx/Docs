@@ -1,6 +1,9 @@
 ---
 title: Zapier Integration
 unlisted: true # hidden while the Zapier integration is rebuilt; URL still works
+# Unlisted pages are not in the sidebar, which is where Previous / Next come from.
+pagination_prev: Integrations/Hubspot
+pagination_next: Integrations/Teams
 sidebar_position: 5
 description: Export TurboDocx documents to 5,000+ apps with Zapier. Connect document generation to any CRM, project management, or cloud storage platform.
 keywords:

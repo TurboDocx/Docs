@@ -1,0 +1,17 @@
+diff --git a/node_modules/docusaurus-plugin-openapi-docs/lib/openapi/openapi.js b/node_modules/docusaurus-plugin-openapi-docs/lib/openapi/openapi.js
+index 0f74f36..6788525 100644
+--- a/node_modules/docusaurus-plugin-openapi-docs/lib/openapi/openapi.js
++++ b/node_modules/docusaurus-plugin-openapi-docs/lib/openapi/openapi.js
+@@ -245,8 +245,10 @@ function createItems(openapiData, options, sidebarOptions) {
+                             .replace(/\s+$/, "")
+                         : "",
+                     ...((options === null || options === void 0 ? void 0 : options.proxy) && { proxy: options.proxy }),
+-                    ...((options === null || options === void 0 ? void 0 : options.hideSendButton) && {
+-                        hide_send_button: options.hideSendButton,
++                    // TurboDocx: an operation can opt out of Try it's Send with x-hide-send-button: true
++                    ...(((options === null || options === void 0 ? void 0 : options.hideSendButton) ||
++                        operationObject["x-hide-send-button"] === true) && {
++                        hide_send_button: true,
+                     }),
+                     ...((options === null || options === void 0 ? void 0 : options.showExtensions) && {
+                         show_extensions: options.showExtensions,

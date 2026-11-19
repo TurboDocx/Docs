@@ -62,7 +62,7 @@ function Upload-Template {
     $bodyLines += "--$boundary"
     $bodyLines += "Content-Disposition: form-data; name=`"tags`""
     $bodyLines += ""
-    $bodyLines += '["hr", "contract", "template"]'
+    $bodyLines += '[]'
 
     $bodyLines += "--$boundary--"
 

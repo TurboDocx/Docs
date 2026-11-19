@@ -291,8 +291,8 @@ const recipients = JSON.stringify([
     email: "john.smith@company.com",
     signingOrder: 1,
     metadata: {
-      color: "hsl(200, 75%, 50%)",
-      lightColor: "hsl(200, 75%, 93%)",
+      color: "#4A90E2",
+      lightColor: "#E3F2FD",
     },
   },
   {
@@ -300,8 +300,8 @@ const recipients = JSON.stringify([
     email: "jane.doe@partner.com",
     signingOrder: 2,
     metadata: {
-      color: "hsl(270, 75%, 50%)",
-      lightColor: "hsl(270, 75%, 93%)",
+      color: "#8E44AD",
+      lightColor: "#F3E5F5",
     },
   },
 ]);
@@ -437,7 +437,7 @@ These return `400` with a body of the form `{ "message": "...", "type": "..." }`
 | `DuplicateSignerRole`      | `Role "client" was given more than one recipient`                                   | Two recipients name the same role                            |
 | `SignerRoleUnfilled`       | `Role "client" needs a signer. Pass recipients: [{ role: "<role>", name, email }]`   | A role has no saved signer and no recipient fills it         |
 | `TemplateHasNoSignerRoles` |                                                                                     | The template has no saved signer roles                       |
-| `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has no `templateId` |
+| `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has neither a `templateId` nor a `deliverableId` |
 | `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address, or a recipient without a role has a role signer's email |
 | `SignerHasNoFields`        | `Signer "Jane Doe" has no fields to sign. Place a field for them or remove them.`  | A signer ends up with no fields after the template's fields are placed |
 | `OtpPhoneRequired`         |                                                                                     | A role requires SMS verification and the recipient has no `phone` |
@@ -507,8 +507,8 @@ When you change a draft's signers with `PATCH /turbosign/documents/{documentId}/
       "email": "john.smith@company.com",
       "signingOrder": 1,
       "metadata": {
-        "color": "hsl(200, 75%, 50%)",
-        "lightColor": "hsl(200, 75%, 93%)"
+        "color": "#4A90E2",
+        "lightColor": "#E3F2FD"
       }
     }
   ],
@@ -578,8 +578,8 @@ Signer roles work the same way here: pass `templateId` and give each recipient a
       "email": "john.smith@company.com",
       "signingOrder": 1,
       "metadata": {
-        "color": "hsl(200, 75%, 50%)",
-        "lightColor": "hsl(200, 75%, 93%)"
+        "color": "#4A90E2",
+        "lightColor": "#E3F2FD"
       }
     }
   ],
@@ -1176,6 +1176,7 @@ A recipient who was **not** emailed is reported rather than silently dropped, so
 | `skipped_max_reached` | Scheduled path only: their reminder cap is spent                |
 | `skipped_disabled`    | Scheduled path only: reminders are off for this document        |
 | `skipped_claim_lost`  | A concurrent request won the send; no duplicate was sent        |
+| `skipped_requires_single_use_url` | They sign only through a single-use link (ID verification or an override), so a reminder email can't work |
 
 ### Error Responses
 
@@ -1507,7 +1508,7 @@ Each recipient object in the `recipients` array should contain the following pro
 | Property     | Type           | Required | Description                                                |
 | ------------ | -------------- | -------- | ---------------------------------------------------------- |
 | name         | String         | Yes      | Full name of the recipient/signer                          |
-| email        | String (email) | Yes      | Email address of the recipient (must be unique)            |
+| email        | String (email) | Yes      | Email address of the recipient                             |
 | signingOrder | Number         | Conditional | Order in which recipient should sign (starts at 1). Not needed on a recipient with a `role` |
 | role         | String         | No       | Template signer role this recipient fills (for example `client`). Requires `templateId`. See [Sending with signer roles](#sending-with-signer-roles) |
 | metadata     | Object         | No       | Optional metadata for UI customization (color, lightColor) |
@@ -1518,8 +1519,8 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 
 | Property   | Type   | Description                                        | Example                |
 | ---------- | ------ | -------------------------------------------------- | ---------------------- |
-| color      | String | Primary color for recipient in HSL format          | `"hsl(200, 75%, 50%)"` |
-| lightColor | String | Light background color for recipient in HSL format | `"hsl(200, 75%, 93%)"` |
+| color      | String | Primary color for recipient in HSL format          | `"#4A90E2"` |
+| lightColor | String | Light background color for recipient in HSL format | `"#E3F2FD"` |
 
 ### Example Recipients Array
 
@@ -1547,8 +1548,8 @@ The `metadata` object allows you to customize the recipient's UI appearance:
     "email": "john.smith@company.com",
     "signingOrder": 1,
     "metadata": {
-      "color": "hsl(200, 75%, 50%)",
-      "lightColor": "hsl(200, 75%, 93%)"
+      "color": "#4A90E2",
+      "lightColor": "#E3F2FD"
     }
   }
 ]

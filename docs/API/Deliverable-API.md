@@ -195,14 +195,14 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable?limit=10&offset=0&showTags
         "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "defaultFont": "Arial",
         "fonts": [{ "name": "Arial", "usage": "body" }],
-        "isActive": true,
+        "isActive": 1,
         "createdOn": "2024-01-15T14:12:10.721Z",
         "updatedOn": "2024-01-15T14:13:45.724Z",
         "tags": [
           {
             "id": "tag-uuid-1",
             "label": "hr",
-            "isActive": true,
+            "isActive": 1,
             "updatedOn": "2024-01-10T10:00:00.000Z",
             "createdOn": "2024-01-10T10:00:00.000Z",
             "createdBy": "user-uuid-123",
@@ -211,7 +211,7 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable?limit=10&offset=0&showTags
           {
             "id": "tag-uuid-2",
             "label": "contract",
-            "isActive": true,
+            "isActive": 1,
             "updatedOn": "2024-01-10T10:00:00.000Z",
             "createdOn": "2024-01-10T10:00:00.000Z",
             "createdBy": "user-uuid-123",
@@ -241,7 +241,7 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable?limit=10&offset=0&showTags
 | `results[].fileType`    | String  | MIME type of the generated file                                  |
 | `results[].defaultFont` | String  | Default font used                                                |
 | `results[].fonts`       | JSON    | Array of font objects with `name` and `usage`                    |
-| `results[].isActive`    | Boolean | Whether the deliverable is active (not deleted)                  |
+| `results[].isActive`    | Integer | `1` while the deliverable exists, `0` once deleted               |
 | `results[].createdOn`   | String  | ISO 8601 creation timestamp                                      |
 | `results[].updatedOn`   | String  | ISO 8601 last update timestamp                                   |
 | `results[].tags`        | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
@@ -376,7 +376,7 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
         "createdBy": "user-uuid-123",
         "createdOn": "2024-01-15T14:12:10.721Z",
         "updatedOn": "2024-01-15T14:12:10.721Z",
-        "isActive": true,
+        "isActive": 1,
         "defaultFont": "",
         "fonts": null
       }
@@ -397,7 +397,7 @@ Variable stacks allow you to inject multiple instances of a variable — useful 
 | `deliverable.createdBy`    | String  | User ID of the creator                          |
 | `deliverable.createdOn`    | String  | ISO 8601 creation timestamp                     |
 | `deliverable.updatedOn`    | String  | ISO 8601 last update timestamp                  |
-| `deliverable.isActive`     | Boolean | Active status (always `true` on creation)       |
+| `deliverable.isActive`     | Integer | Active status (always `1` on creation)          |
 | `deliverable.defaultFont`  | String  | Default font (empty string if not specified)    |
 | `deliverable.fonts`        | JSON    | Font metadata array (null if not yet generated) |
 
@@ -427,7 +427,7 @@ GET https://api.turbodocx.com/v1/deliverable/:id
 
 | Parameter  | Type    | Required | Description                  |
 | ---------- | ------- | -------- | ---------------------------- |
-| `showTags` | Boolean | No       | Include tags in the response |
+| `showTags` | Boolean | No       | Include tags in the response. Any value turns this on, even `false`; leave it out to omit the tags |
 
 ### Example Request
 
@@ -448,12 +448,12 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
       "description": "Employment contract for new senior developer",
       "templateId": "0b1099cf-d7b9-41a4-822b-51b68fd4885a",
       "templateName": "Employment Contract Template",
-      "templateNotDeleted": true,
+      "templateNotDeleted": 1,
       "defaultFont": "Arial",
       "fonts": [{ "name": "Arial", "usage": "body" }],
       "email": "admin@company.com",
       "fileType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "isActive": true,
+      "isActive": 1,
       "createdOn": "2024-01-15T14:12:10.721Z",
       "updatedOn": "2024-01-15T14:13:45.724Z",
       "variables": [
@@ -467,7 +467,7 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
         {
           "id": "tag-uuid-1",
           "label": "hr",
-          "isActive": true,
+          "isActive": 1,
           "updatedOn": "2024-01-10T10:00:00.000Z",
           "createdOn": "2024-01-10T10:00:00.000Z",
           "createdBy": "user-uuid-123",
@@ -476,7 +476,7 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
         {
           "id": "tag-uuid-2",
           "label": "contract",
-          "isActive": true,
+          "isActive": 1,
           "updatedOn": "2024-01-10T10:00:00.000Z",
           "createdOn": "2024-01-10T10:00:00.000Z",
           "createdBy": "user-uuid-123",
@@ -497,16 +497,16 @@ curl -X GET "https://api.turbodocx.com/v1/deliverable/39697685-ca00-43b8-92b8-77
 | `results.description`        | String  | Deliverable description                                          |
 | `results.templateId`         | String  | Template ID used for generation                                  |
 | `results.templateName`       | String  | Template name                                                    |
-| `results.templateNotDeleted` | Boolean | Whether the source template still exists                         |
+| `results.templateNotDeleted` | Integer | `1` while the source template exists, `0` after it is deleted    |
 | `results.defaultFont`        | String  | Default font used                                                |
 | `results.fonts`              | JSON    | Array of font objects with `name` and `usage`                    |
 | `results.email`              | String  | Creator's email                                                  |
 | `results.fileType`           | String  | MIME type of the generated file                                  |
-| `results.isActive`           | Boolean | Active status                                                    |
+| `results.isActive`           | Integer | `1` while the deliverable exists, `0` once deleted               |
 | `results.createdOn`          | String  | ISO 8601 creation timestamp                                      |
 | `results.updatedOn`          | String  | ISO 8601 last update timestamp                                   |
 | `results.variables`          | Array   | Parsed variable objects with values                              |
-| `results.tags`               | Array   | Tags (only when `showTags=true`) — see [Tag Object](#tag-object) |
+| `results.tags`               | Array   | Tags (only when `showTags` is sent, with any value) — see [Tag Object](#tag-object) |
 
 ---
 
@@ -720,7 +720,7 @@ When `showTags=true` is passed, tag arrays contain full tag objects with the fol
 | ----------- | ------- | ---------------------------------- |
 | `id`        | String  | Tag unique identifier (UUID)       |
 | `label`     | String  | Tag display name                   |
-| `isActive`  | Boolean | Whether the tag is active          |
+| `isActive`  | Integer | `1` while the tag exists, `0` once deleted |
 | `updatedOn` | String  | ISO 8601 last update timestamp     |
 | `createdOn` | String  | ISO 8601 creation timestamp        |
 | `createdBy` | String  | User ID of the tag creator         |

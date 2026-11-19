@@ -22,13 +22,9 @@ def browse_templates(limit = 25, offset = 0, query = '', show_tags = true, selec
 
   params['query'] = query unless query.empty?
 
-  if selected_tags
-    selected_tags.each do |tag|
-      params["selectedTags[]"] = tag
-    end
-  end
-
-  query_string = params.map { |k, v| "#{CGI.escape(k)}=#{CGI.escape(v)}" }.join('&')
+  # Repeat selectedTags once per tag ID (the API reads ?selectedTags=<id>&selectedTags=<id>)
+  pairs = params.to_a + Array(selected_tags).map { |tag_id| ['selectedTags', tag_id] }
+  query_string = URI.encode_www_form(pairs)
   uri = URI("#{BASE_URL}/template-item?#{query_string}")
 
   # Create HTTP connection

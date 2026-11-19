@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"time"
+	"strings"
 )
 
 // Configuration - Update these values
@@ -119,7 +119,7 @@ func main() {
  */
 func (tm *TemplateWorkflowManager) PathA_UploadAndGenerate(templateFilePath, deliverableName string) error {
 	fmt.Println("🔄 PATH A: Upload New Template → Generate Deliverable")
-	fmt.Println(fmt.Sprintf("%s", fmt.Sprintf("%48s", "").ReplaceAll(" ", "=")))
+	fmt.Println(strings.Repeat("=", 48))
 
 	// Step 1: Upload and create template
 	fmt.Println("\n📤 Step 1: Uploading template...")
@@ -174,7 +174,7 @@ func (tm *TemplateWorkflowManager) uploadTemplate(templateFilePath string) (*Upl
 	writer.WriteField("name", "API Upload Template")
 	writer.WriteField("description", "Template uploaded via API for testing")
 	writer.WriteField("variables", "[]")
-	writer.WriteField("tags", `["api", "test", "upload"]`)
+	writer.WriteField("tags", `[]`)
 
 	writer.Close()
 
@@ -194,7 +194,7 @@ func (tm *TemplateWorkflowManager) uploadTemplate(templateFilePath string) (*Upl
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusCreated {
 		body, _ := io.ReadAll(resp.Body)
 		return nil, fmt.Errorf("upload failed: %d - %s", resp.StatusCode, string(body))
 	}
@@ -239,7 +239,7 @@ func (tm *TemplateWorkflowManager) uploadTemplate(templateFilePath string) (*Upl
  */
 func (tm *TemplateWorkflowManager) PathB_BrowseAndGenerate(searchQuery, deliverableName string) error {
 	fmt.Println("🔍 PATH B: Browse Existing Templates → Generate Deliverable")
-	fmt.Println(fmt.Sprintf("%56s", "").ReplaceAll(" ", "="))
+	fmt.Println(strings.Repeat("=", 56))
 
 	// Step 1: Browse templates
 	fmt.Println("\n🔍 Step 1: Browsing templates...")
@@ -445,8 +445,6 @@ func (tm *TemplateWorkflowManager) getTemplatePDFPreview(templateID string) (str
 // ===============================
 
 func (tm *TemplateWorkflowManager) generateDeliverable(templateID, name, description string) (*DeliverableResponse, error) {
-	now := time.Now().UTC().Format(time.RFC3339)
-
 	payload := map[string]interface{}{
 		"templateId":  templateID,
 		"name":        name,
@@ -470,17 +468,6 @@ func (tm *TemplateWorkflowManager) generateDeliverable(templateID, name, descrip
 		},
 		"tags":            []string{"api-generated"},
 		"fonts":           "[]",
-		"metadata": map[string]interface{}{
-			"sessions": []map[string]interface{}{
-				{
-					"id":        fmt.Sprintf("go-session-%d", time.Now().Unix()),
-					"starttime": now,
-					"endtime":   now,
-				},
-			},
-			"workflow":  "Go Complete Workflow",
-			"generated": now,
-		},
 	}
 
 	jsonData, err := json.Marshal(payload)
@@ -488,7 +475,7 @@ func (tm *TemplateWorkflowManager) generateDeliverable(templateID, name, descrip
 		return nil, fmt.Errorf("failed to marshal JSON: %v", err)
 	}
 
-	req, err := http.NewRequest("POST", BASE_URL+"/deliverable", bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest("POST", BASE_URL+"/v1/deliverable", bytes.NewBuffer(jsonData))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err)
 	}
@@ -531,7 +518,7 @@ func (tm *TemplateWorkflowManager) generateDeliverable(templateID, name, descrip
 func (tm *TemplateWorkflowManager) downloadDeliverable(deliverableID, filename string) error {
 	fmt.Printf("📥 Downloading file: %s\n", filename)
 
-	req, err := http.NewRequest("GET", BASE_URL+"/deliverable/file/"+deliverableID, nil)
+	req, err := http.NewRequest("GET", BASE_URL+"/v1/deliverable/file/"+deliverableID, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create request: %v", err)
 	}
@@ -574,7 +561,7 @@ func (tm *TemplateWorkflowManager) downloadDeliverable(deliverableID, filename s
 
 func (tm *TemplateWorkflowManager) DemoPathA(templateFilePath string) error {
 	fmt.Println("🚀 DEMO: Path A - Upload New Template Workflow")
-	fmt.Println(fmt.Sprintf("%45s", "").ReplaceAll(" ", "="))
+	fmt.Println(strings.Repeat("=", 45))
 	fmt.Println()
 
 	return tm.PathA_UploadAndGenerate(templateFilePath, "Contract Generated via Path A - API Upload")
@@ -582,7 +569,7 @@ func (tm *TemplateWorkflowManager) DemoPathA(templateFilePath string) error {
 
 func (tm *TemplateWorkflowManager) DemoPathB() error {
 	fmt.Println("🚀 DEMO: Path B - Browse Existing Template Workflow")
-	fmt.Println(fmt.Sprintf("%51s", "").ReplaceAll(" ", "="))
+	fmt.Println(strings.Repeat("=", 51))
 	fmt.Println()
 
 	return tm.PathB_BrowseAndGenerate("contract", "Contract Generated via Path B - Browse & Select")
@@ -590,10 +577,10 @@ func (tm *TemplateWorkflowManager) DemoPathB() error {
 
 func (tm *TemplateWorkflowManager) DemoComparison() error {
 	fmt.Println("🚀 DEMO: Complete Workflow Comparison")
-	fmt.Println(fmt.Sprintf("%36s", "").ReplaceAll(" ", "="))
+	fmt.Println(strings.Repeat("=", 36))
 	fmt.Println()
 
-	fmt.Println("Testing both paths with the same template type...\n")
+	fmt.Println("Testing both paths with the same template type...")
 
 	// Run Path B first (browse existing)
 	err := tm.DemoPathB()
@@ -601,7 +588,7 @@ func (tm *TemplateWorkflowManager) DemoComparison() error {
 		return fmt.Errorf("demo comparison failed: %v", err)
 	}
 
-	fmt.Println("\n" + fmt.Sprintf("%60s", "").ReplaceAll(" ", "=") + "\n")
+	fmt.Println("\n" + strings.Repeat("=", 60) + "\n")
 
 	// For Path A, we'd need a template file
 	fmt.Println("📝 Path A requires a template file to upload.")

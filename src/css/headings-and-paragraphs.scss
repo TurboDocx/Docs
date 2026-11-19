@@ -231,8 +231,10 @@ img {
   @include vertical-margin($base-margin);
 }
 
+// Links follow the theme's primary colour: the brand blue in light mode, the brighter blue in dark
+// mode (the fixed brand blue was 2.6:1 on the dark background).
 a {
-  color: $color-1;
+  color: var(--ifm-color-primary);
   text-decoration: none;
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji" !important;
@@ -240,6 +242,42 @@ a {
 }
 
 a:hover {
-  color: $color-1;
+  color: var(--ifm-color-primary);
   text-decoration: underline;
+}
+
+// Boxes written in the docs as inline-styled <div>s (banners, feature cards): the box's padding is
+// the only space around its content, so a heading's top margin or a list's bottom margin can't push
+// the content off-centre. Theme components (which carry classes) are not touched.
+:is(.theme-doc-markdown, .markdown) > div[style]:not([class]),
+:is(.theme-doc-markdown, .markdown) > div[style]:not([class]) div[style]:not([class]) {
+  > :first-child {
+    margin-top: 0 !important;
+  }
+  > :last-child,
+  > :last-child > :last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+// Spacer <br/> lines between blocks give at most one line of extra space: stacked spacers
+// (<br/><br/><br/>) opened 60px+ holes before the next heading in the older guides.
+:is(.theme-doc-markdown, .markdown) > br + br {
+  display: none;
+}
+
+// A list inside a centred box is centred as one block, its bullets kept beside their text.
+:is(.theme-doc-markdown, .markdown) :is(div[style*="text-align:center"], div[style*="text-align: center"]) > :is(ul, ol) {
+  display: inline-block;
+  text-align: left;
+}
+
+// Inline code: one neutral chip on every page and in every box (the API reference style), light and
+// dark. Guide pages used Infima's chip, tinted per admonition; API pages this one.
+:is(.markdown, .openapi-right-panel__container) :not(pre) > code {
+  color: var(--api-code-text);
+  background: var(--api-code-bg);
+  border: 0;
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
 }

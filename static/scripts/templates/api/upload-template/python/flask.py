@@ -1,71 +1,73 @@
+import os
+
 import requests
-import json
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
 
 # Configuration - Update these values
 API_TOKEN = "YOUR_API_TOKEN"
 ORG_ID = "YOUR_ORGANIZATION_ID"
 BASE_URL = "https://api.turbodocx.com"
-TEMPLATE_NAME = "Employee Contract Template"
+TEMPLATE_PATH = "./contract-template.docx"
 
+HEADERS = {
+    "Authorization": f"Bearer {API_TOKEN}",
+    "x-rapiddocx-org-id": ORG_ID,
+    "User-Agent": "TurboDocx API Client",
+}
+
+
+@app.route("/upload-template", methods=["POST"])
 def upload_template():
-    """
-    Path A: Upload and Create Template
-    Uploads a .docx/.pptx template and extracts variables automatically
-    """
-    try:
-        url = f"{BASE_URL}/template/upload-and-create"
+    """Path A: upload a .docx/.pptx template; TurboDocx extracts its variables."""
+    body = request.get_json(silent=True) or {}
+    name = body.get("name", "Employee Contract Template")
+    description = body.get("description", "Standard employee contract with variable placeholders")
 
-        headers = {
-            'Authorization': f'Bearer {API_TOKEN}',
-            'x-rapiddocx-org-id': ORG_ID,
-            'User-Agent': 'TurboDocx API Client'
-        }
+    if not os.path.exists(TEMPLATE_PATH):
+        return jsonify({"error": f"Template file not found: {TEMPLATE_PATH}"}), 400
 
-        # Prepare form data
+    with open(TEMPLATE_PATH, "rb") as template_file:
         files = {
-            'templateFile': ('contract-template.docx', open('./contract-template.docx', 'rb'),
-                           'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            "templateFile": (
+                os.path.basename(TEMPLATE_PATH),
+                template_file,
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
         }
-
         data = {
-            'name': TEMPLATE_NAME,
-            'description': 'Standard employee contract with variable placeholders',
-            'variables': '[]',  # Optional: pre-defined variables
-            'tags': '["hr", "contract", "template"]'
+            "name": name,
+            "description": description,
+            "variables": "[]",  # Optional: pre-defined variables
+            "tags": "[]",  # Optional: tag objects, e.g. [{"id": "TAG_ID"}]
         }
+        response = requests.post(
+            f"{BASE_URL}/template/upload-and-create", headers=HEADERS, files=files, data=data, timeout=60
+        )
 
-        response = requests.post(url, headers=headers, files=files, data=data)
-        response.raise_for_status()
+    # Upload and create answers 201 Created
+    if response.status_code != 201:
+        return jsonify({"error": "Template upload failed", "details": response.text}), 502
 
-        result = response.json()
-        template = result['data']['results']['template']
+    results = response.json()["data"]["results"]
+    template = results["template"]
 
-        print(f"Template uploaded successfully: {template['id']}")
-        print(f"Template name: {template['name']}")
-        print(f"Variables extracted: {len(template['variables']) if template['variables'] else 0}")
-        print(f"Default font: {template['defaultFont']}")
-        print(f"Fonts used: {len(template['fonts']) if template['fonts'] else 0}")
-        print(f"Redirect to: {result['data']['results']['redirectUrl']}")
+    return jsonify(
+        {
+            "templateId": template["id"],
+            "name": template["name"],
+            "variables": len(template.get("variables") or []),
+            "defaultFont": template.get("defaultFont"),
+            "redirectUrl": results["redirectUrl"],
+        }
+    )
 
-        # Clean up file handle
-        files['templateFile'][1].close()
 
-        return template
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error uploading template: {e}")
-        raise
-    except FileNotFoundError:
-        print("Error: Template file './contract-template.docx' not found")
-        raise
-    except json.JSONDecodeError as e:
-        print(f"Error parsing response: {e}")
-        raise
-
-# Example usage
 if __name__ == "__main__":
-    try:
-        template = upload_template()
-        print(f"Ready to generate documents with template: {template['id']}")
-    except Exception as error:
-        print(f"Upload failed: {error}")
+    app.run(port=5000)
+
+# Example usage:
+#   curl -X POST http://localhost:5000/upload-template \
+#     -H "Content-Type: application/json" \
+#     -d '{"name": "Employee Contract Template"}'

@@ -41,14 +41,32 @@
     min-height: 100vh !important;
   }
 
+  /* The search box needs its full width on phones: capped at 10vw it overflowed the screen and
+     wrapped its "Ctrl + K" hint. Push it to the right edge instead. */
   .centerSearchBar {
     left: unset;
-    max-width: 10vw;
+  }
+
+  .navbar__items > div:has(.centerSearchBar) {
+    margin-left: auto;
   }
 
   .navbar__toggle {
     display: flex;
     justify-content: space-evenly;
+  }
+}
+
+/* Under 360px the logo and the full search box don't both fit; a smaller logo keeps them apart.
+   The box itself can't shrink: its label and shortcut live in Orama's shadow DOM. */
+@media (max-width: 359px) {
+  .navbar__brand {
+    margin-right: 0.5rem;
+  }
+
+  .navbar__logo img {
+    width: 80px;
+    height: auto;
   }
 }
 

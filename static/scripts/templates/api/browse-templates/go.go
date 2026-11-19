@@ -132,7 +132,7 @@ func browseTemplates(limit, offset int, query string, showTags bool, selectedTag
 
 	if selectedTags != nil {
 		for _, tag := range selectedTags {
-			params.Add("selectedTags[]", tag)
+			params.Add("selectedTags", tag)
 		}
 	}
 

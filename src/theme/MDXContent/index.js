@@ -74,14 +74,11 @@ export default function MDXContentWrapper(props) {
           </BackgroundGradientAnimation>
           <MDXContent style={{ backgroundImage: image }} {...props} />
         </>
-      ) : props?.children?.props?.children?.props?.className?.includes("theme-api-markdown") ? (
-        // Render something for the new condition
-        <div style={{ paddingTop: "2em" }}>
-          <MDXContent style={{ backgroundImage: image }} {...props} />
-        </div>
       ) : (
-        <TracingBeam>
-          <div style={{ paddingTop: "2em" }}>
+        // Every doc page, API reference included, gets the tracing beam on desktop; docs-tracing-beam
+        // (src/css/custom.scss) makes it fill the column and drops it on phones.
+        <TracingBeam className="docs-tracing-beam">
+          <div className="docs-beam-content">
             <MDXContent style={{ backgroundImage: image }} {...props} />
           </div>
         </TracingBeam>

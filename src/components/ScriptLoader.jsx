@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import CodeBlock from "@theme/CodeBlock";
+import { DEFAULT_LANGUAGES, EXTENSIONS } from "./scriptLoaderFiles.mjs";
 
-const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) => {
+// `languages` lists the samples that exist for this scriptPath (see scriptLoaderFiles.mjs), so the
+// page only requests files that are there: a missing one is a 404 in the reader's console.
+const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples", languages = DEFAULT_LANGUAGES }) => {
   const [scripts, setScripts] = useState({});
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(null);
@@ -10,16 +13,7 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
   useEffect(() => {
     const loadScripts = async () => {
       try {
-        const languageConfigs = {
-          nodejs: ['express', 'fastify'],
-          python: ['fastapi', 'flask'],
-          csharp: ['controller', 'minimal'],
-          php: [],
-          java: [],
-          go: [],
-          ruby: [],
-          powershell: []
-        };
+        const languageConfigs = languages;
         
         const loadedScripts = {};
         const initialSubTabs = {};
@@ -75,21 +69,10 @@ const ScriptLoader = ({ scriptPath, id = "scripts", label = "Code Examples" }) =
     };
 
     loadScripts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scriptPath]);
 
-  const getFileExtension = (lang) => {
-    const extensions = {
-      nodejs: 'js',
-      python: 'py',
-      php: 'php',
-      csharp: 'cs',
-      java: 'java',
-      go: 'go',
-      ruby: 'rb',
-      powershell: 'ps1'
-    };
-    return extensions[lang] || 'txt';
-  };
+  const getFileExtension = (lang) => EXTENSIONS[lang] || 'txt';
 
   const getLanguageLabel = (lang) => {
     const labels = {

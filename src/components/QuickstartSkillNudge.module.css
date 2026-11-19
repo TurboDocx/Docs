@@ -3,10 +3,17 @@
 
 .wrap {
   --qs-accent: #2b579a; /* brand primary */
-  --qs-term-bg: #0b1020;
-  --qs-term-fg: #e6edf3;
-  --qs-term-muted: #8b98b0;
-  --qs-prompt: #51cf66;
+  /* Terminal: the site code theme (code-themes.js): One Light here, One Dark in dark mode. */
+  --qs-term-bg: hsl(230, 1%, 98%);
+  --qs-term-fg: hsl(230, 8%, 24%);
+  --qs-term-muted: hsl(230, 4%, 46%); /* comment */
+  --qs-prompt: hsl(119, 34%, 37%); /* string */
+  --qs-agent-prompt: hsl(221, 87%, 55%); /* function */
+  --qs-term-edge: rgba(0, 0, 0, 0.1);
+  --qs-term-bar: rgba(0, 0, 0, 0.03);
+  --qs-term-btn: rgba(0, 0, 0, 0.04);
+  --qs-term-btn-hover: rgba(0, 0, 0, 0.08);
+  --qs-term-shadow: rgba(11, 16, 32, 0.16);
 
   display: grid;
   grid-template-columns: 1fr 1.15fr;
@@ -33,6 +40,17 @@
 }
 
 [data-theme='dark'] .wrap {
+  --qs-term-bg: hsl(220, 13%, 18%);
+  --qs-term-fg: hsl(220, 14%, 71%);
+  --qs-term-muted: hsl(220, 10%, 59%);
+  --qs-prompt: hsl(95, 38%, 62%);
+  --qs-agent-prompt: hsl(207, 82%, 66%);
+  --qs-term-edge: rgba(255, 255, 255, 0.1);
+  --qs-term-bar: rgba(255, 255, 255, 0.04);
+  --qs-term-btn: rgba(255, 255, 255, 0.08);
+  --qs-term-btn-hover: rgba(255, 255, 255, 0.14);
+  --qs-term-shadow: rgba(11, 16, 32, 0.7);
+
   border-color: var(--ifm-color-emphasis-300);
 }
 
@@ -126,8 +144,8 @@
   border-radius: 10px;
   overflow: hidden;
   background: var(--qs-term-bg);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 18px 40px -20px rgba(11, 16, 32, 0.7);
+  border: 1px solid var(--qs-term-edge);
+  box-shadow: 0 18px 40px -20px var(--qs-term-shadow);
   font-family: var(--ifm-font-family-monospace);
 }
 
@@ -136,8 +154,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.55rem 0.75rem;
-  background: rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--qs-term-bar);
+  border-bottom: 1px solid var(--qs-term-edge);
 }
 
 .dots {
@@ -200,7 +218,7 @@
 }
 
 .agentPrompt {
-  color: #8fb2e8;
+  color: var(--qs-agent-prompt);
   user-select: none;
   margin-right: 0.5rem;
   font-weight: 700;
@@ -215,8 +233,8 @@
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--qs-term-fg);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--qs-term-btn);
+  border: 1px solid var(--qs-term-edge);
   border-radius: 7px;
   padding: 0.35rem 0.6rem;
   cursor: pointer;
@@ -224,12 +242,11 @@
 }
 
 .copyBtn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--qs-term-btn-hover);
 }
 
 .copyBtn.copied {
-  color: #27c93f;
+  color: var(--qs-prompt);
   border-color: rgba(39, 201, 63, 0.4);
   background: rgba(39, 201, 63, 0.12);
 }

@@ -111,7 +111,7 @@ public class TemplateWorkflowManager {
                 "[]" +
                 "\r\n--" + boundary + "\r\n" +
                 "Content-Disposition: form-data; name=\"tags\"\r\n\r\n" +
-                "[\"api\", \"test\", \"upload\"]" +
+                "[]" +
                 "\r\n--" + boundary + "--\r\n";
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -130,7 +130,7 @@ public class TemplateWorkflowManager {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() != 200) {
+        if (response.statusCode() != 201) {
             throw new RuntimeException("Upload failed: " + response.statusCode());
         }
 
@@ -307,12 +307,11 @@ public class TemplateWorkflowManager {
         payload.set("variables", deliverableData.get("variables"));
         payload.set("tags", deliverableData.get("tags"));
         payload.put("fonts", "[]");
-        payload.set("metadata", createMetadata());
 
         String jsonBody = mapper.writeValueAsString(payload);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/deliverable"))
+                .uri(URI.create(BASE_URL + "/v1/deliverable"))
                 .header("Authorization", "Bearer " + API_TOKEN)
                 .header("x-rapiddocx-org-id", ORG_ID)
                 .header("User-Agent", "TurboDocx API Client")
@@ -340,7 +339,7 @@ public class TemplateWorkflowManager {
         System.out.println("📥 Downloading file: " + filename);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/deliverable/file/" + deliverableId))
+                .uri(URI.create(BASE_URL + "/v1/deliverable/file/" + deliverableId))
                 .header("Authorization", "Bearer " + API_TOKEN)
                 .header("x-rapiddocx-org-id", ORG_ID)
                 .header("User-Agent", "TurboDocx API Client")
@@ -401,22 +400,6 @@ public class TemplateWorkflowManager {
         return variables;
     }
 
-    private ObjectNode createMetadata() {
-        ObjectNode metadata = mapper.createObjectNode();
-
-        ArrayNode sessions = mapper.createArrayNode();
-        ObjectNode session = mapper.createObjectNode();
-        session.put("id", UUID.randomUUID().toString());
-        session.put("starttime", Instant.now().toString());
-        session.put("endtime", Instant.now().toString());
-        sessions.add(session);
-
-        metadata.set("sessions", sessions);
-        metadata.put("workflow", "Java Complete Workflow");
-        metadata.put("generated", Instant.now().toString());
-
-        return metadata;
-    }
 
     // ===============================
     // DEMO FUNCTIONS
