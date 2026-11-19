@@ -1,3 +1,4 @@
+const { GETTING_STARTED_GUIDES } = require("../../sidebar-guides");
 // API reference sidebar. Endpoint pages are generated from tdocxcollection.yml (see dev-docs-openapi.js);
 // `className` drives the small method tag shown before each endpoint name.
 // Guides that live in other sections are `ref` items so they keep their own URL and breadcrumb.
@@ -22,10 +23,9 @@ module.exports = [
     items: [
       { type: "doc", id: "API/turbodocx-api-documentation", label: "Introduction and Authentication" },
       { type: "doc", id: "API/Deliverable-API", label: "Generate Documents" },
-      { type: "ref", id: "TurboSign/API-Signatures", label: "Send for Signature" },
-      { type: "ref", id: "TurboSign/API-Bulk-Signatures", label: "Bulk Signatures" },
-      { type: "ref", id: "TurboDocx-Templating/API-Templates", label: "Templates" },
-      { type: "ref", id: "TurboSign/Webhooks", label: "Webhooks" },
+      // Real items here (Previous / Next walk Getting Started in order); their own sections list them
+      // as shortcuts (sidebar-guides.js).
+      ...GETTING_STARTED_GUIDES.map(({ id, label }) => ({ type: "doc", id, label })),
     ],
   },
   {
