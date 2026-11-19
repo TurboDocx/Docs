@@ -197,6 +197,10 @@ main[class*="docMainContainer"] {
     max-width: none !important;
   }
 }
+// Category pages: the theme caps them at 75% (!important).
+main [class*="generatedIndexPage"] {
+  max-width: none !important;
+}
 @media (min-width: 997px) {
   // The text column takes the free width; the table of contents keeps a fixed one.
   // (Docusaurus pins this column to max-width: 75% !important.)

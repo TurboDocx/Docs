@@ -836,7 +836,7 @@
   .openapi-tabs__response-header-section ~ * {
     .openapi-tabs__schema-tabs-container {
       display: flex !important;
-      margin: 0;
+      margin: 0.75rem 0 0; // merges with the margin above it: 12px after a description or content type
     }
     .openapi-tabs__schema-list-container {
       display: flex !important;
@@ -847,6 +847,9 @@
     // Description → switch → example: one 12px step each, no stacked wrapper margins.
     [role="tabpanel"] > div:has(> div > p) {
       margin: 0.75rem 0 0;
+      > div {
+        margin-bottom: 0 !important; // inline 0.5rem; the next step's own 12px top margin is the gap
+      }
     }
     .tabs-container {
       margin-top: 0;
@@ -871,8 +874,9 @@
     }
   }
   // In a response: description → content type → Example / Schema → example, 12px steps.
-  .openapi-tabs__response-header-section ~ * .openapi-tabs__mime-container {
-    margin: 0.75rem 0;
+  // (Only rows that show content-type tabs: a single-type response renders an empty row.)
+  .openapi-tabs__response-header-section ~ * .openapi-tabs__mime-container:has(li + li) {
+    margin: 0.75rem 0 0;
   }
 }
 
@@ -905,6 +909,50 @@
     .openapi__method-endpoint-path {
       white-space: normal;
       overflow-wrap: anywhere;
+    }
+  }
+}
+
+[class*="docs-doc-id-API/"] {
+  // Schema trees (request body, responses) and parameter lists: one row rhythm.
+  // Query / path / header parameter rows start at the card edge like Body rows (the theme indents
+  // them 16px).
+  .openapi-params__list-item {
+    margin-left: 0 !important; // the theme sets 1rem !important
+  }
+  // An opened object / array starts with its first row: no 16px top margin under its summary
+  // (details > animated wrapper > collapsible content).
+  .openapi-schema__list-item details > div > div[class*="collapsibleContent"] {
+    margin-top: 0;
+  }
+  // "Array [" and "]" sit right against the rows they wrap: no list-item margin, no extra padding.
+  // "Array [" gets the same 13px step under its summary as any first row.
+  .openapi-left-panel__container li:has(> div[style*="opacity"]) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    &:first-child {
+      padding-top: 0.6875rem;
+    }
+    > div {
+      padding: 0 !important;
+      line-height: 1.5;
+    }
+  }
+}
+
+[class*="docs-doc-id-API/"] {
+  // Inside a schema / parameter row: description and "Allowed:" / "Default:" lines are one block
+  // (4px apart, not the site's 20px paragraph gap), and their labels keep the row's text size
+  // (the 14px bold is for field names only).
+  .openapi-schema__list-item,
+  .openapi-params__list-item {
+    p {
+      margin: 0 0 0.25rem !important; // beats the site's .theme-doc-markdown p:not([class]) !important
+    }
+    p strong {
+      font-size: inherit;
+      font-weight: 600 !important;
     }
   }
 }
