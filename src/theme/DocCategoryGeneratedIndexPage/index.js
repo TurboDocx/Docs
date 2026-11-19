@@ -15,8 +15,8 @@ import styles from '@docusaurus/theme-classic/lib/theme/DocCategoryGeneratedInde
 // Category pages (generated index) are the theme's page with two changes:
 // - noindex: they only list the docs in a section, so every breadcrumb has a page to link to; they have
 //   no content of their own (and so need no markdown twin);
-// - the tracing beam around the content, as on every doc page (breadcrumbs stay outside it, so the
-//   beam's dot sits under the first crumb's first letter).
+// - the tracing beam around the content, as on every doc page (breadcrumbs and Previous / Next stay
+//   outside it, so the beam's dot sits under the first crumb's first letter).
 export default function DocCategoryGeneratedIndexPage({categoryGeneratedIndex}) {
   const category = useCurrentSidebarCategory();
   return (
@@ -45,14 +45,16 @@ export default function DocCategoryGeneratedIndexPage({categoryGeneratedIndex}) 
             <article className="margin-top--lg">
               <DocCardList items={category.items} className={styles.list} />
             </article>
-            <footer className="margin-top--md">
-              <DocPaginator
-                previous={categoryGeneratedIndex.navigation.previous}
-                next={categoryGeneratedIndex.navigation.next}
-              />
-            </footer>
           </div>
         </TracingBeam>
+        {/* Outside the beam, as on doc pages: src/css/custom.scss lines it up with the content and keeps
+            it at the bottom of the page. */}
+        <footer className="margin-top--md">
+          <DocPaginator
+            previous={categoryGeneratedIndex.navigation.previous}
+            next={categoryGeneratedIndex.navigation.next}
+          />
+        </footer>
       </div>
     </>
   );

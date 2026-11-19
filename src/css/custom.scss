@@ -224,6 +224,14 @@ main [class*="generatedIndexPage"] {
 // Tracing beam (src/components/tracing-beam.tsx), around every doc page.
 // Desktop: it fills the column, and its dot (40px left of the content, 27px in) lands 3px left of
 // the breadcrumb text, under the first letter. Phones: no beam, the content starts at the edge.
+:root {
+  --docs-beam-inset: 0px; // where page content starts, past the beam (phones: no beam)
+}
+@media (min-width: 997px) {
+  :root {
+    --docs-beam-inset: 50px; // the beam's 10px offset + its 40px gutter
+  }
+}
 div.docs-tracing-beam {
   max-width: none;
   margin: 0 0 0 10px;
@@ -241,4 +249,45 @@ div.docs-tracing-beam {
       display: none;
     }
   }
+}
+
+// Previous / Next (and "Last updated") line up with the content, past the beam, on every page, and
+// sit at the bottom of the page: the page container passes main's height down, and the article grows
+// into any free space, so on a short page they stand just above the site footer.
+main[class*="docMainContainer"] nav.pagination-nav,
+main[class*="docMainContainer"] .theme-doc-footer {
+  margin-left: var(--docs-beam-inset);
+}
+main[class*="docMainContainer"] > .container {
+  display: flex;
+  flex-direction: column;
+  > .row,
+  > [class*="generatedIndexPage"] {
+    flex: 1 0 auto;
+  }
+}
+main[class*="docMainContainer"] .row > [class*="docItemCol"],
+main[class*="docMainContainer"] .row > .col:only-child {
+  display: flex;
+  flex-direction: column;
+  > [class*="docItemContainer"] {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    > article {
+      flex: 1 0 auto;
+    }
+  }
+}
+main [class*="generatedIndexPage"] {
+  display: flex;
+  flex-direction: column;
+  > div.docs-tracing-beam {
+    flex: 1 0 auto;
+  }
+}
+// API pages put Previous / Next in a left-column-wide box (col--7): span the content width instead.
+main[class*="docMainContainer"] .row > .col--7:has(> nav.pagination-nav) {
+  flex: 1 1 100%;
+  max-width: 100%;
 }

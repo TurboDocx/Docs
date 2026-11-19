@@ -937,6 +937,7 @@
     > div {
       padding: 0 !important;
       line-height: 1.5;
+      margin-left: 0.25rem !important; // starts where the parent's name starts (theme: -0.5rem)
     }
   }
 }
