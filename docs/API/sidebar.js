@@ -3,12 +3,21 @@
 // Guides that live in other sections are `ref` items so they keep their own URL and breadcrumb.
 // The sidebar text is the page title: generated pages set sidebar_label, which wins over a label here.
 const ep = (id, method) => ({ type: "doc", id: `API/${id}`, className: `api-method ${method}` });
-const group = (label, items) => ({ type: "category", label, collapsed: true, items });
+// Every category links to a page listing its items, so each breadcrumb is a working link.
+const index = (slug, description) => ({ type: "generated-index", slug, description });
+const group = (label, items) => ({
+  type: "category",
+  label,
+  collapsed: true,
+  link: index(`/API/endpoints/${label.toLowerCase()}`, `${label} endpoints of the TurboDocx API.`),
+  items,
+});
 
 module.exports = [
   {
     type: "category",
     label: "Getting Started",
+    link: index("/API/getting-started", "Start here: authentication, then the main API workflows."),
     collapsed: false,
     items: [
       { type: "doc", id: "API/turbodocx-api-documentation", label: "Introduction and Authentication" },
@@ -22,6 +31,7 @@ module.exports = [
   {
     type: "category",
     label: "Resources and Endpoints",
+    link: index("/API/endpoints", "Every TurboDocx API endpoint, grouped by resource."),
     collapsed: false,
     items: [
       group("Templates", [
@@ -82,6 +92,7 @@ module.exports = [
   {
     type: "category",
     label: "Embedded Signing",
+    link: index("/API/embedded-signing", "Embed TurboSign signing in your own app."),
     collapsed: true,
     items: [
       { type: "ref", id: "TurboSign/embedded-signing/index", label: "Overview" },
@@ -93,6 +104,7 @@ module.exports = [
   {
     type: "category",
     label: "SDKs and Integrations",
+    link: index("/API/sdks-and-integrations", "Official SDKs and agent skills for the TurboDocx API."),
     collapsed: true,
     items: [
       { type: "ref", id: "SDKs/index", label: "SDKs Overview" },

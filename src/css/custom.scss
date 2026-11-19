@@ -26,6 +26,20 @@
 
 // Removed global list-style rule to prevent affecting navigation
 
+// Tab rows are <ul>s, so the content list indent below would push them 28px in from the heading.
+// They start where the text starts, the same as the SDK language cards and API code tabs.
+article, .markdown, [class*="theme-doc-markdown"] {
+  ul.tabs {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+
+    > li {
+      margin-bottom: 0;
+    }
+  }
+}
+
 // Enhanced text styling for better readability - only apply to content areas
 article, .markdown, [class*="theme-doc-markdown"] {
   // Ensure bold text renders properly

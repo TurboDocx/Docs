@@ -44,32 +44,32 @@ All variables must be **one word only** - no spaces allowed inside the `{bracket
 
 <div style={{display: 'grid', gap: '20px', marginBottom: '32px'}}>
 
-<div style={{backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '20px'}}>
+<div style={{backgroundColor: 'var(--ifm-color-success-contrast-background)', border: '1px solid var(--ifm-color-success-dark)', borderRadius: '8px', padding: '20px'}}>
   <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px'}}>
     <span style={{fontSize: '20px'}}>✅</span>
-    <strong style={{color: '#16a34a', fontSize: '18px'}}>Correct - One word only</strong>
+    <strong style={{color: 'var(--ifm-color-success-dark)', fontSize: '18px'}}>Correct - One word only</strong>
   </div>
-  <div style={{backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '16px', lineHeight: '1.6'}}>
-    <code style={{backgroundColor: '#dcfce7', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: '#166534'}}>{'{CustomerName}'}</code>
-    <code style={{backgroundColor: '#dcfce7', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: '#166534'}}>{'{ProjectDate}'}</code>
-    <code style={{backgroundColor: '#dcfce7', padding: '4px 8px', borderRadius: '4px', color: '#166534'}}>{'{ScopeSection}'}</code>
+  <div style={{backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '16px', lineHeight: '1.6'}}>
+    <code style={{backgroundColor: 'var(--ifm-color-success-contrast-background)', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: 'var(--ifm-color-success-contrast-foreground)'}}>{'{CustomerName}'}</code>
+    <code style={{backgroundColor: 'var(--ifm-color-success-contrast-background)', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: 'var(--ifm-color-success-contrast-foreground)'}}>{'{ProjectDate}'}</code>
+    <code style={{backgroundColor: 'var(--ifm-color-success-contrast-background)', padding: '4px 8px', borderRadius: '4px', color: 'var(--ifm-color-success-contrast-foreground)'}}>{'{ScopeSection}'}</code>
   </div>
-  <div style={{marginTop: '12px', fontSize: '14px', color: '#14532d', fontStyle: 'italic'}}>
+  <div style={{marginTop: '12px', fontSize: '14px', color: 'var(--ifm-color-success-contrast-foreground)', fontStyle: 'italic'}}>
     ✨ These variable names will work perfectly in your templates
   </div>
 </div>
 
-<div style={{backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '20px'}}>
+<div style={{backgroundColor: 'var(--ifm-color-danger-contrast-background)', border: '1px solid var(--ifm-color-danger-dark)', borderRadius: '8px', padding: '20px'}}>
   <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px'}}>
     <span style={{fontSize: '20px'}}>❌</span>
-    <strong style={{color: '#dc2626', fontSize: '18px'}}>Incorrect - Contains spaces</strong>
+    <strong style={{color: 'var(--ifm-color-danger-dark)', fontSize: '18px'}}>Incorrect - Contains spaces</strong>
   </div>
-  <div style={{backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '16px', lineHeight: '1.6'}}>
-    <code style={{backgroundColor: '#fee2e2', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: '#991b1b', textDecoration: 'line-through'}}>{'{Customer Name}'}</code>
-    <code style={{backgroundColor: '#fee2e2', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: '#991b1b', textDecoration: 'line-through'}}>{'{Project Date}'}</code>
-    <code style={{backgroundColor: '#fee2e2', padding: '4px 8px', borderRadius: '4px', color: '#991b1b', textDecoration: 'line-through'}}>{'{Scope Section}'}</code>
+  <div style={{backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '16px', lineHeight: '1.6'}}>
+    <code style={{backgroundColor: 'var(--ifm-color-danger-contrast-background)', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: 'var(--ifm-color-danger-contrast-foreground)', textDecoration: 'line-through'}}>{'{Customer Name}'}</code>
+    <code style={{backgroundColor: 'var(--ifm-color-danger-contrast-background)', padding: '4px 8px', borderRadius: '4px', marginRight: '12px', color: 'var(--ifm-color-danger-contrast-foreground)', textDecoration: 'line-through'}}>{'{Project Date}'}</code>
+    <code style={{backgroundColor: 'var(--ifm-color-danger-contrast-background)', padding: '4px 8px', borderRadius: '4px', color: 'var(--ifm-color-danger-contrast-foreground)', textDecoration: 'line-through'}}>{'{Scope Section}'}</code>
   </div>
-  <div style={{marginTop: '12px', fontSize: '14px', color: '#7f1d1d', fontStyle: 'italic'}}>
+  <div style={{marginTop: '12px', fontSize: '14px', color: 'var(--ifm-color-danger-contrast-foreground)', fontStyle: 'italic'}}>
     ⚠️ Spaces inside brackets will prevent variables from being recognized
   </div>
 </div>
@@ -92,35 +92,35 @@ All variables must be **one word only** - no spaces allowed inside the `{bracket
 
 <div style={{display: 'grid', gap: '24px', marginBottom: '32px'}}>
 
-<div style={{backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '20px'}}>
+<div style={{backgroundColor: 'var(--ifm-color-danger-contrast-background)', border: '1px solid var(--ifm-color-danger-dark)', borderRadius: '8px', padding: '20px'}}>
   <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px'}}>
     <span style={{fontSize: '20px'}}>❌</span>
-    <strong style={{color: '#dc2626', fontSize: '18px'}}>Incorrect - Variable mixed with other text</strong>
+    <strong style={{color: 'var(--ifm-color-danger-dark)', fontSize: '18px'}}>Incorrect - Variable mixed with other text</strong>
   </div>
-  <div style={{backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.5'}}>
+  <div style={{backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.5'}}>
     <div style={{marginBottom: '12px'}}>
       <strong>Rich Text/Section Variables:</strong><br/>
-      <code style={{backgroundColor: '#f3f4f6', padding: '2px 4px', borderRadius: '3px'}}>Proposal Section: {'{ProposalSection}'}, If you have any questions about the proposal...</code>
+      <code style={{backgroundColor: 'var(--ifm-color-emphasis-100)', padding: '2px 4px', borderRadius: '3px'}}>Proposal Section: {'{ProposalSection}'}, If you have any questions about the proposal...</code>
     </div>
     <div>
       <strong>Image Variables:</strong><br/>
-      <code style={{backgroundColor: '#f3f4f6', padding: '2px 4px', borderRadius: '3px'}}>Photo: {'{HeadshotImage}'}, Nicolas Fry, CEO</code>
+      <code style={{backgroundColor: 'var(--ifm-color-emphasis-100)', padding: '2px 4px', borderRadius: '3px'}}>Photo: {'{HeadshotImage}'}, Nicolas Fry, CEO</code>
     </div>
   </div>
-  <div style={{marginTop: '12px', fontSize: '14px', color: '#7f1d1d', fontStyle: 'italic'}}>
+  <div style={{marginTop: '12px', fontSize: '14px', color: 'var(--ifm-color-danger-contrast-foreground)', fontStyle: 'italic'}}>
     ⚠️ This format will prevent variables from working properly
   </div>
 </div>
 
-<div style={{backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '20px'}}>
+<div style={{backgroundColor: 'var(--ifm-color-success-contrast-background)', border: '1px solid var(--ifm-color-success-dark)', borderRadius: '8px', padding: '20px'}}>
   <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px'}}>
     <span style={{fontSize: '20px'}}>✅</span>
-    <strong style={{color: '#16a34a', fontSize: '18px'}}>Correct - Variable on its own line</strong>
+    <strong style={{color: 'var(--ifm-color-success-dark)', fontSize: '18px'}}>Correct - Variable on its own line</strong>
   </div>
-  <div style={{backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.5'}}>
+  <div style={{backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.5'}}>
     <div style={{marginBottom: '20px'}}>
       <strong>Rich Text/Section Variables:</strong><br/>
-      <code style={{backgroundColor: '#f3f4f6', padding: '2px 4px', borderRadius: '3px', display: 'block', marginTop: '8px'}}>
+      <code style={{backgroundColor: 'var(--ifm-color-emphasis-100)', padding: '2px 4px', borderRadius: '3px', display: 'block', marginTop: '8px'}}>
         Proposal Section:<br/><br/>
         {'{ProposalSection}'}<br/><br/>
         If you have any questions about the proposal...
@@ -128,14 +128,14 @@ All variables must be **one word only** - no spaces allowed inside the `{bracket
     </div>
     <div>
       <strong>Image Variables:</strong><br/>
-      <code style={{backgroundColor: '#f3f4f6', padding: '2px 4px', borderRadius: '3px', display: 'block', marginTop: '8px'}}>
+      <code style={{backgroundColor: 'var(--ifm-color-emphasis-100)', padding: '2px 4px', borderRadius: '3px', display: 'block', marginTop: '8px'}}>
         Photo:<br/><br/>
         {'{HeadshotImage}'}<br/><br/>
         Nicolas Fry, CEO
       </code>
     </div>
   </div>
-  <div style={{marginTop: '12px', fontSize: '14px', color: '#14532d', fontStyle: 'italic'}}>
+  <div style={{marginTop: '12px', fontSize: '14px', color: 'var(--ifm-color-success-contrast-foreground)', fontStyle: 'italic'}}>
     ✨ This format ensures variables work correctly and content flows properly
   </div>
 </div>

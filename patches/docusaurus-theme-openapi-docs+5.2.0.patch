@@ -73,7 +73,7 @@ index 9f0954f..838917f 100644
      ),
      react_1.default.createElement("div", { className: "openapi__divider" })
 diff --git a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
-index cdb5a9a..aa11554 100644
+index cdb5a9a..e221e4d 100644
 --- a/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
 +++ b/node_modules/docusaurus-theme-openapi-docs/lib/theme/ApiExplorer/Request/index.js
 @@ -135,11 +135,11 @@ function Request({ item }) {
@@ -88,7 +88,7 @@ index cdb5a9a..aa11554 100644
 -  const [expandServer, setExpandServer] = (0, react_1.useState)(true);
 +  const [expandBody, setExpandBody] = (0, react_1.useState)(false);
 +  const [expandParams, setExpandParams] = (0, react_1.useState)(false);
-+  const [expandServer, setExpandServer] = (0, react_1.useState)(false);
++  const [expandServer, setExpandServer] = (0, react_1.useState)(true); // TurboDocx: Base URL is always shown
    const serverLabelId = (0, react_1.useId)();
    const allParams = [
      ...pathParams,

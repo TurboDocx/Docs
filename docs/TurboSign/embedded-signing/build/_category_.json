@@ -1,5 +1,10 @@
 {
   "label": "Build guides",
   "position": 3,
-  "collapsed": false
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "slug": "/TurboSign/embedded-signing/build-guides",
+    "description": "Step-by-step guides for building embedded signing into your app."
+  }
 }

@@ -217,8 +217,8 @@ We're actively developing a comprehensive Microsoft Teams integration that will 
 ## Stay Updated
 
 <div style={{
-  background: 'var(--ifm-color-info-lightest)',
-  border: '1px solid var(--ifm-color-info-light)',
+  background: 'var(--ifm-color-info-contrast-background)',
+  border: '1px solid var(--ifm-color-info-dark)',
   borderRadius: '8px',
   padding: '2rem',
   textAlign: 'center',
@@ -245,8 +245,8 @@ Want to be among the first to know when Microsoft Teams integration becomes avai
 ## Technical Preview
 
 <div style={{
-  background: 'var(--ifm-color-secondary-lightest)',
-  border: '1px solid var(--ifm-color-secondary-light)',
+  background: 'var(--ifm-color-emphasis-100)',
+  border: '1px solid var(--ifm-color-emphasis-300)',
   borderRadius: '8px',
   padding: '1.5rem',
   margin: '2rem 0'

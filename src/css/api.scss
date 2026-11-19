@@ -179,24 +179,9 @@
   &--delete { background: var(--api-delete); }
 }
 
-// Param anchors: a "#" link appears in the gutter on hover/focus.
+// Param and body field ids: a link to one lands just under the navbar.
 .api-param-anchor {
-  position: relative;
   scroll-margin-top: calc(var(--ifm-navbar-height) + 1rem);
-
-  > .api-param-anchor__link {
-    position: absolute;
-    left: -1.1rem;
-    top: 0.45rem;
-    font-size: 0.85rem;
-    opacity: 0;
-    text-decoration: none;
-  }
-  &:hover > .api-param-anchor__link,
-  > .api-param-anchor__link:focus,
-  &:target > .api-param-anchor__link {
-    opacity: 1;
-  }
 }
 
 // Sidebar: small filled method pill (lowercase) before each endpoint name.
@@ -447,13 +432,7 @@
 // a labelled language picker, a dark request card, light cards with grey headers for Try it and Response.
 
 [class*="docs-doc-id-API/"] {
-  // Breadcrumb: small, quiet.
-  .breadcrumbs__link {
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--api-label);
-  }
+  // Breadcrumbs keep the site-wide style (no API-only overrides).
 
   // Header: Copy page sits up in the breadcrumb row; the method shows once, on the URL line.
   .api-title {
@@ -551,7 +530,8 @@
     box-shadow: none !important;
     padding: 0 !important;
   }
-  .openapi-tabs__code-container-inner::before {
+  // Only the variant tabs' wrapper carries the label: the tab row inside it has the same class.
+  div.openapi-tabs__code-container-inner::before {
     content: "Example request";
     display: block;
     font-size: 0.75rem;
@@ -623,8 +603,11 @@
     display: none;
   }
   // The chip row's wrapper carries the theme's 16px inset; align it with the heading.
+  // The theme caps it at 390px, which wrapped 6+ chips onto a second row beside empty space.
   .openapi-tabs__response-header-section > .openapi-tabs__response-container {
     padding-left: 0;
+    max-width: 100%;
+    width: 100%;
   }
   .openapi-tabs__response-list-container {
     display: flex;
@@ -694,5 +677,206 @@
     font-weight: 500;
     text-transform: none;
     padding: 0.35rem 0.9rem;
+  }
+}
+
+// ==== Alignment pass ====
+// Every tab row starts where its label or heading starts; chips sit on their text's centre line;
+// sections are spaced by one rhythm (no theme margins stacking up).
+
+// Code-language tabs (API right column and the code samples on guide pages): the theme indents
+// the tab row by 28px. Start it at the content edge, under its label.
+.openapi-tabs__code-container .openapi-tabs__code-list-container,
+.openapi-tabs__code-container-inner > ul {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+// Variant tabs (Axios / Native / ...) are a row of their own under the "Example request" label.
+.openapi-tabs__code-container-inner > ul {
+  justify-content: flex-start;
+  gap: 0.25rem;
+}
+
+// Content-type, file-type and auth-scheme tab rows: same edge as the heading above them.
+.openapi-tabs__schema-list-container,
+.openapi-tabs__mime-list-container {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+[class*="docs-doc-id-API/"] {
+  // Method pill and URL on one centre line: the URL is an h2 that kept the theme's top margin.
+  .openapi__method-endpoint {
+    align-items: center;
+    .openapi__method-endpoint-path {
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  // Description → first section: one gap (the paragraph's own margin) instead of stacked theme
+  // margins from the hidden content-type row, its tab body and the hidden Body/Example switch.
+  .openapi-left-panel__container > .tabs-container {
+    margin-top: 0;
+  }
+  // Tab bodies (Docusaurus wraps each in .margin-top--md): no stacked gap under a hidden tab row.
+  .openapi-left-panel__container .margin-top--md {
+    margin-top: 0 !important;
+  }
+  .openapi-left-panel__container .openapi-tabs__schema-tabs-container:not(.openapi-tabs__response-container *) {
+    display: none;
+  }
+
+  // Section headers (Body, Path Parameters, ...): the chevron on the title's centre line.
+  .openapi-markdown__details-summary--with-control,
+  .openapi-markdown__details > summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 1.25rem;
+    position: relative;
+    &::before {
+      top: 50% !important;
+      margin-top: -0.3rem;
+    }
+    h3,
+    strong {
+      margin: 0 !important;
+      line-height: 1.5;
+    }
+    // "Body required" stays on one line: the theme lets the title wrap, and a sub-pixel rounding of
+    // its width dropped "required" under "Body" on some pages.
+    > h3 {
+      flex-wrap: nowrap;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+  }
+
+  // Content-type tabs (multipart/form-data, application/json): one paragraph gap above, 16px to
+  // the Body header below, no stacked theme margins.
+  .openapi-left-panel__container {
+    .openapi-tabs__mime-container {
+      margin-top: 0;
+    }
+    ul.openapi-tabs__mime-list-container {
+      margin: 0 !important;
+    }
+  }
+
+  // Rows end at their last line: the last paragraph's margin (often the "Allowed:" line) would
+  // escape its wrapper and pad that row's bottom. The hidden example is the real last child.
+  .openapi-schema__list-item,
+  .openapi-params__list-item {
+    p:last-of-type {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  // Schema rows: no tree-line connector or left rule (the card's hairlines separate the rows).
+  .openapi-schema__list-item,
+  .openapi-params__list-item {
+    border-left: 0 !important;
+    &::before {
+      display: none !important;
+    }
+  }
+  .openapi-left-panel__container ul:has(> :is(.api-param-anchor, .openapi-schema__list-item)) {
+    border-left: 1px solid var(--api-hairline);
+  }
+  // Nested object/array blocks inside a row: no extra vertical rule beside their fields.
+  .openapi-schema__list-item details > div > div[style] {
+    border-left: 0 !important;
+  }
+
+  // Responses: description, then the example, one gap apart.
+  .openapi-tabs__response-container [role="tabpanel"] > .tabs-container {
+    margin-top: 0.75rem;
+  }
+  .openapi-code__code-samples-container {
+    margin-top: 1rem !important;
+  }
+}
+
+[class*="docs-doc-id-API/"] {
+  // Try it response body: the same dark code card as the example request, so its padding reads as
+  // the card's inset rather than an indent under the status chip.
+  .openapi-explorer__response-container .openapi-explorer__code-block {
+    background: #282c34 !important;
+    border-radius: 8px;
+  }
+}
+
+[class*="docs-doc-id-API/"] {
+  // Auth scheme tables on the overview use row headers (<th>), which browsers centre.
+  .theme-doc-markdown table th {
+    text-align: left;
+  }
+}
+
+[class*="docs-doc-id-API/"] {
+  // Responses keep their Example / Schema switch (Example is selected first). The request-body
+  // rules above hide the same switch for the body, where the example is already in the right column;
+  // response panels sit after the response header, so they are shown again here.
+  .openapi-tabs__response-header-section ~ * {
+    .openapi-tabs__schema-tabs-container {
+      display: flex !important;
+      margin: 0;
+    }
+    .openapi-tabs__schema-list-container {
+      display: flex !important;
+      gap: 0.25rem;
+      margin: 0;
+      padding: 0;
+    }
+    // Description → switch → example: one 12px step each, no stacked wrapper margins.
+    [role="tabpanel"] > div:has(> div > p) {
+      margin: 0.75rem 0 0;
+    }
+    .tabs-container {
+      margin-top: 0;
+    }
+    .openapi-code__code-samples-container {
+      margin-top: 0.75rem !important;
+    }
+  }
+}
+
+[class*="docs-doc-id-API/"] {
+  // Content-type rows wrap long media types instead of scrolling between arrows: the left arrow
+  // took the row's first 20px, so the first tab started in from the text above it.
+  .openapi-tabs__mime-container {
+    .openapi-tabs__arrow {
+      display: none;
+    }
+    ul.openapi-tabs__mime-list-container {
+      flex-wrap: wrap;
+      row-gap: 0.5rem;
+      overflow: visible;
+    }
+  }
+  // In a response: description → content type → Example / Schema → example, 12px steps.
+  .openapi-tabs__response-header-section ~ * .openapi-tabs__mime-container {
+    margin: 0.75rem 0;
+  }
+}
+
+// Dark mode fills (method pills, Send API Request) are bright, so their text is the page's dark
+// background colour: white on #58a6ff / #ffba00 was 1.7–2.5:1, dark text is 5:1 or more.
+[data-theme="dark"] {
+  .openapi__method-endpoint .badge,
+  .openapi-explorer__request-btn {
+    color: var(--ifm-background-color);
+  }
+}
+
+// Light mode: the PUT / PATCH pills are pale fills (cyan, yellow), so they take dark text, and the
+// cyan "nullable" label takes the darker info shade (white on yellow was 1.7:1, cyan on white 2:1).
+[data-theme="light"] {
+  .openapi__method-endpoint :is(.badge--info, .badge--warning) {
+    color: #1c1e21;
+  }
+  .openapi-schema__nullable {
+    color: var(--ifm-color-info-contrast-foreground);
   }
 }

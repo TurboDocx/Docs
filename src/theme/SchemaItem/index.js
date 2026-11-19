@@ -2,16 +2,14 @@ import React, {useContext} from 'react';
 import SchemaItem from '@theme-original/SchemaItem';
 import {RequestBodyScope} from '@site/src/components/apiAnchorScope';
 
-// Give every request body field its own linkable anchor, named by its path so nested fields never
-// share one: #body-recipients, #body-recipients.email, #body-fields.template.anchor.
+// Give every request body field an id named by its path, so nested fields never share one:
+// #body-recipients, #body-recipients.email, #body-fields.template.anchor. Links to a nested field open
+// its sections (src/clientModules/openApiAnchor.js). No visible "#" link in the row.
 // Response schemas get none (they repeat across status tabs).
 
-function Anchored({id, label, children}) {
+function Anchored({id, children}) {
   return (
     <div id={id} className="api-param-anchor">
-      <a className="api-param-anchor__link" href={`#${id}`} aria-label={`Link to ${label}`}>
-        #
-      </a>
       {children}
     </div>
   );
@@ -33,7 +31,7 @@ export default function SchemaItemWrapper(props) {
     if (!name) return <SchemaItem {...props} />;
     const path = `${prefix}${slug(name)}`;
     return (
-      <Anchored id={`body-${path}`} label={path}>
+      <Anchored id={`body-${path}`}>
         <RequestBodyScope.Provider value={`${path}.`}>
           <SchemaItem {...props} />
         </RequestBodyScope.Provider>
@@ -44,7 +42,7 @@ export default function SchemaItemWrapper(props) {
   if (!props.name) return <SchemaItem {...props} />;
   const path = `${prefix}${slug(props.name)}`;
   return (
-    <Anchored id={`body-${path}`} label={path}>
+    <Anchored id={`body-${path}`}>
       <SchemaItem {...props} />
     </Anchored>
   );
