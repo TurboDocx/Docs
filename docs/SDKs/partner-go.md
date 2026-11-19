@@ -1,6 +1,10 @@
 ---
 title: TurboPartner Go SDK
 unlisted: true
+# Unlisted pages are not in the sidebar, which is where Previous / Next come from (and they can't
+# link to each other): the SDKs overview, and the standard SDK for the same language.
+pagination_prev: SDKs/index
+pagination_next: SDKs/go
 sidebar_position: 12
 sidebar_label: "TurboPartner: Go"
 description: Official TurboDocx Partner SDK for Go. Manage organizations, users, API keys, and entitlements programmatically with Go 1.21+.

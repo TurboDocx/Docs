@@ -1,6 +1,10 @@
 ---
 title: TurboPartner PHP SDK
 unlisted: true
+# Unlisted pages are not in the sidebar, which is where Previous / Next come from (and they can't
+# link to each other): the SDKs overview, and the standard SDK for the same language.
+pagination_prev: SDKs/index
+pagination_next: SDKs/php
 sidebar_position: 10
 sidebar_label: "TurboPartner: PHP"
 description: Official TurboDocx Partner SDK for PHP. Manage organizations, users, API keys, and entitlements programmatically with PHP 8.1+.

@@ -1,6 +1,10 @@
 ---
 title: TurboPartner Java SDK
 unlisted: true
+# Unlisted pages are not in the sidebar, which is where Previous / Next come from (and they can't
+# link to each other): the SDKs overview, and the standard SDK for the same language.
+pagination_prev: SDKs/index
+pagination_next: SDKs/java
 sidebar_position: 13
 sidebar_label: "TurboPartner: Java"
 description: Official TurboDocx Partner SDK for Java. Manage organizations, users, API keys, and entitlements programmatically with the Builder pattern.

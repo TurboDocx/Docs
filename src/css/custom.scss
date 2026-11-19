@@ -298,21 +298,41 @@ main [class*="docItemContainer"] > article {
     }
   }
 }
-// The page title sits on the beam's dot: no top padding or margin above the first heading.
+// Beam spacing: the line starts at the dot, 1.75rem above the content's first line, and ends 1.75rem
+// below its last line (on a short page the beam's box grows, so the line reaches the bottom of the
+// content area). The first and last elements' own margins are dropped so these two gaps are exact.
 .docs-beam-content {
-  padding-top: 1.25rem;
+  padding-top: 1.75rem;
   // (guide pages wrap their content in .row > .col--12)
   > :first-child,
   > header:first-child h1,
   > :first-child .api-title h1,
   > .row:first-child > .col:first-child > :first-child,
   > .row:first-child > .col:first-child > header:first-child h1,
-  h1.openapi__heading { // API overview: a hidden element precedes its title
+  h1.openapi__heading { // API overview: its version badge precedes the title
     margin-top: 0 !important;
+  }
+  // the last element, its last child, and so on down (a list's last item, a table in a column)
+  > :last-child,
+  > :last-child > :last-child,
+  > :last-child > :last-child > :last-child,
+  > :last-child > :last-child > :last-child > :last-child,
+  > :last-child > :last-child > :last-child > :last-child > :last-child,
+  // API pages end with their left column (the right one is the sticky Try it panel)
+  .theme-api-markdown > .col--7,
+  .theme-api-markdown > .col--7 > :last-child,
+  .theme-api-markdown > .col--7 > :last-child > :last-child,
+  // tab sets: the visible panel is not the last child (hidden panels follow it)
+  [role="tabpanel"] > :last-child,
+  [role="tabpanel"] > :last-child > :last-child {
+    margin-bottom: 0 !important;
   }
 }
 @media (min-width: 997px) {
+  div.docs-tracing-beam {
+    padding-bottom: 1.5rem; // + the last line's own spacing = the 24px gap above the first line
+  }
   .docs-tracing-beam > div:first-child {
-    top: calc(1.25rem + 0.75rem); // the dot's centre on the title's first line
+    top: 0; // the dot marks the start of the beam
   }
 }

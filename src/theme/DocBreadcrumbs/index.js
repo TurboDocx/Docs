@@ -17,7 +17,7 @@ const SECTIONS = {
   TurboQuote: {label: 'TurboQuote', href: '/docs/category/turboquote'},
   Pipelines: {label: 'Pipelines', href: '/docs/category/pipelines'},
   'Advanced-Configuration': {label: 'Advanced Configuration', href: '/docs/category/advanced-configuration'},
-  API: {label: 'API', href: '/docs/API/turbodocx-api-documentation'},
+  API: {label: 'API', href: '/docs/API'},
 };
 
 function FallbackBreadcrumbs() {
