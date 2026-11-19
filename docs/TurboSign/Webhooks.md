@@ -1,9 +1,5 @@
 ---
 title: TurboSign Webhooks
-# Reached from API → Getting Started and from its own section (sidebar-guides.js), so no single
-# Previous / Next order fits: show none.
-pagination_prev: null
-pagination_next: null
 sidebar_position: 6
 description: "Configure TurboSign webhooks to receive notifications for signature events: sent, viewed, signed, completed, voided, and finalization failures."
 keywords:
