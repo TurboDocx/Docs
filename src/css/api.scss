@@ -446,8 +446,16 @@
   .api-title {
     position: relative;
     margin-bottom: 0.25rem;
+    // Copy page sits on the title's first line (a two-line title no longer centres it between lines).
+    --api-title-line: 2.5rem;
+    align-items: flex-start;
     h1 {
       font-size: 2rem;
+      line-height: var(--api-title-line);
+    }
+    .api-copy-page {
+      height: 1.875rem;
+      margin-top: calc((var(--api-title-line) - 1.875rem) / 2);
     }
   }
   .api-title .api-method-badge {

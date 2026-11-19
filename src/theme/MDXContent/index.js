@@ -85,14 +85,11 @@ export default function MDXContentWrapper(props) {
           </BackgroundGradientAnimation>
           <MDXContent style={{ backgroundImage: image }} {...props} />
         </>
-      ) : isApiPage ? (
-        // API reference pages: full width for the two-column layout, no tracing beam
-        <div style={{ paddingTop: "1em" }}>
-          <MDXContent style={{ backgroundImage: image }} {...props} />
-        </div>
       ) : (
-        <TracingBeam>
-          <div style={{ paddingTop: "2em" }}>
+        // Every doc page, API reference included, gets the tracing beam on desktop; docs-tracing-beam
+        // (src/css/custom.scss) makes it fill the column and drops it on phones.
+        <TracingBeam className="docs-tracing-beam">
+          <div style={{ paddingTop: isApiPage ? "1em" : "2em" }}>
             <MDXContent style={{ backgroundImage: image }} {...props} />
           </div>
         </TracingBeam>

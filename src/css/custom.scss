@@ -183,3 +183,58 @@ article, .markdown, [class*="theme-doc-markdown"] {
 
 
 
+
+
+// ==== Docs layout ====
+
+// Docs pages use the whole width beside the sidebar: Infima caps .container at 1320px, and with the
+// sidebar collapsed Docusaurus caps the doc wrapper too, which left wide empty bands on big screens.
+// (main's own max-width stays: it is 100% minus the sidebar.)
+main[class*="docMainContainer"] {
+  min-width: 0;
+  > .container,
+  [class*="docItemWrapperEnhanced"] {
+    max-width: none !important;
+  }
+}
+@media (min-width: 997px) {
+  // The text column takes the free width; the table of contents keeps a fixed one.
+  // (Docusaurus pins this column to max-width: 75% !important.)
+  main[class*="docMainContainer"] .row > [class*="docItemCol"] {
+    flex: 1 1 0;
+    max-width: none !important;
+    min-width: 0;
+  }
+  main[class*="docMainContainer"] .row > [class*="docItemCol"] ~ .col--3 {
+    flex: 0 0 18rem;
+    max-width: 18rem;
+  }
+}
+
+// Breadcrumbs: the first crumb's text starts at the content edge (the links carry side padding for
+// their hover background, so the trail moves left by that padding).
+.theme-doc-breadcrumbs .breadcrumbs {
+  margin-left: calc(-1 * var(--ifm-breadcrumb-padding-horizontal) * var(--ifm-breadcrumb-size-multiplier));
+}
+
+// Tracing beam (src/components/tracing-beam.tsx), around every doc page.
+// Desktop: it fills the column, and its dot (40px left of the content, 27px in) lands 3px left of
+// the breadcrumb text, under the first letter. Phones: no beam, the content starts at the edge.
+div.docs-tracing-beam {
+  max-width: none;
+  margin: 0 0 0 10px;
+}
+@media (min-width: 997px) {
+  div.docs-tracing-beam svg.tracing-beam {
+    display: block;
+  }
+}
+@media (max-width: 996px) {
+  div.docs-tracing-beam {
+    margin: 0;
+    padding-left: 0;
+    > div:first-child {
+      display: none;
+    }
+  }
+}
