@@ -880,3 +880,16 @@
     color: var(--ifm-color-info-contrast-foreground);
   }
 }
+
+[class*="docs-doc-id-API/"] {
+  // The method + URL row is a <pre>: on a phone a long URL scrolled sideways with a scrollbar under
+  // it. Let the URL wrap instead (any character; it has no spaces).
+  .openapi__method-endpoint {
+    white-space: normal;
+    overflow: visible;
+    .openapi__method-endpoint-path {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+}
