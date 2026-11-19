@@ -4,7 +4,7 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from "fram
 import { cn } from "../utils/cn";
 
 // Tracing beam beside a doc page's content (desktop only; src/css/custom.scss hides it on phones).
-// A straight line runs from under the dot to the end of the content, and a lit segment travels down it
+// A straight line runs from under the dot to the end of the content area, and a lit segment travels down it
 // with the scroll: lit at the top when the page opens, at the end of the content when you reach the end
 // of the content. A page with nothing to scroll shows the whole line lit.
 // The line's length and the scroll distance follow the content as it grows (images, tabs, accordions).
@@ -17,6 +17,7 @@ export const TracingBeam = ({
   children: React.ReactNode;
   className?: string;
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const [lineHeight, setLineHeight] = useState(0);
@@ -27,21 +28,25 @@ export const TracingBeam = ({
   const endScroll = useMotionValue(0);
 
   useEffect(() => {
+    const wrapper = wrapperRef.current;
     const content = contentRef.current;
     const svg = svgRef.current;
-    if (!content || !svg) {
+    if (!wrapper || !content || !svg) {
       return undefined;
     }
+    // The line ends at the bottom of the beam's box: the content's end on a long page; on a short page
+    // the box grows to the bottom of the content area (src/css/custom.scss), and so does the line.
     const measure = () => {
-      const contentBox = content.getBoundingClientRect();
+      const bottom = wrapper.getBoundingClientRect().bottom;
       const lineTop = svg.getBoundingClientRect().top;
-      const h = Math.max(0, Math.round(contentBox.bottom - lineTop));
+      const h = Math.max(0, Math.round(bottom - lineTop));
       setLineHeight(h);
       length.set(h);
-      endScroll.set(contentBox.bottom + window.scrollY - window.innerHeight);
+      endScroll.set(bottom + window.scrollY - window.innerHeight);
     };
     measure();
     const observer = new ResizeObserver(measure);
+    observer.observe(wrapper);
     observer.observe(content);
     window.addEventListener("resize", measure);
     return () => {
@@ -68,7 +73,7 @@ export const TracingBeam = ({
   const y2 = useSpring(tail, { stiffness: 500, damping: 90 });
 
   return (
-    <motion.div className={cn("relative w-full max-w-4xl mx-auto h-full pl-10", className)}>
+    <motion.div ref={wrapperRef} className={cn("relative w-full max-w-4xl mx-auto h-full pl-10", className)}>
       <div className="absolute -left-10 mr-4 top-3">
         <motion.div
           transition={{ duration: 0.2, delay: 0.5 }}

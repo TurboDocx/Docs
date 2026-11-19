@@ -260,13 +260,6 @@ a:hover {
   }
 }
 
-// Doc cards (category pages and card lists): the title starts at the card's padding; the site-wide
-// heading margin would push it down and leave the card's content off-centre.
-.theme-doc-card-container h2 {
-  margin-top: 0 !important;
-  margin-bottom: 0.5rem !important;
-}
-
 // Spacer <br/> lines between blocks give at most one line of extra space: stacked spacers
 // (<br/><br/><br/>) opened 60px+ holes before the next heading in the older guides.
 :is(.theme-doc-markdown, .markdown) > br + br {

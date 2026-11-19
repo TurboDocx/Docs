@@ -35,7 +35,7 @@ export default function DocCategoryGeneratedIndexPage({categoryGeneratedIndex}) 
         <DocBreadcrumbs />
         <DocVersionBadge />
         <TracingBeam className="docs-tracing-beam">
-          <div style={{paddingTop: '2em'}}>
+          <div className="docs-beam-content">
             <header>
               <Heading as="h1" className={styles.title}>
                 {categoryGeneratedIndex.title}

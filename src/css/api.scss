@@ -957,3 +957,18 @@
     }
   }
 }
+
+// API overview: "Version: 1.0.0" is a small chip at the end of the title line (it rendered as a
+// full-width white bar above the title).
+.docs-beam-content .theme-doc-version-badge {
+  display: inline-flex;
+  float: right;
+  margin: 0.6rem 0 0 1rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.75rem;
+  font-weight: 500;
+}

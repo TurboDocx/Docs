@@ -23,6 +23,7 @@
 @import "./cards.scss";
 @import "./blog.scss";
 @import "./api.scss";
+@import "./doc-cards.scss";
 
 // Removed global list-style rule to prevent affecting navigation
 
@@ -187,32 +188,20 @@ article, .markdown, [class*="theme-doc-markdown"] {
 
 // ==== Docs layout ====
 
-// Docs pages use the whole width beside the sidebar: Infima caps .container at 1320px, and with the
-// sidebar collapsed Docusaurus caps the doc wrapper too, which left wide empty bands on big screens.
-// (main's own max-width stays: it is 100% minus the sidebar.)
+// Page width: Infima's 1320px container on laptops, growing with the screen on large monitors
+// (+45% of every pixel past 1440px, up to 1680px), so big screens get more room and even side
+// margins, without very long text lines or oversized images.
+@media (min-width: 1440px) {
+  :root {
+    --ifm-container-width-xl: clamp(1320px, calc(1320px + (100vw - 1440px) * 0.45), 1680px);
+  }
+}
 main[class*="docMainContainer"] {
   min-width: 0;
-  > .container,
-  [class*="docItemWrapperEnhanced"] {
-    max-width: none !important;
-  }
 }
-// Category pages: the theme caps them at 75% (!important).
+// Category pages have no table of contents: use the container width (the theme caps them at 75%).
 main [class*="generatedIndexPage"] {
   max-width: none !important;
-}
-@media (min-width: 997px) {
-  // The text column takes the free width; the table of contents keeps a fixed one.
-  // (Docusaurus pins this column to max-width: 75% !important.)
-  main[class*="docMainContainer"] .row > [class*="docItemCol"] {
-    flex: 1 1 0;
-    max-width: none !important;
-    min-width: 0;
-  }
-  main[class*="docMainContainer"] .row > [class*="docItemCol"] ~ .col--3 {
-    flex: 0 0 18rem;
-    max-width: 18rem;
-  }
 }
 
 // Breadcrumbs: the first crumb's text starts at the content edge (the links carry side padding for
@@ -234,6 +223,7 @@ main [class*="generatedIndexPage"] {
 }
 div.docs-tracing-beam {
   max-width: none;
+  height: auto; // not the component's h-full: it grows with flex (below) and must leave room for its siblings
   margin: 0 0 0 10px;
 }
 @media (min-width: 997px) {
@@ -266,8 +256,9 @@ main[class*="docMainContainer"] > .container {
     flex: 1 0 auto;
   }
 }
-main[class*="docMainContainer"] .row > [class*="docItemCol"],
-main[class*="docMainContainer"] .row > .col:only-child {
+// (only the page layout's own column: guide content also uses .row > .col wrappers)
+main[class*="docMainContainer"] > .container > .row > [class*="docItemCol"],
+main[class*="docMainContainer"] > .container > .row > .col:only-child {
   display: flex;
   flex-direction: column;
   > [class*="docItemContainer"] {
@@ -290,4 +281,38 @@ main [class*="generatedIndexPage"] {
 main[class*="docMainContainer"] .row > .col--7:has(> nav.pagination-nav) {
   flex: 1 1 100%;
   max-width: 100%;
+}
+
+// The beam runs the height of the content area: the article grows (above), and inside it the
+// markdown block and the beam grow with it, so on a short page the line reaches down to just above
+// "Last updated" / Previous / Next.
+main [class*="docItemContainer"] > article {
+  display: flex;
+  flex-direction: column;
+  > .theme-doc-markdown {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    > div.docs-tracing-beam {
+      flex: 1 0 auto;
+    }
+  }
+}
+// The page title sits on the beam's dot: no top padding or margin above the first heading.
+.docs-beam-content {
+  padding-top: 1.25rem;
+  // (guide pages wrap their content in .row > .col--12)
+  > :first-child,
+  > header:first-child h1,
+  > :first-child .api-title h1,
+  > .row:first-child > .col:first-child > :first-child,
+  > .row:first-child > .col:first-child > header:first-child h1,
+  h1.openapi__heading { // API overview: a hidden element precedes its title
+    margin-top: 0 !important;
+  }
+}
+@media (min-width: 997px) {
+  .docs-tracing-beam > div:first-child {
+    top: calc(1.25rem + 0.75rem); // the dot's centre on the title's first line
+  }
 }

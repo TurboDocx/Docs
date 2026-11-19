@@ -1,0 +1,110 @@
+// Category pages (generated index): page header and a responsive grid of doc cards
+// (src/theme/DocCard/Layout). Colours come from the theme tokens, so light and dark mode follow.
+
+main [class*="generatedIndexPage"] {
+  header {
+    margin-bottom: 1.5rem;
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 0.5rem;
+    }
+    p {
+      margin: 0;
+      max-width: 48rem;
+      color: var(--ifm-color-emphasis-700);
+    }
+  }
+  article.margin-top--lg {
+    margin-top: 0 !important;
+  }
+  // The theme lays cards out as a 2-column Infima row; use a grid that fits the width instead.
+  section.row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: 1rem;
+    margin: 0;
+    > article.col {
+      max-width: none;
+      width: auto;
+      padding: 0;
+      margin: 0 !important;
+    }
+  }
+}
+
+.doc-card.card {
+  position: relative;
+  display: flex;
+  flex-direction: row; // Infima's .card stacks its children
+  align-items: flex-start;
+  gap: 0.85rem;
+  height: 100%;
+  padding: 1rem 2.5rem 1rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  background: var(--ifm-background-surface-color);
+  box-shadow: none;
+  color: var(--ifm-font-color-base);
+  text-decoration: none !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    border-color: var(--ifm-color-primary);
+    box-shadow: 0 10px 24px -16px rgba(0, 0, 0, 0.45);
+    transform: translateY(-1px);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--ifm-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.doc-card__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  color: var(--ifm-color-primary);
+  background: color-mix(in srgb, var(--ifm-color-primary) 12%, transparent);
+}
+
+.doc-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.doc-card .doc-card__title {
+  margin: 0 !important;
+  font-size: 1rem !important;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ifm-heading-color);
+}
+
+.doc-card .doc-card__description {
+  margin: 0 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  color: var(--ifm-color-emphasis-700) !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.doc-card__arrow {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--ifm-color-emphasis-500);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.doc-card:hover .doc-card__arrow {
+  color: var(--ifm-color-primary);
+  transform: translateX(3px);
+}
