@@ -223,6 +223,7 @@ main [class*="generatedIndexPage"] {
 }
 div.docs-tracing-beam {
   max-width: none;
+  width: auto; // not the component's w-full: 100% plus the 10px offset ran 10px past the column's right edge
   height: auto; // not the component's h-full: it grows with flex (below) and must leave room for its siblings
   margin: 0 0 0 10px;
 }
