@@ -1,9 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const { themes } = require('prism-react-renderer');
-const lightCodeTheme = themes.github;
-const darkCodeTheme = themes.dracula;
+// One Light / One Dark for every code block, readable at 4.5:1 (see code-themes.js).
+const { lightCodeTheme, darkCodeTheme } = require('./code-themes');
 
 // [item, [[], [], []]]
 const apiConfig = require('./dev-docs-openapi.js');

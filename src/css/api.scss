@@ -799,10 +799,9 @@
 }
 
 [class*="docs-doc-id-API/"] {
-  // Try it response body: the same dark code card as the example request, so its padding reads as
-  // the card's inset rather than an indent under the status chip.
+  // Try it response body: the same code card as the example request (the site code theme, light or
+  // dark), so its padding reads as the card's inset rather than an indent under the status chip.
   .openapi-explorer__response-container .openapi-explorer__code-block {
-    background: #282c34 !important;
     border-radius: 8px;
   }
 }
