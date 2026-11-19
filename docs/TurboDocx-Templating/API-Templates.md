@@ -1,5 +1,9 @@
 ---
 title: Template Generation API Integration
+# Reached from API → Getting Started and from its own section (sidebar-guides.js), so no single
+# Previous / Next order fits: show none.
+pagination_prev: null
+pagination_next: null
 sidebar_position: 1
 description: Integrate Template Generation API to upload templates, browse existing templates, and generate deliverables with detailed examples.
 keywords:

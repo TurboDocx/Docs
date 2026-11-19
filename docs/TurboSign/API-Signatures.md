@@ -1,5 +1,9 @@
 ---
 title: TurboSign API Integration
+# Reached from API → Getting Started and from its own section (sidebar-guides.js), so no single
+# Previous / Next order fits: show none.
+pagination_prev: null
+pagination_next: null
 sidebar_position: 4
 description: Integrate TurboSign API with single-step document preparation. Send documents for electronic signatures in one API call with simplified workflow.
 keywords:

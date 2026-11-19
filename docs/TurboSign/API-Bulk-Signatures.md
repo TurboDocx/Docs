@@ -1,5 +1,9 @@
 ---
 title: TurboSign Bulk API Integration
+# Reached from API → Getting Started and from its own section (sidebar-guides.js), so no single
+# Previous / Next order fits: show none.
+pagination_prev: null
+pagination_next: null
 sidebar_position: 5
 description: Send documents for signature at scale with TurboSign Bulk API. Process hundreds or thousands of requests with tracking and management.
 keywords:
