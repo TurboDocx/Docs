@@ -8,7 +8,7 @@ Use this endpoint once, during integration setup, to start receiving signature l
 
 ## Request notes
 
-`urls` accepts up to 10 HTTPS endpoints (plain HTTP is rejected); `events` must be one or more of the values listed in [Get Webhook](/docs/API/get-webhook)'s `availableEvents`. Requires an API key with the administrator role.
+`urls` accepts up to 10 HTTPS endpoints (plain HTTP is rejected). Each must resolve to a public internet address: a URL whose host is private or internal (such as `localhost`, `10.x.x.x`, `192.168.x.x` or a cloud metadata address), or doesn't resolve at all, is refused with `400` and `"error": "WebhookUrlNotAllowed"`. `events` must be one or more of the values listed in [Get Webhook](/docs/API/get-webhook)'s `availableEvents`. Requires an API key with the administrator role.
 
 ## Related endpoints
 
