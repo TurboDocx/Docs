@@ -42,6 +42,9 @@ template has a red pen icon.
 TurboDocx prepares the PDF the same way as a PDF you upload for signature:
 
 - **Password-protected PDFs can't be uploaded.** Remove the password and upload it again.
+- **PDFs with security restrictions can't be uploaded.** A PDF that opens without a password but
+  restricts editing can't take signature fields. Open it, choose **Print › Save as PDF**, and
+  upload the new copy.
 - **A damaged PDF is repaired** when possible. If it can't be read, you'll be asked to export it
   again.
 - **Fillable form fields are flattened.** Anything typed into the PDF's own form fields becomes

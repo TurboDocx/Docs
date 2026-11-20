@@ -793,7 +793,7 @@ Content-Length: 287456
 
 - Verify file is .docx, .pptx or .pdf format
 - Check file size is under the maximum limit (typically 25MB)
-- Ensure file is not corrupted or password-protected
+- Ensure file is not corrupted, password-protected or restricted
 - Verify network connection and try again
 
 #### Variable Extraction Issues
@@ -853,6 +853,7 @@ You can also upload a **.pdf** to `POST /template/upload-and-create`. A PDF temp
 - **Upload**: same request as Path A. The response has an empty `variables` array — there is nothing to extract from a PDF.
 - **Preparation on upload**: the PDF is processed the same way as a PDF uploaded for signature before it is stored:
   - A password-protected PDF is refused with `400` and `"type": "PasswordProtectedPDF"`.
+  - A PDF with security restrictions (it opens without a password, but its owner restricted editing) is refused with `400` and `"type": "RestrictedPDF"`: signature fields can't be added to it. Saving it again with **Print › Save as PDF** removes the restrictions.
   - A damaged PDF is repaired where possible. One that can't be read is refused with `400` and `"type": "PDFFormatError"`.
   - Fillable form fields are flattened, so any values in them become part of the page.
 - **Download**: **Download File** on the template's page in the app returns this stored PDF.
