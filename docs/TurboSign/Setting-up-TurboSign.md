@@ -566,7 +566,10 @@ TurboSign checks a PDF when you upload it, before you place any fields. If it ca
 - **It has formatting issues.** The PDF couldn't be read or repaired. Export it again from the program that made it, or contact support.
 
 ### "We Couldn't Send This Document"
-If sending fails, your fields stay on the page, so don't refresh. Try again. If it keeps happening, the message shows a **Reference** code: copy it and give it to support, so they can find exactly what went wrong.
+Nothing was sent, and your fields are still on the page, so don't refresh. Try again. The message also shows a **Reference** code: if sending keeps failing, copy it and give it to support, so they can find exactly what went wrong.
+
+### "We Couldn't Confirm This Document Was Sent"
+TurboSign's answer didn't reach your browser (for example, the connection dropped), so the document may already be on its way to your recipients. Before you try again, open your documents list in another tab: if the document is there, it was sent. Your fields are still on the page, so don't refresh.
 
 <br/>
 
