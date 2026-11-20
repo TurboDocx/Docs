@@ -1686,7 +1686,10 @@ paths:
         '400':
           description: >-
             `name`, `urls`, or `events` is missing or invalid, or any URL is not HTTPS. Response
-            body: `{ "message", "type": "ValidationError", "data": { "errors": [...] } }`
+            body: `{ "message", "type": "ValidationError", "data": { "errors": [...] } }`. A URL
+            whose host resolves to a private or internal network address, or doesn't resolve, is
+            refused with `{ "message", "error": "WebhookUrlNotAllowed", "data": { "reason" } }`,
+            where `reason` is `private`, `unresolvable` or `invalid`.
           content:
             application/json: {}
         '401':
@@ -2076,7 +2079,10 @@ paths:
         '400':
           description: >-
             A field fails validation, or a URL in `urls` is not HTTPS. Response body: `{ "message",
-            "type": "ValidationError", "data": { "errors": [...] } }`
+            "type": "ValidationError", "data": { "errors": [...] } }`. A URL in `urls` whose host
+            resolves to a private or internal network address, or doesn't resolve, is refused with
+            `{ "message", "error": "WebhookUrlNotAllowed", "data": { "reason" } }`, where `reason`
+            is `private`, `unresolvable` or `invalid`.
           content:
             application/json: {}
         '401':
