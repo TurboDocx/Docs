@@ -559,6 +559,15 @@ After clicking "Send Document":
 ### "I Made a Mistake in the Document"
 **Solution:** It's best practice to void the document and send a new version. 
 
+### "We Can't Use This PDF"
+TurboSign checks a PDF when you upload it, before you place any fields. If it can't be used, the reason stays under the upload area until you choose another file:
+- **It has security restrictions.** The PDF opens without a password, but its owner restricted editing, so signature fields can't be added. Open it, choose **Print › Save as PDF**, and upload the new copy.
+- **It's password-protected.** Remove the password and upload it again.
+- **It has formatting issues.** The PDF couldn't be read or repaired. Export it again from the program that made it, or contact support.
+
+### "We Couldn't Send This Document"
+If sending fails, your fields stay on the page, so don't refresh. Try again. If it keeps happening, the message shows a **Reference** code: copy it and give it to support, so they can find exactly what went wrong.
+
 <br/>
 
 ## What's Next?

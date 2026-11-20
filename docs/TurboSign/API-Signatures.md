@@ -243,7 +243,7 @@ User-Agent: TurboDocx API Client
 
 \*\* **Fields**: Required, unless at least one recipient names a template signer `role`. Omitting `fields` without a role returns `400 FieldsRequired`. See [Sending with signer roles](#sending-with-signer-roles).
 
-A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are used as sent. A signature setup saved on the template in the TurboDocx app is applied only when a recipient names one of its roles (see [Sending with signer roles](#sending-with-signer-roles)).
+A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs and PDFs with security restrictions, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are used as sent. A signature setup saved on the template in the TurboDocx app is applied only when a recipient names one of its roles (see [Sending with signer roles](#sending-with-signer-roles)).
 
 :::tip Reminders & expiration are optional
 The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
@@ -2100,7 +2100,7 @@ Position a signature field at bottom-right of a US Letter page:
 
 **Document Validation**:
 
-- Ensure PDFs are not password-protected or corrupted
+- Ensure PDFs are not password-protected, restricted (`RestrictedPDF`) or corrupted
 - Verify all pages are readable
 - Test with actual documents before production
 - Keep backup copies of source documents
@@ -2309,7 +2309,7 @@ x-rapiddocx-org-id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 **Solutions**:
 
-- ✅ Verify PDF file is not corrupted or password-protected
+- ✅ Verify PDF file is not corrupted, password-protected or restricted (re-save a restricted PDF with Print › Save as PDF)
 - ✅ Check file size is under maximum limit (typically 10MB)
 - ✅ Ensure file is actually a PDF (check MIME type)
 - ✅ Verify network connection and try again
