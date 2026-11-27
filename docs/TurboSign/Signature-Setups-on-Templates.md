@@ -262,9 +262,10 @@ template instead.
   - **Word or PowerPoint template:** generate a document from the template, then send its
     `deliverableId`. The roles and the fields made from template variables are sent with it.
     Fields placed at a fixed position are not, because the generated pages can differ from the
-    template's. Generate the document with `"keepAnchoredTags": true`, so its tags stay in the
-    document for the fields to find. Without it, a signer can end up with no fields and the send
-    fails with `SignerHasNoFields`.
+    template's. The fields find their tags in the document, so the tags must still be there:
+    documents generated in the TurboDocx app keep them, and a document you generate with the API
+    needs `"keepAnchoredTags": true`. Without the tags, a signer can end up with no fields and the
+    send fails with `SignerHasNoFields`.
 
   See [Sending with signer roles](./API-Signatures.md#sending-with-signer-roles).
 
