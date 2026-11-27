@@ -133,7 +133,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'Integrations/Claude-MCP',
-          label: 'Claude (MCP)',
+          label: 'MCP server (Claude, n8n)',
         },
         {
           type: 'category',
