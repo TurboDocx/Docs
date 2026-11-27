@@ -74,13 +74,13 @@ Have your document ready and know exactly where signatures are needed before you
 
 <br/>
 
-## Step 1: Click "Get It Signed"
+## Step 1: Open TurboSign
 
-Let's start by getting to TurboSign from your main dashboard.
+Open **TurboSign** in whichever way fits your account:
 
-From the **TurboDocx homepage**, look for the **"Get It Signed"** button and click it. This will take you directly to **TurboSign** where all the magic happens.
-
-![Get It Signed button on TurboDocx homepage](/img/turbosign/GetSigned.png)
+- **From the side navigation:** click the **TurboSign** logo in the left side navigation. This works for every account.
+- **From the home page with the assistant:** under the chat box, click **Get it signed**. TurboSign opens in a new tab.
+- **From the home page without the assistant:** click the **Get it Signed** tile.
 
 <br/>
 

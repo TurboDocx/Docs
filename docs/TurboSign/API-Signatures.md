@@ -221,7 +221,7 @@ User-Agent: TurboDocx API Client
 | ------------------- | -------------- | ------------- | ------------------------------------------ |
 | file                | File           | Conditional\* | PDF, DOCX, or PPTX file to upload          |
 | deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
-| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). Required when any recipient has a `role` |
+| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). When any recipient has a `role`, send this or `deliverableId` |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
@@ -365,7 +365,7 @@ formData.append("fields", fields);
 
 A PDF template in TurboDocx can carry a saved signature setup: signer **roles** (for example "Client" and "Countersigner") with fields placed on the PDF for each role. Each role has a stable **key** (for example `client`), shown under **Use via API** on the template page (turn on **Dev Mode** to see it) and returned by [Get Template Signature Setup](#endpoint-8-get-template-signature-setup). A role is either a **slot** with no saved signer, filled in each time you send, or it has a **saved signer** (a name and email used when you leave the role out). Roles saved before keys existed answer to `signer_1`, `signer_2` and so on, by signing order.
 
-Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word or PowerPoint template, generate a deliverable and send it with `deliverableId`.
+Signer roles work with a PDF signature template sent by `templateId`, and with a deliverable sent by `deliverableId`. A deliverable generated from a Word or PowerPoint template brings the roles and the fields anchored to its template variables, found by their tags in the document. Fields placed at a fixed position are left out, because the generated pages don't match them. Generate that deliverable with `"keepAnchoredTags": true` so the tags stay in the document; without it, a signer can end up with no fields and the send fails with `SignerHasNoFields`. Sending the `templateId` of a Word or PowerPoint template with roles is refused with `TemplateRolesNeedPdfTemplate`.
 
 #### How role keys are made {#how-role-keys-are-made}
 
@@ -402,7 +402,7 @@ curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-signing \
 
 How a role send behaves:
 
-- **Role keys** are matched case-insensitively. `role` requires `templateId`.
+- **Role keys** are matched case-insensitively. `role` requires `templateId` or `deliverableId`.
 - **Fields come from the template.** The fields saved for each role are placed for the signer who fills it, so `fields` can be left out. Any `fields` you do pass are added to the template's (for example an extra witness signature).
 - **Roles you leave out** use the template's saved signer. A role with no saved signer must be filled, or the request fails with `SignerRoleUnfilled`.
 - **Signing order** follows the template's role order, then any recipients without a role in their own `signingOrder`. The final order is renumbered so it runs 1, 2, 3 and so on. A recipient with a `role` needs no `signingOrder`.
@@ -435,6 +435,7 @@ These return `400` with a body of the form `{ "message": "...", "type": "..." }`
 | -------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `UnknownSignerRole`        | `Unknown role "clinet". This template's roles are: client, countersigner`           | A `role` does not match any of the template's role keys      |
 | `DuplicateSignerRole`      | `Role "client" was given more than one recipient`                                   | Two recipients name the same role                            |
+| `DELIVERABLE_NOT_FOUND`    | `Deliverable not found or access denied: <deliverableId>`                           | The `deliverableId` doesn't exist in your organization       |
 | `SignerRoleUnfilled`       | `Role "client" needs a signer. Pass recipients: [{ role: "<role>", name, email }]`   | A role has no saved signer and no recipient fills it         |
 | `TemplateHasNoSignerRoles` |                                                                                     | The template has no saved signer roles                       |
 | `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has neither a `templateId` nor a `deliverableId` |
@@ -1510,7 +1511,7 @@ Each recipient object in the `recipients` array should contain the following pro
 | name         | String         | Yes      | Full name of the recipient/signer                          |
 | email        | String (email) | Yes      | Email address of the recipient                             |
 | signingOrder | Number         | Conditional | Order in which recipient should sign (starts at 1). Not needed on a recipient with a `role` |
-| role         | String         | No       | Template signer role this recipient fills (for example `client`). Requires `templateId`. See [Sending with signer roles](#sending-with-signer-roles) |
+| role         | String         | No       | Template signer role this recipient fills (for example `client`). Requires `templateId` or `deliverableId`. See [Sending with signer roles](#sending-with-signer-roles) |
 | metadata     | Object         | No       | Optional metadata for UI customization (color, lightColor) |
 
 ### Metadata Object (Optional)

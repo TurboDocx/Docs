@@ -29,12 +29,12 @@ For example, on a template's page the code already contains that template's ID a
 
 ## Step 1: Turn on Developer Mode
 
-1. Go to the **Home** page.
-2. In the top-right corner, click the **Dev Mode** switch to turn it on.
+1. At the bottom of the left side navigation, click your name and picture. Your profile menu opens.
+2. Click **Developer mode** to turn its switch on.
 
-![Home page with the Dev Mode switch highlighted in the top-right corner](/img/developer_mode/dev_mode_switch.png)
+The profile menu is on every page, and every role can use it.
 
-Developer Mode stays on until you turn it off. It is saved in this browser only, so you need to turn it on again on another computer or browser.
+Developer Mode stays on until you turn it off. It is saved for you in this browser only, so you need to turn it on again on another computer or browser. Other people who use the same browser keep their own setting.
 
 ## Step 2: Open the code panel
 
@@ -111,11 +111,11 @@ Only administrators can create API keys. If the button is grayed out, ask an adm
 When you no longer want to see the **Code** buttons:
 
 1. Open any code panel.
-2. At the top of the panel, click **Turn Off Dev Mode**.
+2. At the top of the panel, click **Turn off Dev Mode**.
 
-![Code panel with the Turn Off Dev Mode button highlighted](/img/developer_mode/turn_off_dev_mode.png)
+![Code panel with the Turn off Dev Mode button highlighted](/img/developer_mode/turn_off_dev_mode.png)
 
-The panel closes and the **Code** buttons disappear. You can turn Developer Mode back on at any time from the **Dev Mode** switch on the **Home** page.
+The panel closes and the **Code** buttons disappear. To turn Developer Mode back on, click your name and picture at the bottom of the left side navigation, then click **Developer mode**.
 
 :::note The panel remembers your choices
 The next time you open a code panel, it opens in the language you used last, and each page reopens on the operation and switch settings you left it on. These choices are saved in this browser only.
