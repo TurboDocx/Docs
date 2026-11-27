@@ -8,7 +8,7 @@ Use this endpoint to rotate delivery URLs, add or remove subscribed event types,
 
 ## Request notes
 
-`urls` and `events` each replace the webhook's full list, they do not merge with the existing values. If you include `name`, it must still be unique among your organization's active webhooks.
+`urls` and `events` each replace the webhook's full list, they do not merge with the existing values. New `urls` are checked as on create: each must be HTTPS and resolve to a public internet address, or the update is refused with `400` and `"error": "WebhookUrlNotAllowed"`. If you include `name`, it must still be unique among your organization's active webhooks.
 
 ## Related endpoints
 
