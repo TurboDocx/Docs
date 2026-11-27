@@ -131,6 +131,11 @@ const sidebars = {
           className: 'integration-connectwise',
         },
         {
+          type: 'doc',
+          id: 'Integrations/Claude-MCP',
+          label: 'Claude (MCP)',
+        },
+        {
           type: 'category',
           label: 'Wrike',
           className: 'integration-wrike',
