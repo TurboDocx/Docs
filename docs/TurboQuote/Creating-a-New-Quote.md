@@ -38,9 +38,9 @@ Begin the process of creating and sending a new professional quote using TurboQu
 
 **Instruction:**
 
-- Click on the **Create a Quote** card in the main options section to start building a new quote.
-
-![Start creating a new quote from the home screen](/img/turboquote/step-01.png)
+- In the left side navigation, under **TurboQuote**, click **Quotes**. This works for every account.
+- Or, on the home screen with the assistant, click **Create a quote** under the chat box. It opens in a new tab.
+- Or, on the home screen without the assistant, click the **Create a Quote** card.
 
 <br/>
 

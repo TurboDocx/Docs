@@ -432,10 +432,9 @@ Time to put your new integration to work! This is where the real magic happens â
 ### Creating Your First Document
 
 1. **Go to document generation**
-   - On the TurboDocx **Home** page, click **Create a Document**
-   - To make slides instead, click **Create a Presentation**
-
-![Document Creation Page](/img/salesforce-integration/Create_document_button.png)
+   - If your **Home** page shows the assistant, click **Create a document** under the chat box. It opens in a new tab.
+   - If your **Home** page shows tiles, click the **Create a Document/Presentation** tile.
+   - Documents and presentations both start here: pick a Word template for a document, or a PowerPoint template for slides.
 
 <br/>
 
