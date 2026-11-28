@@ -27,16 +27,15 @@ function Browse-Templates {
         $params['query'] = $Query
     }
 
-    if ($SelectedTags) {
-        foreach ($tag in $SelectedTags) {
-            $params["selectedTags[]"] = $tag
-        }
-    }
-
     # Build query string
     $queryString = ($params.GetEnumerator() | ForEach-Object {
         "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))"
     }) -join '&'
+
+    # Repeat selectedTags once per tag ID (the API reads ?selectedTags=<id>&selectedTags=<id>)
+    foreach ($tagId in $SelectedTags) {
+        $queryString += "&selectedTags=$([System.Web.HttpUtility]::UrlEncode($tagId))"
+    }
 
     $uri = "$BASE_URL/template-item?$queryString"
 

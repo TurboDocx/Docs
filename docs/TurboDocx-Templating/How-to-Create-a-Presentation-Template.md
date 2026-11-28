@@ -56,7 +56,7 @@ Let's start with creating our first presentation template.
 
 3. For each variable area, you'll need to create invisible shapes to hold your variables.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '2px dashed var(--ifm-color-emphasis-300)', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: 'var(--ifm-color-emphasis-700)'}}>
   Screenshots Coming Soon
 </div>
 
@@ -89,7 +89,7 @@ For slide deck templates, follow these specific steps to ensure variables work c
    - Change the font color to black (or your preferred color)
    - This makes it easy and clear to see in your final deck
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '2px dashed var(--ifm-color-emphasis-300)', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: 'var(--ifm-color-emphasis-700)'}}>
   Screenshots Coming Soon
 </div>
 
@@ -115,7 +115,7 @@ Now that we've created our first presentation template, let's upload it to Turbo
 
 2. As you can see, there are multiple ways to upload a Document. For this example, we will click on the "Upload Template" area then choose the presentation you just saved in the last step or drag and drop your presentation into the area.
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '2px dashed var(--ifm-color-emphasis-300)', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: 'var(--ifm-color-emphasis-700)'}}>
   Screenshots Coming Soon
 </div>
 
@@ -128,7 +128,7 @@ On the next screen, you will see a preview of your template.
 
 2. Once you've checked to make sure all your variable are set, go ahead and click the "Create Template" button on the bottom right corner (you may need to scroll)
 
-<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: '#f8f9fa', border: '2px dashed #dee2e6', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: '#6c757d'}}>
+<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '600px', height: '400px', backgroundColor: 'var(--ifm-color-emphasis-100)', border: '2px dashed var(--ifm-color-emphasis-300)', borderRadius: '8px', margin: '20px auto', fontSize: '24px', fontWeight: 'bold', color: 'var(--ifm-color-emphasis-700)'}}>
   Screenshots Coming Soon
 </div>
 

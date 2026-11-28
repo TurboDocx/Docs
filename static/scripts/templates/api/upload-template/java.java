@@ -83,7 +83,7 @@ public class TemplateUpload {
         // Tags field
         String tagsField = "\r\n--" + boundary + "\r\n" +
                 "Content-Disposition: form-data; name=\"tags\"\r\n\r\n" +
-                "[\"hr\", \"contract\", \"template\"]";
+                "[]";
 
         String endBoundary = "\r\n--" + boundary + "--\r\n";
 
@@ -109,7 +109,7 @@ public class TemplateUpload {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() != 200) {
+        if (response.statusCode() != 201) {
             throw new RuntimeException("HTTP error " + response.statusCode() + ": " + response.body());
         }
 

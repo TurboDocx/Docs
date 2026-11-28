@@ -1443,7 +1443,7 @@ $variables = [
 ```
 
 :::info Variable Stack
-For repeating content (e.g., table rows), use `variableStack` instead of `text` to provide multiple values for the same placeholder. See the [PHP Types section](#php-types) for details.
+For repeating content (e.g., table rows), use `variableStack` instead of `text` to provide multiple values for the same placeholder. See the [PHP Types section](#typescript-types) for details.
 :::
 
 </TabItem>
@@ -1716,7 +1716,9 @@ console.log(JSON.stringify(result, null, 2));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await Deliverable.generateDeliverable({
+import { Deliverable, type CreateDeliverableRequest, type CreateDeliverableResponse } from "@turbodocx/sdk";
+
+const request: CreateDeliverableRequest = {
   name: "Q1 Report",
   templateId: "your-template-id",
   variables: [
@@ -1725,7 +1727,9 @@ const result = await Deliverable.generateDeliverable({
   ],
   description: "Quarterly business report",
   tags: ["reports", "quarterly"],
-});
+};
+
+const result: CreateDeliverableResponse = await Deliverable.generateDeliverable(request);
 
 console.log(JSON.stringify(result, null, 2));
 ```
@@ -1857,12 +1861,16 @@ console.log(JSON.stringify(list, null, 2));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const list = await Deliverable.listDeliverables({
+import { Deliverable, type DeliverableListResponse, type ListDeliverablesOptions } from "@turbodocx/sdk";
+
+const options: ListDeliverablesOptions = {
   limit: 10,
   offset: 0,
   query: "report",
   showTags: true,
-});
+};
+
+const list: DeliverableListResponse = await Deliverable.listDeliverables(options);
 
 console.log(JSON.stringify(list, null, 2));
 ```
@@ -1972,7 +1980,9 @@ console.log(JSON.stringify(details, null, 2));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const details = await Deliverable.getDeliverableDetails("deliverable-uuid", {
+import { Deliverable, type DeliverableRecord } from "@turbodocx/sdk";
+
+const details: DeliverableRecord = await Deliverable.getDeliverableDetails("deliverable-uuid", {
   showTags: true,
 });
 
@@ -2061,11 +2071,15 @@ console.log(JSON.stringify(result, null, 2));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await Deliverable.updateDeliverableInfo("deliverable-uuid", {
+import { Deliverable, type UpdateDeliverableRequest, type UpdateDeliverableResponse } from "@turbodocx/sdk";
+
+const update: UpdateDeliverableRequest = {
   name: "Q1 Report - Final",
   description: "Final quarterly business report",
   tags: ["reports", "final"],
-});
+};
+
+const result: UpdateDeliverableResponse = await Deliverable.updateDeliverableInfo("deliverable-uuid", update);
 
 console.log(JSON.stringify(result, null, 2));
 ```
@@ -2167,7 +2181,9 @@ console.log(JSON.stringify(result, null, 2));
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-const result = await Deliverable.deleteDeliverable("deliverable-uuid");
+import { Deliverable, type DeleteDeliverableResponse } from "@turbodocx/sdk";
+
+const result: DeleteDeliverableResponse = await Deliverable.deleteDeliverable("deliverable-uuid");
 
 console.log(JSON.stringify(result, null, 2));
 ```
@@ -3419,7 +3435,7 @@ The deliverable object returned by `get_deliverable_details`. Includes all field
 </TabItem>
 <TabItem value="php" label="PHP" attributes={{className: 'tab-lang tab-lang--php'}}>
 
-The deliverable record returned by `getDeliverableDetails`. Includes all fields from [Deliverable Record](#deliverable-record) **except `fileSize`**, plus:
+The deliverable record returned by `getDeliverableDetails`. Includes all fields from [Deliverable Record](#deliverablerecord) **except `fileSize`**, plus:
 
 | Key                  | Type     | Description                              |
 | -------------------- | -------- | ---------------------------------------- |

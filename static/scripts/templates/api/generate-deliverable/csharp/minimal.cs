@@ -7,28 +7,6 @@ const string ApiToken = "YOUR_API_TOKEN";
 const string OrgId    = "YOUR_ORGANIZATION_ID";
 const string BaseUrl  = "https://api.turbodocx.com";
 
-// ── Record types ────────────────────────────────────────────────────
-record Subvariable(
-    [property: JsonPropertyName("placeholder")] string Placeholder,
-    [property: JsonPropertyName("text")]        string Text,
-    [property: JsonPropertyName("mimeType")]    string MimeType
-);
-
-record Variable(
-    [property: JsonPropertyName("placeholder")]   string Placeholder,
-    [property: JsonPropertyName("text")]           string Text,
-    [property: JsonPropertyName("mimeType")]       string MimeType,
-    [property: JsonPropertyName("subvariables")]   Subvariable[]? Subvariables = null
-);
-
-record DeliverableRequest(
-    [property: JsonPropertyName("templateId")]    string TemplateId,
-    [property: JsonPropertyName("name")]          string Name,
-    [property: JsonPropertyName("description")]   string Description,
-    [property: JsonPropertyName("variables")]     Variable[] Variables,
-    [property: JsonPropertyName("tags")]          string[] Tags
-);
-
 // ── App bootstrap ───────────────────────────────────────────────────
 var builder = WebApplication.CreateBuilder(args);
 
@@ -104,3 +82,25 @@ app.MapGet("/api/deliverable/download/{id}", async (string id, IHttpClientFactor
 });
 
 app.Run();
+
+// ── Record types ────────────────────────────────────────────────────
+record Subvariable(
+    [property: JsonPropertyName("placeholder")] string Placeholder,
+    [property: JsonPropertyName("text")]        string Text,
+    [property: JsonPropertyName("mimeType")]    string MimeType
+);
+
+record Variable(
+    [property: JsonPropertyName("placeholder")]   string Placeholder,
+    [property: JsonPropertyName("text")]           string Text,
+    [property: JsonPropertyName("mimeType")]       string MimeType,
+    [property: JsonPropertyName("subvariables")]   Subvariable[]? Subvariables = null
+);
+
+record DeliverableRequest(
+    [property: JsonPropertyName("templateId")]    string TemplateId,
+    [property: JsonPropertyName("name")]          string Name,
+    [property: JsonPropertyName("description")]   string Description,
+    [property: JsonPropertyName("variables")]     Variable[] Variables,
+    [property: JsonPropertyName("tags")]          string[] Tags
+);

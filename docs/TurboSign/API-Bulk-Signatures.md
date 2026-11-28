@@ -328,6 +328,7 @@ failing document is listed in the error details with its specific code (`Optiona
 
 <ScriptLoader
   scriptPath="turbosign/api/bulk/ingest"
+  languages={{ nodejs: ['express', 'fastify'], python: ['fastapi', 'flask'] }}
   id="bulk-ingest"
   label="Bulk Ingest - Create Batch"
 />
@@ -403,6 +404,7 @@ User-Agent: TurboDocx API Client
 
 <ScriptLoader
   scriptPath="turbosign/api/bulk/list-batches"
+  languages={{ nodejs: ['express', 'fastify'], python: ['fastapi', 'flask'] }}
   id="bulk-list-batches"
   label="List All Batches"
 />
@@ -493,6 +495,7 @@ User-Agent: TurboDocx API Client
 
 <ScriptLoader
   scriptPath="turbosign/api/bulk/list-jobs"
+  languages={{ nodejs: ['express', 'fastify'], python: ['fastapi', 'flask'] }}
   id="bulk-list-jobs"
   label="List Jobs in Batch"
 />
@@ -541,6 +544,7 @@ User-Agent: TurboDocx API Client
 
 <ScriptLoader
   scriptPath="turbosign/api/bulk/cancel-batch"
+  languages={{ nodejs: ['express', 'fastify'], python: ['fastapi', 'flask'] }}
   id="bulk-cancel-batch"
   label="Cancel Batch"
 />

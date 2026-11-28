@@ -1,0 +1,64 @@
+---
+id: send-signing-reminder
+title: "Send Signing Reminder"
+description: "Sends a reminder email now to signers whose turn it is, even when scheduled reminders are off or capped, and without counting against the cap. The response reports each recipient considered, including those skipped."
+sidebar_label: "Send Signing Reminder"
+hide_title: true
+hide_table_of_contents: true
+api: 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
+sidebar_class_name: "post api-method"
+info_path: docs/API/turbodocx-api-documentation
+custom_edit_url: null
+hide_send_button: true
+---
+
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import ParamsDetails from "@theme/ParamsDetails";
+import RequestSchema from "@theme/RequestSchema";
+import StatusCodes from "@theme/StatusCodes";
+import Heading from "@theme/Heading";
+import Translate from "@docusaurus/Translate";
+
+<ApiTitle method="post" title="Send Signing Reminder" />
+
+<MethodEndpoint
+  method={"post"}
+  path={"/turbosign/documents/{documentId}/send-reminder"}
+  context={"endpoint"}
+>
+  
+</MethodEndpoint>
+
+
+
+Sends a reminder email now to signers whose turn it is, even when scheduled reminders are off or capped, and without counting against the cap. The response reports each recipient considered, including those skipped.
+
+<Heading
+  id={"request"}
+  as={"h2"}
+  className={"openapi-tabs__heading"}
+>
+  <Translate id="theme.openapi.request.title">Request</Translate>
+</Heading>
+
+<RequestSchema
+  title={"Body"}
+  body={{"required":false,"content":{"application/json":{"schema":{"type":"object","properties":{"recipientIds":{"type":"array","minItems":1,"uniqueItems":true,"description":"Recipients to remind. Omit the key to remind everyone whose turn it is; if present it needs at least one ID.","items":{"type":"string","format":"uuid"},"example":["5f673f37-9912-4e72-85aa-8f3649760f6b"]}}},"example":{}}}}}
+>
+  
+</RequestSchema>
+
+<ParamsDetails
+  parameters={[{"name":"documentId","in":"path","required":true,"description":"The signature document ID.","schema":{"type":"string","format":"uuid"}}]}
+>
+  
+</ParamsDetails>
+
+<StatusCodes
+  responses={{"200":{"description":"One result per recipient considered.","content":{"application/json":{"schema":{"type":"object","properties":{"data":{"type":"object","properties":{"results":{"type":"array","items":{"type":"object","properties":{"recipientId":{"type":"string","format":"uuid"},"status":{"type":"string","enum":["sent","failed","skipped_completed","skipped_wrong_order","skipped_not_due","skipped_max_reached","skipped_disabled","skipped_claim_lost","skipped_requires_single_use_url"]},"reminderCount":{"type":"integer","description":"Reminder count after the send. Only set when `sent`."},"phase":{"type":"string","enum":["reminder","expiring"],"description":"Which email copy was used."}}}}}}}},"example":{"data":{"results":[{"recipientId":"5f673f37-9912-4e72-85aa-8f3649760f6b","status":"sent","reminderCount":2,"phase":"reminder"},{"recipientId":"7a891c23-4d56-4e78-9abc-def012345678","status":"skipped_wrong_order"}]}}}}},"400":{"description":"`recipientIds` is invalid (for example an empty array), or a named recipient is not a current pending signer.","content":{"application/json":{"examples":{"validation":{"summary":"Empty recipientIds","value":{"message":"There was an issue validating the body","type":"ValidationError","data":{"errors":[{"message":"At least one recipient ID is required","path":["recipientIds"],"type":"array.min","context":{"label":"recipientIds","key":"recipientIds","limit":1,"value":[]}}]}}},"notEligible":{"summary":"Some IDs not eligible","value":{"error":"Some recipients are not eligible for a reminder at this time","invalidRecipientIds":["7a891c23-4d56-4e78-9abc-def012345678"]}}},"schema":{"type":"object","properties":{"error":{"type":"string","description":"What went wrong. TurboSign errors send it; request validation errors send `message` instead."},"invalidRecipientIds":{"type":"array","items":{"type":"string","format":"uuid"},"description":"The recipients that cannot be emailed right now."},"message":{"type":"string"},"type":{"type":"string"},"data":{"type":"object","properties":{"errors":{"type":"array","items":{"type":"object","properties":{"message":{"type":"string"},"path":{"type":"array","items":{"type":"string"}},"type":{"type":"string"},"context":{"type":"object","properties":{"label":{"type":"string"},"key":{"type":"string"},"limit":{"type":"integer"},"value":{"type":"array","items":{}}}}}}}}}}}}}},"401":{"description":"Missing or invalid API key, or the organization ID header is missing or is not an organization the key belongs to. The response has no body."},"403":{"description":"The key's role cannot send reminders (viewers cannot). The response has no body."},"404":{"description":"The document does not exist, was deleted, or belongs to another organization.","content":{"application/json":{"example":{"error":"Document not found"},"schema":{"type":"object","properties":{"error":{"type":"string"}}}}}},"409":{"description":"The document is not out for signature (for example voided or expired), or the recipients sign only through single-use signing URLs.","content":{"application/json":{"examples":{"notActionable":{"summary":"Document expired","value":{"error":"This document has expired, so its signers can no longer be reminded.","code":"DocumentNotActionable","status":"expired"}},"singleUse":{"summary":"Recipients sign through single-use URLs","value":{"message":"These recipients sign through a single-use signing URL, so no reminder email can be sent. Use the signing-url endpoint to mint one.","type":"RecipientRequiresSingleUseUrl","error":"These recipients sign through a single-use signing URL, so no reminder email can be sent. Use the signing-url endpoint to mint one.","code":"RecipientRequiresSingleUseUrl"}}},"schema":{"type":"object","properties":{"message":{"type":"string","description":"What went wrong. Request validation errors send it; some TurboSign errors send it beside `error`."},"type":{"type":"string","description":"Error type, for example `ValidationError`. The same value as `code` when both are sent."},"error":{"type":"string"},"code":{"type":"string"},"status":{"type":"string"}}}}}},"500":{"description":"An unexpected server error.","content":{"application/json":{"example":{"error":"Failed to send signature reminders"},"schema":{"type":"object","properties":{"error":{"type":"string"}}}}}}}}
+>
+  
+</StatusCodes>
+
+
+      

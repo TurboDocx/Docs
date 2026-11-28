@@ -239,7 +239,7 @@ url = link["url"]
 
 | Status | `code` | Meaning |
 |---|---|---|
-| 400 | `RecipientSelectorInvalid`, `InvalidReturnUrl` | Send exactly one selector; `returnUrl` must be `https`. |
+| 400 | `RecipientSelectorInvalid`, `ValidationError` | Send exactly one selector; a `returnUrl` that is not `https` fails request validation (`ValidationError`). |
 | 400 | `IdentityAssertion*`, `IdentityProviderMismatch`, `IdentityEmailMismatch` | The `external_idv` assertion is missing or fails a check. |
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. |
 | 403 | `EmbeddedSigningNotEnabled`, `ExternalIdvNotAllowed`, `IdentityOverrideNotAllowed` | The organization has not turned on what the recipient uses. |
@@ -523,7 +523,7 @@ Identity and passcode errors from sending a document and from `createSigningUrl`
 | 400 | `IdentityConfigInvalid`, `IdvProviderRequired`, `OverrideNotAcknowledged`, `IdentityModeConflict` | The recipient's `identityVerification` block is invalid or incomplete. |
 | 400 | `DuplicateExternalId` | Two recipients on the document share an `externalId`. |
 | 400 | `RecipientSelectorInvalid` | `createSigningUrl` needs exactly one of `recipientId` or `externalId`. |
-| 400 | `InvalidReturnUrl` | `returnUrl` is not an `https` URL. |
+| 400 | `ValidationError` | `returnUrl` is not an `https` URL (rejected by request validation). |
 | 400 | `IdentityAssertionRequired`, `IdentityAssertionInvalid`, `IdentityProviderMismatch`, `IdentityEmailMismatch`, `IdentityAssertionStale`, `IdentityAssertionReused` | The `external_idv` assertion is missing or fails a check (see [External identity verification](../identity-verification/external-identity-verification.md#errors)). |
 | 402 | `OtpNotEntitled`, `SmsOtpLimitExceeded` | The plan does not include this verification, or the SMS allowance is used up. |
 | 403 | none (a plain `403 Forbidden`) | The API key belongs to a **User**. Requesting a signing URL needs an **Administrator** or **Contributor** key. |

@@ -21,7 +21,7 @@ This guide walks you through the complete process of creating a new professional
 
 By the end of this guide, you will have:
 
-- 🧾 **Created a new quote** from the TurboDocx home screen
+- 🧾 **Created a new quote** from the side navigation or the TurboDocx home screen
 - 🏢 **Added a new company record** with industry classification
 - 👤 **Set up contact details** for the company
 - ✅ **Named and submitted** your completed quote
@@ -32,15 +32,15 @@ Creating your first quote takes just a few minutes. Follow along and you'll have
 
 <br/>
 
-## Step 1: Start Creating a New Quote from the Main TurboDocx Home Screen
+## Step 1: Start a New Quote
 
-Begin the process of creating and sending a new professional quote using TurboQuote. The main options section provides the entry point to initiate this workflow, setting up the workspace to add client details, products, and pricing.
+Open TurboQuote to begin creating and sending a new professional quote, with client details, products, and pricing.
 
 **Instruction:**
 
-- Click on the **Create a Quote** card in the main options section to start building a new quote.
-
-![Start creating a new quote from the home screen](/img/turboquote/step-01.png)
+- In the left side navigation, under **TurboQuote**, click **Quotes**. This works for every account.
+- Or, on the home screen with the assistant, click **Create a quote** under the chat box. It opens in a new tab.
+- Or, on the home screen without the assistant, click the **Create a Quote** card.
 
 <br/>
 

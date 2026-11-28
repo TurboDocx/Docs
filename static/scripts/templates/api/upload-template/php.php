@@ -32,7 +32,7 @@ function uploadTemplate($apiToken, $orgId, $baseUrl, $templateName, $templateFil
         'name' => $templateName,
         'description' => 'Standard employee contract with variable placeholders',
         'variables' => '[]',
-        'tags' => '["hr", "contract", "template"]'
+        'tags' => '[]'
     ];
 
     // Initialize cURL
@@ -56,7 +56,7 @@ function uploadTemplate($apiToken, $orgId, $baseUrl, $templateName, $templateFil
         throw new Exception("cURL error: " . $error);
     }
 
-    if ($httpCode !== 200) {
+    if ($httpCode !== 201) {
         throw new Exception("HTTP error: " . $httpCode . " - " . $response);
     }
 

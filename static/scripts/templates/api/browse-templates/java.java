@@ -81,7 +81,7 @@ public class TemplateBrowser {
 
         if (selectedTags != null) {
             for (String tag : selectedTags) {
-                params.append("&selectedTags[]=").append(URLEncoder.encode(tag, StandardCharsets.UTF_8));
+                params.append("&selectedTags=").append(URLEncoder.encode(tag, StandardCharsets.UTF_8));
             }
         }
 

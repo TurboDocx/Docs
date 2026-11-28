@@ -81,6 +81,7 @@ Webhooks can be configured from the E-Signature settings on the **Features and i
    - You can add up to 10 different URLs
    - Each URL will receive all subscribed events
    - Every URL must use HTTPS (plain `http://` is rejected, even for testing). To receive webhooks on your machine, expose your local server through an HTTPS tunnel such as ngrok or Cloudflare Tunnel
+   - Every URL must resolve to a public internet address. TurboDocx refuses URLs that point at private or internal networks, such as `localhost`, `10.x.x.x`, `192.168.x.x` or cloud metadata addresses, and URLs whose host doesn't resolve
 
 ![E-Signature Settings Webhooks section showing the Webhook URLs field and the Add Another URL button](/img/webhooks/signature-webhook-config.png)
 
@@ -600,7 +601,7 @@ end
 ### Security Best Practices
 
 1. **Always verify signatures**: Never process webhooks without verifying the signature
-2. **Use HTTPS**: Webhook URLs must be HTTPS; TurboDocx rejects `http://` URLs, so use an HTTPS tunnel when testing locally
+2. **Use HTTPS and a public address**: Webhook URLs must be HTTPS and resolve to a public internet address; TurboDocx rejects `http://` URLs and private or internal addresses, so use an HTTPS tunnel when testing locally
 3. **Store secrets securely**: Keep webhook secrets in environment variables or secure vaults
 4. **Implement timestamp validation**: Reject webhooks with timestamps older than 5 minutes
 5. **Use timing-safe comparison**: Prevent timing attacks when comparing signatures
@@ -616,6 +617,7 @@ end
 - **Success Criteria**: Only HTTP 2xx status codes are considered successful; redirects (3xx) are not followed and count as a failure
 - **Retry Logic**: Failed deliveries are automatically retried up to 2 more times (3 attempts in total)
 - **Retry Schedule**: Exponential backoff: the 2nd attempt about 1 minute after the 1st, the 3rd about 5 minutes after the 2nd
+- **Address Check**: Each attempt resolves the URL's host again and connects only to the public addresses it checked. If the host now resolves to a private or internal address, the attempt fails with "The URL points at a private or internal network address." and is retried like any other failure
 - **Delivery Order**: Webhooks are delivered to all configured URLs in parallel
 
 ### Handling Failures

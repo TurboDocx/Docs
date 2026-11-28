@@ -29,7 +29,7 @@ This works for **Word**, **PowerPoint** and **PDF** templates.
 | Saved | Details |
 | --- | --- |
 | **Signers** | Name, email, signing order, identity verification, and each signer's default values (for example their company or title). |
-| **Fields** | Every field you placed, at its exact position on the page, with all of its settings (alignment, Required, read-only, rules, default values). |
+| **Fields** | Every field you placed, at its exact position on the page, with all of its settings (alignment, Required, read-only, rules, default values). A field you made from a template variable with **Use as TurboSign field** follows its tag in the text and fits its line, instead of sitting at a fixed position. |
 | **CC recipients** | Everyone added as **Receives a Copy**. |
 | **Email message** | The **Signature Email Description** signers see in their email. |
 | **Reminders & expiration** | Only the settings you changed for this template. Anything you left alone keeps following your organization's settings, even if those change later. |
@@ -238,7 +238,8 @@ uploaded a file, choose the template to save it to.
 :::tip
 Fields are saved at exact positions on the page. If you save a setup to a different template, or
 later replace the template's file, open the template's page and check that the fields still sit
-where they should.
+where they should. A field made from a template variable follows its tag in the text and fits its
+line instead, so it moves with the text.
 :::
 
 ## Drafts keep everything
@@ -253,10 +254,20 @@ template instead.
 
 ## Good to know
 
-- **A saved setup is used in the TurboDocx app.** Requests sent through the
-  [TurboSign API](./API-Signatures.md) use the recipients and fields in the request. The one
-  exception is a PDF template with signer roles, which the API can send by role. See
-  [Use it from code](./PDF-Signature-Templates.md#use-it-from-code).
+- **The API uses a saved setup when you send by signer role.** A request sent through the
+  [TurboSign API](./API-Signatures.md) uses only the recipients and fields in the request, unless
+  a recipient names one of the template's roles (`recipients[].role`):
+  - **PDF template:** send its `templateId`. See
+    [Use it from code](./PDF-Signature-Templates.md#use-it-from-code).
+  - **Word or PowerPoint template:** generate a document from the template, then send its
+    `deliverableId`. The roles and the fields made from template variables are sent with it.
+    Fields placed at a fixed position are not, because the generated pages can differ from the
+    template's. The fields find their tags in the document, so the tags must still be there:
+    documents generated in the TurboDocx app keep them, and a document you generate with the API
+    needs `"keepAnchoredTags": true`. Without the tags, a signer can end up with no fields and the
+    send fails with `SignerHasNoFields`.
+
+  See [Sending with signer roles](./API-Signatures.md#sending-with-signer-roles).
 
 ## Related
 

@@ -1,109 +1,67 @@
-using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Text.Json;
+using System.Net;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc;
 
-/**
- * Path A: Upload and Create Template
- * Uploads a .docx/.pptx template and extracts variables automatically
- */
-class TemplateUpload
+// Register in Program.cs:
+//   builder.Services.AddControllers();
+//   builder.Services.AddHttpClient<TemplateUploadController>();
+//   app.MapControllers();
+
+[ApiController]
+[Route("api/templates")]
+public class TemplateUploadController : ControllerBase
 {
     // Configuration - Update these values
-    private const string API_TOKEN = "YOUR_API_TOKEN";
-    private const string ORG_ID = "YOUR_ORGANIZATION_ID";
-    private const string BASE_URL = "https://api.turbodocx.com";
-    private const string TEMPLATE_NAME = "Employee Contract Template";
+    private const string ApiToken = "YOUR_API_TOKEN";
+    private const string OrgId = "YOUR_ORGANIZATION_ID";
+    private const string BaseUrl = "https://api.turbodocx.com";
+    private const string TemplatePath = "./contract-template.docx";
 
-    static async Task Main(string[] args)
+    private readonly HttpClient _httpClient;
+
+    public TemplateUploadController(HttpClient httpClient)
     {
-        try
-        {
-            var result = await UploadTemplate("./contract-template.docx");
-
-            using var document = JsonDocument.Parse(result);
-            var template = document.RootElement
-                .GetProperty("data")
-                .GetProperty("results")
-                .GetProperty("template");
-
-            Console.WriteLine($"Template uploaded successfully: {template.GetProperty("id").GetString()}");
-            Console.WriteLine($"Template name: {template.GetProperty("name").GetString()}");
-
-            // Handle nullable variables field
-            var variableCount = 0;
-            if (template.TryGetProperty("variables", out var variables) &&
-                variables.ValueKind != JsonValueKind.Null)
-            {
-                variableCount = variables.GetArrayLength();
-            }
-            Console.WriteLine($"Variables extracted: {variableCount}");
-
-            Console.WriteLine($"Default font: {template.GetProperty("defaultFont").GetString()}");
-
-            // Handle nullable fonts field
-            var fontCount = 0;
-            if (template.TryGetProperty("fonts", out var fonts) &&
-                fonts.ValueKind != JsonValueKind.Null)
-            {
-                fontCount = fonts.GetArrayLength();
-            }
-            Console.WriteLine($"Fonts used: {fontCount}");
-
-            var redirectUrl = document.RootElement
-                .GetProperty("data")
-                .GetProperty("results")
-                .GetProperty("redirectUrl");
-            Console.WriteLine($"Redirect to: {redirectUrl.GetString()}");
-
-            Console.WriteLine($"Ready to generate documents with template: {template.GetProperty("id").GetString()}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Upload failed: {ex.Message}");
-        }
+        _httpClient = httpClient;
+        _httpClient.BaseAddress = new Uri(BaseUrl);
+        _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiToken}");
+        _httpClient.DefaultRequestHeaders.Add("x-rapiddocx-org-id", OrgId);
+        _httpClient.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
     }
 
-    private static async Task<string> UploadTemplate(string templateFilePath)
+    /// <summary>
+    /// Path A: upload a .docx/.pptx template; TurboDocx extracts its variables.
+    /// POST api/templates/upload
+    /// </summary>
+    [HttpPost("upload")]
+    public async Task<IActionResult> UploadTemplate()
     {
-        // Check if file exists
-        if (!File.Exists(templateFilePath))
+        if (!System.IO.File.Exists(TemplatePath))
         {
-            throw new FileNotFoundException($"Template file not found: {templateFilePath}");
+            return BadRequest(new { error = $"Template file not found: {TemplatePath}" });
         }
 
-        using var client = new HttpClient();
+        using var form = new MultipartFormDataContent();
 
-        // Set headers
-        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + API_TOKEN);
-        client.DefaultRequestHeaders.Add("x-rapiddocx-org-id", ORG_ID);
-        client.DefaultRequestHeaders.Add("User-Agent", "TurboDocx API Client");
-
-        // Create multipart form data
-        using var content = new MultipartFormDataContent();
-
-        // Add template file
-        var fileContent = new ByteArrayContent(File.ReadAllBytes(templateFilePath));
-        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(
+        var fileContent = new ByteArrayContent(await System.IO.File.ReadAllBytesAsync(TemplatePath));
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        content.Add(fileContent, "templateFile", Path.GetFileName(templateFilePath));
+        form.Add(fileContent, "templateFile", Path.GetFileName(TemplatePath));
+        form.Add(new StringContent("Employee Contract Template"), "name");
+        form.Add(new StringContent("Standard employee contract with variable placeholders"), "description");
+        form.Add(new StringContent("[]"), "variables");
+        form.Add(new StringContent("[]"), "tags");
 
-        // Add form fields
-        content.Add(new StringContent(TEMPLATE_NAME), "name");
-        content.Add(new StringContent("Standard employee contract with variable placeholders"), "description");
-        content.Add(new StringContent("[]"), "variables");
-        content.Add(new StringContent("[\"hr\", \"contract\", \"template\"]"), "tags");
+        var response = await _httpClient.PostAsync("/template/upload-and-create", form);
 
-        // Make request
-        var response = await client.PostAsync(BASE_URL + "/template/upload-and-create", content);
-
-        if (!response.IsSuccessStatusCode)
+        // Upload and create answers 201 Created
+        if (response.StatusCode != HttpStatusCode.Created)
         {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"HTTP error {response.StatusCode}: {errorContent}");
+            var error = await response.Content.ReadAsStringAsync();
+            return StatusCode(502, new { error = "Template upload failed", details = error });
         }
 
-        return await response.Content.ReadAsStringAsync();
+        // { "data": { "results": { "template": { "id", "name", "variables", ... }, "redirectUrl" } } }
+        var body = await response.Content.ReadAsStringAsync();
+        return Content(body, "application/json");
     }
 }

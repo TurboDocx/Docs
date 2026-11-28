@@ -221,7 +221,7 @@ User-Agent: TurboDocx API Client
 | ------------------- | -------------- | ------------- | ------------------------------------------ |
 | file                | File           | Conditional\* | PDF, DOCX, or PPTX file to upload          |
 | deliverableId       | String (UUID)  | Conditional\* | Reference to existing deliverable          |
-| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). Required when any recipient has a `role` |
+| templateId          | String (UUID)  | Conditional\* | Reference to existing template (DOCX, PPTX, or a [PDF signature template](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). When any recipient has a `role`, send this or `deliverableId` |
 | fileLink            | String (URL)   | Conditional\* | URL to download file from                  |
 | documentName        | String         | No            | Document name in TurboSign (max 255 chars) |
 | documentDescription | String         | No            | Document description (max 1000 chars)      |
@@ -243,7 +243,7 @@ User-Agent: TurboDocx API Client
 
 \*\* **Fields**: Required, unless at least one recipient names a template signer `role`. Omitting `fields` without a role returns `400 FieldsRequired`. See [Sending with signer roles](#sending-with-signer-roles).
 
-A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are used as sent. A signature setup saved on the template in the TurboDocx app is applied only when a recipient names one of its roles (see [Sending with signer roles](#sending-with-signer-roles)).
+A PDF template is sent as it was stored at upload: TurboDocx refuses password-protected PDFs and PDFs with security restrictions, repairs damaged ones where it can, and flattens fillable form fields into the page (see [PDF signature templates](/docs/TurboDocx-Templating/API-Templates#pdf-signature-templates)). The request's `recipients` and `fields` are used as sent. A signature setup saved on the template in the TurboDocx app is applied only when a recipient names one of its roles (see [Sending with signer roles](#sending-with-signer-roles)).
 
 :::tip Reminders & expiration are optional
 The eight schedule fields are **per-document overrides**. Omit any of them and that setting is
@@ -291,8 +291,8 @@ const recipients = JSON.stringify([
     email: "john.smith@company.com",
     signingOrder: 1,
     metadata: {
-      color: "hsl(200, 75%, 50%)",
-      lightColor: "hsl(200, 75%, 93%)",
+      color: "#4A90E2",
+      lightColor: "#E3F2FD",
     },
   },
   {
@@ -300,8 +300,8 @@ const recipients = JSON.stringify([
     email: "jane.doe@partner.com",
     signingOrder: 2,
     metadata: {
-      color: "hsl(270, 75%, 50%)",
-      lightColor: "hsl(270, 75%, 93%)",
+      color: "#8E44AD",
+      lightColor: "#F3E5F5",
     },
   },
 ]);
@@ -365,7 +365,7 @@ formData.append("fields", fields);
 
 A PDF template in TurboDocx can carry a saved signature setup: signer **roles** (for example "Client" and "Countersigner") with fields placed on the PDF for each role. Each role has a stable **key** (for example `client`), shown under **Use via API** on the template page (turn on **Dev Mode** to see it) and returned by [Get Template Signature Setup](#endpoint-8-get-template-signature-setup). A role is either a **slot** with no saved signer, filled in each time you send, or it has a **saved signer** (a name and email used when you leave the role out). Roles saved before keys existed answer to `signer_1`, `signer_2` and so on, by signing order.
 
-Signer roles work with **PDF signature templates** only, because the saved field positions are measured on that PDF. To send a Word or PowerPoint template, generate a deliverable and send it with `deliverableId`.
+Signer roles work with a PDF signature template sent by `templateId`, and with a deliverable sent by `deliverableId`. A deliverable generated from a Word or PowerPoint template brings the roles and the fields anchored to its template variables, found by their tags in the document. Fields placed at a fixed position are left out, because the generated pages don't match them. Generate that deliverable with `"keepAnchoredTags": true` so the tags stay in the document; without it, a signer can end up with no fields and the send fails with `SignerHasNoFields`. Sending the `templateId` of a Word or PowerPoint template with roles is refused with `TemplateRolesNeedPdfTemplate`.
 
 #### How role keys are made {#how-role-keys-are-made}
 
@@ -402,7 +402,7 @@ curl -X POST https://api.turbodocx.com/turbosign/single/prepare-for-signing \
 
 How a role send behaves:
 
-- **Role keys** are matched case-insensitively. `role` requires `templateId`.
+- **Role keys** are matched case-insensitively. `role` requires `templateId` or `deliverableId`.
 - **Fields come from the template.** The fields saved for each role are placed for the signer who fills it, so `fields` can be left out. Any `fields` you do pass are added to the template's (for example an extra witness signature).
 - **Roles you leave out** use the template's saved signer. A role with no saved signer must be filled, or the request fails with `SignerRoleUnfilled`.
 - **Signing order** follows the template's role order, then any recipients without a role in their own `signingOrder`. The final order is renumbered so it runs 1, 2, 3 and so on. A recipient with a `role` needs no `signingOrder`.
@@ -435,9 +435,10 @@ These return `400` with a body of the form `{ "message": "...", "type": "..." }`
 | -------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------ |
 | `UnknownSignerRole`        | `Unknown role "clinet". This template's roles are: client, countersigner`           | A `role` does not match any of the template's role keys      |
 | `DuplicateSignerRole`      | `Role "client" was given more than one recipient`                                   | Two recipients name the same role                            |
+| `DELIVERABLE_NOT_FOUND`    | `Deliverable not found or access denied: <deliverableId>`                           | The `deliverableId` doesn't exist in your organization       |
 | `SignerRoleUnfilled`       | `Role "client" needs a signer. Pass recipients: [{ role: "<role>", name, email }]`   | A role has no saved signer and no recipient fills it         |
 | `TemplateHasNoSignerRoles` |                                                                                     | The template has no saved signer roles                       |
-| `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has no `templateId` |
+| `RoleRequiresTemplate`     |                                                                                     | A recipient has a `role` but the request has neither a `templateId` nor a `deliverableId` |
 | `DuplicateRoleEmail`       |                                                                                     | Two roles resolved to the same email address, or a recipient without a role has a role signer's email |
 | `SignerHasNoFields`        | `Signer "Jane Doe" has no fields to sign. Place a field for them or remove them.`  | A signer ends up with no fields after the template's fields are placed |
 | `OtpPhoneRequired`         |                                                                                     | A role requires SMS verification and the recipient has no `phone` |
@@ -507,8 +508,8 @@ When you change a draft's signers with `PATCH /turbosign/documents/{documentId}/
       "email": "john.smith@company.com",
       "signingOrder": 1,
       "metadata": {
-        "color": "hsl(200, 75%, 50%)",
-        "lightColor": "hsl(200, 75%, 93%)"
+        "color": "#4A90E2",
+        "lightColor": "#E3F2FD"
       }
     }
   ],
@@ -578,8 +579,8 @@ Signer roles work the same way here: pass `templateId` and give each recipient a
       "email": "john.smith@company.com",
       "signingOrder": 1,
       "metadata": {
-        "color": "hsl(200, 75%, 50%)",
-        "lightColor": "hsl(200, 75%, 93%)"
+        "color": "#4A90E2",
+        "lightColor": "#E3F2FD"
       }
     }
   ],
@@ -1176,6 +1177,7 @@ A recipient who was **not** emailed is reported rather than silently dropped, so
 | `skipped_max_reached` | Scheduled path only: their reminder cap is spent                |
 | `skipped_disabled`    | Scheduled path only: reminders are off for this document        |
 | `skipped_claim_lost`  | A concurrent request won the send; no duplicate was sent        |
+| `skipped_requires_single_use_url` | They sign only through a single-use link (ID verification or an override), so a reminder email can't work |
 
 ### Error Responses
 
@@ -1507,9 +1509,9 @@ Each recipient object in the `recipients` array should contain the following pro
 | Property     | Type           | Required | Description                                                |
 | ------------ | -------------- | -------- | ---------------------------------------------------------- |
 | name         | String         | Yes      | Full name of the recipient/signer                          |
-| email        | String (email) | Yes      | Email address of the recipient (must be unique)            |
+| email        | String (email) | Yes      | Email address of the recipient                             |
 | signingOrder | Number         | Conditional | Order in which recipient should sign (starts at 1). Not needed on a recipient with a `role` |
-| role         | String         | No       | Template signer role this recipient fills (for example `client`). Requires `templateId`. See [Sending with signer roles](#sending-with-signer-roles) |
+| role         | String         | No       | Template signer role this recipient fills (for example `client`). Requires `templateId` or `deliverableId`. See [Sending with signer roles](#sending-with-signer-roles) |
 | metadata     | Object         | No       | Optional metadata for UI customization (color, lightColor) |
 
 ### Metadata Object (Optional)
@@ -1518,8 +1520,8 @@ The `metadata` object allows you to customize the recipient's UI appearance:
 
 | Property   | Type   | Description                                        | Example                |
 | ---------- | ------ | -------------------------------------------------- | ---------------------- |
-| color      | String | Primary color for recipient in HSL format          | `"hsl(200, 75%, 50%)"` |
-| lightColor | String | Light background color for recipient in HSL format | `"hsl(200, 75%, 93%)"` |
+| color      | String | Primary color for recipient in HSL format          | `"#4A90E2"` |
+| lightColor | String | Light background color for recipient in HSL format | `"#E3F2FD"` |
 
 ### Example Recipients Array
 
@@ -1547,8 +1549,8 @@ The `metadata` object allows you to customize the recipient's UI appearance:
     "email": "john.smith@company.com",
     "signingOrder": 1,
     "metadata": {
-      "color": "hsl(200, 75%, 50%)",
-      "lightColor": "hsl(200, 75%, 93%)"
+      "color": "#4A90E2",
+      "lightColor": "#E3F2FD"
     }
   }
 ]
@@ -2099,7 +2101,7 @@ Position a signature field at bottom-right of a US Letter page:
 
 **Document Validation**:
 
-- Ensure PDFs are not password-protected or corrupted
+- Ensure PDFs are not password-protected, restricted (`RestrictedPDF`) or corrupted
 - Verify all pages are readable
 - Test with actual documents before production
 - Keep backup copies of source documents
@@ -2308,7 +2310,7 @@ x-rapiddocx-org-id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 **Solutions**:
 
-- ✅ Verify PDF file is not corrupted or password-protected
+- ✅ Verify PDF file is not corrupted, password-protected or restricted (re-save a restricted PDF with Print › Save as PDF)
 - ✅ Check file size is under maximum limit (typically 10MB)
 - ✅ Ensure file is actually a PDF (check MIME type)
 - ✅ Verify network connection and try again

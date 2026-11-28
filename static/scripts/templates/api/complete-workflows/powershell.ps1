@@ -172,7 +172,7 @@ class TemplateWorkflowManager {
         $bodyLines += "--$boundary"
         $bodyLines += "Content-Disposition: form-data; name=`"tags`""
         $bodyLines += ""
-        $bodyLines += '["hr", "contract", "template"]'
+        $bodyLines += '[]'
 
         $bodyLines += "--$boundary--"
 
@@ -255,7 +255,7 @@ class TemplateWorkflowManager {
     }
 
     [hashtable] GenerateDeliverable([string]$templateId, [hashtable]$deliverableData) {
-        $uri = "$($this.BaseUrl)/deliverable"
+        $uri = "$($this.BaseUrl)/v1/deliverable"
 
         Write-Host "Generating deliverable..."
         Write-Host "Template ID: $templateId"
@@ -291,7 +291,7 @@ class TemplateWorkflowManager {
     [hashtable] DownloadDeliverable([string]$deliverableId, [string]$filename) {
         Write-Host "Downloading file: $filename"
 
-        $uri = "$($this.BaseUrl)/deliverable/file/$deliverableId"
+        $uri = "$($this.BaseUrl)/v1/deliverable/file/$deliverableId"
 
         # Create headers
         $headers = @{
@@ -335,19 +335,6 @@ class TemplateWorkflowManager {
             'variables' = $this.CreateComplexVariables()
             'tags' = @('hr', 'contract', 'employee', 'engineering')
             'fonts' = '[{"name":"Arial","usage":269}]'
-            'metadata' = @{
-                'sessions' = @(
-                    @{
-                        'id' = [System.Guid]::NewGuid().ToString()
-                        'starttime' = $now
-                        'endtime' = $now
-                    }
-                )
-                'createdBy' = 'PowerShell Workflow Manager'
-                'documentType' = 'Employment Contract'
-                'version' = 'v1.0'
-                'workflowPath' = $pathLabel
-            }
         }
     }
 

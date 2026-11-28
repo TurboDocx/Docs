@@ -50,7 +50,7 @@ def upload_template(template_file_path)
   # Tags field
   form_data << "\r\n--#{boundary}\r\n"
   form_data << "Content-Disposition: form-data; name=\"tags\"\r\n\r\n"
-  form_data << '["hr", "contract", "template"]'
+  form_data << '[]'
 
   form_data << "\r\n--#{boundary}--\r\n"
 
@@ -69,7 +69,7 @@ def upload_template(template_file_path)
   # Make request
   response = http.request(request)
 
-  unless response.code == '200'
+  unless response.code == '201'
     raise "HTTP error #{response.code}: #{response.body}"
   end
 

@@ -202,7 +202,7 @@ User-Agent: TurboDocx API Client
   "name": "Employee Contract Template",
   "description": "Standard employee contract with variable placeholders",
   "variables": "[]", // Optional: Pre-defined variables (usually extracted automatically)
-  "tags": "[]" // Optional: Categorization tags
+  "tags": "[]" // Optional: tag objects as a JSON string, e.g. [{"id": "TAG_ID"}]
 }
 ```
 
@@ -272,7 +272,7 @@ User-Agent: TurboDocx API Client
 | `data.results.deliverable.createdBy`  | string  | Email of the user who created it |
 | `data.results.deliverable.createdOn`  | string  | ISO timestamp of creation        |
 | `data.results.deliverable.orgId`      | string  | Organization ID                  |
-| `data.results.deliverable.isActive`   | boolean | Whether deliverable is active    |
+| `data.results.deliverable.isActive`   | number  | Active status (1 = active, 0 = inactive) |
 | `data.results.deliverable.templateId` | string  | Original template ID used        |
 
 ### Code Examples
@@ -308,16 +308,16 @@ User-Agent: TurboDocx API Client
 #### Query Parameters
 
 ```http
-?limit=25&offset=0&query=contract&showTags=true&selectedTags[]=tag-123
+?limit=25&offset=0&query=contract&showTags=true&selectedTags=TAG_ID_1&selectedTags=TAG_ID_2
 ```
 
 | Parameter      | Type    | Description                         |
 | -------------- | ------- | ----------------------------------- |
-| `limit`        | number  | Items per page (default: 6)         |
+| `limit`        | number  | Items per page (default: 9)         |
 | `offset`       | number  | Pagination offset (default: 0)      |
 | `query`        | string  | Search term for template names      |
 | `showTags`     | boolean | Include tag information in response |
-| `selectedTags` | array   | Filter by specific tag IDs          |
+| `selectedTags` | string  | Tag ID to filter by; repeat the parameter for several (items must have all of them) |
 
 #### Response
 
@@ -415,7 +415,7 @@ GET https://api.turbodocx.com/template/{templateId}
           "placeholder": "{EmployeeName}",
           "text": "",
           "mimeType": "text",
-          "allowRichTextInjection": false,
+          "allowRichTextInjection": 0,
           "order": 1,
           "subvariables": []
         },
@@ -425,7 +425,7 @@ GET https://api.turbodocx.com/template/{templateId}
           "placeholder": "{Department}",
           "text": "",
           "mimeType": "text",
-          "allowRichTextInjection": true,
+          "allowRichTextInjection": 1,
           "order": 2,
           "subvariables": [
             {
@@ -590,7 +590,7 @@ User-Agent: TurboDocx API Client
         "createdBy": "api-user@company.com",
         "createdOn": "2024-12-19T21:22:10.000Z",
         "orgId": "your-organization-id",
-        "isActive": true,
+        "isActive": 1,
         "templateId": "0b1099cf-d7b9-41a4-822b-51b68fd4885a"
       }
     }
@@ -793,7 +793,7 @@ Content-Length: 287456
 
 - Verify file is .docx, .pptx or .pdf format
 - Check file size is under the maximum limit (typically 25MB)
-- Ensure file is not corrupted or password-protected
+- Ensure file is not corrupted, password-protected or restricted
 - Verify network connection and try again
 
 #### Variable Extraction Issues
@@ -853,6 +853,7 @@ You can also upload a **.pdf** to `POST /template/upload-and-create`. A PDF temp
 - **Upload**: same request as Path A. The response has an empty `variables` array — there is nothing to extract from a PDF.
 - **Preparation on upload**: the PDF is processed the same way as a PDF uploaded for signature before it is stored:
   - A password-protected PDF is refused with `400` and `"type": "PasswordProtectedPDF"`.
+  - A PDF with security restrictions (it opens without a password, but its owner restricted editing) is refused with `400` and `"type": "RestrictedPDF"`: signature fields can't be added to it. Saving it again with **Print › Save as PDF** removes the restrictions.
   - A damaged PDF is repaired where possible. One that can't be read is refused with `400` and `"type": "PDFFormatError"`.
   - Fillable form fields are flattened, so any values in them become part of the page.
 - **Download**: **Download File** on the template's page in the app returns this stored PDF.

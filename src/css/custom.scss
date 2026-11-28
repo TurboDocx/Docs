@@ -23,8 +23,23 @@
 @import "./cards.scss";
 @import "./blog.scss";
 @import "./api.scss";
+@import "./doc-cards.scss";
 
 // Removed global list-style rule to prevent affecting navigation
+
+// Tab rows are <ul>s, so the content list indent below would push them 28px in from the heading.
+// They start where the text starts, the same as the SDK language cards and API code tabs.
+article, .markdown, [class*="theme-doc-markdown"] {
+  ul.tabs {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+
+    > li {
+      margin-bottom: 0;
+    }
+  }
+}
 
 // Enhanced text styling for better readability - only apply to content areas
 article, .markdown, [class*="theme-doc-markdown"] {
@@ -169,3 +184,156 @@ article, .markdown, [class*="theme-doc-markdown"] {
 
 
 
+
+
+// ==== Docs layout ====
+
+// Page width: Infima's 1320px container on laptops, growing with the screen on large monitors
+// (+45% of every pixel past 1440px, up to 1680px), so big screens get more room and even side
+// margins, without very long text lines or oversized images.
+@media (min-width: 1440px) {
+  :root {
+    --ifm-container-width-xl: clamp(1320px, calc(1320px + (100vw - 1440px) * 0.45), 1680px);
+  }
+}
+main[class*="docMainContainer"] {
+  min-width: 0;
+}
+// Category pages have no table of contents: use the container width (the theme caps them at 75%).
+main [class*="generatedIndexPage"] {
+  max-width: none !important;
+}
+
+// Breadcrumbs: the first crumb's text starts at the content edge (the links carry side padding for
+// their hover background, so the trail moves left by that padding).
+.theme-doc-breadcrumbs .breadcrumbs {
+  margin-left: calc(-1 * var(--ifm-breadcrumb-padding-horizontal) * var(--ifm-breadcrumb-size-multiplier));
+}
+
+// Tracing beam (src/components/tracing-beam.tsx), around every doc page.
+// Desktop: it fills the column, and its dot (40px left of the content, 27px in) lands 3px left of
+// the breadcrumb text, under the first letter. Phones: no beam, the content starts at the edge.
+:root {
+  --docs-beam-inset: 0px; // where page content starts, past the beam (phones: no beam)
+}
+@media (min-width: 997px) {
+  :root {
+    --docs-beam-inset: 50px; // the beam's 10px offset + its 40px gutter
+  }
+}
+div.docs-tracing-beam {
+  max-width: none;
+  width: auto; // not the component's w-full: 100% plus the 10px offset ran 10px past the column's right edge
+  height: auto; // not the component's h-full: it grows with flex (below) and must leave room for its siblings
+  margin: 0 0 0 10px;
+}
+@media (min-width: 997px) {
+  div.docs-tracing-beam svg.tracing-beam {
+    display: block;
+  }
+}
+@media (max-width: 996px) {
+  div.docs-tracing-beam {
+    margin: 0;
+    padding-left: 0;
+    > div:first-child {
+      display: none;
+    }
+  }
+}
+
+// Previous / Next (and "Last updated") line up with the content, past the beam, on every page, and
+// sit at the bottom of the page: the page container passes main's height down, and the article grows
+// into any free space, so on a short page they stand just above the site footer.
+main[class*="docMainContainer"] nav.pagination-nav,
+main[class*="docMainContainer"] .theme-doc-footer {
+  margin-left: var(--docs-beam-inset);
+}
+main[class*="docMainContainer"] > .container {
+  display: flex;
+  flex-direction: column;
+  > .row,
+  > [class*="generatedIndexPage"] {
+    flex: 1 0 auto;
+  }
+}
+// (only the page layout's own column: guide content also uses .row > .col wrappers)
+main[class*="docMainContainer"] > .container > .row > [class*="docItemCol"],
+main[class*="docMainContainer"] > .container > .row > .col:only-child {
+  display: flex;
+  flex-direction: column;
+  > [class*="docItemContainer"] {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    > article {
+      flex: 1 0 auto;
+    }
+  }
+}
+main [class*="generatedIndexPage"] {
+  display: flex;
+  flex-direction: column;
+  > div.docs-tracing-beam {
+    flex: 1 0 auto;
+  }
+}
+// API pages put Previous / Next in a left-column-wide box (col--7): span the content width instead.
+main[class*="docMainContainer"] .row > .col--7:has(> nav.pagination-nav) {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+// The beam runs the height of the content area: the article grows (above), and inside it the
+// markdown block and the beam grow with it, so on a short page the line reaches down to just above
+// "Last updated" / Previous / Next.
+main [class*="docItemContainer"] > article {
+  display: flex;
+  flex-direction: column;
+  > .theme-doc-markdown {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    > div.docs-tracing-beam {
+      flex: 1 0 auto;
+    }
+  }
+}
+// Beam spacing: the line starts at the dot, 1.75rem above the content's first line, and ends 1.75rem
+// below its last line (on a short page the beam's box grows, so the line reaches the bottom of the
+// content area). The first and last elements' own margins are dropped so these two gaps are exact.
+.docs-beam-content {
+  padding-top: 1.75rem;
+  // (guide pages wrap their content in .row > .col--12)
+  > :first-child,
+  > header:first-child h1,
+  > :first-child .api-title h1,
+  > .row:first-child > .col:first-child > :first-child,
+  > .row:first-child > .col:first-child > header:first-child h1,
+  h1.openapi__heading { // API overview: its version badge precedes the title
+    margin-top: 0 !important;
+  }
+  // the last element, its last child, and so on down (a list's last item, a table in a column)
+  > :last-child,
+  > :last-child > :last-child,
+  > :last-child > :last-child > :last-child,
+  > :last-child > :last-child > :last-child > :last-child,
+  > :last-child > :last-child > :last-child > :last-child > :last-child,
+  // API pages end with their left column (the right one is the sticky Try it panel)
+  .theme-api-markdown > .col--7,
+  .theme-api-markdown > .col--7 > :last-child,
+  .theme-api-markdown > .col--7 > :last-child > :last-child,
+  // tab sets: the visible panel is not the last child (hidden panels follow it)
+  [role="tabpanel"] > :last-child,
+  [role="tabpanel"] > :last-child > :last-child {
+    margin-bottom: 0 !important;
+  }
+}
+@media (min-width: 997px) {
+  div.docs-tracing-beam {
+    padding-bottom: 1.5rem; // + the last line's own spacing = the 24px gap above the first line
+  }
+  .docs-tracing-beam > div:first-child {
+    top: 0; // the dot marks the start of the beam
+  }
+}

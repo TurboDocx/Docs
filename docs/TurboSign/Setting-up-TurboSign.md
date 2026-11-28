@@ -74,13 +74,13 @@ Have your document ready and know exactly where signatures are needed before you
 
 <br/>
 
-## Step 1: Click "Get It Signed"
+## Step 1: Open TurboSign
 
-Let's start by getting to TurboSign from your main dashboard.
+Open **TurboSign** in whichever way fits your account:
 
-From the **TurboDocx homepage**, look for the **"Get It Signed"** button and click it. This will take you directly to **TurboSign** where all the magic happens.
-
-![Get It Signed button on TurboDocx homepage](/img/turbosign/GetSigned.png)
+- **From the side navigation:** click the **TurboSign** logo in the left side navigation. This works for every account.
+- **From the home page with the assistant:** under the chat box, click **Get it signed**. TurboSign opens in a new tab.
+- **From the home page without the assistant:** click the **Get it Signed** tile.
 
 <br/>
 
@@ -558,6 +558,18 @@ After clicking "Send Document":
 
 ### "I Made a Mistake in the Document"
 **Solution:** It's best practice to void the document and send a new version. 
+
+### "We Can't Use This PDF"
+TurboSign checks a PDF when you upload it, before you place any fields. If it can't be used, the reason stays under the upload area until you choose another file:
+- **It has security restrictions.** The PDF opens without a password, but its owner restricted editing, so signature fields can't be added. Open it, choose **Print › Save as PDF**, and upload the new copy.
+- **It's password-protected.** Remove the password and upload it again.
+- **It has formatting issues.** The PDF couldn't be read or repaired. Export it again from the program that made it, or contact support.
+
+### "We Couldn't Send This Document"
+Nothing was sent, and your fields are still on the page, so don't refresh. Try again. The message also shows a **Reference** code: if sending keeps failing, copy it and give it to support, so they can find exactly what went wrong.
+
+### "We Couldn't Confirm This Document Was Sent"
+TurboSign's answer didn't reach your browser (for example, the connection dropped), so the document may already be on its way to your recipients. Before you try again, open your documents list in another tab: if the document is there, it was sent. Your fields are still on the page, so don't refresh.
 
 <br/>
 

@@ -161,7 +161,7 @@ class TemplateWorkflowManager
     # Tags field
     form_data << "\r\n--#{boundary}\r\n"
     form_data << "Content-Disposition: form-data; name=\"tags\"\r\n\r\n"
-    form_data << '["hr", "contract", "template"]'
+    form_data << '[]'
 
     form_data << "\r\n--#{boundary}--\r\n"
 
@@ -180,7 +180,7 @@ class TemplateWorkflowManager
     # Make request
     response = http.request(request)
 
-    unless response.code == '200'
+    unless response.code == '201'
       raise "HTTP error #{response.code}: #{response.body}"
     end
 
@@ -197,13 +197,9 @@ class TemplateWorkflowManager
 
     params['query'] = query unless query.empty?
 
-    if selected_tags
-      selected_tags.each do |tag|
-        params["selectedTags[]"] = tag
-      end
-    end
-
-    query_string = params.map { |k, v| "#{CGI.escape(k)}=#{CGI.escape(v)}" }.join('&')
+    # Repeat selectedTags once per tag ID (the API reads ?selectedTags=<id>&selectedTags=<id>)
+    pairs = params.to_a + Array(selected_tags).map { |tag_id| ['selectedTags', tag_id] }
+    query_string = URI.encode_www_form(pairs)
     uri = URI("#{BASE_URL}/template-item?#{query_string}")
 
     # Create HTTP connection
@@ -267,7 +263,7 @@ class TemplateWorkflowManager
   end
 
   def generate_deliverable(template_id, deliverable_data)
-    uri = URI("#{BASE_URL}/deliverable")
+    uri = URI("#{BASE_URL}/v1/deliverable")
 
     puts "Generating deliverable..."
     puts "Template ID: #{template_id}"
@@ -311,7 +307,7 @@ class TemplateWorkflowManager
   def download_deliverable(deliverable_id, filename)
     puts "Downloading file: #{filename}"
 
-    uri = URI("#{BASE_URL}/deliverable/file/#{deliverable_id}")
+    uri = URI("#{BASE_URL}/v1/deliverable/file/#{deliverable_id}")
 
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -354,20 +350,7 @@ class TemplateWorkflowManager
       'description' => "Employment contract generated via workflow path #{path_label}",
       'variables' => create_complex_variables,
       'tags' => ['hr', 'contract', 'employee', 'engineering'],
-      'fonts' => '[{"name":"Arial","usage":269}]',
-      'metadata' => {
-        'sessions' => [
-          {
-            'id' => SecureRandom.uuid,
-            'starttime' => now,
-            'endtime' => now
-          }
-        ],
-        'createdBy' => 'Ruby Workflow Manager',
-        'documentType' => 'Employment Contract',
-        'version' => 'v1.0',
-        'workflowPath' => path_label
-      }
+      'fonts' => '[{"name":"Arial","usage":269}]'
     }
   end
 
